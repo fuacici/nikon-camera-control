@@ -45,6 +45,7 @@ namespace CameraControl.Classes
     private void button1_Click(object sender, RoutedEventArgs e)
     {
       Session.EndEdit();
+      DialogResult = true;
       Close();
     }
 
