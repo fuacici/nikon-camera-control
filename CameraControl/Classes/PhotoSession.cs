@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -55,7 +56,7 @@ namespace CameraControl.Classes
     }
 
     [XmlIgnore]
-    public List<FileItem> Files { get; set; }
+    public ObservableCollection<FileItem> Files { get; set; }
 
     public string ConfigFile { get; set; }
 
@@ -63,7 +64,7 @@ namespace CameraControl.Classes
     {
       Name = "Default";
       Folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), Name);
-      Files = new List<FileItem>();
+      Files = new ObservableCollection<FileItem>();
       FileNameTemplate = "DSC_$C";
     }
 
@@ -86,10 +87,11 @@ namespace CameraControl.Classes
       return res;
     }
 
-    public void AddFile(string fileName)
+    public FileItem AddFile(string fileName)
     {
-      FileItem item=new FileItem();
+      FileItem item = new FileItem(fileName);
       Files.Add(item);
+      return item;
     }
 
     public override string ToString()

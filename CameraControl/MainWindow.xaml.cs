@@ -40,6 +40,7 @@ namespace CameraControl
       DataContext = WiaManager;
       controler1.Manager = WiaManager;
       SessionPanel.DataContext = ServiceProvider.Settings;
+      ImagePanel.DataContext = ServiceProvider.Settings;
     }
 
     void WiaManager_PhotoTaked(Item item)
@@ -48,20 +49,16 @@ namespace CameraControl
       {
         string s = item.ItemID;
         ImageFile imageFile = (ImageFile)item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
-
-
         string fileName = ServiceProvider.Settings.DefaultSession.GetNextFileName(imageFile.FileExtension);
         //file exist : : 0x80070050
         imageFile.SaveFile(fileName);
-        BitmapImage logo = new BitmapImage();
-        logo.BeginInit();
-        logo.UriSource = new Uri(fileName);
-        logo.EndInit();
-        image1.Source = logo;
+
+        ImageLIst.SelectedValue = ServiceProvider.Settings.DefaultSession.AddFile(fileName);
+        ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
       }
       catch (Exception ex)
       {
-        MessageBox.Show("Transfer error !\nMessage" + ex.Message);
+        MessageBox.Show("Transfer error !\nMessage :" + ex.Message);
 
       }
     }
@@ -100,7 +97,15 @@ namespace CameraControl
 
     private void button3_Click(object sender, RoutedEventArgs e)
     {
-      WiaManager.TakePicture();
+      try
+      {
+        WiaManager.TakePicture();
+      }
+      catch (Exception exception)
+      {
+        MessageBox.Show("No picture was teked !\n" + exception.Message);
+      }
+      
     }
 
     private void btn_edit_Sesion_Click(object sender, RoutedEventArgs e)
@@ -121,6 +126,23 @@ namespace CameraControl
       {
         ServiceProvider.Settings.Add(editSession.Session);
         ServiceProvider.Settings.DefaultSession = editSession.Session;
+      }
+    }
+
+    private void ImageLIst_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+      if (e.AddedItems.Count > 0)
+      {
+        FileItem item = e.AddedItems[0] as FileItem;
+        if (item != null)
+        {
+          BitmapImage logo = new BitmapImage();
+          logo.BeginInit();
+          logo.UriSource = new Uri(item.FileName);
+          logo.EndInit();
+          image1.Source = logo;
+        }
       }
     }
 

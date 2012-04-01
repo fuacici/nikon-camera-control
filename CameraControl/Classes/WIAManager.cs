@@ -161,6 +161,7 @@ namespace CameraControl.Classes
       DeviceManager = new DeviceManager();
       DeviceManager.RegisterEvent(Conts.wiaEventDeviceConnected, "*");
       DeviceManager.RegisterEvent(Conts.wiaEventDeviceDisconnected, "*");
+      DeviceManager.RegisterEvent(Conts.wiaEventItemCreated, "*");
       DeviceManager.OnEvent += DeviceManager_OnEvent;
       DeviceName = "";
       Manufacturer = "";
@@ -301,19 +302,7 @@ namespace CameraControl.Classes
 
     public bool TakePicture()
     {
-      if (ConnectToCamera())
-      {
-        try
-        {
-          Device.ExecuteCommand(Conts.wiaCommandTakePicture);
-          DeviceManager.RegisterEvent(Conts.wiaEventItemCreated, "*");
-        }
-        catch (Exception)
-        {
-
-          return false;
-        }
-      }
+      Device.ExecuteCommand(Conts.wiaCommandTakePicture);
       return false;
     }
 

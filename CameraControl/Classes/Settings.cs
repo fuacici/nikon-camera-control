@@ -53,6 +53,7 @@ namespace CameraControl.Classes
     {
       if (session == null)
         return;
+      session.Files.Clear();
       if(!Directory.Exists(session.Folder))
       {
         Directory.CreateDirectory(session.Folder);
@@ -62,10 +63,11 @@ namespace CameraControl.Classes
       {
        if(supportedExtensions.Contains(Path.GetExtension(file)))
        {
-         session.
+         session.AddFile(file);
        }
       }
     }
+
     public void Save(PhotoSession session)
     {
       string filename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,
