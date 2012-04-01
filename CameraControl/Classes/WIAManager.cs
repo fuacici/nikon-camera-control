@@ -155,6 +155,7 @@ namespace CameraControl.Classes
     public Dictionary<int, string> ExposureModeTable;
     public Dictionary<int, string> WbTable;
     public Dictionary<string, long> ECTable;
+    public Dictionary<string, long> FTable;
 
     public WIAManager()
     {
@@ -167,6 +168,7 @@ namespace CameraControl.Classes
       Manufacturer = "";
 
       ECTable = new Dictionary<string, long>();
+      FTable=new Dictionary<string, long>();
       ShutterTable = new Dictionary<int, string>
                        {
                          {1, "6400"},

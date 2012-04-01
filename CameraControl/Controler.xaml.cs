@@ -81,12 +81,18 @@ namespace CameraControl
         Property apertureProperty = Manager.Device.Properties["F Number"];
         if (apertureProperty != null)
         {
+          Manager.FTable.Clear();
           foreach (var subTypeValue in apertureProperty.SubTypeValues)
           {
+            double d = (int) subTypeValue;
             //if (Manager.ShutterTable.ContainsKey((int)subTypeValue))
-            cmb_aperture.Items.Add((int) subTypeValue);
+            string s = "f/" + (d/100).ToString("0.0");
+            Manager.FTable.Add(s, (int)subTypeValue);
+            cmb_aperture.Items.Add(s);
+
+            if ((int)subTypeValue == (int)apertureProperty.get_Value())
+              cmb_aperture.SelectedValue = s;
           }
-          cmb_aperture.SelectedValue = (int) apertureProperty.get_Value();
         }
 
         cmb_EComp.Items.Clear();
@@ -142,7 +148,7 @@ namespace CameraControl
     {
       if (cmb_aperture.SelectedValue != null)
       {
-        Manager.Device.Properties["F Number"].set_Value(cmb_aperture.SelectedValue);
+        Manager.Device.Properties["F Number"].set_Value(Manager.FTable[(string)cmb_aperture.SelectedValue]);
       }
     }
 
