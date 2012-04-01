@@ -38,7 +38,7 @@
             </StackPanel.DataContext>
             <StackPanel  Orientation="Horizontal">
                 <ComboBox  Name="cmb_session" SelectedValue="{Binding Path=DefaultSession}" ItemsSource="{Binding Path=PhotoSessions}" Width="183"  Margin="3"/>
-                <Button Content="Add" Grid.Column="3" Name="btn_add_Sesion" Margin="3"/>
+                <Button Content="Add" Grid.Column="3" Name="btn_add_Sesion" Margin="3" Click="btn_add_Sesion_Click" />
                 <Button Content="Edit" Grid.Column="3" Name="btn_edit_Sesion" Margin="3" Click="btn_edit_Sesion_Click" />
             </StackPanel>
             <StackPanel  Orientation="Horizontal">

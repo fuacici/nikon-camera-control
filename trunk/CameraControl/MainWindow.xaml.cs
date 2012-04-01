@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using CameraControl.Classes;
 using WIA;
 using WIAVIDEOLib;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace CameraControl
 {
@@ -25,9 +26,8 @@ namespace CameraControl
   /// </summary>
   public partial class MainWindow : Window
   {
-    private WiaVideo wiaVideo;
+    
     public WIAManager WiaManager { get; set; }
-    private int imageCounter = 0;
 
     public MainWindow()
     {
@@ -44,23 +44,26 @@ namespace CameraControl
 
     void WiaManager_PhotoTaked(Item item)
     {
-      string s = item.ItemID;
-      ImageFile imageFile = (ImageFile)item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
-      foreach (IProperty property in imageFile.Properties)
+      try
       {
-        string n = property.Name;
-        string v = property.get_Value().ToString();
+        string s = item.ItemID;
+        ImageFile imageFile = (ImageFile)item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
+
+
+        string fileName = ServiceProvider.Settings.DefaultSession.GetNextFileName(imageFile.FileExtension);
+        //file exist : : 0x80070050
+        imageFile.SaveFile(fileName);
+        BitmapImage logo = new BitmapImage();
+        logo.BeginInit();
+        logo.UriSource = new Uri(fileName);
+        logo.EndInit();
+        image1.Source = logo;
       }
-      imageCounter++;
-      string fileName = string.Format("d:\\valami{0}.jpg", imageCounter);
-      //file exist : : 0x80070050
-      File.Delete(fileName);
-      imageFile.SaveFile(fileName);
-      BitmapImage logo = new BitmapImage();
-      logo.BeginInit();
-      logo.UriSource = new Uri(fileName);
-      logo.EndInit();
-      image1.Source = logo;
+      catch (Exception ex)
+      {
+        MessageBox.Show("Transfer error !\nMessage" + ex.Message);
+
+      }
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -102,8 +105,23 @@ namespace CameraControl
 
     private void btn_edit_Sesion_Click(object sender, RoutedEventArgs e)
     {
+      if(File.Exists(ServiceProvider.Settings.DefaultSession.ConfigFile))
+      {
+        File.Delete(ServiceProvider.Settings.DefaultSession.ConfigFile);
+      }
       EditSession editSession = new EditSession(ServiceProvider.Settings.DefaultSession);
       editSession.ShowDialog();
+      ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
+    }
+
+    private void btn_add_Sesion_Click(object sender, RoutedEventArgs e)
+    {
+      EditSession editSession = new EditSession(new PhotoSession());
+      if (editSession.ShowDialog() == true)
+      {
+        ServiceProvider.Settings.Add(editSession.Session);
+        ServiceProvider.Settings.DefaultSession = editSession.Session;
+      }
     }
 
   }
