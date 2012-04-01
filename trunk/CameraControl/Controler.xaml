@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="CameraControl.Controler"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:my="clr-namespace:CameraControl.Classes"
+             mc:Ignorable="d" 
+             d:DesignHeight="57" d:DesignWidth="912" BorderBrush="Black" BorderThickness="1">
+    <UserControl.DataContext>
+        <my:WIAManager/>
+    </UserControl.DataContext>
+    <WrapPanel  HorizontalAlignment="Left"  Name="wrapPanel1" VerticalAlignment="Top" ItemWidth="150">
+        <StackPanel Margin="1">
+            <Label Content="Mode" />
+            <ComboBox Name="cmb_mode" SelectionChanged="cmb_mode_SelectionChanged" IsEnabled="False" SelectedValue="{Binding Path=ExposureMode}" ItemsSource="{Binding Path=ExposureModeList}"/>
+        </StackPanel>
+        <StackPanel Margin="1">
+            <Label Content="Iso" Name="label1" />
+            <ComboBox Name="cmb_iso" SelectionChanged="cmb_iso_SelectionChanged" />
+        </StackPanel>
+        <StackPanel Margin="1">
+            <Label Content="Shutter speed" Name="label2" />
+            <ComboBox Name="cmb_shutter" SelectionChanged="cmb_shutter_SelectionChanged" IsEnabled="{Binding Path=SutterCanBeSet}" />
+        </StackPanel>
+        <StackPanel Margin="1">
+            <Label Content="Aperture" Name="label3" />
+            <ComboBox Name="cmb_aperture" SelectionChanged="cmb_aperture_SelectionChanged" IsEnabled="{Binding Path=ApertureCanBeSet}" />
+        </StackPanel>
+        <StackPanel Margin="1">
+            <Label Content="White Balance"/>
+            <ComboBox Name="cmb_WB" ItemsSource="{Binding Path=WBModeList}" SelectedValue="{Binding Path=WhiteBalance}"/>
+        </StackPanel>
+        <StackPanel Margin="1">
+            <Label Content="Exposure Compensation"  />
+            <ComboBox Name="cmb_EComp" SelectionChanged="cmb_EComp_SelectionChanged" />
+        </StackPanel>
+
+    </WrapPanel>
+</UserControl>
