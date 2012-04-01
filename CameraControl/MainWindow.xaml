@@ -12,7 +12,7 @@
                     <DataTemplate>
                         <StackPanel>
                         <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" Margin="6" >
-                                <Image Source="{Binding Path=BitmapImage}" Stretch="Uniform" Width="120" Height="80"  />
+                                <Image Source="{Binding Path=Thumbnail}" Stretch="Uniform" Width="120" Height="80"  />
                         </Border>
                             <Label Content="{Binding Path=Name}" HorizontalAlignment="Center" />
                         </StackPanel>

@@ -16,7 +16,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CameraControl.Classes;
 using WIA;
-using WIAVIDEOLib;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace CameraControl
@@ -39,8 +38,7 @@ namespace CameraControl
       InitializeComponent();
       DataContext = WiaManager;
       controler1.Manager = WiaManager;
-      SessionPanel.DataContext = ServiceProvider.Settings;
-      ImagePanel.DataContext = ServiceProvider.Settings;
+
     }
 
     void WiaManager_PhotoTaked(Item item)
@@ -66,7 +64,8 @@ namespace CameraControl
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       WiaManager.ConnectToCamera();
-      //WiaManager = new WIAManager();
+      SessionPanel.DataContext = ServiceProvider.Settings;
+      ImagePanel.DataContext = ServiceProvider.Settings;
     }
 
     //private void button1_Click(object sender, RoutedEventArgs e)
