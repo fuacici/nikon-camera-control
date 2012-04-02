@@ -77,6 +77,25 @@ namespace CameraControl.Classes
       Name = Path.GetFileName(file);
     }
 
+    public BitmapImage GetBitmap()
+    {
+      BitmapImage res = null;
+      try
+      {
+        FIBITMAP dib = FreeImage.LoadEx(FileName);
+        res =
+          byteArrayToImageEx(FreeImage.GetFileType(FileName, 0) == FREE_IMAGE_FORMAT.FIF_RAW
+                               ? ImageToByteArray(
+                                 FreeImage.GetBitmap(FreeImage.ConvertToType(dib, FREE_IMAGE_TYPE.FIT_BITMAP, true)))
+                               : ImageToByteArray(FreeImage.GetBitmap(dib)));
+        FreeImage.UnloadEx(ref dib);
+      }
+      catch (Exception)
+      {
+      }
+      return res;
+    }
+
     public void GetExtendedThumb()
     {
       try
@@ -88,8 +107,6 @@ namespace CameraControl.Classes
           if (FreeImage.GetFileType(FileName, 0) == FREE_IMAGE_FORMAT.FIF_RAW)
           {
             dib = FreeImage.LoadEx(FileName, FREE_IMAGE_LOAD_FLAGS.RAW_PREVIEW);
-            //FreeImageBitmap bitmap = new FreeImageBitmap(FileName, FREE_IMAGE_LOAD_FLAGS.RAW_PREVIEW);
-            //Thumbnail = byteArrayToImageEx(ImageToByteArray((Bitmap)bitmap.GetThumbnailImage(160, false)));
           }
           else
           {
