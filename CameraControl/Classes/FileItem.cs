@@ -22,10 +22,10 @@ namespace CameraControl.Classes
       {
         if (_bitmapImage == null)
         {
-          _bitmapImage = new BitmapImage();
-          _bitmapImage.BeginInit();
-          _bitmapImage.UriSource = new Uri(FileName);
-          _bitmapImage.EndInit();
+          //_bitmapImage = new BitmapImage();
+          //_bitmapImage.BeginInit();
+          //_bitmapImage.UriSource = new Uri(FileName);
+          //_bitmapImage.EndInit();
           //http://stackoverflow.com/questions/1738978/loading-image-in-thread-with-wpf
           //using (BackgroundWorker bg = new BackgroundWorker())
           //{
@@ -37,6 +37,10 @@ namespace CameraControl.Classes
       }
       set
       {
+        if(value==null)
+        {
+          
+        }
         _bitmapImage = value;
         NotifyPropertyChanged("BitmapImage");
       }
@@ -50,7 +54,8 @@ namespace CameraControl.Classes
       {
         if (_thumbnail == null)
         {
-          GetExtendedThumb();
+          ServiceProvider.ThumbWorker.AddItem(this);
+          //GetExtendedThumb();
           //using (BackgroundWorker bg = new BackgroundWorker())
           //{
           //  bg.DoWork += (sender, args) => GetExtendedThumb();
@@ -78,23 +83,31 @@ namespace CameraControl.Classes
       {
         if (FreeImage.GetFileType(FileName, 0) != FREE_IMAGE_FORMAT.FIF_UNKNOWN)
         {
-          FreeImageBitmap bitmap;
-          if (FreeImage.GetFileType(FileName, 0) == FREE_IMAGE_FORMAT.FIF_RAW)
-            bitmap = new FreeImageBitmap(FileName, FREE_IMAGE_LOAD_FLAGS.RAW_PREVIEW);
-          else
-            bitmap = new FreeImageBitmap(FileName);
 
-          int dw = bitmap.Width;
-          int dh = bitmap.Height;
-          int tw = 160;
-          int th = 160;
-          double zw = (tw/(double) dw);
-          double zh = (th/(double) dh);
-          double z = (zw <= zh) ? zw : zh;
-          dw = (int) (dw*z);
-          dh = (int) (dh*z);
+          FIBITMAP dib = new FIBITMAP();
+          if (FreeImage.GetFileType(FileName, 0) == FREE_IMAGE_FORMAT.FIF_RAW)
+          {
+            dib = FreeImage.LoadEx(FileName, FREE_IMAGE_LOAD_FLAGS.RAW_PREVIEW);
+            //FreeImageBitmap bitmap = new FreeImageBitmap(FileName, FREE_IMAGE_LOAD_FLAGS.RAW_PREVIEW);
+            //Thumbnail = byteArrayToImageEx(ImageToByteArray((Bitmap)bitmap.GetThumbnailImage(160, false)));
+          }
+          else
+          {
+            dib = FreeImage.LoadEx(FileName);
+          }
+          FIBITMAP bit = FreeImage.MakeThumbnail(dib, 255, true);
+          Thumbnail = byteArrayToImageEx(ImageToByteArray(FreeImage.GetBitmap(bit)));
+          //int dw = bitmap.Width;
+          //int dh = bitmap.Height;
+          //int tw = 160;
+          //int th = 160;
+          //double zw = (tw/(double) dw);
+          //double zh = (th/(double) dh);
+          //double z = (zw <= zh) ? zw : zh;
+          //dw = (int) (dw*z);
+          //dh = (int) (dh*z);
           //_thumbnail = byteArrayToImageEx(ImageToByteArray((Bitmap) bitmap.GetThumbnailImage(dw, dh, null, IntPtr.Zero)));
-          _thumbnail = byteArrayToImageEx(ImageToByteArray((Bitmap) bitmap.GetThumbnailImage(160, true)));
+
           //switch (Photo.Orientation)
           //{
           //  case 3:
@@ -111,7 +124,7 @@ namespace CameraControl.Classes
           //}
           //_thumbData = ImageToByteArray(_thumbnail);
           //Size = 256;
-          bitmap.Dispose();
+          FreeImage.UnloadEx(ref dib);
           NotifyPropertyChanged("Thumbnail");
         }
       }
@@ -141,6 +154,7 @@ namespace CameraControl.Classes
       img.BeginInit();
       img.StreamSource = ms;
       img.EndInit();
+      img.Freeze();
       return img;
     }
 

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -31,14 +33,41 @@ namespace CameraControl
     public MainWindow()
     {
       ServiceProvider.Settings = new Settings();
+      ServiceProvider.ThumbWorker = new ThumbWorker();
       ServiceProvider.Settings = ServiceProvider.Settings.Load();
+      ServiceProvider.Settings.PropertyChanged += Settings_PropertyChanged;
+      ServiceProvider.Settings.LoadSessionData();
       WiaManager = new WIAManager();
       ServiceProvider.Settings.Manager = WiaManager;
       WiaManager.PhotoTaked += WiaManager_PhotoTaked;
       InitializeComponent();
       DataContext = WiaManager;
       controler1.Manager = WiaManager;
+    }
 
+    void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+      if(e.PropertyName=="DefaultSession")
+      {
+        BackgroundWorker backgroundWorker = new BackgroundWorker();
+        backgroundWorker.DoWork += delegate
+        {
+          try
+          {
+            //ServiceProvider.ThumbWorker.Start();
+            foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
+            {
+              if (fileItem.Thumbnail == null)
+                fileItem.GetExtendedThumb();
+            }
+          }
+          catch (Exception)
+          {
+            
+          }
+        };
+        backgroundWorker.RunWorkerAsync();
+      }
     }
 
     void WiaManager_PhotoTaked(Item item)
@@ -133,17 +162,35 @@ namespace CameraControl
 
       if (e.AddedItems.Count > 0)
       {
+        BackgroundWorker worker=new BackgroundWorker();
+        worker.DoWork += worker_DoWork;
         FileItem item = e.AddedItems[0] as FileItem;
         if (item != null)
         {
-          BitmapImage logo = new BitmapImage();
-          logo.BeginInit();
-          logo.UriSource = new Uri(item.FileName);
-          logo.EndInit();
-          image1.Source = logo;
+          image1.Source = item.Thumbnail;
+          worker.RunWorkerAsync(item);
         }
       }
     }
+
+    void worker_DoWork(object sender, DoWorkEventArgs e)
+    {
+      FileItem fileItem = e.Argument as FileItem;
+      BitmapImage logo = new BitmapImage();
+      logo.BeginInit();
+      logo.UriSource = new Uri(fileItem.FileName);
+      logo.EndInit();
+      logo.Freeze();
+
+         //Call the UI thread using the Dispatcher to update the Image control
+      Dispatcher.BeginInvoke(new ThreadStart(delegate
+                                               {
+                                                 image1.Source = logo;
+                                               }));
+
+    }
+
+
 
   }
 }
