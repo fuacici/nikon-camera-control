@@ -41,7 +41,7 @@ namespace CameraControl
       ServiceProvider.Settings.Manager = WiaManager;
       WiaManager.PhotoTaked += WiaManager_PhotoTaked;
       InitializeComponent();
-      DataContext = WiaManager;
+      DataContext = ServiceProvider.Settings;
       controler1.Manager = WiaManager;
     }
 
@@ -175,12 +175,14 @@ namespace CameraControl
 
     void worker_DoWork(object sender, DoWorkEventArgs e)
     {
+      ServiceProvider.Settings.ImageLoading = Visibility.Visible;
       FileItem fileItem = e.Argument as FileItem;
-      BitmapImage logo = new BitmapImage();
-      logo.BeginInit();
-      logo.UriSource = new Uri(fileItem.FileName);
-      logo.EndInit();
-      logo.Freeze();
+      BitmapImage logo = fileItem.GetBitmap();
+      ServiceProvider.Settings.ImageLoading = Visibility.Hidden;
+      //logo.BeginInit();
+      //logo.UriSource = new Uri(fileItem.FileName);
+      //logo.EndInit();
+      //logo.Freeze();
 
          //Call the UI thread using the Dispatcher to update the Image control
       Dispatcher.BeginInvoke(new ThreadStart(delegate
@@ -189,8 +191,6 @@ namespace CameraControl
                                                }));
 
     }
-
-
 
   }
 }

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Xml.Serialization;
 
 namespace CameraControl.Classes
@@ -12,7 +13,7 @@ namespace CameraControl.Classes
   {
     private string AppName = "NikonCameraControl";
     private string ConfigFile = "";
-    private List<string> supportedExtensions= new List<string>() {".jpg"};
+    private List<string> supportedExtensions= new List<string>() {".jpg",".nef"};
 
     [XmlIgnore]
     public WIAManager Manager { get; set; }
@@ -34,6 +35,18 @@ namespace CameraControl.Classes
     [XmlIgnore]
     public ObservableCollection<PhotoSession> PhotoSessions { get; set; }
 
+    private Visibility _imageLoading;
+
+    [XmlIgnore]
+    public Visibility ImageLoading
+    {
+      get { return _imageLoading; }
+      set
+      {
+        _imageLoading = value;
+        NotifyPropertyChanged("ImageLoading");
+      }
+    }
 
     public Settings()
     {
@@ -41,6 +54,7 @@ namespace CameraControl.Classes
                                 "settings.xml");
       DefaultSession = new PhotoSession();
       PhotoSessions = new ObservableCollection<PhotoSession>();
+      ImageLoading = Visibility.Hidden;
     }
 
     public void Add(PhotoSession session)
