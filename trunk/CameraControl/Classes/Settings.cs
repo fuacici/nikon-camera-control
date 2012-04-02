@@ -49,11 +49,15 @@ namespace CameraControl.Classes
       PhotoSessions.Add(session);
     }
 
+    /// <summary>
+    /// Load files atached to a session
+    /// </summary>
+    /// <param name="session"></param>
     public void LoadData(PhotoSession session)
     {
       if (session == null)
         return;
-      session.Files.Clear();
+      //session.Files.Clear();
       if(!Directory.Exists(session.Folder))
       {
         Directory.CreateDirectory(session.Folder);
@@ -63,7 +67,8 @@ namespace CameraControl.Classes
       {
        if(supportedExtensions.Contains(Path.GetExtension(file)))
        {
-         session.AddFile(file);
+         if (!session.ContainFile(file))
+           session.AddFile(file);
        }
       }
     }
@@ -98,12 +103,6 @@ namespace CameraControl.Classes
 
     public Settings Load()
     {
-      string sesionFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                                         AppName, "Sessions");
-      if (!Directory.Exists(sesionFolder))
-      {
-        Directory.CreateDirectory(sesionFolder);
-      }
       Settings settings = new Settings();
       if (!Directory.Exists(Path.GetDirectoryName(ConfigFile)))
       {
@@ -121,20 +120,31 @@ namespace CameraControl.Classes
       {
         settings.Save();
       }
+      return settings;
+    }
+
+    public void LoadSessionData()
+    {
+      string sesionFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                                   AppName, "Sessions");
+      if (!Directory.Exists(sesionFolder))
+      {
+        Directory.CreateDirectory(sesionFolder);
+      }
+
       string[] sesions = Directory.GetFiles(sesionFolder, "*.xml");
       foreach (string sesion in sesions)
       {
-        settings.Add(Load(sesion));
+        Add(Load(sesion));
       }
-      if (settings.PhotoSessions.Count > 0)
+      if (PhotoSessions.Count > 0)
       {
-        settings.DefaultSession = settings.PhotoSessions[0];
+        DefaultSession = PhotoSessions[0];
       }
-      if (settings.PhotoSessions.Count == 0)
+      if (PhotoSessions.Count == 0)
       {
-        settings.Add(settings.DefaultSession);
+        Add(DefaultSession);
       }
-      return settings;
     }
 
     public void Save()

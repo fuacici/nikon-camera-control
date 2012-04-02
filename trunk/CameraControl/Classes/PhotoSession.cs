@@ -94,6 +94,16 @@ namespace CameraControl.Classes
       return item;
     }
 
+    public bool ContainFile(string fileName)
+    {
+      foreach (FileItem fileItem in Files)
+      {
+        if (fileItem.FileName.ToUpper() == fileName.ToUpper())
+          return true;
+      }
+      return false;
+    }
+
     public override string ToString()
     {
       return Name;

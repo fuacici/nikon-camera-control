@@ -66,6 +66,7 @@
       <DependentUpon>EditSession.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\FileItem.cs" />
+    <Compile Include="Classes\ThumbWorker.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Page Include="Classes\EditSession.xaml">
       <SubType>Designer</SubType>
