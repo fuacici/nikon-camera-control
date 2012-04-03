@@ -11,15 +11,15 @@
                 <Setter.Value>
                     <DataTemplate>
                         <StackPanel>
-                        <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" Margin="6" >
+                            <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" Margin="6" >
                                 <Image Source="{Binding Path=Thumbnail}" Stretch="Uniform" Width="120" Height="80"  />
-                        </Border>
+                            </Border>
                             <Label Content="{Binding Path=Name}" HorizontalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
-           
+
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
@@ -58,7 +58,7 @@
             </StackPanel>
         </StackPanel>
         <Button Content="Take picture" Name="button3" Click="button3_Click" IsEnabled="{Binding Path=Manager.IsConected}"/>
-        <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" Margin="0" Grid.Column="1" Grid.Row="1">
+        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="0" Grid.Column="1" Grid.Row="1">
             <Image Grid.Row="1" Name="image1" Stretch="Uniform"  />
         </Border>
         <Label Content="Loading ..." Name="lbl_loading" Grid.Column="1" Grid.Row="1" Margin="0,2,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="{Binding Path=ImageLoading}" FontSize="25" FontWeight="ExtraBold">
@@ -81,5 +81,11 @@
         <StackPanel Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" Name="ImagePanel"  Grid.RowSpan="2" >
             <ListBox  Name="ImageLIst" ItemsSource="{Binding Path=DefaultSession.Files}" SelectionChanged="ImageLIst_SelectionChanged" />
         </StackPanel>
+        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="7,0,5,121"  Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="2"  Height="100" VerticalAlignment="Bottom">
+            <Image  Name="image3" Stretch="Uniform"  />
+        </Border>
+        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="6"  Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="2"  Height="100" VerticalAlignment="Bottom">
+            <Image  Name="image2" Stretch="Uniform"  />
+        </Border>
     </Grid>
 </Window>
