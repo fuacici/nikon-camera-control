@@ -188,6 +188,8 @@ namespace CameraControl
       Dispatcher.BeginInvoke(new ThreadStart(delegate
                                                {
                                                  image1.Source = logo;
+                                                 image2.Source = fileItem.Histogram;
+                                                 image3.Source = fileItem.HistogramBlack;
                                                }));
 
     }

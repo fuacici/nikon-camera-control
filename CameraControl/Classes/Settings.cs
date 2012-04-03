@@ -79,7 +79,7 @@ namespace CameraControl.Classes
       string[] files = Directory.GetFiles(session.Folder);
       foreach (string file in files)
       {
-       if(supportedExtensions.Contains(Path.GetExtension(file)))
+       if(supportedExtensions.Contains(Path.GetExtension(file).ToLower()))
        {
          if (!session.ContainFile(file))
            session.AddFile(file);

@@ -77,12 +77,116 @@ namespace CameraControl.Classes
       Name = Path.GetFileName(file);
     }
 
+    private void CreateHistogramBlack(FIBITMAP dib)
+    {
+      int height = 100;
+      int[] histo = new int[256];
+      Bitmap image = new Bitmap(256, height);
+      Graphics g = Graphics.FromImage(image);
+      g.FillRectangle(new SolidBrush(SystemColors.Window), 0, 0, 256, height);
+      double maxValue = 0;
+
+
+      FreeImage.GetHistogram(dib, histo, FREE_IMAGE_COLOR_CHANNEL.FICC_RGB);
+
+      foreach (int i in histo)
+      {
+        if (i > maxValue)
+          maxValue = i;
+      }
+
+      for (int i = 0; i < 256; i++)
+      {
+        int x = Convert.ToInt32((histo[i] / maxValue) * height);
+        g.DrawLine(new Pen(new SolidBrush(Color.Black), 1), i, height, i, height - x);
+        //if ((i+1) % 52 == 0)
+        //  g.DrawLine(new Pen(new SolidBrush(Color.Black), 1), i, height, i, 0);
+      }
+
+      _histogramBlack = byteArrayToImageEx(ImageToByteArray(image));
+    }
+
+    private void CreateHistogram(FIBITMAP dib)
+    {
+      int height = 100;
+      int[] histo = new int[256];
+      Bitmap image = new Bitmap(256, height);
+      Graphics g = Graphics.FromImage(image);
+      g.FillRectangle(new SolidBrush(SystemColors.Window), 0, 0, 256, height);
+      double maxValue= 0;
+      
+     
+      FreeImage.GetHistogram(dib, histo, FREE_IMAGE_COLOR_CHANNEL.FICC_RED);
+
+      foreach (int i in histo)
+      {
+        if (i > maxValue)
+          maxValue = i;
+      }
+
+      for (int i = 0; i < 256; i++)
+      {
+        int x = Convert.ToInt32((histo[i] / maxValue) * height);
+        g.DrawLine(new Pen(new SolidBrush(Color.FromArgb(100, 255, 0, 0)), 1), i, height, i, height - x);
+      }
+
+      maxValue = 0;
+      FreeImage.GetHistogram(dib, histo, FREE_IMAGE_COLOR_CHANNEL.FICC_GREEN);
+
+      foreach (int i in histo)
+      {
+        if (i > maxValue)
+          maxValue = i;
+      }
+
+      for (int i = 0; i < 256; i++)
+      {
+        int x = Convert.ToInt32((histo[i] / maxValue) * height);
+        g.DrawLine(new Pen(new SolidBrush(Color.FromArgb(100, 0, 255, 0)), 1), i, height, i, height - x);
+      }
+
+      maxValue = 0;
+      FreeImage.GetHistogram(dib, histo, FREE_IMAGE_COLOR_CHANNEL.FICC_BLUE);
+      foreach (int i in histo)
+      {
+        if (i > maxValue)
+          maxValue = i;
+      }
+
+      for (int i = 0; i < 256; i++)
+      {
+        int x = Convert.ToInt32((histo[i]/maxValue)*height);
+        g.DrawLine(new Pen(new SolidBrush(Color.FromArgb(100, 0, 0, 255)), 1), i, height, i, height - x);
+      }
+
+
+     _histogram = byteArrayToImageEx(ImageToByteArray(image));
+    }
+
+    private BitmapImage _histogram;
+    public BitmapImage Histogram
+    {
+      get { return _histogram; }
+      set { _histogram = value; }
+    }
+
+    private BitmapImage _histogramBlack;
+    public BitmapImage HistogramBlack
+    {
+      get { return _histogramBlack; }
+      set { _histogramBlack = value; }
+    }
+
+
     public BitmapImage GetBitmap()
     {
       BitmapImage res = null;
       try
       {
+        
         FIBITMAP dib = FreeImage.LoadEx(FileName);
+        CreateHistogram(dib);
+        CreateHistogramBlack(dib);
         res =
           byteArrayToImageEx(FreeImage.GetFileType(FileName, 0) == FREE_IMAGE_FORMAT.FIF_RAW
                                ? ImageToByteArray(
