@@ -124,10 +124,18 @@ namespace CameraControl.Classes
           maxValue = i;
       }
 
+      
       for (int i = 0; i < 256; i++)
       {
-        int x = Convert.ToInt32((histo[i] / maxValue) * height);
-        g.DrawLine(new Pen(new SolidBrush(Color.FromArgb(100, 255, 0, 0)), 1), i, height, i, height - x);
+        try
+        {
+          int x = (int)((histo[i] / maxValue) * height);
+          g.DrawLine(new Pen(new SolidBrush(Color.FromArgb(100, 255, 0, 0)), 1), i, height, i, height - x);
+        }
+        catch (Exception ex)
+        {
+
+        }
       }
 
       maxValue = 0;
@@ -183,16 +191,24 @@ namespace CameraControl.Classes
       BitmapImage res = null;
       try
       {
-        
         FIBITMAP dib = FreeImage.LoadEx(FileName);
-        CreateHistogram(dib);
-        CreateHistogramBlack(dib);
-        res =
-          byteArrayToImageEx(FreeImage.GetFileType(FileName, 0) == FREE_IMAGE_FORMAT.FIF_RAW
-                               ? ImageToByteArray(
-                                 FreeImage.GetBitmap(FreeImage.ConvertToType(dib, FREE_IMAGE_TYPE.FIT_BITMAP, true)))
-                               : ImageToByteArray(FreeImage.GetBitmap(dib)));
-        FreeImage.UnloadEx(ref dib);
+        if (FreeImage.GetFileType(FileName, 0) == FREE_IMAGE_FORMAT.FIF_RAW)
+        {
+          FIBITMAP bmp = FreeImage.ConvertToType(dib, FREE_IMAGE_TYPE.FIT_BITMAP, false);
+          res = byteArrayToImageEx(ImageToByteArray(FreeImage.GetBitmap(bmp)));
+          CreateHistogram(bmp);
+          CreateHistogramBlack(bmp);
+          FreeImage.UnloadEx(ref dib);
+          FreeImage.UnloadEx(ref bmp);
+        }
+        else
+        {
+          res = byteArrayToImageEx(ImageToByteArray(FreeImage.GetBitmap(dib)));
+          CreateHistogram(dib);
+          CreateHistogramBlack(dib);
+          FreeImage.UnloadEx(ref dib);
+        }
+
       }
       catch (Exception)
       {
