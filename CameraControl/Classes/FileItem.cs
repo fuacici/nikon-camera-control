@@ -194,7 +194,7 @@ namespace CameraControl.Classes
         FIBITMAP dib = FreeImage.LoadEx(FileName);
         if (FreeImage.GetFileType(FileName, 0) == FREE_IMAGE_FORMAT.FIF_RAW)
         {
-          FIBITMAP bmp = FreeImage.ConvertToType(dib, FREE_IMAGE_TYPE.FIT_BITMAP, false);
+          FIBITMAP bmp = FreeImage.ToneMapping(dib, FREE_IMAGE_TMO.FITMO_REINHARD05, 0, 0); // ConvertToType(dib, FREE_IMAGE_TYPE.FIT_BITMAP, false);
           res = byteArrayToImageEx(ImageToByteArray(FreeImage.GetBitmap(bmp)));
           CreateHistogram(bmp);
           CreateHistogramBlack(bmp);
