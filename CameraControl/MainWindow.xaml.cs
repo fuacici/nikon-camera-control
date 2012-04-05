@@ -95,7 +95,7 @@ namespace CameraControl
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       WiaManager.ConnectToCamera();
-      SessionPanel.DataContext = ServiceProvider.Settings;
+      //SessionPanel.DataContext = ServiceProvider.Settings;
       ImagePanel.DataContext = ServiceProvider.Settings;
     }
 
