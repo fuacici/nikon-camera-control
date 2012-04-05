@@ -43,7 +43,6 @@ namespace CameraControl
       ServiceProvider.Settings.Manager = WiaManager;
       WiaManager.PhotoTaked += WiaManager_PhotoTaked;
       InitializeComponent();
-      ThemeManager.ApplyTheme(Application.Current, "ExpressionDark");
       DataContext = ServiceProvider.Settings;
       controler1.Manager = WiaManager;
     }
@@ -200,6 +199,12 @@ namespace CameraControl
     {
       PropertyWnd wnd=new PropertyWnd();
       wnd.Show();
+    }
+
+    private void button2_Click(object sender, RoutedEventArgs e)
+    {
+      SettingsWnd wnd=new SettingsWnd();
+      wnd.ShowDialog();
     }
 
   }

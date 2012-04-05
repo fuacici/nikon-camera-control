@@ -48,7 +48,7 @@ namespace CameraControl.Classes
       }
     }
 
-
+    [XmlIgnore]
     private Visibility _imageLoading;
 
     [XmlIgnore]
@@ -62,6 +62,18 @@ namespace CameraControl.Classes
       }
     }
 
+    private string _currentTheme;
+    public string CurrentTheme
+    {
+      get { return _currentTheme; }
+      set
+      {
+        _currentTheme = value;
+        NotifyPropertyChanged("CurrentTheme");
+      }
+    }
+
+
     public Settings()
     {
       ConfigFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,
@@ -70,6 +82,7 @@ namespace CameraControl.Classes
       PhotoSessions = new ObservableCollection<PhotoSession>();
       ImageLoading = Visibility.Hidden;
       SelectedBitmap = new BitmapFile();
+      CurrentTheme = "ExpressionDark";
     }
 
     public void Add(PhotoSession session)
