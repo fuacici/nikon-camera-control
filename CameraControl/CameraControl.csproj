@@ -75,6 +75,9 @@
     <Compile Include="windows\PropertyWnd.xaml.cs">
       <DependentUpon>PropertyWnd.xaml</DependentUpon>
     </Compile>
+    <Compile Include="windows\SettingsWnd.xaml.cs">
+      <DependentUpon>SettingsWnd.xaml</DependentUpon>
+    </Compile>
     <Page Include="Classes\EditSession.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -104,6 +107,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="windows\PropertyWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="windows\SettingsWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
