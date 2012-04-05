@@ -304,6 +304,7 @@ namespace CameraControl.Classes
 
     public bool TakePicture()
     {
+      //14 4d545058-1a2e-4106-a357-771e0819fc56
       Device.ExecuteCommand(Conts.wiaCommandTakePicture);
       return false;
     }

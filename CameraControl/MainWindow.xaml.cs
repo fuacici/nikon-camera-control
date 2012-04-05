@@ -17,7 +17,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CameraControl.Classes;
+using CameraControl.windows;
 using WIA;
+using WPF.Themes;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace CameraControl
@@ -41,6 +43,7 @@ namespace CameraControl
       ServiceProvider.Settings.Manager = WiaManager;
       WiaManager.PhotoTaked += WiaManager_PhotoTaked;
       InitializeComponent();
+      ThemeManager.ApplyTheme(Application.Current, "ExpressionDark");
       DataContext = ServiceProvider.Settings;
       controler1.Manager = WiaManager;
     }
@@ -177,7 +180,8 @@ namespace CameraControl
     {
       ServiceProvider.Settings.ImageLoading = Visibility.Visible;
       FileItem fileItem = e.Argument as FileItem;
-      BitmapImage logo = fileItem.GetBitmap();
+      ServiceProvider.Settings.SelectedBitmap.SetFileItem(fileItem);
+      BitmapImage logo = ServiceProvider.Settings.SelectedBitmap.GetBitmap();
       ServiceProvider.Settings.ImageLoading = Visibility.Hidden;
       //logo.BeginInit();
       //logo.UriSource = new Uri(fileItem.FileName);
@@ -188,10 +192,14 @@ namespace CameraControl
       Dispatcher.BeginInvoke(new ThreadStart(delegate
                                                {
                                                  image1.Source = logo;
-                                                 image2.Source = fileItem.Histogram;
-                                                 image3.Source = fileItem.HistogramBlack;
                                                }));
 
+    }
+
+    private void button1_Click(object sender, RoutedEventArgs e)
+    {
+      PropertyWnd wnd=new PropertyWnd();
+      wnd.Show();
     }
 
   }
