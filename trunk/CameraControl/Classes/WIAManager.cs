@@ -324,6 +324,7 @@ namespace CameraControl.Classes
           {
             DeviceId = DevInfo.DeviceID;
             Device = DevInfo.Connect();
+
             //Log(DateTime.Now.ToString() + " Digital Still Camera Connected\r\n");
             DeviceName = Device.Properties["Description"].get_Value();
             Manufacturer = Device.Properties["Manufacturer"].get_Value();

@@ -40,17 +40,17 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="161" />
             <ColumnDefinition Width="618*" />
-
             <ColumnDefinition Width="223" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="54" />
+            <RowDefinition Height="45" />
             <RowDefinition Height="463*" />
+            <RowDefinition Height="35" />
             <RowDefinition Height="121" />
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
         <my:Controler x:Name="controler1" Grid.Row="1" IsEnabled="{Binding Path=Manager.IsConected}" Margin="0,0,0,15" />
-        <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,166,0">
+        <StackPanel Grid.Column="1" Grid.Row="2">
             <StackPanel  Orientation="Horizontal">
                 <Label Content="Manufacturer :" />
                 <Label Content="{Binding Path=Manager.Manufacturer}" />
@@ -59,10 +59,7 @@
                 <Label Content="Model :" />
                 <Label Content="{Binding Path=Manager.DeviceName}" />
             </StackPanel>
-            <Button Content="Button" Height="23" Name="button2" Width="75" Click="button2_Click" />
         </StackPanel>
-        <Button Content="Take picture" Name="button3" Click="button3_Click" IsEnabled="{Binding Path=Manager.IsConected}">
-        </Button>
         <Border  BorderThickness="1" CornerRadius="5" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,15">
             <Image Grid.Row="1" Name="image1" Stretch="Uniform" />
         </Border>
@@ -74,18 +71,27 @@
                 </RadialGradientBrush>
             </Label.Foreground>
         </Label>
-        <StackPanel Grid.Column="2" Name="SessionPanel">
-            <StackPanel  Orientation="Horizontal">
-                <ComboBox  Name="cmb_session" SelectedValue="{Binding Path=DefaultSession}" ItemsSource="{Binding Path=PhotoSessions}" Width="150"  Margin="3"/>
-                <Button Content="Add" Grid.Column="3" Name="btn_add_Sesion" Margin="3" Click="btn_add_Sesion_Click"/>
-                <Button Content="Edit" Grid.Column="3" Name="btn_edit_Sesion" Margin="3" Click="btn_edit_Sesion_Click" />
-            </StackPanel>
-            <StackPanel  Orientation="Horizontal">
-            </StackPanel>
-            <Button Content="Button" Height="23" Name="button1" Width="75" Click="button1_Click" />
-        </StackPanel>
-        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Name="ImagePanel"  Grid.RowSpan="2" >
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="3" Name="ImagePanel"  Grid.RowSpan="2" >
             <ListBox  Name="ImageLIst" ItemsSource="{Binding Path=DefaultSession.Files}" SelectionChanged="ImageLIst_SelectionChanged" Background="{DynamicResource WindowBackgroundBrush}"/>
         </StackPanel>
+        <ToolBar Grid.ColumnSpan="3" Name="toolBar1">
+            <Button ToolTip="Take picture"  Height="30" Name="button3" Click="button3_Click" IsEnabled="{Binding Path=Manager.IsConected}" Margin="5">
+                <Image Source="/CameraControl;component/Images/Camera.png"/>
+            </Button>
+            <ToggleButton ToolTip="Button" Height="30" Width="50" Name="button1"  Click="button1_Click" Margin="5">
+                <Image Source="/CameraControl;component/Images/Camera.png"/>
+            </ToggleButton>
+            <Button ToolTip="Settings" Height="30" Name="button2" Width="50" Click="button2_Click" Margin="5" >
+                <Image Source="/CameraControl;component/Images/Settings.png" />                
+            </Button>
+            <StackPanel HorizontalAlignment="Right">
+                <StackPanel  Orientation="Horizontal">
+                    <ComboBox  Name="cmb_session" SelectedValue="{Binding Path=DefaultSession}" ItemsSource="{Binding Path=PhotoSessions}" Width="150"  Margin="3"/>
+                    <Button Content="Add" Grid.Column="3" Name="btn_add_Sesion" Margin="3" Click="btn_add_Sesion_Click"/>
+                    <Button Content="Edit" Grid.Column="3" Name="btn_edit_Sesion" Margin="3" Click="btn_edit_Sesion_Click" />
+                </StackPanel>
+            </StackPanel>
+        </ToolBar>
+        
     </Grid>
 </Window>
