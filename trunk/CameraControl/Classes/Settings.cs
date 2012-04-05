@@ -35,6 +35,20 @@ namespace CameraControl.Classes
     [XmlIgnore]
     public ObservableCollection<PhotoSession> PhotoSessions { get; set; }
 
+    private BitmapFile _selectedBitmap;
+
+    [XmlIgnore]
+    public BitmapFile SelectedBitmap
+    {
+      get { return _selectedBitmap; }
+      set
+      {
+        _selectedBitmap = value;
+        NotifyPropertyChanged("DefaultSession");
+      }
+    }
+
+
     private Visibility _imageLoading;
 
     [XmlIgnore]
@@ -55,6 +69,7 @@ namespace CameraControl.Classes
       DefaultSession = new PhotoSession();
       PhotoSessions = new ObservableCollection<PhotoSession>();
       ImageLoading = Visibility.Hidden;
+      SelectedBitmap = new BitmapFile();
     }
 
     public void Add(PhotoSession session)
