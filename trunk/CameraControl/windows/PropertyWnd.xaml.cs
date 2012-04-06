@@ -30,5 +30,19 @@ namespace CameraControl.windows
       DragMove();
     }
 
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+      Hide();
+    }
+
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (IsVisible)
+      {
+        Hide();
+        e.Cancel = true;
+      }
+    }
+
   }
 }

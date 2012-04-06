@@ -29,7 +29,9 @@ namespace CameraControl
   /// </summary>
   public partial class MainWindow : Window
   {
-    
+
+    public PropertyWnd PropertyWnd { get; set; }
+
     public WIAManager WiaManager { get; set; }
 
     public MainWindow()
@@ -197,14 +199,44 @@ namespace CameraControl
 
     private void button1_Click(object sender, RoutedEventArgs e)
     {
-      PropertyWnd wnd=new PropertyWnd();
-      wnd.Show();
+      if (button1.IsChecked == true)
+      {
+        if (PropertyWnd == null)
+        {
+          PropertyWnd = new PropertyWnd();
+        }
+        PropertyWnd.IsVisibleChanged -= PropertyWnd_IsVisibleChanged;
+        PropertyWnd.Show();
+        PropertyWnd.IsVisibleChanged += PropertyWnd_IsVisibleChanged;
+      }
+      else
+      {
+        if (PropertyWnd != null && PropertyWnd.Visibility == Visibility.Visible)
+        {
+          PropertyWnd.IsVisibleChanged -= PropertyWnd_IsVisibleChanged;
+          PropertyWnd.Hide();
+        }
+      }
+    }
+
+    void PropertyWnd_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+      button1.IsChecked = !button1.IsChecked;
     }
 
     private void button2_Click(object sender, RoutedEventArgs e)
     {
       SettingsWnd wnd=new SettingsWnd();
       wnd.ShowDialog();
+    }
+
+    private void Window_Closed(object sender, EventArgs e)
+    {
+      if (PropertyWnd != null)
+      {
+        PropertyWnd.Hide();
+        PropertyWnd.Close();
+      }
     }
 
   }
