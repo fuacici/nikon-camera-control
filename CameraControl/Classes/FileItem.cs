@@ -61,7 +61,8 @@ namespace CameraControl.Classes
       {
         if (_thumbnail == null)
         {
-          ServiceProvider.ThumbWorker.AddItem(this);
+          GetExtendedThumb();
+          //ServiceProvider.ThumbWorker.AddItem(this);
         }
         return _thumbnail;
       }
@@ -83,13 +84,19 @@ namespace CameraControl.Classes
           if (FreeImage.GetFileType(FileName, 0) == FREE_IMAGE_FORMAT.FIF_RAW)
           {
             dib = FreeImage.LoadEx(FileName, FREE_IMAGE_LOAD_FLAGS.RAW_PREVIEW);
+            FIBITMAP bit = FreeImage.MakeThumbnail(dib, 255, true);
+            Thumbnail = byteArrayToImageEx(ImageToByteArray(FreeImage.GetBitmap(bit)));
+            FreeImage.UnloadEx(ref dib);
           }
           else
           {
-            dib = FreeImage.LoadEx(FileName);
+            Image.GetThumbnailImageAbort myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
+            Stream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite); // or any stream
+            Image tempImage = Image.FromStream(fs, true, false);
+            Thumbnail = byteArrayToImageEx(ImageToByteArray(tempImage.GetThumbnailImage(160, 120, myCallback, IntPtr.Zero)));
+            fs.Close();
           }
-          FIBITMAP bit = FreeImage.MakeThumbnail(dib, 255, true);
-          Thumbnail = byteArrayToImageEx(ImageToByteArray(FreeImage.GetBitmap(bit)));
+
           //int dw = bitmap.Width;
           //int dh = bitmap.Height;
           //int tw = 160;
@@ -117,14 +124,19 @@ namespace CameraControl.Classes
           //}
           //_thumbData = ImageToByteArray(_thumbnail);
           //Size = 256;
-          FreeImage.UnloadEx(ref dib);
-          NotifyPropertyChanged("Thumbnail");
+          //NotifyPropertyChanged("Thumbnail");
         }
       }
       catch (Exception)
       {
       }
     }
+
+    private bool ThumbnailCallback()
+    {
+      return false;
+    }
+
 
     public byte[] ImageToByteArray(Image p_ImageIn)
     {
