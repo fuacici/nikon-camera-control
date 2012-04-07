@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -92,11 +93,9 @@ namespace CameraControl.Classes
       {
         int x = Convert.ToInt32((histo[i] / maxValue) * height);
         g.DrawLine(new Pen(new SolidBrush(Color.Black), 1), i, height, i, height - x);
-        //if ((i+1) % 52 == 0)
-        //  g.DrawLine(new Pen(new SolidBrush(Color.Black), 1), i, height, i, 0);
       }
 
-      HistogramBlack = byteArrayToImageEx(ImageToByteArray(image));
+      HistogramBlack =ToBitmap(image);
     }
 
     private void CreateHistogram(FIBITMAP dib)
@@ -161,7 +160,7 @@ namespace CameraControl.Classes
       }
 
 
-      Histogram = byteArrayToImageEx(ImageToByteArray(image));
+      Histogram = ToBitmap(image);
     }
 
 
@@ -176,8 +175,8 @@ namespace CameraControl.Classes
         if (FreeImage.GetFileType(FileItem.FileName, 0) == FREE_IMAGE_FORMAT.FIF_RAW)
         {
           FIBITMAP bmp = FreeImage.ToneMapping(dib, FREE_IMAGE_TMO.FITMO_REINHARD05, 0, 0); // ConvertToType(dib, FREE_IMAGE_TYPE.FIT_BITMAP, false);
-          FileItem.Thumbnail = byteArrayToImageEx(ImageToByteArray(FreeImage.GetBitmap(FreeImage.MakeThumbnail(dib, 255, true))));
-          DisplayImage = byteArrayToImageEx(ImageToByteArray(FreeImage.GetBitmap(bmp)));
+          FileItem.Thumbnail = ToBitmap(FreeImage.GetBitmap(FreeImage.MakeThumbnail(dib, 255, true)));
+          DisplayImage = ToBitmap(FreeImage.GetBitmap(bmp));
           CreateHistogram(bmp);
           CreateHistogramBlack(bmp);
           FreeImage.UnloadEx(ref dib);
@@ -185,8 +184,8 @@ namespace CameraControl.Classes
         }
         else
         {
-          DisplayImage = byteArrayToImageEx(ImageToByteArray(FreeImage.GetBitmap(dib)));
-          FileItem.Thumbnail = byteArrayToImageEx(ImageToByteArray(FreeImage.GetBitmap(FreeImage.MakeThumbnail(dib, 255, true))));
+          DisplayImage = ToBitmap(FreeImage.GetBitmap(dib));
+          FileItem.Thumbnail =ToBitmap(FreeImage.GetBitmap(FreeImage.MakeThumbnail(dib, 255, true)));
           CreateHistogram(dib);
           CreateHistogramBlack(dib);
           FreeImage.UnloadEx(ref dib);
@@ -199,19 +198,61 @@ namespace CameraControl.Classes
       return res;
     }
 
-    public byte[] ImageToByteArray(Image p_ImageIn)
+    public void SetBitmap(BitmapImage bi,Image image)
+    {
+      try
+      {
+        MemoryStream ms = new MemoryStream();
+        image.Save(ms, ImageFormat.Bmp);
+        ms.Position = 0;
+        if(bi.IsFrozen)
+        {
+          BitmapImage bic = bi.Clone();
+          bic.BeginInit();
+          bic.StreamSource = ms;
+          bic.EndInit();
+        }
+        else
+        {
+          bi.BeginInit();
+          bi.StreamSource = ms;
+          bi.EndInit();
+          bi.Freeze();
+        }
+      }
+      catch (Exception ex)
+      {
+        
+        
+      }
+    }
+
+    public BitmapImage ToBitmap(Image image)
+    {
+      MemoryStream ms = new MemoryStream();
+      image.Save(ms, ImageFormat.Bmp);
+      ms.Position = 0;
+      BitmapImage bi = new BitmapImage();
+      bi.BeginInit();
+      bi.StreamSource = ms;
+      bi.EndInit();
+      bi.Freeze();
+      return bi;
+    }
+
+    private byte[] ImageToByteArray(Image p_ImageIn)
     {
       byte[] aRet = null;
 
       using (MemoryStream oMS = new MemoryStream())
       {
-        p_ImageIn.Save(oMS, System.Drawing.Imaging.ImageFormat.Jpeg);
+        p_ImageIn.Save(oMS, System.Drawing.Imaging.ImageFormat.Bmp);
         aRet = oMS.ToArray();
       }
       return aRet;
     }
 
-    public BitmapImage byteArrayToImageEx(byte[] byteArrayIn)
+    private BitmapImage byteArrayToImageEx(byte[] byteArrayIn)
     {
       if (byteArrayIn == null)
         return null;
