@@ -33,7 +33,20 @@ namespace CameraControl.Classes
       }
     }
 
-
+    private BitmapImage _displayImage;
+    public BitmapImage DisplayImage
+    {
+      get { return _displayImage; }
+      set
+      {
+        if(_displayImage==null || FileItem!=null)
+        {
+          _displayImage = FileItem.Thumbnail;
+        }
+        _displayImage = value;
+        NotifyPropertyChanged("DisplayImage");
+      }
+    }
 
     private BitmapImage _histogram;
     public BitmapImage Histogram
@@ -163,7 +176,8 @@ namespace CameraControl.Classes
         if (FreeImage.GetFileType(FileItem.FileName, 0) == FREE_IMAGE_FORMAT.FIF_RAW)
         {
           FIBITMAP bmp = FreeImage.ToneMapping(dib, FREE_IMAGE_TMO.FITMO_REINHARD05, 0, 0); // ConvertToType(dib, FREE_IMAGE_TYPE.FIT_BITMAP, false);
-          res = byteArrayToImageEx(ImageToByteArray(FreeImage.GetBitmap(bmp)));
+          FileItem.Thumbnail = byteArrayToImageEx(ImageToByteArray(FreeImage.GetBitmap(FreeImage.MakeThumbnail(dib, 255, true))));
+          DisplayImage = byteArrayToImageEx(ImageToByteArray(FreeImage.GetBitmap(bmp)));
           CreateHistogram(bmp);
           CreateHistogramBlack(bmp);
           FreeImage.UnloadEx(ref dib);
@@ -171,7 +185,8 @@ namespace CameraControl.Classes
         }
         else
         {
-          res = byteArrayToImageEx(ImageToByteArray(FreeImage.GetBitmap(dib)));
+          DisplayImage = byteArrayToImageEx(ImageToByteArray(FreeImage.GetBitmap(dib)));
+          FileItem.Thumbnail = byteArrayToImageEx(ImageToByteArray(FreeImage.GetBitmap(FreeImage.MakeThumbnail(dib, 255, true))));
           CreateHistogram(dib);
           CreateHistogramBlack(dib);
           FreeImage.UnloadEx(ref dib);
@@ -213,6 +228,7 @@ namespace CameraControl.Classes
     {
       FileItem = item;
       IsLoaded = false;
+      DisplayImage = FileItem.Thumbnail;
     }
 
     public BitmapFile()

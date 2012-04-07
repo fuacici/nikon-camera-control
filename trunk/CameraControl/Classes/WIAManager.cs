@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using WIA;
 
 namespace CameraControl.Classes
@@ -311,6 +312,11 @@ namespace CameraControl.Classes
 
     public bool ConnectToCamera()
     {
+      return ConnectToCamera(true);
+    }
+
+    public bool ConnectToCamera(bool retry)
+    {
       try
       {
         // Device is already connected
@@ -348,6 +354,11 @@ namespace CameraControl.Classes
       }
       catch (Exception exp)
       {
+        if (retry)
+        {
+          Thread.Sleep(1000);
+          ConnectToCamera(false);
+        }
         //Log("Something went wrong when connecting the camera\r\n", exp.ToString());
         return false;
       }

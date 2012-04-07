@@ -171,7 +171,7 @@ namespace CameraControl
         FileItem item = e.AddedItems[0] as FileItem;
         if (item != null)
         {
-          image1.Source = item.Thumbnail;
+          //image1.Source = item.Thumbnail;
           worker.RunWorkerAsync(item);
         }
       }
@@ -182,7 +182,7 @@ namespace CameraControl
       ServiceProvider.Settings.ImageLoading = Visibility.Visible;
       FileItem fileItem = e.Argument as FileItem;
       ServiceProvider.Settings.SelectedBitmap.SetFileItem(fileItem);
-      BitmapImage logo = ServiceProvider.Settings.SelectedBitmap.GetBitmap();
+      ServiceProvider.Settings.SelectedBitmap.GetBitmap();
       ServiceProvider.Settings.ImageLoading = Visibility.Hidden;
       //logo.BeginInit();
       //logo.UriSource = new Uri(fileItem.FileName);
@@ -190,10 +190,10 @@ namespace CameraControl
       //logo.Freeze();
 
          //Call the UI thread using the Dispatcher to update the Image control
-      Dispatcher.BeginInvoke(new ThreadStart(delegate
-                                               {
-                                                 image1.Source = logo;
-                                               }));
+      //Dispatcher.BeginInvoke(new ThreadStart(delegate
+      //                                         {
+      //                                           image1.Source = logo;
+      //                                         }));
 
     }
 
