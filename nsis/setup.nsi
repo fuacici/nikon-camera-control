@@ -5,7 +5,7 @@ Name NikonCameraControl
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.2
+!define VERSION 0.3
 !define COMPANY "Duka Istvan"
 !define URL http://code.google.com/p/nikon-camera-control/
 
@@ -40,7 +40,7 @@ Var StartMenuGroup
 !insertmacro MUI_LANGUAGE English
 
 # Installer attributes
-OutFile NCCsetup.exe
+OutFile NCCsetup_${VERSION}.exe
 InstallDir $PROGRAMFILES\NikonCameraControl
 CRCCheck on
 XPStyle on
