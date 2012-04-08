@@ -10,6 +10,5 @@ namespace CameraControl
   {
     public static Settings Settings { get; set; }
     public static ThumbWorker ThumbWorker { get; set; }
-  
   }
 }

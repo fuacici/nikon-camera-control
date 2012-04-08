@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -49,37 +50,37 @@ namespace CameraControl
       controler1.Manager = WiaManager;
     }
 
-    void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-      if(e.PropertyName=="DefaultSession")
+      if (e.PropertyName == "DefaultSession")
       {
         BackgroundWorker backgroundWorker = new BackgroundWorker();
         backgroundWorker.DoWork += delegate
-        {
-          try
-          {
-            //ServiceProvider.ThumbWorker.Start();
-            foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
-            {
-              if (fileItem.Thumbnail == null)
-                fileItem.GetExtendedThumb();
-            }
-          }
-          catch (Exception)
-          {
-            
-          }
-        };
+                                     {
+                                       try
+                                       {
+                                         //ServiceProvider.ThumbWorker.Start();
+                                         foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
+                                         {
+                                           if (fileItem.Thumbnail == null)
+                                             fileItem.GetExtendedThumb();
+                                         }
+                                       }
+                                       catch (Exception)
+                                       {
+
+                                       }
+                                     };
         backgroundWorker.RunWorkerAsync();
       }
     }
 
-    void WiaManager_PhotoTaked(Item item)
+    private void WiaManager_PhotoTaked(Item item)
     {
       try
       {
         string s = item.ItemID;
-        ImageFile imageFile = (ImageFile)item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
+        ImageFile imageFile = (ImageFile) item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
         string fileName = ServiceProvider.Settings.DefaultSession.GetNextFileName(imageFile.FileExtension);
         //file exist : : 0x80070050
         imageFile.SaveFile(fileName);
@@ -119,8 +120,8 @@ namespace CameraControl
     //      }
     //      catch (Exception)
     //      {
-            
-            
+
+
     //      }
     //      textBox1.Text += "\n";
     //    }
@@ -129,20 +130,32 @@ namespace CameraControl
 
     private void button3_Click(object sender, RoutedEventArgs e)
     {
+
+      if (!ServiceProvider.Settings.DefaultSession.TimeLapse.IsDisabled)
+      {
+        if (
+          MessageBox.Show("A time lapse photo session runnig !\n Do you want to stop it  ?",
+                          "", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+        {
+          ServiceProvider.Settings.DefaultSession.TimeLapse.Stop();
+          return;
+        }
+      }
+
       try
       {
         WiaManager.TakePicture();
       }
       catch (Exception exception)
       {
-        MessageBox.Show("No picture was teked !\n" + exception.Message);
+        MessageBox.Show("No picture was taken !\n" + exception.Message);
       }
-      
+
     }
 
     private void btn_edit_Sesion_Click(object sender, RoutedEventArgs e)
     {
-      if(File.Exists(ServiceProvider.Settings.DefaultSession.ConfigFile))
+      if (File.Exists(ServiceProvider.Settings.DefaultSession.ConfigFile))
       {
         File.Delete(ServiceProvider.Settings.DefaultSession.ConfigFile);
       }
@@ -166,7 +179,7 @@ namespace CameraControl
 
       if (e.AddedItems.Count > 0)
       {
-        BackgroundWorker worker=new BackgroundWorker();
+        BackgroundWorker worker = new BackgroundWorker();
         worker.DoWork += worker_DoWork;
         FileItem item = e.AddedItems[0] as FileItem;
         if (item != null)
@@ -177,7 +190,7 @@ namespace CameraControl
       }
     }
 
-    void worker_DoWork(object sender, DoWorkEventArgs e)
+    private void worker_DoWork(object sender, DoWorkEventArgs e)
     {
       ServiceProvider.Settings.ImageLoading = Visibility.Visible;
       FileItem fileItem = e.Argument as FileItem;
@@ -189,7 +202,7 @@ namespace CameraControl
       //logo.EndInit();
       //logo.Freeze();
 
-         //Call the UI thread using the Dispatcher to update the Image control
+      //Call the UI thread using the Dispatcher to update the Image control
       //Dispatcher.BeginInvoke(new ThreadStart(delegate
       //                                         {
       //                                           image1.Source = logo;
@@ -219,15 +232,19 @@ namespace CameraControl
       }
     }
 
-    void PropertyWnd_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+    private void PropertyWnd_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
       button1.IsChecked = !button1.IsChecked;
     }
 
     private void button2_Click(object sender, RoutedEventArgs e)
     {
-      SettingsWnd wnd=new SettingsWnd();
+      if (PropertyWnd != null && PropertyWnd.IsVisible)
+        PropertyWnd.Topmost = false;
+      SettingsWnd wnd = new SettingsWnd();
       wnd.ShowDialog();
+      if (PropertyWnd != null && PropertyWnd.IsVisible)
+        PropertyWnd.Topmost = true;
     }
 
     private void Window_Closed(object sender, EventArgs e)
@@ -236,6 +253,33 @@ namespace CameraControl
       {
         PropertyWnd.Hide();
         PropertyWnd.Close();
+      }
+    }
+
+    private void but_timelapse_Click(object sender, RoutedEventArgs e)
+    {
+      if (PropertyWnd != null && PropertyWnd.IsVisible)
+        PropertyWnd.Topmost = false;
+      TimeLapseWnd wnd = new TimeLapseWnd();
+      wnd.ShowDialog();
+      if (PropertyWnd != null && PropertyWnd.IsVisible)
+        PropertyWnd.Topmost = true;
+    }
+
+    private void Window_Closing(object sender, CancelEventArgs e)
+    {
+      if (!ServiceProvider.Settings.DefaultSession.TimeLapse.IsDisabled)
+      {
+        if (
+          MessageBox.Show("A time lapse photo session runnig !\n Do you want to stop it and exit from application ?",
+                          "Closing", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
+        {
+          e.Cancel = true;
+        }
+        else
+        {
+          ServiceProvider.Settings.DefaultSession.TimeLapse.Stop();
+        }
       }
     }
 

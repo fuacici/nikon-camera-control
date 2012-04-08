@@ -38,3 +38,18 @@ Capture Mode|1|FalseFalse|ListSubType|
 Burst Number|1|FalseFalse|RangeSubType|
 Focus Metering Mode|32785|FalseFalse|ListSubType|
 Format|{B96B3CA9-0728-11D3-9D7B-0000F81EF32E}|FalseFalse|UnspecifiedSubType|
+
+
+Exif:
+
+Exposure mode
+Exposure program
+Exposure time
+F number
+Lens focal length
+ISO speed rating
+Metering mode
+White balance
+
+
+Icon source : http://iconleak.com/

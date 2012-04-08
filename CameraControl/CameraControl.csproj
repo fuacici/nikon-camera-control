@@ -59,6 +59,9 @@
     <Reference Include="WPF.Themes">
       <HintPath>..\refs\WPF.Themes.dll</HintPath>
     </Reference>
+    <Reference Include="WPFToolkit.Extended">
+      <HintPath>..\refs\WPFToolkit.Extended.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -66,17 +69,22 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\BitmapFile.cs" />
+    <Compile Include="Classes\DictionaryItem.cs" />
     <Compile Include="Classes\EditSession.xaml.cs">
       <DependentUpon>EditSession.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\FileItem.cs" />
     <Compile Include="Classes\ThumbWorker.cs" />
+    <Compile Include="Classes\TimeLapseClass.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="windows\PropertyWnd.xaml.cs">
       <DependentUpon>PropertyWnd.xaml</DependentUpon>
     </Compile>
     <Compile Include="windows\SettingsWnd.xaml.cs">
       <DependentUpon>SettingsWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="windows\TimeLapseWnd.xaml.cs">
+      <DependentUpon>TimeLapseWnd.xaml</DependentUpon>
     </Compile>
     <Page Include="Classes\EditSession.xaml">
       <SubType>Designer</SubType>
@@ -111,6 +119,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="windows\SettingsWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="windows\TimeLapseWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -159,6 +171,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Properties.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Timelapse.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
