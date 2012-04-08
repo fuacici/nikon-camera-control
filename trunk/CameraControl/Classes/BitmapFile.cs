@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media.Imaging;
 using FreeImageAPI;
+using FreeImageAPI.Metadata;
 
 namespace CameraControl.Classes
 {
@@ -70,6 +72,8 @@ namespace CameraControl.Classes
         NotifyPropertyChanged("HistogramBlack");
       }
     }
+
+    public ObservableCollection<DictionaryItem> Metadata { get; set; }
 
     private void CreateHistogramBlack(FIBITMAP dib)
     {
@@ -169,6 +173,7 @@ namespace CameraControl.Classes
     public BitmapImage GetBitmap()
     {
       BitmapImage res = null;
+      //Metadata.Clear();
       try
       {
         FIBITMAP dib = FreeImage.LoadEx(FileItem.FileName);
@@ -190,12 +195,68 @@ namespace CameraControl.Classes
           CreateHistogramBlack(dib);
           FreeImage.UnloadEx(ref dib);
         }
-
+        GetMetadata();
       }
       catch (Exception)
       {
       }
       return res;
+    }
+
+    public void GetMetadata()
+    {
+      using (FreeImageBitmap bitmap = new FreeImageBitmap(FileItem.FileName))
+      {
+        long i = 0;
+        foreach (MetadataModel metadataModel in bitmap.Metadata)
+        {
+          foreach (MetadataTag metadataTag in metadataModel)
+          {
+            AddMetadataItem(metadataTag);
+            //i += metadataTag.Length;
+            //if (!string.IsNullOrEmpty(metadataTag.Description))
+            //  Metadata.Add(new DictionaryItem { Name = metadataTag.Description, Value = metadataTag.ToString() });
+          }
+        }
+        //Enumerable.OrderBy(Metadata, dict => dict.Name);
+      }
+    }
+
+    /*
+http://www.exiv2.org/tags-nikon.html
+
+Click on a column header to sort the table.
+
+Tag (hex)	Tag (dec)	IFD	Key	Type	Tag description
+
+0x0000	0	NikonAf2	Exif.NikonAf2.Version	Undefined	Version
+0x0004	4	NikonAf2	Exif.NikonAf2.ContrastDetectAF	Byte	Contrast detect AF
+0x0005	5	NikonAf2	Exif.NikonAf2.AFAreaMode	Byte	AF area mode
+0x0006	6	NikonAf2	Exif.NikonAf2.PhaseDetectAF	Byte	Phase detect AF
+0x0007	7	NikonAf2	Exif.NikonAf2.PrimaryAFPoint	Byte	Primary AF point
+0x0008	8	NikonAf2	Exif.NikonAf2.AFPointsUsed	Byte	AF points used
+0x0010	16	NikonAf2	Exif.NikonAf2.AFImageWidth	Short	AF image width
+0x0012	18	NikonAf2	Exif.NikonAf2.AFImageHeight	Short	AF image height
+0x0014	20	NikonAf2	Exif.NikonAf2.AFAreaXPosition	Short	AF area x position
+0x0016	22	NikonAf2	Exif.NikonAf2.AFAreaYPosition	Short	AF area y position
+0x0018	24	NikonAf2	Exif.NikonAf2.AFAreaWidth	Short	AF area width
+0x001a	26	NikonAf2	Exif.NikonAf2.AFAreaHeight	Short	AF area height
+0x001c	28	NikonAf2	Exif.NikonAf2.ContrastDetectAFInFocus	Short	Contrast detect AF in focus
+     * 
+*/
+    public void AddMetadataItem(MetadataTag tag )
+    {
+      if (string.IsNullOrEmpty(tag.Description))
+        return;
+      foreach (DictionaryItem dictionaryItem in Metadata)
+      {
+        if (dictionaryItem.Name == tag.Description)
+        {
+          dictionaryItem.Value = tag.ToString();
+          return;
+        }
+      }
+      Metadata.Add(new DictionaryItem { Name = tag.Description, Value = tag.ToString()});
     }
 
     public void SetBitmap(BitmapImage bi,Image image)
@@ -252,7 +313,7 @@ namespace CameraControl.Classes
       return aRet;
     }
 
-    private BitmapImage byteArrayToImageEx(byte[] byteArrayIn)
+    public BitmapImage byteArrayToImageEx(byte[] byteArrayIn)
     {
       if (byteArrayIn == null)
         return null;
@@ -275,6 +336,15 @@ namespace CameraControl.Classes
     public BitmapFile()
     {
       IsLoaded = false;
+      Metadata = new ObservableCollection<DictionaryItem>();
+      Metadata.Add(new DictionaryItem() {Name = "Exposure mode"});
+      Metadata.Add(new DictionaryItem() {Name = "Exposure program"});
+      Metadata.Add(new DictionaryItem() {Name = "Exposure time"});
+      Metadata.Add(new DictionaryItem() {Name = "F number"});
+      Metadata.Add(new DictionaryItem() {Name = "Lens focal length"});
+      Metadata.Add(new DictionaryItem() {Name = "ISO speed rating"});
+      Metadata.Add(new DictionaryItem() {Name = "Metering mode"});
+      Metadata.Add(new DictionaryItem() {Name = "White balance"});
     }
   }
 }

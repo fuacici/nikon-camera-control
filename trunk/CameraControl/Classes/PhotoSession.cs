@@ -58,6 +58,18 @@ namespace CameraControl.Classes
     [XmlIgnore]
     public ObservableCollection<FileItem> Files { get; set; }
 
+    private TimeLapseClass _timeLapse;
+    public TimeLapseClass TimeLapse
+    {
+      get { return _timeLapse; }
+      set
+      {
+        _timeLapse = value;
+        NotifyPropertyChanged("TimeLapse");
+      }
+    }
+
+
     public string ConfigFile { get; set; }
 
     public PhotoSession()
@@ -66,6 +78,7 @@ namespace CameraControl.Classes
       Folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), Name);
       Files = new ObservableCollection<FileItem>();
       FileNameTemplate = "DSC_$C";
+      TimeLapse = new TimeLapseClass();
     }
 
     public string GetNextFileName(string ext)

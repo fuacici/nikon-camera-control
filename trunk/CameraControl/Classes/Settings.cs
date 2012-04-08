@@ -73,6 +73,17 @@ namespace CameraControl.Classes
       }
     }
 
+    private string _systemMessage;
+    [XmlIgnore]
+    public string SystemMessage
+    {
+      get { return _systemMessage; }
+      set
+      {
+        _systemMessage = value;
+        NotifyPropertyChanged("SystemMessage");
+      }
+    }
 
     public Settings()
     {
@@ -83,6 +94,7 @@ namespace CameraControl.Classes
       ImageLoading = Visibility.Hidden;
       SelectedBitmap = new BitmapFile();
       CurrentTheme = "ExpressionDark";
+      SystemMessage = "";
     }
 
     public void Add(PhotoSession session)
