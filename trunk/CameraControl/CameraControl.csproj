@@ -37,6 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="exiv2net">
+      <HintPath>..\refs\exiv2net.dll</HintPath>
+    </Reference>
     <Reference Include="FreeImageNET, Version=3.15.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\refs\FreeImageNET.dll</HintPath>
@@ -77,6 +80,12 @@
     <Compile Include="Classes\ThumbWorker.cs" />
     <Compile Include="Classes\TimeLapseClass.cs" />
     <Compile Include="ServiceProvider.cs" />
+    <Compile Include="windows\CreateTimeLapseWnd.xaml.cs">
+      <DependentUpon>CreateTimeLapseWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="windows\FullScreenWnd.xaml.cs">
+      <DependentUpon>FullScreenWnd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="windows\PropertyWnd.xaml.cs">
       <DependentUpon>PropertyWnd.xaml</DependentUpon>
     </Compile>
@@ -114,6 +123,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="windows\CreateTimeLapseWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="windows\FullScreenWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="windows\PropertyWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -174,6 +191,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Timelapse.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Fullscreen.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

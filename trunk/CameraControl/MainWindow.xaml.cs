@@ -283,5 +283,21 @@ namespace CameraControl
       }
     }
 
+    private void but_fullscreen_Click(object sender, RoutedEventArgs e)
+    {
+      ShowFullScreen();
+    }
+
+    private void ShowFullScreen()
+    {
+      FullScreenWnd wnd = new FullScreenWnd();
+      wnd.ShowDialog();
+    }
+
+    private void image1_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+      if (e.ClickCount >= 2 && e.LeftButton == MouseButtonState.Pressed)
+        ShowFullScreen();
+    }
   }
 }
