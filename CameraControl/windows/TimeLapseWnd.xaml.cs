@@ -33,5 +33,14 @@ namespace CameraControl.windows
     {
       Close();
     }
+
+    private void button1_Click(object sender, RoutedEventArgs e)
+    {
+      Hide();
+      CreateTimeLapseWnd wnd = new CreateTimeLapseWnd();
+      wnd.ShowDialog();
+      Show();
+    }
+
   }
 }

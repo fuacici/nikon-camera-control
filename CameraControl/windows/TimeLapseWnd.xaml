@@ -4,17 +4,30 @@
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:CameraControl="clr-namespace:CameraControl"
-        Title="Time Lapse" Height="251" Width="333" Background="{DynamicResource WindowBackgroundBrush}" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" UseLayoutRounding="True">
+        Title="Time Lapse" Height="291" Width="394" Background="{DynamicResource WindowBackgroundBrush}" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" UseLayoutRounding="True">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="64*" />
             <RowDefinition Height="148*" />
         </Grid.RowDefinitions>
-        <Button Content="Start TimeLapse" Margin="0,0,12,12" Name="btn_start" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="110" Grid.Row="1" Click="btn_start_Click" IsEnabled="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=Manager.IsConected}"/>
-        <Button Content="Close" Height="23" HorizontalAlignment="Left" Margin="12,0,0,12" Name="button2" VerticalAlignment="Bottom" Width="75" Grid.Row="1" Click="button2_Click" />
-        <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="12,28,0,0" Name="integerUpDown1" VerticalAlignment="Top" Width="134" Minimum="0" Maximum="3600" ShowButtonSpinner="True" Value="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.Period}" />
-        <Label Content="Seconds between shots" Height="28" HorizontalAlignment="Left" Margin="12,0,0,0" Name="label1" VerticalAlignment="Top" />
-        <xctk:IntegerUpDown HorizontalAlignment="Right" Margin="0,28,12,0" Name="integerUpDown2" VerticalAlignment="Top" Width="110" Minimum="0" Value="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.NumberOfPhotos}"/>
-        <Label Content="Number of photos" Height="28" HorizontalAlignment="Right" Margin="0,0,14,0" Name="label2" VerticalAlignment="Top" />
+        <TabControl Name="tabControl1" Grid.RowSpan="2">
+            <TabItem Header="Time Lapse" Name="tabItem1">
+                <Grid>
+                    <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="10,38,0,0" Maximum="3600" Minimum="0" Name="integerUpDown1" ShowButtonSpinner="True" Value="{Binding Source={x:Static CameraControl:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.Period}" VerticalAlignment="Top" Width="134" />
+                    <Label Content="Seconds between shots" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label1" VerticalAlignment="Top" />
+                    <xctk:IntegerUpDown HorizontalAlignment="Right" Margin="0,38,4,0" Minimum="0" Name="integerUpDown2" Value="{Binding Source={x:Static CameraControl:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.NumberOfPhotos}" VerticalAlignment="Top" Width="110" />
+                    <Label Content="Number of photos" Height="28" HorizontalAlignment="Right" Margin="0,10,6,0" Name="label2" VerticalAlignment="Top" />
+                    <Button Content="Close" Height="23" HorizontalAlignment="Left" Margin="10,0,0,14" Name="button2" VerticalAlignment="Bottom" Width="75" Click="button2_Click" />
+                    <Button Content="Start TimeLapse" Margin="0,0,6,14" Name="btn_start" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="110" Click="btn_start_Click" IsEnabled="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=Manager.IsConected}" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Movie settings" Name="tabItem2">
+                
+            </TabItem>
+            <TabItem Header="Create movie" Name="tabItem3">
+                <Button Content="Create movie" Height="23" Name="button1" Width="140" Click="button1_Click" />
+            </TabItem>
+
+        </TabControl>
     </Grid>
 </Window>

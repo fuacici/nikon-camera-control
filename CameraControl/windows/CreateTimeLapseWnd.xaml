@@ -1,0 +1,12 @@
+﻿<Window x:Class="CameraControl.windows.CreateTimeLapseWnd"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes" xmlns:CameraControl="clr-namespace:CameraControl"
+        themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
+        Title="CreateTimeLapseWnd" Height="192" Width="481" Background="{DynamicResource WindowBackgroundBrush}" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
+    <Grid>
+        <ProgressBar Height="29" HorizontalAlignment="Left" Margin="107,45,0,0" Name="progressBar1" VerticalAlignment="Top" Width="340" />
+        <Image Height="91" HorizontalAlignment="Left" Margin="12,12,0,0" Name="image1" Stretch="Fill" VerticalAlignment="Top" Width="91" />
+        <Button Content="Cancel" Height="23" HorizontalAlignment="Left" Margin="196,118,0,0" Name="button1" VerticalAlignment="Top" Width="75" />
+    </Grid>
+</Window>

@@ -205,14 +205,28 @@ namespace CameraControl.Classes
 
     public void GetMetadata()
     {
+      //Exiv2Net.Image image = new Exiv2Net.Image(FileItem.FileName);
+      //foreach (KeyValuePair<string, Exiv2Net.Value> i in image)
+      //{
+      //  Console.WriteLine(i);
+      //}
       using (FreeImageBitmap bitmap = new FreeImageBitmap(FileItem.FileName))
       {
+
         long i = 0;
         foreach (MetadataModel metadataModel in bitmap.Metadata)
         {
           foreach (MetadataTag metadataTag in metadataModel)
           {
             AddMetadataItem(metadataTag);
+            if(metadataTag.Key=="AFInfo2")
+            {
+              byte[] b=metadataTag.Value as byte[];
+              string hex =BitConverter.ToString(b);
+              //b = b.Reverse().ToArray();
+
+              ushort i6=BitConverter.ToUInt16(b, 6);
+            }
             //i += metadataTag.Length;
             //if (!string.IsNullOrEmpty(metadataTag.Description))
             //  Metadata.Add(new DictionaryItem { Name = metadataTag.Description, Value = metadataTag.ToString() });

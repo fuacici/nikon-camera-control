@@ -5,7 +5,7 @@ Name NikonCameraControl
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.3
+!define VERSION 0.4
 !define COMPANY "Duka Istvan"
 !define URL http://code.google.com/p/nikon-camera-control/
 
@@ -69,7 +69,7 @@ Section -post SEC0001
     SetOutPath $INSTDIR
     WriteUninstaller $INSTDIR\uninstall.exe
     !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-    SetOutPath $SMPROGRAMS\$StartMenuGroup
+
     CreateShortCut "$SMPROGRAMS\$StartMenuGroup\Nikon  Camera Control.lnk" "$INSTDIR\CameraControl.exe"
     CreateShortCut "$DESKTOP\Nikon  Camera Control.lnk" "$INSTDIR\CameraControl.exe" "" "$INSTDIR\CameraControl.exe" 0 "" "" "Nikon  Camera Control"
     
