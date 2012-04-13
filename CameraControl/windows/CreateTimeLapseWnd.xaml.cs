@@ -29,6 +29,8 @@ namespace CameraControl.windows
     private string _tempFolder = "";
     private int _counter = 0;
     private bool _isbusy = false;
+    private string _basedir = "";
+    private string _virtualdubdir = "";
 
     public CreateTimeLapseWnd()
     {
@@ -40,6 +42,8 @@ namespace CameraControl.windows
         Directory.Delete(_tempFolder, true);
       }
       Directory.CreateDirectory(_tempFolder);
+      _basedir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+      _virtualdubdir = Path.Combine(_basedir, "VirtualDub", "vdub.exe");
     }
 
     void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -62,10 +66,59 @@ namespace CameraControl.windows
           return;
         }
       }
+      string script = "";
+      using (TextReader reader = new StreamReader(Path.Combine(_basedir, "VirtualDub.script")))
+      {
+        script = reader.ReadToEnd();
+      }
+      script = script.Replace("$InFile$", Path.Combine(_tempFolder, "img000001.jpg").Replace(@"\",@"\\"));
+      script = script.Replace("$FPS$", ServiceProvider.Settings.DefaultSession.TimeLapse.Fps.ToString());
+      script = script.Replace("$Count$", ServiceProvider.Settings.DefaultSession.Files.Count.ToString());
+      script = script.Replace("$OutFile$", ServiceProvider.Settings.DefaultSession.TimeLapse.OutputFIleName.Replace(@"\", @"\\"));
+      using (TextWriter writer = new StreamWriter(Path.Combine(_tempFolder, "VirtualDub.script")))
+      {
+        writer.Write(script);
+      }
+
+      System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo(_virtualdubdir);
+      //psi.RedirectStandardOutput = true;
+      //psi.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+      psi.Arguments = "/i " + Path.Combine(_tempFolder, "VirtualDub.script");
+      psi.UseShellExecute = false;
+      System.Diagnostics.Process listFiles;
+      listFiles = System.Diagnostics.Process.Start(psi);
+      listFiles.WaitForExit();
+      MessageBox.Show("Conversion Done !");
+      button1.Content = "Done";
+      //Close();
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      if (ServiceProvider.Settings.DefaultSession.Files.Count == 0)
+      {
+        MessageBox.Show("No image files in current session !");
+        Close();
+        return;
+      }
+      if (ServiceProvider.Settings.DefaultSession.TimeLapse.VideoType == null || ServiceProvider.Settings.DefaultSession.TimeLapse.VideoType.Width == 0 || ServiceProvider.Settings.DefaultSession.TimeLapse.VideoType.Height == 0)
+      {
+        MessageBox.Show("Wrong video settings !");
+        Close();
+        return;
+      }
+      if (string.IsNullOrEmpty(ServiceProvider.Settings.DefaultSession.TimeLapse.OutputFIleName ))
+      {
+        MessageBox.Show("No output file defined !");
+        Close();
+        return;
+      }
+      if (!File.Exists(_virtualdubdir))
+      {
+        MessageBox.Show("VirtualDub not found. Reinstall the application ! !");
+        Close();
+        return;
+      }
       progressBar1.Maximum = ServiceProvider.Settings.DefaultSession.Files.Count;
       _isbusy = true;
       _backgroundWorker.RunWorkerAsync();
@@ -78,8 +131,8 @@ namespace CameraControl.windows
 
       uint dw = FreeImage.GetWidth(dib);
       uint dh = FreeImage.GetHeight(dib);
-      int tw = 1920;
-      int th = 1080;
+      int tw = ServiceProvider.Settings.DefaultSession.TimeLapse.VideoType.Width;
+      int th = ServiceProvider.Settings.DefaultSession.TimeLapse.VideoType.Height;
       double zw = (tw / (double)dw);
       double zh = (th / (double)dh);
       double z = (zw <= zh) ? zw : zh;

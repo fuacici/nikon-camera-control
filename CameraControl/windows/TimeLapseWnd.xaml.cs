@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -40,6 +41,18 @@ namespace CameraControl.windows
       CreateTimeLapseWnd wnd = new CreateTimeLapseWnd();
       wnd.ShowDialog();
       Show();
+    }
+
+    private void button3_Click(object sender, RoutedEventArgs e)
+    {
+      SaveFileDialog dialog = new SaveFileDialog();
+      dialog.Filter = "Avi files (*.avi)|*.avi|All files (*.*)|*.*";
+      dialog.AddExtension = true;
+      dialog.FileName = ServiceProvider.Settings.DefaultSession.TimeLapse.OutputFIleName;
+      if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+      {
+        ServiceProvider.Settings.DefaultSession.TimeLapse.OutputFIleName = dialog.FileName;
+      }
     }
 
   }

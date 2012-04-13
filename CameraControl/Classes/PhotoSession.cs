@@ -79,6 +79,10 @@ namespace CameraControl.Classes
       Files = new ObservableCollection<FileItem>();
       FileNameTemplate = "DSC_$C";
       TimeLapse = new TimeLapseClass();
+      if (ServiceProvider.Settings!=null && ServiceProvider.Settings.VideoTypes.Count > 0)
+        TimeLapse.VideoType = ServiceProvider.Settings.VideoTypes[0];
+      TimeLapse.OutputFIleName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos),
+                                              Name + ".avi");
     }
 
     public string GetNextFileName(string ext)

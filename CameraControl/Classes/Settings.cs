@@ -50,6 +50,9 @@ namespace CameraControl.Classes
 
     [XmlIgnore]
     private Visibility _imageLoading;
+    
+    [XmlIgnore]
+    public ObservableCollection<VideoType> VideoTypes { get; set; }
 
     [XmlIgnore]
     public Visibility ImageLoading
@@ -95,6 +98,12 @@ namespace CameraControl.Classes
       SelectedBitmap = new BitmapFile();
       CurrentTheme = "ExpressionDark";
       SystemMessage = "";
+      VideoTypes = new ObservableCollection<VideoType>();
+      VideoTypes.Add(new VideoType("HD 1080 16:9", 1920, 1080));
+      VideoTypes.Add(new VideoType("UXGA 4:3", 1600, 1200));
+      VideoTypes.Add(new VideoType("HD 720 16:9", 1280, 720));
+      VideoTypes.Add(new VideoType("Super VGA 4:3", 800, 600));
+      VideoTypes.Add(new VideoType("Super VGA 4:3", 800, 600));
     }
 
     public void Add(PhotoSession session)
