@@ -5,7 +5,7 @@
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         themes:ThemeManager.Theme="{Binding  Path=CurrentTheme}"
         Title="Nikon Camera Control" Height="700" Width="1024" Loaded="Window_Loaded" xmlns:my="clr-namespace:CameraControl" Background="{DynamicResource WindowBackgroundBrush}"
-        SizeToContent="Height" Closed="Window_Closed" Closing="Window_Closing">
+        Closed="Window_Closed" Closing="Window_Closing">
     <Window.Resources>
         <Style TargetType="{x:Type ListBox}">
             <!-- Set the ItemTemplate of the ListBox to a DataTemplate which
@@ -50,17 +50,18 @@
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
         <my:Controler x:Name="controler1" Grid.Row="1" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=Manager.IsConected}" Margin="5"/>
-        <StackPanel Grid.Column="1" Grid.Row="2">
-            <StackPanel Orientation="Horizontal">
-                <StackPanel  Orientation="Horizontal">
-                    <Label Content="Manufacturer :" />
-                    <Label Content="{Binding Path=Manager.Manufacturer}" />
-                </StackPanel>
-                <StackPanel  Orientation="Horizontal">
-                    <Label Content="Model :" />
-                    <Label Content="{Binding Path=Manager.DeviceName}" />
-                </StackPanel>
+        <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="2">
+            <StackPanel  Orientation="Horizontal">
+                <Label Content="Manufacturer:" />
+                <Label Content="{Binding Path=Manager.Manufacturer}" />
             </StackPanel>
+            <StackPanel  Orientation="Horizontal">
+                <Label Content="Model:" />
+                <Label Content="{Binding Path=Manager.DeviceName}" />
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="2">
+
             <StackPanel  Orientation="Horizontal">
                 <Label Content="{Binding Path=SystemMessage }" />
             </StackPanel>

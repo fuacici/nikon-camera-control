@@ -36,6 +36,39 @@ namespace CameraControl.Classes
 
     private int _photosTaken;
 
+    private VideoType _videoType;
+    public VideoType VideoType
+    {
+      get { return _videoType; }
+      set
+      {
+        _videoType = value;
+        NotifyPropertyChanged("VideoType");
+      }
+    }
+
+    private string _outputFIleName;
+    public string OutputFIleName
+    {
+      get { return _outputFIleName; }
+      set
+      {
+        _outputFIleName = value;
+        NotifyPropertyChanged("OutputFIleName");
+      }
+    }
+
+    private int _fps;
+    public int Fps
+    {
+      get { return _fps; }
+      set
+      {
+        _fps = value;
+        NotifyPropertyChanged("Fps");
+      }
+    }
+
     [XmlIgnore]
     public int PhotosTaken
     {
@@ -66,6 +99,8 @@ namespace CameraControl.Classes
       NumberOfPhotos = 100;
       PhotosTaken = 0;
       IsDisabled = true;
+      VideoType = new VideoType("",0,0);
+      Fps = 15;
       _timer.Elapsed += _timer_Elapsed;
     }
 

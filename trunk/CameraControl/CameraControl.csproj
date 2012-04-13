@@ -79,6 +79,7 @@
     <Compile Include="Classes\FileItem.cs" />
     <Compile Include="Classes\ThumbWorker.cs" />
     <Compile Include="Classes\TimeLapseClass.cs" />
+    <Compile Include="Classes\VideoType.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="windows\CreateTimeLapseWnd.xaml.cs">
       <DependentUpon>CreateTimeLapseWnd.xaml</DependentUpon>
