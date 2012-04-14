@@ -5,6 +5,8 @@
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
         Title="FullScreenWnd" Height="300" Width="300" WindowState="Maximized" WindowStyle="None" KeyDown="image1_KeyDown" Background="{DynamicResource WindowBackgroundBrush}" MouseDown="image1_MouseDown">
     <Grid>
-        <Image Name="image1" Stretch="Uniform" Source="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" KeyDown="image1_KeyDown" MouseDown="image1_MouseDown" />
+        <Image Name="image1" Stretch="Uniform" Source="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" KeyDown="image1_KeyDown" MouseDown="image1_MouseDown" KeyUp="image1_KeyUp" />
+        <Label Content="Loading ..." Name="lbl_loading" Grid.Column="1" Grid.Row="1" Margin="292,2,195,0" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=ImageLoading}" FontSize="25" FontWeight="ExtraBold">
+        </Label>
     </Grid>
 </Window>

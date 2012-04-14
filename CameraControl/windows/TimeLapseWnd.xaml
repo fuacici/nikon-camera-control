@@ -30,6 +30,7 @@
                     <Button Content="..." Height="23" HorizontalAlignment="Left" Margin="328,125,0,0" Name="button3" VerticalAlignment="Top" Width="26" Click="button3_Click" />
                     <Label Content="Fps" Height="28" HorizontalAlignment="Left" Margin="14,75,0,0" Name="label5" VerticalAlignment="Top" />
                     <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="48,75,0,0" Name="integerUpDown3" VerticalAlignment="Top" Width="75" Minimum="5" Maximum="60" Value="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.Fps}" />
+                    <CheckBox Content="Fill image" Height="16" HorizontalAlignment="Left" Margin="286,79,0,0" Name="checkBox1" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.FillImage}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Create movie" Name="tabItem3">
