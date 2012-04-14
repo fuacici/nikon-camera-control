@@ -29,12 +29,21 @@ namespace CameraControl.windows
       {
         Close();
       }
+      else
+      {
+        //RaiseEvent(e);
+      }
     }
 
     private void image1_MouseDown(object sender, MouseButtonEventArgs e)
     {
       if (e.ClickCount >= 2 && e.LeftButton == MouseButtonState.Pressed)
         Close();
+    }
+
+    private void image1_KeyUp(object sender, KeyEventArgs e)
+    {
+      //RaiseEvent(e);
     }
   }
 }

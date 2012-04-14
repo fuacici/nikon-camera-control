@@ -70,12 +70,6 @@
             <Image Grid.Row="1" Name="image1" Stretch="Uniform" Source="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" MouseDown="image1_MouseDown" />
         </Border>
         <Label Content="Loading ..." Name="lbl_loading" Grid.Column="1" Grid.Row="1" Margin="292,2,195,0" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="{Binding Path=ImageLoading}" FontSize="25" FontWeight="ExtraBold">
-            <Label.Foreground>
-                <RadialGradientBrush>
-                    <GradientStop Color="Black" Offset="0" />
-                    <GradientStop Color="White" Offset="1" />
-                </RadialGradientBrush>
-            </Label.Foreground>
         </Label>
         <StackPanel Grid.Row="3" Grid.ColumnSpan="3" Name="ImagePanel"  Grid.RowSpan="2" >
             <ListBox  Name="ImageLIst" ItemsSource="{Binding Path=DefaultSession.Files, IsAsync=True}" SelectionChanged="ImageLIst_SelectionChanged" Background="{DynamicResource WindowBackgroundBrush}"/>

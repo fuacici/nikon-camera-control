@@ -21,6 +21,7 @@ using CameraControl.Classes;
 using CameraControl.windows;
 using WIA;
 using WPF.Themes;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace CameraControl
@@ -48,6 +49,8 @@ namespace CameraControl
       InitializeComponent();
       DataContext = ServiceProvider.Settings;
       controler1.Manager = WiaManager;
+      if (ServiceProvider.Settings.DefaultSession.Files.Count > 0)
+        ImageLIst.SelectedIndex = 0;
     }
 
     private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -185,6 +188,7 @@ namespace CameraControl
         if (item != null)
         {
           //image1.Source = item.Thumbnail;
+          ServiceProvider.Settings.SelectedBitmap.SetFileItem(item);
           worker.RunWorkerAsync(item);
         }
       }
@@ -192,9 +196,11 @@ namespace CameraControl
 
     private void worker_DoWork(object sender, DoWorkEventArgs e)
     {
-      ServiceProvider.Settings.ImageLoading = Visibility.Visible;
+      Thread.Sleep(200);
       FileItem fileItem = e.Argument as FileItem;
-      ServiceProvider.Settings.SelectedBitmap.SetFileItem(fileItem);
+      if (ServiceProvider.Settings.SelectedBitmap.FileItem.FileName != fileItem.FileName)
+        return;
+      ServiceProvider.Settings.ImageLoading = Visibility.Visible;
       ServiceProvider.Settings.SelectedBitmap.GetBitmap();
       ServiceProvider.Settings.ImageLoading = Visibility.Hidden;
       //logo.BeginInit();
@@ -291,7 +297,26 @@ namespace CameraControl
     private void ShowFullScreen()
     {
       FullScreenWnd wnd = new FullScreenWnd();
+      wnd.KeyDown += wnd_KeyDown;
+      wnd.KeyUp += wnd_KeyUp;
       wnd.ShowDialog();
+    }
+
+    void wnd_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+    {
+      ImageLIst.RaiseEvent(e);
+    }
+
+    void wnd_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+    {
+      if (e.Key == Key.Right && ImageLIst.SelectedIndex < ImageLIst.Items.Count - 1)
+      {
+        ImageLIst.SelectedIndex++;
+      }
+      if (e.Key == Key.Left && ImageLIst.SelectedIndex >0)
+      {
+        ImageLIst.SelectedIndex--;
+      }
     }
 
     private void image1_MouseDown(object sender, MouseButtonEventArgs e)

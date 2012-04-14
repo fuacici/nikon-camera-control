@@ -104,6 +104,18 @@ namespace CameraControl.Classes
       }
     }
 
+    private bool _fillImage;
+    public bool FillImage
+    {
+      get { return _fillImage; }
+      set
+      {
+        _fillImage = value;
+        NotifyPropertyChanged("FillImage");
+      }
+    }
+
+
     public TimeLapseClass()
     {
       Period = 5;
@@ -112,6 +124,7 @@ namespace CameraControl.Classes
       IsDisabled = true;
       VideoType = new VideoType("",0,0);
       Fps = 15;
+      FillImage = false;
       _timer.Elapsed += _timer_Elapsed;
     }
 

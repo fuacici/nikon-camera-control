@@ -31,11 +31,13 @@ namespace CameraControl.windows
     private bool _isbusy = false;
     private string _basedir = "";
     private string _virtualdubdir = "";
+    private DateTime _starTime;
 
     public CreateTimeLapseWnd()
     {
       InitializeComponent();
       _backgroundWorker.DoWork += new DoWorkEventHandler(_backgroundWorker_DoWork);
+      _backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_backgroundWorker_RunWorkerCompleted);
       _tempFolder = Path.Combine(Path.GetTempPath(), "NCC_TimeLapse", ServiceProvider.Settings.DefaultSession.Name);
       if (Directory.Exists(_tempFolder))
       {
@@ -43,11 +45,20 @@ namespace CameraControl.windows
       }
       Directory.CreateDirectory(_tempFolder);
       _basedir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-      _virtualdubdir = Path.Combine(_basedir, "VirtualDub", "vdub.exe");
+      _virtualdubdir = Path.Combine(_basedir, "VirtualDub", "VirtualDub.exe");
+      btn_paly.Visibility=Visibility.Hidden;
+    }
+
+    void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+    {
+      button1.Content = "Done";
+      btn_paly.Visibility = Visibility.Visible;
+      this.BringIntoView();
     }
 
     void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
     {
+      _starTime = DateTime.Now;
       foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
       {
         _counter++;
@@ -57,9 +68,10 @@ namespace CameraControl.windows
                                                  {
                                                    progressBar1.Value++;
                                                    image1.Source = item.Thumbnail;
-                                                   label1.Content = string.Format("{0}/{1}", _counter,
+                                                   label1.Content = string.Format("{0}/{1} ({2})", _counter,
                                                                                   ServiceProvider.Settings.
-                                                                                    DefaultSession.Files.Count);
+                                                                                    DefaultSession.Files.Count,
+                                                                                  (DateTime.Now - _starTime).ToString(@"hh\:mm\:ss"));
                                                  }));
         if(_backgroundWorker.CancellationPending)
         {
@@ -82,14 +94,13 @@ namespace CameraControl.windows
 
       System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo(_virtualdubdir);
       //psi.RedirectStandardOutput = true;
-      //psi.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-      psi.Arguments = "/i " + Path.Combine(_tempFolder, "VirtualDub.script");
+      psi.WindowStyle = System.Diagnostics.ProcessWindowStyle.Minimized;
+      psi.Arguments = "/min /s " + Path.Combine(_tempFolder, "VirtualDub.script")+" /x";
       psi.UseShellExecute = false;
       System.Diagnostics.Process listFiles;
       listFiles = System.Diagnostics.Process.Start(psi);
       listFiles.WaitForExit();
-      MessageBox.Show("Conversion Done !");
-      button1.Content = "Done";
+      //MessageBox.Show("Conversion Done !");
       //Close();
     }
 
@@ -135,8 +146,8 @@ namespace CameraControl.windows
       int th = ServiceProvider.Settings.DefaultSession.TimeLapse.VideoType.Height;
       double zw = (tw / (double)dw);
       double zh = (th / (double)dh);
-      //double z = (zw <= zh) ? zw : zh;
-      double z = (zw >= zh) ? zw : zh;
+      double z = 0;
+      z = !ServiceProvider.Settings.DefaultSession.TimeLapse.FillImage ? ((zw <= zh) ? zw : zh) : ((zw >= zh) ? zw : zh);
       dw = (uint)(dw * z);
       dh = (uint)(dh * z);
       int difw =(int) (tw - dw);
@@ -144,7 +155,7 @@ namespace CameraControl.windows
       if (FreeImage.GetFileType(file, 0) == FREE_IMAGE_FORMAT.FIF_RAW)
       {
         FIBITMAP bmp = FreeImage.ToneMapping(dib, FREE_IMAGE_TMO.FITMO_REINHARD05, 0, 0); // ConvertToType(dib, FREE_IMAGE_TYPE.FIT_BITMAP, false);
-        FIBITMAP resized = FreeImage.Rescale(bmp, (int)dw, (int)dh, FREE_IMAGE_FILTER.FILTER_LANCZOS3);
+        FIBITMAP resized = FreeImage.Rescale(bmp, (int)dw, (int)dh, FREE_IMAGE_FILTER.FILTER_BILINEAR);
         FIBITMAP final = FreeImage.EnlargeCanvas<RGBQUAD>(resized, difw / 2, difh / 2, difw - (difw / 2), difh - (difh / 2),
                                                           new RGBQUAD(System.Drawing.Color.Black),
                                                           FREE_IMAGE_COLOR_OPTIONS.FICO_RGB);
@@ -156,7 +167,7 @@ namespace CameraControl.windows
       }
       else
       {
-        FIBITMAP resized = FreeImage.Rescale(dib, (int) dw, (int) dh, FREE_IMAGE_FILTER.FILTER_LANCZOS3);
+        FIBITMAP resized = FreeImage.Rescale(dib, (int)dw, (int)dh, FREE_IMAGE_FILTER.FILTER_BILINEAR);
         FIBITMAP final = FreeImage.EnlargeCanvas<RGBQUAD>(resized, difw/2, difh/2, difw - (difw/2), difh - (difh/2),
                                                           new RGBQUAD(System.Drawing.Color.Black),
                                                           FREE_IMAGE_COLOR_OPTIONS.FICO_RGB);
@@ -181,6 +192,14 @@ namespace CameraControl.windows
           e.Cancel = true;
         }
       }
+    }
+
+    private void btn_paly_Click(object sender, RoutedEventArgs e)
+    {
+      if (File.Exists(ServiceProvider.Settings.DefaultSession.TimeLapse.OutputFIleName))
+        System.Diagnostics.Process.Start(ServiceProvider.Settings.DefaultSession.TimeLapse.OutputFIleName);
+      else
+        MessageBox.Show("Output file not found");
     }
 
   }
