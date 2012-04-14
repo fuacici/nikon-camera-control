@@ -135,7 +135,8 @@ namespace CameraControl.windows
       int th = ServiceProvider.Settings.DefaultSession.TimeLapse.VideoType.Height;
       double zw = (tw / (double)dw);
       double zh = (th / (double)dh);
-      double z = (zw <= zh) ? zw : zh;
+      //double z = (zw <= zh) ? zw : zh;
+      double z = (zw >= zh) ? zw : zh;
       dw = (uint)(dw * z);
       dh = (uint)(dh * z);
       int difw =(int) (tw - dw);

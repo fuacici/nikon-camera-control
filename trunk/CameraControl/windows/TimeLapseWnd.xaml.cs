@@ -55,5 +55,10 @@ namespace CameraControl.windows
       }
     }
 
+    private void Window_Closed(object sender, EventArgs e)
+    {
+      ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
+    }
+
   }
 }
