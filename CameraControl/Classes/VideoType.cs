@@ -27,8 +27,18 @@ namespace CameraControl.Classes
 
     public override string ToString()
     {
-      return string.Format("{0}" + "({1}x{2})", Name, Width, Height);
+      return string.Format("{0} " + "({1}x{2})", Name, Width, Height);
     }
+
+    public override bool Equals(object obj)
+    {
+      VideoType videoType = obj as VideoType;
+      if (videoType == null)
+        return base.Equals(obj);
+      return Name.Equals(videoType.Name);
+    }
+
+
 
     public override int GetHashCode()
     {

@@ -39,7 +39,15 @@ namespace CameraControl.Classes
     private VideoType _videoType;
     public VideoType VideoType
     {
-      get { return _videoType; }
+      get
+      {
+        if (_videoType == null || _videoType.Width==0)
+        {
+          if (ServiceProvider.Settings != null && ServiceProvider.Settings.VideoTypes.Count > 0)
+            _videoType = ServiceProvider.Settings.VideoTypes[0];
+        }
+        return _videoType;
+      }
       set
       {
         _videoType = value;
@@ -50,7 +58,10 @@ namespace CameraControl.Classes
     private string _outputFIleName;
     public string OutputFIleName
     {
-      get { return _outputFIleName; }
+      get
+      {
+        return _outputFIleName;
+      }
       set
       {
         _outputFIleName = value;

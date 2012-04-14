@@ -4,7 +4,7 @@
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:CameraControl="clr-namespace:CameraControl"
-        Title="Time Lapse" Height="291" Width="394" Background="{DynamicResource WindowBackgroundBrush}" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" UseLayoutRounding="True" ShowActivated="True">
+        Title="Time Lapse" Height="291" Width="394" Background="{DynamicResource WindowBackgroundBrush}" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" UseLayoutRounding="True" ShowActivated="True" Closed="Window_Closed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="64*" />
@@ -28,8 +28,8 @@
                     <TextBox Height="23" HorizontalAlignment="Left" Margin="6,126,0,0" Name="textBox1" VerticalAlignment="Top" Width="316" Text="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.OutputFIleName}"/>
                     <Label Content="Output file" Height="28" HorizontalAlignment="Left" Margin="6,101,0,0" Name="label4" VerticalAlignment="Top" />
                     <Button Content="..." Height="23" HorizontalAlignment="Left" Margin="328,125,0,0" Name="button3" VerticalAlignment="Top" Width="26" Click="button3_Click" />
-                    <Label Content="Fps" Height="28" HorizontalAlignment="Left" Margin="6,66,0,0" Name="label5" VerticalAlignment="Top" />
-                    <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="40,66,0,0" Name="integerUpDown3" VerticalAlignment="Top" Width="75" Minimum="5" Maximum="60" Value="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.Fps}" />
+                    <Label Content="Fps" Height="28" HorizontalAlignment="Left" Margin="14,75,0,0" Name="label5" VerticalAlignment="Top" />
+                    <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="48,75,0,0" Name="integerUpDown3" VerticalAlignment="Top" Width="75" Minimum="5" Maximum="60" Value="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.Fps}" />
                 </Grid>
             </TabItem>
             <TabItem Header="Create movie" Name="tabItem3">
