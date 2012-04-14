@@ -4,5 +4,7 @@
 = Supported Cameras  =
   * Nikon D3100
   * Nikon D5100
+  * Nikon D5000
   * Nikon D90
+ 
  
