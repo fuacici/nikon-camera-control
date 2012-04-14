@@ -2,6 +2,7 @@
 #labels Featured
 
 = Supported Cameras  =
+  * Nikon D3000
   * Nikon D3100
   * Nikon D5100
   * Nikon D5000
