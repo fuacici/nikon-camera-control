@@ -1,8 +1,9 @@
 ﻿<Window x:Class="CameraControl.windows.LiveViewWnd"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:CameraControl="clr-namespace:CameraControl"
-        Title="LiveViewWnd" Height="353" Width="455" Loaded="Window_Loaded">
+        Title="Live View" Height="353" Width="455" Loaded="Window_Loaded" Closed="Window_Closed">
     <Grid>
         <Image Name="image1" Stretch="Uniform" />
+        <Button Content="Auto Focus" Height="23" HorizontalAlignment="Left" Margin="19,23,0,0" Name="button1" VerticalAlignment="Top" Width="75" Click="button1_Click" />
     </Grid>
 </Window>

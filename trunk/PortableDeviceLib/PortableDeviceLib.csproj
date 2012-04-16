@@ -129,6 +129,7 @@
     <Compile Include="PortableDeviceHelpers.cs" />
     <Compile Include="Model\PortableDeviceObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StillImageDevice.cs" />
     <Compile Include="Tree.cs" />
     <Compile Include="TreeNode.cs" />
   </ItemGroup>

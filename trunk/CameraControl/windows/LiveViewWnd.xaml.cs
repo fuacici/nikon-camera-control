@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using CameraControl.Devices.Nikon;
 using PortableDeviceLib;
 using Timer = System.Timers.Timer;
 
@@ -27,7 +28,7 @@ namespace CameraControl.windows
     private const string AppName = "CameraControl";
     private const int AppMajorVersionNumber = 1;
     private const int AppMinorVersionNumber = 0;
-    private PortableDevice selectedPortableDevice;
+    private NikonD5100 selectedPortableDevice;
     private Timer _timer = new Timer(1000/25);
     /// <summary>
     /// Gets the <see cref="PortableDevice"/> connected
@@ -38,7 +39,7 @@ namespace CameraControl.windows
       private set;
     }
 
-    public PortableDevice SelectedPortableDevice
+    public NikonD5100 SelectedPortableDevice
     {
       get { return this.selectedPortableDevice; }
       set
@@ -69,18 +70,12 @@ namespace CameraControl.windows
 
     private void GetLiveImage()
     {
-      byte[] result = SelectedPortableDevice.GetLiveView();
+
+      byte[] result = SelectedPortableDevice.GetLiveViewImage();
       if (result == null)
         return;
-      int cbBytesRead = result.Length;
-      const int headerSize = 384;
 
-      MemoryStream copy = new MemoryStream((int)cbBytesRead - headerSize);
-      copy.Write(result, headerSize, (int)cbBytesRead - headerSize);
-
-      byte[] buffer = copy.GetBuffer();
-
-      MemoryStream stream = new MemoryStream(buffer, 0, buffer.Length);
+      MemoryStream stream = new MemoryStream(result, 0, result.Length);
 
       JpegBitmapDecoder decoder = new JpegBitmapDecoder(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
 
@@ -89,7 +84,7 @@ namespace CameraControl.windows
       {
           image1.Source = decoder.Frames[0];
       }
-     
+     stream.Close();
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -104,8 +99,7 @@ namespace CameraControl.windows
       foreach (var device in PortableDeviceCollection.Instance.Devices)
       {
         this.PortableDevices.Add(device);
-        PortableDevice portableDevice = device;
-        portableDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
+        NikonD5100 portableDevice = new NikonD5100(device.DeviceId);
         this.SelectedPortableDevice = portableDevice;
         break;
       }
@@ -115,6 +109,18 @@ namespace CameraControl.windows
       _timer.Start();
 
       //SelectedPortableDevice.StoptLiveView();
+    }
+
+    private void Window_Closed(object sender, EventArgs e)
+    {
+      _timer.Stop();
+      Thread.Sleep(100);
+      SelectedPortableDevice.StopLiveView();
+    }
+
+    private void button1_Click(object sender, RoutedEventArgs e)
+    {
+      selectedPortableDevice.AutoFocus();
     }
   }
 }
