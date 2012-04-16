@@ -41,6 +41,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\refs\FreeImageNET.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\refs\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -84,6 +87,9 @@
     <Compile Include="windows\FullScreenWnd.xaml.cs">
       <DependentUpon>FullScreenWnd.xaml</DependentUpon>
     </Compile>
+    <Compile Include="windows\LiveViewWnd.xaml.cs">
+      <DependentUpon>LiveViewWnd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="windows\PropertyWnd.xaml.cs">
       <DependentUpon>PropertyWnd.xaml</DependentUpon>
     </Compile>
@@ -126,6 +132,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="windows\FullScreenWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="windows\LiveViewWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -192,6 +202,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Fullscreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PortableDeviceLib\PortableDeviceLib.csproj">
+      <Project>{E9F048C1-C6A0-4CCD-BE57-4E76A7F8B32D}</Project>
+      <Name>PortableDeviceLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

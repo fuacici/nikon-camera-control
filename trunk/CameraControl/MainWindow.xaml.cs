@@ -38,6 +38,7 @@ namespace CameraControl
 
     public MainWindow()
     {
+      ServiceProvider.Configure();
       ServiceProvider.Settings = new Settings();
       ServiceProvider.ThumbWorker = new ThumbWorker();
       ServiceProvider.Settings = ServiceProvider.Settings.Load();
@@ -324,5 +325,12 @@ namespace CameraControl
       if (e.ClickCount >= 2 && e.LeftButton == MouseButtonState.Pressed)
         ShowFullScreen();
     }
+
+    private void btn_liveview_Click(object sender, RoutedEventArgs e)
+    {
+      LiveViewWnd wnd = new LiveViewWnd();
+      wnd.ShowDialog();
+    }
+
   }
 }
