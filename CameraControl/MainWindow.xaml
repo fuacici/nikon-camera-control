@@ -90,6 +90,7 @@
             <Button ToolTip="Time lapse" Height="30" Name="but_fullscreen" Width="50" Margin="5" Click="but_fullscreen_Click">
                 <Image Source="/CameraControl;component/Images/Fullscreen.png" />
             </Button>
+            <Button Content="Lv" ToolTip="Time lapse" Height="30" Name="btn_liveview" Width="50" Margin="5" Click="btn_liveview_Click" />
             <StackPanel HorizontalAlignment="Right" IsEnabled="{Binding Path=DefaultSession.TimeLapse.IsDisabled}">
                 <StackPanel  Orientation="Horizontal">
                     <ComboBox  Name="cmb_session" SelectedValue="{Binding Path=DefaultSession}" ItemsSource="{Binding Path=PhotoSessions}" Width="150"  Margin="3"/>

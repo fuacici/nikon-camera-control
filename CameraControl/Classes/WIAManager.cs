@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Windows.Media.Imaging;
 using WIA;
 
 namespace CameraControl.Classes
@@ -151,6 +152,16 @@ namespace CameraControl.Classes
       }
     }
 
+    private BitmapImage _liveView;
+    public BitmapImage LiveView
+    {
+      get { return _liveView; }
+      set
+      {
+        _liveView = value;
+        NotifyPropertyChanged("LiveView");
+      }
+    }
 
     public Dictionary<int, string> ShutterTable;
     public Dictionary<int, string> ExposureModeTable;
