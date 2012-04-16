@@ -47,7 +47,7 @@ namespace PortableDeviceLib
 
         private object dispatcher; //Use an object for thread safety
 
-        private PortableDeviceApiLib.PortableDeviceClass portableDeviceClass;
+      protected PortableDeviceApiLib.PortableDeviceClass portableDeviceClass;
         private Dictionary<string, object> values;
         private PortableDeviceCapabilities deviceCapabilities;
         private PortableDeviceFonctionalObject content;
@@ -272,6 +272,29 @@ namespace PortableDeviceLib
 
         //view-source:http://www.experts-exchange.com/Programming/Languages/C_Sharp/Q_26860397.html
 
+        public void StartLiveView()
+        {
+          IPortableDeviceValues commandValues = (IPortableDeviceValues)new PortableDeviceTypesLib.PortableDeviceValuesClass();
+          IPortableDevicePropVariantCollection propVariant =
+            (IPortableDevicePropVariantCollection)new PortableDeviceTypesLib.PortableDevicePropVariantCollection();
+          IPortableDeviceValues results;
+
+          //commandValues.SetGuidValue(ref PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_CATEGORY, ref command.fmtid);
+          commandValues.SetGuidValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_CATEGORY,
+                                           PortableDevicePKeys.WPD_COMMAND_MTP_EXT_EXECUTE_COMMAND_WITHOUT_DATA_PHASE.fmtid);
+          commandValues.SetUnsignedIntegerValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_ID,
+                                 PortableDevicePKeys.WPD_COMMAND_MTP_EXT_EXECUTE_COMMAND_WITHOUT_DATA_PHASE.pid);
+
+          commandValues.SetIPortableDevicePropVariantCollectionValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPERATION_PARAMS, propVariant);
+          commandValues.SetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPERATION_CODE, 0x9201);
+
+          // According to documentation, first parameter should be 0 (see http://msdn.microsoft.com/en-us/library/dd375691%28v=VS.85%29.aspx)
+          this.portableDeviceClass.SendCommand(0, commandValues, out results);
+          int pvalue = 0;
+          results.GetSignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out pvalue);
+
+        }
+
       public void StoptLiveView()
         {
           IPortableDeviceValues commandValues = (IPortableDeviceValues)new PortableDeviceTypesLib.PortableDeviceValuesClass();
@@ -291,7 +314,7 @@ namespace PortableDeviceLib
           // According to documentation, first parameter should be 0 (see http://msdn.microsoft.com/en-us/library/dd375691%28v=VS.85%29.aspx)
           this.portableDeviceClass.SendCommand(0, commandValues, out results);
           int pvalue = 0;
-          //results.GetSignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out pvalue);
+          results.GetSignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out pvalue);
         }
 
         public byte[] GetLiveView()
@@ -394,13 +417,7 @@ namespace PortableDeviceLib
           // 18, 8E  
           GCHandle pinnedArray = GCHandle.Alloc(imgdate, GCHandleType.Pinned);
           IntPtr ptr = pinnedArray.AddrOfPinnedObject();
-
-          //IntPtr ptr = Marshal.AllocHGlobal((int)tmpBufferSize);
-          //for (int i = 0; i < 10000; i++)
-          //{
-          //  Marshal.WriteByte(ptr,i,255);// ReadByte(ptr, i);
-          //}
-
+          
           uint dataread =0;
           pResults.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_NUM_BYTES_READ, out dataread);
           pResults.GetBufferValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_DATA, ptr, out cbBytesRead);
@@ -422,6 +439,10 @@ namespace PortableDeviceLib
 
           portableDeviceClass.SendCommand(0, pParameters, out pResults);
 
+          Marshal.FreeHGlobal(tmpPtr);
+          pinnedArray.Free();
+          //Marshal.FreeHGlobal(ptr);
+
           try
           {
             int tmpResult = 0;
@@ -435,32 +456,9 @@ namespace PortableDeviceLib
           catch
           {
           }
-          //Marshal.FreeHGlobal(tmpPtr);
           return res;
        }
       
-        public void StartLiveView()
-        {
-          IPortableDeviceValues commandValues = (IPortableDeviceValues)new PortableDeviceTypesLib.PortableDeviceValuesClass();
-          IPortableDevicePropVariantCollection propVariant =
-            (IPortableDevicePropVariantCollection) new PortableDeviceTypesLib.PortableDevicePropVariantCollection();
-          IPortableDeviceValues results;
-
-          //commandValues.SetGuidValue(ref PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_CATEGORY, ref command.fmtid);
-          commandValues.SetGuidValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_CATEGORY,
-                                           PortableDevicePKeys.WPD_COMMAND_MTP_EXT_EXECUTE_COMMAND_WITHOUT_DATA_PHASE.fmtid);
-          commandValues.SetUnsignedIntegerValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_ID,
-                                 PortableDevicePKeys.WPD_COMMAND_MTP_EXT_EXECUTE_COMMAND_WITHOUT_DATA_PHASE.pid);
-
-          commandValues.SetIPortableDevicePropVariantCollectionValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPERATION_PARAMS, propVariant);
-          commandValues.SetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPERATION_CODE, 0x9201);
-
-          // According to documentation, first parameter should be 0 (see http://msdn.microsoft.com/en-us/library/dd375691%28v=VS.85%29.aspx)
-          this.portableDeviceClass.SendCommand(0, commandValues, out results);
-          int pvalue = 0;
-          results.GetSignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE,out pvalue);
-
-        }
         /// <summary>
         /// 
         /// </summary>
