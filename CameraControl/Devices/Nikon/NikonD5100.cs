@@ -3,30 +3,40 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using CameraControl.Classes;
 using PortableDeviceLib;
 
 namespace CameraControl.Devices.Nikon
 {
-  public class NikonD5100
+  public class NikonD5100 :ICameraDevice
   {
     private const int CONST_CMD_AfDrive = 0x90C1;
     private const int CONST_CMD_StartLiveView = 0x9201;
     private const int CONST_CMD_EndLiveView = 0x9202;
     private const int CONST_CMD_GetLiveViewImage = 0x9203;
+    private const int CONST_CMD_InitiateCaptureRecInMedia = 0x9207;
 
     private const string AppName = "CameraControl";
     private const int AppMajorVersionNumber = 1;
     private const int AppMinorVersionNumber = 0;
 
     private StillImageDevice _stillImageDevice = null;
+    private WIAManager _manager = null;
 
-    public NikonD5100(string id)
+    public NikonD5100()
     {
-      Init(id);
+    
     }
 
-    public bool Init(string id)
+    //public NikonD5100(string id)
+    //{
+    //  Init(id);
+    //}
+
+    public bool Init(string id, WIAManager manager)
     {
+      _manager = manager;
+      _manager.HaveLiveView = true;
       _stillImageDevice = new StillImageDevice(id);
       _stillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
       return true;
@@ -62,6 +72,16 @@ namespace CameraControl.Devices.Nikon
     public void AutoFocus()
     {
       _stillImageDevice.ExecuteWithNoData(CONST_CMD_AfDrive);
+    }
+
+    public void TakePictureNoAf()
+    {
+      _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF, 0x0000);
+    }
+
+    public void Close()
+    {
+      _stillImageDevice.Disconnect();
     }
 
   }

@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using CameraControl.Devices;
 using CameraControl.Devices.Nikon;
 using PortableDeviceLib;
 using Timer = System.Timers.Timer;
@@ -25,10 +26,9 @@ namespace CameraControl.windows
   /// </summary>
   public partial class LiveViewWnd : Window
   {
-    private const string AppName = "CameraControl";
-    private const int AppMajorVersionNumber = 1;
-    private const int AppMinorVersionNumber = 0;
-    private NikonD5100 selectedPortableDevice;
+    private int _retries = 0;
+    private ICameraDevice selectedPortableDevice;
+
     private Timer _timer = new Timer(1000/25);
     /// <summary>
     /// Gets the <see cref="PortableDevice"/> connected
@@ -39,7 +39,7 @@ namespace CameraControl.windows
       private set;
     }
 
-    public NikonD5100 SelectedPortableDevice
+    public ICameraDevice SelectedPortableDevice
     {
       get { return this.selectedPortableDevice; }
       set
@@ -53,9 +53,10 @@ namespace CameraControl.windows
       }
     }
 
-    public LiveViewWnd()
+    public LiveViewWnd(ICameraDevice device)
     {
       InitializeComponent();
+      SelectedPortableDevice = device;
       _timer.Stop();
       _timer.AutoReset = true;
       _timer.Elapsed += _timer_Elapsed;
@@ -63,6 +64,11 @@ namespace CameraControl.windows
 
     void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
     {
+      if(_retries>100)
+      {
+        _timer.Stop();
+        return;
+      }
       _timer.Enabled = false;
       Dispatcher.BeginInvoke(new ThreadStart(GetLiveImage));
       _timer.Enabled = true;
@@ -73,7 +79,10 @@ namespace CameraControl.windows
 
       byte[] result = SelectedPortableDevice.GetLiveViewImage();
       if (result == null)
+      {
+        _retries++;
         return;
+      }
 
       MemoryStream stream = new MemoryStream(result, 0, result.Length);
 
@@ -82,28 +91,14 @@ namespace CameraControl.windows
       decoder.Frames[0].Freeze();
       if (decoder.Frames.Count > 0)
       {
-          image1.Source = decoder.Frames[0];
+        image1.Source = decoder.Frames[0];
       }
-     stream.Close();
+      stream.Close();
+      _retries = 0;
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      PortableDevices = new ObservableCollection<PortableDevice>();
-      if (PortableDeviceCollection.Instance == null)
-      {
-        PortableDeviceCollection.CreateInstance(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
-        PortableDeviceCollection.Instance.AutoConnectToPortableDevice = false;
-      }
-
-      foreach (var device in PortableDeviceCollection.Instance.Devices)
-      {
-        this.PortableDevices.Add(device);
-        NikonD5100 portableDevice = new NikonD5100(device.DeviceId);
-        this.SelectedPortableDevice = portableDevice;
-        break;
-      }
-
       SelectedPortableDevice.StartLiveView();
       Thread.Sleep(1000);
       _timer.Start();
@@ -120,7 +115,18 @@ namespace CameraControl.windows
 
     private void button1_Click(object sender, RoutedEventArgs e)
     {
+      _timer.Stop();
+      Thread.Sleep(100);
       selectedPortableDevice.AutoFocus();
+      _timer.Start();
+    }
+
+    private void button2_Click(object sender, RoutedEventArgs e)
+    {
+      _timer.Stop();
+      Thread.Sleep(100);
+      selectedPortableDevice.TakePictureNoAf();
+      _timer.Start();
     }
   }
 }

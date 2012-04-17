@@ -1,20 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using CameraControl.Classes;
+using CameraControl.Devices;
 
 namespace CameraControl
 {
   public class ServiceProvider
   {
+    private static string AppName = "NikonCameraControl";
+
     public static Settings Settings { get; set; }
     public static ThumbWorker ThumbWorker { get; set; }
-    private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+    public static readonly log4net.ILog Log = log4net.LogManager.GetLogger("NCC");
+    public static CameraDeviceManager DeviceManager { get; set; }
 
     public static void Configure()
     {
-      bool isConfigured = log.Logger.Repository.Configured;
+      bool isConfigured = Log.Logger.Repository.Configured;
       if (!isConfigured)
       {
         // Setup RollingFileAppender
@@ -24,7 +29,8 @@ namespace CameraControl
         fileAppender.MaxSizeRollBackups = 5;
         fileAppender.RollingStyle = log4net.Appender.RollingFileAppender.RollingMode.Size;
         fileAppender.AppendToFile = true;
-        fileAppender.File = "D:\\test.log";
+        fileAppender.File = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,"Log",
+                                "app.log");
         fileAppender.Name = "XXXRollingFileAppender";
         fileAppender.ActivateOptions(); // IMPORTANT, creates the file
         log4net.Config.BasicConfigurator.Configure(fileAppender);
@@ -35,7 +41,8 @@ namespace CameraControl
         log4net.Config.BasicConfigurator.Configure(ta);
 #endif
       }
-      log.Debug("Test");
+      DeviceManager = new CameraDeviceManager();
+      Log.Debug("Application starting");
     }
   }
 }

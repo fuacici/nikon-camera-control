@@ -7,7 +7,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Media.Imaging;
+using CameraControl.Devices;
 using WIA;
+using DeviceManager = WIA.DeviceManager;
 
 namespace CameraControl.Classes
 {
@@ -16,6 +18,8 @@ namespace CameraControl.Classes
     public DeviceManager DeviceManager { get; set; }
     public Device Device { get; set; }
     public string DeviceId { get; set; }
+    public ICameraDevice CameraDevice { get; set; }
+
 
     private string _deviceName;
 
@@ -50,6 +54,17 @@ namespace CameraControl.Classes
       {
         _isConected = value;
         NotifyPropertyChanged("IsConected");
+      }
+    }
+
+    private bool _haveLiveView;
+    public bool HaveLiveView
+    {
+      get { return _haveLiveView; }
+      set
+      {
+        _haveLiveView = value;
+        NotifyPropertyChanged("HaveLiveView");
       }
     }
 
@@ -149,17 +164,6 @@ namespace CameraControl.Classes
             ApertureCanBeSet = false;
             break;
         }
-      }
-    }
-
-    private BitmapImage _liveView;
-    public BitmapImage LiveView
-    {
-      get { return _liveView; }
-      set
-      {
-        _liveView = value;
-        NotifyPropertyChanged("LiveView");
       }
     }
 
@@ -285,6 +289,8 @@ namespace CameraControl.Classes
       if (Device != null)
         Marshal.ReleaseComObject(Device);
       Device = null;
+      if (CameraDevice != null)
+        CameraDevice.Close();
     }
 
     public int GetShutterValue(string s)
@@ -316,7 +322,6 @@ namespace CameraControl.Classes
 
     public bool TakePicture()
     {
-      //14 4d545058-1a2e-4106-a357-771e0819fc56
       Device.ExecuteCommand(Conts.wiaCommandTakePicture);
       return false;
     }
@@ -341,7 +346,7 @@ namespace CameraControl.Classes
           {
             DeviceId = DevInfo.DeviceID;
             Device = DevInfo.Connect();
-
+            Thread.Sleep(500);
             //Log(DateTime.Now.ToString() + " Digital Still Camera Connected\r\n");
             DeviceName = Device.Properties["Description"].get_Value();
             Manufacturer = Device.Properties["Manufacturer"].get_Value();
@@ -353,9 +358,8 @@ namespace CameraControl.Classes
             if (ExposureModeTable.ContainsKey(Device.Properties["Exposure Mode"].get_Value()))
               ExposureMode = ExposureModeTable[Device.Properties["Exposure Mode"].get_Value()];
 
-
-
             IsConected = true;
+            CameraDevice = ServiceProvider.DeviceManager.GetIDevice(this);
             return true;
           }
         }

@@ -37,6 +37,38 @@ namespace PortableDeviceLib
       results.GetSignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out pvalue);
     }
 
+    public void ExecuteWithNoData(int code, uint param1, uint param2)
+    {
+      IPortableDeviceValues commandValues =
+        (IPortableDeviceValues) new PortableDeviceTypesLib.PortableDeviceValuesClass();
+      IPortableDevicePropVariantCollection propVariant =
+        (IPortableDevicePropVariantCollection) new PortableDeviceTypesLib.PortableDevicePropVariantCollection();
+      IPortableDeviceValues results;
+
+      //commandValues.SetGuidValue(ref PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_CATEGORY, ref command.fmtid);
+      commandValues.SetGuidValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_CATEGORY,
+                                 PortableDevicePKeys.WPD_COMMAND_MTP_EXT_EXECUTE_COMMAND_WITHOUT_DATA_PHASE.fmtid);
+      commandValues.SetUnsignedIntegerValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_ID,
+                                            PortableDevicePKeys.WPD_COMMAND_MTP_EXT_EXECUTE_COMMAND_WITHOUT_DATA_PHASE.
+                                              pid);
+
+      tag_inner_PROPVARIANT vparam1 = new tag_inner_PROPVARIANT();
+      tag_inner_PROPVARIANT vparam2 = new tag_inner_PROPVARIANT();
+      UintToPropVariant(param1, out vparam1);
+      UintToPropVariant(param2, out vparam2);
+      propVariant.Add(ref vparam1);
+      propVariant.Add(ref vparam2);
+      
+      commandValues.SetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPERATION_CODE, (uint)code);
+      
+      commandValues.SetIPortableDevicePropVariantCollectionValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPERATION_PARAMS, propVariant);
+
+      // According to documentation, first parameter should be 0 (see http://msdn.microsoft.com/en-us/library/dd375691%28v=VS.85%29.aspx)
+      this.portableDeviceClass.SendCommand(0, commandValues, out results);
+      int pvalue = 0;
+      //results.GetSignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out pvalue);
+    }
+
     public byte[] ExecuteWithData(int code)
     {
       // source: http://msdn.microsoft.com/en-us/library/windows/desktop/ff384843(v=vs.85).aspx
@@ -179,6 +211,60 @@ namespace PortableDeviceLib
       return res;
     }
 
+    private void StringToPropVariant(string value,
+        out PortableDeviceApiLib.tag_inner_PROPVARIANT propvarValue)
+    {
+      // We'll use an IPortableDeviceValues object to transform the
+      // string into a PROPVARIANT
+      PortableDeviceApiLib.IPortableDeviceValues pValues =
+          (PortableDeviceApiLib.IPortableDeviceValues)
+              new PortableDeviceTypesLib.PortableDeviceValuesClass();
 
+      // We insert the string value into the IPortableDeviceValues object
+      // using the SetStringValue method
+      pValues.SetStringValue(ref PortableDevicePKeys.WPD_OBJECT_ID, value);
+
+      // We then extract the string into a PROPVARIANT by using the 
+      // GetValue method
+      pValues.GetValue(ref PortableDevicePKeys.WPD_OBJECT_ID,
+                                  out propvarValue);
+    }
+
+    private void UintToPropVariant(uint value,
+    out PortableDeviceApiLib.tag_inner_PROPVARIANT propvarValue)
+    {
+      // We'll use an IPortableDeviceValues object to transform the
+      // string into a PROPVARIANT
+      PortableDeviceApiLib.IPortableDeviceValues pValues =
+          (PortableDeviceApiLib.IPortableDeviceValues)
+              new PortableDeviceTypesLib.PortableDeviceValuesClass();
+
+      // We insert the string value into the IPortableDeviceValues object
+      // using the SetStringValue method
+      pValues.SetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_OBJECT_ID, (uint)value);
+
+      // We then extract the string into a PROPVARIANT by using the 
+      // GetValue method
+      pValues.GetValue(ref PortableDevicePKeys.WPD_OBJECT_ID,
+                                  out propvarValue);
+    }
+
+    private void uLongIntToPropVariant(ulong value, out PortableDeviceApiLib.tag_inner_PROPVARIANT propvarValue)
+    {
+      // We'll use an IPortableDeviceValues object to transform the
+      // string into a PROPVARIANT
+      PortableDeviceApiLib.IPortableDeviceValues pValues =
+          (PortableDeviceApiLib.IPortableDeviceValues)
+              new PortableDeviceTypesLib.PortableDeviceValuesClass();
+
+      // We insert the string value into the IPortableDeviceValues object
+      // using the SetStringValue method
+      pValues.SetUnsignedLargeIntegerValue(ref PortableDevicePKeys.WPD_OBJECT_ID, (ulong)value);
+
+      // We then extract the string into a PROPVARIANT by using the 
+      // GetValue method
+      pValues.GetValue(ref PortableDevicePKeys.WPD_OBJECT_ID,
+                                  out propvarValue);
+    }
   }
 }
