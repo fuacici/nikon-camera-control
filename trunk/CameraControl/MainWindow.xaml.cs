@@ -261,6 +261,7 @@ namespace CameraControl
         PropertyWnd.Hide();
         PropertyWnd.Close();
       }
+      WiaManager.DisconnectCamera();
     }
 
     private void but_timelapse_Click(object sender, RoutedEventArgs e)
@@ -328,7 +329,9 @@ namespace CameraControl
 
     private void btn_liveview_Click(object sender, RoutedEventArgs e)
     {
-      LiveViewWnd wnd = new LiveViewWnd();
+      if (WiaManager.CameraDevice == null)
+        return;
+      LiveViewWnd wnd = new LiveViewWnd(WiaManager.CameraDevice);
       wnd.ShowDialog();
     }
 

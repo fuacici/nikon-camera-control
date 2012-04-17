@@ -80,6 +80,8 @@
     <Compile Include="Classes\ThumbWorker.cs" />
     <Compile Include="Classes\TimeLapseClass.cs" />
     <Compile Include="Classes\VideoType.cs" />
+    <Compile Include="Devices\CameraDeviceManager.cs" />
+    <Compile Include="Devices\ICameraDevice.cs" />
     <Compile Include="Devices\Nikon\NikonD5100.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="windows\CreateTimeLapseWnd.xaml.cs">
