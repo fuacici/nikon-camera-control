@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Confirmed working cameras
 #labels Featured
 
 = Supported Cameras  =
