@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using CameraControl.Devices;
 using CameraControl.Devices.Nikon;
 using PortableDeviceLib;
+using MessageBox = System.Windows.Forms.MessageBox;
 using Timer = System.Timers.Timer;
 
 namespace CameraControl.windows
@@ -76,8 +77,16 @@ namespace CameraControl.windows
 
     private void GetLiveImage()
     {
+      byte[] result = null;
+      try
+      {
+        result = SelectedPortableDevice.GetLiveViewImage();
+      }
+      catch (Exception)
+      {
+ 
+      }
 
-      byte[] result = SelectedPortableDevice.GetLiveViewImage();
       if (result == null)
       {
         _retries++;
@@ -99,7 +108,17 @@ namespace CameraControl.windows
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      SelectedPortableDevice.StartLiveView();
+      try
+      {
+        SelectedPortableDevice.StartLiveView();
+      }
+      catch (Exception exception)
+      {
+        ServiceProvider.Log.Error("Unable to start liveview !", exception);
+        MessageBox.Show("Unable to start liveview !");
+        Close();
+      }
+
       Thread.Sleep(1000);
       _timer.Start();
 
@@ -108,16 +127,30 @@ namespace CameraControl.windows
 
     private void Window_Closed(object sender, EventArgs e)
     {
-      _timer.Stop();
-      Thread.Sleep(100);
-      SelectedPortableDevice.StopLiveView();
+      try
+      {
+        _timer.Stop();
+        Thread.Sleep(100);
+        SelectedPortableDevice.StopLiveView();
+      }
+      catch (Exception exception)
+      {
+        ServiceProvider.Log.Error("Unable to stop liveview", exception);
+      }
     }
 
     private void button1_Click(object sender, RoutedEventArgs e)
     {
       _timer.Stop();
       Thread.Sleep(100);
-      selectedPortableDevice.AutoFocus();
+      try
+      {
+        selectedPortableDevice.AutoFocus();
+      }
+      catch (Exception exception)
+      {
+        ServiceProvider.Log.Error("Unable to autofocus", exception);
+      }
       _timer.Start();
     }
 
@@ -125,8 +158,16 @@ namespace CameraControl.windows
     {
       _timer.Stop();
       Thread.Sleep(100);
-      selectedPortableDevice.TakePictureNoAf();
+      try
+      {
+        selectedPortableDevice.TakePictureNoAf();
+      }
+      catch (Exception exception)
+      {
+        ServiceProvider.Log.Error("Unable to take pictore with no af", exception);
+      }
       _timer.Start();
     }
+
   }
 }
