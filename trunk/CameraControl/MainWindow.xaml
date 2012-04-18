@@ -62,8 +62,8 @@
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="2">
 
-            <StackPanel  Orientation="Horizontal">
-                <Label Content="{Binding Path=SystemMessage }" />
+            <StackPanel  Orientation="Horizontal" Margin="10,0,0,0">
+                <Label Content="{Binding Path=SystemMessage }" FontWeight="Bold" />
             </StackPanel>
         </StackPanel>
         <Border  BorderThickness="1" CornerRadius="5" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2">

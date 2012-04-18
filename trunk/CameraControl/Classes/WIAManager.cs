@@ -284,6 +284,7 @@ namespace CameraControl.Classes
     public void DisconnectCamera()
     {
       IsConected = false;
+      HaveLiveView = false;
       DeviceName = "";
       Manufacturer = "";
       if (Device != null)
@@ -371,10 +372,11 @@ namespace CameraControl.Classes
       {
         if (retry)
         {
-          Thread.Sleep(1000);
-          ConnectToCamera(false);
+          Thread.Sleep(500);
+          return ConnectToCamera(false);
         }
-        //Log("Something went wrong when connecting the camera\r\n", exp.ToString());
+        ServiceProvider.Log.Error("Unable to connect to the camera", exp);
+        ServiceProvider.Settings.SystemMessage = "Unable to connect to the camera. Please reconnect your camera !";
         return false;
       }
     }
