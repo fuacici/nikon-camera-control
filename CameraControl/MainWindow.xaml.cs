@@ -335,5 +335,11 @@ namespace CameraControl
       wnd.ShowDialog();
     }
 
+    private void btn_about_Click(object sender, RoutedEventArgs e)
+    {
+      AboutWnd wnd=new AboutWnd();
+      wnd.ShowDialog();
+    }
+
   }
 }

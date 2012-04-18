@@ -84,6 +84,9 @@
     <Compile Include="Devices\ICameraDevice.cs" />
     <Compile Include="Devices\Nikon\NikonD5100.cs" />
     <Compile Include="ServiceProvider.cs" />
+    <Compile Include="windows\AboutWnd.xaml.cs">
+      <DependentUpon>AboutWnd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="windows\CreateTimeLapseWnd.xaml.cs">
       <DependentUpon>CreateTimeLapseWnd.xaml</DependentUpon>
     </Compile>
@@ -130,6 +133,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="windows\AboutWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="windows\CreateTimeLapseWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -212,7 +219,9 @@
       <Name>PortableDeviceLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\About.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
