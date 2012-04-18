@@ -83,6 +83,7 @@ namespace CameraControl
     {
       try
       {
+        ServiceProvider.Settings.SystemMessage = "Photo transfer begin.";
         string s = item.ItemID;
         ImageFile imageFile = (ImageFile) item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
         string fileName = ServiceProvider.Settings.DefaultSession.GetNextFileName(imageFile.FileExtension);
@@ -91,11 +92,12 @@ namespace CameraControl
 
         ImageLIst.SelectedValue = ServiceProvider.Settings.DefaultSession.AddFile(fileName);
         ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
+        ServiceProvider.Settings.SystemMessage = "Photo transfer done.";
       }
       catch (Exception ex)
       {
-        MessageBox.Show("Transfer error !\nMessage :" + ex.Message);
-
+        ServiceProvider.Settings.SystemMessage = "Transfer error !\nMessage :" + ex.Message;
+        ServiceProvider.Log.Error("Transfer error !",ex);
       }
     }
 
@@ -150,9 +152,21 @@ namespace CameraControl
       {
         WiaManager.TakePicture();
       }
+        catch(COMException comException)
+        {
+          if(comException.ErrorCode==-2147467259)
+          {
+            ServiceProvider.Settings.SystemMessage = "Unable to take photo. Unable to focus !";
+          }
+          else
+          {
+            ServiceProvider.Log.Error("Take photo", comException);
+          }
+        }
       catch (Exception exception)
       {
         MessageBox.Show("No picture was taken !\n" + exception.Message);
+        ServiceProvider.Log.Error("Take photo", exception);
       }
 
     }
