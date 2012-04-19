@@ -34,7 +34,16 @@ namespace PortableDeviceLib
       // According to documentation, first parameter should be 0 (see http://msdn.microsoft.com/en-us/library/dd375691%28v=VS.85%29.aspx)
       this.portableDeviceClass.SendCommand(0, commandValues, out results);
       int pvalue = 0;
-      results.GetSignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out pvalue);
+      try
+      {
+        int pValue = 0;
+        results.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
+        if (pValue != 0)
+          return ;
+      }
+      catch (Exception ex)
+      {
+      }
     }
 
     public void ExecuteWithNoData(int code, uint param1, uint param2)
@@ -66,6 +75,16 @@ namespace PortableDeviceLib
       // According to documentation, first parameter should be 0 (see http://msdn.microsoft.com/en-us/library/dd375691%28v=VS.85%29.aspx)
       this.portableDeviceClass.SendCommand(0, commandValues, out results);
       int pvalue = 0;
+      try
+      {
+        int pValue = 0;
+        results.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
+        if (pValue != 0)
+          return;
+      }
+      catch (Exception ex)
+      {
+      }
       //results.GetSignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out pvalue);
     }
 
@@ -74,7 +93,7 @@ namespace PortableDeviceLib
       // source: http://msdn.microsoft.com/en-us/library/windows/desktop/ff384843(v=vs.85).aspx
       // and view-source:http://www.experts-exchange.com/Programming/Languages/C_Sharp/Q_26860397.html
       // error codes http://msdn.microsoft.com/en-us/library/windows/desktop/dd319335(v=vs.85).aspx
-      byte[] imgdate = new byte[921600];
+      byte[] imgdate = new byte[8];
 
       IPortableDeviceValues commandValues = (IPortableDeviceValues)new PortableDeviceTypesLib.PortableDeviceValuesClass();
       IPortableDeviceValues pParameters = (IPortableDeviceValues)new PortableDeviceTypesLib.PortableDeviceValues();
