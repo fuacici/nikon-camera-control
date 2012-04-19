@@ -1,4 +1,5 @@
 ﻿using CameraControl.Classes;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.Devices
 {
@@ -7,8 +8,9 @@ namespace CameraControl.Devices
     bool Init(string id, WIAManager manager);
     void StartLiveView();
     void StopLiveView();
-    byte[] GetLiveViewImage();
+    LiveViewData GetLiveViewImage();
     void AutoFocus();
+    void Focus(int x, int y);
     void TakePictureNoAf();
     void Close();
   }

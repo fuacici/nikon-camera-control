@@ -4,14 +4,16 @@
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
         Background="{DynamicResource WindowBackgroundBrush}"
-        Title="Live View" Height="353" Width="455" Loaded="Window_Loaded" Closed="Window_Closed">
+        Title="Live View" Height="507" Width="758" Loaded="Window_Loaded" Closed="Window_Closed">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="96*" />
-            <ColumnDefinition Width="337*" />
+            <ColumnDefinition Width="101*" />
+            <ColumnDefinition Width="635*" />
         </Grid.ColumnDefinitions>
-        <Image Name="image1" Stretch="Uniform" Grid.Column="1" />
+        <Image Name="image1" Stretch="Uniform" Grid.Column="1" MouseDown="image1_MouseDown" />
+        <Canvas Grid.Column="1" Name="canvas"   Background="{x:Null}"/>
         <Button Content="Auto Focus" Height="23" HorizontalAlignment="Left" Margin="12,22,0,0" Name="button1" VerticalAlignment="Top" Width="75" Click="button1_Click" />
         <Button Content="Take pic" Height="23" HorizontalAlignment="Left" Margin="12,55,0,0" Name="button2" VerticalAlignment="Top" Width="75" Click="button2_Click" />
+
     </Grid>
 </Window>

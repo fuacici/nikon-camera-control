@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using CameraControl.Devices;
+using CameraControl.Devices.Classes;
 using CameraControl.Devices.Nikon;
 using PortableDeviceLib;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -29,6 +30,9 @@ namespace CameraControl.windows
   {
     private int _retries = 0;
     private ICameraDevice selectedPortableDevice;
+    private Rectangle _focusrect=new Rectangle(); 
+
+    public LiveViewData LiveViewData { get; set; }
 
     private Timer _timer = new Timer(1000/25);
     /// <summary>
@@ -61,6 +65,15 @@ namespace CameraControl.windows
       _timer.Stop();
       _timer.AutoReset = true;
       _timer.Elapsed += _timer_Elapsed;
+      _focusrect.Stroke = new SolidColorBrush(Colors.Green);
+      canvas.Children.Add(_focusrect);
+      ServiceProvider.Settings.Manager.PhotoTaked += new Classes.WIAManager.PhotoTakedEventHandler(Manager_PhotoTaked);
+    }
+
+    void Manager_PhotoTaked(WIA.Item imageFile)
+    {
+      _timer.Start();
+      StartLiveView();
     }
 
     void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -77,23 +90,22 @@ namespace CameraControl.windows
 
     private void GetLiveImage()
     {
-      byte[] result = null;
       try
       {
-        result = SelectedPortableDevice.GetLiveViewImage();
+        LiveViewData = SelectedPortableDevice.GetLiveViewImage();
       }
       catch (Exception)
       {
- 
+
       }
 
-      if (result == null)
+      if (LiveViewData == null || LiveViewData.ImageData == null)
       {
         _retries++;
         return;
       }
 
-      MemoryStream stream = new MemoryStream(result, 0, result.Length);
+      MemoryStream stream = new MemoryStream(LiveViewData.ImageData, 0, LiveViewData.ImageData.Length);
 
       JpegBitmapDecoder decoder = new JpegBitmapDecoder(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
 
@@ -102,24 +114,27 @@ namespace CameraControl.windows
       {
         image1.Source = decoder.Frames[0];
       }
+
+
       stream.Close();
+      _focusrect.BeginInit();
+      _focusrect.Visibility = LiveViewData.HaveFocusData ? Visibility.Visible : Visibility.Hidden;
+      double xt = canvas.ActualWidth/LiveViewData.ImageWidth;
+      double yt = canvas.ActualHeight/LiveViewData.ImageHeight;
+      _focusrect.Height = LiveViewData.FocusFrameXSize*xt;
+      _focusrect.Width = LiveViewData.FocusFrameYSize*yt;
+      _focusrect.SetValue(Canvas.LeftProperty, LiveViewData.FocusX * xt - (_focusrect.Height/2));
+      _focusrect.SetValue(Canvas.TopProperty, LiveViewData.FocusY*yt - (_focusrect.Width/2));
+      _focusrect.Stroke = new SolidColorBrush(LiveViewData.Focused ? Colors.Green : Colors.Red);
+      _focusrect.EndInit();
       _retries = 0;
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      try
-      {
-        SelectedPortableDevice.StartLiveView();
-      }
-      catch (Exception exception)
-      {
-        ServiceProvider.Log.Error("Unable to start liveview !", exception);
-        MessageBox.Show("Unable to start liveview !");
-        Close();
-      }
 
-      Thread.Sleep(1000);
+      StartLiveView();
+      Thread.Sleep(500);
       _timer.Start();
 
       //SelectedPortableDevice.StoptLiveView();
@@ -166,7 +181,35 @@ namespace CameraControl.windows
       {
         ServiceProvider.Log.Error("Unable to take pictore with no af", exception);
       }
-      _timer.Start();
+      //_timer.Start();
+    }
+
+    private void StartLiveView()
+    {
+      try
+      {
+        SelectedPortableDevice.StartLiveView();
+        _retries = 0;
+      }
+      catch (Exception exception)
+      {
+        ServiceProvider.Log.Error("Unable to start liveview !", exception);
+        MessageBox.Show("Unable to start liveview !");
+        Close();
+      }
+    }
+
+    private void image1_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+      if (e.ButtonState == MouseButtonState.Pressed && e.ChangedButton == MouseButton.Left && LiveViewData != null && LiveViewData.HaveFocusData)
+      {
+        Point _initialPoint = e.MouseDevice.GetPosition(canvas);
+        double xt = LiveViewData.ImageWidth/canvas.ActualWidth;
+        double yt = LiveViewData.ImageHeight/canvas.ActualHeight;
+        int posx = (int) (_initialPoint.X*xt);
+        int posy = (int) (_initialPoint.Y*yt);
+        selectedPortableDevice.Focus(posx, posy);
+      }
     }
 
   }
