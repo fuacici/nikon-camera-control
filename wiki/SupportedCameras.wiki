@@ -2,13 +2,18 @@
 #labels Featured
 
 = Supported Cameras  =
-  * Nikon D3000
-  * Nikon D3100
-  * Nikon D5100
-  * Nikon D5000
-  * Nikon D90
-  * Nikon D7000
-  * Nikon D300
-  * Nikon D800
+||Model||Control||Live view||
+||Nikon D3000||X||-||
+||Nikon D3100||X||-||
+||Nikon D5000||X||-||
+||Nikon D5100||X||X||
+||Nikon D90||X||-||
+||Nikon D7000||X||?||
+||Nikon D300||X||-||
+||Nikon D800||X||-||
+||Nikon D800||X||-||
  
- 
+
+* X  confirmed
+* ?  need to be tested
+* -  not working or not implemented yet
