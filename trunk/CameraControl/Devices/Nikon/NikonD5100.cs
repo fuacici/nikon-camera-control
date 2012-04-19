@@ -17,6 +17,7 @@ namespace CameraControl.Devices.Nikon
     private const int CONST_CMD_GetLiveViewImage = 0x9203;
     private const int CONST_CMD_InitiateCaptureRecInMedia = 0x9207;
     private const int CONST_CMD_ChangeAfArea = 0x9205;
+    private const int CONST_CMD_MfDrive = 0x9204;
 
     private const string AppName = "CameraControl";
     private const int AppMajorVersionNumber = 1;
@@ -85,6 +86,14 @@ namespace CameraControl.Devices.Nikon
       viewData.ImageData = copy.GetBuffer();
 
       return viewData;
+    }
+
+    public void Focus(int step)
+    {
+      if (step > 0)
+        _stillImageDevice.ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000001, (uint) step);
+      else
+        _stillImageDevice.ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000002, (uint) -step);
     }
 
     public void AutoFocus()

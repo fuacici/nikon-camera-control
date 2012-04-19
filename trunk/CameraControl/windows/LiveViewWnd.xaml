@@ -7,13 +7,31 @@
         Title="Live View" Height="507" Width="758" Loaded="Window_Loaded" Closed="Window_Closed">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="101*" />
+            <ColumnDefinition Width="101" />
             <ColumnDefinition Width="635*" />
         </Grid.ColumnDefinitions>
         <Image Name="image1" Stretch="Uniform" Grid.Column="1" MouseDown="image1_MouseDown" />
         <Canvas Grid.Column="1" Name="canvas"   Background="{x:Null}"/>
         <Button Content="Auto Focus" Height="23" HorizontalAlignment="Left" Margin="12,22,0,0" Name="button1" VerticalAlignment="Top" Width="75" Click="button1_Click" />
         <Button Content="Take pic" Height="23" HorizontalAlignment="Left" Margin="12,55,0,0" Name="button2" VerticalAlignment="Top" Width="75" Click="button2_Click" />
-
+        <GroupBox Header="Manual Focus" Height="150" HorizontalAlignment="Left" Margin="0,131,0,0" Name="groupBox1" VerticalAlignment="Top" Width="100">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="45*" />
+                    <ColumnDefinition Width="45*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35*" />
+                    <RowDefinition Height="35*" />
+                    <RowDefinition Height="35*" />
+                </Grid.RowDefinitions>
+                <Button Content="-" Name="btn_focusm" Margin="3" FontWeight="Bold" Click="btn_focusm_Click" />
+                <Button Content="+" Grid.Column="1" Name="btn_focusp"  Margin="3" FontWeight="Bold" Click="btn_focusp_Click" />
+                <Button Content="--" Grid.Row="1" Name="btn_focusmm"  Margin="3" FontWeight="Bold" Click="btn_focusmm_Click" />
+                <Button Content="++" Grid.Column="1" Grid.Row="1" Name="btn_focuspp" Margin="3"  FontWeight="Bold" Click="btn_focuspp_Click" />
+                <Button Content="---" Grid.Row="2" Name="btn_focusmmm" Margin="3"  FontWeight="Bold" Click="btn_focusmmm_Click" />
+                <Button Content="+++" Grid.Column="1" Grid.Row="2" Name="btn_focusppp" Margin="3"  FontWeight="Bold" Click="btn_focusppp_Click" />
+            </Grid>
+        </GroupBox>
     </Grid>
 </Window>

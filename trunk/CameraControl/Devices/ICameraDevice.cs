@@ -10,6 +10,7 @@ namespace CameraControl.Devices
     void StopLiveView();
     LiveViewData GetLiveViewImage();
     void AutoFocus();
+    void Focus(int step);
     void Focus(int x, int y);
     void TakePictureNoAf();
     void Close();
