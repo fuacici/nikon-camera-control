@@ -5,3 +5,4 @@
   * Live view support for D5100
   * About window
   * Improved error handing
+  * Manual focus control in live view
