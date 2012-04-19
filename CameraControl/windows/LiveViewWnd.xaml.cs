@@ -34,7 +34,7 @@ namespace CameraControl.windows
 
     public LiveViewData LiveViewData { get; set; }
 
-    private Timer _timer = new Timer(1000/25);
+    private Timer _timer = new Timer(1000/30);
     /// <summary>
     /// Gets the <see cref="PortableDevice"/> connected
     /// </summary>
@@ -52,8 +52,6 @@ namespace CameraControl.windows
         if (this.selectedPortableDevice != value)
         {
           this.selectedPortableDevice = value;
-          //this.RaisePropertyChanged("SelectedPortableDevice");
-          //Messenger.Default.Send(new ShowDeviceMessage() { Device = value });
         }
       }
     }
@@ -81,6 +79,8 @@ namespace CameraControl.windows
       if(_retries>100)
       {
         _timer.Stop();
+
+        Dispatcher.BeginInvoke(new ThreadStart(delegate { image1.Visibility = Visibility.Hidden; }));
         return;
       }
       _timer.Enabled = false;
@@ -197,6 +197,7 @@ namespace CameraControl.windows
         MessageBox.Show("Unable to start liveview !");
         Close();
       }
+      image1.Visibility = Visibility.Visible;
     }
 
     private void image1_MouseDown(object sender, MouseButtonEventArgs e)
@@ -210,6 +211,36 @@ namespace CameraControl.windows
         int posy = (int) (_initialPoint.Y*yt);
         selectedPortableDevice.Focus(posx, posy);
       }
+    }
+
+    private void btn_focusm_Click(object sender, RoutedEventArgs e)
+    {
+      selectedPortableDevice.Focus(-10);
+    }
+
+    private void btn_focusp_Click(object sender, RoutedEventArgs e)
+    {
+      selectedPortableDevice.Focus(10);
+    }
+
+    private void btn_focusmm_Click(object sender, RoutedEventArgs e)
+    {
+      selectedPortableDevice.Focus(-100);
+    }
+
+    private void btn_focuspp_Click(object sender, RoutedEventArgs e)
+    {
+      selectedPortableDevice.Focus(100);
+    }
+
+    private void btn_focusmmm_Click(object sender, RoutedEventArgs e)
+    {
+      selectedPortableDevice.Focus(-500);
+    }
+
+    private void btn_focusppp_Click(object sender, RoutedEventArgs e)
+    {
+      selectedPortableDevice.Focus(500);
     }
 
   }
