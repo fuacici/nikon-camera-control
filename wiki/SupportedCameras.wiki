@@ -13,7 +13,7 @@
 ||Nikon D800||X||-||
 ||Nikon D800||X||-||
  
-
-* X  confirmed
-* ?  need to be tested
-* -  not working or not implemented yet
+Legend:
+ * X  confirmed
+ * ?  need to be tested
+ * -  not working or not implemented yet
