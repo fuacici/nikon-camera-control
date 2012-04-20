@@ -23,6 +23,7 @@ namespace CameraControl.Devices
       DeviceClass = new Dictionary<string, Type>();
       DeviceClass.Add("D5100", typeof(NikonD5100));
       DeviceClass.Add("D7000", typeof(NikonD5100)); // not tested
+      DeviceClass.Add("D90", typeof(NikonD5100)); // not tested
     }
 
     public ICameraDevice GetIDevice(WIAManager manager)

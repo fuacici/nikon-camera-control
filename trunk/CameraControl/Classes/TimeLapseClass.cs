@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Timers;
 using System.Xml.Serialization;
@@ -139,11 +140,25 @@ namespace CameraControl.Classes
           ServiceProvider.Settings.Manager.TakePicture();
           _timer.Enabled = true;
         }
+        catch (COMException comException)
+        {
+          if (comException.ErrorCode == -2147467259)
+          {
+            ServiceProvider.Settings.SystemMessage = "Unable to take photo. Unable to focus !Retrying....";
+            _timer.Enabled = true;
+            return;
+          }
+          else
+          {
+            ServiceProvider.Log.Error("Take photo", comException);
+          }
+        }
         catch (Exception ex)
         {
           if (ex.Message == "Exception from HRESULT: 0x80210006")
           {
             ServiceProvider.Settings.SystemMessage = " Camera is busy retrying ....";
+            _timer.Enabled = true;
             return;
           }
           ServiceProvider.Settings.SystemMessage = " Error to take photo !";
