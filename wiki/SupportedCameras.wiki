@@ -3,6 +3,7 @@
 
 = Supported Cameras  =
 ||Model||Control||Live view||
+||Nikon D40||?||-||
 ||Nikon D3000||X||-||
 ||Nikon D3100||X||-||
 ||Nikon D5000||X||-||
