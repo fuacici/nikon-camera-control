@@ -11,19 +11,19 @@ namespace CameraControl.Devices.Nikon
 {
   public class NikonD5100 :ICameraDevice
   {
-    private const int CONST_CMD_AfDrive = 0x90C1;
-    private const int CONST_CMD_StartLiveView = 0x9201;
-    private const int CONST_CMD_EndLiveView = 0x9202;
-    private const int CONST_CMD_GetLiveViewImage = 0x9203;
-    private const int CONST_CMD_InitiateCaptureRecInMedia = 0x9207;
-    private const int CONST_CMD_ChangeAfArea = 0x9205;
-    private const int CONST_CMD_MfDrive = 0x9204;
+    public const int CONST_CMD_AfDrive = 0x90C1;
+    public const int CONST_CMD_StartLiveView = 0x9201;
+    public const int CONST_CMD_EndLiveView = 0x9202;
+    public const int CONST_CMD_GetLiveViewImage = 0x9203;
+    public const int CONST_CMD_InitiateCaptureRecInMedia = 0x9207;
+    public const int CONST_CMD_ChangeAfArea = 0x9205;
+    public const int CONST_CMD_MfDrive = 0x9204;
 
     private const string AppName = "CameraControl";
     private const int AppMajorVersionNumber = 1;
     private const int AppMinorVersionNumber = 0;
 
-    private StillImageDevice _stillImageDevice = null;
+    protected StillImageDevice _stillImageDevice = null;
     private WIAManager _manager = null;
 
     public NikonD5100()
@@ -55,7 +55,7 @@ namespace CameraControl.Devices.Nikon
       _stillImageDevice.ExecuteWithNoData(CONST_CMD_EndLiveView);
     }
 
-    public LiveViewData GetLiveViewImage()
+    public virtual LiveViewData GetLiveViewImage()
     {
       LiveViewData viewData=new LiveViewData();
       viewData.HaveFocusData = true;
@@ -67,6 +67,16 @@ namespace CameraControl.Devices.Nikon
         return null;
       int cbBytesRead = result.Length;
 
+      MemoryStream copy = new MemoryStream((int)cbBytesRead - headerSize);
+      copy.Write(result, headerSize, (int)cbBytesRead - headerSize);
+      copy.Close();
+      viewData.ImageData = copy.GetBuffer();
+
+      return viewData;
+    }
+
+    protected void GetAditionalLIveViewData(LiveViewData viewData, byte[] result)
+    {
       viewData.LiveViewImageWidth = ToInt16(result, 0);
       viewData.LiveViewImageHeight = ToInt16(result, 2);
 
@@ -80,12 +90,6 @@ namespace CameraControl.Devices.Nikon
       viewData.FocusY = ToInt16(result, 22);
 
       viewData.Focused = result[40] != 1;
-      MemoryStream copy = new MemoryStream((int)cbBytesRead - headerSize);
-      copy.Write(result, headerSize, (int)cbBytesRead - headerSize);
-      copy.Close();
-      viewData.ImageData = copy.GetBuffer();
-
-      return viewData;
     }
 
     public void Focus(int step)

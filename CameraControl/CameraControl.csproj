@@ -87,6 +87,7 @@
     <Compile Include="Devices\Classes\LiveViewData.cs" />
     <Compile Include="Devices\ICameraDevice.cs" />
     <Compile Include="Devices\Nikon\NikonD5100.cs" />
+    <Compile Include="Devices\Nikon\NikonD90.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="windows\AboutWnd.xaml.cs">
       <DependentUpon>AboutWnd.xaml</DependentUpon>
