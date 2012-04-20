@@ -315,7 +315,11 @@ namespace CameraControl
       FullScreenWnd wnd = new FullScreenWnd();
       wnd.KeyDown += wnd_KeyDown;
       wnd.KeyUp += wnd_KeyUp;
-      wnd.ShowDialog();
+      wnd.Show();
+      wnd.Activate();
+      wnd.Topmost = true;  
+      wnd.Topmost = false; 
+      wnd.Focus();        
     }
 
     void wnd_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
