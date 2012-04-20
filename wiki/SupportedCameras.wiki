@@ -3,12 +3,13 @@
 
 = Supported Cameras  =
 ||Model||Control||Live view||Raw support||
+||Nikon D2x||X||-||-||
 ||Nikon D40||?||-||?||
 ||Nikon D3000||X||-||?||
 ||Nikon D3100||X||-||?||
 ||Nikon D5000||X||-||?||
 ||Nikon D5100||X||X||X||
-||Nikon D90||X||-||?||
+||Nikon D90||X||+||?||
 ||Nikon D7000||X||?||X||
 ||Nikon D300||X||-||?||
 ||Nikon D700||X||-||?||
@@ -20,3 +21,4 @@
  * X  confirmed
  * ?  need to be tested
  * -  not working or not implemented yet
+ * +  planed
