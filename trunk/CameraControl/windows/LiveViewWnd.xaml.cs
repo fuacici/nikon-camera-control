@@ -65,7 +65,7 @@ namespace CameraControl.windows
       _timer.Elapsed += _timer_Elapsed;
       _focusrect.Stroke = new SolidColorBrush(Colors.Green);
       canvas.Children.Add(_focusrect);
-      ServiceProvider.Settings.Manager.PhotoTaked += new Classes.WIAManager.PhotoTakedEventHandler(Manager_PhotoTaked);
+      ServiceProvider.Settings.Manager.PhotoTaked += Manager_PhotoTaked;
     }
 
     void Manager_PhotoTaked(WIA.Item imageFile)
@@ -119,12 +119,14 @@ namespace CameraControl.windows
       stream.Close();
       _focusrect.BeginInit();
       _focusrect.Visibility = LiveViewData.HaveFocusData ? Visibility.Visible : Visibility.Hidden;
-      double xt = canvas.ActualWidth/LiveViewData.ImageWidth;
-      double yt = canvas.ActualHeight/LiveViewData.ImageHeight;
+      double xt = image1.ActualWidth/LiveViewData.ImageWidth;
+      double yt = image1.ActualHeight/LiveViewData.ImageHeight;
       _focusrect.Height = LiveViewData.FocusFrameXSize*xt;
       _focusrect.Width = LiveViewData.FocusFrameYSize*yt;
-      _focusrect.SetValue(Canvas.LeftProperty, LiveViewData.FocusX * xt - (_focusrect.Height/2));
-      _focusrect.SetValue(Canvas.TopProperty, LiveViewData.FocusY*yt - (_focusrect.Width/2));
+      double xx = (canvas.ActualWidth - image1.ActualWidth)/2;
+      double yy = (canvas.ActualHeight - image1.ActualHeight)/2;
+      _focusrect.SetValue(Canvas.LeftProperty, LiveViewData.FocusX*xt - (_focusrect.Height/2) + xx);
+      _focusrect.SetValue(Canvas.TopProperty, LiveViewData.FocusY*yt - (_focusrect.Width/2) + yy);
       _focusrect.Stroke = new SolidColorBrush(LiveViewData.Focused ? Colors.Green : Colors.Red);
       _focusrect.EndInit();
       _retries = 0;
@@ -202,11 +204,12 @@ namespace CameraControl.windows
 
     private void image1_MouseDown(object sender, MouseButtonEventArgs e)
     {
-      if (e.ButtonState == MouseButtonState.Pressed && e.ChangedButton == MouseButton.Left && LiveViewData != null && LiveViewData.HaveFocusData)
+      if (e.ButtonState == MouseButtonState.Pressed && e.ChangedButton == MouseButton.Left && LiveViewData != null &&
+          LiveViewData.HaveFocusData)
       {
-        Point _initialPoint = e.MouseDevice.GetPosition(canvas);
-        double xt = LiveViewData.ImageWidth/canvas.ActualWidth;
-        double yt = LiveViewData.ImageHeight/canvas.ActualHeight;
+        Point _initialPoint = e.MouseDevice.GetPosition(image1);
+        double xt = LiveViewData.ImageWidth/image1.ActualWidth;
+        double yt = LiveViewData.ImageHeight/image1.ActualHeight;
         int posx = (int) (_initialPoint.X*xt);
         int posy = (int) (_initialPoint.Y*yt);
         selectedPortableDevice.Focus(posx, posy);

@@ -21,20 +21,8 @@ namespace CameraControl.Devices.Nikon
       if (result == null || result.Length <= headerSize)
         return null;
       int cbBytesRead = result.Length;
+      GetAditionalLIveViewData(viewData, result);
 
-      viewData.LiveViewImageWidth = ToInt16(result, 0);
-      viewData.LiveViewImageHeight = ToInt16(result, 2);
-
-      viewData.ImageWidth = ToInt16(result, 4);
-      viewData.ImageHeight = ToInt16(result, 6);
-
-      viewData.FocusFrameXSize = ToInt16(result, 16);
-      viewData.FocusFrameYSize = ToInt16(result, 18);
-
-      viewData.FocusX = ToInt16(result, 20);
-      viewData.FocusY = ToInt16(result, 22);
-
-      viewData.Focused = result[40] != 1;
       MemoryStream copy = new MemoryStream((int)cbBytesRead - headerSize);
       copy.Write(result, headerSize, (int)cbBytesRead - headerSize);
       copy.Close();
