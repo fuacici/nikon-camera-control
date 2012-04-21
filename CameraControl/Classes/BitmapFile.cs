@@ -304,6 +304,13 @@ Tag (hex)	Tag (dec)	IFD	Key	Type	Tag description
 
     public BitmapImage ToBitmap(Image image)
     {
+      //Graphics g = Graphics.FromImage(image);
+      //int w = image.Width/3;
+      //int h = image.Height/3;
+      //g.DrawLine(new Pen(new SolidBrush(Color.White), 2), w, 0, w, image.Height);
+      //g.DrawLine(new Pen(new SolidBrush(Color.White), 2), w*2, 0, w*2, image.Height);
+      //g.DrawLine(new Pen(new SolidBrush(Color.White), 2), 0, h, image.Width, h);
+      //g.DrawLine(new Pen(new SolidBrush(Color.White), 2), 0, h*2, image.Width, h*2);
       MemoryStream ms = new MemoryStream();
       image.Save(ms, ImageFormat.Bmp);
       ms.Position = 0;

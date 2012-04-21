@@ -66,7 +66,7 @@ namespace CameraControl.Devices.Nikon
       if (result == null || result.Length <= headerSize)
         return null;
       int cbBytesRead = result.Length;
-
+      GetAditionalLIveViewData(viewData, result);
       MemoryStream copy = new MemoryStream((int)cbBytesRead - headerSize);
       copy.Write(result, headerSize, (int)cbBytesRead - headerSize);
       copy.Close();
