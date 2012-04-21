@@ -47,6 +47,7 @@
     <Reference Include="log4net">
       <HintPath>..\refs\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -74,6 +75,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\AsyncObservableCollection.cs" />
     <Compile Include="Classes\BitmapFile.cs" />
     <Compile Include="Classes\DictionaryItem.cs" />
     <Compile Include="Classes\EditSession.xaml.cs">

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -19,6 +20,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CameraControl.Classes;
 using CameraControl.windows;
+using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.FileIO;
 using WIA;
 using WPF.Themes;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
@@ -357,6 +360,49 @@ namespace CameraControl
     {
       AboutWnd wnd=new AboutWnd();
       wnd.ShowDialog();
+    }
+
+    private void mnu_delete_file_Click(object sender, RoutedEventArgs e)
+    {
+      if (ServiceProvider.Settings.SelectedBitmap == null || ServiceProvider.Settings.SelectedBitmap.FileItem == null)
+        return;
+      if (MessageBox.Show("Do you really want to delete this file ?", "Delete file", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+      {
+        int indx = ImageLIst.SelectedIndex;
+        Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(ServiceProvider.Settings.SelectedBitmap.FileItem.FileName,
+                                                           UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+        if (indx > -1 || indx < ImageLIst.Items.Count)
+          ImageLIst.SelectedIndex = indx;
+        if (indx >= ImageLIst.Items.Count)
+          ImageLIst.SelectedIndex = ImageLIst.Items.Count - 1;
+      }
+    }
+
+    private void mnu_show_explorer_Click(object sender, RoutedEventArgs e)
+    {
+      if (ServiceProvider.Settings.SelectedBitmap == null || ServiceProvider.Settings.SelectedBitmap.FileItem == null)
+        return;
+      try
+      {
+        ProcessStartInfo processStartInfo = new ProcessStartInfo();
+        processStartInfo.FileName = "explorer";
+        processStartInfo.UseShellExecute = true;
+        processStartInfo.WindowStyle = ProcessWindowStyle.Normal;
+        processStartInfo.Arguments =
+            string.Format("/e,/select,\"{0}\"", ServiceProvider.Settings.SelectedBitmap.FileItem.FileName);
+        Process.Start(processStartInfo);
+      }
+      catch (Exception exception)
+      {
+        ServiceProvider.Log.Error("Error to show file in explorer", exception);
+      }
+    }
+
+    private void mnu_open_Click(object sender, RoutedEventArgs e)
+    {
+      if (ServiceProvider.Settings.SelectedBitmap == null || ServiceProvider.Settings.SelectedBitmap.FileItem == null)
+        return;
+      Process.Start(ServiceProvider.Settings.SelectedBitmap.FileItem.FileName);
     }
 
   }
