@@ -31,6 +31,10 @@ namespace CameraControl.windows
     private int _retries = 0;
     private ICameraDevice selectedPortableDevice;
     private Rectangle _focusrect=new Rectangle(); 
+    Line _line11=new Line();
+    Line _line12 = new Line();
+    Line _line21 = new Line();
+    Line _line22 = new Line();
 
     public LiveViewData LiveViewData { get; set; }
 
@@ -65,6 +69,14 @@ namespace CameraControl.windows
       _timer.Elapsed += _timer_Elapsed;
       _focusrect.Stroke = new SolidColorBrush(Colors.Green);
       canvas.Children.Add(_focusrect);
+      _line11.Stroke = new SolidColorBrush(Colors.White);
+      _line12.Stroke = new SolidColorBrush(Colors.White);
+      _line21.Stroke = new SolidColorBrush(Colors.White);
+      _line22.Stroke = new SolidColorBrush(Colors.White);
+      canvas.Children.Add(_line11);
+      canvas.Children.Add(_line12);
+      canvas.Children.Add(_line21);
+      canvas.Children.Add(_line22);
       ServiceProvider.Settings.Manager.PhotoTaked += Manager_PhotoTaked;
     }
 
@@ -114,22 +126,41 @@ namespace CameraControl.windows
       {
         image1.Source = decoder.Frames[0];
       }
-
-
       stream.Close();
+      DrawLines();
+      _retries = 0;
+    }
+
+    void DrawLines()
+    {
+      if (LiveViewData == null)
+        return;
       _focusrect.BeginInit();
       _focusrect.Visibility = LiveViewData.HaveFocusData ? Visibility.Visible : Visibility.Hidden;
-      double xt = image1.ActualWidth/LiveViewData.ImageWidth;
-      double yt = image1.ActualHeight/LiveViewData.ImageHeight;
-      _focusrect.Height = LiveViewData.FocusFrameXSize*xt;
-      _focusrect.Width = LiveViewData.FocusFrameYSize*yt;
-      double xx = (canvas.ActualWidth - image1.ActualWidth)/2;
-      double yy = (canvas.ActualHeight - image1.ActualHeight)/2;
-      _focusrect.SetValue(Canvas.LeftProperty, LiveViewData.FocusX*xt - (_focusrect.Height/2) + xx);
-      _focusrect.SetValue(Canvas.TopProperty, LiveViewData.FocusY*yt - (_focusrect.Width/2) + yy);
+      double xt = image1.ActualWidth / LiveViewData.ImageWidth;
+      double yt = image1.ActualHeight / LiveViewData.ImageHeight;
+      _focusrect.Height = LiveViewData.FocusFrameXSize * xt;
+      _focusrect.Width = LiveViewData.FocusFrameYSize * yt;
+      double xx = (canvas.ActualWidth - image1.ActualWidth) / 2;
+      double yy = (canvas.ActualHeight - image1.ActualHeight) / 2;
+      SetLinePos(_line11, (int)(xx + image1.ActualWidth / 3), (int)yy, (int)(xx + image1.ActualWidth / 3), (int)(yy + image1.ActualHeight));
+      SetLinePos(_line12, (int)(xx + (image1.ActualWidth / 3) * 2), (int)yy, (int)(xx + (image1.ActualWidth / 3) * 2), (int)(yy + image1.ActualHeight));
+
+      SetLinePos(_line21, (int)xx, (int) (yy+ (image1.ActualHeight/3)), (int) (xx + image1.ActualWidth),(int) (yy + image1.ActualHeight/3));
+      SetLinePos(_line22, (int)xx, (int)(yy+(image1.ActualHeight / 3)*2), (int)(xx + image1.ActualWidth), (int)(yy + (image1.ActualHeight / 3)*2));
+
+      _focusrect.SetValue(Canvas.LeftProperty, LiveViewData.FocusX * xt - (_focusrect.Height / 2) + xx);
+      _focusrect.SetValue(Canvas.TopProperty, LiveViewData.FocusY * yt - (_focusrect.Width / 2) + yy);
       _focusrect.Stroke = new SolidColorBrush(LiveViewData.Focused ? Colors.Green : Colors.Red);
       _focusrect.EndInit();
-      _retries = 0;
+    }
+
+    private void SetLinePos(Line line,int x1, int y1, int x2, int y2)
+    {
+      line.X1 = x1;
+      line.X2 = x2;
+      line.Y1 = y1;
+      line.Y2 = y2;
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -244,6 +275,29 @@ namespace CameraControl.windows
     private void btn_focusppp_Click(object sender, RoutedEventArgs e)
     {
       selectedPortableDevice.Focus(500);
+    }
+
+    private void canvas_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+      DrawLines();
+    }
+
+    private void chk_grid_Checked(object sender, RoutedEventArgs e)
+    {
+      if (chk_grid.IsChecked == true)
+      {
+        _line11.Visibility = Visibility.Visible;
+        _line12.Visibility = Visibility.Visible;
+        _line21.Visibility = Visibility.Visible;
+        _line22.Visibility = Visibility.Visible;
+      }
+      else
+      {
+        _line11.Visibility = Visibility.Hidden;
+        _line12.Visibility = Visibility.Hidden;
+        _line21.Visibility = Visibility.Hidden;
+        _line22.Visibility = Visibility.Hidden;
+      }
     }
 
   }
