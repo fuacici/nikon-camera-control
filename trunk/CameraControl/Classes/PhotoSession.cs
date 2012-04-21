@@ -4,12 +4,15 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Threading;
 using System.Xml.Serialization;
 
 namespace CameraControl.Classes
 {
   public class PhotoSession : BaseFieldClass
   {
+    public List<string> SupportedExtensions = new List<string>() {".jpg", ".nef"};
+
     private string _name;
     public string Name
     {
@@ -27,6 +30,11 @@ namespace CameraControl.Classes
       get { return _folder; }
       set
       {
+        if (_folder != value)
+        {
+          _systemWatcher.Path = value;
+          _systemWatcher.EnableRaisingEvents = true;
+        }
         _folder = value;
         NotifyPropertyChanged("Folder");
       }
@@ -56,7 +64,7 @@ namespace CameraControl.Classes
     }
 
     [XmlIgnore]
-    public ObservableCollection<FileItem> Files { get; set; }
+    public AsyncObservableCollection<FileItem> Files { get; set; }
 
     private TimeLapseClass _timeLapse;
     public TimeLapseClass TimeLapse
@@ -71,18 +79,61 @@ namespace CameraControl.Classes
 
 
     public string ConfigFile { get; set; }
+    private FileSystemWatcher _systemWatcher;
 
     public PhotoSession()
     {
+      _systemWatcher = new FileSystemWatcher();
+      _systemWatcher.EnableRaisingEvents = false;
+      _systemWatcher.Deleted += _systemWatcher_Deleted;
+      _systemWatcher.Created += new FileSystemEventHandler(_systemWatcher_Created);
+
       Name = "Default";
       Folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), Name);
-      Files = new ObservableCollection<FileItem>();
+      Files = new AsyncObservableCollection<FileItem>();
       FileNameTemplate = "DSC_$C";
       TimeLapse = new TimeLapseClass();
       if (ServiceProvider.Settings!=null && ServiceProvider.Settings.VideoTypes.Count > 0)
         TimeLapse.VideoType = ServiceProvider.Settings.VideoTypes[0];
       TimeLapse.OutputFIleName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos),
                                               Name + ".avi");
+    }
+
+    void _systemWatcher_Created(object sender, FileSystemEventArgs e)
+    {
+      try
+      {
+        //AddFile(e.FullPath);
+      }
+      catch (Exception exception)
+      {
+        ServiceProvider.Log.Error("Add file error", exception);
+      }
+    }
+
+    void _systemWatcher_Deleted(object sender, FileSystemEventArgs e)
+    {
+      FileItem deletedItem = null;
+      lock (this)
+      {
+        foreach (FileItem fileItem in Files)
+        {
+          if (fileItem.FileName == e.FullPath)
+            deletedItem = fileItem;
+        }
+      }
+      try
+      {
+        if (deletedItem != null)
+          Files.Remove(deletedItem);
+          //Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => Files.Remove(
+          //  deletedItem)));
+      }
+      catch (Exception exception)
+      {
+
+
+      }
     }
 
     public string GetNextFileName(string ext)
@@ -108,6 +159,9 @@ namespace CameraControl.Classes
 
     public FileItem AddFile(string fileName)
     {
+      FileItem oitem = GetFile(fileName);
+      if (oitem != null)
+        return oitem;
       FileItem item = new FileItem(fileName);
       Files.Add(item);
       return item;
@@ -121,6 +175,16 @@ namespace CameraControl.Classes
           return true;
       }
       return false;
+    }
+
+    public FileItem GetFile(string fileName)
+    {
+      foreach (FileItem fileItem in Files)
+      {
+        if (fileItem.FileName.ToUpper() == fileName.ToUpper())
+          return fileItem;
+      }
+      return null;
     }
 
     public override string ToString()

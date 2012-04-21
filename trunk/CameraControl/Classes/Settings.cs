@@ -13,8 +13,7 @@ namespace CameraControl.Classes
   {
     private string AppName = "NikonCameraControl";
     private string ConfigFile = "";
-    private List<string> supportedExtensions= new List<string>() {".jpg",".nef"};
-
+   
     [XmlIgnore]
     public WIAManager Manager { get; set; }
 
@@ -130,7 +129,7 @@ namespace CameraControl.Classes
       string[] files = Directory.GetFiles(session.Folder);
       foreach (string file in files)
       {
-       if(supportedExtensions.Contains(Path.GetExtension(file).ToLower()))
+       if(session.SupportedExtensions.Contains(Path.GetExtension(file).ToLower()))
        {
          if (!session.ContainFile(file))
            session.AddFile(file);

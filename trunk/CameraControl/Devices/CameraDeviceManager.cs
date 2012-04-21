@@ -20,12 +20,16 @@ namespace CameraControl.Devices
 
     public CameraDeviceManager()
     {
-      DeviceClass = new Dictionary<string, Type>();
-      DeviceClass.Add("D5100", typeof(NikonD5100));
-      DeviceClass.Add("D7000", typeof(NikonD5100)); // not tested
-      DeviceClass.Add("D90", typeof(NikonD5100)); // not tested
+      DeviceClass = new Dictionary<string, Type>
+                      {
+                        {"D5100", typeof (NikonD5100)},
+                        {"D7000", typeof (NikonD5100)},
+                        {"D90", typeof (NikonD90)},
+                        {"D4", typeof (NikonD5100)}
+                      };
     }
 
+    //TODO: need to be fixed same type cameras isn't handled right 
     public ICameraDevice GetIDevice(WIAManager manager)
     {
       ObservableCollection<PortableDevice>  PortableDevices = new ObservableCollection<PortableDevice>();

@@ -67,7 +67,15 @@
             </StackPanel>
         </StackPanel>
         <Border  BorderThickness="1" CornerRadius="5" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2">
-            <Image Grid.Row="1" Name="image1" Stretch="Uniform" Source="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" MouseDown="image1_MouseDown" />
+            <Image Grid.Row="1" Name="image1" Stretch="Uniform" Source="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" MouseDown="image1_MouseDown">
+                <Image.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Delete File" Name="mnu_delete_file" Click="mnu_delete_file_Click" />
+                        <MenuItem Header="Show in explorer" Name="mnu_show_explorer" Click="mnu_show_explorer_Click" />
+                        <MenuItem Header="Open in external viewer" Name="mnu_open" Click="mnu_open_Click" />
+                    </ContextMenu>
+                </Image.ContextMenu>
+            </Image>
         </Border>
         <Label Content="Loading ..." Name="lbl_loading" Grid.Column="1" Grid.Row="1" Margin="292,2,195,0" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="{Binding Path=ImageLoading}" FontSize="25" FontWeight="ExtraBold">
         </Label>
