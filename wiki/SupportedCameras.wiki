@@ -5,6 +5,7 @@
 ||Model||Control||Live view||Raw support||
 ||Nikon D2x||X||-||-||
 ||Nikon D40||?||-||?||
+||Nikon D80||-||-||-||
 ||Nikon D3000||X||-||?||
 ||Nikon D3100||X||-||?||
 ||Nikon D5000||X||-||?||
