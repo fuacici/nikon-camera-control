@@ -9,7 +9,7 @@ using PortableDeviceLib;
 
 namespace CameraControl.Devices.Nikon
 {
-  public class NikonD5100 :ICameraDevice
+  public class NikonD5100 : BaseFieldClass, ICameraDevice
   {
     public const int CONST_CMD_AfDrive = 0x90C1;
     public const int CONST_CMD_StartLiveView = 0x9201;
@@ -34,15 +34,34 @@ namespace CameraControl.Devices.Nikon
     
     }
 
-    //public NikonD5100(string id)
-    //{
-    //  Init(id);
-    //}
+    private bool _haveLiveView;
+    public bool HaveLiveView
+    {
+      get { return _haveLiveView; }
+      set
+      {
+        _haveLiveView = value;
+        NotifyPropertyChanged("HaveLiveView");
+      }
+    }
+
+    private PropertyValue _fNumber;
+    public PropertyValue FNumber
+    {
+      get { return _fNumber; }
+      set
+      {
+        _fNumber = value;
+        NotifyPropertyChanged("FNumber");
+      }
+    }
 
     public bool Init(string id, WIAManager manager)
     {
       _manager = manager;
-      _manager.HaveLiveView = true;
+      HaveLiveView = true;
+      FNumber = new PropertyValue();
+
       _stillImageDevice = new StillImageDevice(id);
       _stillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
       return true;
@@ -121,6 +140,8 @@ namespace CameraControl.Devices.Nikon
     public void Close()
     {
       _stillImageDevice.Disconnect();
+      HaveLiveView = false;
+      ServiceProvider.Settings.SystemMessage = "Camera disconnected !";
     }
 
     public static short ToInt16(byte[] value, int startIndex)
@@ -130,6 +151,7 @@ namespace CameraControl.Devices.Nikon
 
     public void ReadDeviceProperties()
     {
+      HaveLiveView = true;
       int f = BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_Fnumber, -1), 0);
       _manager.Device.Properties[WIAManager.CONST_PROP_F_Number].set_Value(f);
     }

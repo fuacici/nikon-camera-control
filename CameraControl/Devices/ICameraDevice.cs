@@ -5,6 +5,9 @@ namespace CameraControl.Devices
 {
   public interface ICameraDevice
   {
+    bool HaveLiveView { get; set; }
+    PropertyValue FNumber { get; set; }
+
     bool Init(string id, WIAManager manager);
     void StartLiveView();
     void StopLiveView();

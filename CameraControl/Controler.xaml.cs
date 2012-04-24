@@ -30,7 +30,7 @@ namespace CameraControl
         if (_manager != null)
           _manager.PropertyChanged -= _manager_PropertyChanged;
         _manager = value;
-        DataContext = Manager;
+        //DataContext = ServiceProvider.DeviceManager;
         SetProperties();
         _manager.PropertyChanged += _manager_PropertyChanged;
       }
@@ -47,11 +47,12 @@ namespace CameraControl
     public Controler()
     {
       InitializeComponent();
-      DataContext = Manager;
+      //DataContext = ServiceProvider.DeviceManager;
     }
 
     public void SetProperties()
     {
+      return;
       if (!Manager.IsConected)
         return;
       try
@@ -77,23 +78,23 @@ namespace CameraControl
           }
           cmb_shutter.SelectedValue = Manager.ShutterTable[(int) shutterProperty.get_Value()];
         }
-        cmb_aperture.Items.Clear();
-        Property apertureProperty = Manager.Device.Properties[WIAManager.CONST_PROP_F_Number];
-        if (apertureProperty != null)
-        {
-          Manager.FTable.Clear();
-          foreach (var subTypeValue in apertureProperty.SubTypeValues)
-          {
-            double d = (int) subTypeValue;
-            //if (Manager.ShutterTable.ContainsKey((int)subTypeValue))
-            string s = "f/" + (d/100).ToString("0.0");
-            Manager.FTable.Add(s, (int)subTypeValue);
-            cmb_aperture.Items.Add(s);
+        //cmb_aperture.Items.Clear();
+        //Property apertureProperty = Manager.Device.Properties[WIAManager.CONST_PROP_F_Number];
+        //if (apertureProperty != null)
+        //{
+        //  Manager.FTable.Clear();
+        //  foreach (var subTypeValue in apertureProperty.SubTypeValues)
+        //  {
+        //    double d = (int) subTypeValue;
+        //    //if (Manager.ShutterTable.ContainsKey((int)subTypeValue))
+        //    string s = "f/" + (d/100).ToString("0.0");
+        //    Manager.FTable.Add(s, (int)subTypeValue);
+        //    cmb_aperture.Items.Add(s);
 
-            if ((int)subTypeValue == (int)apertureProperty.get_Value())
-              cmb_aperture.SelectedValue = s;
-          }
-        }
+        //    if ((int)subTypeValue == (int)apertureProperty.get_Value())
+        //      cmb_aperture.SelectedValue = s;
+        //  }
+        //}
 
         cmb_EComp.Items.Clear();
         Property ecProperty = Manager.Device.Properties["Exposure Compensation"];

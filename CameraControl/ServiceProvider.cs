@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using CameraControl.Classes;
 using CameraControl.Devices;
+using CameraControl.Devices.Others;
 
 namespace CameraControl
 {
@@ -16,6 +17,8 @@ namespace CameraControl
     public static ThumbWorker ThumbWorker { get; set; }
     public static readonly log4net.ILog Log = log4net.LogManager.GetLogger("NCC");
     public static CameraDeviceManager DeviceManager { get; set; }
+
+
 
     public static void Configure()
     {

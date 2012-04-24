@@ -91,6 +91,8 @@
     <Compile Include="Devices\ICameraDevice.cs" />
     <Compile Include="Devices\Nikon\NikonD5100.cs" />
     <Compile Include="Devices\Nikon\NikonD90.cs" />
+    <Compile Include="Devices\Others\NotConnectedCameraDevice.cs" />
+    <Compile Include="Devices\Others\WiaCameraDevice.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="windows\AboutWnd.xaml.cs">
       <DependentUpon>AboutWnd.xaml</DependentUpon>
@@ -236,9 +238,7 @@
   <ItemGroup>
     <Resource Include="Images\logo.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Devices\Others\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

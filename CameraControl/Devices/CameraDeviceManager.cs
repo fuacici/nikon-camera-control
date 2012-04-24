@@ -5,11 +5,12 @@ using System.Linq;
 using System.Text;
 using CameraControl.Classes;
 using CameraControl.Devices.Nikon;
+using CameraControl.Devices.Others;
 using PortableDeviceLib;
 
 namespace CameraControl.Devices
 {
-  public class CameraDeviceManager
+  public class CameraDeviceManager : BaseFieldClass
   {
     private const string AppName = "CameraControl";
     private const int AppMajorVersionNumber = 1;
@@ -18,15 +19,27 @@ namespace CameraControl.Devices
     
     public Dictionary<string,Type> DeviceClass { get; set; }
 
+    private  ICameraDevice _selectedCameraDevice;
+    public  ICameraDevice SelectedCameraDevice
+    {
+      get { return _selectedCameraDevice; }
+      set
+      {
+        _selectedCameraDevice = value;
+        NotifyPropertyChanged("SelectedCameraDevice");
+      }
+    }
+
     public CameraDeviceManager()
     {
       DeviceClass = new Dictionary<string, Type>
                       {
-                        {"D5100", typeof (NikonD5100)},
+                        //{"D5100", typeof (NikonD5100)},
                         {"D7000", typeof (NikonD5100)},
                         {"D90", typeof (NikonD90)},
                         {"D4", typeof (NikonD5100)}
                       };
+      SelectedCameraDevice = new NotConnectedCameraDevice();
     }
 
     //TODO: need to be fixed same type cameras isn't handled right 
@@ -41,22 +54,17 @@ namespace CameraControl.Devices
 
       foreach (var device in PortableDeviceCollection.Instance.Devices)
       {
-        //string pnp_id = manager.Device.Properties["PnP ID String"].get_Value();
-        //if (device.DeviceId == manager.Device.Properties["PnP ID String"].get_Value())
-        //{
          if(DeviceClass.ContainsKey(manager.DeviceName))
          {
-           ICameraDevice dv= (ICameraDevice)Activator.CreateInstance(DeviceClass[manager.DeviceName]);
-           dv.Init(device.DeviceId, manager);
-           return dv;
+           SelectedCameraDevice = (ICameraDevice)Activator.CreateInstance(DeviceClass[manager.DeviceName]);
+           SelectedCameraDevice.Init(device.DeviceId, manager);
+           return SelectedCameraDevice;
          }
-        //}
-        //this.PortableDevices.Add(device);
-        //NikonD5100 portableDevice = new NikonD5100(device.DeviceId, manager);
-        //this.SelectedPortableDevice = portableDevice;
         break;
       }
-      return null;
+      SelectedCameraDevice = new WiaCameraDevice();
+      SelectedCameraDevice.Init(manager.DeviceId, manager);
+      return SelectedCameraDevice;
     }
   }
 }
