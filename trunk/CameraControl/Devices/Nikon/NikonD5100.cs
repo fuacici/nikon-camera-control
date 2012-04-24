@@ -18,6 +18,9 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_CMD_InitiateCaptureRecInMedia = 0x9207;
     public const int CONST_CMD_ChangeAfArea = 0x9205;
     public const int CONST_CMD_MfDrive = 0x9204;
+    public const int CONST_CMD_GetDevicePropValue = 0x1015;
+
+    public const int CONST_PROP_Fnumber = 0x5007;
 
     private const string AppName = "CameraControl";
     private const int AppMajorVersionNumber = 1;
@@ -123,6 +126,12 @@ namespace CameraControl.Devices.Nikon
     public static short ToInt16(byte[] value, int startIndex)
     {
         return System.BitConverter.ToInt16(value.Reverse().ToArray(), value.Length - sizeof(Int16) - startIndex);
+    }
+
+    public void ReadDeviceProperties()
+    {
+      int f = BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_Fnumber, -1), 0);
+      _manager.Device.Properties[WIAManager.CONST_PROP_F_Number].set_Value(f);
     }
 
   }

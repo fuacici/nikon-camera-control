@@ -33,6 +33,6 @@
                 <Button Content="+++" Grid.Column="1" Grid.Row="2" Name="btn_focusppp" Margin="3"  FontWeight="Bold" Click="btn_focusppp_Click" />
             </Grid>
         </GroupBox>
-        <CheckBox Content="Grid" Height="16" HorizontalAlignment="Left" Margin="9,300,0,0" Name="chk_grid" VerticalAlignment="Top" IsChecked="True" Checked="chk_grid_Checked" />
+        <CheckBox Content="Grid" Height="16" HorizontalAlignment="Left" Margin="9,300,0,0" Name="chk_grid" VerticalAlignment="Top" IsChecked="True" Checked="chk_grid_Checked" Unchecked="chk_grid_Unchecked" />
     </Grid>
 </Window>

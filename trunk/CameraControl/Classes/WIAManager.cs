@@ -20,6 +20,7 @@ namespace CameraControl.Classes
     public string DeviceId { get; set; }
     public ICameraDevice CameraDevice { get; set; }
 
+    public const string CONST_PROP_F_Number = "F Number";
 
     private string _deviceName;
 
@@ -361,6 +362,7 @@ namespace CameraControl.Classes
 
             IsConected = true;
             CameraDevice = ServiceProvider.DeviceManager.GetIDevice(this);
+            ServiceProvider.Settings.SystemMessage = "Camera is connected !";
             return true;
           }
         }

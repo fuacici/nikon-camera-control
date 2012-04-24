@@ -82,6 +82,7 @@
       <DependentUpon>EditSession.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\FileItem.cs" />
+    <Compile Include="Classes\PropertyValue.cs" />
     <Compile Include="Classes\ThumbWorker.cs" />
     <Compile Include="Classes\TimeLapseClass.cs" />
     <Compile Include="Classes\VideoType.cs" />
@@ -234,6 +235,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Devices\Others\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

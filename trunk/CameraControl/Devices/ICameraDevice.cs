@@ -14,5 +14,6 @@ namespace CameraControl.Devices
     void Focus(int x, int y);
     void TakePictureNoAf();
     void Close();
+    void ReadDeviceProperties();
   }
 }

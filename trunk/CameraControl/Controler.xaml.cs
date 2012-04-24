@@ -78,7 +78,7 @@ namespace CameraControl
           cmb_shutter.SelectedValue = Manager.ShutterTable[(int) shutterProperty.get_Value()];
         }
         cmb_aperture.Items.Clear();
-        Property apertureProperty = Manager.Device.Properties["F Number"];
+        Property apertureProperty = Manager.Device.Properties[WIAManager.CONST_PROP_F_Number];
         if (apertureProperty != null)
         {
           Manager.FTable.Clear();
@@ -148,7 +148,7 @@ namespace CameraControl
     {
       if (cmb_aperture.SelectedValue != null)
       {
-        Manager.Device.Properties["F Number"].set_Value(Manager.FTable[(string)cmb_aperture.SelectedValue]);
+        Manager.Device.Properties[WIAManager.CONST_PROP_F_Number].set_Value(Manager.FTable[(string)cmb_aperture.SelectedValue]);
       }
     }
 
@@ -178,6 +178,11 @@ namespace CameraControl
         }
         //Manager.Device.Properties["Exposure Compensation"].set_Value((int)Manager.ECTable[(string)cmb_EComp.SelectedValue]);
       }
+    }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+      SetProperties();
     }
 
 
