@@ -58,17 +58,6 @@ namespace CameraControl.Classes
       }
     }
 
-    private bool _haveLiveView;
-    public bool HaveLiveView
-    {
-      get { return _haveLiveView; }
-      set
-      {
-        _haveLiveView = value;
-        NotifyPropertyChanged("HaveLiveView");
-      }
-    }
-
     private bool _apertureCanBeSet;
 
     public bool ApertureCanBeSet
@@ -285,7 +274,6 @@ namespace CameraControl.Classes
     public void DisconnectCamera()
     {
       IsConected = false;
-      HaveLiveView = false;
       DeviceName = "";
       Manufacturer = "";
       if (Device != null)
@@ -293,6 +281,7 @@ namespace CameraControl.Classes
       Device = null;
       if (CameraDevice != null)
         CameraDevice.Close();
+      ServiceProvider.Settings.SystemMessage = "Camera disconnected !";
     }
 
     public int GetShutterValue(string s)
@@ -362,6 +351,7 @@ namespace CameraControl.Classes
 
             IsConected = true;
             CameraDevice = ServiceProvider.DeviceManager.GetIDevice(this);
+            ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties();
             ServiceProvider.Settings.SystemMessage = "Camera is connected !";
             return true;
           }

@@ -3,11 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:my="clr-namespace:CameraControl.Classes"
-             mc:Ignorable="d" 
+             xmlns:Devices="clr-namespace:CameraControl.Devices" mc:Ignorable="d" 
              d:DesignHeight="57" d:DesignWidth="912" BorderBrush="Black" BorderThickness="1">
     <UserControl.DataContext>
-        <my:WIAManager/>
+        <Devices:CameraDeviceManager/>
     </UserControl.DataContext>
     <WrapPanel  HorizontalAlignment="Left"  Name="wrapPanel1" VerticalAlignment="Top" ItemWidth="150">
         <StackPanel Margin="1">
@@ -24,7 +23,7 @@
         </StackPanel>
         <StackPanel Margin="1">
             <Label Content="Aperture" Name="label3" />
-            <ComboBox Name="cmb_aperture" SelectionChanged="cmb_aperture_SelectionChanged" IsEnabled="{Binding Path=ApertureCanBeSet}" />
+            <ComboBox Name="cmb_aperture" SelectionChanged="cmb_aperture_SelectionChanged" IsEnabled="{Binding Path=ApertureCanBeSet}" ItemsSource="{Binding Path=SelectedCameraDevice.FNumber.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.FNumber.Value}"/>
         </StackPanel>
         <StackPanel Margin="1">
             <Label Content="White Balance"/>
