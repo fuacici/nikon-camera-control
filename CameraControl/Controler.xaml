@@ -34,6 +34,9 @@
             <Label Content="Exposure Compensation"  />
             <ComboBox Name="cmb_EComp" SelectionChanged="cmb_EComp_SelectionChanged" />
         </StackPanel>
-
+        <StackPanel Margin="1">
+            <Label Content="Exposure Compensation"  />
+            <Button Content="Reread" Click="Button_Click" />
+        </StackPanel>
     </WrapPanel>
 </UserControl>

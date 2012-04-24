@@ -364,17 +364,24 @@ namespace CameraControl
 
     private void mnu_delete_file_Click(object sender, RoutedEventArgs e)
     {
-      if (ServiceProvider.Settings.SelectedBitmap == null || ServiceProvider.Settings.SelectedBitmap.FileItem == null)
-        return;
-      if (MessageBox.Show("Do you really want to delete this file ?", "Delete file", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+      try
       {
-        int indx = ImageLIst.SelectedIndex;
-        Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(ServiceProvider.Settings.SelectedBitmap.FileItem.FileName,
-                                                           UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-        if (indx > -1 || indx < ImageLIst.Items.Count)
-          ImageLIst.SelectedIndex = indx;
-        if (indx >= ImageLIst.Items.Count)
-          ImageLIst.SelectedIndex = ImageLIst.Items.Count - 1;
+        if (ServiceProvider.Settings.SelectedBitmap == null || ServiceProvider.Settings.SelectedBitmap.FileItem == null)
+          return;
+        if (MessageBox.Show("Do you really want to delete this file ?", "Delete file", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+        {
+          int indx = ImageLIst.SelectedIndex;
+          Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(ServiceProvider.Settings.SelectedBitmap.FileItem.FileName,
+                                                             UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+          if (indx > -1 || indx < ImageLIst.Items.Count)
+            ImageLIst.SelectedIndex = indx;
+          if (indx >= ImageLIst.Items.Count)
+            ImageLIst.SelectedIndex = ImageLIst.Items.Count - 1;
+        }
+      }
+      catch (Exception exception)
+      {
+        ServiceProvider.Log.Error("Error to delete file", exception);
       }
     }
 
@@ -403,6 +410,11 @@ namespace CameraControl
       if (ServiceProvider.Settings.SelectedBitmap == null || ServiceProvider.Settings.SelectedBitmap.FileItem == null)
         return;
       Process.Start(ServiceProvider.Settings.SelectedBitmap.FileItem.FileName);
+    }
+
+    private void button4_Click(object sender, RoutedEventArgs e)
+    {
+      ServiceProvider.Settings.Manager.CameraDevice.ReadDeviceProperties();
     }
 
   }

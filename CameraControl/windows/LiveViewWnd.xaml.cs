@@ -284,20 +284,18 @@ namespace CameraControl.windows
 
     private void chk_grid_Checked(object sender, RoutedEventArgs e)
     {
-      if (chk_grid.IsChecked == true)
-      {
-        _line11.Visibility = Visibility.Visible;
-        _line12.Visibility = Visibility.Visible;
-        _line21.Visibility = Visibility.Visible;
-        _line22.Visibility = Visibility.Visible;
-      }
-      else
-      {
-        _line11.Visibility = Visibility.Hidden;
-        _line12.Visibility = Visibility.Hidden;
-        _line21.Visibility = Visibility.Hidden;
-        _line22.Visibility = Visibility.Hidden;
-      }
+      _line11.Visibility = Visibility.Visible;
+      _line12.Visibility = Visibility.Visible;
+      _line21.Visibility = Visibility.Visible;
+      _line22.Visibility = Visibility.Visible;
+    }
+
+    private void chk_grid_Unchecked(object sender, RoutedEventArgs e)
+    {
+      _line11.Visibility = Visibility.Hidden;
+      _line12.Visibility = Visibility.Hidden;
+      _line21.Visibility = Visibility.Hidden;
+      _line22.Visibility = Visibility.Hidden;
     }
 
   }

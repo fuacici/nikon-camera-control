@@ -64,8 +64,8 @@ namespace PortableDeviceLib
       tag_inner_PROPVARIANT vparam1 = new tag_inner_PROPVARIANT();
       tag_inner_PROPVARIANT vparam2 = new tag_inner_PROPVARIANT();
       UintToPropVariant(param1, out vparam1);
-      UintToPropVariant(param2, out vparam2);
       propVariant.Add(ref vparam1);
+      UintToPropVariant(param2, out vparam2);
       propVariant.Add(ref vparam2);
       
       commandValues.SetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPERATION_CODE, (uint)code);
@@ -90,6 +90,11 @@ namespace PortableDeviceLib
 
     public byte[] ExecuteWithData(int code)
     {
+      return ExecuteWithData(code, -1, -1);
+    }
+
+    public byte[] ExecuteWithData(int code, int param1, int param2)
+    {
       // source: http://msdn.microsoft.com/en-us/library/windows/desktop/ff384843(v=vs.85).aspx
       // and view-source:http://www.experts-exchange.com/Programming/Languages/C_Sharp/Q_26860397.html
       // error codes http://msdn.microsoft.com/en-us/library/windows/desktop/dd319335(v=vs.85).aspx
@@ -110,6 +115,18 @@ namespace PortableDeviceLib
       commandValues.SetBufferValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_DATA, ref imgdate[0], (uint)imgdate.Length);
 
 
+      tag_inner_PROPVARIANT vparam1 = new tag_inner_PROPVARIANT();
+      tag_inner_PROPVARIANT vparam2 = new tag_inner_PROPVARIANT();
+      if (param1 > -1)
+      {
+        UintToPropVariant((uint)param1, out vparam1);
+        propVariant.Add(ref vparam1);
+      }
+      if (param2 > -1)
+      {
+        UintToPropVariant((uint)param2, out vparam2);
+        propVariant.Add(ref vparam2);
+      }
       commandValues.SetIPortableDevicePropVariantCollectionValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPERATION_PARAMS, propVariant);
       commandValues.SetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPERATION_CODE, (uint) code);
 
