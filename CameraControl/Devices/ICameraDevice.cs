@@ -7,6 +7,13 @@ namespace CameraControl.Devices
   {
     bool HaveLiveView { get; set; }
     PropertyValue FNumber { get; set; }
+    PropertyValue IsoNumber { get; set; }
+    PropertyValue ShutterSpeed { get; set; }
+    PropertyValue WhiteBalance { get; set; }
+    PropertyValue Mode { get; set; }
+    PropertyValue ExposureCompensation { get; set; }
+    
+
 
     bool Init(string id, WIAManager manager);
     void StartLiveView();

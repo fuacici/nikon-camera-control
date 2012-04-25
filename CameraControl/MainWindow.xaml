@@ -49,7 +49,7 @@
             <RowDefinition Height="121" />
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
-        <my:Controler x:Name="controler1" Grid.Row="1" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=Manager.IsConected}" Margin="5"/>
+        <my:Controler x:Name="controler1" Grid.Row="1" DataContext="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=Manager.IsConected}" Margin="5"/>
         <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="2">
             <StackPanel  Orientation="Horizontal">
                 <Label Content="Manufacturer:" />
