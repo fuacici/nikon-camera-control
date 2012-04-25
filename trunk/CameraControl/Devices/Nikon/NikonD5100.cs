@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Timers;
 using CameraControl.Classes;
 using CameraControl.Devices.Classes;
+using CameraControl.Devices.Others;
 using PortableDeviceLib;
 
 namespace CameraControl.Devices.Nikon
 {
-  public class NikonD5100 : BaseFieldClass, ICameraDevice
+  public class NikonD5100 : WiaCameraDevice, ICameraDevice
   {
     public const int CONST_CMD_AfDrive = 0x90C1;
     public const int CONST_CMD_StartLiveView = 0x9201;
@@ -19,65 +21,67 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_CMD_ChangeAfArea = 0x9205;
     public const int CONST_CMD_MfDrive = 0x9204;
     public const int CONST_CMD_GetDevicePropValue = 0x1015;
+    public const int CONST_CMD_GetEvent = 0x90C7;
 
     public const int CONST_PROP_Fnumber = 0x5007;
+    public const int CONST_PROP_ExposureIndex = 0x500F;
+    public const int CONST_PROP_ExposureTime = 0x500D;
+    public const int CONST_PROP_WhiteBalance = 0x5005;
+    public const int CONST_PROP_ExposureProgramMode = 0x500E;
+    public const int CONST_PROP_ExposureBiasCompensation = 0x5010;
 
     private const string AppName = "CameraControl";
     private const int AppMajorVersionNumber = 1;
     private const int AppMinorVersionNumber = 0;
+    private Timer _timer = new Timer(1000/5);
 
     protected StillImageDevice _stillImageDevice = null;
     private WIAManager _manager = null;
 
     public NikonD5100()
     {
-    
+      _timer.AutoReset = true;
+      _timer.Elapsed += _timer_Elapsed;
     }
 
-    private bool _haveLiveView;
-    public bool HaveLiveView
+    void _timer_Elapsed(object sender, ElapsedEventArgs e)
     {
-      get { return _haveLiveView; }
-      set
+      _timer.Stop();
+      try
       {
-        _haveLiveView = value;
-        NotifyPropertyChanged("HaveLiveView");
+        getEvent();
       }
-    }
-
-    private PropertyValue _fNumber;
-    public PropertyValue FNumber
-    {
-      get { return _fNumber; }
-      set
+      catch (Exception)
       {
-        _fNumber = value;
-        NotifyPropertyChanged("FNumber");
+        
+        
       }
+      _timer.Start();
     }
 
-    public bool Init(string id, WIAManager manager)
+
+    public override bool Init(string id, WIAManager manager)
     {
+      base.Init(id, manager);
       _manager = manager;
       HaveLiveView = true;
-      FNumber = new PropertyValue();
-
       _stillImageDevice = new StillImageDevice(id);
       _stillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
+      _timer.Start();
       return true;
     }
 
-    public void StartLiveView()
+    public override void StartLiveView()
     {
       _stillImageDevice.ExecuteWithNoData(CONST_CMD_StartLiveView);
     }
 
-    public void StopLiveView()
+    public override void StopLiveView()
     {
       _stillImageDevice.ExecuteWithNoData(CONST_CMD_EndLiveView);
     }
 
-    public virtual LiveViewData GetLiveViewImage()
+    public override LiveViewData GetLiveViewImage()
     {
       LiveViewData viewData=new LiveViewData();
       viewData.HaveFocusData = true;
@@ -114,7 +118,7 @@ namespace CameraControl.Devices.Nikon
       viewData.Focused = result[40] != 1;
     }
 
-    public void Focus(int step)
+    public override void Focus(int step)
     {
       if (step > 0)
         _stillImageDevice.ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000001, (uint) step);
@@ -122,12 +126,12 @@ namespace CameraControl.Devices.Nikon
         _stillImageDevice.ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000002, (uint) -step);
     }
 
-    public void AutoFocus()
+    public override void AutoFocus()
     {
       _stillImageDevice.ExecuteWithNoData(CONST_CMD_AfDrive);
     }
 
-    public void TakePictureNoAf()
+    public override void TakePictureNoAf()
     {
       _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF, 0x0000);
     }
@@ -137,8 +141,9 @@ namespace CameraControl.Devices.Nikon
       _stillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeAfArea, (uint) x, (uint) y);
     }
 
-    public void Close()
+    public override void Close()
     {
+      _timer.Stop();
       _stillImageDevice.Disconnect();
       HaveLiveView = false;
       ServiceProvider.Settings.SystemMessage = "Camera disconnected !";
@@ -149,11 +154,36 @@ namespace CameraControl.Devices.Nikon
         return System.BitConverter.ToInt16(value.Reverse().ToArray(), value.Length - sizeof(Int16) - startIndex);
     }
 
-    public void ReadDeviceProperties()
+    public override void ReadDeviceProperties()
     {
       HaveLiveView = true;
-      int f = BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_Fnumber, -1), 0);
-      _manager.Device.Properties[WIAManager.CONST_PROP_F_Number].set_Value(f);
+      FNumber.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_Fnumber, -1), 0));
+      IsoNumber.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureIndex, -1), 0));
+      ShutterSpeed.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureTime, -1), 0));
+      WhiteBalance.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_WhiteBalance, -1), 0));
+      Mode.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureProgramMode, -1), 0));
+      ExposureCompensation.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureBiasCompensation, -1), 0));
+    }
+
+    private void getEvent()
+    {
+      byte[] result = _stillImageDevice.ExecuteWithData(CONST_CMD_GetEvent);
+      bool shouldRefresProperties = false;
+      int eventCount = BitConverter.ToInt16(result, 0);
+      if (eventCount > 0)
+      {
+        for (int i = 0; i < eventCount; i++)
+        {
+          int eventCode = BitConverter.ToInt16(result, 6*i + 2);
+          int eventParam = BitConverter.ToInt16(result, 6*i + 4);
+          if (eventCode == 0x4006)
+          {
+            shouldRefresProperties = true;
+          }
+        }
+        if (shouldRefresProperties)
+          ReadDeviceProperties();
+      }
     }
 
   }

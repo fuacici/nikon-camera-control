@@ -11,31 +11,27 @@
     <WrapPanel  HorizontalAlignment="Left"  Name="wrapPanel1" VerticalAlignment="Top" ItemWidth="150">
         <StackPanel Margin="1">
             <Label Content="Mode" />
-            <ComboBox Name="cmb_mode" SelectionChanged="cmb_mode_SelectionChanged" IsEnabled="False" SelectedValue="{Binding Path=ExposureMode}" ItemsSource="{Binding Path=ExposureModeList}"/>
+            <ComboBox Name="cmb_mode" IsEnabled="{Binding Path=SelectedCameraDevice.Mode.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.Mode.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.Mode.Value}" />
         </StackPanel>
         <StackPanel Margin="1">
             <Label Content="Iso" Name="label1" />
-            <ComboBox Name="cmb_iso" SelectionChanged="cmb_iso_SelectionChanged" />
+            <ComboBox Name="cmb_iso" IsEnabled="{Binding Path=SelectedCameraDevice.IsoNumber.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.IsoNumber.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.IsoNumber.Value}" />
         </StackPanel>
         <StackPanel Margin="1">
             <Label Content="Shutter speed" Name="label2" />
-            <ComboBox Name="cmb_shutter" SelectionChanged="cmb_shutter_SelectionChanged" IsEnabled="{Binding Path=SutterCanBeSet}" />
+            <ComboBox Name="cmb_shutter" IsEnabled="{Binding Path=SelectedCameraDevice.ShutterSpeed.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.ShutterSpeed.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.ShutterSpeed.Value}"/>
         </StackPanel>
         <StackPanel Margin="1">
             <Label Content="Aperture" Name="label3" />
-            <ComboBox Name="cmb_aperture" SelectionChanged="cmb_aperture_SelectionChanged" IsEnabled="{Binding Path=ApertureCanBeSet}" ItemsSource="{Binding Path=SelectedCameraDevice.FNumber.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.FNumber.Value}"/>
+            <ComboBox Name="cmb_aperture" IsEnabled="{Binding Path=SelectedCameraDevice.FNumber.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.FNumber.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.FNumber.Value}"/>
         </StackPanel>
         <StackPanel Margin="1">
             <Label Content="White Balance"/>
-            <ComboBox Name="cmb_WB" ItemsSource="{Binding Path=WBModeList}" SelectedValue="{Binding Path=WhiteBalance}"/>
+            <ComboBox Name="cmb_WB" IsEnabled="{Binding Path=SelectedCameraDevice.WhiteBalance.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.WhiteBalance.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.WhiteBalance.Value}"/>
         </StackPanel>
         <StackPanel Margin="1">
             <Label Content="Exposure Compensation"  />
-            <ComboBox Name="cmb_EComp" SelectionChanged="cmb_EComp_SelectionChanged" />
-        </StackPanel>
-        <StackPanel Margin="1">
-            <Label Content="Exposure Compensation"  />
-            <Button Content="Reread" Click="Button_Click" />
+            <ComboBox Name="cmb_EComp" IsEnabled="{Binding Path=SelectedCameraDevice.ExposureCompensation.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.ExposureCompensation.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.ExposureCompensation.Value}"/>
         </StackPanel>
     </WrapPanel>
 </UserControl>

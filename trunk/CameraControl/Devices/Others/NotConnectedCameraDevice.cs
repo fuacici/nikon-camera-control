@@ -15,6 +15,16 @@ namespace CameraControl.Devices.Others
 
     public PropertyValue FNumber { get; set; }
 
+    public PropertyValue IsoNumber { get; set; }
+
+    public PropertyValue ShutterSpeed { get; set; }
+
+    public PropertyValue WhiteBalance { get; set; }
+
+    public PropertyValue Mode { get; set; }
+
+    public PropertyValue ExposureCompensation { get; set; }
+
     public bool Init(string id, WIAManager manager)
     {
       HaveLiveView = false;

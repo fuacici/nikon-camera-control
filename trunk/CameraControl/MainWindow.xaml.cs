@@ -52,7 +52,6 @@ namespace CameraControl
       WiaManager.PhotoTaked += WiaManager_PhotoTaked;
       InitializeComponent();
       DataContext = ServiceProvider.Settings;
-      controler1.Manager = WiaManager;
       if (ServiceProvider.Settings.DefaultSession.Files.Count > 0)
         ImageLIst.SelectedIndex = 0;
     }

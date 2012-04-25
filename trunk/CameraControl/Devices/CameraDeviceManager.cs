@@ -34,7 +34,7 @@ namespace CameraControl.Devices
     {
       DeviceClass = new Dictionary<string, Type>
                       {
-                        //{"D5100", typeof (NikonD5100)},
+                        {"D5100", typeof (NikonD5100)},
                         {"D7000", typeof (NikonD5100)},
                         {"D90", typeof (NikonD90)},
                         {"D4", typeof (NikonD5100)}

@@ -7,22 +7,46 @@ namespace CameraControl.Classes
 {
   public class PropertyValue:BaseFieldClass
   {
-    public delegate void ValueChangedEventHandler(object sender, object e);
+    public delegate void ValueChangedEventHandler(object sender, string key, int val);
     public event ValueChangedEventHandler ValueChanged;
     
-    private Dictionary<object, object> _valuesDictionary;
+    private Dictionary<string, int> _valuesDictionary;
 
-    private object _value;
-    public object Value
+    private string _value;
+    public string Value
     {
       get { return _value; }
       set
       {
-        if (_value != value && ValueChanged != null)
-          ValueChanged(this, _value);
-
-        _value = value;
+        //if (_value != value)
+        //{
+          _value = value;
+          if(ValueChanged != null)
+          {
+            foreach (KeyValuePair<string, int> keyValuePair in _valuesDictionary)
+            {
+              if (keyValuePair.Key == _value)
+                ValueChanged(this, _value, keyValuePair.Value);
+            }
+          }
+        //}
         NotifyPropertyChanged("Value");
+      }
+    }
+
+    private bool _isEnabled;
+    public bool IsEnabled
+    {
+      get
+      {
+        //if (Values == null || Values.Count==0)
+        //  return false;
+        return _isEnabled;
+      }
+      set
+      {
+        _isEnabled = value;
+        NotifyPropertyChanged("IsEnabled");
       }
     }
 
@@ -33,14 +57,15 @@ namespace CameraControl.Classes
 
     public PropertyValue()
     {
-      _valuesDictionary = new Dictionary<object, object>();
+      _valuesDictionary = new Dictionary<string, int>();
+      IsEnabled = true;
     }
 
-    public void SetValue(object o)
+    public void SetValue(int o)
     {
-      foreach (KeyValuePair<object, object> keyValuePair in _valuesDictionary)
+      foreach (KeyValuePair<string, int> keyValuePair in _valuesDictionary)
       {
-        if(keyValuePair.Value==o)
+        if (keyValuePair.Value== o)
         {
           _value = keyValuePair.Key;
           NotifyPropertyChanged("Value");
@@ -48,10 +73,11 @@ namespace CameraControl.Classes
       }
     }
 
-    public void AddValues(object key, object value)
+    public void AddValues(string key, int value)
     {
       if (!_valuesDictionary.ContainsKey(key))
         _valuesDictionary.Add(key, value);
+      NotifyPropertyChanged("Values");
     }
 
 
