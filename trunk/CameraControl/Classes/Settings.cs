@@ -64,6 +64,18 @@ namespace CameraControl.Classes
       }
     }
 
+    private bool _disableNativeDrivers;
+    public bool DisableNativeDrivers
+    {
+      get { return _disableNativeDrivers; }
+      set
+      {
+        _disableNativeDrivers = value;
+        NotifyPropertyChanged("DisableNativeDrivers");
+      }
+    }
+
+
     private string _currentTheme;
     public string CurrentTheme
     {
@@ -97,6 +109,7 @@ namespace CameraControl.Classes
       SelectedBitmap = new BitmapFile();
       CurrentTheme = "ExpressionDark";
       SystemMessage = "";
+      DisableNativeDrivers = false;
       VideoTypes = new ObservableCollection<VideoType>
                      {
                        new VideoType("HD 1080 16:9", 1920, 1080),

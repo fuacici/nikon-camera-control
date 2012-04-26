@@ -45,23 +45,27 @@ namespace CameraControl.Devices
     //TODO: need to be fixed same type cameras isn't handled right 
     public ICameraDevice GetIDevice(WIAManager manager)
     {
-      ObservableCollection<PortableDevice>  PortableDevices = new ObservableCollection<PortableDevice>();
-      if (PortableDeviceCollection.Instance == null)
+      if (!ServiceProvider.Settings.DisableNativeDrivers)
       {
-        PortableDeviceCollection.CreateInstance(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
-        PortableDeviceCollection.Instance.AutoConnectToPortableDevice = false;
+        ObservableCollection<PortableDevice> PortableDevices = new ObservableCollection<PortableDevice>();
+        if (PortableDeviceCollection.Instance == null)
+        {
+          PortableDeviceCollection.CreateInstance(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
+          PortableDeviceCollection.Instance.AutoConnectToPortableDevice = false;
+        }
+
+        foreach (var device in PortableDeviceCollection.Instance.Devices)
+        {
+          if (DeviceClass.ContainsKey(manager.DeviceName))
+          {
+            SelectedCameraDevice = (ICameraDevice) Activator.CreateInstance(DeviceClass[manager.DeviceName]);
+            SelectedCameraDevice.Init(device.DeviceId, manager);
+            return SelectedCameraDevice;
+          }
+          break;
+        }
       }
 
-      foreach (var device in PortableDeviceCollection.Instance.Devices)
-      {
-         if(DeviceClass.ContainsKey(manager.DeviceName))
-         {
-           SelectedCameraDevice = (ICameraDevice)Activator.CreateInstance(DeviceClass[manager.DeviceName]);
-           SelectedCameraDevice.Init(device.DeviceId, manager);
-           return SelectedCameraDevice;
-         }
-        break;
-      }
       SelectedCameraDevice = new WiaCameraDevice();
       SelectedCameraDevice.Init(manager.DeviceId, manager);
       return SelectedCameraDevice;
