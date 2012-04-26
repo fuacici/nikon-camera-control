@@ -170,6 +170,8 @@ namespace CameraControl.Devices.Nikon
     private void getEvent()
     {
       byte[] result = _stillImageDevice.ExecuteWithData(CONST_CMD_GetEvent);
+      if (result == null)
+        return;
       bool shouldRefresProperties = false;
       int eventCount = BitConverter.ToInt16(result, 0);
       if (eventCount > 0)

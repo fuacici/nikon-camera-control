@@ -113,6 +113,8 @@ namespace CameraControl.Classes
         Item item = Device.GetItem(itemId);
         if (PhotoTaked != null)
           PhotoTaked(item);
+        if (PhotoTakenDone != null)
+          PhotoTakenDone(item);
       }
     }
 
@@ -206,6 +208,7 @@ namespace CameraControl.Classes
     public delegate void PhotoTakedEventHandler(Item imageFile);
 
     public virtual event PhotoTakedEventHandler PhotoTaked;
+    public virtual event PhotoTakedEventHandler PhotoTakenDone;
 
     #endregion
 
