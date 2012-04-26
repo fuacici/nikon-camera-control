@@ -2,24 +2,32 @@
 #labels Featured
 
 = Supported Cameras  =
-||Model||Control||Live view||Raw support||
-||Nikon D2x||X||-||-||
-||Nikon D40||?||-||?||
-||Nikon D80||-||-||-||
-||Nikon D3000||X||-||?||
-||Nikon D3100||X||-||?||
-||Nikon D5000||X||-||?||
-||Nikon D5100||X||X||X||
-||Nikon D90||X||+||?||
-||Nikon D7000||X||?||X||
-||Nikon D300||X||-||?||
-||Nikon D700||X||-||?||
-||Nikon D800||X||-||?||
+||Model||Control||Live view||Raw support||Driver||
+||Nikon D2x||X||-||-||WIA||
+||Nikon D200||?||-||?||Native||
+||Nikon D4||X||?||?||Native||
+||Nikon D40||?||-||?||Native||
+||Nikon D60||?||-||?||Native||
+||Nikon D80||?||-||?||Native||
+||Nikon D3X||X||?||?||WIA||
+||Nikon D3S||X||?||?||WIA||
+||Nikon D3000||X||-||?||WIA||
+||Nikon D3100||X||-||?||WIA||
+||Nikon D5000||X||?||?||Native||
+||Nikon D5100||X||X||X||Native||
+||Nikon D90||X||?||?||Native||
+||Nikon D7000||X||?||X||Native||
+||Nikon D300||X||-||?||Native||
+||Nikon D700||X||?||?||Native||
+||Nikon D800||X||?||?||Native||
+||Nikon D800E||X||?||?||Native||
  
 
 
 
  * X  confirmed
- * ?  need to be tested
+ * ?  implemented, but need to be tested
  * -  not working or not implemented yet
  * +  planed
+ 
+With Native driver the application can use live view (if is supported by the camera) and read camera properties in real time
