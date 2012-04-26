@@ -168,6 +168,17 @@ namespace CameraControl.Devices.Others
       }
     }
 
+    private int _battery;
+    public int Battery
+    {
+      get { return _battery; }
+      set
+      {
+        _battery = value;
+        NotifyPropertyChanged("Battery");
+      }
+    }
+
     private Device Device { get; set; }
 
     public virtual bool Init(string id, WIAManager manager)
@@ -244,6 +255,8 @@ namespace CameraControl.Devices.Others
         ExposureCompensation.SetValue(ecProperty.get_Value());
       }
 
+      Battery = manager.Device.Properties[WIAManager.CONST_PROP_BatteryStatus].get_Value();
+      
       HaveLiveView = false;
       return true;
     }

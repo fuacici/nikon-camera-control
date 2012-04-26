@@ -12,7 +12,7 @@ namespace CameraControl.Devices
     PropertyValue WhiteBalance { get; set; }
     PropertyValue Mode { get; set; }
     PropertyValue ExposureCompensation { get; set; }
-    
+    int Battery { get; set; }
 
 
     bool Init(string id, WIAManager manager);

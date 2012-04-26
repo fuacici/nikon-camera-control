@@ -25,6 +25,8 @@ namespace CameraControl.Devices.Others
 
     public PropertyValue ExposureCompensation { get; set; }
 
+    public int Battery { get; set; }
+
     public bool Init(string id, WIAManager manager)
     {
       HaveLiveView = false;

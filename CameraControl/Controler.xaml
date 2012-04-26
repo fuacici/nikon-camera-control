@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Devices="clr-namespace:CameraControl.Devices" mc:Ignorable="d" 
-             d:DesignHeight="57" d:DesignWidth="912" BorderBrush="Black" BorderThickness="1">
+             d:DesignHeight="57" d:DesignWidth="1168" BorderBrush="Black" BorderThickness="1">
     <UserControl.DataContext>
         <Devices:CameraDeviceManager/>
     </UserControl.DataContext>
@@ -32,6 +32,10 @@
         <StackPanel Margin="1">
             <Label Content="Exposure Compensation"  />
             <ComboBox Name="cmb_EComp" IsEnabled="{Binding Path=SelectedCameraDevice.ExposureCompensation.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.ExposureCompensation.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.ExposureCompensation.Value}"/>
+        </StackPanel>
+        <StackPanel Margin="1">
+            <Label Content="Battery"  />
+            <ProgressBar Minimum="0" Maximum="100" Height="20" Value="{Binding Path=SelectedCameraDevice.Battery}" />
         </StackPanel>
     </WrapPanel>
 </UserControl>

@@ -67,8 +67,8 @@ namespace CameraControl.Classes
       {
         if (keyValuePair.Value== o)
         {
-          _value = keyValuePair.Key;
-          NotifyPropertyChanged("Value");
+          Value = keyValuePair.Key;
+          //NotifyPropertyChanged("Value");
         }
       }
     }

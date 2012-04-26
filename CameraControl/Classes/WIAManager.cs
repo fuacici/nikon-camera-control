@@ -26,6 +26,7 @@ namespace CameraControl.Classes
     public const string CONST_PROP_WhiteBalance = "White Balance";
     public const string CONST_PROP_ExposureMode = "Exposure Mode";
     public const string CONST_PROP_ExposureCompensation = "Exposure Compensation";
+    public const string CONST_PROP_BatteryStatus = "Battery Status";
     
     private string _deviceName;
 
@@ -61,31 +62,6 @@ namespace CameraControl.Classes
         _isConected = value;
         NotifyPropertyChanged("IsConected");
       }
-    }
-
-
-    private bool _sutterCanBeSet;
-
-    public bool SutterCanBeSet
-    {
-      get { return _sutterCanBeSet; }
-      set
-      {
-        _sutterCanBeSet = value;
-        NotifyPropertyChanged("SutterCanBeSet");
-      }
-    }
-
-    private string _mode;
-
-    public ObservableCollection<string> ExposureModeList
-    {
-      get { return new ObservableCollection<string>(ExposureModeTable.Values.ToList()); }
-    }
-
-    public ObservableCollection<string> WBModeList
-    {
-      get { return new ObservableCollection<string>(WbTable.Values.ToList()); }
     }
 
     public bool SetProperty(string name, object val)
