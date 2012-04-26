@@ -129,6 +129,12 @@ namespace CameraControl.Classes
       _timer.Elapsed += _timer_Elapsed;
     }
 
+    void Manager_PhotoTakenDone(WIA.Item imageFile)
+    {
+      if (!IsDisabled)
+        _timer.Start();
+    }
+
     void _timer_Elapsed(object sender, ElapsedEventArgs e)
     {
       _timecounter++;
@@ -138,7 +144,7 @@ namespace CameraControl.Classes
         {
           _timer.Enabled = false;
           ServiceProvider.Settings.Manager.TakePicture();
-          _timer.Enabled = true;
+          //_timer.Enabled = true;
         }
         catch (COMException comException)
         {
@@ -188,15 +194,18 @@ namespace CameraControl.Classes
     public void Start()
     {
       PhotosTaken = 0;
-      _timer.Start();
       _timer.AutoReset = true;
       IsDisabled = false;
+      ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTakenDone;
+      _timer.Start();
     }
 
     public void Stop()
     {
       _timer.Stop();
       IsDisabled = true;
+      ServiceProvider.Settings.Manager.PhotoTakenDone -= Manager_PhotoTakenDone;
+      ServiceProvider.Settings.SystemMessage = "Timelapse done";
     }
 
   }

@@ -77,13 +77,14 @@ namespace CameraControl.windows
       canvas.Children.Add(_line12);
       canvas.Children.Add(_line21);
       canvas.Children.Add(_line22);
-      ServiceProvider.Settings.Manager.PhotoTaked += Manager_PhotoTaked;
+      ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTaked;
     }
 
     void Manager_PhotoTaked(WIA.Item imageFile)
     {
-      _timer.Start();
       StartLiveView();
+      Thread.Sleep(200);
+      _timer.Start();
     }
 
     void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)

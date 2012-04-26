@@ -36,6 +36,9 @@ namespace CameraControl.Devices
                       {
                         {"D5100", typeof (NikonD5100)},
                         {"D7000", typeof (NikonD5100)},
+                        {"D300", typeof (NikonD300)},
+                        {"D800", typeof (NikonD5100)},
+                        {"D800E", typeof (NikonD5100)},
                         {"D90", typeof (NikonD90)},
                         {"D4", typeof (NikonD5100)}
                       };
