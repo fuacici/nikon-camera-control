@@ -29,6 +29,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_PROP_WhiteBalance = 0x5005;
     public const int CONST_PROP_ExposureProgramMode = 0x500E;
     public const int CONST_PROP_ExposureBiasCompensation = 0x5010;
+    public const int CONST_PROP_BatteryLevel = 0x5001;
 
     private const string AppName = "CameraControl";
     private const int AppMajorVersionNumber = 1;
@@ -163,6 +164,7 @@ namespace CameraControl.Devices.Nikon
       WhiteBalance.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_WhiteBalance, -1), 0));
       Mode.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureProgramMode, -1), 0));
       ExposureCompensation.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureBiasCompensation, -1), 0));
+      Battery =_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_BatteryLevel, -1)[0];
     }
 
     private void getEvent()
