@@ -373,7 +373,7 @@ namespace CameraControl
           Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(ServiceProvider.Settings.SelectedBitmap.FileItem.FileName,
                                                              UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
           if (indx > -1 || indx < ImageLIst.Items.Count)
-            ImageLIst.SelectedIndex = indx;
+            ImageLIst.SelectedItem = ImageLIst.Items[indx];
           if (indx >= ImageLIst.Items.Count)
             ImageLIst.SelectedIndex = ImageLIst.Items.Count - 1;
         }
