@@ -1,6 +1,27 @@
 #summary ChangeLog
 #labels Featured
 
+0.6.69
+  * Context menu for deleting item
+  * Real time reading camera properties
+  * Grid in live view
+  * Battery level indicator
+  * Improved time lapse stability  
+  * Support for D90
+  * Support for D5000
+  * Support for D300
+  * Support for D300S
+  * Support for D3X
+  * Support for D3S
+  * Support for D700
+  * Support for D800
+  * Support for D800E
+  * Support for D90
+  * Support for D40
+  * Support for D60
+  * Support for D80
+  * Support for D200
+  * Support for D4
 0.6.43
   * Live view support for D5100
   * About window
