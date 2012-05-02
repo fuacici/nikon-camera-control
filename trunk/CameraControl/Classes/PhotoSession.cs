@@ -32,6 +32,10 @@ namespace CameraControl.Classes
       {
         if (_folder != value)
         {
+          if(!Directory.Exists(value))
+          {
+            Directory.CreateDirectory(value);
+          }
           _systemWatcher.Path = value;
           _systemWatcher.EnableRaisingEvents = true;
         }
