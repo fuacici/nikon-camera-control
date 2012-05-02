@@ -15,7 +15,8 @@
 ||Nikon D5000||X||?||?||Native||
 ||Nikon D5100||X||X||X||Native||
 ||Nikon D60||?||-||?||Native||
-||Nikon D70S||X||-||?||WIA||
+||Nikon D70||X||-||?||Native||
+||Nikon D70S||X||-||?||Native||
 ||Nikon D700||X||?||?||Native||
 ||Nikon D7000||X||?||X||Native||
 ||Nikon D80||?||-||?||Native||
