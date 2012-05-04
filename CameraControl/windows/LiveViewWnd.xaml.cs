@@ -38,7 +38,7 @@ namespace CameraControl.windows
 
     public LiveViewData LiveViewData { get; set; }
 
-    private Timer _timer = new Timer(1000/30);
+    private Timer _timer = new Timer(1000/25);
     /// <summary>
     /// Gets the <see cref="PortableDevice"/> connected
     /// </summary>
@@ -96,9 +96,9 @@ namespace CameraControl.windows
         Dispatcher.BeginInvoke(new ThreadStart(delegate { image1.Visibility = Visibility.Hidden; }));
         return;
       }
-      _timer.Enabled = false;
+      _timer.Stop();
       Dispatcher.BeginInvoke(new ThreadStart(GetLiveImage));
-      _timer.Enabled = true;
+      _timer.Start();
     }
 
     private void GetLiveImage()
@@ -109,7 +109,8 @@ namespace CameraControl.windows
       }
       catch (Exception)
       {
-
+        _retries++;
+        return;
       }
 
       if (LiveViewData == null || LiveViewData.ImageData == null)
@@ -118,16 +119,24 @@ namespace CameraControl.windows
         return;
       }
 
-      MemoryStream stream = new MemoryStream(LiveViewData.ImageData, 0, LiveViewData.ImageData.Length);
-
-      JpegBitmapDecoder decoder = new JpegBitmapDecoder(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
-
-      decoder.Frames[0].Freeze();
-      if (decoder.Frames.Count > 0)
+      try
       {
-        image1.Source = decoder.Frames[0];
+        MemoryStream stream = new MemoryStream(LiveViewData.ImageData, 0, LiveViewData.ImageData.Length);
+
+        JpegBitmapDecoder decoder = new JpegBitmapDecoder(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+
+        decoder.Frames[0].Freeze();
+        if (decoder.Frames.Count > 0)
+        {
+          image1.Source = decoder.Frames[0];
+        }
+        stream.Close();
       }
-      stream.Close();
+      catch (Exception)
+      {
+        _retries++;
+        return;
+      }
       DrawLines();
       _retries = 0;
     }

@@ -157,14 +157,22 @@ namespace CameraControl.Devices.Nikon
 
     public override void ReadDeviceProperties()
     {
-      HaveLiveView = true;
-      FNumber.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_Fnumber, -1), 0));
-      IsoNumber.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureIndex, -1), 0));
-      ShutterSpeed.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureTime, -1), 0));
-      WhiteBalance.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_WhiteBalance, -1), 0));
-      Mode.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureProgramMode, -1), 0));
-      ExposureCompensation.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureBiasCompensation, -1), 0));
-      Battery =_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_BatteryLevel, -1)[0];
+      try
+      {
+        HaveLiveView = true;
+        FNumber.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_Fnumber, -1), 0));
+        IsoNumber.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureIndex, -1), 0));
+        ShutterSpeed.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureTime, -1), 0));
+        WhiteBalance.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_WhiteBalance, -1), 0));
+        Mode.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureProgramMode, -1), 0));
+        ExposureCompensation.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureBiasCompensation, -1), 0));
+        Battery = _stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_BatteryLevel, -1)[0];
+      }
+      catch (Exception)
+      {
+        
+        
+      }
     }
 
     private void getEvent()
