@@ -411,10 +411,5 @@ namespace CameraControl
       Process.Start(ServiceProvider.Settings.SelectedBitmap.FileItem.FileName);
     }
 
-    private void button4_Click(object sender, RoutedEventArgs e)
-    {
-      ServiceProvider.Settings.Manager.CameraDevice.ReadDeviceProperties();
-    }
-
   }
 }

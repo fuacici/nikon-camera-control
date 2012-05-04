@@ -34,22 +34,24 @@ namespace CameraControl.Devices
     {
       DeviceClass = new Dictionary<string, Type>
                       {
-                        {"D5100", typeof (NikonD5100)},
-                        {"D5000", typeof (NikonD90)},
-                        {"D7000", typeof (NikonD5100)},
+                        {"D200", typeof (NikonD40)},
+                        {"D3S", typeof (NikonD90)},
+                        {"D3X", typeof (NikonD3X)},
                         {"D300", typeof (NikonD300)},
                         {"D300S", typeof (NikonD3X)},
-                        {"D3X", typeof (NikonD3X)},
-                        {"D3S", typeof (NikonD90)},
+                        {"D4", typeof (NikonD5100)},
+                        {"D40", typeof (NikonD40)},
+                        {"D5100", typeof (NikonD5100)},
+                        {"D5000", typeof (NikonD90)},
+                        {"D60", typeof (NikonD40)},
+                        {"D70", typeof (NikonD40)},
+                        {"D70S", typeof (NikonD40)},
                         {"D700", typeof (NikonD3X)},
+                        {"D7000", typeof (NikonD5100)},
+                        {"D80", typeof (NikonD40)},
                         {"D800", typeof (NikonD5100)},
                         {"D800E", typeof (NikonD5100)},
                         {"D90", typeof (NikonD90)},
-                        {"D40", typeof (NikonD40)},
-                        {"D60", typeof (NikonD40)},
-                        {"D80", typeof (NikonD40)},
-                        {"D200", typeof (NikonD40)},
-                        {"D4", typeof (NikonD5100)}
                       };
       SelectedCameraDevice = new NotConnectedCameraDevice();
     }
