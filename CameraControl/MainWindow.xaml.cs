@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -13,18 +14,19 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Xml.Linq;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
 using CameraControl.Classes;
 using CameraControl.windows;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
 using WIA;
 using WPF.Themes;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace CameraControl
@@ -54,6 +56,43 @@ namespace CameraControl
       DataContext = ServiceProvider.Settings;
       if (ServiceProvider.Settings.DefaultSession.Files.Count > 0)
         ImageLIst.SelectedIndex = 0;
+      if ((DateTime.Now - ServiceProvider.Settings.LastUpdateCheckDate).TotalDays > 7)
+      {
+        ServiceProvider.Settings.LastUpdateCheckDate = DateTime.Now;
+        ServiceProvider.Settings.Save();
+        CheckForUpdate();
+      }
+    }
+
+    private void CheckForUpdate()
+    {
+      try
+      {
+        string tempfile = System.IO.Path.GetTempFileName();
+        using (WebClient client = new WebClient())
+        {
+          client.DownloadFile("http://nikon-camera-control.googlecode.com/svn/trunk/versioninfo.xml", tempfile);
+        }
+       
+        XmlDocument document=new XmlDocument();
+        document.Load(tempfile);
+        string ver=document.SelectSingleNode("application/version").InnerText;
+        Version v_ver=new Version(ver);
+        Version app_ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+        if(v_ver>System.Reflection.Assembly.GetExecutingAssembly().GetName().Version)
+        {
+          if(MessageBox.Show("New version of application released\nDo you want to download?","Update",MessageBoxButtons.YesNo)==System.Windows.Forms.DialogResult.Yes)
+          {
+            System.Diagnostics.Process.Start("http://code.google.com/p/nikon-camera-control/downloads/list");
+            Close();
+          }
+        }
+        File.Delete(tempfile);
+      }
+      catch (Exception exception)
+      {
+        ServiceProvider.Log.Error("Error download update information",exception);
+      }
     }
 
     private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)

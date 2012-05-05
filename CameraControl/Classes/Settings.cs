@@ -87,6 +87,8 @@ namespace CameraControl.Classes
       }
     }
 
+    public DateTime LastUpdateCheckDate { get; set; }
+
     private string _systemMessage;
     [XmlIgnore]
     public string SystemMessage
@@ -118,6 +120,7 @@ namespace CameraControl.Classes
                        new VideoType("Super VGA 4:3", 800, 600),
                        //new VideoType("Super VGA 4:3", 800, 600)
                      };
+      LastUpdateCheckDate = DateTime.MinValue;
     }
 
     public void Add(PhotoSession session)
