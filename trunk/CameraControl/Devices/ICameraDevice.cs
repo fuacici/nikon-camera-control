@@ -13,7 +13,7 @@ namespace CameraControl.Devices
     PropertyValue Mode { get; set; }
     PropertyValue ExposureCompensation { get; set; }
     int Battery { get; set; }
-
+    byte LiveViewImageZoomRatio { get; set; }
 
     bool Init(string id, WIAManager manager);
     void StartLiveView();

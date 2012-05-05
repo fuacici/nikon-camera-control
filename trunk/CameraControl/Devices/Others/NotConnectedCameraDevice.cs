@@ -27,6 +27,8 @@ namespace CameraControl.Devices.Others
 
     public int Battery { get; set; }
 
+    public byte LiveViewImageZoomRatio { get; set; }
+
     public bool Init(string id, WIAManager manager)
     {
       HaveLiveView = false;

@@ -38,7 +38,7 @@ namespace CameraControl.windows
 
     public LiveViewData LiveViewData { get; set; }
 
-    private Timer _timer = new Timer(1000/25);
+    private Timer _timer = new Timer(1000/15);
     /// <summary>
     /// Gets the <see cref="PortableDevice"/> connected
     /// </summary>
@@ -306,6 +306,11 @@ namespace CameraControl.windows
       _line12.Visibility = Visibility.Hidden;
       _line21.Visibility = Visibility.Hidden;
       _line22.Visibility = Visibility.Hidden;
+    }
+
+    private void button3_Click(object sender, RoutedEventArgs e)
+    {
+      SelectedPortableDevice.LiveViewImageZoomRatio = 2;
     }
 
   }
