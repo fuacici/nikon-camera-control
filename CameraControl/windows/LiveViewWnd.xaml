@@ -34,5 +34,7 @@
             </Grid>
         </GroupBox>
         <CheckBox Content="Grid" Height="16" HorizontalAlignment="Left" Margin="9,300,0,0" Name="chk_grid" VerticalAlignment="Top" IsChecked="True" Checked="chk_grid_Checked" Unchecked="chk_grid_Unchecked" />
+        <Button Content="Button" Height="23" HorizontalAlignment="Left" Margin="9,399,0,0" Name="button3" VerticalAlignment="Top" Width="75" Click="button3_Click" />
+        <Slider Height="23" HorizontalAlignment="Left" Margin="9,331,0,0" Name="slider1" VerticalAlignment="Top" Width="82" Maximum="5" Value="{Binding Source={x:Static Member=CameraControl:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.LiveViewImageZoomRatio}"/>
     </Grid>
 </Window>

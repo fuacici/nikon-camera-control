@@ -179,6 +179,8 @@ namespace CameraControl.Devices.Others
       }
     }
 
+    public virtual byte LiveViewImageZoomRatio { get; set; }
+
     private Device Device { get; set; }
 
     public virtual bool Init(string id, WIAManager manager)

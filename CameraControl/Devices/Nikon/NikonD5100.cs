@@ -21,6 +21,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_CMD_ChangeAfArea = 0x9205;
     public const int CONST_CMD_MfDrive = 0x9204;
     public const int CONST_CMD_GetDevicePropValue = 0x1015;
+    public const int CONST_CMD_SetDevicePropValue = 0x1016;
     public const int CONST_CMD_GetEvent = 0x90C7;
 
     public const int CONST_PROP_Fnumber = 0x5007;
@@ -30,6 +31,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_PROP_ExposureProgramMode = 0x500E;
     public const int CONST_PROP_ExposureBiasCompensation = 0x5010;
     public const int CONST_PROP_BatteryLevel = 0x5001;
+    public const int CONST_PROP_LiveViewImageZoomRatio = 0xD1A3;
 
     private const string AppName = "CameraControl";
     private const int AppMajorVersionNumber = 1;
@@ -74,6 +76,7 @@ namespace CameraControl.Devices.Nikon
 
     public override void StartLiveView()
     {
+      LiveViewImageZoomRatio = 0;
       _stillImageDevice.ExecuteWithNoData(CONST_CMD_StartLiveView);
     }
 
@@ -89,7 +92,7 @@ namespace CameraControl.Devices.Nikon
 
       const int headerSize = 384;
 
-      byte[] result = _stillImageDevice.ExecuteWithData(CONST_CMD_GetLiveViewImage);
+      byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetLiveViewImage);
       if (result == null || result.Length <= headerSize)
         return null;
       int cbBytesRead = result.Length;
@@ -155,18 +158,40 @@ namespace CameraControl.Devices.Nikon
         return System.BitConverter.ToInt16(value.Reverse().ToArray(), value.Length - sizeof(Int16) - startIndex);
     }
 
+    private byte _liveViewImageZoomRatio;
+    public override byte LiveViewImageZoomRatio
+    {
+      get
+      {
+        byte[] data = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_LiveViewImageZoomRatio,-1);
+        if (data != null && data.Length == 1)
+        {
+          _liveViewImageZoomRatio = data[0];
+          ////NotifyPropertyChanged("LiveViewImageZoomRatio");
+        }
+        return _liveViewImageZoomRatio;
+      }
+      set
+      {
+        _liveViewImageZoomRatio = value;
+        _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new byte[] {_liveViewImageZoomRatio},
+                                           CONST_PROP_LiveViewImageZoomRatio, -1);
+        NotifyPropertyChanged("LiveViewImageZoomRatio");
+      }
+    }
+
     public override void ReadDeviceProperties()
     {
       try
       {
         HaveLiveView = true;
-        FNumber.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_Fnumber, -1), 0));
-        IsoNumber.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureIndex, -1), 0));
-        ShutterSpeed.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureTime, -1), 0));
-        WhiteBalance.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_WhiteBalance, -1), 0));
-        Mode.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureProgramMode, -1), 0));
-        ExposureCompensation.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureBiasCompensation, -1), 0));
-        Battery = _stillImageDevice.ExecuteWithData(CONST_CMD_GetDevicePropValue, CONST_PROP_BatteryLevel, -1)[0];
+        FNumber.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_Fnumber, -1), 0));
+        IsoNumber.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureIndex, -1), 0));
+        ShutterSpeed.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureTime, -1), 0));
+        WhiteBalance.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_WhiteBalance, -1), 0));
+        Mode.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureProgramMode, -1), 0));
+        ExposureCompensation.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureBiasCompensation, -1), 0));
+        Battery = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_BatteryLevel, -1)[0];
       }
       catch (Exception)
       {
@@ -177,7 +202,7 @@ namespace CameraControl.Devices.Nikon
 
     private void getEvent()
     {
-      byte[] result = _stillImageDevice.ExecuteWithData(CONST_CMD_GetEvent);
+      byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetEvent);
       if (result == null)
         return;
       bool shouldRefresProperties = false;
