@@ -41,6 +41,9 @@ namespace CameraControl.Devices.Nikon
     protected StillImageDevice _stillImageDevice = null;
     private WIAManager _manager = null;
 
+    private object _loker = new object();
+
+
     public NikonD5100()
     {
       _timer.AutoReset = true;
@@ -76,33 +79,43 @@ namespace CameraControl.Devices.Nikon
 
     public override void StartLiveView()
     {
-      LiveViewImageZoomRatio = 0;
-      _stillImageDevice.ExecuteWithNoData(CONST_CMD_StartLiveView);
+      lock (_loker)
+      {
+        LiveViewImageZoomRatio = 0;
+        _stillImageDevice.ExecuteWithNoData(CONST_CMD_StartLiveView);
+      }
     }
 
     public override void StopLiveView()
     {
-      _stillImageDevice.ExecuteWithNoData(CONST_CMD_EndLiveView);
+      lock (_loker)
+      {
+        _stillImageDevice.ExecuteWithNoData(CONST_CMD_EndLiveView);
+      }
     }
 
     public override LiveViewData GetLiveViewImage()
     {
-      LiveViewData viewData=new LiveViewData();
-      viewData.HaveFocusData = true;
+      lock (_loker)
+      {
 
-      const int headerSize = 384;
+        LiveViewData viewData = new LiveViewData();
+        viewData.HaveFocusData = true;
 
-      byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetLiveViewImage);
-      if (result == null || result.Length <= headerSize)
-        return null;
-      int cbBytesRead = result.Length;
-      GetAditionalLIveViewData(viewData, result);
-      MemoryStream copy = new MemoryStream((int)cbBytesRead - headerSize);
-      copy.Write(result, headerSize, (int)cbBytesRead - headerSize);
-      copy.Close();
-      viewData.ImageData = copy.GetBuffer();
+        const int headerSize = 384;
 
-      return viewData;
+        byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetLiveViewImage);
+        if (result == null || result.Length <= headerSize)
+          return null;
+        int cbBytesRead = result.Length;
+        GetAditionalLIveViewData(viewData, result);
+        MemoryStream copy = new MemoryStream((int) cbBytesRead - headerSize);
+        copy.Write(result, headerSize, (int) cbBytesRead - headerSize);
+        copy.Close();
+        viewData.ImageData = copy.GetBuffer();
+
+        return viewData;
+      }
     }
 
     protected void GetAditionalLIveViewData(LiveViewData viewData, byte[] result)
@@ -124,33 +137,48 @@ namespace CameraControl.Devices.Nikon
 
     public override void Focus(int step)
     {
-      if (step > 0)
-        _stillImageDevice.ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000001, (uint) step);
-      else
-        _stillImageDevice.ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000002, (uint) -step);
+      lock (_loker)
+      {
+        if (step > 0)
+          _stillImageDevice.ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000001, (uint) step);
+        else
+          _stillImageDevice.ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000002, (uint) -step);
+      }
     }
 
     public override void AutoFocus()
     {
-      _stillImageDevice.ExecuteWithNoData(CONST_CMD_AfDrive);
+      lock (_loker)
+      {
+        _stillImageDevice.ExecuteWithNoData(CONST_CMD_AfDrive);
+      }
     }
 
     public override void TakePictureNoAf()
     {
-      _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF, 0x0000);
+      lock (_loker)
+      {
+        _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF, 0x0000);
+      }
     }
 
     public void Focus(int x, int y)
     {
-      _stillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeAfArea, (uint) x, (uint) y);
+      lock (_loker)
+      {
+        _stillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeAfArea, (uint) x, (uint) y);
+      }
     }
 
     public override void Close()
     {
-      _timer.Stop();
-      _stillImageDevice.Disconnect();
-      HaveLiveView = false;
-      ServiceProvider.Settings.SystemMessage = "Camera disconnected !";
+      lock (_loker)
+      {
+        _timer.Stop();
+        _stillImageDevice.Disconnect();
+        HaveLiveView = false;
+        ServiceProvider.Settings.SystemMessage = "Camera disconnected !";
+      }
     }
 
     public static short ToInt16(byte[] value, int startIndex)
@@ -159,44 +187,67 @@ namespace CameraControl.Devices.Nikon
     }
 
     private byte _liveViewImageZoomRatio;
+
     public override byte LiveViewImageZoomRatio
     {
       get
       {
-        byte[] data = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_LiveViewImageZoomRatio,-1);
-        if (data != null && data.Length == 1)
+        lock (_loker)
         {
-          _liveViewImageZoomRatio = data[0];
-          ////NotifyPropertyChanged("LiveViewImageZoomRatio");
+          byte[] data = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                          CONST_PROP_LiveViewImageZoomRatio,
+                                                          -1);
+          if (data != null && data.Length == 1)
+          {
+            _liveViewImageZoomRatio = data[0];
+            ////NotifyPropertyChanged("LiveViewImageZoomRatio");
+          }
         }
         return _liveViewImageZoomRatio;
       }
       set
       {
-        _liveViewImageZoomRatio = value;
-        _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new byte[] {_liveViewImageZoomRatio},
-                                           CONST_PROP_LiveViewImageZoomRatio, -1);
-        NotifyPropertyChanged("LiveViewImageZoomRatio");
+        lock (_loker)
+        {
+          if (_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] {value},
+                                                 CONST_PROP_LiveViewImageZoomRatio, -1) != null)
+            _liveViewImageZoomRatio = value;
+          NotifyPropertyChanged("LiveViewImageZoomRatio");
+        }
       }
     }
 
     public override void ReadDeviceProperties()
     {
-      try
+      lock (_loker)
       {
-        HaveLiveView = true;
-        FNumber.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_Fnumber, -1), 0));
-        IsoNumber.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureIndex, -1), 0));
-        ShutterSpeed.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureTime, -1), 0));
-        WhiteBalance.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_WhiteBalance, -1), 0));
-        Mode.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureProgramMode, -1), 0));
-        ExposureCompensation.SetValue(BitConverter.ToInt16(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureBiasCompensation, -1), 0));
-        Battery = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_BatteryLevel, -1)[0];
-      }
-      catch (Exception)
-      {
-        
-        
+        try
+        {
+          HaveLiveView = true;
+          FNumber.SetValue(
+            BitConverter.ToInt16(
+              _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_Fnumber, -1), 0));
+          IsoNumber.SetValue(
+            BitConverter.ToInt16(
+              _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureIndex, -1), 0));
+          ShutterSpeed.SetValue(
+            BitConverter.ToInt16(
+              _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureTime, -1), 0));
+          WhiteBalance.SetValue(
+            BitConverter.ToInt16(
+              _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_WhiteBalance, -1), 0));
+          Mode.SetValue(
+            BitConverter.ToInt16(
+              _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureProgramMode, -1), 0));
+          ExposureCompensation.SetValue(
+            BitConverter.ToInt16(
+              _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureBiasCompensation, -1),
+              0));
+          Battery = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_BatteryLevel, -1)[0];
+        }
+        catch (Exception)
+        {
+        }
       }
     }
 
