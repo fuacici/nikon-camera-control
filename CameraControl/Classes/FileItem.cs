@@ -12,8 +12,32 @@ namespace CameraControl.Classes
 {
   public class FileItem:BaseFieldClass
   {
-    public string FileName { get; set; }
+    private string _fileName;
+    public string FileName
+    {
+      get { return _fileName; }
+      set
+      {
+        _fileName = value;
+        if (File.Exists(_fileName))
+        {
+          FileDate = File.GetLastWriteTime(_fileName);
+        }
+
+      }
+    }
+
+    public DateTime FileDate { get; set; }
+
     public string Name { get; set; }
+
+    private string _toolTip;
+    public string ToolTip
+    {
+      get { return string.Format("File name: {0}\nFile date :{1}",Name,FileDate.ToShortDateString()); }
+    }
+
+
     private BitmapImage _bitmapImage;
 
     public BitmapImage BitmapImage

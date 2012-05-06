@@ -456,5 +456,11 @@ namespace CameraControl
         return;
       Process.Start(ServiceProvider.Settings.SelectedBitmap.FileItem.FileName);
     }
+
+    private void btn_br_Click(object sender, RoutedEventArgs e)
+    {
+      BraketingWnd wnd = new BraketingWnd();
+      wnd.ShowDialog();
+    }
   }
 }
