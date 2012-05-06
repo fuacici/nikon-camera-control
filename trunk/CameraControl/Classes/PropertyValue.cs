@@ -50,9 +50,9 @@ namespace CameraControl.Classes
       }
     }
 
-    public AsyncObservableCollection<object> Values
+    public AsyncObservableCollection<string> Values
     {
-      get { return new AsyncObservableCollection<object>(_valuesDictionary.Keys); }
+      get { return new AsyncObservableCollection<string>(_valuesDictionary.Keys); }
     }
 
     public PropertyValue()
@@ -69,6 +69,17 @@ namespace CameraControl.Classes
         {
           Value = keyValuePair.Key;
           //NotifyPropertyChanged("Value");
+        }
+      }
+    }
+
+    public void SetValue(string o)
+    {
+      foreach (KeyValuePair<string, int> keyValuePair in _valuesDictionary)
+      {
+        if (keyValuePair.Key == o)
+        {
+          Value = keyValuePair.Key;
         }
       }
     }

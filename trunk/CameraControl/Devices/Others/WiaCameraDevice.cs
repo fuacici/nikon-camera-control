@@ -252,6 +252,8 @@ namespace CameraControl.Devices.Others
         {
           decimal d = (int)subTypeValue;
           string s = decimal.Round(d/1000,1).ToString();
+          if (d > 0)
+            s = "+" + s;
           ExposureCompensation.AddValues(s, (int)subTypeValue);
         }
         ExposureCompensation.SetValue(ecProperty.get_Value());

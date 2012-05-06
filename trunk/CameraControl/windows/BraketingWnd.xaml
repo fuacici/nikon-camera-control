@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:CameraControl="clr-namespace:CameraControl" xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
-        Title="BraketingWnd" Height="436" Width="522" Background="{DynamicResource WindowBackgroundBrush}">
+        Title="BraketingWnd" Height="436" Width="522" Background="{DynamicResource WindowBackgroundBrush}" Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="334*" />
@@ -11,10 +11,18 @@
         </Grid.RowDefinitions>
         <TabControl Name="tabControl1">
             <TabItem Header="Exposure bracketing" Name="tabItem1">
-                <Grid />
+                <Grid Width="490">
+                    <ListBox Height="260" HorizontalAlignment="Left" Margin="22,20,0,0" Name="listBox1" VerticalAlignment="Top" Width="180" >
+                        <ListBox.ItemTemplate>
+                            <HierarchicalDataTemplate>
+                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked}"/>
+                            </HierarchicalDataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
             </TabItem>
         </TabControl>
-        <Button Content="Start" Grid.Row="1" HorizontalAlignment="Left" Margin="27,0,0,14" Name="btn_shot" Width="75" Height="23" VerticalAlignment="Bottom" />
+        <Button Content="Start" Grid.Row="1" HorizontalAlignment="Left" Margin="27,0,0,14" Name="btn_shot" Width="75" Height="23" VerticalAlignment="Bottom" Click="btn_shot_Click" />
         <Button Content="Close" Grid.Row="1" Height="23" HorizontalAlignment="Right" Margin="0,28,26,0" Name="btn_close" VerticalAlignment="Top" Width="75" />
     </Grid>
 </Window>
