@@ -191,7 +191,7 @@ namespace CameraControl
 
       try
       {
-        WiaManager.TakePicture();
+        ServiceProvider.DeviceManager.SelectedCameraDevice.TakePicture();
       }
         catch(COMException comException)
         {

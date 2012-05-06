@@ -148,11 +148,11 @@ namespace CameraControl.Classes
       return false;
     }
 
-    public bool TakePicture()
-    {
-      Device.ExecuteCommand(Conts.wiaCommandTakePicture);
-      return false;
-    }
+    //public bool TakePicture()
+    //{
+    //  Device.ExecuteCommand(Conts.wiaCommandTakePicture);
+    //  return false;
+    //}
 
     public bool ConnectToCamera()
     {

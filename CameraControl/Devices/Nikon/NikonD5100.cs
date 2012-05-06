@@ -32,6 +32,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_PROP_ExposureBiasCompensation = 0x5010;
     public const int CONST_PROP_BatteryLevel = 0x5001;
     public const int CONST_PROP_LiveViewImageZoomRatio = 0xD1A3;
+    
 
     private const string AppName = "CameraControl";
     private const int AppMajorVersionNumber = 1;
@@ -69,6 +70,7 @@ namespace CameraControl.Devices.Nikon
     public override bool Init(string id, WIAManager manager)
     {
       base.Init(id, manager);
+      ExposureCompensation.ValueChanged += ExposureCompensation_ValueChanged;
       _manager = manager;
       HaveLiveView = true;
       _stillImageDevice = new StillImageDevice(id);
@@ -76,6 +78,16 @@ namespace CameraControl.Devices.Nikon
       _timer.Start();
       return true;
     }
+
+    void ExposureCompensation_ValueChanged(object sender, string key, int val)
+    {
+      lock (_loker)
+      {
+        _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                                           CONST_PROP_ExposureBiasCompensation, -1);
+      }
+    }
+
 
     public override void StartLiveView()
     {
@@ -98,7 +110,6 @@ namespace CameraControl.Devices.Nikon
     {
       lock (_loker)
       {
-
         LiveViewData viewData = new LiveViewData();
         viewData.HaveFocusData = true;
 
@@ -115,6 +126,14 @@ namespace CameraControl.Devices.Nikon
         viewData.ImageData = copy.GetBuffer();
 
         return viewData;
+      }
+    }
+
+    public override void TakePicture()
+    {
+      lock (_loker)
+      {
+        _manager.Device.ExecuteCommand(Conts.wiaCommandTakePicture);
       }
     }
 

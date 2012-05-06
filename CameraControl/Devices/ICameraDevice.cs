@@ -23,6 +23,7 @@ namespace CameraControl.Devices
     void Focus(int step);
     void Focus(int x, int y);
     void TakePictureNoAf();
+    void TakePicture();
     void Close();
     void ReadDeviceProperties();
   }
