@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -35,10 +36,13 @@ namespace CameraControl.windows
     Line _line12 = new Line();
     Line _line21 = new Line();
     Line _line22 = new Line();
+    private BackgroundWorker _worker = new BackgroundWorker();
+    
 
     public LiveViewData LiveViewData { get; set; }
 
-    private Timer _timer = new Timer(1000/15);
+    private Timer _timer = new Timer(1000/20);
+    private bool oper_in_progress = false;
     /// <summary>
     /// Gets the <see cref="PortableDevice"/> connected
     /// </summary>
@@ -78,7 +82,9 @@ namespace CameraControl.windows
       canvas.Children.Add(_line21);
       canvas.Children.Add(_line22);
       ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTaked;
+      _worker.DoWork += delegate { GetLiveImage(); };
     }
+
 
     void Manager_PhotoTaked(WIA.Item imageFile)
     {
@@ -89,20 +95,29 @@ namespace CameraControl.windows
 
     void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
     {
-      if(_retries>100)
+      if (_retries > 100)
       {
         _timer.Stop();
 
-        Dispatcher.BeginInvoke(new ThreadStart(delegate { image1.Visibility = Visibility.Hidden; }));
+        Dispatcher.BeginInvoke(new ThreadStart(delegate
+                                                 {
+                                                   image1.Visibility = Visibility.Hidden;
+                                                   chk_grid.IsChecked = false;
+                                                 }));
         return;
       }
-      _timer.Stop();
-      Dispatcher.BeginInvoke(new ThreadStart(GetLiveImage));
-      _timer.Start();
+      //_timer.Stop();
+      if(!_worker.IsBusy)
+        _worker.RunWorkerAsync();
+      //Dispatcher.BeginInvoke(new ThreadStart(GetLiveImage));
+      //_timer.Start();
     }
 
     private void GetLiveImage()
     {
+      if(oper_in_progress)
+        return;
+      oper_in_progress = true;
       try
       {
         LiveViewData = SelectedPortableDevice.GetLiveViewImage();
@@ -110,35 +125,43 @@ namespace CameraControl.windows
       catch (Exception)
       {
         _retries++;
+        oper_in_progress = false;
         return;
       }
 
       if (LiveViewData == null || LiveViewData.ImageData == null)
       {
         _retries++;
+        oper_in_progress = false;
         return;
       }
 
       try
       {
-        MemoryStream stream = new MemoryStream(LiveViewData.ImageData, 0, LiveViewData.ImageData.Length);
+        Dispatcher.BeginInvoke(new Action(delegate
+                                            {
+                                              MemoryStream stream = new MemoryStream(LiveViewData.ImageData, 0, LiveViewData.ImageData.Length);
 
-        JpegBitmapDecoder decoder = new JpegBitmapDecoder(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+                                              JpegBitmapDecoder decoder = new JpegBitmapDecoder(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
 
-        decoder.Frames[0].Freeze();
-        if (decoder.Frames.Count > 0)
-        {
-          image1.Source = decoder.Frames[0];
-        }
-        stream.Close();
+                                              decoder.Frames[0].Freeze();
+
+                                              if (decoder.Frames.Count > 0)
+                                              {
+                                                image1.Source = decoder.Frames[0];
+                                              }
+                                              stream.Close();
+                                            }));
       }
       catch (Exception)
       {
         _retries++;
+        oper_in_progress = false;
         return;
       }
-      DrawLines();
+      Dispatcher.BeginInvoke(new Action(delegate { DrawLines(); ; }));
       _retries = 0;
+      oper_in_progress = false;
     }
 
     void DrawLines()
@@ -188,6 +211,7 @@ namespace CameraControl.windows
       try
       {
         _timer.Stop();
+        ServiceProvider.Settings.Manager.PhotoTakenDone -= Manager_PhotoTaked;
         Thread.Sleep(100);
         SelectedPortableDevice.StopLiveView();
       }
@@ -232,6 +256,7 @@ namespace CameraControl.windows
       try
       {
         SelectedPortableDevice.StartLiveView();
+        oper_in_progress = false;
         _retries = 0;
       }
       catch (Exception exception)
@@ -306,11 +331,6 @@ namespace CameraControl.windows
       _line12.Visibility = Visibility.Hidden;
       _line21.Visibility = Visibility.Hidden;
       _line22.Visibility = Visibility.Hidden;
-    }
-
-    private void button3_Click(object sender, RoutedEventArgs e)
-    {
-      SelectedPortableDevice.LiveViewImageZoomRatio = 2;
     }
 
   }

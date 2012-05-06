@@ -93,6 +93,11 @@ namespace PortableDeviceLib
       return ExecuteReadData(code, -1, -1);
     }
 
+    public byte[] ExecuteReadData(int code, int param1)
+    {
+      return ExecuteReadData(code, param1, -1);
+    }
+
     public byte[] ExecuteReadData(int code, int param1, int param2)
     {
       // source: http://msdn.microsoft.com/en-us/library/windows/desktop/ff384843(v=vs.85).aspx

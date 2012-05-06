@@ -34,7 +34,14 @@
             </Grid>
         </GroupBox>
         <CheckBox Content="Grid" Height="16" HorizontalAlignment="Left" Margin="9,300,0,0" Name="chk_grid" VerticalAlignment="Top" IsChecked="True" Checked="chk_grid_Checked" Unchecked="chk_grid_Unchecked" />
-        <Button Content="Button" Height="23" HorizontalAlignment="Left" Margin="9,399,0,0" Name="button3" VerticalAlignment="Top" Width="75" Click="button3_Click" />
-        <Slider Height="23" HorizontalAlignment="Left" Margin="9,331,0,0" Name="slider1" VerticalAlignment="Top" Width="82" Maximum="5" Value="{Binding Source={x:Static Member=CameraControl:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.LiveViewImageZoomRatio}"/>
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="10,343,0,0" Name="comboBox1" VerticalAlignment="Top" Width="81" SelectedIndex="{Binding Source={x:Static Member=CameraControl:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.LiveViewImageZoomRatio}">
+            <ComboBoxItem Content="All" IsSelected="True" />
+            <ComboBoxItem Content="25%" />
+            <ComboBoxItem Content="33%" />
+            <ComboBoxItem Content="50%" />
+            <ComboBoxItem Content="66%" />
+            <ComboBoxItem Content="100%" />
+        </ComboBox>
+        <Label Content="Lv zoom ration" HorizontalAlignment="Left" Margin="4,320,0,0" Name="label1" Height="28" VerticalAlignment="Top" />
     </Grid>
 </Window>
