@@ -459,7 +459,7 @@ namespace CameraControl
 
     private void btn_br_Click(object sender, RoutedEventArgs e)
     {
-      BraketingWnd wnd = new BraketingWnd();
+      BraketingWnd wnd = new BraketingWnd(ServiceProvider.DeviceManager.SelectedCameraDevice, ServiceProvider.Settings.DefaultSession);
       wnd.ShowDialog();
     }
   }

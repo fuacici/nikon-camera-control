@@ -81,6 +81,16 @@ namespace CameraControl.Classes
       }
     }
 
+    private BraketingClass _braketing;
+    public BraketingClass Braketing
+    {
+      get { return _braketing; }
+      set
+      {
+        _braketing = value;
+        NotifyPropertyChanged("Braketing");
+      }
+    }
 
     public string ConfigFile { get; set; }
     private FileSystemWatcher _systemWatcher;
@@ -93,6 +103,7 @@ namespace CameraControl.Classes
       _systemWatcher.Created += new FileSystemEventHandler(_systemWatcher_Created);
 
       Name = "Default";
+      Braketing = new BraketingClass();
       Folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), Name);
       Files = new AsyncObservableCollection<FileItem>();
       FileNameTemplate = "DSC_$C";
