@@ -35,7 +35,7 @@
         </StackPanel>
         <StackPanel Margin="1">
             <Label Content="Battery"  />
-            <ProgressBar Minimum="0" Maximum="100" Height="20" Value="{Binding Path=SelectedCameraDevice.Battery}" />
+            <ProgressBar Minimum="0" Maximum="100" Height="20" Value="{Binding Path=SelectedCameraDevice.Battery}" ToolTip="{Binding Path=SelectedCameraDevice.Battery}"/>
         </StackPanel>
     </WrapPanel>
 </UserControl>

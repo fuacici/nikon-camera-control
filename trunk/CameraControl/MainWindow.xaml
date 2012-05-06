@@ -16,7 +16,7 @@
                     <DataTemplate>
                         <StackPanel>
                             <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" Margin="6" >
-                                <Image Source="{Binding Path=Thumbnail}" Stretch="Uniform" Width="120" Height="80"  />
+                                <Image Source="{Binding Path=Thumbnail}" ToolTip="{Binding Path=ToolTip}" Stretch="Uniform" Width="120" Height="80"  />
                             </Border>
                             <Label Content="{Binding Path=Name}" HorizontalAlignment="Center" />
                         </StackPanel>
@@ -90,6 +90,7 @@
             <Button ToolTip="Take picture"  Height="30" Name="button3" Click="button3_Click" IsEnabled="{Binding Path=Manager.IsConected}" Margin="5">
                 <Image Source="/CameraControl;component/Images/Camera.png"/>
             </Button>
+            <Button Content="[BR]" ToolTip="Braketing"  Height="30" Name="btn_br" IsEnabled="{Binding Path=Manager.IsConected}" Margin="5" Click="btn_br_Click" />
             <ToggleButton ToolTip="Image property" Height="30" Width="50" Name="button1"  Click="button1_Click" Margin="5">
                 <Image Source="/CameraControl;component/Images/Properties.png"/>
             </ToggleButton>

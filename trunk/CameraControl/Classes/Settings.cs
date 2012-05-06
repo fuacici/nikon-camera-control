@@ -151,6 +151,7 @@ namespace CameraControl.Classes
            session.AddFile(file);
        }
       }
+      session.Files=new AsyncObservableCollection<FileItem>(session.Files.OrderBy(x => x.FileDate));
     }
 
     public void Save(PhotoSession session)
