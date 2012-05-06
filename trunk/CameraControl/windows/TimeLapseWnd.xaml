@@ -19,6 +19,7 @@
                     <Label Content="Number of photos" Height="28" HorizontalAlignment="Right" Margin="0,10,6,0" Name="label2" VerticalAlignment="Top" />
                     <Button Content="Close" Height="23" HorizontalAlignment="Left" Margin="10,0,0,14" Name="button2" VerticalAlignment="Bottom" Width="75" Click="button2_Click" />
                     <Button Content="Start TimeLapse" Margin="0,0,6,14" Name="btn_start" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="110" Click="btn_start_Click" IsEnabled="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=Manager.IsConected}" />
+                    <CheckBox Content="Don't autofocus on every shot " ToolTip="This option work only if you use native drive" Height="16" HorizontalAlignment="Left" Margin="10,64,0,0" Name="chk_noaf" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static CameraControl:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.NoAutofocus}" />
                 </Grid>
             </TabItem>
             <TabItem Header="Movie settings" Name="tabItem2">

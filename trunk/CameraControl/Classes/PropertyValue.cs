@@ -73,6 +73,14 @@ namespace CameraControl.Classes
       }
     }
 
+    public void SetValue(byte[] ba)
+    {
+      if (ba == null || ba.Length < 2)
+        return;
+      int val = BitConverter.ToInt16(ba, 0);
+      SetValue(val);
+    }
+
     public void AddValues(string key, int value)
     {
       if (!_valuesDictionary.ContainsKey(key))

@@ -81,6 +81,17 @@ namespace CameraControl.Classes
       }
     }
 
+    private bool _noAutofocus;
+    public bool NoAutofocus
+    {
+      get { return _noAutofocus; }
+      set
+      {
+        _noAutofocus = value;
+        NotifyPropertyChanged("NoAutofocus");
+      }
+    }
+
     [XmlIgnore]
     public int PhotosTaken
     {
@@ -143,7 +154,10 @@ namespace CameraControl.Classes
         try
         {
           _timer.Enabled = false;
-          ServiceProvider.DeviceManager.SelectedCameraDevice.TakePicture();
+          if (NoAutofocus)
+            ServiceProvider.DeviceManager.SelectedCameraDevice.TakePictureNoAf();
+          else
+            ServiceProvider.DeviceManager.SelectedCameraDevice.TakePicture();
           //_timer.Enabled = true;
         }
         catch (COMException comException)

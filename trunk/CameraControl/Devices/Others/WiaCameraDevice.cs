@@ -365,7 +365,7 @@ namespace CameraControl.Devices.Others
 
     public virtual void TakePictureNoAf()
     {
-      throw new NotImplementedException();
+      TakePicture();
     }
 
     public virtual void TakePicture()

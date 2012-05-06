@@ -32,7 +32,8 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_PROP_ExposureBiasCompensation = 0x5010;
     public const int CONST_PROP_BatteryLevel = 0x5001;
     public const int CONST_PROP_LiveViewImageZoomRatio = 0xD1A3;
-    
+    public const int CONST_PROP_AFModeSelect = 0xD161;
+
 
     private const string AppName = "CameraControl";
     private const int AppMajorVersionNumber = 1;
@@ -56,7 +57,10 @@ namespace CameraControl.Devices.Nikon
       _timer.Stop();
       try
       {
-        getEvent();
+        lock (_loker)
+        {
+          getEvent();
+        }
       }
       catch (Exception)
       {
@@ -131,6 +135,7 @@ namespace CameraControl.Devices.Nikon
 
     public override void TakePicture()
     {
+      //AutoFocus();
       lock (_loker)
       {
         _manager.Device.ExecuteCommand(Conts.wiaCommandTakePicture);
@@ -177,7 +182,12 @@ namespace CameraControl.Devices.Nikon
     {
       lock (_loker)
       {
+        byte oldval = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1)[0];
+        _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] {(byte) 4},
+                                           CONST_PROP_AFModeSelect, -1);
         _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF, 0x0000);
+        _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] { oldval },
+                                   CONST_PROP_AFModeSelect, -1);
       }
     }
 
@@ -202,7 +212,9 @@ namespace CameraControl.Devices.Nikon
 
     public static short ToInt16(byte[] value, int startIndex)
     {
-        return System.BitConverter.ToInt16(value.Reverse().ToArray(), value.Length - sizeof(Int16) - startIndex);
+      int i = (short) (value[startIndex] << 8 | value[startIndex+1]);
+      return (short) (i);
+      //return System.BitConverter.ToInt16(value.Reverse().ToArray(), value.Length - sizeof(Int16) - startIndex);
     }
 
     private byte _liveViewImageZoomRatio;
@@ -243,25 +255,13 @@ namespace CameraControl.Devices.Nikon
         try
         {
           HaveLiveView = true;
-          FNumber.SetValue(
-            BitConverter.ToInt16(
-              _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_Fnumber, -1), 0));
-          IsoNumber.SetValue(
-            BitConverter.ToInt16(
-              _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureIndex, -1), 0));
-          ShutterSpeed.SetValue(
-            BitConverter.ToInt16(
-              _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureTime, -1), 0));
-          WhiteBalance.SetValue(
-            BitConverter.ToInt16(
-              _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_WhiteBalance, -1), 0));
-          Mode.SetValue(
-            BitConverter.ToInt16(
-              _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureProgramMode, -1), 0));
-          ExposureCompensation.SetValue(
-            BitConverter.ToInt16(
-              _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureBiasCompensation, -1),
-              0));
+          FNumber.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_Fnumber));
+          IsoNumber.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureIndex));
+          ShutterSpeed.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureTime));
+          WhiteBalance.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_WhiteBalance));
+          Mode.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureProgramMode));
+          ExposureCompensation.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                                          CONST_PROP_ExposureBiasCompensation));
           Battery = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_BatteryLevel, -1)[0];
         }
         catch (Exception)
