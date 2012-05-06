@@ -51,6 +51,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -78,9 +79,6 @@
     <Compile Include="Classes\AsyncObservableCollection.cs" />
     <Compile Include="Classes\BitmapFile.cs" />
     <Compile Include="Classes\DictionaryItem.cs" />
-    <Compile Include="Classes\EditSession.xaml.cs">
-      <DependentUpon>EditSession.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Classes\FileItem.cs" />
     <Compile Include="Classes\PropertyValue.cs" />
     <Compile Include="Classes\ThumbWorker.cs" />
@@ -103,6 +101,9 @@
     <Compile Include="windows\CreateTimeLapseWnd.xaml.cs">
       <DependentUpon>CreateTimeLapseWnd.xaml</DependentUpon>
     </Compile>
+    <Compile Include="windows\EditSession.xaml.cs">
+      <DependentUpon>EditSession.xaml</DependentUpon>
+    </Compile>
     <Compile Include="windows\FullScreenWnd.xaml.cs">
       <DependentUpon>FullScreenWnd.xaml</DependentUpon>
     </Compile>
@@ -118,10 +119,6 @@
     <Compile Include="windows\TimeLapseWnd.xaml.cs">
       <DependentUpon>TimeLapseWnd.xaml</DependentUpon>
     </Compile>
-    <Page Include="Classes\EditSession.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controler.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -153,6 +150,10 @@
     <Page Include="windows\CreateTimeLapseWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="windows\EditSession.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="windows\FullScreenWnd.xaml">
       <SubType>Designer</SubType>
@@ -201,17 +202,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="WIA">
-      <Guid>{94A0E92D-43C0-494E-AC29-FD45948A5221}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\Camera.png" />
   </ItemGroup>
   <ItemGroup>
@@ -241,7 +231,17 @@
   <ItemGroup>
     <Resource Include="Images\logo.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <COMReference Include="WIA">
+      <Guid>{94A0E92D-43C0-494E-AC29-FD45948A5221}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

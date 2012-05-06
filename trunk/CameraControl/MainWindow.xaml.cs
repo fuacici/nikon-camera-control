@@ -27,6 +27,7 @@ using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
 using WIA;
 using WPF.Themes;
+using EditSession = CameraControl.windows.EditSession;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace CameraControl
