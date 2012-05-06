@@ -450,6 +450,5 @@ namespace CameraControl
         return;
       Process.Start(ServiceProvider.Settings.SelectedBitmap.FileItem.FileName);
     }
-
   }
 }

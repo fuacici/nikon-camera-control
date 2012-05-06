@@ -4,7 +4,8 @@
         xmlns:myclass="clr-namespace:CameraControl.Classes"
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         themes:ThemeManager.Theme="{Binding  Path=CurrentTheme}"
-        Title="NCC" Height="700" Width="1024" Loaded="Window_Loaded" xmlns:my="clr-namespace:CameraControl" Background="{DynamicResource WindowBackgroundBrush}"
+        Title="NCC" Height="700" Width="1024" Loaded="Window_Loaded" xmlns:my="clr-namespace:CameraControl"
+        xmlns:local="clr-namespace:CameraControl.Controls" Background="{DynamicResource WindowBackgroundBrush}"
         Closed="Window_Closed" Closing="Window_Closing" Icon="/CameraControl;component/Images/logo.png">
     <Window.Resources>
         <Style TargetType="{x:Type ListBox}">
@@ -49,7 +50,13 @@
             <RowDefinition Height="121" />
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
-        <my:Controler x:Name="controler1" Grid.Row="1" DataContext="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=Manager.IsConected}" Margin="5"/>
+        <local:ZoomBorder  BorderThickness="1" CornerRadius="5" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2">
+            <Image Name="image1" Stretch="Uniform" Source="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" MouseDown="image1_MouseDown">
+            </Image>
+        </local:ZoomBorder>
+        <StackPanel Grid.Row="1" Grid.RowSpan="2" >
+            <my:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=Manager.IsConected}" Margin="5"/>
+        </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="2">
             <StackPanel  Orientation="Horizontal">
                 <Label Content="Manufacturer:" />
@@ -66,17 +73,6 @@
                 <Label Content="{Binding Path=SystemMessage }" FontWeight="Bold" />
             </StackPanel>
         </StackPanel>
-        <Border  BorderThickness="1" CornerRadius="5" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2">
-            <Image Grid.Row="1" Name="image1" Stretch="Uniform" Source="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" MouseDown="image1_MouseDown">
-                <!--<Image.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Delete File" Name="mnu_delete_file" Click="mnu_delete_file_Click" />
-                        <MenuItem Header="Show in explorer" Name="mnu_show_explorer" Click="mnu_show_explorer_Click" />
-                        <MenuItem Header="Open in external viewer" Name="mnu_open" Click="mnu_open_Click" />
-                    </ContextMenu>
-                </Image.ContextMenu>-->
-            </Image>
-        </Border>
         <Label Content="Loading ..." Name="lbl_loading" Grid.Column="1" Grid.Row="1" Margin="292,2,195,0" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="{Binding Path=ImageLoading}" FontSize="25" FontWeight="ExtraBold">
         </Label>
         <StackPanel Grid.Row="3" Grid.ColumnSpan="3" Name="ImagePanel"  Grid.RowSpan="2" >
