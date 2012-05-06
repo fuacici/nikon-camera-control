@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace CameraControl.windows
 {
@@ -37,6 +39,14 @@ namespace CameraControl.windows
 
     private void button1_Click(object sender, RoutedEventArgs e)
     {
+      if(!CheckCodec())
+      {
+        if(MessageBox.Show("Xvid codec not instaled !\nDo you want to download and install it ? ","Video codec problem",MessageBoxButtons.YesNo)==System.Windows.Forms.DialogResult.Yes)
+        {
+          System.Diagnostics.Process.Start("http://www.xvid.org/Downloads.15.0.html");
+        }
+        return;
+      }
       Hide();
       CreateTimeLapseWnd wnd = new CreateTimeLapseWnd();
       wnd.ShowDialog();
@@ -60,5 +70,18 @@ namespace CameraControl.windows
       ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
     }
 
+    private bool CheckCodec()
+    {
+      ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_CodecFile");
+      ManagementObjectCollection collection = searcher.Get();
+     foreach (ManagementObject obj in collection)
+      {
+        if ((string)obj["Description"] == "Xvid MPEG-4 Video Codec")
+        {
+          return true;
+        }
+      }
+      return false;
+    }
   }
 }
