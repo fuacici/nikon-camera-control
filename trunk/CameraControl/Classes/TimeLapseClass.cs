@@ -143,7 +143,7 @@ namespace CameraControl.Classes
         try
         {
           _timer.Enabled = false;
-          ServiceProvider.Settings.Manager.TakePicture();
+          ServiceProvider.DeviceManager.SelectedCameraDevice.TakePicture();
           //_timer.Enabled = true;
         }
         catch (COMException comException)

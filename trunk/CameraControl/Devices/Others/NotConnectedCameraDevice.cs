@@ -70,6 +70,11 @@ namespace CameraControl.Devices.Others
       throw new NotImplementedException();
     }
 
+    public void TakePicture()
+    {
+      throw new NotImplementedException();
+    }
+
     public void Close()
     {
       throw new NotImplementedException();

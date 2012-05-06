@@ -368,6 +368,11 @@ namespace CameraControl.Devices.Others
       throw new NotImplementedException();
     }
 
+    public virtual void TakePicture()
+    {
+      Device.ExecuteCommand(Conts.wiaCommandTakePicture);
+    }
+
     public virtual void Close()
     {
       if (Device != null)
