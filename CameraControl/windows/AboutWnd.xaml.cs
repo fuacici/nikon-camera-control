@@ -22,6 +22,7 @@ namespace CameraControl.windows
     public AboutWnd()
     {
       InitializeComponent();
+      Title = "About " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
     }
 
     private void button2_Click(object sender, RoutedEventArgs e)
