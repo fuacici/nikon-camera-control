@@ -283,7 +283,14 @@ namespace CameraControl.Devices.Others
 
     void ExposureCompensation_ValueChanged(object sender, string key, int val)
     {
-      Device.Properties[WIAManager.CONST_PROP_ExposureCompensation].set_Value(val);
+      try
+      {
+        Device.Properties[WIAManager.CONST_PROP_ExposureCompensation].set_Value(val);
+      }
+      catch (Exception)
+      {
+        
+      }
     }
 
     void Mode_ValueChanged(object sender, string key, int val)

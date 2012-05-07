@@ -8,8 +8,19 @@ namespace CameraControl.Classes
 {
   public class BraketingClass : BaseFieldClass
   {
-    private bool isBusy;
     private int index = 0;
+    private string _defec = "0";
+
+    private bool _isBusy;
+    public bool IsBusy
+    {
+      get { return _isBusy; }
+      set
+      {
+        _isBusy = value;
+        NotifyPropertyChanged("IsBusy");
+      }
+    }
 
     private AsyncObservableCollection<string> _exposureValues;
     public AsyncObservableCollection<string> ExposureValues
@@ -24,36 +35,43 @@ namespace CameraControl.Classes
 
     public BraketingClass()
     {
-      isBusy = false;
-      ExposureValues = new AsyncObservableCollection<string>();
-      ExposureValues.Add("-1");
-      ExposureValues.Add("0");
-      ExposureValues.Add("+1");
+      IsBusy = false;
+      ExposureValues = new AsyncObservableCollection<string> ();
     }
 
     public void TakePhoto()
     {
       if (ExposureValues.Count == 0)
         return;
-      if (!isBusy)
-      {
-        ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTakenDone;
-        isBusy = true;
-      }
+      index = 0;
+      _defec = ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.Value;
+      ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTakenDone;
+      IsBusy = true;
       ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue(ExposureValues[index]);
       ServiceProvider.DeviceManager.SelectedCameraDevice.TakePicture();
       index++;
     }
 
+    private void TakeNextPhoto()
+    {
+      Thread.Sleep(100);
+      ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue(ExposureValues[index]);
+      ServiceProvider.DeviceManager.SelectedCameraDevice.TakePictureNoAf();
+      index++;
+    }
+
     void Manager_PhotoTakenDone(WIA.Item imageFile)
     {
-      Thread.Sleep(200);
-      if(index<ExposureValues.Count)
-        TakePhoto();
+      if (index < ExposureValues.Count)
+      {
+        Thread thread = new Thread(TakeNextPhoto);
+        thread.Start();
+      }
       else
       {
-        isBusy = false;
+        IsBusy = false;
         ServiceProvider.Settings.Manager.PhotoTakenDone -= Manager_PhotoTakenDone;
+        ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue(_defec);
       }
     }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -23,16 +24,20 @@ namespace CameraControl.windows
     private ICameraDevice _device;
     private PhotoSession _photoSession;
     AsyncObservableCollection<CheckedListItem> collection = new AsyncObservableCollection<CheckedListItem>();
+    BackgroundWorker backgroundWorker = new BackgroundWorker();
 
     public BraketingWnd(ICameraDevice device, PhotoSession session)
     {
       InitializeComponent();
       _device = device;
       _photoSession = session;
+      backgroundWorker.DoWork += delegate { _photoSession.Braketing.TakePhoto(); };
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      if (_photoSession.Braketing.ExposureValues.Count == 0)
+        _photoSession.Braketing.ExposureValues = new AsyncObservableCollection<string> {"-1", "0", "+1"};
       foreach (string value in _device.ExposureCompensation.Values)
       {
         CheckedListItem item = new CheckedListItem()
@@ -48,14 +53,19 @@ namespace CameraControl.windows
       _photoSession.Braketing.ExposureValues.Clear();
       foreach (CheckedListItem listItem in collection)
       {
-        if (listItem.IsChecked)
+        if (listItem.IsChecked && !_photoSession.Braketing.ExposureValues.Contains(listItem.Name))
           _photoSession.Braketing.ExposureValues.Add(listItem.Name);
       }
     }
 
     private void btn_shot_Click(object sender, RoutedEventArgs e)
     {
-      _photoSession.Braketing.TakePhoto();
+      backgroundWorker.RunWorkerAsync();
+    }
+
+    private void btn_close_Click(object sender, RoutedEventArgs e)
+    {
+      this.Close();
     }
 
   }
