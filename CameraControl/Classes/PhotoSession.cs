@@ -11,6 +11,7 @@ namespace CameraControl.Classes
 {
   public class PhotoSession : BaseFieldClass
   {
+    [XmlIgnore]
     public List<string> SupportedExtensions = new List<string>() {".jpg", ".nef"};
 
     private string _name;

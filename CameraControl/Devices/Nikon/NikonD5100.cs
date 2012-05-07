@@ -38,7 +38,7 @@ namespace CameraControl.Devices.Nikon
     private const string AppName = "CameraControl";
     private const int AppMajorVersionNumber = 1;
     private const int AppMinorVersionNumber = 0;
-    private Timer _timer = new Timer(1000/5);
+    private Timer _timer = new Timer(1000/25);
 
     protected StillImageDevice _stillImageDevice = null;
     private WIAManager _manager = null;
