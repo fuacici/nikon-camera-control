@@ -50,6 +50,7 @@ namespace CameraControl
       ServiceProvider.Settings = ServiceProvider.Settings.Load();
       ServiceProvider.Settings.PropertyChanged += Settings_PropertyChanged;
       ServiceProvider.Settings.LoadSessionData();
+      ServiceProvider.Trigger.Start();
       WiaManager = new WIAManager();
       ServiceProvider.Settings.Manager = WiaManager;
       WiaManager.PhotoTaked += WiaManager_PhotoTaked;

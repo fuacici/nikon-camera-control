@@ -22,6 +22,10 @@ namespace CameraControl.windows
     public SettingsWnd()
     {
       InitializeComponent();
+      foreach (Key key in Enum.GetValues(typeof(System.Windows.Forms.Keys)))
+      {
+        cmb_keys.Items.Add(key);
+      }
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)

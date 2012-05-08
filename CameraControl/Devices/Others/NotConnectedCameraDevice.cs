@@ -67,17 +67,17 @@ namespace CameraControl.Devices.Others
 
     public void TakePictureNoAf()
     {
-      throw new NotImplementedException();
+      
     }
 
     public void TakePicture()
     {
-      throw new NotImplementedException();
+      
     }
 
     public void Close()
     {
-      throw new NotImplementedException();
+      
     }
 
     public void ReadDeviceProperties()
