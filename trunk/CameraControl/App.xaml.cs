@@ -23,6 +23,7 @@ namespace CameraControl
       // Global exception handling  
       Application.Current.DispatcherUnhandledException +=
         new DispatcherUnhandledExceptionEventHandler(AppDispatcherUnhandledException);
+      
     }
 
     private void AppDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

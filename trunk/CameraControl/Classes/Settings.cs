@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Input;
 using System.Xml.Serialization;
 
 namespace CameraControl.Classes
@@ -88,6 +89,62 @@ namespace CameraControl.Classes
     }
 
     public DateTime LastUpdateCheckDate { get; set; }
+
+    private bool _triggerKeyAlt;
+    public bool TriggerKeyAlt
+    {
+      get { return _triggerKeyAlt; }
+      set
+      {
+        _triggerKeyAlt = value;
+        NotifyPropertyChanged("TriggerKeyAlt");
+      }
+    }
+
+    private bool _triggerKeyCtrl;
+
+    public bool TriggerKeyCtrl
+    {
+      get { return _triggerKeyCtrl; }
+      set
+      {
+        _triggerKeyCtrl = value;
+        NotifyPropertyChanged("TriggerKeyCtrl");
+      }
+    }
+
+    private bool _triggerKeyShift;
+    public bool TriggerKeyShift
+    {
+      get { return _triggerKeyShift; }
+      set
+      {
+        _triggerKeyShift = value;
+        NotifyPropertyChanged("TriggerKeyShift");
+      }
+    }
+
+    private Key _triggerKey;
+    public Key TriggerKey
+    {
+      get { return _triggerKey; }
+      set
+      {
+        _triggerKey = value;
+        NotifyPropertyChanged("TriggerKey");
+      }
+    }
+
+    private bool _usetriggerKey;
+    public bool UseTriggerKey
+    {
+      get { return _usetriggerKey; }
+      set
+      {
+        _usetriggerKey = value;
+        NotifyPropertyChanged("UseTriggerKey");
+      }
+    }
 
     private string _systemMessage;
     [XmlIgnore]

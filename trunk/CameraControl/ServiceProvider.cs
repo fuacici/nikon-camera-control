@@ -17,7 +17,7 @@ namespace CameraControl
     public static ThumbWorker ThumbWorker { get; set; }
     public static readonly log4net.ILog Log = log4net.LogManager.GetLogger("NCC");
     public static CameraDeviceManager DeviceManager { get; set; }
-
+    public static TriggerClass Trigger { get; set; }
 
 
     public static void Configure()
@@ -45,6 +45,7 @@ namespace CameraControl
 #endif
       }
       DeviceManager = new CameraDeviceManager();
+      Trigger = new TriggerClass();
       Log.Debug("Application starting");
     }
   }
