@@ -87,6 +87,7 @@
     <Compile Include="Classes\TimeLapseClass.cs" />
     <Compile Include="Classes\TriggerClass.cs" />
     <Compile Include="Classes\VideoType.cs" />
+    <Compile Include="Classes\WebServer.cs" />
     <Compile Include="Controls\ZoomBorder.cs" />
     <Compile Include="Devices\CameraDeviceManager.cs" />
     <Compile Include="Devices\Classes\LiveViewData.cs" />
