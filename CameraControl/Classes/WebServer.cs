@@ -1,14 +1,22 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Web;
+using System.Windows;
+
 // origin: http://www.codeproject.com/Articles/1505/Create-your-own-Web-Server-using-C
 namespace CameraControl.Classes
 {
-  internal class WebServer
+  public class WebServer
   {
+    public delegate void EventEventHandler(string cmd);
 
+    public virtual event EventEventHandler Event;
+
+    private bool _shouldStop;
     private TcpListener myListener;
     private int port = 5050; // Select any free port you wish
 
@@ -16,8 +24,14 @@ namespace CameraControl.Classes
     //given port. It also calls a Thread on the method StartListen(). 
     public WebServer()
     {
+    }
+
+    public void Start(int pt)
+    {
       try
       {
+        _shouldStop = false;
+        port = pt;
         //start listing on the given port
         myListener = new TcpListener(port);
         myListener.Start();
@@ -29,10 +43,16 @@ namespace CameraControl.Classes
       }
       catch (Exception e)
       {
-        Console.WriteLine("An Exception Occurred while Listening :" + e.ToString());
+        ServiceProvider.Log.Error("Error start webserver", e);
       }
     }
 
+    public void Stop()
+    {
+      _shouldStop = true;
+      if (myListener != null)
+        myListener.Stop();
+    }
 
     /// <summary>
     /// Returns The Default File Name
@@ -44,25 +64,25 @@ namespace CameraControl.Classes
     public string GetTheDefaultFileName(string sLocalDirectory)
     {
       StreamReader sr;
-      String sLine = "";
+      String sLine = "index.html";
 
-      try
-      {
-        //Open the default.dat to find out the list
-        // of default file
-        sr = new StreamReader("data\\Default.Dat");
+      //try
+      //{
+      //  //Open the default.dat to find out the list
+      //  // of default file
+      //  sr = new StreamReader("data\\Default.Dat");
 
-        while ((sLine = sr.ReadLine()) != null)
-        {
-          //Look for the default file in the web server root folder
-          if (File.Exists(sLocalDirectory + sLine) == true)
-            break;
-        }
-      }
-      catch (Exception e)
-      {
-        Console.WriteLine("An Exception Occurred : " + e.ToString());
-      }
+      //  while ((sLine = sr.ReadLine()) != null)
+      //  {
+      //    //Look for the default file in the web server root folder
+      //    if (File.Exists(sLocalDirectory + sLine) == true)
+      //      break;
+      //  }
+      //}
+      //catch (Exception e)
+      //{
+      //  Console.WriteLine("An Exception Occurred : " + e.ToString());
+      //}
       if (File.Exists(sLocalDirectory + sLine) == true)
         return sLine;
       else
@@ -93,36 +113,36 @@ namespace CameraControl.Classes
 
       sFileExt = sRequestedFile.Substring(iStartPos);
 
-      try
-      {
-        //Open the Vdirs.dat to find out the list virtual directories
-        sr = new StreamReader("data\\Mime.Dat");
+      //try
+      //{
+      //  //Open the Vdirs.dat to find out the list virtual directories
+      //  sr = new StreamReader("data\\Mime.Dat");
 
-        while ((sLine = sr.ReadLine()) != null)
-        {
+      //  while ((sLine = sr.ReadLine()) != null)
+      //  {
 
-          sLine.Trim();
+      //    sLine.Trim();
 
-          if (sLine.Length > 0)
-          {
-            //find the separator
-            iStartPos = sLine.IndexOf(";");
+      //    if (sLine.Length > 0)
+      //    {
+      //      //find the separator
+      //      iStartPos = sLine.IndexOf(";");
 
-            // Convert to lower case
-            sLine = sLine.ToLower();
+      //      // Convert to lower case
+      //      sLine = sLine.ToLower();
 
-            sMimeExt = sLine.Substring(0, iStartPos);
-            sMimeType = sLine.Substring(iStartPos + 1);
+      //      sMimeExt = sLine.Substring(0, iStartPos);
+      //      sMimeType = sLine.Substring(iStartPos + 1);
 
-            if (sMimeExt == sFileExt)
-              break;
-          }
-        }
-      }
-      catch (Exception e)
-      {
-        Console.WriteLine("An Exception Occurred : " + e.ToString());
-      }
+      //      if (sMimeExt == sFileExt)
+      //        break;
+      //    }
+      //  }
+      //}
+      //catch (Exception e)
+      //{
+      //  Console.WriteLine("An Exception Occurred : " + e.ToString());
+      //}
 
       if (sMimeExt == sFileExt)
         return sMimeType;
@@ -300,7 +320,7 @@ namespace CameraControl.Classes
       String sRequestedFile;
       String sErrorMessage;
       String sLocalDir;
-      String sMyWebServerRoot = "C:\\MyWebServerRoot\\";
+      String sMyWebServerRoot = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "WebServer\\");
       String sPhysicalFilePath = "";
       String sFormattedMessage = "";
       String sResponse = "";
@@ -309,14 +329,26 @@ namespace CameraControl.Classes
 
       while (true)
       {
+        if (_shouldStop)
+          return;
         //Accept a new connection
-        Socket mySocket = myListener.AcceptSocket();
+        Socket mySocket = null;
+        try
+        {
+           mySocket = myListener.AcceptSocket();
+        }
+        catch (Exception)
+        {
+        }
 
-        Console.WriteLine("Socket Type " + mySocket.SocketType);
+        if(mySocket==null)
+          continue;
+
+        //Console.WriteLine("Socket Type " + mySocket.SocketType);
         if (mySocket.Connected)
         {
-          Console.WriteLine("\nClient Connected!!\n==================\nCLient IP {0}\n",
-                            mySocket.RemoteEndPoint);
+          //Console.WriteLine("\nClient Connected!!\n==================\nCLient IP {0}\n",
+          //                  mySocket.RemoteEndPoint);
 
 
 
@@ -336,7 +368,7 @@ namespace CameraControl.Classes
           {
             Console.WriteLine("Only Get Method is supported..");
             mySocket.Close();
-            return;
+            continue;
           }
 
 
@@ -373,7 +405,14 @@ namespace CameraControl.Classes
           //Extract The directory Name
           sDirName = sRequest.Substring(sRequest.IndexOf("/"), sRequest.LastIndexOf("/") - 3);
 
-
+          string cmds = "";
+          if (sDirName.Contains("?"))
+          {
+            cmds = sDirName.Split('?')[1];
+            if (Event != null)
+              Event(cmds.ToUpper());
+            sDirName = sDirName.Split('?')[0];
+          }
 
           /////////////////////////////////////////////////////////////////////
           // Identify the Physical Directory
@@ -426,7 +465,7 @@ namespace CameraControl.Classes
 
               mySocket.Close();
 
-              return;
+              continue;
 
             }
           }
@@ -440,7 +479,7 @@ namespace CameraControl.Classes
 
           String sMimeType = GetMimeType(sRequestedFile);
 
-
+          
 
           //Build the physical path
           sPhysicalFilePath = sLocalDir + sRequestedFile;

@@ -62,6 +62,7 @@ Section -Main SEC0000
     SetOverwrite on
     File /r ..\CameraControl\bin\Debug\*
     WriteRegStr HKLM "${REGKEY}\Components" Main 1
+	SimpleFC::AddPort 5513 "$(^Name)" 6 0 2 "" 1
 SectionEnd
 
 Section -post SEC0001

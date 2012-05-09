@@ -15,7 +15,10 @@ namespace CameraControl
   {
     private void Application_Exit(object sender, ExitEventArgs e)
     {
-
+      if (ServiceProvider.Trigger != null)
+      {
+        ServiceProvider.Trigger.Stop();
+      }
     }
 
     private void Application_Startup(object sender, StartupEventArgs e)

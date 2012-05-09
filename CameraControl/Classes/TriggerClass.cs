@@ -20,15 +20,36 @@ namespace CameraControl.Classes
     private static bool _ctrlpressed = false;
     private static bool _shiftpressed = false;
 
+    public WebServer WebServer { get; set; }
+
+    public TriggerClass()
+    {
+      WebServer = new WebServer();      
+    }
+
     public void Start()
     {
       _hookID = SetHook(_proc);
+      if (ServiceProvider.Settings.UseWebserver)
+      {
+        WebServer.Start(ServiceProvider.Settings.WebserverPort);
+        WebServer.Event += new Classes.WebServer.EventEventHandler(WebServer_Event);
+      }
+    }
+
+    void WebServer_Event(string cmd)
+    {
+      if (cmd.StartsWith("CMD=TAKEPHOTO"))
+      {
+        TakePhoto();
+      }
     }
 
     public void Stop()
     {
       if (_hookID != IntPtr.Zero)
         UnhookWindowsHookEx(_hookID);
+      WebServer.Stop();
     }
 
     private static IntPtr SetHook(LowLevelKeyboardProc proc)
@@ -61,18 +82,7 @@ namespace CameraControl.Classes
             ServiceProvider.Settings.TriggerKeyShift == _shiftpressed &&
             ServiceProvider.Settings.TriggerKey.ToString() == ((Keys) vkCode).ToString())
         {
-          Thread thread = new Thread(new ThreadStart(delegate
-                                                       {
-                                                         try
-                                                         {
-                                                           ServiceProvider.DeviceManager.SelectedCameraDevice.
-                                                             TakePicture();
-                                                         }
-                                                         catch (Exception)
-                                                         {
-                                                         }
-                                                       }));
-          thread.Start();
+          TakePhoto();
         }
       }
       if (nCode >= 0 && (wParam == (IntPtr)WM_KEYUP || wParam == (IntPtr)WM_SYSKEYUP))
@@ -87,6 +97,22 @@ namespace CameraControl.Classes
           _shiftpressed = false;
       }
       return CallNextHookEx(_hookID, nCode, wParam, lParam);
+    }
+
+    private static void TakePhoto()
+    {
+      Thread thread = new Thread(new ThreadStart(delegate
+      {
+        try
+        {
+          ServiceProvider.DeviceManager.SelectedCameraDevice.
+            TakePicture();
+        }
+        catch (Exception)
+        {
+        }
+      }));
+      thread.Start();      
     }
 
     [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]

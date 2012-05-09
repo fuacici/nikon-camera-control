@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -146,6 +147,40 @@ namespace CameraControl.Classes
       }
     }
 
+    private bool _useWebserver;
+    public bool UseWebserver
+    {
+      get { return _useWebserver; }
+      set
+      {
+        _useWebserver = value;
+        NotifyPropertyChanged("UseWebserver");
+      }
+    }
+
+    private int _webserverPort;
+    public int WebserverPort
+    {
+      get { return _webserverPort; }
+      set
+      {
+        _webserverPort = value;
+        NotifyPropertyChanged("WebserverPort");
+      }
+    }
+
+    public string Webaddress { get
+    {
+            var hostEntry = Dns.GetHostEntry(Dns.GetHostName());
+      var ip = (
+                 from addr in hostEntry.AddressList
+                 where addr.AddressFamily.ToString() == "InterNetwork"
+                 select addr.ToString()
+          ).FirstOrDefault();
+      return string.Format("http://{0}:{1}", ip, WebserverPort);
+    } 
+    }
+
     private string _systemMessage;
     [XmlIgnore]
     public string SystemMessage
@@ -178,6 +213,9 @@ namespace CameraControl.Classes
                        //new VideoType("Super VGA 4:3", 800, 600)
                      };
       LastUpdateCheckDate = DateTime.MinValue;
+      UseTriggerKey = false;
+      UseWebserver = false;
+      WebserverPort = 5513;
     }
 
     public void Add(PhotoSession session)
