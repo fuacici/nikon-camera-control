@@ -39,9 +39,24 @@ namespace CameraControl.Classes
 
     void WebServer_Event(string cmd)
     {
-      if (cmd.StartsWith("CMD=TAKEPHOTO"))
+      if (cmd.StartsWith("CMD=TAKEPHOTO_"))
       {
         TakePhoto();
+      }
+      if (cmd.StartsWith("CMD=TAKEPHOTONOAF"))
+      {
+        Thread thread = new Thread(new ThreadStart(delegate
+        {
+          try
+          {
+            ServiceProvider.DeviceManager.SelectedCameraDevice.
+              TakePictureNoAf();
+          }
+          catch (Exception)
+          {
+          }
+        }));
+        thread.Start(); 
       }
     }
 
