@@ -89,6 +89,8 @@
     <Compile Include="Classes\TriggerClass.cs" />
     <Compile Include="Classes\VideoType.cs" />
     <Compile Include="Classes\WebServer.cs" />
+    <Compile Include="Classes\WindowsCmdConsts.cs" />
+    <Compile Include="Classes\WindowsManager.cs" />
     <Compile Include="Controls\ZoomBorder.cs" />
     <Compile Include="Devices\CameraDeviceManager.cs" />
     <Compile Include="Devices\Classes\LiveViewData.cs" />
@@ -100,6 +102,7 @@
     <Compile Include="Devices\Nikon\NikonD90.cs" />
     <Compile Include="Devices\Others\NotConnectedCameraDevice.cs" />
     <Compile Include="Devices\Others\WiaCameraDevice.cs" />
+    <Compile Include="Interfaces\IWindow.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="windows\AboutWnd.xaml.cs">
       <DependentUpon>AboutWnd.xaml</DependentUpon>
@@ -255,6 +258,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

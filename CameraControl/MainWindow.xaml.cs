@@ -64,6 +64,30 @@ namespace CameraControl
         ServiceProvider.Settings.Save();
         CheckForUpdate();
       }
+      ServiceProvider.WindowsManager = new WindowsManager();
+      ServiceProvider.WindowsManager.Event += Trigger_Event;
+    }
+
+    void Trigger_Event(string cmd)
+    {
+      Dispatcher.Invoke(new Action(delegate
+                                     {
+                                       switch (cmd)
+                                       {
+                                         case WindowsCmdConsts.Next_Image:
+                                           if (ImageLIst.SelectedIndex < ImageLIst.Items.Count - 1)
+                                           {
+                                             ImageLIst.SelectedIndex++;
+                                           }
+                                           break;
+                                         case WindowsCmdConsts.Prev_Image:
+                                           if (ImageLIst.SelectedIndex > 0)
+                                           {
+                                             ImageLIst.SelectedIndex--;
+                                           }
+                                           break;
+                                       }
+                                     }));
     }
 
     private void CheckForUpdate()
@@ -153,35 +177,9 @@ namespace CameraControl
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       WiaManager.ConnectToCamera();
-      //SessionPanel.DataContext = ServiceProvider.Settings;
       ImagePanel.DataContext = ServiceProvider.Settings;
     }
 
-    //private void button1_Click(object sender, RoutedEventArgs e)
-    //{
-    //  if (WiaManager.ConnectToCamera())
-    //  {
-    //    //listBox1.Items.Clear();
-    //    foreach (Property property in WiaManager.Device.Properties)
-    //    {
-    //      textBox1.Text += property.Name + "|" + property.get_Value().ToString() + "|" + property.IsReadOnly.ToString() +
-    //                       property.IsVector.ToString() + "|" + property.SubType.ToString() + "|";
-    //      try
-    //      {
-    //        textBox1.Text += property.SubTypeMax.ToString();
-    //        //  + property.SubTypeMin.ToString() + "|" +
-    //        //property.SubTypeStep.ToString() + "|" + property.SubTypeValues.ToString() +
-    //        //property.Type.ToString() + "|";
-    //      }
-    //      catch (Exception)
-    //      {
-
-
-    //      }
-    //      textBox1.Text += "\n";
-    //    }
-    //  }
-    //}
 
     private void button3_Click(object sender, RoutedEventArgs e)
     {
@@ -267,17 +265,6 @@ namespace CameraControl
       ServiceProvider.Settings.ImageLoading = Visibility.Visible;
       ServiceProvider.Settings.SelectedBitmap.GetBitmap();
       ServiceProvider.Settings.ImageLoading = Visibility.Hidden;
-      //logo.BeginInit();
-      //logo.UriSource = new Uri(fileItem.FileName);
-      //logo.EndInit();
-      //logo.Freeze();
-
-      //Call the UI thread using the Dispatcher to update the Image control
-      //Dispatcher.BeginInvoke(new ThreadStart(delegate
-      //                                         {
-      //                                           image1.Source = logo;
-      //                                         }));
-
     }
 
     private void button1_Click(object sender, RoutedEventArgs e)
@@ -324,6 +311,7 @@ namespace CameraControl
         PropertyWnd.Hide();
         PropertyWnd.Close();
       }
+      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.All_Close);
       WiaManager.DisconnectCamera();
     }
 
@@ -356,42 +344,13 @@ namespace CameraControl
 
     private void but_fullscreen_Click(object sender, RoutedEventArgs e)
     {
-      ShowFullScreen();
-    }
-
-    private void ShowFullScreen()
-    {
-      FullScreenWnd wnd = new FullScreenWnd();
-      wnd.KeyDown += wnd_KeyDown;
-      wnd.KeyUp += wnd_KeyUp;
-      wnd.Show();
-      wnd.Activate();
-      wnd.Topmost = true;  
-      wnd.Topmost = false; 
-      wnd.Focus();        
-    }
-
-    void wnd_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
-    {
-      ImageLIst.RaiseEvent(e);
-    }
-
-    void wnd_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-    {
-      if (e.Key == Key.Right && ImageLIst.SelectedIndex < ImageLIst.Items.Count - 1)
-      {
-        ImageLIst.SelectedIndex++;
-      }
-      if (e.Key == Key.Left && ImageLIst.SelectedIndex >0)
-      {
-        ImageLIst.SelectedIndex--;
-      }
+      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_Show);
     }
 
     private void image1_MouseDown(object sender, MouseButtonEventArgs e)
     {
       if (e.ClickCount >= 2 && e.LeftButton == MouseButtonState.Pressed)
-        ShowFullScreen();
+        ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_Show);
     }
 
     private void btn_liveview_Click(object sender, RoutedEventArgs e)

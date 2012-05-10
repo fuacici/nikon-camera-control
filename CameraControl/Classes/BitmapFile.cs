@@ -42,7 +42,7 @@ namespace CameraControl.Classes
       get { return _displayImage; }
       set
       {
-        if(_displayImage==null || FileItem!=null)
+        if(_displayImage==null && FileItem!=null)
         {
           _displayImage = FileItem.Thumbnail;
         }
