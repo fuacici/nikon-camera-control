@@ -22,6 +22,8 @@ namespace CameraControl.Classes
 
     public WebServer WebServer { get; set; }
 
+
+
     public TriggerClass()
     {
       WebServer = new WebServer();      
@@ -43,7 +45,7 @@ namespace CameraControl.Classes
       {
         TakePhoto();
       }
-      if (cmd.StartsWith("CMD=TAKEPHOTONOAF"))
+      else if (cmd.StartsWith("CMD=TAKEPHOTONOAF"))
       {
         Thread thread = new Thread(new ThreadStart(delegate
         {
@@ -57,6 +59,16 @@ namespace CameraControl.Classes
           }
         }));
         thread.Start(); 
+      }
+      else
+      {
+        string simplecmd = "";
+        if(cmd.Contains("="))
+        {
+          simplecmd = cmd.Split('=')[1];
+        }
+        simplecmd = simplecmd.Replace("/", "");
+        ServiceProvider.WindowsManager.ExecuteCommand(simplecmd);
       }
     }
 

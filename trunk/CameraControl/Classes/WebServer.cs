@@ -98,7 +98,7 @@ namespace CameraControl.Classes
     /// <returns>Mime Type</returns>
     public string GetMimeType(string sRequestedFile)
     {
-
+      return "";
 
       StreamReader sr;
       String sLine = "";
@@ -391,10 +391,10 @@ namespace CameraControl.Classes
           //If file name is not supplied add forward slash to indicate 
           //that it is a directory and then we will look for the 
           //default file name..
-          if ((sRequest.IndexOf(".") < 1) && (!sRequest.EndsWith("/")))
-          {
-            sRequest = sRequest + "/";
-          }
+          //if ((sRequest.IndexOf(".") < 1) && (!sRequest.EndsWith("/")))
+          //{
+          //  sRequest = sRequest + "/";
+          //}
 
 
           //Extract the requested file name
@@ -409,8 +409,6 @@ namespace CameraControl.Classes
           if (sDirName.Contains("?"))
           {
             cmds = sDirName.Split('?')[1];
-            if (Event != null)
-              Event(cmds.ToUpper());
             sDirName = sDirName.Split('?')[0];
           }
 
@@ -450,6 +448,11 @@ namespace CameraControl.Classes
           /////////////////////////////////////////////////////////////////////
           // Identify the File Name
           /////////////////////////////////////////////////////////////////////
+          if (sRequestedFile.Contains("?"))
+          {
+            cmds = sRequestedFile.Split('?')[1];
+            sRequestedFile = sRequestedFile.Split('?')[0];
+          }
 
           //If The file name is not supplied then look in the default file list
           if (sRequestedFile.Length == 0)
@@ -476,6 +479,10 @@ namespace CameraControl.Classes
           /////////////////////////////////////////////////////////////////////
           // Get TheMime Type
           /////////////////////////////////////////////////////////////////////
+
+
+          if (!string.IsNullOrEmpty(cmds) && Event != null)
+            Event(cmds);
 
           String sMimeType = GetMimeType(sRequestedFile);
 
