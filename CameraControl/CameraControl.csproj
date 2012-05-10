@@ -93,7 +93,7 @@
     <Compile Include="Devices\CameraDeviceManager.cs" />
     <Compile Include="Devices\Classes\LiveViewData.cs" />
     <Compile Include="Devices\ICameraDevice.cs" />
-    <Compile Include="Devices\Nikon\NikonD300.cs" />
+    <Compile Include="Devices\Nikon\NikonD300_obsolete.cs" />
     <Compile Include="Devices\Nikon\NikonD3X.cs" />
     <Compile Include="Devices\Nikon\NikonD40.cs" />
     <Compile Include="Devices\Nikon\NikonD5100.cs" />

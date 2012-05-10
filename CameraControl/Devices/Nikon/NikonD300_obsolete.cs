@@ -7,7 +7,8 @@ using CameraControl.Devices.Classes;
 
 namespace CameraControl.Devices.Nikon
 {
-  public class NikonD300 : NikonD5100
+  [Obsolete("Wrong usage")]
+  class NikonD300_obsolete : NikonD5100
   {
     override public LiveViewData GetLiveViewImage()
     {

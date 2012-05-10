@@ -37,7 +37,7 @@ namespace CameraControl.Devices
                         {"D200", typeof (NikonD40)},
                         {"D3S", typeof (NikonD90)},
                         {"D3X", typeof (NikonD3X)},
-                        {"D300", typeof (NikonD300)},
+                        {"D300", typeof (NikonD3X)},
                         {"D300S", typeof (NikonD3X)},
                         {"D4", typeof (NikonD5100)},
                         {"D40", typeof (NikonD40)},
