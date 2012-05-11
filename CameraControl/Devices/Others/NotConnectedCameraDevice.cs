@@ -37,32 +37,32 @@ namespace CameraControl.Devices.Others
 
     public void StartLiveView()
     {
-      throw new NotImplementedException();
+     
     }
 
     public void StopLiveView()
     {
-      throw new NotImplementedException();
+     
     }
 
     public LiveViewData GetLiveViewImage()
     {
-      throw new NotImplementedException();
+      return new LiveViewData();
     }
 
     public void AutoFocus()
     {
-      throw new NotImplementedException();
+     
     }
 
     public void Focus(int step)
     {
-      throw new NotImplementedException();
+     
     }
 
     public void Focus(int x, int y)
     {
-      throw new NotImplementedException();
+     
     }
 
     public void TakePictureNoAf()

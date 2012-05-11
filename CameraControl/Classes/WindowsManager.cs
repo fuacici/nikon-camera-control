@@ -17,6 +17,7 @@ namespace CameraControl.Classes
     {
       WindowsList = new List<IWindow>();
       WindowsList.Add(new FullScreenWnd());
+      WindowsList.Add(new LiveViewWnd());
     }
 
     public void ExecuteCommand(string cmd)
