@@ -15,9 +15,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using CameraControl.Classes;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using CameraControl.Devices.Nikon;
+using CameraControl.Interfaces;
 using PortableDeviceLib;
 using MessageBox = System.Windows.Forms.MessageBox;
 using Timer = System.Timers.Timer;
@@ -27,7 +29,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for LiveViewWnd.xaml
   /// </summary>
-  public partial class LiveViewWnd : Window
+  public partial class LiveViewWnd : Window, IWindow
   {
     private int _retries = 0;
     private ICameraDevice selectedPortableDevice;
@@ -64,10 +66,21 @@ namespace CameraControl.windows
       }
     }
 
+    public LiveViewWnd()
+    {
+      SelectedPortableDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
+      Init();
+    }
+
     public LiveViewWnd(ICameraDevice device)
     {
-      InitializeComponent();
       SelectedPortableDevice = device;
+      Init();
+    }
+
+    public void Init()
+    {
+      InitializeComponent();
       _timer.Stop();
       _timer.AutoReset = true;
       _timer.Elapsed += _timer_Elapsed;
@@ -81,10 +94,8 @@ namespace CameraControl.windows
       canvas.Children.Add(_line12);
       canvas.Children.Add(_line21);
       canvas.Children.Add(_line22);
-      ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTaked;
       _worker.DoWork += delegate { GetLiveImage(); };
     }
-
 
     void Manager_PhotoTaked(WIA.Item imageFile)
     {
@@ -106,11 +117,8 @@ namespace CameraControl.windows
                                                  }));
         return;
       }
-      //_timer.Stop();
       if(!_worker.IsBusy)
         _worker.RunWorkerAsync();
-      //Dispatcher.BeginInvoke(new ThreadStart(GetLiveImage));
-      //_timer.Start();
     }
 
     private void GetLiveImage()
@@ -198,27 +206,14 @@ namespace CameraControl.windows
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-
-      StartLiveView();
-      Thread.Sleep(500);
-      _timer.Start();
-
       //SelectedPortableDevice.StoptLiveView();
     }
 
+
+
     private void Window_Closed(object sender, EventArgs e)
     {
-      try
-      {
-        _timer.Stop();
-        ServiceProvider.Settings.Manager.PhotoTakenDone -= Manager_PhotoTaked;
-        Thread.Sleep(100);
-        SelectedPortableDevice.StopLiveView();
-      }
-      catch (Exception exception)
-      {
-        ServiceProvider.Log.Error("Unable to stop liveview", exception);
-      }
+
     }
 
     private void button1_Click(object sender, RoutedEventArgs e)
@@ -263,7 +258,7 @@ namespace CameraControl.windows
       {
         ServiceProvider.Log.Error("Unable to start liveview !", exception);
         MessageBox.Show("Unable to start liveview !");
-        Close();
+        ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide);
       }
       image1.Visibility = Visibility.Visible;
     }
@@ -333,5 +328,102 @@ namespace CameraControl.windows
       _line22.Visibility = Visibility.Hidden;
     }
 
+    #region Implementation of IWindow
+
+    public void ExecuteCommand(string cmd)
+    {
+      switch (cmd)
+      {
+        case WindowsCmdConsts.LiveViewWnd_Show:
+          Dispatcher.BeginInvoke(new Action(delegate
+                                              {
+                                                SelectedPortableDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
+                                                Show();
+                                                Activate();
+                                                Topmost = true;
+                                                Topmost = false;
+                                                Focus();
+                                                ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTaked;
+                                                StartLiveView();
+                                                Thread.Sleep(500);
+                                                _timer.Start();
+                                              }));
+          break;
+        case WindowsCmdConsts.LiveViewWnd_Hide:
+          Dispatcher.Invoke(new Action(delegate
+                                         {
+                                           Hide();
+                                           try
+                                           {
+                                             _timer.Stop();
+                                             ServiceProvider.Settings.Manager.PhotoTakenDone -= Manager_PhotoTaked;
+                                             Thread.Sleep(100);
+                                             SelectedPortableDevice.StopLiveView();
+                                           }
+                                           catch (Exception exception)
+                                           {
+                                             ServiceProvider.Log.Error("Unable to stop liveview", exception);
+                                           }
+                                         }));
+          break;
+        case WindowsCmdConsts.All_Close:
+          Dispatcher.Invoke(new Action(delegate
+                                         {
+                                           Hide();
+                                           Close();
+                                         }));
+          break;
+        case WindowsCmdConsts.LiveView_Zoom_All:
+          SelectedPortableDevice.LiveViewImageZoomRatio = 0;
+          break;
+        case WindowsCmdConsts.LiveView_Zoom_25:
+          SelectedPortableDevice.LiveViewImageZoomRatio = 1;
+          break;
+        case WindowsCmdConsts.LiveView_Zoom_33:
+          SelectedPortableDevice.LiveViewImageZoomRatio = 2;
+          break;
+        case WindowsCmdConsts.LiveView_Zoom_50:
+          SelectedPortableDevice.LiveViewImageZoomRatio = 3;
+          break;
+        case WindowsCmdConsts.LiveView_Zoom_66:
+          SelectedPortableDevice.LiveViewImageZoomRatio = 4;
+          break;
+        case WindowsCmdConsts.LiveView_Zoom_100:
+          SelectedPortableDevice.LiveViewImageZoomRatio = 5;
+          break;
+        case WindowsCmdConsts.LiveView_Focus_M:
+          btn_focusm_Click(null, null);
+          break;
+        case WindowsCmdConsts.LiveView_Focus_P:
+          btn_focusp_Click(null, null);
+          break;
+        case WindowsCmdConsts.LiveView_Focus_MM:
+          btn_focusmm_Click(null, null);
+          break;
+        case WindowsCmdConsts.LiveView_Focus_PP:
+          btn_focuspp_Click(null, null);
+          break;
+        case WindowsCmdConsts.LiveView_Focus_MMM:
+          btn_focusmm_Click(null, null);
+          break;
+        case WindowsCmdConsts.LiveView_Focus_PPP:
+          btn_focuspp_Click(null, null);
+          break;
+        case WindowsCmdConsts.LiveView_Focus:
+          button1_Click(null, null);
+          break;
+      }
+    }
+
+    #endregion
+
+    private void Window_Closing(object sender, CancelEventArgs e)
+    {
+      if (IsVisible)
+      {
+        ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide);
+        e.Cancel = true;
+      }
+    }
   }
 }

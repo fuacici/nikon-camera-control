@@ -223,6 +223,8 @@ namespace CameraControl.Devices.Nikon
     {
       get
       {
+        if (_stillImageDevice == null)
+          return 0;
         lock (_loker)
         {
           byte[] data = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
