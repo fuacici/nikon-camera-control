@@ -43,5 +43,6 @@
             <ComboBoxItem Content="100%" />
         </ComboBox>
         <Label Content="Lv zoom ration" HorizontalAlignment="Left" Margin="4,320,0,0" Name="label1" Height="28" VerticalAlignment="Top" />
+        <Button Content="Focus stacking" Height="28" HorizontalAlignment="Left" Margin="4,380,0,0" Name="button3" VerticalAlignment="Top" Width="96" Click="button3_Click" />
     </Grid>
 </Window>
