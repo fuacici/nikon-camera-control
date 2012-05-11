@@ -357,8 +357,7 @@ namespace CameraControl
     {
       if (WiaManager.CameraDevice == null)
         return;
-      LiveViewWnd wnd = new LiveViewWnd(WiaManager.CameraDevice);
-      wnd.ShowDialog();
+      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Show);
     }
 
     private void btn_about_Click(object sender, RoutedEventArgs e)

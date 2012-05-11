@@ -421,9 +421,16 @@ namespace CameraControl.windows
     {
       if (IsVisible)
       {
-        ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide);
         e.Cancel = true;
+        ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide);
       }
     }
+
+    private void button3_Click(object sender, RoutedEventArgs e)
+    {
+      FocusStackingWnd wnd = new FocusStackingWnd();
+      wnd.ShowDialog();
+    }
+
   }
 }
