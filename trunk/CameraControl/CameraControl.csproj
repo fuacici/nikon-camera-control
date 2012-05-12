@@ -91,6 +91,9 @@
     <Compile Include="Classes\WebServer.cs" />
     <Compile Include="Classes\WindowsCmdConsts.cs" />
     <Compile Include="Classes\WindowsManager.cs" />
+    <Compile Include="Controls\Controler.xaml.cs">
+      <DependentUpon>Controler.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ZoomBorder.cs" />
     <Compile Include="Devices\CameraDeviceManager.cs" />
     <Compile Include="Devices\Classes\LiveViewData.cs" />
@@ -134,9 +137,9 @@
     <Compile Include="windows\TimeLapseWnd.xaml.cs">
       <DependentUpon>TimeLapseWnd.xaml</DependentUpon>
     </Compile>
-    <Page Include="Controler.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Controls\Controler.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -151,9 +154,6 @@
     <Compile Include="Classes\PhotoSession.cs" />
     <Compile Include="Classes\Settings.cs" />
     <Compile Include="Classes\WIAManager.cs" />
-    <Compile Include="Controler.xaml.cs">
-      <DependentUpon>Controler.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
