@@ -191,7 +191,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public void Focus(int x, int y)
+    public override void Focus(int x, int y)
     {
       lock (_loker)
       {

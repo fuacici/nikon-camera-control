@@ -25,12 +25,12 @@
                     <RowDefinition Height="35*" />
                     <RowDefinition Height="35*" />
                 </Grid.RowDefinitions>
-                <Button Content="-" Name="btn_focusm" Margin="3" FontWeight="Bold" Click="btn_focusm_Click" />
-                <Button Content="+" Grid.Column="1" Name="btn_focusp"  Margin="3" FontWeight="Bold" Click="btn_focusp_Click" />
-                <Button Content="--" Grid.Row="1" Name="btn_focusmm"  Margin="3" FontWeight="Bold" Click="btn_focusmm_Click" />
-                <Button Content="++" Grid.Column="1" Grid.Row="1" Name="btn_focuspp" Margin="3"  FontWeight="Bold" Click="btn_focuspp_Click" />
-                <Button Content="---" Grid.Row="2" Name="btn_focusmmm" Margin="3"  FontWeight="Bold" Click="btn_focusmmm_Click" />
-                <Button Content="+++" Grid.Column="1" Grid.Row="2" Name="btn_focusppp" Margin="3"  FontWeight="Bold" Click="btn_focusppp_Click" />
+                <Button Content="-" Name="btn_focusm" Margin="3" FontWeight="Bold" Click="btn_focusm_Click" ToolTip="-10" />
+                <Button Content="+" Grid.Column="1" Name="btn_focusp"  Margin="3" FontWeight="Bold" Click="btn_focusp_Click" ToolTip="10"/>
+                <Button Content="--" Grid.Row="1" Name="btn_focusmm"  Margin="3" FontWeight="Bold" Click="btn_focusmm_Click" ToolTip="-100" />
+                <Button Content="++" Grid.Column="1" Grid.Row="1" Name="btn_focuspp" Margin="3"  FontWeight="Bold" Click="btn_focuspp_Click" ToolTip="100"/>
+                <Button Content="---" Grid.Row="2" Name="btn_focusmmm" Margin="3"  FontWeight="Bold" Click="btn_focusmmm_Click" ToolTip="-500" />
+                <Button Content="+++" Grid.Column="1" Grid.Row="2" Name="btn_focusppp" Margin="3"  FontWeight="Bold" Click="btn_focusppp_Click" ToolTip="500" />
             </Grid>
         </GroupBox>
         <CheckBox Content="Grid" Height="16" HorizontalAlignment="Left" Margin="9,300,0,0" Name="chk_grid" VerticalAlignment="Top" IsChecked="True" Checked="chk_grid_Checked" Unchecked="chk_grid_Unchecked" />

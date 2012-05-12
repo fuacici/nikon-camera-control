@@ -9,6 +9,8 @@ namespace CameraControl.Classes
   {
     public const string FullScreenWnd_Show = "FullScreenWnd_Show";
     public const string FullScreenWnd_Hide = "FullScreenWnd_Hide";
+    public const string FocusStackingWnd_Show = "FocusStackingWnd_Show";
+    public const string FocusStackingWnd_Hide = "FocusStackingWnd_Hide";
     public const string LiveViewWnd_Show = "LiveViewWnd_Show";
     public const string LiveViewWnd_Hide = "LiveViewWnd_Hide";
     public const string LiveView_Zoom_All = "LiveView_Zoom_All";

@@ -55,7 +55,7 @@
             </Image>
         </local:ZoomBorder>
         <StackPanel Grid.Row="1" Grid.RowSpan="2" >
-            <my:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=Manager.IsConected}" Margin="5"/>
+            <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=Manager.IsConected}" Margin="5"/>
         </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="2">
             <StackPanel  Orientation="Horizontal">

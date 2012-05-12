@@ -148,17 +148,26 @@ namespace CameraControl.windows
       {
         Dispatcher.BeginInvoke(new Action(delegate
                                             {
-                                              MemoryStream stream = new MemoryStream(LiveViewData.ImageData, 0, LiveViewData.ImageData.Length);
-
-                                              JpegBitmapDecoder decoder = new JpegBitmapDecoder(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
-
-                                              decoder.Frames[0].Freeze();
-
-                                              if (decoder.Frames.Count > 0)
+                                              if (LiveViewData != null && LiveViewData.ImageData != null)
                                               {
-                                                image1.Source = decoder.Frames[0];
+
+                                                MemoryStream stream = new MemoryStream(LiveViewData.ImageData, 0,
+                                                                                       LiveViewData.ImageData.Length);
+
+                                                JpegBitmapDecoder decoder = new JpegBitmapDecoder(stream,
+                                                                                                  BitmapCreateOptions.
+                                                                                                    None,
+                                                                                                  BitmapCacheOption.
+                                                                                                    OnLoad);
+
+                                                decoder.Frames[0].Freeze();
+
+                                                if (decoder.Frames.Count > 0)
+                                                {
+                                                  image1.Source = decoder.Frames[0];
+                                                }
+                                                stream.Close();
                                               }
-                                              stream.Close();
                                             }));
       }
       catch (Exception)
@@ -364,6 +373,7 @@ namespace CameraControl.windows
                                            {
                                              ServiceProvider.Log.Error("Unable to stop liveview", exception);
                                            }
+                                           ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FocusStackingWnd_Hide);
                                          }));
           break;
         case WindowsCmdConsts.All_Close:
@@ -428,8 +438,7 @@ namespace CameraControl.windows
 
     private void button3_Click(object sender, RoutedEventArgs e)
     {
-      FocusStackingWnd wnd = new FocusStackingWnd();
-      wnd.ShowDialog();
+      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FocusStackingWnd_Show);
     }
 
   }

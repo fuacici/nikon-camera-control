@@ -31,7 +31,6 @@ namespace CameraControl.Classes
 
     public string Name { get; set; }
 
-    private string _toolTip;
     public string ToolTip
     {
       get { return string.Format("File name: {0}\nFile date :{1}",Name,FileDate.ToShortDateString()); }
