@@ -2,7 +2,6 @@
 #labels Featured
 0.7.104
   * Generate "Focus stacked" image using Hugin application
-  * Focus stacking
   * Option to trigger photo taking using keyboard
   * Focus stacking
   * Web server (it is possible to control the application using a smart phone) 
