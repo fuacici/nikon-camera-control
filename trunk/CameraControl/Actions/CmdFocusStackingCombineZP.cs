@@ -12,7 +12,7 @@ using CameraControl.windows;
 
 namespace CameraControl.Actions
 {
-  public class CmdFocusStacking : BaseFieldClass, IMenuAction, ICommand
+  public class CmdFocusStackingCombineZP : BaseFieldClass, IMenuAction, ICommand
   {
     #region Implementation of IMenuAction
 
@@ -41,7 +41,7 @@ namespace CameraControl.Actions
 
     public string Title
     {
-      get { return "Generate \"Focus Stacked\" image"; }
+      get { return "Generate \"Focus Stacked\" image using CombineZP"; }
       set { throw new NotImplementedException(); }
     }
 

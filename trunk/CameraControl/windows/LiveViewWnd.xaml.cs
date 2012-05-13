@@ -99,9 +99,13 @@ namespace CameraControl.windows
 
     void Manager_PhotoTaked(WIA.Item imageFile)
     {
-      StartLiveView();
-      Thread.Sleep(200);
-      _timer.Start();
+      Thread thread = new Thread(new ThreadStart(delegate
+                                                   {
+                                                     //Thread.Sleep(200);
+                                                     StartLiveView();
+                                                     _timer.Start();
+                                                   }));
+      thread.Start();
     }
 
     void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -269,7 +273,7 @@ namespace CameraControl.windows
         MessageBox.Show("Unable to start liveview !");
         ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide);
       }
-      image1.Visibility = Visibility.Visible;
+      Dispatcher.Invoke(new Action(delegate { image1.Visibility = Visibility.Visible; }));
     }
 
     private void image1_MouseDown(object sender, MouseButtonEventArgs e)

@@ -66,7 +66,6 @@ namespace CameraControl.windows
     public FocusStackingWnd()
     {
       InitializeComponent();
-      ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTakenDone;
       IsBusy = false;
     }
 
@@ -139,10 +138,15 @@ namespace CameraControl.windows
                                                 Topmost = true;
                                                 Topmost = false;
                                                 Focus();
+                                                ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTakenDone;
                                               }));
           break;
         case WindowsCmdConsts.FocusStackingWnd_Hide:
-          Dispatcher.Invoke(new Action(Hide));
+          Dispatcher.Invoke(new Action(delegate
+                                         {
+                                           Hide();
+                                           ServiceProvider.Settings.Manager.PhotoTakenDone -= Manager_PhotoTakenDone;
+                                         }));
           break;
         case WindowsCmdConsts.All_Close:
           Dispatcher.Invoke(new Action(delegate
