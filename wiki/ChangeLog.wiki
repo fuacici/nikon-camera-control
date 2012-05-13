@@ -1,6 +1,6 @@
 #summary ChangeLog
 #labels Featured
-0.7.104
+[http://cameracontrol.host-ed.me/forum/viewtopic.php?f=4&t=14 0.7.104]
   * Generate "Focus stacked" image using Hugin application
   * Option to trigger photo taking using keyboard
   * Focus stacking
