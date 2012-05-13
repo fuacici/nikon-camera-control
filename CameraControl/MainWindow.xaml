@@ -18,7 +18,10 @@
                             <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" Margin="6" >
                                 <Image Source="{Binding Path=Thumbnail}" ToolTip="{Binding Path=ToolTip}" Stretch="Uniform" Width="120" Height="80"  />
                             </Border>
-                            <Label Content="{Binding Path=Name}" HorizontalAlignment="Center" />
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding Path=IsChecked}"/>
+                                <Label Content="{Binding Path=Name}" HorizontalAlignment="Center" />
+                            </StackPanel>
                         </StackPanel>
                     </DataTemplate>
                 </Setter.Value>
@@ -79,6 +82,21 @@
             <ListBox  Name="ImageLIst" ItemsSource="{Binding Path=DefaultSession.Files, IsAsync=True}" SelectionChanged="ImageLIst_SelectionChanged" Background="{DynamicResource WindowBackgroundBrush}">
                 <ListBox.ContextMenu>
                         <ContextMenu>
+                        <MenuItem Header="Actions" ItemsSource="{Binding Source={x:Static Member=my:ServiceProvider.ActionManager}, Path=Actions}" >
+                            <MenuItem.ItemTemplate>
+                                <DataTemplate>
+                                    <MenuItem Header="{Binding Path=Title}" 
+                                      Command="{Binding}" 
+                                      CommandParameter="{Binding}" />
+                                </DataTemplate>
+                            </MenuItem.ItemTemplate>
+                        </MenuItem>
+                        <Separator/>
+                            <MenuItem Header="Select" >
+                            <MenuItem Header="All" Name="mnu_select_all" Click="mnu_select_all_Click" />
+                            <MenuItem Header="None" Name="mnu_select_none" Click="mnu_select_none_Click" />
+                        </MenuItem>
+                        <Separator/>
                             <MenuItem Header="Delete File" Name="mnu_delete_file" Click="mnu_delete_file_Click" />
                             <MenuItem Header="Show in explorer" Name="mnu_show_explorer" Click="mnu_show_explorer_Click" />
                             <MenuItem Header="Open in external viewer" Name="mnu_open" Click="mnu_open_Click" />

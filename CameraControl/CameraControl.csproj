@@ -77,6 +77,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Actions\CmdFocusStacking.cs" />
+    <Compile Include="Classes\ActionEventArgs.cs" />
+    <Compile Include="Classes\ActionManager.cs" />
     <Compile Include="Classes\AsyncObservableCollection.cs" />
     <Compile Include="Classes\BitmapFile.cs" />
     <Compile Include="Classes\BraketingClass.cs" />
@@ -105,10 +108,14 @@
     <Compile Include="Devices\Nikon\NikonD90.cs" />
     <Compile Include="Devices\Others\NotConnectedCameraDevice.cs" />
     <Compile Include="Devices\Others\WiaCameraDevice.cs" />
+    <Compile Include="Interfaces\IMenuAction.cs" />
     <Compile Include="Interfaces\IWindow.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="windows\AboutWnd.xaml.cs">
       <DependentUpon>AboutWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="windows\ActionExecuteWnd.xaml.cs">
+      <DependentUpon>ActionExecuteWnd.xaml</DependentUpon>
     </Compile>
     <Compile Include="windows\BraketingWnd.xaml.cs">
       <DependentUpon>BraketingWnd.xaml</DependentUpon>
@@ -159,6 +166,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="windows\AboutWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="windows\ActionExecuteWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
