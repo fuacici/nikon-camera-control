@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -47,6 +48,29 @@ namespace CameraControl.windows
       ServiceProvider.Settings.EndEdit();
       ServiceProvider.Settings.Save();
       this.Close();
+    }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+      FolderBrowserDialog dlg = new FolderBrowserDialog();
+      dlg.SelectedPath = ServiceProvider.Settings.HuginPath;
+      if(dlg.ShowDialog()==System.Windows.Forms.DialogResult.OK)
+      {
+        ServiceProvider.Settings.HuginPath = dlg.SelectedPath;
+      }
+    }
+
+    private void Button_Click_1(object sender, RoutedEventArgs e)
+    {
+      try
+      {
+        System.Diagnostics.Process.Start("http://hugin.sourceforge.net/download/");
+      }
+      catch (Exception)
+      {
+        
+        
+      }
     }
 
   }

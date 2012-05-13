@@ -368,19 +368,33 @@ namespace CameraControl
 
     private void mnu_delete_file_Click(object sender, RoutedEventArgs e)
     {
+      List<FileItem> filestodelete = new List<FileItem>();
       try
       {
-        if (ServiceProvider.Settings.SelectedBitmap == null || ServiceProvider.Settings.SelectedBitmap.FileItem == null)
-          return;
-        if (MessageBox.Show("Do you really want to delete this file ?", "Delete file", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+        foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
         {
-          int indx = ImageLIst.SelectedIndex;
-          Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(ServiceProvider.Settings.SelectedBitmap.FileItem.FileName,
-                                                             UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-          if (indx > -1 || indx < ImageLIst.Items.Count)
-            ImageLIst.SelectedItem = ImageLIst.Items[indx];
-          if (indx >= ImageLIst.Items.Count)
-            ImageLIst.SelectedIndex = ImageLIst.Items.Count - 1;
+          if (fileItem.IsChecked)
+            filestodelete.Add(fileItem);
+        }
+
+        if (ServiceProvider.Settings.SelectedBitmap != null && ServiceProvider.Settings.SelectedBitmap.FileItem != null &&
+            filestodelete.Count == 0)
+          filestodelete.Add(ServiceProvider.Settings.SelectedBitmap.FileItem);
+
+        if (filestodelete.Count == 0)
+          return;
+
+        if (
+          MessageBox.Show("Do you really want to delete selected file(s) ?", "Delete file", MessageBoxButtons.YesNo) ==
+          System.Windows.Forms.DialogResult.Yes)
+        {
+          foreach (FileItem fileItem in filestodelete)
+          {
+            Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fileItem.FileName, UIOption.OnlyErrorDialogs,
+                                                               RecycleOption.SendToRecycleBin);
+          }
+          if (ImageLIst.Items.Count > 0)
+            ImageLIst.SelectedIndex = 0;
         }
       }
       catch (Exception exception)
@@ -420,6 +434,23 @@ namespace CameraControl
     {
       BraketingWnd wnd = new BraketingWnd(ServiceProvider.DeviceManager.SelectedCameraDevice, ServiceProvider.Settings.DefaultSession);
       wnd.ShowDialog();
+    }
+
+
+    private void mnu_select_none_Click(object sender, RoutedEventArgs e)
+    {
+      foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
+      {
+        fileItem.IsChecked = false;
+      }
+    }
+
+    private void mnu_select_all_Click(object sender, RoutedEventArgs e)
+    {
+      foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
+      {
+        fileItem.IsChecked = true;
+      }
     }
   }
 }

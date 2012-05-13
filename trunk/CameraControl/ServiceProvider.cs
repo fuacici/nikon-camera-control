@@ -19,6 +19,7 @@ namespace CameraControl
     public static CameraDeviceManager DeviceManager { get; set; }
     public static TriggerClass Trigger { get; set; }
     public static WindowsManager WindowsManager { get; set; }
+    public static ActionManager ActionManager { get; set; }
 
     public static void Configure()
     {
@@ -32,8 +33,9 @@ namespace CameraControl
         fileAppender.MaxSizeRollBackups = 5;
         fileAppender.RollingStyle = log4net.Appender.RollingFileAppender.RollingMode.Size;
         fileAppender.AppendToFile = true;
-        fileAppender.File = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,"Log",
-                                "app.log");
+        fileAppender.File = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                                         AppName, "Log",
+                                         "app.log");
         fileAppender.Name = "XXXRollingFileAppender";
         fileAppender.ActivateOptions(); // IMPORTANT, creates the file
         log4net.Config.BasicConfigurator.Configure(fileAppender);
@@ -46,6 +48,7 @@ namespace CameraControl
       }
       DeviceManager = new CameraDeviceManager();
       Trigger = new TriggerClass();
+      ActionManager = new ActionManager();
       Log.Debug("Application starting");
     }
   }

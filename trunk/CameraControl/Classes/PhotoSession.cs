@@ -12,7 +12,7 @@ namespace CameraControl.Classes
   public class PhotoSession : BaseFieldClass
   {
     [XmlIgnore]
-    public List<string> SupportedExtensions = new List<string>() {".jpg", ".nef"};
+    public List<string> SupportedExtensions = new List<string>() {".jpg", ".nef", ".tif"};
 
     private string _name;
     public string Name
@@ -68,8 +68,18 @@ namespace CameraControl.Classes
       }
     }
 
+    private AsyncObservableCollection<FileItem> _files;
+
     [XmlIgnore]
-    public AsyncObservableCollection<FileItem> Files { get; set; }
+    public AsyncObservableCollection<FileItem> Files
+    {
+      get { return _files; }
+      set
+      {
+        _files = value;
+        NotifyPropertyChanged("Files");
+      }
+    }
 
     private TimeLapseClass _timeLapse;
     public TimeLapseClass TimeLapse
@@ -207,6 +217,18 @@ namespace CameraControl.Classes
     {
       return Name;
     }
+
+    public AsyncObservableCollection<FileItem> GetSelectedFiles()
+    {
+      AsyncObservableCollection<FileItem> list = new AsyncObservableCollection<FileItem>();
+      foreach (FileItem fileItem in Files)
+      {
+        if (fileItem.IsChecked)
+          list.Add(fileItem);
+      }
+      return list;
+    }
+
 
   }
 }

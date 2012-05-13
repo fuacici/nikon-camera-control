@@ -74,7 +74,8 @@ namespace CameraControl.windows
     {
       if (photo_count <= PhotoNo)
       {
-        TakePhoto();
+        Thread thread = new Thread(TakePhoto);
+        thread.Start();
       }
       else
       {

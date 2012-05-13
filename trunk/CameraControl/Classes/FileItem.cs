@@ -36,6 +36,16 @@ namespace CameraControl.Classes
       get { return string.Format("File name: {0}\nFile date :{1}",Name,FileDate.ToShortDateString()); }
     }
 
+    private bool _isChecked;
+    public bool IsChecked
+    {
+      get { return _isChecked; }
+      set
+      {
+        _isChecked = value;
+        NotifyPropertyChanged("IsChecked");
+      }
+    }
 
     private BitmapImage _bitmapImage;
 
