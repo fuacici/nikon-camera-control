@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Timers;
 using CameraControl.Classes;
 using CameraControl.Devices.Classes;
 using CameraControl.Devices.Others;
 using PortableDeviceLib;
+using Timer = System.Timers.Timer;
 
 namespace CameraControl.Devices.Nikon
 {
@@ -38,7 +40,7 @@ namespace CameraControl.Devices.Nikon
     private const string AppName = "CameraControl";
     private const int AppMajorVersionNumber = 1;
     private const int AppMinorVersionNumber = 0;
-    private Timer _timer = new Timer(1000/25);
+    private Timer _timer = new Timer(1000/15);
 
     protected StillImageDevice _stillImageDevice = null;
     private WIAManager _manager = null;
@@ -112,25 +114,31 @@ namespace CameraControl.Devices.Nikon
 
     public override LiveViewData GetLiveViewImage()
     {
-      lock (_loker)
+      LiveViewData viewData = new LiveViewData();
+      if (Monitor.TryEnter(_loker,100))
       {
-        LiveViewData viewData = new LiveViewData();
-        viewData.HaveFocusData = true;
+        try
+        {
+          viewData.HaveFocusData = true;
 
-        const int headerSize = 384;
+          const int headerSize = 384;
 
-        byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetLiveViewImage);
-        if (result == null || result.Length <= headerSize)
-          return null;
-        int cbBytesRead = result.Length;
-        GetAditionalLIveViewData(viewData, result);
-        MemoryStream copy = new MemoryStream((int) cbBytesRead - headerSize);
-        copy.Write(result, headerSize, (int) cbBytesRead - headerSize);
-        copy.Close();
-        viewData.ImageData = copy.GetBuffer();
-
-        return viewData;
+          byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetLiveViewImage);
+          if (result == null || result.Length <= headerSize)
+            return null;
+          int cbBytesRead = result.Length;
+          GetAditionalLIveViewData(viewData, result);
+          MemoryStream copy = new MemoryStream((int)cbBytesRead - headerSize);
+          copy.Write(result, headerSize, (int)cbBytesRead - headerSize);
+          copy.Close();
+          viewData.ImageData = copy.GetBuffer();
+        }
+        finally
+        {
+          Monitor.Exit(_loker);
+        }
       }
+      return viewData;
     }
 
     public override void TakePicture()
@@ -138,7 +146,7 @@ namespace CameraControl.Devices.Nikon
       //AutoFocus();
       lock (_loker)
       {
-        _manager.Device.ExecuteCommand(Conts.wiaCommandTakePicture);
+         _manager.Device.ExecuteCommand(Conts.wiaCommandTakePicture);
       }
     }
 
