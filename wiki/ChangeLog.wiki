@@ -1,6 +1,12 @@
 #summary ChangeLog
 #labels Featured
-
+0.7.104
+  * Generate "Focus stacked" image using Hugin application
+  * Focus stacking
+  * Option to trigger photo taking using keyboard
+  * Focus stacking
+  * Web server (it is possible to control the application using a smart phone) 
+  * Fixed Issue 10: Live view does not work for D300
 0.6.90
   * Zoom preview image using mouse
   * Live view zoom
