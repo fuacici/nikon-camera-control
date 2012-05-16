@@ -86,9 +86,9 @@ namespace CameraControl.Classes
       Name = Path.GetFileName(file);
     }
 
-    private BitmapImage _thumbnail;
+    private BitmapSource _thumbnail;
 
-    public BitmapImage Thumbnail
+    public BitmapSource Thumbnail
     {
       get
       {
@@ -171,7 +171,7 @@ namespace CameraControl.Classes
     }
 
 
-    public byte[] ImageToByteArray(Image p_ImageIn)
+    private byte[] ImageToByteArray(Image p_ImageIn)
     {
       byte[] aRet = null;
 
@@ -183,7 +183,7 @@ namespace CameraControl.Classes
       return aRet;
     }
 
-    public BitmapImage byteArrayToImageEx(byte[] byteArrayIn)
+    private BitmapImage byteArrayToImageEx(byte[] byteArrayIn)
     {
       if (byteArrayIn == null)
         return null;

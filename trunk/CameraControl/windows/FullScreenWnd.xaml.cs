@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -20,10 +21,17 @@ namespace CameraControl.windows
   /// </summary>
   public partial class FullScreenWnd : Window, IWindow
   {
+    private Timer _timer = new Timer();
     public FullScreenWnd()
     {
       InitializeComponent();
       KeyDown += FullScreenWnd_KeyDown;
+      _timer.Elapsed += _timer_Elapsed;
+    }
+
+    void _timer_Elapsed(object sender, ElapsedEventArgs e)
+    {
+      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_Hide);
     }
 
     void FullScreenWnd_KeyDown(object sender, KeyEventArgs e)
@@ -74,9 +82,25 @@ namespace CameraControl.windows
 
                                          }));
           break;
+        case WindowsCmdConsts.FullScreenWnd_ShowTimed:
+          Dispatcher.BeginInvoke(new Action(delegate
+          {
+            Show();
+            Activate();
+            Topmost = true;
+            Topmost = false;
+            Focus();
+            _timer.Stop();
+            _timer.Interval = ServiceProvider.Settings.PreviewSeconds * 1000;
+            _timer.Start();
+          }));
+          break;
         case WindowsCmdConsts.FullScreenWnd_Hide:
-          Dispatcher.Invoke(new Action(Hide));
-
+          Dispatcher.Invoke(new Action(delegate
+                                         {
+                                           _timer.Stop();
+                                           Hide();
+                                         }));
           break;
         case WindowsCmdConsts.All_Close:
           Dispatcher.Invoke(new Action(delegate

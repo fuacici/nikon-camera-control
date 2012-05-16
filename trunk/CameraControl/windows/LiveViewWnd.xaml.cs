@@ -99,6 +99,8 @@ namespace CameraControl.windows
 
     void Manager_PhotoTaked(WIA.Item imageFile)
     {
+      if (!IsVisible)
+        return;
       Thread thread = new Thread(new ThreadStart(delegate
                                                    {
                                                      //Thread.Sleep(200);
