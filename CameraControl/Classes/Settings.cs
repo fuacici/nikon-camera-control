@@ -181,16 +181,41 @@ namespace CameraControl.Classes
       }
     }
 
-    public string Webaddress { get
+    public string Webaddress
     {
-            var hostEntry = Dns.GetHostEntry(Dns.GetHostName());
-      var ip = (
-                 from addr in hostEntry.AddressList
-                 where addr.AddressFamily.ToString() == "InterNetwork"
-                 select addr.ToString()
-          ).FirstOrDefault();
-      return string.Format("http://{0}:{1}", ip, WebserverPort);
-    } 
+      get
+      {
+        var hostEntry = Dns.GetHostEntry(Dns.GetHostName());
+        var ip = (
+                   from addr in hostEntry.AddressList
+                   where addr.AddressFamily.ToString() == "InterNetwork"
+                   select addr.ToString()
+                 ).FirstOrDefault();
+        return string.Format("http://{0}:{1}", ip, WebserverPort);
+      }
+    }
+
+    private bool _preview;
+
+    public bool Preview
+    {
+      get { return _preview; }
+      set
+      {
+        _preview = value;
+        NotifyPropertyChanged("Preview");
+      }
+    }
+
+    private int _previewSeconds;
+    public int PreviewSeconds
+    {
+      get { return _previewSeconds; }
+      set
+      {
+        _previewSeconds = value;
+        NotifyPropertyChanged("PreviewSeconds");
+      }
     }
 
     private string _systemMessage;
@@ -229,6 +254,8 @@ namespace CameraControl.Classes
       UseTriggerKey = false;
       UseWebserver = false;
       WebserverPort = 5513;
+      Preview = false;
+      PreviewSeconds = 3;
     }
 
     public void Add(PhotoSession session)

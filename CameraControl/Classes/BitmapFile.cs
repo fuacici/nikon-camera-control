@@ -36,8 +36,8 @@ namespace CameraControl.Classes
       }
     }
 
-    private BitmapImage _displayImage;
-    public BitmapImage DisplayImage
+    private BitmapSource _displayImage;
+    public BitmapSource DisplayImage
     {
       get { return _displayImage; }
       set
@@ -189,8 +189,8 @@ namespace CameraControl.Classes
         }
         else
         {
-          DisplayImage = ToBitmap(FreeImage.GetBitmap(dib));
-          FileItem.Thumbnail =ToBitmap(FreeImage.GetBitmap(FreeImage.MakeThumbnail(dib, 255, true)));
+          DisplayImage = BitmapSourceConvert.ToBitmapSource(FreeImage.GetBitmap(dib));
+          FileItem.Thumbnail = BitmapSourceConvert.ToBitmapSource(FreeImage.GetBitmap(FreeImage.MakeThumbnail(dib, 255, true)));
           CreateHistogram(dib);
           CreateHistogramBlack(dib);
           FreeImage.UnloadEx(ref dib);
@@ -273,7 +273,7 @@ Tag (hex)	Tag (dec)	IFD	Key	Type	Tag description
       Metadata.Add(new DictionaryItem { Name = tag.Description, Value = tag.ToString()});
     }
 
-    public void SetBitmap(BitmapImage bi,Image image)
+    private void SetBitmap(BitmapImage bi,Image image)
     {
       try
       {

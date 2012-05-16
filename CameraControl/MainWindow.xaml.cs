@@ -166,6 +166,8 @@ namespace CameraControl
         ImageLIst.SelectedValue = ServiceProvider.Settings.DefaultSession.AddFile(fileName);
         ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
         ServiceProvider.Settings.SystemMessage = "Photo transfer done.";
+        if (ServiceProvider.Settings.Preview)
+          ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_ShowTimed);
       }
       catch (Exception ex)
       {

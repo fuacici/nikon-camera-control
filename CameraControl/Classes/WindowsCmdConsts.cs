@@ -8,6 +8,7 @@ namespace CameraControl.Classes
   class WindowsCmdConsts
   {
     public const string FullScreenWnd_Show = "FullScreenWnd_Show";
+    public const string FullScreenWnd_ShowTimed = "FullScreenWnd_ShowTimed";
     public const string FullScreenWnd_Hide = "FullScreenWnd_Hide";
     public const string FocusStackingWnd_Show = "FocusStackingWnd_Show";
     public const string FocusStackingWnd_Hide = "FocusStackingWnd_Hide";

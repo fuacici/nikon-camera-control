@@ -96,7 +96,7 @@ namespace CameraControl.Actions
           param += " " + filename;
         }
         ProcessStartInfo startInfo = new ProcessStartInfo(_pathtoalign);
-        startInfo.WindowStyle = ProcessWindowStyle.Maximized;
+        startInfo.WindowStyle = ProcessWindowStyle.Minimized;
         startInfo.Arguments = param;
         Process process = Process.Start(startInfo);
         process.WaitForExit();

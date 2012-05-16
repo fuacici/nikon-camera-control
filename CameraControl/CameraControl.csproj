@@ -83,6 +83,7 @@
     <Compile Include="Classes\ActionManager.cs" />
     <Compile Include="Classes\AsyncObservableCollection.cs" />
     <Compile Include="Classes\BitmapFile.cs" />
+    <Compile Include="Classes\BitmapSourceConvert.cs" />
     <Compile Include="Classes\BraketingClass.cs" />
     <Compile Include="Classes\CheckedListItem.cs" />
     <Compile Include="Classes\DictionaryItem.cs" />

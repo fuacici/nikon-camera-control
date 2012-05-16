@@ -21,8 +21,15 @@
                     <StackPanel Orientation="Horizontal" Margin="3">
                         <CheckBox Content="Disable native drivers (not recomanded)" ToolTip="This option disable special handig of some cameras. Use this if you experience some problem"  IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=DisableNativeDrivers}" />
                     </StackPanel>
+                    <StackPanel Margin="3">
+                        <CheckBox Content="Preview image after shot in fullscreen" IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=Preview}"/>
+                        <StackPanel Orientation="Horizontal" Margin="3">
+                            <Label Content="Preview time in sec : "/>
+                            <xctk:IntegerUpDown Name="integerUpDown1" Width="100" Value="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=PreviewSeconds}"/>
+                        </StackPanel>
+                    </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <Label Content="Hugin folder:"/>
+                        <Label Content="Hugin folder : "/>
                         <Button Content="Get" Click="Button_Click_1" />
                         </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="3">
