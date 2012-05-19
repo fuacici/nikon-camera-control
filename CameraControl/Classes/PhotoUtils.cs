@@ -29,7 +29,7 @@ namespace CameraControl.Classes
       if (FreeImage.GetFileType(sourse, 0) == FREE_IMAGE_FORMAT.FIF_RAW)
       {
         FIBITMAP bmp = FreeImage.ToneMapping(dib, FREE_IMAGE_TMO.FITMO_REINHARD05, 0, 0);
-          // ConvertToType(dib, FREE_IMAGE_TYPE.FIT_BITMAP, false);
+        // ConvertToType(dib, FREE_IMAGE_TYPE.FIT_BITMAP, false);
         FIBITMAP resized = FreeImage.Rescale(bmp, (int) dw, (int) dh, FREE_IMAGE_FILTER.FILTER_LANCZOS3);
         FIBITMAP final = FreeImage.EnlargeCanvas<RGBQUAD>(resized, difw/2, difh/2, difw - (difw/2), difh - (difh/2),
                                                           new RGBQUAD(System.Drawing.Color.Black),
@@ -58,6 +58,16 @@ namespace CameraControl.Classes
           FreeImage.UnloadEx(ref dib);
         }
       }
+    }
+
+    public static string GetUniqueFilename(string prefix, int counter, string sufix)
+    {
+      string file = prefix + counter + sufix;
+      if (File.Exists(file))
+      {
+        return GetUniqueFilename(prefix, counter + 1, sufix);
+      }
+      return file;
     }
   }
 }

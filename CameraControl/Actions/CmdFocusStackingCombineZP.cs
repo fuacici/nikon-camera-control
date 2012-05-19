@@ -145,8 +145,8 @@ namespace CameraControl.Actions
     {
       IsBusy = true;
       _shouldStop = false;
-      _pathtoalign = Path.Combine(ServiceProvider.Settings.HuginPath,"Bin", "align_image_stack.exe");
-      _pathtoenfuse = Path.Combine(ServiceProvider.Settings.HuginPath, "Bin", "enfuse.exe");
+      _pathtoalign = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "Bin", "align_image_stack.exe");
+      _pathtoenfuse = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "Bin", "enfuse.exe");
       _files = ServiceProvider.Settings.DefaultSession.GetSelectedFiles();
       if(_files.Count<2)
       {

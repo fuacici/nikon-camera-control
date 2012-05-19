@@ -28,14 +28,6 @@
                             <xctk:IntegerUpDown Name="integerUpDown1" Width="100" Value="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=PreviewSeconds}"/>
                         </StackPanel>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="3">
-                        <Label Content="Hugin folder : "/>
-                        <Button Content="Get" Click="Button_Click_1" />
-                        </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="3">
-                        <TextBox Width="270" Text="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=HuginPath}"/>
-                        <Button Content="..." Width="30" Click="Button_Click" />
-                    </StackPanel>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Triggers">
