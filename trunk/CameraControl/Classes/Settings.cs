@@ -89,16 +89,16 @@ namespace CameraControl.Classes
       }
     }
 
-    private string _huginPath;
-    public string HuginPath
-    {
-      get { return _huginPath; }
-      set
-      {
-        _huginPath = value;
-        NotifyPropertyChanged("HuginPath");
-      }
-    }
+    //private string _huginPath;
+    //public string HuginPath
+    //{
+    //  get { return _huginPath; }
+    //  set
+    //  {
+    //    _huginPath = value;
+    //    NotifyPropertyChanged("HuginPath");
+    //  }
+    //}
 
     public DateTime LastUpdateCheckDate { get; set; }
 
@@ -234,7 +234,7 @@ namespace CameraControl.Classes
     {
       ConfigFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,
                                 "settings.xml");
-      HuginPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Hugin");
+      //HuginPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Hugin");
       DefaultSession = new PhotoSession();
       PhotoSessions = new ObservableCollection<PhotoSession>();
       ImageLoading = Visibility.Hidden;

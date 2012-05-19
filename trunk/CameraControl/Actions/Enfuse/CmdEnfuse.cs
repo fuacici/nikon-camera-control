@@ -48,8 +48,8 @@ namespace CameraControl.Actions.Enfuse
     {
       IsBusy = true;
       _shouldStop = false;
-      _pathtoalign = Path.Combine(ServiceProvider.Settings.HuginPath, "Bin", "align_image_stack.exe");
-      _pathtoenfuse = Path.Combine(ServiceProvider.Settings.HuginPath, "Bin", "enfuse.exe");
+      _pathtoalign = Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "Tools", "align_image_stack.exe");
+      _pathtoenfuse = Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "Tools", "enfuse.exe");
       _files = ServiceProvider.Settings.DefaultSession.GetSelectedFiles();
       if (_files.Count < 2)
       {
@@ -215,8 +215,13 @@ namespace CameraControl.Actions.Enfuse
         OnProgressChange("Enfuse images ..");
         OnProgressChange("This may take few minutes too");
         _resulfile = Path.Combine(_tempdir, Path.GetFileName(_files[0].FileName) + _files.Count + "_enfuse.jpg");
+        _resulfile =
+          PhotoUtils.GetUniqueFilename(
+            Path.GetDirectoryName(_files[0].FileName) + "\\" +
+            Path.GetFileNameWithoutExtension(_files[0].FileName) + "_enfuse", 0, ".jpg");
+        _resulfile = Path.Combine(_tempdir, Path.GetFileName(_resulfile));
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.Append(" -o " + _resulfile);
+        stringBuilder.Append(" -l 20 -o " + _resulfile);
         stringBuilder.Append(" --exposure-weight=" + decimal.Round((decimal) (_settings.EnfuseExp/100), 2));
         stringBuilder.Append(" --saturation-weight=" + decimal.Round((decimal) (_settings.EnfuseSat/100), 2));
         stringBuilder.Append(" --contrast-weight=" + decimal.Round((decimal) (_settings.EnfuseCont/100), 2));

@@ -52,12 +52,12 @@ namespace CameraControl.windows
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-      FolderBrowserDialog dlg = new FolderBrowserDialog();
-      dlg.SelectedPath = ServiceProvider.Settings.HuginPath;
-      if(dlg.ShowDialog()==System.Windows.Forms.DialogResult.OK)
-      {
-        ServiceProvider.Settings.HuginPath = dlg.SelectedPath;
-      }
+      //FolderBrowserDialog dlg = new FolderBrowserDialog();
+      //dlg.SelectedPath = ServiceProvider.Settings.HuginPath;
+      //if(dlg.ShowDialog()==System.Windows.Forms.DialogResult.OK)
+      //{
+      //  ServiceProvider.Settings.HuginPath = dlg.SelectedPath;
+      //}
     }
 
     private void Button_Click_1(object sender, RoutedEventArgs e)

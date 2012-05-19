@@ -4,11 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Devices="clr-namespace:CameraControl.Devices" mc:Ignorable="d" 
-             d:DesignHeight="57" d:DesignWidth="1168" BorderBrush="Black" BorderThickness="1">
+             d:DesignHeight="57" d:DesignWidth="1168" BorderBrush="{x:Null}" BorderThickness="1">
     <UserControl.DataContext>
         <Devices:CameraDeviceManager/>
     </UserControl.DataContext>
-    <WrapPanel  HorizontalAlignment="Left"  Name="wrapPanel1" VerticalAlignment="Top" ItemWidth="150">
+    <WrapPanel  HorizontalAlignment="Left"  Name="wrapPanel1" VerticalAlignment="Top" ItemWidth="100">
         <StackPanel Margin="1">
             <Label Content="Mode" />
             <ComboBox Name="cmb_mode" IsEnabled="{Binding Path=SelectedCameraDevice.Mode.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.Mode.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.Mode.Value}" />

@@ -42,8 +42,8 @@
     </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="161" />
-            <ColumnDefinition Width="618*" />
+            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="659*" />
             <ColumnDefinition Width="223" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -53,14 +53,12 @@
             <RowDefinition Height="121" />
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
-        <local:ZoomBorder  BorderThickness="1" CornerRadius="5" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2">
+        <local:ZoomBorder  BorderThickness="1" CornerRadius="5" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,0">
             <Image Name="image1" Stretch="Uniform" Source="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" MouseDown="image1_MouseDown">
             </Image>
         </local:ZoomBorder>
-        <StackPanel Grid.Row="1" Grid.RowSpan="2" >
-            <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=Manager.IsConected}" Margin="5"/>
-        </StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="2">
+        <StackPanel Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="0,0,618,0"></StackPanel>
+        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,618,0">
             <StackPanel  Orientation="Horizontal">
                 <Label Content="Manufacturer:" />
                 <Label Content="{Binding Path=Manager.Manufacturer}" />
@@ -70,13 +68,13 @@
                 <Label Content="{Binding Path=Manager.DeviceName}" />
             </StackPanel>
         </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="2">
+        <StackPanel Grid.Column="1" Grid.Row="2" Margin="41,0,0,0">
 
             <StackPanel  Orientation="Horizontal" Margin="10,0,0,0">
                 <Label Content="{Binding Path=SystemMessage }" FontWeight="Bold" />
             </StackPanel>
         </StackPanel>
-        <Label Content="Loading ..." Name="lbl_loading" Grid.Column="1" Grid.Row="1" Margin="292,2,195,0" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="{Binding Path=ImageLoading}" FontSize="25" FontWeight="ExtraBold">
+        <Label Content="Loading ..." Name="lbl_loading" Grid.Column="1" Grid.Row="1" Margin="338,2,200,0" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="{Binding Path=ImageLoading}" FontSize="25" FontWeight="ExtraBold">
         </Label>
         <StackPanel Grid.Row="3" Grid.ColumnSpan="3" Name="ImagePanel"  Grid.RowSpan="2" >
             <ListBox  Name="ImageLIst" ItemsSource="{Binding Path=DefaultSession.Files, IsAsync=True}" SelectionChanged="ImageLIst_SelectionChanged" Background="{DynamicResource WindowBackgroundBrush}">
@@ -134,5 +132,6 @@
                 </StackPanel>
             </StackPanel>
         </ToolBar>
+        <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=Manager.IsConected}" Margin="12,6,8,152" Width="100" Grid.Row="1" />
     </Grid>
 </Window>
