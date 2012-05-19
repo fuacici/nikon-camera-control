@@ -189,7 +189,9 @@ namespace CameraControl.Classes
         }
         else
         {
-          DisplayImage = BitmapSourceConvert.ToBitmapSource(FreeImage.GetBitmap(dib));
+          BitmapImage img = new BitmapImage(new Uri(FileItem.FileName));
+          img.Freeze();
+          DisplayImage = img;//BitmapSourceConvert.ToBitmapSource(FreeImage.GetBitmap(dib));
           FileItem.Thumbnail = BitmapSourceConvert.ToBitmapSource(FreeImage.GetBitmap(FreeImage.MakeThumbnail(dib, 255, true)));
           CreateHistogram(dib);
           CreateHistogramBlack(dib);

@@ -229,6 +229,22 @@ namespace CameraControl.Classes
       return list;
     }
 
+    public void SelectAll()
+    {
+      foreach (FileItem fileItem in Files)
+      {
+        fileItem.IsChecked = true;
+      }
+    }
+
+    public void SelectNone()
+    {
+      foreach (FileItem fileItem in Files)
+      {
+        fileItem.IsChecked = false;
+      }
+    }
+
 
   }
 }
