@@ -27,6 +27,7 @@ using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
 using WIA;
 using WPF.Themes;
+using Clipboard = System.Windows.Clipboard;
 using EditSession = CameraControl.windows.EditSession;
 using MessageBox = System.Windows.Forms.MessageBox;
 
@@ -441,18 +442,17 @@ namespace CameraControl
 
     private void mnu_select_none_Click(object sender, RoutedEventArgs e)
     {
-      foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
-      {
-        fileItem.IsChecked = false;
-      }
+      ServiceProvider.Settings.DefaultSession.SelectNone();
     }
 
     private void mnu_select_all_Click(object sender, RoutedEventArgs e)
     {
-      foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
-      {
-        fileItem.IsChecked = true;
-      }
+      ServiceProvider.Settings.DefaultSession.SelectAll();
+    }
+
+    private void mnu_copypath_Click(object sender, RoutedEventArgs e)
+    {
+      Clipboard.SetText(ServiceProvider.Settings.SelectedBitmap.FileItem.FileName);
     }
   }
 }

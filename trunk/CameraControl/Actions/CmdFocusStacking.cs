@@ -116,7 +116,7 @@ namespace CameraControl.Actions
         OnProgressChange("Enfuse images ..");
         OnProgressChange("This may take few minutes too");
         _resulfile = Path.Combine(_tempdir, Path.GetFileName(_files[0].FileName) + _files.Count + "_enfuse.tif");
-        string param = " -o " + _resulfile + " --exposure-weight=0 --saturation-weight=0 --contrast-weight=1 --hard-mask --contrast-window-size=9 " + _filenames[0] + "????.tif";
+        string param = " -o " + _resulfile + " --exposure-weight=0 --saturation-weight=0 --contrast-weight=1 --hard-mask --contrast-window-size=5 " + _filenames[0] + "????.tif";
         ProcessStartInfo startInfo = new ProcessStartInfo(_pathtoenfuse);
         startInfo.WindowStyle = ProcessWindowStyle.Minimized;
         startInfo.Arguments = param;
@@ -218,6 +218,7 @@ namespace CameraControl.Actions
       if (ActionDone != null)
         ActionDone(this, new EventArgs());
       IsBusy = false;
+      ServiceProvider.Settings.DefaultSession.SelectNone();
     }
 
     #region Implementation of ICommand

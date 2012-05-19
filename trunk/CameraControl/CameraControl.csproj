@@ -79,6 +79,11 @@
     </ApplicationDefinition>
     <Compile Include="Actions\CmdFocusStacking.cs" />
     <Compile Include="Actions\CmdFocusStackingCombineZP.cs" />
+    <Compile Include="Actions\Enfuse\CmdEnfuse.cs" />
+    <Compile Include="Actions\Enfuse\EnfuseSettings.cs" />
+    <Compile Include="Actions\Enfuse\EnfuseSettingsWnd.xaml.cs">
+      <DependentUpon>EnfuseSettingsWnd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Classes\ActionEventArgs.cs" />
     <Compile Include="Classes\ActionManager.cs" />
     <Compile Include="Classes\AsyncObservableCollection.cs" />
@@ -88,6 +93,7 @@
     <Compile Include="Classes\CheckedListItem.cs" />
     <Compile Include="Classes\DictionaryItem.cs" />
     <Compile Include="Classes\FileItem.cs" />
+    <Compile Include="Classes\PhotoUtils.cs" />
     <Compile Include="Classes\PropertyValue.cs" />
     <Compile Include="Classes\ThumbWorker.cs" />
     <Compile Include="Classes\TimeLapseClass.cs" />
@@ -146,6 +152,10 @@
     <Compile Include="windows\TimeLapseWnd.xaml.cs">
       <DependentUpon>TimeLapseWnd.xaml</DependentUpon>
     </Compile>
+    <Page Include="Actions\Enfuse\EnfuseSettingsWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Controler.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

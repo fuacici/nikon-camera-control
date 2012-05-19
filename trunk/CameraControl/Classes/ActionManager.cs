@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CameraControl.Actions;
+using CameraControl.Actions.Enfuse;
 using CameraControl.Interfaces;
 
 namespace CameraControl.Classes
@@ -25,6 +26,7 @@ namespace CameraControl.Classes
     {
       Actions = new AsyncObservableCollection<IMenuAction>();
       Actions.Add(new CmdFocusStacking());
+      Actions.Add(new CmdEnfuse());
     }
   }
 }
