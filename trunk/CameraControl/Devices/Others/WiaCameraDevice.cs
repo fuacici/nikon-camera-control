@@ -65,7 +65,9 @@ namespace CameraControl.Devices.Others
                          {150000, "15s"},
                          {200000, "20s"},
                          {250000, "25s"},
-                         {300000, "30s"}
+                         {300000, "30s"},
+                         //{0xFFFFFFFF, "Bulb"},
+                         
                        };
      Dictionary<int,string> ExposureModeTable = new Dictionary<int, string>()
                             {
@@ -73,6 +75,15 @@ namespace CameraControl.Devices.Others
                               {2, "P"},
                               {3, "A"},
                               {4, "S"},
+                              {0x8010, "[Scene mode] AUTO"},
+                              {0x8011, "[Scene mode] Portrait"},
+                              {0x8012, "[Scene mode] Landscape"},
+                              {0x8013, "[Scene mode] Close up"},
+                              {0x8014, "[Scene mode] Sports"},
+                              {0x8016, "[Scene mode] Flash prohibition AUTO"},
+                              {0x8017, "[Scene mode] Child"},
+                              {0x8018, "[Scene mode] SCENE"},
+                              {0x8019, "[EffectMode] EFFECTS"},
                             };
 
      Dictionary<int, string> WbTable = new Dictionary<int, string>()
@@ -93,11 +104,27 @@ namespace CameraControl.Devices.Others
                                                   {0, "JPEG (BASIC)"},
                                                   {1, "JPEG (NORMAL)"},
                                                   {2, "JPEG (FINE)"},
+                                                  {3, "TIFF (RGB)"},
                                                   {4, "RAW"},
                                                   {5, "RAW + JPEG (BASIC)"},
                                                   {6, "RAW + JPEG (NORMAL)"},
                                                   {7, "RAW + JPEG (FINE)"}
                                                 };
+
+    private Dictionary<int,string> EMMTable=new Dictionary<int, string>
+                                              {
+                                                {2, "Center-weighted metering"},
+                                                {3, "Multi-pattern metering"},
+                                                {4, "Spot metering"}
+                                              }; 
+    private Dictionary<int, string> FMTable=new Dictionary<int, string>()
+                                              {
+                                                {1, "[M] Manual focus"},
+                                                {0x8010, "[S] Single AF servo"},
+                                                {0x8011, "[C] Continuous AF servo"},
+                                                {0x8012, "[A] AF servo mode automatic switching"},
+                                                {0x8013, "[F] Constant AF servo"},
+                                              };
 
     #region Implementation of ICameraDevice
 
@@ -189,6 +216,20 @@ namespace CameraControl.Devices.Others
         NotifyPropertyChanged("CompressionSetting");
       }
     }
+
+    private PropertyValue _exposureMeteringMode;
+    public PropertyValue ExposureMeteringMode
+    {
+      get { return _exposureMeteringMode; }
+      set
+      {
+        _exposureMeteringMode = value;
+        NotifyPropertyChanged("ExposureMeteringMode");
+      }
+    }
+
+    public PropertyValue FocusMode { get; set; }
+
 
     private int _battery;
     public int Battery
@@ -292,6 +333,28 @@ namespace CameraControl.Devices.Others
         CompressionSetting.SetValue(csProperty.get_Value());
       }
 
+      Property emmProperty = manager.Device.Properties[WIAManager.CONST_PROP_ExposureMeteringMode];
+      if (emmProperty != null)
+      {
+        foreach (var subTypeValue in emmProperty.SubTypeValues)
+        {
+          if (EMMTable.ContainsKey((int)subTypeValue))
+            ExposureMeteringMode.AddValues(EMMTable[(int)subTypeValue], (int)subTypeValue);
+        }
+        CompressionSetting.SetValue(emmProperty.get_Value());
+      }
+
+      Property fmProperty = manager.Device.Properties[WIAManager.CONST_PROP_FocusMode];
+      if (fmProperty != null)
+      {
+        foreach (var subTypeValue in fmProperty.SubTypeValues)
+        {
+          if (FMTable.ContainsKey((int)subTypeValue))
+            FocusMode.AddValues(FMTable[(int)subTypeValue], (int)subTypeValue);
+        }
+        FocusMode.SetValue(fmProperty.get_Value());
+      }
+
       Battery = manager.Device.Properties[WIAManager.CONST_PROP_BatteryStatus].get_Value();
       
       HaveLiveView = false;
@@ -314,6 +377,34 @@ namespace CameraControl.Devices.Others
       CompressionSetting.ValueChanged += CompressionSetting_ValueChanged;
       ExposureCompensation = new PropertyValue();
       ExposureCompensation.ValueChanged += ExposureCompensation_ValueChanged;
+      ExposureMeteringMode = new PropertyValue();
+      ExposureMeteringMode.ValueChanged += ExposureMeteringMode_ValueChanged;
+      FocusMode = new PropertyValue();
+      FocusMode.ValueChanged += FocusMode_ValueChanged;
+    }
+
+    void FocusMode_ValueChanged(object sender, string key, int val)
+    {
+      try
+      {
+        //Device.Properties[WIAManager.CONST_PROP_FocusMode].set_Value(val);
+      }
+      catch (Exception)
+      {
+
+      }
+    }
+
+    void ExposureMeteringMode_ValueChanged(object sender, string key, int val)
+    {
+      try
+      {
+        Device.Properties[WIAManager.CONST_PROP_ExposureMeteringMode].set_Value(val);
+      }
+      catch (Exception)
+      {
+
+      }
     }
 
     void CompressionSetting_ValueChanged(object sender, string key, int val)
@@ -391,32 +482,33 @@ namespace CameraControl.Devices.Others
  
     public virtual void StartLiveView()
     {
-      throw new NotImplementedException();
+      //throw new NotImplementedException();
     }
 
     public virtual void StopLiveView()
     {
-      throw new NotImplementedException();
+      //throw new NotImplementedException();
     }
 
     public virtual LiveViewData GetLiveViewImage()
     {
-      throw new NotImplementedException();
+      //throw new NotImplementedException();
+      return new LiveViewData();
     }
 
     public virtual void AutoFocus()
     {
-      throw new NotImplementedException();
+      //throw new NotImplementedException();
     }
 
     public virtual void Focus(int step)
     {
-      throw new NotImplementedException();
+      //throw new NotImplementedException();
     }
 
     public virtual void Focus(int x, int y)
     {
-      throw new NotImplementedException();
+      //throw new NotImplementedException();
     }
 
     public virtual void TakePictureNoAf()

@@ -36,6 +36,8 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_PROP_LiveViewImageZoomRatio = 0xD1A3;
     public const int CONST_PROP_AFModeSelect = 0xD161;
     public const int CONST_PROP_CompressionSetting = 0x5004;
+    public const int CONST_PROP_ExposureMeteringMode = 0x500B;
+    public const int CONST_PROP_FocusMode = 0x500A;
 
 
     private const string AppName = "CameraControl";
@@ -78,12 +80,22 @@ namespace CameraControl.Devices.Nikon
     {
       base.Init(id, manager);
       ExposureCompensation.ValueChanged += ExposureCompensation_ValueChanged;
+      FocusMode.ValueChanged += FocusMode_ValueChanged;
       _manager = manager;
       HaveLiveView = true;
       _stillImageDevice = new StillImageDevice(id);
       _stillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
       _timer.Start();
       return true;
+    }
+
+    void FocusMode_ValueChanged(object sender, string key, int val)
+    {
+      lock (_loker)
+      {
+        _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt16)val),
+                                           CONST_PROP_FocusMode, -1);
+      }
     }
 
     void ExposureCompensation_ValueChanged(object sender, string key, int val)
@@ -275,6 +287,9 @@ namespace CameraControl.Devices.Nikon
                                                                           CONST_PROP_ExposureBiasCompensation));
           CompressionSetting.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
                                                                 CONST_PROP_CompressionSetting));
+          ExposureMeteringMode.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                                CONST_PROP_ExposureMeteringMode));
+          FocusMode.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_FocusMode));
           Battery = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_BatteryLevel, -1)[0];
         }
         catch (Exception)

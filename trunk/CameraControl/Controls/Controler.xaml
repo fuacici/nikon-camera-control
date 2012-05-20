@@ -36,7 +36,15 @@
         <StackPanel Margin="1">
             <Label Content="Compression"  />
             <ComboBox IsEnabled="{Binding Path=SelectedCameraDevice.CompressionSetting.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.CompressionSetting.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.CompressionSetting.Value}"/>
-        </StackPanel>        
+        </StackPanel>
+        <StackPanel Margin="1">
+            <Label Content="Metering Mode"  />
+            <ComboBox IsEnabled="{Binding Path=SelectedCameraDevice.ExposureMeteringMode.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.ExposureMeteringMode.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.ExposureMeteringMode.Value}"/>
+        </StackPanel>
+        <StackPanel Margin="1">
+            <Label Content="Focus Mode"  />
+            <ComboBox IsEnabled="{Binding Path=SelectedCameraDevice.FocusMode.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.FocusMode.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.FocusMode.Value}"/>
+        </StackPanel>
         <StackPanel Margin="1">
             <Label Content="Battery"  />
             <ProgressBar Minimum="0" Maximum="100" Height="20" Value="{Binding Path=SelectedCameraDevice.Battery}" ToolTip="{Binding Path=SelectedCameraDevice.Battery}"/>

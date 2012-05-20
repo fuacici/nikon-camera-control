@@ -13,6 +13,8 @@ namespace CameraControl.Devices
     PropertyValue Mode { get; set; }
     PropertyValue ExposureCompensation { get; set; }
     PropertyValue CompressionSetting { get; set; }
+    PropertyValue ExposureMeteringMode { get; set; }
+    PropertyValue FocusMode { get; set; }
 
     int Battery { get; set; }
     byte LiveViewImageZoomRatio { get; set; }

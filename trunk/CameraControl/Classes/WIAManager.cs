@@ -28,6 +28,8 @@ namespace CameraControl.Classes
     public const string CONST_PROP_ExposureCompensation = "Exposure Compensation";
     public const string CONST_PROP_BatteryStatus = "Battery Status";
     public const string CONST_PROP_CompressionSetting = "Compression Setting";
+    public const string CONST_PROP_ExposureMeteringMode = "Exposure Metering Mode";
+    public const string CONST_PROP_FocusMode = "Focus Mode";
     
     private string _deviceName;
 
