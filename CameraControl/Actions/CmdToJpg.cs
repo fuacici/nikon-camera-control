@@ -58,7 +58,7 @@ namespace CameraControl.Actions
                                   " --wb=camera --saturation=1.2 --exposure=0 --black-point=auto --overwrite --out-type=jpg --output=" +
                                   _otfile + " " + _infile))
         {
-          ServiceProvider.Settings.DefaultSession.AddFile(_infile);
+          ServiceProvider.Settings.DefaultSession.AddFile(_otfile);
         }
       }
       else
