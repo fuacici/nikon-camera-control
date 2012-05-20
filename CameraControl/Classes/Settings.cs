@@ -234,7 +234,6 @@ namespace CameraControl.Classes
     {
       ConfigFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,
                                 "settings.xml");
-      //HuginPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Hugin");
       DefaultSession = new PhotoSession();
       PhotoSessions = new ObservableCollection<PhotoSession>();
       ImageLoading = Visibility.Hidden;
@@ -248,7 +247,6 @@ namespace CameraControl.Classes
                        new VideoType("UXGA 4:3", 1600, 1200),
                        new VideoType("HD 720 16:9", 1280, 720),
                        new VideoType("Super VGA 4:3", 800, 600),
-                       //new VideoType("Super VGA 4:3", 800, 600)
                      };
       LastUpdateCheckDate = DateTime.MinValue;
       UseTriggerKey = false;

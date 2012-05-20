@@ -35,6 +35,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_PROP_BatteryLevel = 0x5001;
     public const int CONST_PROP_LiveViewImageZoomRatio = 0xD1A3;
     public const int CONST_PROP_AFModeSelect = 0xD161;
+    public const int CONST_PROP_CompressionSetting = 0x5004;
 
 
     private const string AppName = "CameraControl";
@@ -272,6 +273,8 @@ namespace CameraControl.Devices.Nikon
           Mode.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureProgramMode));
           ExposureCompensation.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
                                                                           CONST_PROP_ExposureBiasCompensation));
+          CompressionSetting.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                                CONST_PROP_CompressionSetting));
           Battery = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_BatteryLevel, -1)[0];
         }
         catch (Exception)

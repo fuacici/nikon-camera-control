@@ -132,6 +132,6 @@
                 </StackPanel>
             </StackPanel>
         </ToolBar>
-        <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=Manager.IsConected}" Margin="12,6,8,152" Width="100" Grid.Row="1" />
+        <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=Manager.IsConected}" Margin="12,6,8,14" Width="100" Grid.Row="1" />
     </Grid>
 </Window>

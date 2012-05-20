@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,8 +10,31 @@ namespace CameraControl.Classes
 {
   public class PhotoUtils
   {
+    public  static bool  RunAndWait(string exe, string param)
+    {
+      try
+      {
+        ProcessStartInfo startInfo = new ProcessStartInfo(exe);
+        startInfo.WindowStyle = ProcessWindowStyle.Minimized;
+        startInfo.Arguments = param;
+        Process process = Process.Start(startInfo);
+        process.WaitForExit();
+      }
+      catch (Exception)
+      {
+        return false;
+      }
+      return true;
+    }
+
     public static void CopyPhotoScale(string sourse, string dest, double scale)
     {
+      if (scale == 1 && Path.GetExtension(sourse).ToUpper() == Path.GetExtension(dest).ToUpper())
+      {
+        File.Copy(sourse, dest, true);
+        return;
+      }
+
       string newfile = dest;
       FIBITMAP dib = FreeImage.LoadEx(sourse);
 
@@ -30,7 +54,7 @@ namespace CameraControl.Classes
       {
         FIBITMAP bmp = FreeImage.ToneMapping(dib, FREE_IMAGE_TMO.FITMO_REINHARD05, 0, 0);
         // ConvertToType(dib, FREE_IMAGE_TYPE.FIT_BITMAP, false);
-        FIBITMAP resized = FreeImage.Rescale(bmp, (int) dw, (int) dh, FREE_IMAGE_FILTER.FILTER_LANCZOS3);
+        FIBITMAP resized = FreeImage.Rescale(bmp, (int) dw, (int) dh, FREE_IMAGE_FILTER.FILTER_CATMULLROM);
         FIBITMAP final = FreeImage.EnlargeCanvas<RGBQUAD>(resized, difw/2, difh/2, difw - (difw/2), difh - (difh/2),
                                                           new RGBQUAD(System.Drawing.Color.Black),
                                                           FREE_IMAGE_COLOR_OPTIONS.FICO_RGB);
@@ -42,13 +66,8 @@ namespace CameraControl.Classes
       }
       else
       {
-        if (scale == 1 && Path.GetExtension(sourse).ToUpper() == Path.GetExtension(dest).ToUpper())
         {
-          File.Copy(sourse, dest, true);
-        }
-        else
-        {
-          FIBITMAP resized = FreeImage.Rescale(dib, (int) dw, (int) dh, FREE_IMAGE_FILTER.FILTER_BILINEAR);
+          FIBITMAP resized = FreeImage.Rescale(dib, (int) dw, (int) dh, FREE_IMAGE_FILTER.FILTER_CATMULLROM);
           FIBITMAP final = FreeImage.EnlargeCanvas<RGBQUAD>(resized, difw/2, difh/2, difw - (difw/2), difh - (difh/2),
                                                             new RGBQUAD(System.Drawing.Color.Black),
                                                             FREE_IMAGE_COLOR_OPTIONS.FICO_RGB);
@@ -62,7 +81,7 @@ namespace CameraControl.Classes
 
     public static string GetUniqueFilename(string prefix, int counter, string sufix)
     {
-      string file = prefix + counter + sufix;
+      string file = prefix  + counter + sufix;
       if (File.Exists(file))
       {
         return GetUniqueFilename(prefix, counter + 1, sufix);

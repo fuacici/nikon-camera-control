@@ -88,6 +88,17 @@ namespace CameraControl.Devices.Others
                     {32787, "Custom"}
                   };
 
+    private Dictionary<int, string> CSTable = new Dictionary<int, string>()
+                                                {
+                                                  {0, "JPEG (BASIC)"},
+                                                  {1, "JPEG (NORMAL)"},
+                                                  {2, "JPEG (FINE)"},
+                                                  {4, "RAW"},
+                                                  {5, "RAW + JPEG (BASIC)"},
+                                                  {6, "RAW + JPEG (NORMAL)"},
+                                                  {7, "RAW + JPEG (FINE)"}
+                                                };
+
     #region Implementation of ICameraDevice
 
     private bool _haveLiveView;
@@ -165,6 +176,17 @@ namespace CameraControl.Devices.Others
       {
         _exposureCompensation = value;
         NotifyPropertyChanged("ExposureCompensation");
+      }
+    }
+
+    private PropertyValue _compressionSetting;
+    public PropertyValue CompressionSetting
+    {
+      get { return _compressionSetting; }
+      set
+      {
+        _compressionSetting = value;
+        NotifyPropertyChanged("CompressionSetting");
       }
     }
 
@@ -259,6 +281,17 @@ namespace CameraControl.Devices.Others
         ExposureCompensation.SetValue(ecProperty.get_Value());
       }
 
+      Property csProperty = manager.Device.Properties[WIAManager.CONST_PROP_CompressionSetting];
+      if (csProperty != null)
+      {
+        foreach (var subTypeValue in csProperty.SubTypeValues)
+        {
+          if (CSTable.ContainsKey((int)subTypeValue))
+            CompressionSetting.AddValues(CSTable[(int)subTypeValue], (int)subTypeValue);
+        }
+        CompressionSetting.SetValue(csProperty.get_Value());
+      }
+
       Battery = manager.Device.Properties[WIAManager.CONST_PROP_BatteryStatus].get_Value();
       
       HaveLiveView = false;
@@ -277,8 +310,22 @@ namespace CameraControl.Devices.Others
       WhiteBalance.ValueChanged += WhiteBalance_ValueChanged;
       Mode = new PropertyValue();
       Mode.ValueChanged += Mode_ValueChanged;
+      CompressionSetting = new PropertyValue();
+      CompressionSetting.ValueChanged += CompressionSetting_ValueChanged;
       ExposureCompensation = new PropertyValue();
       ExposureCompensation.ValueChanged += ExposureCompensation_ValueChanged;
+    }
+
+    void CompressionSetting_ValueChanged(object sender, string key, int val)
+    {
+      try
+      {
+        Device.Properties[WIAManager.CONST_PROP_CompressionSetting].set_Value(val);
+      }
+      catch (Exception)
+      {
+
+      }
     }
 
     void ExposureCompensation_ValueChanged(object sender, string key, int val)

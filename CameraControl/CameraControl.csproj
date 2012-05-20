@@ -77,8 +77,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Actions\CmdExpJpg.cs" />
     <Compile Include="Actions\CmdFocusStacking.cs" />
     <Compile Include="Actions\CmdFocusStackingCombineZP.cs" />
+    <Compile Include="Actions\CmdToJpg.cs" />
     <Compile Include="Actions\Enfuse\CmdEnfuse.cs" />
     <Compile Include="Actions\Enfuse\EnfuseSettings.cs" />
     <Compile Include="Actions\Enfuse\EnfuseSettingsWnd.xaml.cs">
