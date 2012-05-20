@@ -12,6 +12,8 @@ namespace CameraControl.Devices
     PropertyValue WhiteBalance { get; set; }
     PropertyValue Mode { get; set; }
     PropertyValue ExposureCompensation { get; set; }
+    PropertyValue CompressionSetting { get; set; }
+
     int Battery { get; set; }
     byte LiveViewImageZoomRatio { get; set; }
 

@@ -29,7 +29,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="File Name Template :" Width="120" />
-                <TextBox Text="{Binding Path=FileNameTemplate}" Width="200"/>
+                <TextBox Text="{Binding Path=FileNameTemplate}" Width="200" ToolTip="$N - Session name \n $C - Counter \n $E - Exposure comp."/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Counter :" Width="120" />

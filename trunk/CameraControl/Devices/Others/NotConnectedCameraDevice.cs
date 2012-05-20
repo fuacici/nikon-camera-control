@@ -25,6 +25,8 @@ namespace CameraControl.Devices.Others
 
     public PropertyValue ExposureCompensation { get; set; }
 
+    public PropertyValue CompressionSetting { get; set; }
+
     public int Battery { get; set; }
 
     public byte LiveViewImageZoomRatio { get; set; }

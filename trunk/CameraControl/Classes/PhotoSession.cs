@@ -180,6 +180,14 @@ namespace CameraControl.Classes
         res += "$C";
       res = res.Replace("$C", Counter.ToString("00000"));
       res = res.Replace("$N", Name.Trim());
+      if(ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.Value!="0")
+      {
+        res = res.Replace("$E", ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.Value);
+      }
+      else
+      {
+        res = res.Replace("$E", "");
+      }
       return res;
     }
 

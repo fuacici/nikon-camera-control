@@ -27,6 +27,11 @@ namespace CameraControl.Classes
       }
     }
 
+    public bool IsRaw
+    {
+      get { return !string.IsNullOrEmpty(FileName) && Path.GetExtension(FileName).ToLower() == ".nef"; }
+    }
+
     public DateTime FileDate { get; set; }
 
     public string Name { get; set; }
