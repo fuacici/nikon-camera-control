@@ -1,5 +1,14 @@
 #summary ChangeLog
 #labels Featured
+[http://cameracontrol.host-ed.me/2012/05/20/beta-release-0-7-115/ 0.7.115]
+  * Configure camera "Compression Settings"
+  * Configure camera "Metering Mode"
+  * Configure camera "Focus Mode"
+  * Removed reference to Hugin, now all files are included in installation
+  * Automatic Full screen preview
+  * Enfuse images 
+  * Convert raw image to jpg
+  * Convert raw image to multiple exposed jpgs
 [http://cameracontrol.host-ed.me/forum/viewtopic.php?f=4&t=14 0.7.104]
   * Generate "Focus stacked" image using Hugin application
   * Option to trigger photo taking using keyboard
