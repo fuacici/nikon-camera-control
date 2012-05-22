@@ -95,7 +95,7 @@ namespace CameraControl.windows
       System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo(_virtualdubdir);
       //psi.RedirectStandardOutput = true;
       psi.WindowStyle = System.Diagnostics.ProcessWindowStyle.Minimized;
-      psi.Arguments = "/min /s " + Path.Combine(_tempFolder, "VirtualDub.script")+" /x";
+      psi.Arguments = "/min /s \"" + Path.Combine(_tempFolder, "VirtualDub.script")+"\" /x";
       psi.UseShellExecute = false;
       System.Diagnostics.Process listFiles;
       listFiles = System.Diagnostics.Process.Start(psi);

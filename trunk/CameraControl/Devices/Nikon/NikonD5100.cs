@@ -48,8 +48,6 @@ namespace CameraControl.Devices.Nikon
     protected StillImageDevice _stillImageDevice = null;
     private WIAManager _manager = null;
 
-    private object _loker = new object();
-
 
     public NikonD5100()
     {
@@ -62,7 +60,7 @@ namespace CameraControl.Devices.Nikon
       _timer.Stop();
       try
       {
-        lock (_loker)
+        lock (Locker)
         {
           getEvent();
         }
@@ -91,7 +89,7 @@ namespace CameraControl.Devices.Nikon
 
     void FocusMode_ValueChanged(object sender, string key, int val)
     {
-      lock (_loker)
+      lock (Locker)
       {
         _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt16)val),
                                            CONST_PROP_FocusMode, -1);
@@ -100,7 +98,7 @@ namespace CameraControl.Devices.Nikon
 
     void ExposureCompensation_ValueChanged(object sender, string key, int val)
     {
-      lock (_loker)
+      lock (Locker)
       {
         _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
                                            CONST_PROP_ExposureBiasCompensation, -1);
@@ -110,7 +108,7 @@ namespace CameraControl.Devices.Nikon
 
     public override void StartLiveView()
     {
-      lock (_loker)
+      lock (Locker)
       {
         LiveViewImageZoomRatio = 0;
         _stillImageDevice.ExecuteWithNoData(CONST_CMD_StartLiveView);
@@ -119,7 +117,7 @@ namespace CameraControl.Devices.Nikon
 
     public override void StopLiveView()
     {
-      lock (_loker)
+      lock (Locker)
       {
         _stillImageDevice.ExecuteWithNoData(CONST_CMD_EndLiveView);
       }
@@ -128,7 +126,7 @@ namespace CameraControl.Devices.Nikon
     public override LiveViewData GetLiveViewImage()
     {
       LiveViewData viewData = new LiveViewData();
-      if (Monitor.TryEnter(_loker,100))
+      if (Monitor.TryEnter(Locker,100))
       {
         try
         {
@@ -148,7 +146,7 @@ namespace CameraControl.Devices.Nikon
         }
         finally
         {
-          Monitor.Exit(_loker);
+          Monitor.Exit(Locker);
         }
       }
       return viewData;
@@ -157,7 +155,7 @@ namespace CameraControl.Devices.Nikon
     public override void TakePicture()
     {
       //AutoFocus();
-      lock (_loker)
+      lock (Locker)
       {
          _manager.Device.ExecuteCommand(Conts.wiaCommandTakePicture);
       }
@@ -182,7 +180,7 @@ namespace CameraControl.Devices.Nikon
 
     public override void Focus(int step)
     {
-      lock (_loker)
+      lock (Locker)
       {
         if (step > 0)
           _stillImageDevice.ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000001, (uint) step);
@@ -193,7 +191,7 @@ namespace CameraControl.Devices.Nikon
 
     public override void AutoFocus()
     {
-      lock (_loker)
+      lock (Locker)
       {
         _stillImageDevice.ExecuteWithNoData(CONST_CMD_AfDrive);
       }
@@ -201,7 +199,7 @@ namespace CameraControl.Devices.Nikon
 
     public override void TakePictureNoAf()
     {
-      lock (_loker)
+      lock (Locker)
       {
         byte oldval = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1)[0];
         _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] {(byte) 4},
@@ -214,7 +212,7 @@ namespace CameraControl.Devices.Nikon
 
     public override void Focus(int x, int y)
     {
-      lock (_loker)
+      lock (Locker)
       {
         _stillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeAfArea, (uint) x, (uint) y);
       }
@@ -222,7 +220,7 @@ namespace CameraControl.Devices.Nikon
 
     public override void Close()
     {
-      lock (_loker)
+      lock (Locker)
       {
         _timer.Stop();
         _stillImageDevice.Disconnect();
@@ -246,7 +244,7 @@ namespace CameraControl.Devices.Nikon
       {
         if (_stillImageDevice == null)
           return 0;
-        lock (_loker)
+        lock (Locker)
         {
           byte[] data = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
                                                           CONST_PROP_LiveViewImageZoomRatio,
@@ -261,7 +259,7 @@ namespace CameraControl.Devices.Nikon
       }
       set
       {
-        lock (_loker)
+        lock (Locker)
         {
           if (_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] {value},
                                                  CONST_PROP_LiveViewImageZoomRatio, -1) != null)
@@ -273,7 +271,7 @@ namespace CameraControl.Devices.Nikon
 
     public override void ReadDeviceProperties()
     {
-      lock (_loker)
+      lock (Locker)
       {
         try
         {

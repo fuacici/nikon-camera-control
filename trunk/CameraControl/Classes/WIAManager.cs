@@ -98,7 +98,6 @@ namespace CameraControl.Classes
       DeviceManager.OnEvent += DeviceManager_OnEvent;
       DeviceName = "";
       Manufacturer = "";
-
     }
 
     private void DeviceManager_OnEvent(string eventId, string deviceId, string itemId)
