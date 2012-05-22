@@ -245,6 +245,8 @@ namespace CameraControl.Devices.Others
     public virtual byte LiveViewImageZoomRatio { get; set; }
 
     private Device Device { get; set; }
+    internal object Locker = new object(); // object used to lock multi hreaded mothods 
+
 
     public virtual bool Init(string id, WIAManager manager)
     {
@@ -383,100 +385,156 @@ namespace CameraControl.Devices.Others
       FocusMode.ValueChanged += FocusMode_ValueChanged;
     }
 
+
     void FocusMode_ValueChanged(object sender, string key, int val)
     {
-      try
+      lock (Locker)
       {
-        //Device.Properties[WIAManager.CONST_PROP_FocusMode].set_Value(val);
-      }
-      catch (Exception)
-      {
+        try
+        {
+          Device.Properties[WIAManager.CONST_PROP_FocusMode].set_Value(val);
+        }
+        catch (Exception)
+        {
 
+        }
       }
     }
 
     void ExposureMeteringMode_ValueChanged(object sender, string key, int val)
     {
-      try
+      lock (Locker)
       {
-        Device.Properties[WIAManager.CONST_PROP_ExposureMeteringMode].set_Value(val);
-      }
-      catch (Exception)
-      {
+        try
+        {
+          Device.Properties[WIAManager.CONST_PROP_ExposureMeteringMode].set_Value(val);
+        }
+        catch (Exception)
+        {
 
+        }
       }
     }
 
     void CompressionSetting_ValueChanged(object sender, string key, int val)
     {
-      try
+      lock (Locker)
       {
-        Device.Properties[WIAManager.CONST_PROP_CompressionSetting].set_Value(val);
-      }
-      catch (Exception)
-      {
+        try
+        {
+          Device.Properties[WIAManager.CONST_PROP_CompressionSetting].set_Value(val);
+        }
+        catch (Exception)
+        {
 
+        }
       }
     }
 
     void ExposureCompensation_ValueChanged(object sender, string key, int val)
     {
-      try
+      lock (Locker)
       {
-        Device.Properties[WIAManager.CONST_PROP_ExposureCompensation].set_Value(val);
-      }
-      catch (Exception)
-      {
-        
+        try
+        {
+          Device.Properties[WIAManager.CONST_PROP_ExposureCompensation].set_Value(val);
+        }
+        catch (Exception)
+        {
+
+        }
       }
     }
 
     void Mode_ValueChanged(object sender, string key, int val)
     {
-      switch (key)
+      lock (Locker)
       {
-        case "M":
-          ShutterSpeed.IsEnabled = true;
-          FNumber.IsEnabled = true;
-          break;
-        case "P":
-          ShutterSpeed.IsEnabled = false;
-          FNumber.IsEnabled = false;
-          break;
-        case "A":
-          ShutterSpeed.IsEnabled = false;
-          FNumber.IsEnabled = true;
-          break;
-        case "S":
-          ShutterSpeed.IsEnabled = true;
-          FNumber.IsEnabled = false;
-          break;
-        default:
-          ShutterSpeed.IsEnabled = false;
-          FNumber.IsEnabled = false;
-          break;
+        switch (key)
+        {
+          case "M":
+            ShutterSpeed.IsEnabled = true;
+            FNumber.IsEnabled = true;
+            break;
+          case "P":
+            ShutterSpeed.IsEnabled = false;
+            FNumber.IsEnabled = false;
+            break;
+          case "A":
+            ShutterSpeed.IsEnabled = false;
+            FNumber.IsEnabled = true;
+            break;
+          case "S":
+            ShutterSpeed.IsEnabled = true;
+            FNumber.IsEnabled = false;
+            break;
+          default:
+            ShutterSpeed.IsEnabled = false;
+            FNumber.IsEnabled = false;
+            break;
+        }
+        Device.Properties[WIAManager.CONST_PROP_ExposureMode].set_Value(val);
       }
-      Device.Properties[WIAManager.CONST_PROP_ExposureMode].set_Value(val);
     }
 
     void WhiteBalance_ValueChanged(object sender, string key, int val)
     {
-      Device.Properties[WIAManager.CONST_PROP_WhiteBalance].set_Value(val);
+      lock (Locker)
+      {
+        try
+        {
+          Device.Properties[WIAManager.CONST_PROP_WhiteBalance].set_Value(val);
+        }
+        catch (Exception)
+        {
+          
+        }
+      }
     }
 
     void ShutterSpeed_ValueChanged(object sender, string key, int val)
     {
-      Device.Properties[WIAManager.CONST_PROP_Exposure_Time].set_Value(val);
+      lock (Locker)
+      {
+        try
+        {
+          Device.Properties[WIAManager.CONST_PROP_Exposure_Time].set_Value(val);
+        }
+        catch (Exception)
+        {
+
+        }
+      }
     }
 
     void IsoNumber_ValueChanged(object sender, string key, int val)
     {
-      Device.Properties[WIAManager.CONST_PROP_ISO_Number].set_Value(val);
+      lock (Locker)
+      {
+        try
+        {
+          Device.Properties[WIAManager.CONST_PROP_ISO_Number].set_Value(val);
+        }
+        catch (Exception)
+        {
+
+        }
+      }
     }
 
     void FNumber_ValueChanged(object sender, string key, int val)
     {
-      Device.Properties[WIAManager.CONST_PROP_F_Number].set_Value(val);
+      lock (Locker)
+      {
+        try
+        {
+          Device.Properties[WIAManager.CONST_PROP_F_Number].set_Value(val);
+        }
+        catch (Exception)
+        {
+
+        }
+      }
     }
 
  

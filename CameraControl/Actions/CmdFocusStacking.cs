@@ -89,7 +89,7 @@ namespace CameraControl.Actions
       try
       {
         OnProgressChange("Align images ..");
-        OnProgressChange("This may take few minutes (5-10) ");
+        OnProgressChange("This may take few minutes (5-15) ");
         string param = " -m -a " + _filenames[0];
         foreach (string filename in _filenames)
         {
@@ -97,8 +97,14 @@ namespace CameraControl.Actions
         }
         ProcessStartInfo startInfo = new ProcessStartInfo(_pathtoalign);
         startInfo.WindowStyle = ProcessWindowStyle.Minimized;
+        startInfo.CreateNoWindow = true;
         startInfo.Arguments = param;
+        startInfo.UseShellExecute = false;
+        startInfo.RedirectStandardOutput = true;
         Process process = Process.Start(startInfo);
+      
+        process.OutputDataReceived += new DataReceivedEventHandler(process_OutputDataReceived);
+        process.BeginOutputReadLine();
         process.WaitForExit();
       }
       catch (Exception exception)
@@ -107,6 +113,12 @@ namespace CameraControl.Actions
         ServiceProvider.Log.Error("Error copy files ", exception);
         _shouldStop = true;
       }
+    }
+
+    void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+    {
+      if (!string.IsNullOrEmpty(e.Data))
+        OnProgressChange(e.Data);
     }
 
     private void Enfuse()
@@ -119,8 +131,13 @@ namespace CameraControl.Actions
         string param = " -o " + _resulfile + " --exposure-weight=0 --saturation-weight=0 --contrast-weight=1 --hard-mask --contrast-window-size=5 " + _filenames[0] + "????.tif";
         ProcessStartInfo startInfo = new ProcessStartInfo(_pathtoenfuse);
         startInfo.WindowStyle = ProcessWindowStyle.Minimized;
+        startInfo.CreateNoWindow = true;
         startInfo.Arguments = param;
+        startInfo.UseShellExecute = false;
+        startInfo.RedirectStandardOutput = true;
         Process process = Process.Start(startInfo);
+        process.OutputDataReceived += process_OutputDataReceived;
+        process.BeginOutputReadLine();
         process.WaitForExit();
         if(File.Exists(_resulfile))
         {
