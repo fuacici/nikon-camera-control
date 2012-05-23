@@ -19,8 +19,7 @@ namespace CameraControl.Actions
     private int _progress;
     private bool _shouldStop;
     private string _tempdir = "";
-    private string _pathtoalign = "";
-    private string _pathtoenfuse = "";
+    private string _pathtoexe = "";
     private string _resulfile = "";
     private List<string> _filenames = new List<string>();
     private AsyncObservableCollection<FileItem> _files;
@@ -28,6 +27,11 @@ namespace CameraControl.Actions
     public event EventHandler ProgressChanged;
     public event EventHandler ActionDone;
 
+    public CmdFocusStackingCombineZP()
+    {
+      _pathtoexe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Alan Hadley\\CombineZP",
+                                "CombineZP.exe");
+    }
 
     public int Progress
     {
@@ -58,17 +62,20 @@ namespace CameraControl.Actions
 
     private void CopyFiles()
     {
+      int counter = 0;
       try
       {
+        _filenames.Clear();
         OnProgressChange("Copying files");
         _tempdir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
         Directory.CreateDirectory(_tempdir);
         foreach (FileItem fileItem in _files)
         {
-          string randomFile = Path.Combine(_tempdir, Path.GetRandomFileName() + Path.GetExtension(fileItem.FileName));
+          string randomFile = Path.Combine(_tempdir, "image_" + counter.ToString("0000") + ".jpg");
           OnProgressChange("Copying file " + fileItem.Name);
-          File.Copy(fileItem.FileName, randomFile, true);
+          PhotoUtils.CopyPhotoScale(fileItem.FileName, randomFile, 1);
           _filenames.Add(randomFile);
+          counter++;
           if (_shouldStop)
           {
             OnActionDone();
@@ -84,40 +91,23 @@ namespace CameraControl.Actions
       }
     }
 
-    private void AlignImages()
-    {
-      try
-      {
-        OnProgressChange("Align images ..");
-        OnProgressChange("This may take few minutes (5-10) ");
-        string param = " -m -a " + _filenames[0];
-        foreach (string filename in _filenames)
-        {
-          param += " " + filename;
-        }
-        ProcessStartInfo startInfo = new ProcessStartInfo(_pathtoalign);
-        startInfo.WindowStyle = ProcessWindowStyle.Maximized;
-        startInfo.Arguments = param;
-        Process process = Process.Start(startInfo);
-        process.WaitForExit();
-      }
-      catch (Exception exception)
-      {
-        OnProgressChange("Error copy files " + exception.Message);
-        ServiceProvider.Log.Error("Error copy files ", exception);
-        _shouldStop = true;
-      }
-    }
 
     private void Enfuse()
     {
       try
       {
-        OnProgressChange("Enfuse images ..");
-        OnProgressChange("This may take few minutes too");
+        OnProgressChange("Combine images ..");
+        OnProgressChange("This may take few minutes");
         _resulfile = Path.Combine(_tempdir, Path.GetFileName(_files[0].FileName) + _files.Count + "_enfuse.tif");
-        string param = " -o " + _resulfile + " --exposure-weight=0 --saturation-weight=0 --contrast-weight=1 --hard-mask --contrast-window-size=9 " + _filenames[0] + "????.tif";
-        ProcessStartInfo startInfo = new ProcessStartInfo(_pathtoenfuse);
+        _resulfile =
+          PhotoUtils.GetUniqueFilename(
+            Path.GetDirectoryName(_files[0].FileName) + "\\" +
+            Path.GetFileNameWithoutExtension(_files[0].FileName) + "_enfuse", 0, ".jpg");
+        //_resulfile = Path.Combine(_tempdir, Path.GetFileName(_resulfile));
+
+        string param = "\"" + _tempdir + "\" \"Do Stack\" \"" + _resulfile + "\" -q +j100";
+          //" -o " + _resulfile + " --exposure-weight=0 --saturation-weight=0 --contrast-weight=1 --hard-mask --contrast-window-size=9 " + _filenames[0] + "????.tif";
+        ProcessStartInfo startInfo = new ProcessStartInfo(_pathtoexe);
         startInfo.WindowStyle = ProcessWindowStyle.Minimized;
         startInfo.Arguments = param;
         Process process = Process.Start(startInfo);
@@ -125,8 +115,9 @@ namespace CameraControl.Actions
         if(File.Exists(_resulfile))
         {
           string localfile = Path.Combine(Path.GetDirectoryName(_files[0].FileName), Path.GetFileName(_resulfile));
-          File.Copy(_resulfile, localfile, true);
+          //File.Copy(_resulfile, localfile, true);
           ServiceProvider.Settings.DefaultSession.AddFile(localfile);
+          ServiceProvider.Settings.DefaultSession.SelectNone();
         }
         else
         {
@@ -145,8 +136,6 @@ namespace CameraControl.Actions
     {
       IsBusy = true;
       _shouldStop = false;
-      _pathtoalign = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "Bin", "align_image_stack.exe");
-      _pathtoenfuse = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "Bin", "enfuse.exe");
       _files = ServiceProvider.Settings.DefaultSession.GetSelectedFiles();
       if(_files.Count<2)
       {
@@ -154,27 +143,14 @@ namespace CameraControl.Actions
         OnActionDone();
         return;
       }
-      if(!File.Exists(_pathtoalign))
+      if (!File.Exists(_pathtoexe))
       {
-        OnProgressChange("File not found: align_image_stack.exe");
-        OnProgressChange("Hugin not installed or not configured !");
-        OnActionDone();
-        return;
-      }
-      if (!File.Exists(_pathtoenfuse))
-      {
-        OnProgressChange("File not found: enfuse.exe");
-        OnProgressChange("Hugin not installed or not configured !");
+        OnProgressChange("File not found: CombineZP.exe");
+        OnProgressChange("Please install CombineZP");
         OnActionDone();
         return;
       }
       CopyFiles();
-      if (_shouldStop)
-      {
-        OnActionDone();
-        return;
-      }
-      AlignImages();
       if (_shouldStop)
       {
         OnActionDone();
@@ -235,7 +211,7 @@ namespace CameraControl.Actions
 
     public bool CanExecute(object parameter)
     {
-      return true;
+      return File.Exists(_pathtoexe);
     }
 
     public event EventHandler CanExecuteChanged;
