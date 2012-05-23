@@ -25,7 +25,7 @@ namespace CameraControl.Classes
     public ActionManager()
     {
       Actions = new AsyncObservableCollection<IMenuAction>
-                  {new CmdFocusStacking(), new CmdEnfuse(), new CmdToJpg(), new CmdExpJpg()};
+                  {new CmdFocusStackingCombineZP(), new CmdEnfuse(), new CmdToJpg(), new CmdExpJpg()};
     }
   }
 }
