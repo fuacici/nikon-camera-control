@@ -61,17 +61,29 @@ namespace CameraControl.windows
       }
     }
 
-    private int photo_count = 0;
+
+    private int _photoCount;
+    public int PhotoCount
+    {
+      get { return _photoCount; }
+      set
+      {
+        _photoCount = value;
+        NotifyPropertyChanged("PhotoCount");
+      }
+    }
+
     private bool preview = false;
     public FocusStackingWnd()
     {
       InitializeComponent();
       IsBusy = false;
+      PhotoCount = 0;
     }
 
     void Manager_PhotoTakenDone(WIA.Item imageFile)
     {
-      if (photo_count <= PhotoNo)
+      if (PhotoCount <= PhotoNo)
       {
         Thread thread = new Thread(TakePhoto);
         thread.Start();
@@ -86,7 +98,7 @@ namespace CameraControl.windows
     {
       if (IsBusy)
       {
-        photo_count++;
+        PhotoCount++;
         Thread.Sleep(200);
         ServiceProvider.DeviceManager.SelectedCameraDevice.StartLiveView();
         Thread.Sleep(800);
@@ -98,7 +110,7 @@ namespace CameraControl.windows
         }
         else
         {
-          if (photo_count <= PhotoNo)
+          if (PhotoCount <= PhotoNo)
           {
             Thread.Sleep(1000);
             TakePhoto();
@@ -117,7 +129,7 @@ namespace CameraControl.windows
 
     private void btn_preview_Click(object sender, RoutedEventArgs e)
     {
-      photo_count = 0;
+      PhotoCount = 0;
       IsBusy = true;
       preview = true;
       Thread thread = new Thread(TakePhoto);
@@ -191,7 +203,7 @@ namespace CameraControl.windows
     private void btn_takephoto_Click(object sender, RoutedEventArgs e)
     {
       //ServiceProvider.DeviceManager.SelectedCameraDevice.StopLiveView();
-      photo_count = 0;
+      PhotoCount = 0;
       IsBusy = true;
       preview = false;
       Thread thread = new Thread(TakePhoto);

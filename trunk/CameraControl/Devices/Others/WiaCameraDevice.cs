@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using CameraControl.Classes;
 using CameraControl.Devices.Classes;
 using WIA;
@@ -571,12 +572,30 @@ namespace CameraControl.Devices.Others
 
     public virtual void TakePictureNoAf()
     {
-      TakePicture();
+      lock (Locker)
+      {
+        try
+        {
+          TakePicture();
+        }
+        catch (Exception)
+        {
+
+        }
+      }
     }
 
     public virtual void TakePicture()
     {
-      Device.ExecuteCommand(Conts.wiaCommandTakePicture);
+      Monitor.Enter(Locker);
+      try
+      {
+        Device.ExecuteCommand(Conts.wiaCommandTakePicture);
+      }
+      finally
+      {
+        Monitor.Exit(Locker);
+      }
     }
 
     public virtual void Close()

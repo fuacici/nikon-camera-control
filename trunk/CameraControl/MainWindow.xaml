@@ -95,7 +95,7 @@
                             <MenuItem Header="None" Name="mnu_select_none" Click="mnu_select_none_Click" />
                         </MenuItem>
                         <Separator/>
-                            <MenuItem Header="Delete File" Name="mnu_delete_file" Click="mnu_delete_file_Click" />
+                            <MenuItem Header="Delete File(s)" Name="mnu_delete_file" Click="mnu_delete_file_Click" />
                             <MenuItem Header="Show in explorer" Name="mnu_show_explorer" Click="mnu_show_explorer_Click" />
                             <MenuItem Header="Open in external viewer" Name="mnu_open" Click="mnu_open_Click" />
                             <MenuItem Header="Copy full path in clipboard" Name="mnu_copypath" Click="mnu_copypath_Click" />

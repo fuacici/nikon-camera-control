@@ -155,16 +155,23 @@ namespace CameraControl
 
     private void WiaManager_PhotoTaked(Item item)
     {
+      Thread thread = new Thread(PhotoTaked);
+      thread.Start(item);
+    }
+
+    void PhotoTaked(object o)
+    {
       try
       {
+        Item item = o as Item;
         ServiceProvider.Settings.SystemMessage = "Photo transfer begin.";
         string s = item.ItemID;
-        ImageFile imageFile = (ImageFile) item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
+        ImageFile imageFile = (ImageFile)item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
         string fileName = ServiceProvider.Settings.DefaultSession.GetNextFileName(imageFile.FileExtension);
         //file exist : : 0x80070050
         imageFile.SaveFile(fileName);
-
-        ImageLIst.SelectedValue = ServiceProvider.Settings.DefaultSession.AddFile(fileName);
+        Dispatcher.Invoke(
+          new Action(delegate { ImageLIst.SelectedValue = ServiceProvider.Settings.DefaultSession.AddFile(fileName); }));
         ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
         ServiceProvider.Settings.SystemMessage = "Photo transfer done.";
         if (ServiceProvider.Settings.Preview)
@@ -173,8 +180,9 @@ namespace CameraControl
       catch (Exception ex)
       {
         ServiceProvider.Settings.SystemMessage = "Transfer error !\nMessage :" + ex.Message;
-        ServiceProvider.Log.Error("Transfer error !",ex);
+        ServiceProvider.Log.Error("Transfer error !", ex);
       }
+      
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
