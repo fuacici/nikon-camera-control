@@ -29,8 +29,12 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for LiveViewWnd.xaml
   /// </summary>
-  public partial class LiveViewWnd : Window, IWindow
+  public partial class LiveViewWnd : Window, IWindow, INotifyPropertyChanged
   {
+    private const int Step1 = 10;
+    private const int Step2 = 100;
+    private const int Step3 = 500;
+
     private int _retries = 0;
     private ICameraDevice selectedPortableDevice;
     private Rectangle _focusrect=new Rectangle(); 
@@ -42,6 +46,29 @@ namespace CameraControl.windows
     
 
     public LiveViewData LiveViewData { get; set; }
+
+    private string _counterMessage;
+    public string CounterMessage
+    {
+      get { return _counterMessage; }
+      set
+      {
+        _counterMessage = value;
+        NotifyPropertyChanged("CounterMessage");
+      }
+    }
+
+    private int _focusCounter;
+    public int FocusCounter
+    {
+      get { return _focusCounter; }
+      set
+      {
+        _focusCounter = value;
+        CounterMessage = "F:" + FocusCounter;
+        NotifyPropertyChanged("FocusCounter");
+      }
+    }
 
     private Timer _timer = new Timer(1000/20);
     private bool oper_in_progress = false;
@@ -116,7 +143,7 @@ namespace CameraControl.windows
       {
         _timer.Stop();
 
-        Dispatcher.BeginInvoke(new ThreadStart(delegate
+        Dispatcher.Invoke(new ThreadStart(delegate
                                                  {
                                                    image1.Visibility = Visibility.Hidden;
                                                    chk_grid.IsChecked = false;
@@ -152,7 +179,7 @@ namespace CameraControl.windows
 
       try
       {
-        Dispatcher.BeginInvoke(new Action(delegate
+        Dispatcher.Invoke(new Action(delegate
                                             {
                                               if (LiveViewData != null && LiveViewData.ImageData != null)
                                               {
@@ -182,7 +209,7 @@ namespace CameraControl.windows
         oper_in_progress = false;
         return;
       }
-      Dispatcher.BeginInvoke(new Action(delegate { DrawLines(); ; }));
+      Dispatcher.Invoke(new Action(delegate { DrawLines(); ; }));
       _retries = 0;
       oper_in_progress = false;
     }
@@ -243,6 +270,7 @@ namespace CameraControl.windows
       {
         ServiceProvider.Log.Error("Unable to autofocus", exception);
       }
+      FocusCounter = 0;
       _timer.Start();
     }
 
@@ -294,32 +322,38 @@ namespace CameraControl.windows
 
     private void btn_focusm_Click(object sender, RoutedEventArgs e)
     {
-      selectedPortableDevice.Focus(-10);
+      selectedPortableDevice.Focus(-Step1);
+      FocusCounter -= Step1;
     }
 
     private void btn_focusp_Click(object sender, RoutedEventArgs e)
     {
-      selectedPortableDevice.Focus(10);
+      selectedPortableDevice.Focus(Step1);
+      FocusCounter += Step1;
     }
 
     private void btn_focusmm_Click(object sender, RoutedEventArgs e)
     {
-      selectedPortableDevice.Focus(-100);
+      selectedPortableDevice.Focus(-Step2);
+      FocusCounter -= Step2;
     }
 
     private void btn_focuspp_Click(object sender, RoutedEventArgs e)
     {
-      selectedPortableDevice.Focus(100);
+      selectedPortableDevice.Focus(Step2);
+      FocusCounter += Step2;
     }
 
     private void btn_focusmmm_Click(object sender, RoutedEventArgs e)
     {
-      selectedPortableDevice.Focus(-500);
+      selectedPortableDevice.Focus(-Step3);
+      FocusCounter -= Step3;
     }
 
     private void btn_focusppp_Click(object sender, RoutedEventArgs e)
     {
-      selectedPortableDevice.Focus(500);
+      selectedPortableDevice.Focus(Step3);
+      FocusCounter += Step3;
     }
 
     private void canvas_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -447,5 +481,21 @@ namespace CameraControl.windows
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FocusStackingWnd_Show);
     }
 
+    #region Implementation of INotifyPropertyChanged
+
+    public event PropertyChangedEventHandler PropertyChanged;
+    public virtual void NotifyPropertyChanged(String info)
+    {
+      if (PropertyChanged != null)
+      {
+        PropertyChanged(this, new PropertyChangedEventArgs(info));
+      }
+    }
+    #endregion
+
+    private void button4_Click(object sender, RoutedEventArgs e)
+    {
+      FocusCounter = 0;
+    }
   }
 }

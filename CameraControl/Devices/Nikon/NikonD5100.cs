@@ -154,10 +154,14 @@ namespace CameraControl.Devices.Nikon
 
     public override void TakePicture()
     {
-      //AutoFocus();
-      lock (Locker)
+      Monitor.Enter(Locker);
+      try
       {
-         _manager.Device.ExecuteCommand(Conts.wiaCommandTakePicture);
+        _manager.Device.ExecuteCommand(Conts.wiaCommandTakePicture);
+      }
+      finally
+      {
+        Monitor.Exit(Locker); 
       }
     }
 

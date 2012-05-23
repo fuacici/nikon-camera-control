@@ -4,7 +4,7 @@
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
         Background="{DynamicResource WindowBackgroundBrush}"
-        Title="Live View" Height="507" Width="758" Loaded="Window_Loaded" Closed="Window_Closed" Closing="Window_Closing">
+        Title="Live View" Height="507" Width="758" Loaded="Window_Loaded" Closed="Window_Closed" Closing="Window_Closing" xmlns:my="clr-namespace:CameraControl.windows">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="101" />
@@ -33,7 +33,7 @@
                 <Button Content="+++" Grid.Column="1" Grid.Row="2" Name="btn_focusppp" Margin="3"  FontWeight="Bold" Click="btn_focusppp_Click" ToolTip="500" />
             </Grid>
         </GroupBox>
-        <CheckBox Content="Grid" Height="16" HorizontalAlignment="Left" Margin="9,300,0,0" Name="chk_grid" VerticalAlignment="Top" IsChecked="True" Checked="chk_grid_Checked" Unchecked="chk_grid_Unchecked" />
+        <CheckBox Content="Grid" Height="16" HorizontalAlignment="Left" Margin="10,306,0,0" Name="chk_grid" VerticalAlignment="Top" IsChecked="True" Checked="chk_grid_Checked" Unchecked="chk_grid_Unchecked" />
         <ComboBox Height="23" HorizontalAlignment="Left" Margin="10,346,0,0" Name="comboBox1" VerticalAlignment="Top" Width="81" SelectedIndex="{Binding Source={x:Static Member=CameraControl:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.LiveViewImageZoomRatio}">
             <ComboBoxItem Content="All" IsSelected="True" />
             <ComboBoxItem Content="25%" />
@@ -44,5 +44,7 @@
         </ComboBox>
         <Label Content="Lv zoom ration" HorizontalAlignment="Left" Margin="4,320,0,0" Name="label1" Height="28" VerticalAlignment="Top" />
         <Button Content="Focus stacking" Height="28" HorizontalAlignment="Left" Margin="4,380,0,0" Name="button3" VerticalAlignment="Top" Width="96" Click="button3_Click" />
+        <Button Content="Reset counter" Height="23" HorizontalAlignment="Left" Margin="4,415,0,0" Name="button4" VerticalAlignment="Top" Width="96" Click="button4_Click" />
+        <Label Content="{Binding Path=CounterMessage, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Height="19" HorizontalAlignment="Left" Margin="6,281,0,0" VerticalAlignment="Top" Width="91" />
     </Grid>
 </Window>
