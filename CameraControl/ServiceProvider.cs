@@ -11,7 +11,7 @@ namespace CameraControl
 {
   public class ServiceProvider
   {
-    private static string AppName = "NikonCameraControl";
+    public static string AppName = "NikonCameraControl";
 
     public static Settings Settings { get; set; }
     public static ThumbWorker ThumbWorker { get; set; }

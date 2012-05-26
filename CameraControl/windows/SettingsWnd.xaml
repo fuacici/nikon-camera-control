@@ -28,6 +28,7 @@
                             <xctk:IntegerUpDown Name="integerUpDown1" Width="100" Value="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=PreviewSeconds}"/>
                         </StackPanel>
                     </StackPanel>
+                    <Button Content="Locate log file" Height="23" Name="button3" Width="100" Click="button3_Click" />
                 </StackPanel>
             </TabItem>
             <TabItem Header="Triggers">
