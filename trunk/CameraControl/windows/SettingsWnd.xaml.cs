@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -14,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using CameraControl.Classes;
 using WPF.Themes;
+using Path = System.IO.Path;
 
 namespace CameraControl.windows
 {
@@ -50,26 +52,25 @@ namespace CameraControl.windows
       this.Close();
     }
 
-    private void Button_Click(object sender, RoutedEventArgs e)
-    {
-      //FolderBrowserDialog dlg = new FolderBrowserDialog();
-      //dlg.SelectedPath = ServiceProvider.Settings.HuginPath;
-      //if(dlg.ShowDialog()==System.Windows.Forms.DialogResult.OK)
-      //{
-      //  ServiceProvider.Settings.HuginPath = dlg.SelectedPath;
-      //}
-    }
 
-    private void Button_Click_1(object sender, RoutedEventArgs e)
+    private void button3_Click(object sender, RoutedEventArgs e)
     {
       try
       {
-        System.Diagnostics.Process.Start("http://hugin.sourceforge.net/download/");
+        ProcessStartInfo processStartInfo = new ProcessStartInfo();
+        processStartInfo.FileName = "explorer";
+        processStartInfo.UseShellExecute = true;
+        processStartInfo.WindowStyle = ProcessWindowStyle.Normal;
+        processStartInfo.Arguments =
+          string.Format("/e,/select,\"{0}\"",
+                        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                                     ServiceProvider.AppName, "Log",
+                                     "app.log"));
+        Process.Start(processStartInfo);
       }
-      catch (Exception)
+      catch (Exception exception)
       {
-        
-        
+        ServiceProvider.Log.Error("Error to show file in explorer", exception);
       }
     }
 
