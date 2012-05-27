@@ -32,5 +32,3 @@
  * +  planed
  
 With Native driver the application can use live view (if is supported by the camera) and read camera properties in real time
-
-For comments and bug reports visit this forum http://cameracontrol.host-ed.me/forum/viewforum.php?f=12
