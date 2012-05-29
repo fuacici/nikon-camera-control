@@ -50,7 +50,16 @@ namespace CameraControl.windows
     private string _counterMessage;
     public string CounterMessage
     {
-      get { return _counterMessage; }
+      get
+      {
+        if (!LockA && !LockB)
+          return "?";
+        if (LockA && !LockB)
+          return FocusCounter.ToString();
+        if (LockA && LockB)
+          return FocusCounter + "/" + FocusValue;
+        return _counterMessage;
+      }
       set
       {
         _counterMessage = value;
@@ -65,8 +74,52 @@ namespace CameraControl.windows
       set
       {
         _focusCounter = value;
-        CounterMessage = "F:" + FocusCounter;
         NotifyPropertyChanged("FocusCounter");
+        NotifyPropertyChanged("CounterMessage");
+      }
+    }
+
+    private int _focusValue;
+    public int FocusValue
+    {
+      get { return _focusValue; }
+      set
+      {
+        _focusValue = value;
+        NotifyPropertyChanged("FocusValue");
+        NotifyPropertyChanged("CounterMessage");
+      }
+    }
+
+    private bool _lockA;
+    public bool LockA
+    {
+      get { return _lockA; }
+      set
+      {
+        _lockA = value;
+        if (_lockA)
+        {
+          FocusCounter = 0;
+          FocusValue = 0;
+          LockB = false;
+        }
+        NotifyPropertyChanged("LockA");
+        NotifyPropertyChanged("CounterMessage");
+      }
+    }
+
+    private bool _lockB;
+    public bool LockB
+    {
+      get { return _lockB; }
+      set
+      {
+        _lockB = value;
+        if (_lockB)
+          FocusValue = FocusCounter;
+        NotifyPropertyChanged("LockB");
+        NotifyPropertyChanged("CounterMessage");
       }
     }
 
@@ -97,6 +150,7 @@ namespace CameraControl.windows
     {
       SelectedPortableDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
       Init();
+      LockA = false;
     }
 
     public LiveViewWnd(ICameraDevice device)
@@ -322,38 +376,32 @@ namespace CameraControl.windows
 
     private void btn_focusm_Click(object sender, RoutedEventArgs e)
     {
-      selectedPortableDevice.Focus(-Step1);
-      FocusCounter -= Step1;
+      SetFocus(-Step1);
     }
 
     private void btn_focusp_Click(object sender, RoutedEventArgs e)
     {
-      selectedPortableDevice.Focus(Step1);
-      FocusCounter += Step1;
+      SetFocus(Step1);
     }
 
     private void btn_focusmm_Click(object sender, RoutedEventArgs e)
     {
-      selectedPortableDevice.Focus(-Step2);
-      FocusCounter -= Step2;
+      SetFocus(-Step2);
     }
 
     private void btn_focuspp_Click(object sender, RoutedEventArgs e)
     {
-      selectedPortableDevice.Focus(Step2);
-      FocusCounter += Step2;
+      SetFocus(Step2);
     }
 
     private void btn_focusmmm_Click(object sender, RoutedEventArgs e)
     {
-      selectedPortableDevice.Focus(-Step3);
-      FocusCounter -= Step3;
+      SetFocus(-Step3);
     }
 
     private void btn_focusppp_Click(object sender, RoutedEventArgs e)
     {
-      selectedPortableDevice.Focus(Step3);
-      FocusCounter += Step3;
+      SetFocus(Step3);
     }
 
     private void canvas_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -384,7 +432,7 @@ namespace CameraControl.windows
       switch (cmd)
       {
         case WindowsCmdConsts.LiveViewWnd_Show:
-          Dispatcher.BeginInvoke(new Action(delegate
+          Dispatcher.Invoke(new Action(delegate
                                               {
                                                 SelectedPortableDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
                                                 Show();
@@ -467,6 +515,22 @@ namespace CameraControl.windows
 
     #endregion
 
+    private void SetFocus(int step)
+    {
+      if (LockA)
+      {
+        if (FocusCounter + step < 0)
+          step = -FocusCounter;
+      }
+      if (LockB)
+      {
+        if (FocusCounter + step > FocusValue)
+          step = FocusValue - FocusCounter;
+      }
+      selectedPortableDevice.Focus(step);
+      FocusCounter += step;
+    }
+
     private void Window_Closing(object sender, CancelEventArgs e)
     {
       if (IsVisible)
@@ -478,6 +542,9 @@ namespace CameraControl.windows
 
     private void button3_Click(object sender, RoutedEventArgs e)
     {
+      FocusStackingWnd wnd = (FocusStackingWnd) ServiceProvider.WindowsManager.Get(typeof (FocusStackingWnd));
+      wnd.FocusCounter = FocusCounter;
+      wnd.FocusValue = FocusValue;
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FocusStackingWnd_Show);
     }
 
@@ -496,6 +563,16 @@ namespace CameraControl.windows
     private void button4_Click(object sender, RoutedEventArgs e)
     {
       FocusCounter = 0;
+    }
+
+    private void btn_movea_Click(object sender, RoutedEventArgs e)
+    {
+      SetFocus(-FocusCounter);
+    }
+
+    private void btn_moveb_Click(object sender, RoutedEventArgs e)
+    {
+      SetFocus(FocusValue - FocusCounter);
     }
   }
 }

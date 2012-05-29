@@ -58,6 +58,7 @@ namespace CameraControl.windows
       {
         _focusStep = value;
         NotifyPropertyChanged("FocusStep");
+        PhotoNo = FocusValue / FocusStep;
       }
     }
 
@@ -73,12 +74,38 @@ namespace CameraControl.windows
       }
     }
 
+    private int _focusCounter;
+    public int FocusCounter
+    {
+      get { return _focusCounter; }
+      set
+      {
+        _focusCounter = value;
+        NotifyPropertyChanged("FocusCounter");
+      }
+    }
+
+    private int _focusValue;
+
+    public int FocusValue
+    {
+      get { return _focusValue; }
+      set
+      {
+        _focusValue = value;
+        PhotoNo = FocusValue/FocusStep;
+        NotifyPropertyChanged("FocusValue");
+      }
+    }
+
+
     private bool preview = false;
     public FocusStackingWnd()
     {
       InitializeComponent();
       IsBusy = false;
       PhotoCount = 0;
+      FocusStep = 15;
     }
 
     void Manager_PhotoTakenDone(WIA.Item imageFile)

@@ -31,5 +31,15 @@ namespace CameraControl.Classes
         Event(cmd);
     }
 
+    public IWindow Get(Type t) 
+    {
+      foreach (IWindow window in WindowsList)
+      {
+        if (window.GetType() == t)
+          return window;
+      }
+      return null;
+    }
+
   }
 }
