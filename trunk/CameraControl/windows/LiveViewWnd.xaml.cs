@@ -43,9 +43,61 @@ namespace CameraControl.windows
     Line _line21 = new Line();
     Line _line22 = new Line();
     private BackgroundWorker _worker = new BackgroundWorker();
-    
+    private bool preview = false;
 
     public LiveViewData LiveViewData { get; set; }
+
+    private bool _isBusy;
+    public bool IsBusy
+    {
+      get { return _isBusy; }
+      set
+      {
+        _isBusy = value;
+        NotifyPropertyChanged("IsBusy");
+        NotifyPropertyChanged("IsFree");
+      }
+    }
+
+    public bool IsFree
+    {
+      get { return !_isBusy; }
+    }
+
+    private int _photoNo;
+    public int PhotoNo
+    {
+      get { return _photoNo; }
+      set
+      {
+        _photoNo = value;
+        NotifyPropertyChanged("PhotoNo");
+      }
+    }
+
+    private int _focusStep;
+    public int FocusStep
+    {
+      get { return _focusStep; }
+      set
+      {
+        _focusStep = value;
+        NotifyPropertyChanged("FocusStep");
+        PhotoNo = FocusValue / FocusStep;
+      }
+    }
+
+
+    private int _photoCount;
+    public int PhotoCount
+    {
+      get { return _photoCount; }
+      set
+      {
+        _photoCount = value;
+        NotifyPropertyChanged("PhotoCount");
+      }
+    }
 
     private string _counterMessage;
     public string CounterMessage
@@ -86,6 +138,7 @@ namespace CameraControl.windows
       set
       {
         _focusValue = value;
+        PhotoNo = FocusValue / FocusStep;
         NotifyPropertyChanged("FocusValue");
         NotifyPropertyChanged("CounterMessage");
       }
@@ -151,6 +204,7 @@ namespace CameraControl.windows
       SelectedPortableDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
       Init();
       LockA = false;
+      FocusStep = 20;
     }
 
     public LiveViewWnd(ICameraDevice device)
@@ -182,6 +236,15 @@ namespace CameraControl.windows
     {
       if (!IsVisible)
         return;
+      if (PhotoCount <= PhotoNo && IsBusy)
+      {
+        Thread thread_photo = new Thread(TakePhoto);
+        thread_photo.Start();
+      }
+      else
+      {
+        IsBusy = false;
+      }
       Thread thread = new Thread(new ThreadStart(delegate
                                                    {
                                                      //Thread.Sleep(200);
@@ -574,5 +637,65 @@ namespace CameraControl.windows
     {
       SetFocus(FocusValue - FocusCounter);
     }
+
+    private void TakePhoto()
+    {
+      if (IsBusy)
+      {
+        PhotoCount++;
+        Thread.Sleep(200);
+        ServiceProvider.DeviceManager.SelectedCameraDevice.StartLiveView();
+        Thread.Sleep(800);
+        SetFocus(FocusStep);
+        //ServiceProvider.DeviceManager.SelectedCameraDevice.Focus(FocusStep);
+        Thread.Sleep(1000);
+        if (!preview)
+        {
+          ServiceProvider.DeviceManager.SelectedCameraDevice.TakePictureNoAf();
+        }
+        else
+        {
+          if (PhotoCount <= PhotoNo)
+          {
+            Thread.Sleep(1000);
+            TakePhoto();
+          }
+          else
+          {
+            IsBusy = false;
+          }
+        }
+      }
+      else
+      {
+        ServiceProvider.DeviceManager.SelectedCameraDevice.StartLiveView();
+      }
+    }
+
+    private void btn_preview_Click(object sender, RoutedEventArgs e)
+    {
+      SetFocus(-FocusCounter);
+      PhotoCount = 0;
+      IsBusy = true;
+      preview = true;
+      Thread thread = new Thread(TakePhoto);
+      thread.Start(); 
+    }
+
+    private void btn_stop_Click(object sender, RoutedEventArgs e)
+    {
+      IsBusy = false;
+    }
+
+    private void btn_takephoto_Click(object sender, RoutedEventArgs e)
+    {
+      SetFocus(-FocusCounter);
+      PhotoCount = 0;
+      IsBusy = true;
+      preview = false;
+      Thread thread = new Thread(TakePhoto);
+      thread.Start(); 
+    }
+
   }
 }
