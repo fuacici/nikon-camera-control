@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Devices="clr-namespace:CameraControl.Devices" mc:Ignorable="d" 
-             d:DesignHeight="57" d:DesignWidth="1168" BorderBrush="{x:Null}" BorderThickness="1" KeyDown="UserControl_KeyDown">
+             d:DesignHeight="57" d:DesignWidth="1168" BorderBrush="{x:Null}" BorderThickness="1">
     <UserControl.DataContext>
         <Devices:CameraDeviceManager/>
     </UserControl.DataContext>
@@ -47,7 +47,15 @@
         </StackPanel>
         <StackPanel Margin="1">
             <Label Content="Battery"  />
-            <ProgressBar Minimum="0" Maximum="100" Height="20" Value="{Binding Path=SelectedCameraDevice.Battery}" ToolTip="{Binding Path=SelectedCameraDevice.Battery}"/>
+            <ProgressBar Minimum="0" Maximum="100" Height="20" Value="{Binding Path=SelectedCameraDevice.Battery}" ToolTip="{Binding Path=SelectedCameraDevice.Battery}" Style="{x:Null}">
+                <ProgressBar.Foreground>
+                    <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                        <GradientStop Color="#FFDEDE17" Offset="0.541" />
+                        <GradientStop Color="#FF009600" Offset="0.988" />
+                        <GradientStop Color="#FF0DAD1D" Offset="0.023" />
+                    </LinearGradientBrush>
+                </ProgressBar.Foreground>
+            </ProgressBar>
         </StackPanel>
     </WrapPanel>
 </UserControl>

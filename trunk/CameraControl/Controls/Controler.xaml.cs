@@ -13,14 +13,6 @@ namespace CameraControl.Controls
       InitializeComponent();
     }
 
-    private void UserControl_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-    {
-      //if(e.Key==Key.S)
-      //{
-      //  cmb_shutter.IsDropDownOpen = !cmb_shutter.IsDropDownOpen;
-      //}
-    }
-
     private void cmb_shutter_GotFocus(object sender, System.Windows.RoutedEventArgs e)
     {
       ComboBox cmb = sender as ComboBox;
