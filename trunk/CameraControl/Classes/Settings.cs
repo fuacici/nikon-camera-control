@@ -89,16 +89,27 @@ namespace CameraControl.Classes
       }
     }
 
-    //private string _huginPath;
-    //public string HuginPath
-    //{
-    //  get { return _huginPath; }
-    //  set
-    //  {
-    //    _huginPath = value;
-    //    NotifyPropertyChanged("HuginPath");
-    //  }
-    //}
+    private int _liveViewFreezeTimeOut;
+    public int LiveViewFreezeTimeOut
+    {
+      get { return _liveViewFreezeTimeOut; }
+      set
+      {
+        _liveViewFreezeTimeOut = value;
+        NotifyPropertyChanged("LiveViewFreezeTimeOut");
+      }
+    }
+
+    private bool _previewLiveViewImage;
+    public bool PreviewLiveViewImage
+    {
+      get { return _previewLiveViewImage; }
+      set
+      {
+        _previewLiveViewImage = value;
+        NotifyPropertyChanged("PreviewLiveViewImage");
+      }
+    }
 
     public DateTime LastUpdateCheckDate { get; set; }
 
@@ -254,6 +265,8 @@ namespace CameraControl.Classes
       WebserverPort = 5513;
       Preview = false;
       PreviewSeconds = 3;
+      LiveViewFreezeTimeOut = 3;
+      PreviewLiveViewImage = true;
     }
 
     public void Add(PhotoSession session)

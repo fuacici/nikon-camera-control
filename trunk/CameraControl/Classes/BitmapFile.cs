@@ -14,6 +14,10 @@ namespace CameraControl.Classes
 {
   public class BitmapFile:BaseFieldClass
   {
+    public delegate void BitmapLoadedEventHandler(object sender);
+
+    public virtual event BitmapLoadedEventHandler BitmapLoaded;
+    
     private FileItem _fileItem;
     public FileItem FileItem
     {
@@ -203,6 +207,8 @@ namespace CameraControl.Classes
       catch (Exception)
       {
       }
+      if (BitmapLoaded != null)
+        BitmapLoaded(this);
       return res;
     }
 

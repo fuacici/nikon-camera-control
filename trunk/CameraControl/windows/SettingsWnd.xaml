@@ -25,7 +25,14 @@
                         <CheckBox Content="Preview image after shot in fullscreen" IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=Preview}"/>
                         <StackPanel Orientation="Horizontal" Margin="3">
                             <Label Content="Preview time in sec : "/>
-                            <xctk:IntegerUpDown Name="integerUpDown1" Width="100" Value="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=PreviewSeconds}"/>
+                            <xctk:IntegerUpDown Minimum="2" Width="100" Value="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=PreviewSeconds}"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Margin="3">
+                        <CheckBox Content="Preview image after shot in live view" IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=PreviewLiveViewImage}"/>
+                        <StackPanel Orientation="Horizontal" Margin="3">
+                            <Label Content="Live view image freeze in sec : "/>
+                            <xctk:IntegerUpDown Minimum="2" Maximum="120" Width="100" Value="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=LiveViewFreezeTimeOut}"/>
                         </StackPanel>
                     </StackPanel>
                     <Button Content="Locate log file" Height="23" Name="button3" Width="100" Click="button3_Click" />

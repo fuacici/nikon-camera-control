@@ -189,11 +189,15 @@ namespace CameraControl.windows
       set
       {
         _freezeImage = value;
+        if (_freezeImage)
+          _freezeTimer.Start();
         NotifyPropertyChanged("FreezeImage");
       }
     }
 
     private Timer _timer = new Timer(1000/20);
+    private Timer _freezeTimer = new Timer(ServiceProvider.Settings.LiveViewFreezeTimeOut);
+
     private bool oper_in_progress = false;
     /// <summary>
     /// Gets the <see cref="PortableDevice"/> connected
@@ -223,6 +227,19 @@ namespace CameraControl.windows
       LockA = false;
       FocusStep = 75;
       FreezeImage = false;
+      ServiceProvider.Settings.SelectedBitmap.BitmapLoaded += SelectedBitmap_BitmapLoaded;
+    }
+
+    void SelectedBitmap_BitmapLoaded(object sender)
+    {
+      if(ServiceProvider.Settings.PreviewLiveViewImage && IsVisible)
+      {
+        FreezeImage = true;
+        Dispatcher.Invoke(new Action(delegate
+                                       {
+                                         image1.Source = ServiceProvider.Settings.SelectedBitmap.DisplayImage;
+                                       }));
+      }
     }
 
     public LiveViewWnd(ICameraDevice device)
@@ -237,6 +254,7 @@ namespace CameraControl.windows
       _timer.Stop();
       _timer.AutoReset = true;
       _timer.Elapsed += _timer_Elapsed;
+      _freezeTimer.Elapsed += _freezeTimer_Elapsed;
       _focusrect.Stroke = new SolidColorBrush(Colors.Green);
       canvas.Children.Add(_focusrect);
       _line11.Stroke = new SolidColorBrush(Colors.White);
@@ -252,6 +270,11 @@ namespace CameraControl.windows
                             if (!FreezeImage)
                               GetLiveImage();
                           };
+    }
+
+    void _freezeTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+    {
+      FreezeImage = false;
     }
 
     void Manager_PhotoTaked(WIA.Item imageFile)
