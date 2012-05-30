@@ -108,7 +108,7 @@ namespace CameraControl.windows
           return "?";
         if (LockA && !LockB)
           return FocusCounter.ToString();
-        if (LockA && LockB)
+        if (LockB)
           return FocusCounter + "/" + FocusValue;
         return _counterMessage;
       }
@@ -145,17 +145,23 @@ namespace CameraControl.windows
     }
 
     private bool _lockA;
+
     public bool LockA
     {
       get { return _lockA; }
       set
       {
         _lockA = value;
-        if (_lockA)
+        if (_lockA && !LockB)
         {
           FocusCounter = 0;
           FocusValue = 0;
           LockB = false;
+        }
+        if (_lockA && LockB)
+        {
+          FocusValue = FocusValue - FocusCounter;
+          FocusCounter = 0;
         }
         NotifyPropertyChanged("LockA");
         NotifyPropertyChanged("CounterMessage");
@@ -173,6 +179,17 @@ namespace CameraControl.windows
           FocusValue = FocusCounter;
         NotifyPropertyChanged("LockB");
         NotifyPropertyChanged("CounterMessage");
+      }
+    }
+
+    private bool _freezeImage;
+    public bool FreezeImage
+    {
+      get { return _freezeImage; }
+      set
+      {
+        _freezeImage = value;
+        NotifyPropertyChanged("FreezeImage");
       }
     }
 
@@ -204,7 +221,8 @@ namespace CameraControl.windows
       SelectedPortableDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
       Init();
       LockA = false;
-      FocusStep = 20;
+      FocusStep = 75;
+      FreezeImage = false;
     }
 
     public LiveViewWnd(ICameraDevice device)
@@ -229,7 +247,11 @@ namespace CameraControl.windows
       canvas.Children.Add(_line12);
       canvas.Children.Add(_line21);
       canvas.Children.Add(_line22);
-      _worker.DoWork += delegate { GetLiveImage(); };
+      _worker.DoWork += delegate
+                          {
+                            if (!FreezeImage)
+                              GetLiveImage();
+                          };
     }
 
     void Manager_PhotoTaked(WIA.Item imageFile)
@@ -247,7 +269,6 @@ namespace CameraControl.windows
       }
       Thread thread = new Thread(new ThreadStart(delegate
                                                    {
-                                                     //Thread.Sleep(200);
                                                      StartLiveView();
                                                      _timer.Start();
                                                    }));
@@ -506,6 +527,7 @@ namespace CameraControl.windows
                                                 ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTaked;
                                                 StartLiveView();
                                                 Thread.Sleep(500);
+                                                FreezeImage = false;
                                                 _timer.Start();
                                               }));
           break;
@@ -623,10 +645,6 @@ namespace CameraControl.windows
     }
     #endregion
 
-    private void button4_Click(object sender, RoutedEventArgs e)
-    {
-      FocusCounter = 0;
-    }
 
     private void btn_movea_Click(object sender, RoutedEventArgs e)
     {
@@ -644,9 +662,9 @@ namespace CameraControl.windows
       {
         PhotoCount++;
         Thread.Sleep(200);
-        ServiceProvider.DeviceManager.SelectedCameraDevice.StartLiveView();
-        Thread.Sleep(800);
         SetFocus(FocusStep);
+        Thread.Sleep(800);
+        GetLiveImage();
         //ServiceProvider.DeviceManager.SelectedCameraDevice.Focus(FocusStep);
         Thread.Sleep(1000);
         if (!preview)
@@ -655,13 +673,15 @@ namespace CameraControl.windows
         }
         else
         {
-          if (PhotoCount <= PhotoNo)
+          if (PhotoCount < PhotoNo)
           {
             Thread.Sleep(1000);
             TakePhoto();
           }
           else
           {
+            ServiceProvider.DeviceManager.SelectedCameraDevice.StartLiveView();
+            FreezeImage = false;
             IsBusy = false;
           }
         }
@@ -669,12 +689,15 @@ namespace CameraControl.windows
       else
       {
         ServiceProvider.DeviceManager.SelectedCameraDevice.StartLiveView();
+        FreezeImage = false;
       }
     }
 
     private void btn_preview_Click(object sender, RoutedEventArgs e)
     {
       SetFocus(-FocusCounter);
+      FreezeImage = true;
+      GetLiveImage();
       PhotoCount = 0;
       IsBusy = true;
       preview = true;
@@ -690,6 +713,8 @@ namespace CameraControl.windows
     private void btn_takephoto_Click(object sender, RoutedEventArgs e)
     {
       SetFocus(-FocusCounter);
+      FreezeImage = true;
+      GetLiveImage();
       PhotoCount = 0;
       IsBusy = true;
       preview = false;

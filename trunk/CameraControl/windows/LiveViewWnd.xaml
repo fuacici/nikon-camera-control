@@ -6,6 +6,56 @@
         Background="{DynamicResource WindowBackgroundBrush}"
         Title="Live View" Height="507" Width="758" Loaded="Window_Loaded" Closed="Window_Closed" Closing="Window_Closing" xmlns:my="clr-namespace:CameraControl.windows"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
+    <Window.Resources>
+        <SolidColorBrush x:Key="GlyphBrush" Color="#444" />
+        <ControlTemplate x:Key="toggleButtonTemplate1" TargetType="ToggleButton">
+            <Grid
+                        Width="20"
+                        Height="20"
+                        Background="Transparent">
+                <Image x:Name="ExpandImage"
+                                  Source="/CameraControl;component/Images/unlock.png"
+                                  HorizontalAlignment="Left" 
+                                  VerticalAlignment="Center" 
+                                  Margin="1,1,1,1" />
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsChecked"
+                     Value="True">
+                    <Setter Property="Source"
+                              TargetName="ExpandImage"
+                                  Value="/CameraControl;component/Images/lock.png"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="toggleButtonTemplate" TargetType="ToggleButton">
+            <Grid
+                        Width="20"
+                        Height="20"
+                        Background="Transparent">
+                <Image x:Name="ExpandImage"
+                                  Source="/CameraControl;component/Images/unlock.png"
+                                  HorizontalAlignment="Left" 
+                                  VerticalAlignment="Center" 
+                                  Margin="1,1,1,1" />
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsChecked"
+                     Value="True">
+                    <Setter Property="Source"
+                              TargetName="ExpandImage"
+                                  Value="/CameraControl;component/Images/lock.png"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <Style x:Key="toggleButtonStyle" TargetType="ToggleButton">
+            <Setter Property="Template" Value="{StaticResource toggleButtonTemplate}" />
+        </Style>
+        <Style x:Key="toggleButtonStyle1" TargetType="ToggleButton">
+            <Setter Property="Template" Value="{StaticResource toggleButtonTemplate1}" />
+        </Style>        
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
@@ -40,13 +90,47 @@
                 <ToggleButton Grid.Column="0" Grid.Row="1">
                     <Image/>
                 </ToggleButton>
-                <Button Margin="1" Content="|&lt;" Grid.Column="1" Grid.Row="1" Name="btn_movea" Click="btn_movea_Click" />
+                <Button Margin="1" Content="|&lt;" Grid.Column="1" Grid.Row="1" Name="btn_movea" Click="btn_movea_Click" IsEnabled="{Binding Path=LockA, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}"/>
                 <ToggleButton Margin="1" Grid.Column="0" Grid.Row="1" IsChecked="{Binding Path=LockA, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}">
-                    <Image Source="/CameraControl;component/Images/lock.png" />
+                    <ToggleButton.Resources>
+                        <Image x:Key="OnImage" Source="/CameraControl;component/Images/lock.png" />
+                        <Image x:Key="OffImage" Source="/CameraControl;component/Images/unlock.png" />
+                    </ToggleButton.Resources>
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton">
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Content" Value="{StaticResource OnImage}">
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter Property="Content" Value="{StaticResource OffImage}">
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
                 </ToggleButton>
-                <Button Margin="1" Content=">|" Grid.Column="4" Grid.Row="1" Name="btn_moveb" Click="btn_moveb_Click" />
+                <Button Margin="1" Content=">|" Grid.Column="4" Grid.Row="1" Name="btn_moveb" Click="btn_moveb_Click" IsEnabled="{Binding Path=LockB, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}"/>
                 <ToggleButton Margin="1" Grid.Column="5" Grid.Row="1" IsChecked="{Binding Path=LockB, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" IsEnabled="{Binding Path=LockA, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}">
-                    <Image Source="/CameraControl;component/Images/lock.png" />
+                    <ToggleButton.Resources>
+                        <Image x:Key="OnImage" Source="/CameraControl;component/Images/lock.png" />
+                        <Image x:Key="OffImage" Source="/CameraControl;component/Images/unlock.png" />
+                    </ToggleButton.Resources>
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton">
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Content" Value="{StaticResource OnImage}">
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter Property="Content" Value="{StaticResource OffImage}">
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
                 </ToggleButton>
             </Grid>
         </GroupBox>
@@ -76,5 +160,6 @@
                 <Label Content="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=PhotoCount}" Height="28" HorizontalAlignment="Left" Margin="7,115,0,0" Name="label3" VerticalAlignment="Top" Width="75" />
             </Grid>
         </GroupBox>
+        <ToggleButton Content="Freeze Image" Height="23" HorizontalAlignment="Left" Margin="12,57,0,0" VerticalAlignment="Top" Width="182" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=FreezeImage}"/>
     </Grid>
 </Window>
