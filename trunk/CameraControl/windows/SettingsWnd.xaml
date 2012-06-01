@@ -21,6 +21,9 @@
                     <StackPanel Orientation="Horizontal" Margin="3">
                         <CheckBox Content="Disable native drivers (not recomanded)" ToolTip="This option disable special handig of some cameras. Use this if you experience some problem"  IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=DisableNativeDrivers}" />
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <CheckBox Content="Play sound after photo taken"  IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=PlaySound}" />
+                    </StackPanel>                    
                     <StackPanel Margin="3">
                         <CheckBox Content="Preview image after shot in fullscreen" IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=Preview}"/>
                         <StackPanel Orientation="Horizontal" Margin="3">

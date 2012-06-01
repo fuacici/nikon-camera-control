@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -30,6 +31,7 @@ using WPF.Themes;
 using Clipboard = System.Windows.Clipboard;
 using EditSession = CameraControl.windows.EditSession;
 using MessageBox = System.Windows.Forms.MessageBox;
+using Path = System.IO.Path;
 
 namespace CameraControl
 {
@@ -176,6 +178,13 @@ namespace CameraControl
         ServiceProvider.Settings.SystemMessage = "Photo transfer done.";
         if (ServiceProvider.Settings.Preview)
           ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_ShowTimed);
+
+        if (ServiceProvider.Settings.PlaySound)
+        {
+          string _basedir = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+          var mplayer = new SoundPlayer(Path.Combine(_basedir, "Data", "takephoto.wav"));
+          mplayer.Play();
+        }
       }
       catch (Exception ex)
       {
