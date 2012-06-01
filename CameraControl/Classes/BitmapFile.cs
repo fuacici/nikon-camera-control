@@ -1,19 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using FreeImageAPI;
 using FreeImageAPI.Metadata;
+using AForge.Imaging;
+using Color = System.Drawing.Color;
+using Image = System.Drawing.Image;
+using Pen = System.Drawing.Pen;
 
 namespace CameraControl.Classes
 {
   public class BitmapFile:BaseFieldClass
   {
+    private PointCollection luminanceHistogramPoints = null;
+    private PointCollection redColorHistogramPoints = null;
+    private PointCollection greenColorHistogramPoints = null;
+    private PointCollection blueColorHistogramPoints = null;
+
     public delegate void BitmapLoadedEventHandler(object sender);
 
     public virtual event BitmapLoadedEventHandler BitmapLoaded;
@@ -77,7 +89,72 @@ namespace CameraControl.Classes
       }
     }
 
-    public ObservableCollection<DictionaryItem> Metadata { get; set; }
+
+    public PointCollection LuminanceHistogramPoints
+    {
+      get
+      {
+        return this.luminanceHistogramPoints;
+      }
+      set
+      {
+        if (this.luminanceHistogramPoints != value)
+        {
+          this.luminanceHistogramPoints = value;
+          NotifyPropertyChanged("LuminanceHistogramPoints");
+        }
+      }
+    }
+
+    public PointCollection RedColorHistogramPoints
+    {
+      get
+      {
+        return this.redColorHistogramPoints;
+      }
+      set
+      {
+        if (this.redColorHistogramPoints != value)
+        {
+          this.redColorHistogramPoints = value;
+          NotifyPropertyChanged("RedColorHistogramPoints");
+        }
+      }
+    }
+
+    public PointCollection GreenColorHistogramPoints
+    {
+      get
+      {
+        return this.greenColorHistogramPoints;
+      }
+      set
+      {
+        if (this.greenColorHistogramPoints != value)
+        {
+          this.greenColorHistogramPoints = value;
+          NotifyPropertyChanged("GreenColorHistogramPoints");
+        }
+      }
+    }
+
+    public PointCollection BlueColorHistogramPoints
+    {
+      get
+      {
+        return this.blueColorHistogramPoints;
+      }
+      set
+      {
+        if (this.blueColorHistogramPoints != value)
+        {
+          this.blueColorHistogramPoints = value;
+          NotifyPropertyChanged("BlueColorHistogramPoints");
+        }
+      }
+    }
+
+    public AsyncObservableCollection<DictionaryItem> Metadata { get; set; }
 
     private void CreateHistogramBlack(FIBITMAP dib)
     {
@@ -180,29 +257,24 @@ namespace CameraControl.Classes
       //Metadata.Clear();
       try
       {
-        FIBITMAP dib = FreeImage.LoadEx(FileItem.FileName);
+        
         if (FreeImage.GetFileType(FileItem.FileName, 0) == FREE_IMAGE_FORMAT.FIF_RAW)
         {
+          FIBITMAP dib = FreeImage.LoadEx(FileItem.FileName);
           FIBITMAP bmp = FreeImage.ToneMapping(dib, FREE_IMAGE_TMO.FITMO_REINHARD05, 0, 0); // ConvertToType(dib, FREE_IMAGE_TYPE.FIT_BITMAP, false);
           FileItem.Thumbnail = ToBitmap(FreeImage.GetBitmap(FreeImage.MakeThumbnail(dib, 255, true)));
           DisplayImage = ToBitmap(FreeImage.GetBitmap(bmp));
-          CreateHistogram(bmp);
-          CreateHistogramBlack(bmp);
+          //CreateHistogram(bmp);
+          //CreateHistogramBlack(bmp);
           FreeImage.UnloadEx(ref dib);
           FreeImage.UnloadEx(ref bmp);
         }
         else
         {
-          //BitmapImage img = new BitmapImage(new Uri(FileItem.FileName));
-          //img.Freeze();
-          //DisplayImage = img;
-          DisplayImage =BitmapSourceConvert.ToBitmapSource(FreeImage.GetBitmap(dib));
-          FileItem.Thumbnail = BitmapSourceConvert.ToBitmapSource(FreeImage.GetBitmap(FreeImage.MakeThumbnail(dib, 300, true)));
-          CreateHistogram(dib);
-          CreateHistogramBlack(dib);
-          FreeImage.UnloadEx(ref dib);
+          DisplayImage = ToBitmap(Image.FromFile(FileItem.FileName));
+          Thread thread_photo = new Thread(GetAdditionalData);
+          thread_photo.Start();
         }
-        GetMetadata();
       }
       catch (Exception)
       {
@@ -210,6 +282,23 @@ namespace CameraControl.Classes
       if (BitmapLoaded != null)
         BitmapLoaded(this);
       return res;
+    }
+
+    private void GetAdditionalData()
+    {
+      using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(FileItem.FileName))
+      {
+        // Luminance
+        ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
+        this.LuminanceHistogramPoints = ConvertToPointCollection(hslStatistics.Luminance.Values);
+        // RGB
+        ImageStatistics rgbStatistics = new ImageStatistics(bmp);
+        this.RedColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Red.Values);
+        this.GreenColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Green.Values);
+        this.BlueColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Blue.Values);
+        GetMetadata();
+      }
+      
     }
 
     public void GetMetadata()
@@ -273,13 +362,13 @@ Tag (hex)	Tag (dec)	IFD	Key	Type	Tag description
         return;
       foreach (DictionaryItem dictionaryItem in Metadata)
       {
-        if (dictionaryItem.Name == tag.Description)
+        if (dictionaryItem.Name == tag.Description.Trim())
         {
           dictionaryItem.Value = tag.ToString();
           return;
         }
       }
-      Metadata.Add(new DictionaryItem { Name = tag.Description, Value = tag.ToString()});
+      Metadata.Add(new DictionaryItem { Name = tag.Description.Trim(), Value = tag.ToString()});
     }
 
     private void SetBitmap(BitmapImage bi,Image image)
@@ -311,15 +400,21 @@ Tag (hex)	Tag (dec)	IFD	Key	Type	Tag description
       }
     }
 
+    public BitmapImage ToBitmap(Bitmap image)
+    {
+      MemoryStream ms = new MemoryStream();
+      image.Save(ms, ImageFormat.Bmp);
+      ms.Position = 0;
+      BitmapImage bi = new BitmapImage();
+      bi.BeginInit();
+      bi.StreamSource = ms;
+      bi.EndInit();
+      bi.Freeze();
+      return bi;
+    }
+
     public BitmapImage ToBitmap(Image image)
     {
-      //Graphics g = Graphics.FromImage(image);
-      //int w = image.Width/3;
-      //int h = image.Height/3;
-      //g.DrawLine(new Pen(new SolidBrush(Color.White), 2), w, 0, w, image.Height);
-      //g.DrawLine(new Pen(new SolidBrush(Color.White), 2), w*2, 0, w*2, image.Height);
-      //g.DrawLine(new Pen(new SolidBrush(Color.White), 2), 0, h, image.Width, h);
-      //g.DrawLine(new Pen(new SolidBrush(Color.White), 2), 0, h*2, image.Width, h*2);
       MemoryStream ms = new MemoryStream();
       image.Save(ms, ImageFormat.Bmp);
       ms.Position = 0;
@@ -363,10 +458,52 @@ Tag (hex)	Tag (dec)	IFD	Key	Type	Tag description
       DisplayImage = FileItem.Thumbnail;
     }
 
+    private PointCollection ConvertToPointCollection(int[] values)
+    {
+      //if (this.PerformHistogramSmoothing)
+      //{
+      values = SmoothHistogram(values);
+      //}
+
+      int max = values.Max();
+
+      PointCollection points = new PointCollection();
+      // first point (lower-left corner)
+      points.Add(new System.Windows.Point(0, max));
+      // middle points
+      for (int i = 0; i < values.Length; i++)
+      {
+        points.Add(new System.Windows.Point(i, max - values[i]));
+      }
+      // last point (lower-right corner)
+      points.Add(new System.Windows.Point(values.Length - 1, max));
+      points.Freeze();
+      return points;
+    }
+
+    private int[] SmoothHistogram(int[] originalValues)
+    {
+      int[] smoothedValues = new int[originalValues.Length];
+
+      double[] mask = new double[] { 0.25, 0.5, 0.25 };
+
+      for (int bin = 1; bin < originalValues.Length - 1; bin++)
+      {
+        double smoothedValue = 0;
+        for (int i = 0; i < mask.Length; i++)
+        {
+          smoothedValue += originalValues[bin - 1 + i] * mask[i];
+        }
+        smoothedValues[bin] = (int)smoothedValue;
+      }
+
+      return smoothedValues;
+    }
+
     public BitmapFile()
     {
       IsLoaded = false;
-      Metadata = new ObservableCollection<DictionaryItem>();
+      Metadata = new AsyncObservableCollection<DictionaryItem>();
       Metadata.Add(new DictionaryItem() {Name = "Exposure mode"});
       Metadata.Add(new DictionaryItem() {Name = "Exposure program"});
       Metadata.Add(new DictionaryItem() {Name = "Exposure time"});

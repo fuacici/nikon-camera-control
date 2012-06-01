@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using AForge.Imaging;
 using CameraControl.Classes;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
@@ -46,6 +47,24 @@ namespace CameraControl.windows
     private bool preview = false;
 
     public LiveViewData LiveViewData { get; set; }
+
+    private PointCollection luminanceHistogramPoints = null;
+    public PointCollection LuminanceHistogramPoints
+    {
+      get
+      {
+        return this.luminanceHistogramPoints;
+      }
+      set
+      {
+        if (this.luminanceHistogramPoints != value)
+        {
+          this.luminanceHistogramPoints = value;
+          NotifyPropertyChanged("LuminanceHistogramPoints");
+        }
+      }
+    }
+
 
     private bool _isBusy;
     public bool IsBusy
@@ -196,7 +215,7 @@ namespace CameraControl.windows
     }
 
     private Timer _timer = new Timer(1000/20);
-    private Timer _freezeTimer = new Timer(ServiceProvider.Settings.LiveViewFreezeTimeOut);
+    private Timer _freezeTimer = new Timer(ServiceProvider.Settings.LiveViewFreezeTimeOut*1000);
 
     private bool oper_in_progress = false;
     /// <summary>
@@ -237,6 +256,7 @@ namespace CameraControl.windows
         FreezeImage = true;
         Dispatcher.Invoke(new Action(delegate
                                        {
+                                         ServiceProvider.Settings.SelectedBitmap.DisplayImage.Freeze();
                                          image1.Source = ServiceProvider.Settings.SelectedBitmap.DisplayImage;
                                        }));
       }
@@ -348,6 +368,12 @@ namespace CameraControl.windows
                                                 MemoryStream stream = new MemoryStream(LiveViewData.ImageData, 0,
                                                                                        LiveViewData.ImageData.Length);
 
+                                                using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(stream))
+                                                {
+                                                  ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
+                                                  this.LuminanceHistogramPoints = ConvertToPointCollection(hslStatistics.Luminance.Values);
+                                                }
+                                                stream.Seek(0, SeekOrigin.Begin);
                                                 JpegBitmapDecoder decoder = new JpegBitmapDecoder(stream,
                                                                                                   BitmapCreateOptions.
                                                                                                     None,
@@ -745,5 +771,22 @@ namespace CameraControl.windows
       thread.Start(); 
     }
 
+    private PointCollection ConvertToPointCollection(int[] values)
+    {
+      int max = values.Max();
+
+      PointCollection points = new PointCollection();
+      // first point (lower-left corner)
+      points.Add(new System.Windows.Point(0, max));
+      // middle points
+      for (int i = 0; i < values.Length; i++)
+      {
+        points.Add(new System.Windows.Point(i, max - values[i]));
+      }
+      // last point (lower-right corner)
+      points.Add(new System.Windows.Point(values.Length - 1, max));
+      points.Freeze();
+      return points;
+    }
   }
 }
