@@ -67,29 +67,6 @@ namespace CameraControl.Classes
       }
     }
 
-    private BitmapImage _histogram;
-    public BitmapImage Histogram
-    {
-      get { return _histogram; }
-      set
-      {
-        _histogram = value;
-        NotifyPropertyChanged("Histogram");
-      }
-    }
-
-    private BitmapImage _histogramBlack;
-    public BitmapImage HistogramBlack
-    {
-      get { return _histogramBlack; }
-      set
-      {
-        _histogramBlack = value;
-        NotifyPropertyChanged("HistogramBlack");
-      }
-    }
-
-
     public PointCollection LuminanceHistogramPoints
     {
       get
@@ -156,101 +133,6 @@ namespace CameraControl.Classes
 
     public AsyncObservableCollection<DictionaryItem> Metadata { get; set; }
 
-    private void CreateHistogramBlack(FIBITMAP dib)
-    {
-      int height = 100;
-      int[] histo = new int[256];
-      Bitmap image = new Bitmap(256, height);
-      Graphics g = Graphics.FromImage(image);
-      g.FillRectangle(new SolidBrush(Color.FromArgb(100, 255, 255, 255)), 0, 0, 256, height);
-      double maxValue = 0;
-
-
-      FreeImage.GetHistogram(dib, histo, FREE_IMAGE_COLOR_CHANNEL.FICC_RGB);
-
-      foreach (int i in histo)
-      {
-        if (i > maxValue)
-          maxValue = i;
-      }
-
-      for (int i = 0; i < 256; i++)
-      {
-        int x = Convert.ToInt32((histo[i] / maxValue) * height);
-        g.DrawLine(new Pen(new SolidBrush(Color.Black), 1), i, height, i, height - x);
-      }
-
-      HistogramBlack =ToBitmap(image);
-    }
-
-    private void CreateHistogram(FIBITMAP dib)
-    {
-      int height = 100;
-      int[] histo = new int[256];
-      Bitmap image = new Bitmap(256, height);
-      Graphics g = Graphics.FromImage(image);
-      g.FillRectangle(new SolidBrush(SystemColors.Window), 0, 0, 256, height);
-      double maxValue = 0;
-
-
-      FreeImage.GetHistogram(dib, histo, FREE_IMAGE_COLOR_CHANNEL.FICC_RED);
-
-      foreach (int i in histo)
-      {
-        if (i > maxValue)
-          maxValue = i;
-      }
-
-
-      for (int i = 0; i < 256; i++)
-      {
-        try
-        {
-          int x = (int)((histo[i] / maxValue) * height);
-          g.DrawLine(new Pen(new SolidBrush(Color.FromArgb(126, 255, 0, 0)), 1), i, height, i, height - x);
-        }
-        catch (Exception ex)
-        {
-
-        }
-      }
-
-      maxValue = 0;
-      FreeImage.GetHistogram(dib, histo, FREE_IMAGE_COLOR_CHANNEL.FICC_GREEN);
-
-      foreach (int i in histo)
-      {
-        if (i > maxValue)
-          maxValue = i;
-      }
-
-      for (int i = 0; i < 256; i++)
-      {
-        int x = Convert.ToInt32((histo[i] / maxValue) * height);
-        g.DrawLine(new Pen(new SolidBrush(Color.FromArgb(126, 0, 255, 0)), 1), i, height, i, height - x);
-      }
-
-      maxValue = 0;
-      FreeImage.GetHistogram(dib, histo, FREE_IMAGE_COLOR_CHANNEL.FICC_BLUE);
-      foreach (int i in histo)
-      {
-        if (i > maxValue)
-          maxValue = i;
-      }
-
-      for (int i = 0; i < 256; i++)
-      {
-        int x = Convert.ToInt32((histo[i] / maxValue) * height);
-        g.DrawLine(new Pen(new SolidBrush(Color.FromArgb(126, 0, 0, 255)), 1), i, height, i, height - x);
-      }
-
-
-      Histogram = ToBitmap(image);
-    }
-
-
-
-
     public BitmapImage GetBitmap()
     {
       BitmapImage res = null;
@@ -286,19 +168,25 @@ namespace CameraControl.Classes
 
     private void GetAdditionalData()
     {
-      using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(FileItem.FileName))
+      try
       {
-        // Luminance
-        ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
-        this.LuminanceHistogramPoints = ConvertToPointCollection(hslStatistics.Luminance.Values);
-        // RGB
-        ImageStatistics rgbStatistics = new ImageStatistics(bmp);
-        this.RedColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Red.Values);
-        this.GreenColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Green.Values);
-        this.BlueColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Blue.Values);
+        using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(FileItem.FileName))
+        {
+          // Luminance
+          ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
+          this.LuminanceHistogramPoints = ConvertToPointCollection(hslStatistics.Luminance.Values);
+          // RGB
+          ImageStatistics rgbStatistics = new ImageStatistics(bmp);
+          this.RedColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Red.Values);
+          this.GreenColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Green.Values);
+          this.BlueColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Blue.Values);
+        }
         GetMetadata();
       }
-      
+      catch (Exception ex)
+      {
+        ServiceProvider.Log.Error(ex);
+      }
     }
 
     public void GetMetadata()

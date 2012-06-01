@@ -32,7 +32,7 @@ namespace CameraControl.windows
 
     private void button1_Click(object sender, RoutedEventArgs e)
     {
-      System.Diagnostics.Process.Start("http://cameracontrol.host-ed.me/");
+      System.Diagnostics.Process.Start("http://nccsoftware.blogspot.ro/");
     }
 
     private void button3_Click(object sender, RoutedEventArgs e)

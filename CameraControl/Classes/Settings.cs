@@ -192,6 +192,17 @@ namespace CameraControl.Classes
       }
     }
 
+    private bool _playSound;
+    public bool PlaySound
+    {
+      get { return _playSound; }
+      set
+      {
+        _playSound = value;
+        NotifyPropertyChanged("PlaySound");
+      }
+    }
+
     public string Webaddress
     {
       get
