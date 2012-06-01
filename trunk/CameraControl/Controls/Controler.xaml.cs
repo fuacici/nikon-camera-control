@@ -18,7 +18,7 @@ namespace CameraControl.Controls
       ComboBox cmb = sender as ComboBox;
       if (cmb != null && cmb.IsFocused)
       {
-        cmb.IsDropDownOpen = !cmb.IsDropDownOpen;
+        //cmb.IsDropDownOpen = !cmb.IsDropDownOpen;
       }
     }
 
