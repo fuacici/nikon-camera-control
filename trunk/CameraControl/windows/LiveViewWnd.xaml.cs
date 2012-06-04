@@ -709,30 +709,33 @@ namespace CameraControl.windows
     {
       if (IsBusy)
       {
+        FreezeImage = true;
         PhotoCount++;
-        Thread.Sleep(200);
-        SetFocus(FocusStep);
-        Thread.Sleep(800);
+        StartLiveView();
+        Thread.Sleep(300);
+        if (PhotoCount > 0)
+          SetFocus(FocusStep);
+        Thread.Sleep(700);
         GetLiveImage();
         //ServiceProvider.DeviceManager.SelectedCameraDevice.Focus(FocusStep);
         Thread.Sleep(1000);
-        if (!preview)
+        if (PhotoCount < PhotoNo)
         {
-          ServiceProvider.DeviceManager.SelectedCameraDevice.TakePictureNoAf();
-        }
-        else
-        {
-          if (PhotoCount < PhotoNo)
+          if (!preview)
+          {
+            ServiceProvider.DeviceManager.SelectedCameraDevice.TakePictureNoAf();
+          }
+          else
           {
             Thread.Sleep(1000);
             TakePhoto();
           }
-          else
-          {
-            ServiceProvider.DeviceManager.SelectedCameraDevice.StartLiveView();
-            FreezeImage = false;
-            IsBusy = false;
-          }
+        }
+        else
+        {
+          ServiceProvider.DeviceManager.SelectedCameraDevice.StartLiveView();
+          FreezeImage = false;
+          IsBusy = false;
         }
       }
       else
