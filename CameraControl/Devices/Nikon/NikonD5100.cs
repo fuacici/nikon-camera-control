@@ -165,7 +165,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    protected void GetAditionalLIveViewData(LiveViewData viewData, byte[] result)
+    protected virtual void GetAditionalLIveViewData(LiveViewData viewData, byte[] result)
     {
       viewData.LiveViewImageWidth = ToInt16(result, 0);
       viewData.LiveViewImageHeight = ToInt16(result, 2);
