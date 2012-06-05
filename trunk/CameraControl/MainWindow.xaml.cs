@@ -168,9 +168,12 @@ namespace CameraControl
         Item item = o as Item;
         ServiceProvider.Settings.SystemMessage = "Photo transfer begin.";
         string s = item.ItemID;
-        ImageFile imageFile = (ImageFile)item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
+        ImageFile imageFile = null;
+
+        imageFile = (ImageFile)item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
         string fileName = ServiceProvider.Settings.DefaultSession.GetNextFileName(imageFile.FileExtension);
         //file exist : : 0x80070050
+        // busy :  0x80210006
         imageFile.SaveFile(fileName);
         Dispatcher.Invoke(
           new Action(delegate { ImageLIst.SelectedValue = ServiceProvider.Settings.DefaultSession.AddFile(fileName); }));
@@ -185,6 +188,7 @@ namespace CameraControl
           var mplayer = new SoundPlayer(Path.Combine(_basedir, "Data", "takephoto.wav"));
           mplayer.Play();
         }
+        WiaManager.OnPhotoTakenDone();
       }
       catch (Exception ex)
       {
