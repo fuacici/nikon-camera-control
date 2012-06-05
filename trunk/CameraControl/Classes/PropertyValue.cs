@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CameraControl.Classes
 {
-  public class PropertyValue:BaseFieldClass
+  public class PropertyValue:BaseFieldClass 
   {
     public delegate void ValueChangedEventHandler(object sender, string key, int val);
     public event ValueChangedEventHandler ValueChanged;
@@ -68,9 +68,10 @@ namespace CameraControl.Classes
         if (keyValuePair.Value== o)
         {
           Value = keyValuePair.Key;
-          //NotifyPropertyChanged("Value");
+          return;
         }
       }
+      Console.WriteLine("Value not found");
     }
 
     public void SetValue(string o)
@@ -80,6 +81,7 @@ namespace CameraControl.Classes
         if (keyValuePair.Key == o)
         {
           Value = keyValuePair.Key;
+          return;
         }
       }
     }

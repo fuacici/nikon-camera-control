@@ -277,26 +277,53 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public override void ReadDeviceProperties()
+    public override void ReadDeviceProperties(int prop)
     {
       lock (Locker)
       {
         try
         {
           HaveLiveView = true;
-          FNumber.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_Fnumber));
-          IsoNumber.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureIndex));
-          ShutterSpeed.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureTime));
-          WhiteBalance.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_WhiteBalance));
-          Mode.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureProgramMode));
-          ExposureCompensation.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
-                                                                          CONST_PROP_ExposureBiasCompensation));
-          CompressionSetting.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
-                                                                CONST_PROP_CompressionSetting));
-          ExposureMeteringMode.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
-                                                                CONST_PROP_ExposureMeteringMode));
-          FocusMode.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_FocusMode));
-          Battery = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_BatteryLevel, -1)[0];
+          switch (prop)
+          {
+            case CONST_PROP_Fnumber:
+              FNumber.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_Fnumber));
+              break;
+            case CONST_PROP_ExposureIndex:
+              IsoNumber.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                                   CONST_PROP_ExposureIndex));
+              break;
+            case CONST_PROP_ExposureTime:
+              ShutterSpeed.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                                      CONST_PROP_ExposureTime));
+              break;
+            case CONST_PROP_WhiteBalance:
+              WhiteBalance.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                                      CONST_PROP_WhiteBalance));
+              break;
+            case CONST_PROP_ExposureProgramMode:
+              Mode.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                              CONST_PROP_ExposureProgramMode));
+              break;
+            case CONST_PROP_ExposureBiasCompensation:
+              ExposureCompensation.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                                              CONST_PROP_ExposureBiasCompensation));
+              break;
+            case CONST_PROP_CompressionSetting:
+              CompressionSetting.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                                            CONST_PROP_CompressionSetting));
+              break;
+            case CONST_PROP_ExposureMeteringMode:
+              ExposureMeteringMode.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                                              CONST_PROP_ExposureMeteringMode));
+              break;
+            case CONST_PROP_FocusMode:
+              FocusMode.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_FocusMode));
+              break;
+            case CONST_PROP_BatteryLevel:
+              Battery = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_BatteryLevel, -1)[0];
+              break;
+          }
         }
         catch (Exception)
         {
@@ -319,11 +346,9 @@ namespace CameraControl.Devices.Nikon
           int eventParam = BitConverter.ToInt16(result, 6*i + 4);
           if (eventCode == 0x4006)
           {
-            shouldRefresProperties = true;
+            ReadDeviceProperties(eventParam);
           }
         }
-        if (shouldRefresProperties)
-          ReadDeviceProperties();
       }
     }
 

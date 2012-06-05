@@ -29,6 +29,6 @@ namespace CameraControl.Devices
     void TakePictureNoAf();
     void TakePicture();
     void Close();
-    void ReadDeviceProperties();
+    void ReadDeviceProperties(int prop);
   }
 }

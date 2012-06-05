@@ -606,7 +606,7 @@ namespace CameraControl.Devices.Others
       HaveLiveView = false;
     }
 
-    public virtual void ReadDeviceProperties()
+    public virtual void ReadDeviceProperties(int o)
     {
       HaveLiveView = false;
     }
