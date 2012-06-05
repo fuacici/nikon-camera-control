@@ -14,9 +14,9 @@ namespace CameraControl.Devices.Nikon
       return res;
     }
 
-    public override void ReadDeviceProperties()
+    public override void ReadDeviceProperties(int prop)
     {
-      base.ReadDeviceProperties();
+      base.ReadDeviceProperties(prop);
       HaveLiveView = false;
     }
   }

@@ -181,7 +181,7 @@ namespace CameraControl.Classes
 
             IsConected = true;
             CameraDevice = ServiceProvider.DeviceManager.GetIDevice(this);
-            ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties();
+            ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
             ServiceProvider.Settings.SystemMessage = "Camera is connected ! Driver :"+CameraDevice.GetType().Name;
             ServiceProvider.Log.Debug("===========Camera is connected==============" );
             ServiceProvider.Log.Debug("Driver :" + CameraDevice.GetType().Name);

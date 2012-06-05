@@ -87,7 +87,7 @@ namespace CameraControl.Devices.Others
       
     }
 
-    public void ReadDeviceProperties()
+    public void ReadDeviceProperties(int prop)
     {
       
     }
