@@ -6,15 +6,15 @@ namespace CameraControl.Devices
   public interface ICameraDevice
   {
     bool HaveLiveView { get; set; }
-    PropertyValue FNumber { get; set; }
-    PropertyValue IsoNumber { get; set; }
-    PropertyValue ShutterSpeed { get; set; }
-    PropertyValue WhiteBalance { get; set; }
-    PropertyValue Mode { get; set; }
-    PropertyValue ExposureCompensation { get; set; }
-    PropertyValue CompressionSetting { get; set; }
-    PropertyValue ExposureMeteringMode { get; set; }
-    PropertyValue FocusMode { get; set; }
+    PropertyValue<int> FNumber { get; set; }
+    PropertyValue<int> IsoNumber { get; set; }
+    PropertyValue<int> ShutterSpeed { get; set; }
+    PropertyValue<int> WhiteBalance { get; set; }
+    PropertyValue<int> Mode { get; set; }
+    PropertyValue<int> ExposureCompensation { get; set; }
+    PropertyValue<int> CompressionSetting { get; set; }
+    PropertyValue<int> ExposureMeteringMode { get; set; }
+    PropertyValue<uint> FocusMode { get; set; }
 
     int Battery { get; set; }
     byte LiveViewImageZoomRatio { get; set; }

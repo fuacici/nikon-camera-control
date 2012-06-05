@@ -13,23 +13,23 @@ namespace CameraControl.Devices.Others
 
     public bool HaveLiveView { get; set; }
 
-    public PropertyValue FNumber { get; set; }
+    public PropertyValue<int> FNumber { get; set; }
 
-    public PropertyValue IsoNumber { get; set; }
+    public PropertyValue<int> IsoNumber { get; set; }
 
-    public PropertyValue ShutterSpeed { get; set; }
+    public PropertyValue<int> ShutterSpeed { get; set; }
 
-    public PropertyValue WhiteBalance { get; set; }
+    public PropertyValue<int> WhiteBalance { get; set; }
 
-    public PropertyValue Mode { get; set; }
+    public PropertyValue<int> Mode { get; set; }
 
-    public PropertyValue ExposureCompensation { get; set; }
+    public PropertyValue<int> ExposureCompensation { get; set; }
 
-    public PropertyValue CompressionSetting { get; set; }
+    public PropertyValue<int> CompressionSetting { get; set; }
 
-    public PropertyValue ExposureMeteringMode { get; set; }
+    public PropertyValue<int> ExposureMeteringMode { get; set; }
 
-    public PropertyValue FocusMode { get; set; }
+    public PropertyValue<uint> FocusMode { get; set; }
 
 
     public int Battery { get; set; }

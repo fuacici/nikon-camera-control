@@ -78,22 +78,12 @@ namespace CameraControl.Devices.Nikon
     {
       base.Init(id, manager);
       ExposureCompensation.ValueChanged += ExposureCompensation_ValueChanged;
-      FocusMode.ValueChanged += FocusMode_ValueChanged;
       _manager = manager;
       HaveLiveView = true;
       _stillImageDevice = new StillImageDevice(id);
       _stillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
       _timer.Start();
       return true;
-    }
-
-    void FocusMode_ValueChanged(object sender, string key, int val)
-    {
-      lock (Locker)
-      {
-        _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt16)val),
-                                           CONST_PROP_FocusMode, -1);
-      }
     }
 
     void ExposureCompensation_ValueChanged(object sender, string key, int val)
