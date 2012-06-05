@@ -153,13 +153,16 @@ namespace CameraControl.Classes
         }
         else
         {
-          DisplayImage = ToBitmap(Image.FromFile(FileItem.FileName));
+          Image image = Image.FromFile(FileItem.FileName);
+          DisplayImage = ToBitmap(image);
+          image.Dispose();
           Thread thread_photo = new Thread(GetAdditionalData);
           thread_photo.Start();
         }
       }
-      catch (Exception)
+      catch (Exception exception)
       {
+        ServiceProvider.Log.Error(exception);
       }
       if (BitmapLoaded != null)
         BitmapLoaded(this);
@@ -170,7 +173,7 @@ namespace CameraControl.Classes
     {
       try
       {
-        using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(FileItem.FileName))
+        using (Bitmap bmp = new Bitmap(FileItem.FileName))
         {
           // Luminance
           ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);

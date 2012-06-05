@@ -115,9 +115,13 @@ namespace CameraControl.Classes
         Item item = Device.GetItem(itemId);
         if (PhotoTaked != null)
           PhotoTaked(item);
-        if (PhotoTakenDone != null)
-          PhotoTakenDone(item);
       }
+    }
+
+    public void OnPhotoTakenDone()
+    {
+      if (PhotoTakenDone != null)
+        PhotoTakenDone(null);
     }
 
     public void DisconnectCamera()
