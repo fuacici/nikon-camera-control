@@ -118,7 +118,7 @@ namespace CameraControl.Devices.Others
                                                 {3, "Multi-pattern metering"},
                                                 {4, "Spot metering"}
                                               }; 
-    private Dictionary<int, string> FMTable=new Dictionary<int, string>()
+    private Dictionary<uint, string> FMTable=new Dictionary<uint, string>()
                                               {
                                                 {1, "[M] Manual focus"},
                                                 {0x8010, "[S] Single AF servo"},
@@ -141,8 +141,8 @@ namespace CameraControl.Devices.Others
     }
 
 
-    private PropertyValue _fNumber;
-    public PropertyValue FNumber
+    private PropertyValue<int> _fNumber;
+    public PropertyValue<int> FNumber
     {
       get { return _fNumber; }
       set
@@ -152,8 +152,8 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    private PropertyValue _isoNumber;
-    public PropertyValue IsoNumber
+    private PropertyValue<int> _isoNumber;
+    public PropertyValue<int> IsoNumber
     {
       get { return _isoNumber; }
       set
@@ -163,8 +163,8 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    private PropertyValue _shutterSpeed;
-    public PropertyValue ShutterSpeed
+    private PropertyValue<int> _shutterSpeed;
+    public PropertyValue<int> ShutterSpeed
     {
       get { return _shutterSpeed; }
       set
@@ -174,8 +174,8 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    private PropertyValue _whiteBalance;
-    public PropertyValue WhiteBalance
+    private PropertyValue<int> _whiteBalance;
+    public PropertyValue<int> WhiteBalance
     {
       get { return _whiteBalance; }
       set
@@ -185,8 +185,8 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    private PropertyValue _mode;
-    public PropertyValue Mode
+    private PropertyValue<int> _mode;
+    public PropertyValue<int> Mode
     {
       get { return _mode; }
       set
@@ -196,8 +196,8 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    private PropertyValue _exposureCompensation;
-    public PropertyValue ExposureCompensation
+    private PropertyValue<int> _exposureCompensation;
+    public PropertyValue<int> ExposureCompensation
     {
       get { return _exposureCompensation; }
       set
@@ -207,8 +207,8 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    private PropertyValue _compressionSetting;
-    public PropertyValue CompressionSetting
+    private PropertyValue<int> _compressionSetting;
+    public PropertyValue<int> CompressionSetting
     {
       get { return _compressionSetting; }
       set
@@ -218,8 +218,8 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    private PropertyValue _exposureMeteringMode;
-    public PropertyValue ExposureMeteringMode
+    private PropertyValue<int> _exposureMeteringMode;
+    public PropertyValue<int> ExposureMeteringMode
     {
       get { return _exposureMeteringMode; }
       set
@@ -229,7 +229,7 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    public PropertyValue FocusMode { get; set; }
+    public PropertyValue<uint> FocusMode { get; set; }
 
 
     private int _battery;
@@ -350,12 +350,13 @@ namespace CameraControl.Devices.Others
       Property fmProperty = manager.Device.Properties[WIAManager.CONST_PROP_FocusMode];
       if (fmProperty != null)
       {
-        foreach (var subTypeValue in fmProperty.SubTypeValues)
+        foreach (int subTypeValue in fmProperty.SubTypeValues)
         {
-          if (FMTable.ContainsKey((int)subTypeValue))
-            FocusMode.AddValues(FMTable[(int)subTypeValue], (int)subTypeValue);
+          uint subval = Convert.ToUInt16(subTypeValue);
+          if (FMTable.ContainsKey(subval))
+            FocusMode.AddValues(FMTable[subval], subval);
         }
-        FocusMode.SetValue(fmProperty.get_Value());
+        FocusMode.SetValue(Convert.ToUInt16((int)fmProperty.get_Value()));
       }
 
       Battery = manager.Device.Properties[WIAManager.CONST_PROP_BatteryStatus].get_Value();
@@ -366,40 +367,25 @@ namespace CameraControl.Devices.Others
 
     public WiaCameraDevice()
     {
-      FNumber = new PropertyValue();
+      FNumber = new PropertyValue<int>();
       FNumber.ValueChanged += FNumber_ValueChanged;
-      IsoNumber = new PropertyValue();
+      IsoNumber = new PropertyValue<int>();
       IsoNumber.ValueChanged += IsoNumber_ValueChanged;
-      ShutterSpeed = new PropertyValue();
+      ShutterSpeed = new PropertyValue<int>();
       ShutterSpeed.ValueChanged += ShutterSpeed_ValueChanged;
-      WhiteBalance = new PropertyValue();
+      WhiteBalance = new PropertyValue<int>();
       WhiteBalance.ValueChanged += WhiteBalance_ValueChanged;
-      Mode = new PropertyValue();
+      Mode = new PropertyValue<int>();
       Mode.ValueChanged += Mode_ValueChanged;
-      CompressionSetting = new PropertyValue();
+      CompressionSetting = new PropertyValue<int>();
       CompressionSetting.ValueChanged += CompressionSetting_ValueChanged;
-      ExposureCompensation = new PropertyValue();
+      ExposureCompensation = new PropertyValue<int>();
       ExposureCompensation.ValueChanged += ExposureCompensation_ValueChanged;
-      ExposureMeteringMode = new PropertyValue();
+      ExposureMeteringMode = new PropertyValue<int>();
       ExposureMeteringMode.ValueChanged += ExposureMeteringMode_ValueChanged;
-      FocusMode = new PropertyValue();
-      FocusMode.ValueChanged += FocusMode_ValueChanged;
-    }
+      FocusMode = new PropertyValue<uint>();
+      FocusMode.IsEnabled = false;
 
-
-    void FocusMode_ValueChanged(object sender, string key, int val)
-    {
-      lock (Locker)
-      {
-        try
-        {
-          Device.Properties[WIAManager.CONST_PROP_FocusMode].set_Value(val);
-        }
-        catch (Exception)
-        {
-
-        }
-      }
     }
 
     void ExposureMeteringMode_ValueChanged(object sender, string key, int val)
