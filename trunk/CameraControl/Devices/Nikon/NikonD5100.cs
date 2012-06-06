@@ -77,6 +77,64 @@ namespace CameraControl.Devices.Nikon
                                                     {0x3200, "Hi 1"},
                                                     {0x6400, "Hi 2"},
                                                   };
+    Dictionary<uint, string> _shutterTable = new Dictionary<uint, string>
+                       {
+                         {1, "1/6400"},
+                         {2, "1/4000"},
+                         {3, "1/3200"},
+                         {4, "1/2500"},
+                         {5, "1/2000"},
+                         {6, "1/1600"},
+                         {8, "1/1250"},
+                         {10, "1/1000"},
+                         {12, "1/800"},
+                         {15, "1/640"},
+                         {20, "1/500"},
+                         {25, "1/400"},
+                         {31, "1/320"},
+                         {40, "1/250"},
+                         {50, "1/200"},
+                         {62, "1/160"},
+                         {80, "1/125"},
+                         {100, "1/100"},
+                         {125, "1/80"},
+                         {166, "1/60"},
+                         {200, "1/50"},
+                         {250, "1/40"},
+                         {333, "1/30"},
+                         {400, "1/25"},
+                         {500, "1/20"},
+                         {666, "1/15"},
+                         {769, "1/13"},
+                         {1000, "1/10"},
+                         {1250, "1/8"},
+                         {1666, "1/6"},
+                         {2000, "1/5"},
+                         {2500, "1/4"},
+                         {3333, "1/3"},
+                         {4000, "1/2.5"},
+                         {5000, "1/2"},
+                         {6250, "1/1.6"},
+                         {7692, "1/1.3"},
+                         {10000, "1s"},
+                         {13000, "1.3s"},
+                         {16000, "1.6s"},
+                         {20000, "2s"},
+                         {25000, "2.5s"},
+                         {30000, "3s"},
+                         {40000, "4s"},
+                         {50000, "5s"},
+                         {60000, "6s"},
+                         {80000, "8s"},
+                         {100000, "10s"},
+                         {130000, "13s"},
+                         {150000, "15s"},
+                         {200000, "20s"},
+                         {250000, "25s"},
+                         {300000, "30s"},
+                         { 0xFFFFFFFF , "Bulb"},
+                       };
+
     private PropertyValue<int> _isoNumber;
     public PropertyValue<int> IsoNumber
     {
@@ -88,6 +146,16 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
+    private PropertyValue<long> _shutterSpeed;
+    public PropertyValue<long> ShutterSpeed
+    {
+      get { return _shutterSpeed; }
+      set
+      {
+        _shutterSpeed = value;
+        NotifyPropertyChanged("ShutterSpeed");
+      }
+    }
 
     public NikonD5100()
     {
@@ -117,14 +185,14 @@ namespace CameraControl.Devices.Nikon
     public override bool Init(string id, WIAManager manager)
     {
       //base.Init(id, manager);
-      IsoNumber = new PropertyValue<int>();
+
       //ExposureCompensation.ValueChanged += ExposureCompensation_ValueChanged;
-      IsoNumber.ValueChanged += IsoNumber_ValueChanged;
       _manager = manager;
       HaveLiveView = true;
       _stillImageDevice = new StillImageDevice(id);
       _stillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
       InitIso();
+      InitShutterSpeed();
       _timer.Start();
       return true;
     }
@@ -148,6 +216,8 @@ namespace CameraControl.Devices.Nikon
     {
       lock (Locker)
       {
+        IsoNumber = new PropertyValue<int>();
+        IsoNumber.ValueChanged += IsoNumber_ValueChanged;
         IsoNumber.Clear();
         byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc,CONST_PROP_ExposureIndex);
         int type = BitConverter.ToInt16(result, 2);
@@ -160,6 +230,41 @@ namespace CameraControl.Devices.Nikon
         }
         IsoNumber.SetValue(defval);
       }
+    }
+
+    private void InitShutterSpeed()
+    {
+      lock (Locker)
+      {
+        try
+        {
+          byte datasize = 4;
+          ShutterSpeed = new PropertyValue<long>();
+          ShutterSpeed.ValueChanged += ShutterSpeed_ValueChanged;
+          ShutterSpeed.Clear();
+          byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureTime);
+          int type = BitConverter.ToInt16(result, 2);
+          byte formFlag = result[(2 * datasize) + 5];
+          UInt32 defval = BitConverter.ToUInt32(result, datasize + 5);
+          for (int i = 0; i < result.Length - ((2 * datasize) + 6 + 2); i += datasize)
+          {
+            UInt32 val = BitConverter.ToUInt32(result, ((2 * datasize) + 6 + 2) + i);
+            ShutterSpeed.AddValues(_shutterTable.ContainsKey(val) ? _shutterTable[val] : val.ToString(), val);
+          }
+          ShutterSpeed.SetValue(defval);
+        }
+        catch (Exception ex)
+        {
+          
+         
+        }
+      }
+    }
+
+    void ShutterSpeed_ValueChanged(object sender, string key, long val)
+    {
+      _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                                         CONST_PROP_ExposureTime, -1);
     }
 
     public override void StartLiveView()

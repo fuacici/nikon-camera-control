@@ -17,7 +17,7 @@ namespace CameraControl.Devices.Others
 
     public PropertyValue<int> IsoNumber { get; set; }
 
-    public PropertyValue<int> ShutterSpeed { get; set; }
+    public PropertyValue<long> ShutterSpeed { get; set; }
 
     public PropertyValue<int> WhiteBalance { get; set; }
 

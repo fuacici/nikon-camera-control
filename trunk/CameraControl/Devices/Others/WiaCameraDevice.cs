@@ -68,7 +68,6 @@ namespace CameraControl.Devices.Others
                          {250000, "25s"},
                          {300000, "30s"},
                          {-1, "Bulb"},
-                         
                        };
      Dictionary<int,string> ExposureModeTable = new Dictionary<int, string>()
                             {
@@ -163,8 +162,8 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    private PropertyValue<int> _shutterSpeed;
-    public PropertyValue<int> ShutterSpeed
+    private PropertyValue<long> _shutterSpeed;
+    public PropertyValue<long> ShutterSpeed
     {
       get { return _shutterSpeed; }
       set
@@ -371,7 +370,7 @@ namespace CameraControl.Devices.Others
       FNumber.ValueChanged += FNumber_ValueChanged;
       IsoNumber = new PropertyValue<int>();
       IsoNumber.ValueChanged += IsoNumber_ValueChanged;
-      ShutterSpeed = new PropertyValue<int>();
+      ShutterSpeed = new PropertyValue<long>();
       ShutterSpeed.ValueChanged += ShutterSpeed_ValueChanged;
       WhiteBalance = new PropertyValue<int>();
       WhiteBalance.ValueChanged += WhiteBalance_ValueChanged;
@@ -479,7 +478,7 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    void ShutterSpeed_ValueChanged(object sender, string key, int val)
+    void ShutterSpeed_ValueChanged(object sender, string key, long val)
     {
       lock (Locker)
       {

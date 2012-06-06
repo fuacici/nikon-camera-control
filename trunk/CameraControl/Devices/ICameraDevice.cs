@@ -8,7 +8,7 @@ namespace CameraControl.Devices
     bool HaveLiveView { get; set; }
     PropertyValue<int> FNumber { get; set; }
     PropertyValue<int> IsoNumber { get; set; }
-    PropertyValue<int> ShutterSpeed { get; set; }
+    PropertyValue<long> ShutterSpeed { get; set; }
     PropertyValue<int> WhiteBalance { get; set; }
     PropertyValue<int> Mode { get; set; }
     PropertyValue<int> ExposureCompensation { get; set; }
