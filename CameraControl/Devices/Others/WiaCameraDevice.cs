@@ -67,7 +67,7 @@ namespace CameraControl.Devices.Others
                          {200000, "20s"},
                          {250000, "25s"},
                          {300000, "30s"},
-                         //{0xFFFFFFFF, "Bulb"},
+                         {-1, "Bulb"},
                          
                        };
      Dictionary<int,string> ExposureModeTable = new Dictionary<int, string>()
@@ -280,7 +280,7 @@ namespace CameraControl.Devices.Others
       Property shutterProperty = manager.Device.Properties[WIAManager.CONST_PROP_Exposure_Time];
       if (shutterProperty != null)
       {
-        foreach (var subTypeValue in shutterProperty.SubTypeValues)
+        foreach (int subTypeValue in shutterProperty.SubTypeValues)
         {
           if (ShutterTable.ContainsKey((int)subTypeValue))
             ShutterSpeed.AddValues(ShutterTable[(int)subTypeValue], (int)subTypeValue);
