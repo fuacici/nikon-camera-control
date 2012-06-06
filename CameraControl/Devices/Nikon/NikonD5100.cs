@@ -20,11 +20,13 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_CMD_EndLiveView = 0x9202;
     public const int CONST_CMD_GetLiveViewImage = 0x9203;
     public const int CONST_CMD_InitiateCaptureRecInMedia = 0x9207;
+    public const int CONST_CMD_AfAndCaptureRecInSdram = 0x90CB;
     public const int CONST_CMD_ChangeAfArea = 0x9205;
     public const int CONST_CMD_MfDrive = 0x9204;
     public const int CONST_CMD_GetDevicePropValue = 0x1015;
     public const int CONST_CMD_SetDevicePropValue = 0x1016;
     public const int CONST_CMD_GetEvent = 0x90C7;
+    public const int CONST_CMD_GetDevicePropDesc = 0x1014;
 
     public const int CONST_PROP_Fnumber = 0x5007;
     public const int CONST_PROP_ExposureIndex = 0x500F;
@@ -40,6 +42,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_PROP_FocusMode = 0x500A;
 
 
+
     private const string AppName = "CameraControl";
     private const int AppMajorVersionNumber = 1;
     private const int AppMinorVersionNumber = 0;
@@ -47,6 +50,43 @@ namespace CameraControl.Devices.Nikon
 
     protected StillImageDevice _stillImageDevice = null;
     private WIAManager _manager = null;
+
+    private Dictionary<uint, string> _isoTable = new Dictionary<uint, string>()
+                                                  {
+                                                    {0x0064, "100"},
+                                                    {0x007D, "125"},
+                                                    {0x00A0, "160"},
+                                                    {0x00C8, "200"},
+                                                    {0x00FA, "250"},
+                                                    {0x0140, "320"},
+                                                    {0x0190, "400"},
+                                                    {0x01F4, "500"},
+                                                    {0x0280, "640"},
+                                                    {0x0320, "800"},
+                                                    {0x03E8, "1000"},
+                                                    {0x04E2, "1250"},
+                                                    {0x0640, "1600"},
+                                                    {0x07D0, "2000"},
+                                                    {0x09C4, "2500"},
+                                                    {0x0C80, "3200"},
+                                                    {0x0FA0, "4000"},
+                                                    {0x1388, "5000"},
+                                                    {0x1900, "6400"},
+                                                    {0x1F40, "Hi 0.3"},
+                                                    {0x2710, "Hi 0.7"},
+                                                    {0x3200, "Hi 1"},
+                                                    {0x6400, "Hi 2"},
+                                                  };
+    private PropertyValue<int> _isoNumber;
+    public PropertyValue<int> IsoNumber
+    {
+      get { return _isoNumber; }
+      set
+      {
+        _isoNumber = value;
+        NotifyPropertyChanged("IsoNumber");
+      }
+    }
 
 
     public NikonD5100()
@@ -76,14 +116,23 @@ namespace CameraControl.Devices.Nikon
 
     public override bool Init(string id, WIAManager manager)
     {
-      base.Init(id, manager);
-      ExposureCompensation.ValueChanged += ExposureCompensation_ValueChanged;
+      //base.Init(id, manager);
+      IsoNumber = new PropertyValue<int>();
+      //ExposureCompensation.ValueChanged += ExposureCompensation_ValueChanged;
+      IsoNumber.ValueChanged += IsoNumber_ValueChanged;
       _manager = manager;
       HaveLiveView = true;
       _stillImageDevice = new StillImageDevice(id);
       _stillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
+      InitIso();
       _timer.Start();
       return true;
+    }
+
+    void IsoNumber_ValueChanged(object sender, string key, int val)
+    {
+      _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                                         CONST_PROP_ExposureIndex, -1);
     }
 
     void ExposureCompensation_ValueChanged(object sender, string key, int val)
@@ -95,6 +144,23 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
+    private void InitIso()
+    {
+      lock (Locker)
+      {
+        IsoNumber.Clear();
+        byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc,CONST_PROP_ExposureIndex);
+        int type = BitConverter.ToInt16(result, 2);
+        byte formFlag = result[9];
+        UInt16 defval = BitConverter.ToUInt16(result, 7);
+        for (int i = 0; i < result.Length - 12; i += 2)
+        {
+          UInt16 val = BitConverter.ToUInt16(result, 12 + i);
+          IsoNumber.AddValues(_isoTable.ContainsKey(val) ? _isoTable[val] : val.ToString(), val);
+        }
+        IsoNumber.SetValue(defval);
+      }
+    }
 
     public override void StartLiveView()
     {

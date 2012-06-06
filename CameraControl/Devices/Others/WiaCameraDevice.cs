@@ -153,7 +153,7 @@ namespace CameraControl.Devices.Others
     }
 
     private PropertyValue<int> _isoNumber;
-    public PropertyValue<int> IsoNumber
+    public virtual PropertyValue<int> IsoNumber
     {
       get { return _isoNumber; }
       set
