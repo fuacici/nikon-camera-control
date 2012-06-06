@@ -184,8 +184,8 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    private PropertyValue<int> _mode;
-    public PropertyValue<int> Mode
+    private PropertyValue<uint> _mode;
+    public PropertyValue<uint> Mode
     {
       get { return _mode; }
       set
@@ -304,7 +304,7 @@ namespace CameraControl.Devices.Others
         foreach (var subTypeValue in modeProperty.SubTypeValues)
         {
           if (ExposureModeTable.ContainsKey((int)subTypeValue))
-            Mode.AddValues(ExposureModeTable[(int)subTypeValue], (int)subTypeValue);
+            Mode.AddValues(ExposureModeTable[(int)subTypeValue], (uint)subTypeValue);
         }
         Mode.SetValue(modeProperty.get_Value());
       }
@@ -374,7 +374,7 @@ namespace CameraControl.Devices.Others
       ShutterSpeed.ValueChanged += ShutterSpeed_ValueChanged;
       WhiteBalance = new PropertyValue<int>();
       WhiteBalance.ValueChanged += WhiteBalance_ValueChanged;
-      Mode = new PropertyValue<int>();
+      Mode = new PropertyValue<uint>();
       Mode.ValueChanged += Mode_ValueChanged;
       CompressionSetting = new PropertyValue<int>();
       CompressionSetting.ValueChanged += CompressionSetting_ValueChanged;
@@ -432,7 +432,7 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    void Mode_ValueChanged(object sender, string key, int val)
+    void Mode_ValueChanged(object sender, string key, uint val)
     {
       lock (Locker)
       {

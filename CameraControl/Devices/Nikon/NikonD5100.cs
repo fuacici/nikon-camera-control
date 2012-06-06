@@ -134,6 +134,23 @@ namespace CameraControl.Devices.Nikon
                          {300000, "30s"},
                          { 0xFFFFFFFF , "Bulb"},
                        };
+    
+    Dictionary<int, string> _exposureModeTable = new Dictionary<int, string>()
+                            {
+                              {1, "M"},
+                              {2, "P"},
+                              {3, "A"},
+                              {4, "S"},
+                              {0x8010, "[Scene mode] AUTO"},
+                              {0x8011, "[Scene mode] Portrait"},
+                              {0x8012, "[Scene mode] Landscape"},
+                              {0x8013, "[Scene mode] Close up"},
+                              {0x8014, "[Scene mode] Sports"},
+                              {0x8016, "[Scene mode] Flash prohibition AUTO"},
+                              {0x8017, "[Scene mode] Child"},
+                              {0x8018, "[Scene mode] SCENE"},
+                              {0x8019, "[EffectMode] EFFECTS"},
+                            };
 
     private PropertyValue<int> _isoNumber;
     public PropertyValue<int> IsoNumber
@@ -154,6 +171,28 @@ namespace CameraControl.Devices.Nikon
       {
         _shutterSpeed = value;
         NotifyPropertyChanged("ShutterSpeed");
+      }
+    }
+
+    private PropertyValue<uint> _mode;
+    public PropertyValue<uint> Mode
+    {
+      get { return _mode; }
+      set
+      {
+        _mode = value;
+        NotifyPropertyChanged("Mode");
+      }
+    }
+
+    private PropertyValue<int> _fNumber;
+    public PropertyValue<int> FNumber
+    {
+      get { return _fNumber; }
+      set
+      {
+        _fNumber = value;
+        NotifyPropertyChanged("FNumber");
       }
     }
 
@@ -193,6 +232,8 @@ namespace CameraControl.Devices.Nikon
       _stillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
       InitIso();
       InitShutterSpeed();
+      InitFNumber();
+      InitMode();
       _timer.Start();
       return true;
     }
@@ -265,6 +306,96 @@ namespace CameraControl.Devices.Nikon
     {
       _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
                                          CONST_PROP_ExposureTime, -1);
+    }
+
+    private void InitMode()
+    {
+      try
+      {
+        byte datasize = 2;
+        Mode = new PropertyValue<uint>();
+        Mode.IsEnabled = false;
+        Mode.ValueChanged += Mode_ValueChanged;
+        byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureProgramMode);
+        int type = BitConverter.ToInt16(result, 2);
+        byte formFlag = result[(2 * datasize) + 5];
+        UInt16 defval = BitConverter.ToUInt16(result, datasize + 5);
+        for (int i = 0; i < result.Length - ((2 * datasize) + 6 + 2); i += datasize)
+        {
+          UInt16 val = BitConverter.ToUInt16(result, ((2 * datasize) + 6 + 2) + i);
+          Mode.AddValues(_exposureModeTable.ContainsKey(val) ? _exposureModeTable[val] : val.ToString(), val);
+        }
+        Mode.SetValue(defval);
+      }
+      catch (Exception ex)
+      {
+      }
+    }
+
+
+
+    void Mode_ValueChanged(object sender, string key, uint val)
+    {
+      switch (key)
+      {
+        case "M":
+          ShutterSpeed.IsEnabled = true;
+          FNumber.IsEnabled = true;
+          break;
+        case "P":
+          ShutterSpeed.IsEnabled = false;
+          FNumber.IsEnabled = false;
+          break;
+        case "A":
+          ShutterSpeed.IsEnabled = false;
+          FNumber.IsEnabled = true;
+          break;
+        case "S":
+          ShutterSpeed.IsEnabled = true;
+          FNumber.IsEnabled = false;
+          break;
+        default:
+          ShutterSpeed.IsEnabled = false;
+          FNumber.IsEnabled = false;
+          break;
+      } 
+    }
+
+    private void InitFNumber()
+    {
+      FNumber = new PropertyValue<int> { IsEnabled = true };
+      FNumber.ValueChanged += FNumber_ValueChanged;
+      ReInitFNumber();
+    }
+
+    private void ReInitFNumber()
+    {
+      try
+      {
+        FNumber.Clear();
+        const byte datasize = 2;
+        byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_Fnumber);
+        int type = BitConverter.ToInt16(result, 2);
+        byte formFlag = result[(2 * datasize) + 5];
+        UInt16 defval = BitConverter.ToUInt16(result, datasize + 5);
+        for (int i = 0; i < result.Length - ((2 * datasize) + 6 + 2); i += datasize)
+        {
+          UInt16 val = BitConverter.ToUInt16(result, ((2 * datasize) + 6 + 2) + i);
+          double d = val;
+          string s = "f/" + (d / 100).ToString("0.0");
+          FNumber.AddValues(s, val);
+        }
+        FNumber.SetValue(defval);
+      }
+      catch (Exception ex)
+      {
+      }
+    }
+
+    void FNumber_ValueChanged(object sender, string key, int val)
+    {
+      _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                                   CONST_PROP_Fnumber, -1);
     }
 
     public override void StartLiveView()
@@ -448,7 +579,8 @@ namespace CameraControl.Devices.Nikon
           switch (prop)
           {
             case CONST_PROP_Fnumber:
-              FNumber.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_Fnumber));
+              //FNumber.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_Fnumber));
+              ReInitFNumber();
               break;
             case CONST_PROP_ExposureIndex:
               IsoNumber.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,

@@ -21,7 +21,7 @@ namespace CameraControl.Devices.Others
 
     public PropertyValue<int> WhiteBalance { get; set; }
 
-    public PropertyValue<int> Mode { get; set; }
+    public PropertyValue<uint> Mode { get; set; }
 
     public PropertyValue<int> ExposureCompensation { get; set; }
 
