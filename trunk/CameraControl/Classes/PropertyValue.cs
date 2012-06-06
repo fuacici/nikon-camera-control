@@ -109,6 +109,10 @@ namespace CameraControl.Classes
       NotifyPropertyChanged("Values");
     }
 
+    public void Clear()
+    {
+      _valuesDictionary.Clear();
+    }
 
   }
 }
