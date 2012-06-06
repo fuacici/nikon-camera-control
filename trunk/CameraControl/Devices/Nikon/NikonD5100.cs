@@ -30,7 +30,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_PROP_ExposureIndex = 0x500F;
     public const int CONST_PROP_ExposureTime = 0x500D;
     public const int CONST_PROP_WhiteBalance = 0x5005;
-    public const int CONST_PROP_ExposureProgramMode = 0x500E;
+    public const int CONST_PROP_ExposureProgramMode = 0x500E; 
     public const int CONST_PROP_ExposureBiasCompensation = 0x5010;
     public const int CONST_PROP_BatteryLevel = 0x5001;
     public const int CONST_PROP_LiveViewImageZoomRatio = 0xD1A3;
