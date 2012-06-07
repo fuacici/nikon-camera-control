@@ -173,8 +173,8 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    private PropertyValue<int> _whiteBalance;
-    public PropertyValue<int> WhiteBalance
+    private PropertyValue<long> _whiteBalance;
+    public PropertyValue<long> WhiteBalance
     {
       get { return _whiteBalance; }
       set
@@ -372,7 +372,7 @@ namespace CameraControl.Devices.Others
       IsoNumber.ValueChanged += IsoNumber_ValueChanged;
       ShutterSpeed = new PropertyValue<long>();
       ShutterSpeed.ValueChanged += ShutterSpeed_ValueChanged;
-      WhiteBalance = new PropertyValue<int>();
+      WhiteBalance = new PropertyValue<long>();
       WhiteBalance.ValueChanged += WhiteBalance_ValueChanged;
       Mode = new PropertyValue<uint>();
       Mode.ValueChanged += Mode_ValueChanged;
@@ -463,7 +463,7 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    void WhiteBalance_ValueChanged(object sender, string key, int val)
+    void WhiteBalance_ValueChanged(object sender, string key, long val)
     {
       lock (Locker)
       {
