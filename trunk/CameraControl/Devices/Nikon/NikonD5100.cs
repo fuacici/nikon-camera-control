@@ -13,7 +13,7 @@ using Timer = System.Timers.Timer;
 
 namespace CameraControl.Devices.Nikon
 {
-  public class NikonD5100 : WiaCameraDevice, ICameraDevice
+  public class NikonD5100 :BaseFieldClass,  ICameraDevice
   {
     public const int CONST_CMD_AfDrive = 0x90C1;
     public const int CONST_CMD_StartLiveView = 0x9201;
@@ -152,6 +152,58 @@ namespace CameraControl.Devices.Nikon
                               {0x8019, "[EffectMode] EFFECTS"},
                             };
 
+    Dictionary<uint, string> _wbTable = new Dictionary<uint, string>()
+                  {
+                    {2, "Auto"},
+                    {4, "Daylight"},
+                    {5, "Fluorescent "},
+                    {6, "Incandescent"},
+                    {7, "Flash"},
+                    {32784, "Cloudy"},
+                    {32785, "Shade"},
+                    {32786, "Kelvin"},
+                    {32787, "Custom"}
+                  };
+    
+    private Dictionary<int, string> _csTable = new Dictionary<int, string>()
+                                                {
+                                                  {0, "JPEG (BASIC)"},
+                                                  {1, "JPEG (NORMAL)"},
+                                                  {2, "JPEG (FINE)"},
+                                                  {3, "TIFF (RGB)"},
+                                                  {4, "RAW"},
+                                                  {5, "RAW + JPEG (BASIC)"},
+                                                  {6, "RAW + JPEG (NORMAL)"},
+                                                  {7, "RAW + JPEG (FINE)"}
+                                                };
+    private Dictionary<int, string> _emmTable = new Dictionary<int, string>
+                                              {
+                                                {2, "Center-weighted metering"},
+                                                {3, "Multi-pattern metering"},
+                                                {4, "Spot metering"}
+                                              };
+
+    private Dictionary<uint, string> _fmTable = new Dictionary<uint, string>()
+                                              {
+                                                {1, "[M] Manual focus"},
+                                                {0x8010, "[S] Single AF servo"},
+                                                {0x8011, "[C] Continuous AF servo"},
+                                                {0x8012, "[A] AF servo mode automatic switching"},
+                                                {0x8013, "[F] Constant AF servo"},
+                                              };
+    internal object Locker = new object(); // object used to lock multi hreaded mothods 
+
+    private bool _haveLiveView;
+    public bool HaveLiveView
+    {
+      get { return _haveLiveView; }
+      set
+      {
+        _haveLiveView = value;
+        NotifyPropertyChanged("HaveLiveView");
+      }
+    }
+
     private PropertyValue<int> _isoNumber;
     public PropertyValue<int> IsoNumber
     {
@@ -196,6 +248,72 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
+    private PropertyValue<long> _whiteBalance;
+    public PropertyValue<long> WhiteBalance
+    {
+      get { return _whiteBalance; }
+      set
+      {
+        _whiteBalance = value;
+        NotifyPropertyChanged("WhiteBalance");
+      }
+    }
+
+    private PropertyValue<int> _exposureCompensation;
+    public PropertyValue<int> ExposureCompensation
+    {
+      get { return _exposureCompensation; }
+      set
+      {
+        _exposureCompensation = value;
+        NotifyPropertyChanged("ExposureCompensation");
+      }
+    }
+
+    private PropertyValue<int> _compressionSetting;
+    public PropertyValue<int> CompressionSetting
+    {
+      get { return _compressionSetting; }
+      set
+      {
+        _compressionSetting = value;
+        NotifyPropertyChanged("CompressionSetting");
+      }
+    }
+
+    private PropertyValue<int> _exposureMeteringMode;
+    public PropertyValue<int> ExposureMeteringMode
+    {
+      get { return _exposureMeteringMode; }
+      set
+      {
+        _exposureMeteringMode = value;
+        NotifyPropertyChanged("ExposureMeteringMode");
+      }
+    }
+
+    private PropertyValue<uint> _focusMode;
+    public PropertyValue<uint> FocusMode
+    {
+      get { return _focusMode; }
+      set
+      {
+        _focusMode = value;
+        NotifyPropertyChanged("FocusMode");
+      }
+    }
+
+    private int _battery;
+    public int Battery
+    {
+      get { return _battery; }
+      set
+      {
+        _battery = value;
+        NotifyPropertyChanged("Battery");
+      }
+    }
+
     public NikonD5100()
     {
       _timer.AutoReset = true;
@@ -221,11 +339,8 @@ namespace CameraControl.Devices.Nikon
     }
 
 
-    public override bool Init(string id, WIAManager manager)
+    public virtual bool Init(string id, WIAManager manager)
     {
-      //base.Init(id, manager);
-
-      //ExposureCompensation.ValueChanged += ExposureCompensation_ValueChanged;
       _manager = manager;
       HaveLiveView = true;
       _stillImageDevice = new StillImageDevice(id);
@@ -234,6 +349,12 @@ namespace CameraControl.Devices.Nikon
       InitShutterSpeed();
       InitFNumber();
       InitMode();
+      InitWhiteBalance();
+      InitExposureCompensation();
+      InitCompressionSetting();
+      InitExposureMeteringMode();
+      InitFocusMode();
+      ReadDeviceProperties(CONST_PROP_BatteryLevel);
       _timer.Start();
       return true;
     }
@@ -398,7 +519,144 @@ namespace CameraControl.Devices.Nikon
                                    CONST_PROP_Fnumber, -1);
     }
 
-    public override void StartLiveView()
+    private void InitWhiteBalance()
+    {
+      try
+      {
+        byte datasize = 2;
+        WhiteBalance = new PropertyValue<long>();
+        WhiteBalance.ValueChanged += WhiteBalance_ValueChanged;
+        byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_WhiteBalance);
+        int type = BitConverter.ToInt16(result, 2);
+        byte formFlag = result[(2 * datasize) + 5];
+        UInt16 defval = BitConverter.ToUInt16(result, datasize + 5);
+        for (int i = 0; i < result.Length - ((2 * datasize) + 6 + 2); i += datasize)
+        {
+          UInt16 val = BitConverter.ToUInt16(result, ((2 * datasize) + 6 + 2) + i);
+          WhiteBalance.AddValues(_wbTable.ContainsKey(val) ? _wbTable[val] : val.ToString(), val);
+        }
+        WhiteBalance.SetValue(defval);
+      }
+      catch (Exception ex)
+      {
+      }
+    }
+
+    void WhiteBalance_ValueChanged(object sender, string key, long val)
+    {
+      _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt16)val),
+                              CONST_PROP_WhiteBalance, -1); 
+    }
+
+    public void InitExposureCompensation()
+    {
+      try
+      {
+        byte datasize = 2;
+        ExposureCompensation = new PropertyValue<int>();
+        ExposureCompensation.ValueChanged += ExposureCompensation_ValueChanged;
+        byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureBiasCompensation);
+        int type = BitConverter.ToInt16(result, 2);
+        byte formFlag = result[(2*datasize) + 5];
+        Int16 defval = BitConverter.ToInt16(result, datasize + 5);
+        for (int i = 0; i < result.Length - ((2*datasize) + 6 + 2); i += datasize)
+        {
+          Int16 val = BitConverter.ToInt16(result, ((2*datasize) + 6 + 2) + i);
+          decimal d = val;
+          string s = decimal.Round(d/1000, 1).ToString();
+          if (d > 0)
+            s = "+" + s;
+          ExposureCompensation.AddValues(s, val);
+        }
+        ExposureCompensation.SetValue(defval);
+      }
+      catch (Exception ex)
+      {
+      }
+    }
+
+    private void InitCompressionSetting()
+    {
+      try
+      {
+        byte datasize = 1;
+        CompressionSetting = new PropertyValue<int>();
+        CompressionSetting.ValueChanged += CompressionSetting_ValueChanged;
+        byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_CompressionSetting);
+        int type = BitConverter.ToInt16(result, 2);
+        byte formFlag = result[(2 * datasize) + 5];
+        byte defval = result[ datasize + 5];
+        for (int i = 0; i < result.Length - ((2 * datasize) + 6 + 2); i += datasize)
+        {
+          byte val = result[((2*datasize) + 6 + 2) + i];
+          CompressionSetting.AddValues(_csTable.ContainsKey(val) ? _csTable[val] : val.ToString(), val);
+        }
+        CompressionSetting.SetValue(defval);
+      }
+      catch (Exception ex)
+      {
+      }
+    }
+
+    void CompressionSetting_ValueChanged(object sender, string key, int val)
+    {
+      _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((byte)val),
+                        CONST_PROP_CompressionSetting, -1); 
+    }
+
+    public void InitExposureMeteringMode()
+    {
+      try
+      {
+        byte datasize = 2;
+        ExposureMeteringMode = new PropertyValue<int>();
+        ExposureMeteringMode.ValueChanged += ExposureMeteringMode_ValueChanged;
+        byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureMeteringMode);
+        int type = BitConverter.ToInt16(result, 2);
+        byte formFlag = result[(2 * datasize) + 5];
+        UInt16 defval = BitConverter.ToUInt16(result, datasize + 5);
+        for (int i = 0; i < result.Length - ((2 * datasize) + 6 + 2); i += datasize)
+        {
+          UInt16 val = BitConverter.ToUInt16(result, ((2 * datasize) + 6 + 2) + i);
+          ExposureMeteringMode.AddValues(_emmTable.ContainsKey(val) ? _emmTable[val] : val.ToString(), val);
+        }
+        ExposureMeteringMode.SetValue(defval);
+      }
+      catch (Exception ex)
+      {
+      }
+    }
+
+    void ExposureMeteringMode_ValueChanged(object sender, string key, int val)
+    {
+      _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt16)val),
+                        CONST_PROP_ExposureMeteringMode, -1);      
+    }
+
+    private void InitFocusMode()
+    {
+      try
+      {
+        byte datasize = 2;
+        FocusMode = new PropertyValue<uint>();
+        FocusMode.IsEnabled = false;
+        byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_FocusMode);
+        int type = BitConverter.ToInt16(result, 2);
+        byte formFlag = result[(2 * datasize) + 5];
+        UInt16 defval = BitConverter.ToUInt16(result, datasize + 5);
+        for (int i = 0; i < result.Length - ((2 * datasize) + 6 + 2); i += datasize)
+        {
+          UInt16 val = BitConverter.ToUInt16(result, ((2 * datasize) + 6 + 2) + i);
+          FocusMode.AddValues(_fmTable.ContainsKey(val) ? _fmTable[val] : val.ToString(), val);
+        }
+        FocusMode.SetValue(defval);
+      }
+      catch (Exception ex)
+      {
+      }
+    }
+    
+    public void StartLiveView()
     {
       lock (Locker)
       {
@@ -407,7 +665,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public override void StopLiveView()
+    public void StopLiveView()
     {
       lock (Locker)
       {
@@ -415,7 +673,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public override LiveViewData GetLiveViewImage()
+    public virtual LiveViewData GetLiveViewImage()
     {
       LiveViewData viewData = new LiveViewData();
       if (Monitor.TryEnter(Locker,100))
@@ -444,7 +702,7 @@ namespace CameraControl.Devices.Nikon
       return viewData;
     }
 
-    public override void TakePicture()
+    public  void TakePicture()
     {
       Monitor.Enter(Locker);
       try
@@ -474,7 +732,7 @@ namespace CameraControl.Devices.Nikon
       viewData.Focused = result[40] != 1;
     }
 
-    public override void Focus(int step)
+    public void Focus(int step)
     {
       lock (Locker)
       {
@@ -485,7 +743,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public override void AutoFocus()
+    public  void AutoFocus()
     {
       lock (Locker)
       {
@@ -493,7 +751,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public override void TakePictureNoAf()
+    public  void TakePictureNoAf()
     {
       lock (Locker)
       {
@@ -510,7 +768,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public override void Focus(int x, int y)
+    public void Focus(int x, int y)
     {
       lock (Locker)
       {
@@ -518,7 +776,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public override void Close()
+    public void Close()
     {
       lock (Locker)
       {
@@ -538,7 +796,7 @@ namespace CameraControl.Devices.Nikon
 
     private byte _liveViewImageZoomRatio;
 
-    public override byte LiveViewImageZoomRatio
+    public byte LiveViewImageZoomRatio
     {
       get
       {
@@ -569,7 +827,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public override void ReadDeviceProperties(int prop)
+    public virtual void ReadDeviceProperties(int prop)
     {
       lock (Locker)
       {

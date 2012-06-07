@@ -19,7 +19,7 @@ namespace CameraControl.Devices.Others
 
     public PropertyValue<long> ShutterSpeed { get; set; }
 
-    public PropertyValue<int> WhiteBalance { get; set; }
+    public PropertyValue<long> WhiteBalance { get; set; }
 
     public PropertyValue<uint> Mode { get; set; }
 
