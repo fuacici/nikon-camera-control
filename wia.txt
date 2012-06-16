@@ -16,6 +16,7 @@ STI Generic Capabilities|48|TrueFalse|UnspecifiedSubType|
 WIA Version|2.0|TrueFalse|UnspecifiedSubType|
 Driver Version|6.1.7600.16385|TrueFalse|UnspecifiedSubType|
 PnP ID String|\\?\usb#vid_04b0&pid_0429#000006319062#{6bdd1fc6-810f-11d0-bec7-08002be2092f}|TrueFalse|UnspecifiedSubType|
+              \\?\usb#vid_04b0&pid_0429#000006319062#{6ac27878-a6fa-4155-ba85-f98f491d4f33}
 STI Driver Version|2|TrueFalse|UnspecifiedSubType|
 Pictures Taken|132|TrueFalse|UnspecifiedSubType|
 Firmware Version|V1.01|TrueFalse|UnspecifiedSubType|

@@ -121,6 +121,8 @@
     </Compile>
     <Compile Include="Controls\ZoomBorder.cs" />
     <Compile Include="Devices\CameraDeviceManager.cs" />
+    <Compile Include="Devices\Classes\DeviceDescriptor.cs" />
+    <Compile Include="Devices\Classes\DeviceDescriptorEnumerator.cs" />
     <Compile Include="Devices\Classes\LiveViewData.cs" />
     <Compile Include="Devices\ICameraDevice.cs" />
     <Compile Include="Devices\Nikon\NikonD300_obsolete.cs" />
