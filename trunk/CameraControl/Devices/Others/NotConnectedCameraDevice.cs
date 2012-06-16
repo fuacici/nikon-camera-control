@@ -30,6 +30,9 @@ namespace CameraControl.Devices.Others
     public PropertyValue<int> ExposureMeteringMode { get; set; }
 
     public PropertyValue<uint> FocusMode { get; set; }
+    public bool IsConected { get; set; }
+    public string DeviceName { get; set; }
+    public string Manufacturer { get; set; }
 
 
     public int Battery { get; set; }
@@ -93,5 +96,11 @@ namespace CameraControl.Devices.Others
     }
 
     #endregion
+
+    public NotConnectedCameraDevice()
+    {
+      IsConected = false;
+      HaveLiveView = false;
+    }
   }
 }

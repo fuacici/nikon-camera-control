@@ -229,6 +229,41 @@ namespace CameraControl.Devices.Others
     }
 
     public PropertyValue<uint> FocusMode { get; set; }
+    private string _deviceName;
+
+    public string DeviceName
+    {
+      get { return _deviceName; }
+      set
+      {
+        _deviceName = value;
+        NotifyPropertyChanged("DeviceName");
+      }
+    }
+
+    private string _manufacturer;
+
+    public string Manufacturer
+    {
+      get { return _manufacturer; }
+      set
+      {
+        _manufacturer = value;
+        NotifyPropertyChanged("Manufacturer");
+      }
+    }
+
+    private bool _isConected;
+
+    public bool IsConected
+    {
+      get { return _isConected; }
+      set
+      {
+        _isConected = value;
+        NotifyPropertyChanged("IsConected");
+      }
+    }
 
 
     private int _battery;
@@ -251,115 +286,125 @@ namespace CameraControl.Devices.Others
     public virtual bool Init(string id, WIAManager manager)
     {
       Device = manager.Device;
-
-      Property apertureProperty = manager.Device.Properties[WIAManager.CONST_PROP_F_Number];
-      if (apertureProperty != null)
+      DeviceName = Device.Properties["Description"].get_Value();
+      Manufacturer = Device.Properties["Manufacturer"].get_Value();
+      IsConected = true;
+      try
       {
-        foreach (var subTypeValue in apertureProperty.SubTypeValues)
+        Property apertureProperty = manager.Device.Properties[WIAManager.CONST_PROP_F_Number];
+        if (apertureProperty != null)
         {
-          double d = (int)subTypeValue;
-          string s = "f/" + (d / 100).ToString("0.0");
-          FNumber.AddValues(s, (int)d);
-          if ((int)subTypeValue == (int)apertureProperty.get_Value())
-            FNumber.SetValue((int)d);
+          foreach (var subTypeValue in apertureProperty.SubTypeValues)
+          {
+            double d = (int) subTypeValue;
+            string s = "f/" + (d/100).ToString("0.0");
+            FNumber.AddValues(s, (int) d);
+            if ((int) subTypeValue == (int) apertureProperty.get_Value())
+              FNumber.SetValue((int) d);
+          }
         }
+
+        Property isoProperty = manager.Device.Properties[WIAManager.CONST_PROP_ISO_Number];
+        if (isoProperty != null)
+        {
+          foreach (var subTypeValue in isoProperty.SubTypeValues)
+          {
+            IsoNumber.AddValues(subTypeValue.ToString(), (int) subTypeValue);
+            if ((int) subTypeValue == (int) isoProperty.get_Value())
+              IsoNumber.SetValue((int) subTypeValue);
+          }
+        }
+
+        Property shutterProperty = manager.Device.Properties[WIAManager.CONST_PROP_Exposure_Time];
+        if (shutterProperty != null)
+        {
+          foreach (int subTypeValue in shutterProperty.SubTypeValues)
+          {
+            if (ShutterTable.ContainsKey((int) subTypeValue))
+              ShutterSpeed.AddValues(ShutterTable[(int) subTypeValue], (int) subTypeValue);
+          }
+          ShutterSpeed.SetValue(shutterProperty.get_Value());
+        }
+
+        Property wbProperty = manager.Device.Properties[WIAManager.CONST_PROP_WhiteBalance];
+        if (wbProperty != null)
+        {
+          foreach (var subTypeValue in wbProperty.SubTypeValues)
+          {
+            if (WbTable.ContainsKey((int) subTypeValue))
+              WhiteBalance.AddValues(WbTable[(int) subTypeValue], (int) subTypeValue);
+          }
+          WhiteBalance.SetValue(wbProperty.get_Value());
+        }
+
+        Property modeProperty = manager.Device.Properties[WIAManager.CONST_PROP_ExposureMode];
+        if (modeProperty != null)
+        {
+          foreach (var subTypeValue in modeProperty.SubTypeValues)
+          {
+            if (ExposureModeTable.ContainsKey((int) subTypeValue))
+              Mode.AddValues(ExposureModeTable[(int) subTypeValue], Convert.ToUInt32(subTypeValue));
+          }
+          Mode.SetValue(Convert.ToUInt32(modeProperty.get_Value()));
+        }
+        Mode.IsEnabled = false;
+
+        Property ecProperty = manager.Device.Properties[WIAManager.CONST_PROP_ExposureCompensation];
+        if (ecProperty != null)
+        {
+          foreach (var subTypeValue in ecProperty.SubTypeValues)
+          {
+            decimal d = (int) subTypeValue;
+            string s = decimal.Round(d/1000, 1).ToString();
+            if (d > 0)
+              s = "+" + s;
+            ExposureCompensation.AddValues(s, (int) subTypeValue);
+          }
+          ExposureCompensation.SetValue(ecProperty.get_Value());
+        }
+
+        Property csProperty = manager.Device.Properties[WIAManager.CONST_PROP_CompressionSetting];
+        if (csProperty != null)
+        {
+          foreach (var subTypeValue in csProperty.SubTypeValues)
+          {
+            if (CSTable.ContainsKey((int) subTypeValue))
+              CompressionSetting.AddValues(CSTable[(int) subTypeValue], (int) subTypeValue);
+          }
+          CompressionSetting.SetValue(csProperty.get_Value());
+        }
+
+        Property emmProperty = manager.Device.Properties[WIAManager.CONST_PROP_ExposureMeteringMode];
+        if (emmProperty != null)
+        {
+          foreach (var subTypeValue in emmProperty.SubTypeValues)
+          {
+            if (EMMTable.ContainsKey((int) subTypeValue))
+              ExposureMeteringMode.AddValues(EMMTable[(int) subTypeValue], (int) subTypeValue);
+          }
+          CompressionSetting.SetValue(emmProperty.get_Value());
+        }
+
+        Property fmProperty = manager.Device.Properties[WIAManager.CONST_PROP_FocusMode];
+        if (fmProperty != null)
+        {
+          foreach (int subTypeValue in fmProperty.SubTypeValues)
+          {
+            uint subval = Convert.ToUInt16(subTypeValue);
+            if (FMTable.ContainsKey(subval))
+              FocusMode.AddValues(FMTable[subval], subval);
+          }
+          FocusMode.SetValue(Convert.ToUInt16((int) fmProperty.get_Value()));
+        }
+
+        Battery = manager.Device.Properties[WIAManager.CONST_PROP_BatteryStatus].get_Value();
+      }
+      catch (Exception exception)
+      {
+        ServiceProvider.Log.Error(exception);
+        IsConected = false;
       }
 
-      Property isoProperty = manager.Device.Properties[WIAManager.CONST_PROP_ISO_Number];
-      if (isoProperty != null)
-      {
-        foreach (var subTypeValue in isoProperty.SubTypeValues)
-        {
-          IsoNumber.AddValues(subTypeValue.ToString(), (int)subTypeValue);
-          if ((int)subTypeValue == (int)isoProperty.get_Value())
-            IsoNumber.SetValue((int)subTypeValue);
-        }
-      }
-
-      Property shutterProperty = manager.Device.Properties[WIAManager.CONST_PROP_Exposure_Time];
-      if (shutterProperty != null)
-      {
-        foreach (int subTypeValue in shutterProperty.SubTypeValues)
-        {
-          if (ShutterTable.ContainsKey((int)subTypeValue))
-            ShutterSpeed.AddValues(ShutterTable[(int)subTypeValue], (int)subTypeValue);
-        }
-        ShutterSpeed.SetValue(shutterProperty.get_Value());
-      }
-
-      Property wbProperty = manager.Device.Properties[WIAManager.CONST_PROP_WhiteBalance];
-      if (wbProperty != null)
-      {
-        foreach (var subTypeValue in wbProperty.SubTypeValues)
-        {
-          if (WbTable.ContainsKey((int)subTypeValue))
-            WhiteBalance.AddValues(WbTable[(int)subTypeValue], (int)subTypeValue);
-        }
-        WhiteBalance.SetValue(wbProperty.get_Value());
-      }
-
-      Property modeProperty = manager.Device.Properties[WIAManager.CONST_PROP_ExposureMode];
-      if (modeProperty != null)
-      {
-        foreach (var subTypeValue in modeProperty.SubTypeValues)
-        {
-          if (ExposureModeTable.ContainsKey((int)subTypeValue))
-            Mode.AddValues(ExposureModeTable[(int)subTypeValue], (uint)subTypeValue);
-        }
-        Mode.SetValue(modeProperty.get_Value());
-      }
-      Mode.IsEnabled = false;
-
-      Property ecProperty = manager.Device.Properties[WIAManager.CONST_PROP_ExposureCompensation];
-      if (ecProperty != null)
-      {
-        foreach (var subTypeValue in ecProperty.SubTypeValues)
-        {
-          decimal d = (int)subTypeValue;
-          string s = decimal.Round(d/1000,1).ToString();
-          if (d > 0)
-            s = "+" + s;
-          ExposureCompensation.AddValues(s, (int)subTypeValue);
-        }
-        ExposureCompensation.SetValue(ecProperty.get_Value());
-      }
-
-      Property csProperty = manager.Device.Properties[WIAManager.CONST_PROP_CompressionSetting];
-      if (csProperty != null)
-      {
-        foreach (var subTypeValue in csProperty.SubTypeValues)
-        {
-          if (CSTable.ContainsKey((int)subTypeValue))
-            CompressionSetting.AddValues(CSTable[(int)subTypeValue], (int)subTypeValue);
-        }
-        CompressionSetting.SetValue(csProperty.get_Value());
-      }
-
-      Property emmProperty = manager.Device.Properties[WIAManager.CONST_PROP_ExposureMeteringMode];
-      if (emmProperty != null)
-      {
-        foreach (var subTypeValue in emmProperty.SubTypeValues)
-        {
-          if (EMMTable.ContainsKey((int)subTypeValue))
-            ExposureMeteringMode.AddValues(EMMTable[(int)subTypeValue], (int)subTypeValue);
-        }
-        CompressionSetting.SetValue(emmProperty.get_Value());
-      }
-
-      Property fmProperty = manager.Device.Properties[WIAManager.CONST_PROP_FocusMode];
-      if (fmProperty != null)
-      {
-        foreach (int subTypeValue in fmProperty.SubTypeValues)
-        {
-          uint subval = Convert.ToUInt16(subTypeValue);
-          if (FMTable.ContainsKey(subval))
-            FocusMode.AddValues(FMTable[subval], subval);
-        }
-        FocusMode.SetValue(Convert.ToUInt16((int)fmProperty.get_Value()));
-      }
-
-      Battery = manager.Device.Properties[WIAManager.CONST_PROP_BatteryStatus].get_Value();
-      
       HaveLiveView = false;
       return true;
     }

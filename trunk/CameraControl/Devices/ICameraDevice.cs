@@ -15,6 +15,9 @@ namespace CameraControl.Devices
     PropertyValue<int> CompressionSetting { get; set; }
     PropertyValue<int> ExposureMeteringMode { get; set; }
     PropertyValue<uint> FocusMode { get; set; }
+    bool IsConected { get; set; }
+    string DeviceName { get; set; }
+    string Manufacturer { get; set; }
 
     int Battery { get; set; }
     byte LiveViewImageZoomRatio { get; set; }

@@ -88,18 +88,23 @@ namespace CameraControl.Devices.Nikon
                          {8, "1/1250"},
                          {10, "1/1000"},
                          {12, "1/800"},
+                         {13, "1/750"},
                          {15, "1/640"},
                          {20, "1/500"},
                          {25, "1/400"},
+                         {28, "1/350"},
                          {31, "1/320"},
                          {40, "1/250"},
                          {50, "1/200"},
+                         {55, "1/180"},
                          {62, "1/160"},
                          {80, "1/125"},
                          {100, "1/100"},
+                         {111, "1/90"},
                          {125, "1/80"},
                          {166, "1/60"},
                          {200, "1/50"},
+                         {222, "1/45"},
                          {250, "1/40"},
                          {333, "1/30"},
                          {400, "1/25"},
@@ -115,9 +120,11 @@ namespace CameraControl.Devices.Nikon
                          {4000, "1/2.5"},
                          {5000, "1/2"},
                          {6250, "1/1.6"},
+                         {6666, "1/1.5"},
                          {7692, "1/1.3"},
                          {10000, "1s"},
                          {13000, "1.3s"},
+                         {15000, "1.5s"},
                          {16000, "1.6s"},
                          {20000, "2s"},
                          {25000, "2.5s"},
@@ -303,6 +310,42 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
+    private string _deviceName;
+
+    public string DeviceName
+    {
+      get { return _deviceName; }
+      set
+      {
+        _deviceName = value;
+        NotifyPropertyChanged("DeviceName");
+      }
+    }
+
+    private string _manufacturer;
+
+    public string Manufacturer
+    {
+      get { return _manufacturer; }
+      set
+      {
+        _manufacturer = value;
+        NotifyPropertyChanged("Manufacturer");
+      }
+    }
+
+    private bool _isConected;
+
+    public bool IsConected
+    {
+      get { return _isConected; }
+      set
+      {
+        _isConected = value;
+        NotifyPropertyChanged("IsConected");
+      }
+    }
+
     private int _battery;
     public int Battery
     {
@@ -345,6 +388,8 @@ namespace CameraControl.Devices.Nikon
       HaveLiveView = true;
       _stillImageDevice = new StillImageDevice(id);
       _stillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
+      DeviceName = _stillImageDevice.Model;
+      Manufacturer = _stillImageDevice.Manufacturer;
       InitIso();
       InitShutterSpeed();
       InitFNumber();
@@ -356,6 +401,7 @@ namespace CameraControl.Devices.Nikon
       InitFocusMode();
       ReadDeviceProperties(CONST_PROP_BatteryLevel);
       _timer.Start();
+      IsConected = true;
       return true;
     }
 

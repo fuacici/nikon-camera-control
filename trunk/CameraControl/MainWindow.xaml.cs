@@ -47,6 +47,8 @@ namespace CameraControl
 
     public MainWindow()
     {
+      CommandBindings.Add(new CommandBinding(ApplicationCommands.Close,(sender, args) => this.Close()));
+
       ServiceProvider.Configure();
       ServiceProvider.Settings = new Settings();
       ServiceProvider.ThumbWorker = new ThumbWorker();
@@ -95,39 +97,8 @@ namespace CameraControl
 
     private void CheckForUpdate()
     {
-      try
-      {
-        string tempfile = System.IO.Path.GetTempFileName();
-        using (WebClient client = new WebClient())
-        {
-          client.DownloadFile("http://nikon-camera-control.googlecode.com/svn/trunk/versioninfo.xml", tempfile);
-        }
-
-        XmlDocument document = new XmlDocument();
-        document.Load(tempfile);
-        string ver = document.SelectSingleNode("application/version").InnerText;
-        string url = "http://code.google.com/p/nikon-camera-control/downloads/list";
-        var selectSingleNode = document.SelectSingleNode("application/url");
-        if (selectSingleNode != null)
-          url = selectSingleNode.InnerText;
-        Version v_ver = new Version(ver);
-        Version app_ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-        if (v_ver > System.Reflection.Assembly.GetExecutingAssembly().GetName().Version)
-        {
-          if (
-            MessageBox.Show("New version of application released\nDo you want to download?", "Update",
-                            MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
-          {
-            System.Diagnostics.Process.Start(url);
-            Close();
-          }
-        }
-        File.Delete(tempfile);
-      }
-      catch (Exception exception)
-      {
-        ServiceProvider.Log.Error("Error download update information", exception);
-      }
+      if(PhotoUtils.CheckForUpdate())
+        Close();
     }
 
     private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -474,6 +445,11 @@ namespace CameraControl
     private void mnu_copypath_Click(object sender, RoutedEventArgs e)
     {
       Clipboard.SetText(ServiceProvider.Settings.SelectedBitmap.FileItem.FileName);
+    }
+
+    private void MenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      PhotoUtils.Run("http://nccsoftware.blogspot.com/", "");
     }
   }
 }
