@@ -451,5 +451,17 @@ namespace CameraControl
     {
       PhotoUtils.Run("http://nccsoftware.blogspot.com/", "");
     }
+
+    private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+    {
+      if(PhotoUtils.CheckForUpdate())
+      {
+        Close();
+      }
+      else
+      {
+        MessageBox.Show("You application is up to date !"); 
+      }
+    }
   }
 }

@@ -124,12 +124,12 @@ namespace CameraControl.Classes
 
     public void DisconnectCamera()
     {
-      //IsConected = false;
-      if (Device != null)
-        Marshal.ReleaseComObject(Device);
-      Device = null;
-      if (CameraDevice != null)
-        CameraDevice.Close();
+      //////IsConected = false;
+      //if (Device != null)
+      //  Marshal.ReleaseComObject(Device);
+      //Device = null;
+      //if (CameraDevice != null)
+      //  CameraDevice.Close();
       ServiceProvider.Settings.SystemMessage = "Camera disconnected !";
     }
 
@@ -157,36 +157,35 @@ namespace CameraControl.Classes
 
     public bool ConnectToCamera(bool retry)
     {
+      bool ret = false;
       try
       {
         // Device is already connected
-        if (Device != null)
-          return true;
+        //if (Device != null)
+        //  return true;
 
-        foreach (IDeviceInfo DevInfo in new DeviceManager().DeviceInfos)
+        foreach (IDeviceInfo devInfo in new DeviceManager().DeviceInfos)
         {
           // Look for CameraDeviceType devices
-          if (DevInfo.Type == WiaDeviceType.CameraDeviceType)
+          if (devInfo.Type == WiaDeviceType.CameraDeviceType)
           {
-            DeviceId = DevInfo.DeviceID;
-            Device = DevInfo.Connect();
+            //DeviceId = devInfo.DeviceID;
+            //Device = devInfo.Connect();
             Thread.Sleep(500);
             //Log(DateTime.Now.ToString() + " Digital Still Camera Connected\r\n");
 
             //IsConected = true;
-            CameraDevice = ServiceProvider.DeviceManager.GetIDevice(this);
+            CameraDevice = ServiceProvider.DeviceManager.GetIDevice(this, devInfo.DeviceID);
             ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
             ServiceProvider.Settings.SystemMessage = "Camera is connected ! Driver :"+CameraDevice.GetType().Name;
             ServiceProvider.Log.Debug("===========Camera is connected==============" );
             ServiceProvider.Log.Debug("Driver :" + CameraDevice.GetType().Name);
             ServiceProvider.Log.Debug("Name :" + CameraDevice.DeviceName);
             ServiceProvider.Log.Debug("Manufacturer :" + CameraDevice.Manufacturer);
-            return true;
+            ret = true;
           }
         }
-        // Not a still camera
-        return false;
-
+        return ret;
       }
       catch (Exception exp)
       {

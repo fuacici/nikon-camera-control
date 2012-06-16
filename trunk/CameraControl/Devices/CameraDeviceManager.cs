@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using CameraControl.Classes;
+using CameraControl.Devices.Classes;
 using CameraControl.Devices.Nikon;
 using CameraControl.Devices.Others;
 using PortableDeviceLib;
@@ -15,6 +16,7 @@ namespace CameraControl.Devices
     private const string AppName = "CameraControl";
     private const int AppMajorVersionNumber = 1;
     private const int AppMinorVersionNumber = 0;
+    private DeviceDescriptorEnumerator _deviceEnumerator;
 
     
     public Dictionary<string,Type> DeviceClass { get; set; }
@@ -29,6 +31,9 @@ namespace CameraControl.Devices
         NotifyPropertyChanged("SelectedCameraDevice");
       }
     }
+
+    public AsyncObservableCollection<ICameraDevice> ConnectedDevices { get; set; }
+
 
     public CameraDeviceManager()
     {
@@ -55,10 +60,12 @@ namespace CameraControl.Devices
                         {"D90", typeof (NikonD90)},
                       };
       SelectedCameraDevice = new NotConnectedCameraDevice();
+      ConnectedDevices = new AsyncObservableCollection<ICameraDevice>();
+      _deviceEnumerator = new DeviceDescriptorEnumerator();
     }
 
     //TODO: need to be fixed same type cameras isn't handled right 
-    public ICameraDevice GetIDevice(WIAManager manager)
+    public ICameraDevice GetIDevice(WIAManager manager, string wiaDeviceId)
     {
       WiaCameraDevice wiaCameraDevice=new WiaCameraDevice();
       wiaCameraDevice.Init(manager.DeviceId, manager);
@@ -76,7 +83,9 @@ namespace CameraControl.Devices
         {
           if (DeviceClass.ContainsKey(wiaCameraDevice.DeviceName.ToUpper()))
           {
+            string s = device.SerialNumber;
             SelectedCameraDevice = (ICameraDevice)Activator.CreateInstance(DeviceClass[wiaCameraDevice.DeviceName]);
+            ConnectedDevices.Add(SelectedCameraDevice);
             SelectedCameraDevice.Init(device.DeviceId, manager);
             return SelectedCameraDevice;
           }
@@ -85,6 +94,7 @@ namespace CameraControl.Devices
       }
 
       SelectedCameraDevice = wiaCameraDevice;
+      ConnectedDevices.Add(SelectedCameraDevice);
       //SelectedCameraDevice.Init(manager.DeviceId, manager);
       return SelectedCameraDevice;
     }

@@ -255,7 +255,7 @@ namespace CameraControl.Devices.Others
 
     private bool _isConected;
 
-    public bool IsConected
+    public bool IsConnected
     {
       get { return _isConected; }
       set
@@ -288,10 +288,10 @@ namespace CameraControl.Devices.Others
       Device = manager.Device;
       DeviceName = Device.Properties["Description"].get_Value();
       Manufacturer = Device.Properties["Manufacturer"].get_Value();
-      IsConected = true;
+      IsConnected = true;
       try
       {
-        Property apertureProperty = manager.Device.Properties[WIAManager.CONST_PROP_F_Number];
+        Property apertureProperty = Device.Properties[WIAManager.CONST_PROP_F_Number];
         if (apertureProperty != null)
         {
           foreach (var subTypeValue in apertureProperty.SubTypeValues)
@@ -304,7 +304,7 @@ namespace CameraControl.Devices.Others
           }
         }
 
-        Property isoProperty = manager.Device.Properties[WIAManager.CONST_PROP_ISO_Number];
+        Property isoProperty = Device.Properties[WIAManager.CONST_PROP_ISO_Number];
         if (isoProperty != null)
         {
           foreach (var subTypeValue in isoProperty.SubTypeValues)
@@ -315,7 +315,7 @@ namespace CameraControl.Devices.Others
           }
         }
 
-        Property shutterProperty = manager.Device.Properties[WIAManager.CONST_PROP_Exposure_Time];
+        Property shutterProperty = Device.Properties[WIAManager.CONST_PROP_Exposure_Time];
         if (shutterProperty != null)
         {
           foreach (int subTypeValue in shutterProperty.SubTypeValues)
@@ -326,7 +326,7 @@ namespace CameraControl.Devices.Others
           ShutterSpeed.SetValue(shutterProperty.get_Value());
         }
 
-        Property wbProperty = manager.Device.Properties[WIAManager.CONST_PROP_WhiteBalance];
+        Property wbProperty = Device.Properties[WIAManager.CONST_PROP_WhiteBalance];
         if (wbProperty != null)
         {
           foreach (var subTypeValue in wbProperty.SubTypeValues)
@@ -337,7 +337,7 @@ namespace CameraControl.Devices.Others
           WhiteBalance.SetValue(wbProperty.get_Value());
         }
 
-        Property modeProperty = manager.Device.Properties[WIAManager.CONST_PROP_ExposureMode];
+        Property modeProperty = Device.Properties[WIAManager.CONST_PROP_ExposureMode];
         if (modeProperty != null)
         {
           foreach (var subTypeValue in modeProperty.SubTypeValues)
@@ -349,7 +349,7 @@ namespace CameraControl.Devices.Others
         }
         Mode.IsEnabled = false;
 
-        Property ecProperty = manager.Device.Properties[WIAManager.CONST_PROP_ExposureCompensation];
+        Property ecProperty = Device.Properties[WIAManager.CONST_PROP_ExposureCompensation];
         if (ecProperty != null)
         {
           foreach (var subTypeValue in ecProperty.SubTypeValues)
@@ -363,7 +363,7 @@ namespace CameraControl.Devices.Others
           ExposureCompensation.SetValue(ecProperty.get_Value());
         }
 
-        Property csProperty = manager.Device.Properties[WIAManager.CONST_PROP_CompressionSetting];
+        Property csProperty = Device.Properties[WIAManager.CONST_PROP_CompressionSetting];
         if (csProperty != null)
         {
           foreach (var subTypeValue in csProperty.SubTypeValues)
@@ -374,7 +374,7 @@ namespace CameraControl.Devices.Others
           CompressionSetting.SetValue(csProperty.get_Value());
         }
 
-        Property emmProperty = manager.Device.Properties[WIAManager.CONST_PROP_ExposureMeteringMode];
+        Property emmProperty = Device.Properties[WIAManager.CONST_PROP_ExposureMeteringMode];
         if (emmProperty != null)
         {
           foreach (var subTypeValue in emmProperty.SubTypeValues)
@@ -385,7 +385,7 @@ namespace CameraControl.Devices.Others
           CompressionSetting.SetValue(emmProperty.get_Value());
         }
 
-        Property fmProperty = manager.Device.Properties[WIAManager.CONST_PROP_FocusMode];
+        Property fmProperty = Device.Properties[WIAManager.CONST_PROP_FocusMode];
         if (fmProperty != null)
         {
           foreach (int subTypeValue in fmProperty.SubTypeValues)
@@ -397,12 +397,12 @@ namespace CameraControl.Devices.Others
           FocusMode.SetValue(Convert.ToUInt16((int) fmProperty.get_Value()));
         }
 
-        Battery = manager.Device.Properties[WIAManager.CONST_PROP_BatteryStatus].get_Value();
+        Battery = Device.Properties[WIAManager.CONST_PROP_BatteryStatus].get_Value();
       }
       catch (Exception exception)
       {
         ServiceProvider.Log.Error(exception);
-        IsConected = false;
+        IsConnected = false;
       }
 
       HaveLiveView = false;

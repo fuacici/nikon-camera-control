@@ -105,10 +105,10 @@
             </ListBox>
         </StackPanel>
         <ToolBar Grid.ColumnSpan="3" Name="toolBar1" Grid.Row="1">
-            <Button ToolTip="Take picture"  Height="30" Name="button3" Click="button3_Click" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConected}" Margin="5">
+            <Button ToolTip="Take picture"  Height="30" Name="button3" Click="button3_Click" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5">
                 <Image Source="/CameraControl;component/Images/Camera.png"/>
             </Button>
-            <Button Content="[BR]" ToolTip="Braketing"  Height="30" Name="btn_br" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConected}" Margin="5" Click="btn_br_Click" />
+            <Button Content="[BR]" ToolTip="Braketing"  Height="30" Name="btn_br" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_br_Click" />
             <ToggleButton ToolTip="Image property" Height="30" Width="50" Name="button1"  Click="button1_Click" Margin="5">
                 <Image Source="/CameraControl;component/Images/Properties.png"/>
             </ToggleButton>
@@ -133,15 +133,25 @@
                 </StackPanel>
             </StackPanel>
         </ToolBar>
-        <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConected}" Margin="12,6,8,14" Width="100" Grid.Row="2" />
+        <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="12,6,8,14" Width="100" Grid.Row="2" />
         <Menu Grid.ColumnSpan="3" Name="menu1">
-            <MenuItem Header="File">
+            <MenuItem Header="_File">
+                <MenuItem Header="Connected cameras" ItemsSource="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" >
+                    <MenuItem.ItemTemplate>
+                        <DataTemplate>
+                            <MenuItem Header="{Binding Path=DeviceName}" 
+                                      Command="{Binding}" 
+                                      CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </MenuItem.ItemTemplate>
+                </MenuItem>
                 <MenuItem Header="Exit" Command="ApplicationCommands.Close"/>
             </MenuItem>
-            <MenuItem Header="Help">
+            <MenuItem Header="_Help">
                 <MenuItem Header="Home page" Click="MenuItem_Click" />
+                <MenuItem Header="Check for update" Name="mnu_update" Click="MenuItem_Click_1" />
                 <Separator />
-                <MenuItem Header="About" />
+                <MenuItem Header="About" Name="mnu_about" Click="btn_about_Click" />
             </MenuItem>
         </Menu>
     </Grid>

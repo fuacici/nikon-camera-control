@@ -9,6 +9,7 @@ using CameraControl.Classes;
 using CameraControl.Devices.Classes;
 using CameraControl.Devices.Others;
 using PortableDeviceLib;
+using WIA;
 using Timer = System.Timers.Timer;
 
 namespace CameraControl.Devices.Nikon
@@ -50,6 +51,8 @@ namespace CameraControl.Devices.Nikon
 
     protected StillImageDevice _stillImageDevice = null;
     private WIAManager _manager = null;
+    //TODO: remove reference from wia device
+    private Device Device { get; set; }
 
     private Dictionary<uint, string> _isoTable = new Dictionary<uint, string>()
                                                   {
@@ -336,7 +339,7 @@ namespace CameraControl.Devices.Nikon
 
     private bool _isConected;
 
-    public bool IsConected
+    public bool IsConnected
     {
       get { return _isConected; }
       set
@@ -385,6 +388,7 @@ namespace CameraControl.Devices.Nikon
     public virtual bool Init(string id, WIAManager manager)
     {
       _manager = manager;
+      Device = _manager.Device;
       HaveLiveView = true;
       _stillImageDevice = new StillImageDevice(id);
       _stillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
@@ -401,7 +405,7 @@ namespace CameraControl.Devices.Nikon
       InitFocusMode();
       ReadDeviceProperties(CONST_PROP_BatteryLevel);
       _timer.Start();
-      IsConected = true;
+      IsConnected = true;
       return true;
     }
 
@@ -753,7 +757,7 @@ namespace CameraControl.Devices.Nikon
       Monitor.Enter(Locker);
       try
       {
-        _manager.Device.ExecuteCommand(Conts.wiaCommandTakePicture);
+        Device.ExecuteCommand(Conts.wiaCommandTakePicture);
       }
       finally
       {
