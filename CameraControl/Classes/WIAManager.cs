@@ -31,41 +31,41 @@ namespace CameraControl.Classes
     public const string CONST_PROP_ExposureMeteringMode = "Exposure Metering Mode";
     public const string CONST_PROP_FocusMode = "Focus Mode";
     
-    private string _deviceName;
+    //private string _deviceName;
 
-    public string DeviceName
-    {
-      get { return _deviceName; }
-      set
-      {
-        _deviceName = value;
-        NotifyPropertyChanged("DeviceName");
-      }
-    }
+    //public string DeviceName
+    //{
+    //  get { return _deviceName; }
+    //  set
+    //  {
+    //    _deviceName = value;
+    //    NotifyPropertyChanged("DeviceName");
+    //  }
+    //}
 
-    private string _manufacturer;
+    //private string _manufacturer;
 
-    public string Manufacturer
-    {
-      get { return _manufacturer; }
-      set
-      {
-        _manufacturer = value;
-        NotifyPropertyChanged("Manufacturer");
-      }
-    }
+    //public string Manufacturer
+    //{
+    //  get { return _manufacturer; }
+    //  set
+    //  {
+    //    _manufacturer = value;
+    //    NotifyPropertyChanged("Manufacturer");
+    //  }
+    //}
 
-    private bool _isConected;
+    //private bool _isConected;
 
-    public bool IsConected
-    {
-      get { return _isConected; }
-      set
-      {
-        _isConected = value;
-        NotifyPropertyChanged("IsConected");
-      }
-    }
+    //public bool IsConected
+    //{
+    //  get { return _isConected; }
+    //  set
+    //  {
+    //    _isConected = value;
+    //    NotifyPropertyChanged("IsConected");
+    //  }
+    //}
 
     public bool SetProperty(string name, object val)
     {
@@ -96,8 +96,6 @@ namespace CameraControl.Classes
       DeviceManager.RegisterEvent(Conts.wiaEventDeviceDisconnected, "*");
       DeviceManager.RegisterEvent(Conts.wiaEventItemCreated, "*");
       DeviceManager.OnEvent += DeviceManager_OnEvent;
-      DeviceName = "";
-      Manufacturer = "";
     }
 
     private void DeviceManager_OnEvent(string eventId, string deviceId, string itemId)
@@ -126,9 +124,7 @@ namespace CameraControl.Classes
 
     public void DisconnectCamera()
     {
-      IsConected = false;
-      DeviceName = "";
-      Manufacturer = "";
+      //IsConected = false;
       if (Device != null)
         Marshal.ReleaseComObject(Device);
       Device = null;
@@ -176,17 +172,15 @@ namespace CameraControl.Classes
             Device = DevInfo.Connect();
             Thread.Sleep(500);
             //Log(DateTime.Now.ToString() + " Digital Still Camera Connected\r\n");
-            DeviceName = Device.Properties["Description"].get_Value();
-            Manufacturer = Device.Properties["Manufacturer"].get_Value();
 
-            IsConected = true;
+            //IsConected = true;
             CameraDevice = ServiceProvider.DeviceManager.GetIDevice(this);
             ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
             ServiceProvider.Settings.SystemMessage = "Camera is connected ! Driver :"+CameraDevice.GetType().Name;
             ServiceProvider.Log.Debug("===========Camera is connected==============" );
             ServiceProvider.Log.Debug("Driver :" + CameraDevice.GetType().Name);
-            ServiceProvider.Log.Debug("Name :" + DeviceName);
-            ServiceProvider.Log.Debug("Manufacturer :" + Manufacturer);
+            ServiceProvider.Log.Debug("Name :" + CameraDevice.DeviceName);
+            ServiceProvider.Log.Debug("Manufacturer :" + CameraDevice.Manufacturer);
             return true;
           }
         }

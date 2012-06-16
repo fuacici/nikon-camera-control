@@ -136,6 +136,17 @@ namespace PortableDeviceLib
         }
 
         /// <summary>
+        /// Gets the device Manufacturer
+        /// </summary>
+        public string Manufacturer
+        {
+          get
+          {
+            return GetStringProperty(PortableDevicePKeys.WPD_DEVICE_MANUFACTURER);
+          }
+        }
+
+        /// <summary>
         /// Gets the firmware version
         /// </summary>
         public string FirmwareVersion

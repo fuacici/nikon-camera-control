@@ -95,6 +95,11 @@ namespace CameraControl.Classes
         int val = BitConverter.ToInt16(ba, 0);
         SetValue((T)((object)val));
       }
+      if (typeof(T) == typeof(long))
+      {
+        long val = BitConverter.ToInt32(ba, 0);
+        SetValue((T)((object)val));
+      }
       if (typeof(T) == typeof(uint))
       {
         uint val = BitConverter.ToUInt16(ba, 0);

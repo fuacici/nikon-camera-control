@@ -60,6 +60,9 @@ namespace CameraControl.Devices
     //TODO: need to be fixed same type cameras isn't handled right 
     public ICameraDevice GetIDevice(WIAManager manager)
     {
+      WiaCameraDevice wiaCameraDevice=new WiaCameraDevice();
+      wiaCameraDevice.Init(manager.DeviceId, manager);
+
       if (!ServiceProvider.Settings.DisableNativeDrivers)
       {
         ObservableCollection<PortableDevice> PortableDevices = new ObservableCollection<PortableDevice>();
@@ -71,9 +74,9 @@ namespace CameraControl.Devices
 
         foreach (var device in PortableDeviceCollection.Instance.Devices)
         {
-          if (DeviceClass.ContainsKey(manager.DeviceName.ToUpper()))
+          if (DeviceClass.ContainsKey(wiaCameraDevice.DeviceName.ToUpper()))
           {
-            SelectedCameraDevice = (ICameraDevice) Activator.CreateInstance(DeviceClass[manager.DeviceName]);
+            SelectedCameraDevice = (ICameraDevice)Activator.CreateInstance(DeviceClass[wiaCameraDevice.DeviceName]);
             SelectedCameraDevice.Init(device.DeviceId, manager);
             return SelectedCameraDevice;
           }
@@ -81,8 +84,8 @@ namespace CameraControl.Devices
         }
       }
 
-      SelectedCameraDevice = new WiaCameraDevice();
-      SelectedCameraDevice.Init(manager.DeviceId, manager);
+      SelectedCameraDevice = wiaCameraDevice;
+      //SelectedCameraDevice.Init(manager.DeviceId, manager);
       return SelectedCameraDevice;
     }
   }

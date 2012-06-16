@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Windows.Forms;
+using System.Xml;
 using FreeImageAPI;
 
 namespace CameraControl.Classes
@@ -19,6 +22,23 @@ namespace CameraControl.Classes
         startInfo.Arguments = param;
         Process process = Process.Start(startInfo);
         process.WaitForExit();
+      }
+      catch (Exception)
+      {
+        return false;
+      }
+      return true;
+    }
+
+    public static bool Run(string exe, string param)
+    {
+      try
+      {
+        ProcessStartInfo startInfo = new ProcessStartInfo(exe);
+        startInfo.WindowStyle = ProcessWindowStyle.Minimized;
+        startInfo.Arguments = param;
+        Process process = Process.Start(startInfo);
+        //process.WaitForExit();
       }
       catch (Exception)
       {
@@ -87,6 +107,44 @@ namespace CameraControl.Classes
         return GetUniqueFilename(prefix, counter + 1, sufix);
       }
       return file;
+    }
+
+    public static bool CheckForUpdate()
+    {
+      try
+      {
+        string tempfile = Path.GetTempFileName();
+        using (WebClient client = new WebClient())
+        {
+          client.DownloadFile("http://nikon-camera-control.googlecode.com/svn/trunk/versioninfo.xml", tempfile);
+        }
+
+        XmlDocument document = new XmlDocument();
+        document.Load(tempfile);
+        string ver = document.SelectSingleNode("application/version").InnerText;
+        string url = "http://code.google.com/p/nikon-camera-control/downloads/list";
+        var selectSingleNode = document.SelectSingleNode("application/url");
+        if (selectSingleNode != null)
+          url = selectSingleNode.InnerText;
+        Version v_ver = new Version(ver);
+        Version app_ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+        if (v_ver > System.Reflection.Assembly.GetExecutingAssembly().GetName().Version)
+        {
+          if (
+            MessageBox.Show("New version of application released\nDo you want to download?", "Update",
+                            MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+          {
+            System.Diagnostics.Process.Start(url);
+            return true;
+          }
+        }
+        File.Delete(tempfile);
+      }
+      catch (Exception exception)
+      {
+        ServiceProvider.Log.Error("Error download update information", exception);
+      }
+      return false;
     }
   }
 }
