@@ -171,11 +171,11 @@ namespace CameraControl.Classes
           {
             //DeviceId = devInfo.DeviceID;
             //Device = devInfo.Connect();
-            Thread.Sleep(500);
+            //Thread.Sleep(500);
             //Log(DateTime.Now.ToString() + " Digital Still Camera Connected\r\n");
 
             //IsConected = true;
-            CameraDevice = ServiceProvider.DeviceManager.GetIDevice(this, devInfo.DeviceID);
+            CameraDevice = ServiceProvider.DeviceManager.GetIDevice(this, devInfo);
             ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
             ServiceProvider.Settings.SystemMessage = "Camera is connected ! Driver :"+CameraDevice.GetType().Name;
             ServiceProvider.Log.Debug("===========Camera is connected==============" );

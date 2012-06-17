@@ -34,12 +34,14 @@ namespace CameraControl.Devices.Others
     public string DeviceName { get; set; }
     public string Manufacturer { get; set; }
 
+    public string SerialNumber{ get; set; }
+
 
     public int Battery { get; set; }
 
     public byte LiveViewImageZoomRatio { get; set; }
 
-    public bool Init(string id, WIAManager manager)
+    public bool Init(DeviceDescriptor deviceDescriptor)
     {
       HaveLiveView = false;
       return true;

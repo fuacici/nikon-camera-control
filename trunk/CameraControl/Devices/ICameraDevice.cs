@@ -18,11 +18,12 @@ namespace CameraControl.Devices
     bool IsConnected { get; set; }
     string DeviceName { get; set; }
     string Manufacturer { get; set; }
+    string SerialNumber { get; set; }
 
     int Battery { get; set; }
     byte LiveViewImageZoomRatio { get; set; }
 
-    bool Init(string id, WIAManager manager);
+    bool Init(DeviceDescriptor deviceDescriptor);
     void StartLiveView();
     void StopLiveView();
     LiveViewData GetLiveViewImage();

@@ -50,6 +50,7 @@ namespace CameraControl
       Trigger = new TriggerClass();
       ActionManager = new ActionManager();
       Log.Debug("Application starting");
+      Log.Debug("Application verison" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
     }
   }
 }

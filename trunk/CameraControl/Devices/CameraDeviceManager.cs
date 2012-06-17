@@ -8,6 +8,7 @@ using CameraControl.Devices.Classes;
 using CameraControl.Devices.Nikon;
 using CameraControl.Devices.Others;
 using PortableDeviceLib;
+using WIA;
 
 namespace CameraControl.Devices
 {
@@ -65,14 +66,19 @@ namespace CameraControl.Devices
     }
 
     //TODO: need to be fixed same type cameras isn't handled right 
-    public ICameraDevice GetIDevice(WIAManager manager, string wiaDeviceId)
+    public ICameraDevice GetIDevice(WIAManager manager, IDeviceInfo devInfo)
     {
-      WiaCameraDevice wiaCameraDevice=new WiaCameraDevice();
-      wiaCameraDevice.Init(manager.DeviceId, manager);
+      // already the camera is connected
+      if (_deviceEnumerator.GetByWiaId(devInfo.DeviceID) != null)
+        return _deviceEnumerator.GetByWiaId(devInfo.DeviceID).CameraDevice;
+
+      DeviceDescriptor descriptor = new DeviceDescriptor {WiaDeviceInfo = devInfo, WiaId = devInfo.DeviceID};
+
+      ICameraDevice cameraDevice = new WiaCameraDevice();
+      cameraDevice.Init(descriptor);
 
       if (!ServiceProvider.Settings.DisableNativeDrivers)
       {
-        ObservableCollection<PortableDevice> PortableDevices = new ObservableCollection<PortableDevice>();
         if (PortableDeviceCollection.Instance == null)
         {
           PortableDeviceCollection.CreateInstance(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
@@ -81,19 +87,24 @@ namespace CameraControl.Devices
 
         foreach (var device in PortableDeviceCollection.Instance.Devices)
         {
-          if (DeviceClass.ContainsKey(wiaCameraDevice.DeviceName.ToUpper()))
+          if (PhotoUtils.GetSerial(device.DeviceId) == cameraDevice.SerialNumber &&
+              DeviceClass.ContainsKey(cameraDevice.DeviceName.ToUpper()))
           {
-            string s = device.SerialNumber;
-            SelectedCameraDevice = (ICameraDevice)Activator.CreateInstance(DeviceClass[wiaCameraDevice.DeviceName]);
-            ConnectedDevices.Add(SelectedCameraDevice);
-            SelectedCameraDevice.Init(device.DeviceId, manager);
-            return SelectedCameraDevice;
+            descriptor.WpdId = device.DeviceId;
+            cameraDevice = (ICameraDevice) Activator.CreateInstance(DeviceClass[cameraDevice.DeviceName]);
+            cameraDevice.Init(descriptor);
+            //            ConnectedDevices.Add(SelectedCameraDevice);
+            //SelectedCameraDevice.Init(device.DeviceId, manager);
+            //return SelectedCameraDevice;
+            break;
           }
           break;
         }
       }
 
-      SelectedCameraDevice = wiaCameraDevice;
+      descriptor.CameraDevice = cameraDevice;
+      SelectedCameraDevice = cameraDevice;
+      _deviceEnumerator.Add(descriptor);
       ConnectedDevices.Add(SelectedCameraDevice);
       //SelectedCameraDevice.Init(manager.DeviceId, manager);
       return SelectedCameraDevice;

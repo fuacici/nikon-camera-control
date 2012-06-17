@@ -23,9 +23,11 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml;
 using CameraControl.Classes;
+using CameraControl.Devices;
 using CameraControl.windows;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
+using PortableDeviceLib;
 using WIA;
 using WPF.Themes;
 using Clipboard = System.Windows.Clipboard;
@@ -47,8 +49,8 @@ namespace CameraControl
 
     public MainWindow()
     {
-      CommandBindings.Add(new CommandBinding(ApplicationCommands.Close,(sender, args) => this.Close()));
-
+      CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (sender, args) => this.Close()));
+      SelectDeviceCommand = new RelayCommand<ICameraDevice>(SelectCamera);
       ServiceProvider.Configure();
       ServiceProvider.Settings = new Settings();
       ServiceProvider.ThumbWorker = new ThumbWorker();
@@ -166,7 +168,20 @@ namespace CameraControl
         ServiceProvider.Settings.SystemMessage = "Transfer error !\nMessage :" + ex.Message;
         ServiceProvider.Log.Error("Transfer error !", ex);
       }
-      
+    }
+
+    /// <summary>
+    /// Gets the command for selecting a device
+    /// </summary>
+    public RelayCommand<ICameraDevice> SelectDeviceCommand
+    {
+      get;
+      private set;
+    }
+
+    private void SelectCamera(ICameraDevice cameraDevice)
+    {
+      ServiceProvider.DeviceManager.SelectedCameraDevice = cameraDevice;
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -462,6 +477,11 @@ namespace CameraControl
       {
         MessageBox.Show("You application is up to date !"); 
       }
+    }
+
+    private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+    {
+
     }
   }
 }
