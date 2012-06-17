@@ -29,5 +29,10 @@ namespace CameraControl.Devices.Classes
       Devices.Add(descriptor);
     }
 
+    public void Remove(DeviceDescriptor descriptor)
+    {
+      Devices.Remove(descriptor);
+    }
+
   }
 }

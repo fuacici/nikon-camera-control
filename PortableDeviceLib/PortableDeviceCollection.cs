@@ -163,9 +163,10 @@ namespace PortableDeviceLib
         private void RefreshDevices()
         {
             this.deviceManager.RefreshDeviceList();
-            string[] devicesIds = new string[1];
             uint _countDevices = 1;
-            this.deviceManager.GetDevices(ref devicesIds[0], ref _countDevices);
+            this.deviceManager.GetDevices(null, ref _countDevices);
+            string[] devicesIds = new string[_countDevices];
+            this.deviceManager.GetDevices(devicesIds, ref _countDevices);
             this.countDevices = _countDevices;
         }
 
@@ -176,7 +177,7 @@ namespace PortableDeviceLib
                 return null;
 
             string[] deviceIds = new string[this.countDevices];
-            this.deviceManager.GetDevices(ref deviceIds[0], ref this.countDevices);            
+            this.deviceManager.GetDevices(deviceIds, ref this.countDevices);            
 
             return deviceIds;
         }
