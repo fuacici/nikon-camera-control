@@ -18,5 +18,16 @@ namespace CameraControl.Devices.Classes
     {
       return Devices.FirstOrDefault(deviceDescriptor => deviceDescriptor.SerialNumber == serial);
     }
+    
+    public DeviceDescriptor GetByWiaId(string id)
+    {
+      return Devices.FirstOrDefault(deviceDescriptor => deviceDescriptor.WiaId == id);
+    }
+
+    public void Add(DeviceDescriptor descriptor)
+    {
+      Devices.Add(descriptor);
+    }
+
   }
 }

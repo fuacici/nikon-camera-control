@@ -253,6 +253,17 @@ namespace CameraControl.Devices.Others
       }
     }
 
+    private string _serialNumber;
+    public string SerialNumber
+    {
+      get { return _serialNumber; }
+      set
+      {
+        _serialNumber = value;
+        NotifyPropertyChanged("SerialNumber");
+      }
+    }
+
     private bool _isConected;
 
     public bool IsConnected
@@ -283,11 +294,28 @@ namespace CameraControl.Devices.Others
     internal object Locker = new object(); // object used to lock multi hreaded mothods 
 
 
-    public virtual bool Init(string id, WIAManager manager)
+    public virtual bool Init(DeviceDescriptor deviceDescriptor)
     {
-      Device = manager.Device;
+      //the device not connected
+      try
+      {
+        if (deviceDescriptor.WiaDevice == null)
+        {
+          Thread.Sleep(500);
+          deviceDescriptor.WiaDevice = deviceDescriptor.WiaDeviceInfo.Connect();
+          deviceDescriptor.CameraDevice = this;
+          Thread.Sleep(250);
+        }
+      }
+      catch (Exception exception)
+      {
+        ServiceProvider.Log.Error("Unable to connect camera using via driver", exception);
+        return false;
+      }
+      Device = deviceDescriptor.WiaDevice;
       DeviceName = Device.Properties["Description"].get_Value();
       Manufacturer = Device.Properties["Manufacturer"].get_Value();
+      SerialNumber = PhotoUtils.GetSerial(Device.Properties["PnP ID String"].get_Value());
       IsConnected = true;
       try
       {

@@ -109,6 +109,7 @@
     <Compile Include="Classes\FileItem.cs" />
     <Compile Include="Classes\PhotoUtils.cs" />
     <Compile Include="Classes\PropertyValue.cs" />
+    <Compile Include="Classes\RelayCommand.cs" />
     <Compile Include="Classes\ThumbWorker.cs" />
     <Compile Include="Classes\TimeLapseClass.cs" />
     <Compile Include="Classes\TriggerClass.cs" />

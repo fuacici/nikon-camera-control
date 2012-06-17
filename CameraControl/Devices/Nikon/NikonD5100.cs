@@ -50,7 +50,7 @@ namespace CameraControl.Devices.Nikon
     private Timer _timer = new Timer(1000/15);
 
     protected StillImageDevice _stillImageDevice = null;
-    private WIAManager _manager = null;
+    
     //TODO: remove reference from wia device
     private Device Device { get; set; }
 
@@ -337,6 +337,18 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
+    private string _serialNumber;
+    public string SerialNumber
+    {
+      get { return _serialNumber; }
+      set
+      {
+        _serialNumber = value;
+        NotifyPropertyChanged("SerialNumber");
+      }
+    }
+
+
     private bool _isConected;
 
     public bool IsConnected
@@ -385,12 +397,16 @@ namespace CameraControl.Devices.Nikon
     }
 
 
-    public virtual bool Init(string id, WIAManager manager)
+    public virtual bool Init(DeviceDescriptor deviceDescriptor)
     {
-      _manager = manager;
-      Device = _manager.Device;
+      if(deviceDescriptor.WiaDevice==null)
+      {
+        ServiceProvider.Log.Error("No wia device connected aborting ...");
+        return false;
+      }
+      Device = deviceDescriptor.WiaDevice;
       HaveLiveView = true;
-      _stillImageDevice = new StillImageDevice(id);
+      _stillImageDevice = new StillImageDevice(deviceDescriptor.WpdId);
       _stillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
       DeviceName = _stillImageDevice.Model;
       Manufacturer = _stillImageDevice.Manufacturer;

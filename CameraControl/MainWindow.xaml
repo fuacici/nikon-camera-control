@@ -85,7 +85,7 @@
                             <MenuItem.ItemTemplate>
                                 <DataTemplate>
                                     <MenuItem Header="{Binding Path=Title}" 
-                                      Command="{Binding}" 
+                                      Command="{Binding }" 
                                       CommandParameter="{Binding}" />
                                 </DataTemplate>
                             </MenuItem.ItemTemplate>
@@ -140,7 +140,7 @@
                     <MenuItem.ItemTemplate>
                         <DataTemplate>
                             <MenuItem Header="{Binding Path=DeviceName}" 
-                                      Command="{Binding}" 
+                                      Command="{Binding Path=SelectDeviceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" 
                                       CommandParameter="{Binding}" />
                         </DataTemplate>
                     </MenuItem.ItemTemplate>
