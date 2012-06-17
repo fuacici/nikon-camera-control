@@ -53,6 +53,7 @@ namespace CameraControl.Devices.Nikon
     
     //TODO: remove reference from wia device
     private Device Device { get; set; }
+    public DeviceManager DeviceManager { get; set; }
 
     private Dictionary<uint, string> _isoTable = new Dictionary<uint, string>()
                                                   {
@@ -405,6 +406,9 @@ namespace CameraControl.Devices.Nikon
         return false;
       }
       Device = deviceDescriptor.WiaDevice;
+      DeviceManager = new DeviceManager();
+      DeviceManager.RegisterEvent(Conts.wiaEventItemCreated, deviceDescriptor.WiaId);
+      DeviceManager.OnEvent += DeviceManager_OnEvent;
       HaveLiveView = true;
       _stillImageDevice = new StillImageDevice(deviceDescriptor.WpdId);
       _stillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
@@ -423,6 +427,15 @@ namespace CameraControl.Devices.Nikon
       _timer.Start();
       IsConnected = true;
       return true;
+    }
+
+    void DeviceManager_OnEvent(string EventID, string DeviceID, string ItemID)
+    {
+      if (PhotoCaptured != null)
+      {
+        PhotoCapturedEventArgs args = new PhotoCapturedEventArgs { WiaImageItem = Device.GetItem(ItemID) };
+        PhotoCaptured(this, args);
+      }
     }
 
     void IsoNumber_ValueChanged(object sender, string key, int val)
@@ -953,6 +966,8 @@ namespace CameraControl.Devices.Nikon
         }
       }
     }
+
+    public event PhotoCapturedEventHandler PhotoCaptured;
 
     private void getEvent()
     {

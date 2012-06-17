@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using CameraControl.Classes;
 using CameraControl.Devices.Classes;
@@ -292,7 +290,7 @@ namespace CameraControl.Devices.Others
 
     private Device Device { get; set; }
     internal object Locker = new object(); // object used to lock multi hreaded mothods 
-
+    public DeviceManager DeviceManager { get; set; }
 
     public virtual bool Init(DeviceDescriptor deviceDescriptor)
     {
@@ -312,6 +310,10 @@ namespace CameraControl.Devices.Others
         ServiceProvider.Log.Error("Unable to connect camera using via driver", exception);
         return false;
       }
+      DeviceManager = new DeviceManager();
+      DeviceManager.RegisterEvent(Conts.wiaEventItemCreated, deviceDescriptor.WiaId);
+      DeviceManager.OnEvent += DeviceManager_OnEvent;
+
       Device = deviceDescriptor.WiaDevice;
       DeviceName = Device.Properties["Description"].get_Value();
       Manufacturer = Device.Properties["Manufacturer"].get_Value();
@@ -435,6 +437,15 @@ namespace CameraControl.Devices.Others
 
       HaveLiveView = false;
       return true;
+    }
+
+    void DeviceManager_OnEvent(string EventID, string DeviceID, string ItemID)
+    {
+      if (PhotoCaptured != null)
+      {
+        PhotoCapturedEventArgs args = new PhotoCapturedEventArgs {WiaImageItem = Device.GetItem(ItemID)};
+        PhotoCaptured(this, args);
+      }
     }
 
     public WiaCameraDevice()
@@ -662,12 +673,15 @@ namespace CameraControl.Devices.Others
         Marshal.ReleaseComObject(Device);
       Device = null;
       HaveLiveView = false;
+      DeviceManager.OnEvent -= DeviceManager_OnEvent;
     }
 
     public virtual void ReadDeviceProperties(int o)
     {
       HaveLiveView = false;
     }
+
+    public event PhotoCapturedEventHandler PhotoCaptured;
 
     #endregion
   }

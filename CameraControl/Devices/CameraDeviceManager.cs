@@ -65,7 +65,6 @@ namespace CameraControl.Devices
       _deviceEnumerator = new DeviceDescriptorEnumerator();
     }
 
-    //TODO: need to be fixed same type cameras isn't handled right 
     public ICameraDevice GetIDevice(WIAManager manager, IDeviceInfo devInfo)
     {
       // already the camera is connected
@@ -92,10 +91,8 @@ namespace CameraControl.Devices
           {
             descriptor.WpdId = deviceId;
             cameraDevice = (ICameraDevice) Activator.CreateInstance(DeviceClass[cameraDevice.DeviceName]);
+            cameraDevice.SerialNumber = PhotoUtils.GetSerial(deviceId);
             cameraDevice.Init(descriptor);
-            //            ConnectedDevices.Add(SelectedCameraDevice);
-            //SelectedCameraDevice.Init(device.DeviceId, manager);
-            //return SelectedCameraDevice;
             break;
           }
         }
@@ -105,7 +102,7 @@ namespace CameraControl.Devices
       _deviceEnumerator.Add(descriptor);
       ConnectedDevices.Add(cameraDevice);
       SelectedCameraDevice = cameraDevice;
-
+      cameraDevice.PhotoCaptured += cameraDevice_PhotoCaptured;
       ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
       ServiceProvider.Settings.SystemMessage = "New Camera is connected ! Driver :" + cameraDevice.DeviceName;
       ServiceProvider.Log.Debug("===========Camera is connected==============");
@@ -116,11 +113,18 @@ namespace CameraControl.Devices
       return SelectedCameraDevice;
     }
 
+    void cameraDevice_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
+    {
+      if (PhotoCaptured != null)
+        PhotoCaptured(sender, eventArgs);
+    }
+
     public void DisconnectCamera(string wiaId)
     {
       DeviceDescriptor descriptor = _deviceEnumerator.GetByWiaId(wiaId);
       if (descriptor != null)
       {
+        descriptor.CameraDevice.PhotoCaptured -= cameraDevice_PhotoCaptured;
         ConnectedDevices.Remove(descriptor.CameraDevice);
         ServiceProvider.Settings.SystemMessage = "Camera disconnected :" + descriptor.CameraDevice.DeviceName;
         ServiceProvider.Log.Debug("===========Camera disconnected==============");
@@ -138,5 +142,7 @@ namespace CameraControl.Devices
         _deviceEnumerator.Remove(descriptor);
       }
     }
+
+    public event PhotoCapturedEventHandler PhotoCaptured;
   }
 }

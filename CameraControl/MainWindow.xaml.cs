@@ -60,7 +60,7 @@ namespace CameraControl
       ServiceProvider.Trigger.Start();
       WiaManager = new WIAManager();
       ServiceProvider.Settings.Manager = WiaManager;
-      WiaManager.PhotoTaked += WiaManager_PhotoTaked;
+      ServiceProvider.DeviceManager.PhotoCaptured += DeviceManager_PhotoCaptured;
       InitializeComponent();
       DataContext = ServiceProvider.Settings;
       if (ServiceProvider.Settings.DefaultSession.Files.Count > 0)
@@ -73,6 +73,12 @@ namespace CameraControl
       }
       ServiceProvider.WindowsManager = new WindowsManager();
       ServiceProvider.WindowsManager.Event += Trigger_Event;
+    }
+
+    void DeviceManager_PhotoCaptured(object sender, Devices.Classes.PhotoCapturedEventArgs eventArgs)
+    {
+      Thread thread = new Thread(PhotoTaked);
+      thread.Start(eventArgs);
     }
 
     void Trigger_Event(string cmd)
@@ -128,17 +134,13 @@ namespace CameraControl
       }
     }
 
-    private void WiaManager_PhotoTaked(Item item)
-    {
-      Thread thread = new Thread(PhotoTaked);
-      thread.Start(item);
-    }
 
     void PhotoTaked(object o)
     {
       try
       {
-        Item item = o as Item;
+        Devices.Classes.PhotoCapturedEventArgs eventArgs = o as Devices.Classes.PhotoCapturedEventArgs;
+        Item item = eventArgs.WiaImageItem;
         ServiceProvider.Settings.SystemMessage = "Photo transfer begin.";
         string s = item.ItemID;
         ImageFile imageFile = null;
@@ -365,8 +367,6 @@ namespace CameraControl
 
     private void btn_liveview_Click(object sender, RoutedEventArgs e)
     {
-      if (WiaManager.CameraDevice == null)
-        return;
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Show);
     }
 

@@ -97,6 +97,8 @@ namespace CameraControl.Devices.Others
       
     }
 
+    public event PhotoCapturedEventHandler PhotoCaptured;
+
     #endregion
 
     public NotConnectedCameraDevice()
