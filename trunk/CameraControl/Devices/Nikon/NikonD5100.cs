@@ -846,10 +846,16 @@ namespace CameraControl.Devices.Nikon
     {
       lock (Locker)
       {
-        _timer.Stop();
-        _stillImageDevice.Disconnect();
-        HaveLiveView = false;
-        ServiceProvider.Settings.SystemMessage = "Camera disconnected !";
+        try
+        {
+          _timer.Stop();
+          _stillImageDevice.Disconnect();
+          HaveLiveView = false;
+        }
+        catch (Exception exception)
+        {
+          ServiceProvider.Log.Error("Close camera",exception);
+        }
       }
     }
 

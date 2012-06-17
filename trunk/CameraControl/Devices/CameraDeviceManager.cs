@@ -85,12 +85,12 @@ namespace CameraControl.Devices
           PortableDeviceCollection.Instance.AutoConnectToPortableDevice = false;
         }
 
-        foreach (var device in PortableDeviceCollection.Instance.Devices)
+        foreach (var deviceId in PortableDeviceCollection.Instance.DeviceIds)
         {
-          if (PhotoUtils.GetSerial(device.DeviceId) == cameraDevice.SerialNumber &&
-              DeviceClass.ContainsKey(cameraDevice.DeviceName.ToUpper()))
+          if (PhotoUtils.GetSerial(deviceId) == cameraDevice.SerialNumber &&
+              DeviceClass.ContainsKey(cameraDevice.DeviceName.ToUpper())) 
           {
-            descriptor.WpdId = device.DeviceId;
+            descriptor.WpdId = deviceId;
             cameraDevice = (ICameraDevice) Activator.CreateInstance(DeviceClass[cameraDevice.DeviceName]);
             cameraDevice.Init(descriptor);
             //            ConnectedDevices.Add(SelectedCameraDevice);
@@ -98,16 +98,45 @@ namespace CameraControl.Devices
             //return SelectedCameraDevice;
             break;
           }
-          break;
         }
       }
 
       descriptor.CameraDevice = cameraDevice;
-      SelectedCameraDevice = cameraDevice;
       _deviceEnumerator.Add(descriptor);
-      ConnectedDevices.Add(SelectedCameraDevice);
-      //SelectedCameraDevice.Init(manager.DeviceId, manager);
+      ConnectedDevices.Add(cameraDevice);
+      SelectedCameraDevice = cameraDevice;
+
+      ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
+      ServiceProvider.Settings.SystemMessage = "New Camera is connected ! Driver :" + cameraDevice.DeviceName;
+      ServiceProvider.Log.Debug("===========Camera is connected==============");
+      ServiceProvider.Log.Debug("Driver :" + cameraDevice.GetType().Name);
+      ServiceProvider.Log.Debug("Name :" + cameraDevice.DeviceName);
+      ServiceProvider.Log.Debug("Manufacturer :" + cameraDevice.Manufacturer);
+
       return SelectedCameraDevice;
+    }
+
+    public void DisconnectCamera(string wiaId)
+    {
+      DeviceDescriptor descriptor = _deviceEnumerator.GetByWiaId(wiaId);
+      if (descriptor != null)
+      {
+        ConnectedDevices.Remove(descriptor.CameraDevice);
+        ServiceProvider.Settings.SystemMessage = "Camera disconnected :" + descriptor.CameraDevice.DeviceName;
+        ServiceProvider.Log.Debug("===========Camera disconnected==============");
+        ServiceProvider.Log.Debug("Name :" + descriptor.CameraDevice.DeviceName);
+        if(SelectedCameraDevice==descriptor.CameraDevice)
+        {
+          if (ConnectedDevices.Count > 0)
+            SelectedCameraDevice = ConnectedDevices[0];
+          else
+          {
+            SelectedCameraDevice = new NotConnectedCameraDevice();
+          }
+        }
+        descriptor.CameraDevice.Close();
+        _deviceEnumerator.Remove(descriptor);
+      }
     }
   }
 }

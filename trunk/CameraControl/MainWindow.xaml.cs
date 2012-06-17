@@ -322,7 +322,7 @@ namespace CameraControl
         PropertyWnd.Close();
       }
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.All_Close);
-      WiaManager.DisconnectCamera();
+      //WiaManager.DisconnectCamera();
     }
 
     private void but_timelapse_Click(object sender, RoutedEventArgs e)
@@ -479,9 +479,5 @@ namespace CameraControl
       }
     }
 
-    private void MenuItem_Click_2(object sender, RoutedEventArgs e)
-    {
-
-    }
   }
 }

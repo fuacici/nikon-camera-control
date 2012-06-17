@@ -30,7 +30,7 @@ namespace CameraControl.Classes
     public const string CONST_PROP_CompressionSetting = "Compression Setting";
     public const string CONST_PROP_ExposureMeteringMode = "Exposure Metering Mode";
     public const string CONST_PROP_FocusMode = "Focus Mode";
-    
+
     //private string _deviceName;
 
     //public string DeviceName
@@ -104,11 +104,11 @@ namespace CameraControl.Classes
       {
         ConnectToCamera();
       }
-      else if (eventId == Conts.wiaEventDeviceDisconnected && deviceId == DeviceId)
+      else if (eventId == Conts.wiaEventDeviceDisconnected)
       {
-        DisconnectCamera();
+        ServiceProvider.DeviceManager.DisconnectCamera(deviceId);
       }
-      else if (eventId == Conts.wiaEventItemCreated && deviceId == DeviceId)
+      else if (eventId == Conts.wiaEventItemCreated)
       {
         Item item = Device.GetItem(itemId);
         if (PhotoTaked != null)
@@ -122,16 +122,16 @@ namespace CameraControl.Classes
         PhotoTakenDone(null);
     }
 
-    public void DisconnectCamera()
-    {
-      //////IsConected = false;
-      //if (Device != null)
-      //  Marshal.ReleaseComObject(Device);
-      //Device = null;
-      //if (CameraDevice != null)
-      //  CameraDevice.Close();
-      ServiceProvider.Settings.SystemMessage = "Camera disconnected !";
-    }
+    //public void DisconnectCamera()
+    //{
+    //  //////IsConected = false;
+    //  //if (Device != null)
+    //  //  Marshal.ReleaseComObject(Device);
+    //  //Device = null;
+    //  //if (CameraDevice != null)
+    //  //  CameraDevice.Close();
+    //  ServiceProvider.Settings.SystemMessage = "Camera disconnected !";
+    //}
 
     public bool Syncronize()
     {
@@ -158,47 +158,26 @@ namespace CameraControl.Classes
     public bool ConnectToCamera(bool retry)
     {
       bool ret = false;
-      try
+      foreach (IDeviceInfo devInfo in new DeviceManager().DeviceInfos)
       {
-        // Device is already connected
-        //if (Device != null)
-        //  return true;
-
-        foreach (IDeviceInfo devInfo in new DeviceManager().DeviceInfos)
+        // Look for CameraDeviceType devices
+        if (devInfo.Type == WiaDeviceType.CameraDeviceType)
         {
-          // Look for CameraDeviceType devices
-          if (devInfo.Type == WiaDeviceType.CameraDeviceType)
+          try
           {
-            //DeviceId = devInfo.DeviceID;
-            //Device = devInfo.Connect();
-            //Thread.Sleep(500);
-            //Log(DateTime.Now.ToString() + " Digital Still Camera Connected\r\n");
-
-            //IsConected = true;
-            CameraDevice = ServiceProvider.DeviceManager.GetIDevice(this, devInfo);
-            ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
-            ServiceProvider.Settings.SystemMessage = "Camera is connected ! Driver :"+CameraDevice.GetType().Name;
-            ServiceProvider.Log.Debug("===========Camera is connected==============" );
-            ServiceProvider.Log.Debug("Driver :" + CameraDevice.GetType().Name);
-            ServiceProvider.Log.Debug("Name :" + CameraDevice.DeviceName);
-            ServiceProvider.Log.Debug("Manufacturer :" + CameraDevice.Manufacturer);
-            ret = true;
+            ServiceProvider.DeviceManager.GetIDevice(this, devInfo);
           }
+          catch (Exception exception)
+          {
+            ServiceProvider.Log.Error("Unable to connect to the camera", exception);
+            ServiceProvider.Settings.SystemMessage = "Unable to connect to the camera. Please reconnect your camera !";
+          }
+          ret = true;
         }
-        return ret;
       }
-      catch (Exception exp)
-      {
-        if (retry)
-        {
-          Thread.Sleep(500);
-          return ConnectToCamera(false);
-        }
-        ServiceProvider.Log.Error("Unable to connect to the camera", exp);
-        ServiceProvider.Settings.SystemMessage = "Unable to connect to the camera. Please reconnect your camera !";
-        return false;
-      }
+      return ret;
     }
+
 
     #region events
 
