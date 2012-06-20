@@ -7,6 +7,8 @@ namespace CameraControl.Classes
 {
   class WindowsCmdConsts
   {
+    public const string MultipleCameraWnd_Show = "MultipleCameraWnd_Show";
+    public const string MultipleCameraWnd_Hide = "MultipleCameraWnd_Hide";
     public const string FullScreenWnd_Show = "FullScreenWnd_Show";
     public const string FullScreenWnd_ShowTimed = "FullScreenWnd_ShowTimed";
     public const string FullScreenWnd_Hide = "FullScreenWnd_Hide";

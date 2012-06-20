@@ -19,6 +19,7 @@ namespace CameraControl.Classes
       WindowsList.Add(new FullScreenWnd());
       WindowsList.Add(new LiveViewWnd());
       WindowsList.Add(new FocusStackingWnd());
+      WindowsList.Add(new MultipleCameraWnd());
     }
 
     public void ExecuteCommand(string cmd)
