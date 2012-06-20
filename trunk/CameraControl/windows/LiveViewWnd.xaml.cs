@@ -337,7 +337,7 @@ namespace CameraControl.windows
 
     private void GetLiveImage()
     {
-      if(oper_in_progress)
+      if (oper_in_progress)
         return;
       oper_in_progress = true;
       try
@@ -358,45 +358,53 @@ namespace CameraControl.windows
         return;
       }
 
-      try
-      {
-        Dispatcher.Invoke(new Action(delegate
-                                            {
-                                              if (LiveViewData != null && LiveViewData.ImageData != null)
-                                              {
+      Dispatcher.Invoke(new Action(delegate
+                                     {
+                                       try
+                                       {
 
-                                                MemoryStream stream = new MemoryStream(LiveViewData.ImageData, 0,
-                                                                                       LiveViewData.ImageData.Length);
+                                         if (LiveViewData != null && LiveViewData.ImageData != null)
+                                         {
 
-                                                using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(stream))
-                                                {
-                                                  ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
-                                                  this.LuminanceHistogramPoints = ConvertToPointCollection(hslStatistics.Luminance.Values);
-                                                }
-                                                stream.Seek(0, SeekOrigin.Begin);
-                                                JpegBitmapDecoder decoder = new JpegBitmapDecoder(stream,
-                                                                                                  BitmapCreateOptions.
-                                                                                                    None,
-                                                                                                  BitmapCacheOption.
-                                                                                                    OnLoad);
+                                           MemoryStream stream = new MemoryStream(LiveViewData.ImageData, 0,
+                                                                                  LiveViewData.ImageData.Length);
 
-                                                decoder.Frames[0].Freeze();
+                                           using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(stream))
+                                           {
+                                             ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
+                                             this.LuminanceHistogramPoints =
+                                               ConvertToPointCollection(hslStatistics.Luminance.Values);
+                                           }
+                                           stream.Seek(0, SeekOrigin.Begin);
+                                           JpegBitmapDecoder decoder = new JpegBitmapDecoder(stream,
+                                                                                             BitmapCreateOptions.
+                                                                                               None,
+                                                                                             BitmapCacheOption.
+                                                                                               OnLoad);
 
-                                                if (decoder.Frames.Count > 0)
-                                                {
-                                                  image1.Source = decoder.Frames[0];
-                                                }
-                                                stream.Close();
-                                              }
-                                            }));
-      }
-      catch (Exception)
-      {
-        _retries++;
-        oper_in_progress = false;
-        return;
-      }
-      Dispatcher.Invoke(new Action(delegate { DrawLines(); ; }));
+                                           decoder.Frames[0].Freeze();
+
+                                           if (decoder.Frames.Count > 0)
+                                           {
+                                             image1.Source = decoder.Frames[0];
+                                           }
+                                           stream.Close();
+                                         }
+                                       }
+                                       catch (Exception exception)
+                                       {
+                                         ServiceProvider.Log.Error(exception);
+                                         _retries++;
+                                         oper_in_progress = false;
+                                         return;
+                                       }
+
+                                     }));
+      Dispatcher.Invoke(new Action(delegate
+                                     {
+                                       DrawLines();
+                                       ;
+                                     }));
       _retries = 0;
       oper_in_progress = false;
     }
@@ -595,7 +603,7 @@ namespace CameraControl.windows
                                            {
                                              ServiceProvider.Log.Error("Unable to stop liveview", exception);
                                            }
-                                           ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FocusStackingWnd_Hide);
+                                           //ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FocusStackingWnd_Hide);
                                          }));
           break;
         case WindowsCmdConsts.All_Close:

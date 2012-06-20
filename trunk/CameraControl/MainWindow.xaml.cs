@@ -479,5 +479,10 @@ namespace CameraControl
       }
     }
 
+    private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+    {
+      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.MultipleCameraWnd_Show);
+    }
+
   }
 }

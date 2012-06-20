@@ -162,6 +162,9 @@
     <Compile Include="windows\LiveViewWnd.xaml.cs">
       <DependentUpon>LiveViewWnd.xaml</DependentUpon>
     </Compile>
+    <Compile Include="windows\MultipleCameraWnd.xaml.cs">
+      <DependentUpon>MultipleCameraWnd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="windows\PropertyWnd.xaml.cs">
       <DependentUpon>PropertyWnd.xaml</DependentUpon>
     </Compile>
@@ -225,6 +228,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="windows\LiveViewWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="windows\MultipleCameraWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
