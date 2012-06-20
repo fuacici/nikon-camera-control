@@ -147,6 +147,9 @@
                 </MenuItem>
                 <MenuItem Header="Exit" Command="ApplicationCommands.Close"/>
             </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Header="Multiple camera control"/>
+            </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="Home page" Click="MenuItem_Click" />
                 <MenuItem Header="Check for update" Name="mnu_update" Click="MenuItem_Click_1" />
