@@ -23,6 +23,7 @@ namespace CameraControl.Classes
 
     public void ExecuteCommand(string cmd)
     {
+      ServiceProvider.Log.Debug("Window command received :" + cmd);
       foreach (IWindow window in WindowsList)
       {
         window.ExecuteCommand(cmd);
