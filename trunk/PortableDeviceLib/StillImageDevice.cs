@@ -15,7 +15,7 @@ namespace PortableDeviceLib
    
     }
 
-    public void ExecuteWithNoData(int code)
+    public int ExecuteWithNoData(int code)
     {
       IPortableDeviceValues commandValues = (IPortableDeviceValues)new PortableDeviceTypesLib.PortableDeviceValuesClass();
       IPortableDevicePropVariantCollection propVariant =
@@ -39,14 +39,22 @@ namespace PortableDeviceLib
         int pValue = 0;
         results.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
         if (pValue != 0)
-          return ;
+          return pValue;
       }
       catch (Exception ex)
       {
       }
+      return 0;
     }
 
-    public void ExecuteWithNoData(int code, uint param1, uint param2)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="code"></param>
+    /// <param name="param1"></param>
+    /// <param name="param2"></param>
+    /// <returns>Zero if no error else error code</returns>
+    public int ExecuteWithNoData(int code, uint param1, uint param2)
     {
       IPortableDeviceValues commandValues =
         (IPortableDeviceValues) new PortableDeviceTypesLib.PortableDeviceValuesClass();
@@ -80,12 +88,13 @@ namespace PortableDeviceLib
         int pValue = 0;
         results.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
         if (pValue != 0)
-          return;
+          return pValue;
       }
       catch (Exception ex)
       {
       }
       //results.GetSignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out pvalue);
+      return 0;
     }
 
     public byte[] ExecuteReadData(int code)

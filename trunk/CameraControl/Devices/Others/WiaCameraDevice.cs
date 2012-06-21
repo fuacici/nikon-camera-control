@@ -713,14 +713,7 @@ namespace CameraControl.Devices.Others
     {
       lock (Locker)
       {
-        try
-        {
           TakePicture();
-        }
-        catch (Exception)
-        {
-
-        }
       }
     }
 
@@ -730,6 +723,10 @@ namespace CameraControl.Devices.Others
       try
       {
         Device.ExecuteCommand(Conts.wiaCommandTakePicture);
+      }
+      catch (COMException comException)
+      {
+        ErrorCodes.GetException(comException);
       }
       finally
       {

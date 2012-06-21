@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Timers;
 using System.Xml.Serialization;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.Classes
 {
@@ -160,28 +161,18 @@ namespace CameraControl.Classes
             ServiceProvider.DeviceManager.SelectedCameraDevice.TakePicture();
           //_timer.Enabled = true;
         }
-        catch (COMException comException)
+        catch (DeviceException exception)
         {
-          if (comException.ErrorCode == -2147467259)
-          {
-            ServiceProvider.Settings.SystemMessage = "Unable to take photo. Unable to focus !Retrying....";
-            _timer.Enabled = true;
-            return;
-          }
-          else
-          {
-            ServiceProvider.Log.Error("Take photo", comException);
-          }
-        }
-        catch (Exception ex)
-        {
-          if (ex.Message == "Exception from HRESULT: 0x80210006")
+          if(exception.ErrorCode==ErrorCodes.WIA_ERROR_UNABLE_TO_FOCUS)
           {
             ServiceProvider.Settings.SystemMessage = " Camera is busy retrying ....";
             _timer.Enabled = true;
-            return;
           }
-          ServiceProvider.Settings.SystemMessage = " Error to take photo !";
+          else
+          {
+            ServiceProvider.Log.Error(exception);
+            ServiceProvider.Settings.SystemMessage = exception.Message;
+          }
         }
         _timecounter = 0;
         PhotosTaken++;

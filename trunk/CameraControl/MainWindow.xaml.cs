@@ -24,6 +24,7 @@ using System.Windows.Shapes;
 using System.Xml;
 using CameraControl.Classes;
 using CameraControl.Devices;
+using CameraControl.Devices.Classes;
 using CameraControl.windows;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
@@ -211,16 +212,10 @@ namespace CameraControl
       {
         ServiceProvider.DeviceManager.SelectedCameraDevice.TakePicture();
       }
-        catch(COMException comException)
+      catch (DeviceException exception)
         {
-          if(comException.ErrorCode==-2147467259)
-          {
-            ServiceProvider.Settings.SystemMessage = "Unable to take photo. Unable to focus !";
-          }
-          else
-          {
-            ServiceProvider.Log.Error("Take photo", comException);
-          }
+          ServiceProvider.Settings.SystemMessage = exception.Message;
+          ServiceProvider.Log.Error("Take photo", exception);
         }
       catch (Exception exception)
       {

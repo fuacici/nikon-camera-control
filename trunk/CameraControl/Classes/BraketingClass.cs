@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.Classes
 {
@@ -44,28 +46,46 @@ namespace CameraControl.Classes
       if (ExposureValues.Count == 0)
         return;
       index = 0;
-      _defec = ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.Value;
-      ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTakenDone;
-      IsBusy = true;
-      ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue(ExposureValues[index]);
-      Thread.Sleep(100);
-      ServiceProvider.DeviceManager.SelectedCameraDevice.TakePicture();
-      Thread.Sleep(100);
-      index++;
+      try
+      {
+        _defec = ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.Value;
+        ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTakenDone;
+        IsBusy = true;
+        ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue(ExposureValues[index]);
+        Thread.Sleep(100);
+        ServiceProvider.DeviceManager.SelectedCameraDevice.TakePicture();
+        Thread.Sleep(100);
+        index++;
+      }
+      catch (DeviceException exception)
+      {
+        ServiceProvider.Log.Error(exception);
+        ServiceProvider.Settings.SystemMessage = exception.Message;
+      }
     }
 
     private void TakeNextPhoto()
     {
-      Thread.Sleep(100);
-      ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue(ExposureValues[index]);
-      Thread.Sleep(100);
-      ServiceProvider.DeviceManager.SelectedCameraDevice.TakePictureNoAf();
-      Thread.Sleep(100);
-      index++;
+      try
+      {
+        Thread.Sleep(100);
+        ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue(ExposureValues[index]);
+        Thread.Sleep(100);
+        ServiceProvider.DeviceManager.SelectedCameraDevice.TakePictureNoAf();
+        Thread.Sleep(100);
+        index++;
+      }
+      catch (DeviceException exception)
+      {
+        ServiceProvider.Log.Error(exception);
+        ServiceProvider.Settings.SystemMessage = exception.Message;
+      }
     }
 
     void Manager_PhotoTakenDone(WIA.Item imageFile)
     {
+      if (!IsBusy)
+        return;
       if (index < ExposureValues.Count)
       {
         Thread thread = new Thread(TakeNextPhoto);
