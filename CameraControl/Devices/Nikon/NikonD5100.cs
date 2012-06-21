@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Timers;
@@ -740,7 +741,7 @@ namespace CameraControl.Devices.Nikon
       lock (Locker)
       {
         LiveViewImageZoomRatio = 0;
-        _stillImageDevice.ExecuteWithNoData(CONST_CMD_StartLiveView);
+        ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_StartLiveView));
       }
     }
 
@@ -748,7 +749,7 @@ namespace CameraControl.Devices.Nikon
     {
       lock (Locker)
       {
-        _stillImageDevice.ExecuteWithNoData(CONST_CMD_EndLiveView);
+        ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_EndLiveView));
       }
     }
 
@@ -788,6 +789,10 @@ namespace CameraControl.Devices.Nikon
       {
         Device.ExecuteCommand(Conts.wiaCommandTakePicture);
       }
+      catch (COMException comException)
+      {
+        ErrorCodes.GetException(comException);
+      }
       finally
       {
         Monitor.Exit(Locker); 
@@ -816,9 +821,9 @@ namespace CameraControl.Devices.Nikon
       lock (Locker)
       {
         if (step > 0)
-          _stillImageDevice.ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000001, (uint) step);
+          ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000001, (uint) step));
         else
-          _stillImageDevice.ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000002, (uint) -step);
+          ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000002, (uint) -step));
       }
     }
 
@@ -826,7 +831,7 @@ namespace CameraControl.Devices.Nikon
     {
       lock (Locker)
       {
-        _stillImageDevice.ExecuteWithNoData(CONST_CMD_AfDrive);
+        ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_AfDrive));
       }
     }
 
@@ -840,7 +845,7 @@ namespace CameraControl.Devices.Nikon
           oldval = val[0];
         _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] {(byte) 4},
                                            CONST_PROP_AFModeSelect, -1);
-        _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF, 0x0000);
+        ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF, 0x0000));
         if (val != null)
           _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] {oldval},
                                              CONST_PROP_AFModeSelect, -1);
@@ -851,7 +856,7 @@ namespace CameraControl.Devices.Nikon
     {
       lock (Locker)
       {
-        _stillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeAfArea, (uint) x, (uint) y);
+        ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeAfArea, (uint) x, (uint) y));
       }
     }
 
@@ -974,7 +979,6 @@ namespace CameraControl.Devices.Nikon
       byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetEvent);
       if (result == null)
         return;
-      bool shouldRefresProperties = false;
       int eventCount = BitConverter.ToInt16(result, 0);
       if (eventCount > 0)
       {

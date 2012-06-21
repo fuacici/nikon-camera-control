@@ -68,5 +68,10 @@ namespace CameraControl.windows
       this.Close();
     }
 
+    private void Window_Closing(object sender, CancelEventArgs e)
+    {
+      _photoSession.Braketing.IsBusy = false;
+    }
+
   }
 }

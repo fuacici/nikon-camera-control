@@ -29,7 +29,7 @@ namespace CameraControl
         // Setup RollingFileAppender
         log4net.Appender.RollingFileAppender fileAppender = new log4net.Appender.RollingFileAppender();
         fileAppender.Layout = new log4net.Layout.PatternLayout("%d [%t]%-5p %c [%x] - %m%n");
-        fileAppender.MaximumFileSize = "100KB";
+        fileAppender.MaximumFileSize = "1000KB";
         fileAppender.MaxSizeRollBackups = 5;
         fileAppender.RollingStyle = log4net.Appender.RollingFileAppender.RollingMode.Size;
         fileAppender.AppendToFile = true;
