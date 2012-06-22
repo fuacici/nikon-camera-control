@@ -461,9 +461,10 @@ namespace CameraControl.windows
       {
         selectedPortableDevice.AutoFocus();
       }
-      catch (Exception exception)
+      catch (DeviceException exception)
       {
         ServiceProvider.Log.Error("Unable to autofocus", exception);
+        ServiceProvider.Settings.SystemMessage = exception.Message;
       }
       FocusCounter = 0;
       _timer.Start();
@@ -477,8 +478,9 @@ namespace CameraControl.windows
       {
         selectedPortableDevice.TakePictureNoAf();
       }
-      catch (Exception exception)
+      catch (DeviceException exception)
       {
+        ServiceProvider.Settings.SystemMessage = exception.Message;
         ServiceProvider.Log.Error("Unable to take pictore with no af", exception);
       }
       //_timer.Start();
@@ -669,8 +671,16 @@ namespace CameraControl.windows
         if (FocusCounter + step > FocusValue)
           step = FocusValue - FocusCounter;
       }
-      selectedPortableDevice.Focus(step);
-      FocusCounter += step;
+      try
+      {
+        selectedPortableDevice.Focus(step);
+        FocusCounter += step;
+      }
+      catch (DeviceException exception)
+      {
+       ServiceProvider.Log.Error("Unable to focus",exception);
+        ServiceProvider.Settings.SystemMessage = exception.Message;
+      }
     }
 
     private void Window_Closing(object sender, CancelEventArgs e)
@@ -682,13 +692,6 @@ namespace CameraControl.windows
       }
     }
 
-    private void button3_Click(object sender, RoutedEventArgs e)
-    {
-      FocusStackingWnd wnd = (FocusStackingWnd) ServiceProvider.WindowsManager.Get(typeof (FocusStackingWnd));
-      wnd.FocusCounter = FocusCounter;
-      wnd.FocusValue = FocusValue;
-      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FocusStackingWnd_Show);
-    }
 
     #region Implementation of INotifyPropertyChanged
 
