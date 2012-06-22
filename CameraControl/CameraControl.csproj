@@ -155,9 +155,6 @@
     <Compile Include="windows\EditSession.xaml.cs">
       <DependentUpon>EditSession.xaml</DependentUpon>
     </Compile>
-    <Compile Include="windows\FocusStackingWnd.xaml.cs">
-      <DependentUpon>FocusStackingWnd.xaml</DependentUpon>
-    </Compile>
     <Compile Include="windows\FullScreenWnd.xaml.cs">
       <DependentUpon>FullScreenWnd.xaml</DependentUpon>
     </Compile>
@@ -220,10 +217,6 @@
     <Page Include="windows\EditSession.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="windows\FocusStackingWnd.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="windows\FullScreenWnd.xaml">
       <SubType>Designer</SubType>
