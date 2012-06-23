@@ -718,41 +718,49 @@ namespace CameraControl.windows
 
     private void TakePhoto()
     {
-      if (IsBusy)
+      try
       {
-        FreezeImage = true;
-        PhotoCount++;
-        StartLiveView();
-        Thread.Sleep(300);
-        if (PhotoCount > 0)
-          SetFocus(FocusStep);
-        Thread.Sleep(700);
-        GetLiveImage();
-        //ServiceProvider.DeviceManager.SelectedCameraDevice.Focus(FocusStep);
-        Thread.Sleep(1000);
-        if (PhotoCount < PhotoNo)
+        if (IsBusy)
         {
-          if (!preview)
+          FreezeImage = true;
+          PhotoCount++;
+          StartLiveView();
+          Thread.Sleep(300);
+          if (PhotoCount > 0)
+            SetFocus(FocusStep);
+          Thread.Sleep(700);
+          GetLiveImage();
+          //ServiceProvider.DeviceManager.SelectedCameraDevice.Focus(FocusStep);
+          Thread.Sleep(1000);
+          if (PhotoCount < PhotoNo)
           {
-            ServiceProvider.DeviceManager.SelectedCameraDevice.TakePictureNoAf();
+            if (!preview)
+            {
+              ServiceProvider.DeviceManager.SelectedCameraDevice.TakePictureNoAf();
+            }
+            else
+            {
+              Thread.Sleep(1000);
+              TakePhoto();
+            }
           }
           else
           {
-            Thread.Sleep(1000);
-            TakePhoto();
+            ServiceProvider.DeviceManager.SelectedCameraDevice.StartLiveView();
+            FreezeImage = false;
+            IsBusy = false;
           }
         }
         else
         {
           ServiceProvider.DeviceManager.SelectedCameraDevice.StartLiveView();
           FreezeImage = false;
-          IsBusy = false;
         }
       }
-      else
+      catch (DeviceException exception )
       {
-        ServiceProvider.DeviceManager.SelectedCameraDevice.StartLiveView();
-        FreezeImage = false;
+        ServiceProvider.Settings.SystemMessage = exception.Message;
+        ServiceProvider.Log.Error("Live view. Unable to take photo",exception);
       }
     }
 
