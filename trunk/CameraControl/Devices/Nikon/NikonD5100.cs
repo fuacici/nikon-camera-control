@@ -843,12 +843,12 @@ namespace CameraControl.Devices.Nikon
         byte[] val = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
         if (val != null)
           oldval = val[0];
-        _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] {(byte) 4},
-                                           CONST_PROP_AFModeSelect, -1);
+        ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] {(byte) 4},
+                                           CONST_PROP_AFModeSelect, -1));
         ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF, 0x0000));
         if (val != null)
-          _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] {oldval},
-                                             CONST_PROP_AFModeSelect, -1);
+          ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] {oldval},
+                                             CONST_PROP_AFModeSelect, -1));
       }
     }
 
@@ -910,7 +910,7 @@ namespace CameraControl.Devices.Nikon
         lock (Locker)
         {
           if (_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] {value},
-                                                 CONST_PROP_LiveViewImageZoomRatio, -1) != null)
+                                                 CONST_PROP_LiveViewImageZoomRatio, -1) == 0)
             _liveViewImageZoomRatio = value;
           NotifyPropertyChanged("LiveViewImageZoomRatio");
         }

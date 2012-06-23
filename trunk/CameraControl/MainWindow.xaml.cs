@@ -3,34 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Media;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Xml.Linq;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml;
 using CameraControl.Classes;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using CameraControl.windows;
-using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
-using PortableDeviceLib;
 using WIA;
-using WPF.Themes;
 using Clipboard = System.Windows.Clipboard;
 using EditSession = CameraControl.windows.EditSession;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -76,7 +60,7 @@ namespace CameraControl
       ServiceProvider.WindowsManager.Event += Trigger_Event;
     }
 
-    void DeviceManager_PhotoCaptured(object sender, Devices.Classes.PhotoCapturedEventArgs eventArgs)
+    void DeviceManager_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
     {
       Thread thread = new Thread(PhotoTaked);
       thread.Start(eventArgs);
@@ -140,7 +124,7 @@ namespace CameraControl
     {
       try
       {
-        Devices.Classes.PhotoCapturedEventArgs eventArgs = o as Devices.Classes.PhotoCapturedEventArgs;
+        PhotoCapturedEventArgs eventArgs = o as PhotoCapturedEventArgs;
         Item item = eventArgs.WiaImageItem;
         ServiceProvider.Settings.SystemMessage = "Photo transfer begin.";
         string s = item.ItemID;
@@ -470,7 +454,7 @@ namespace CameraControl
       }
       else
       {
-        MessageBox.Show("You application is up to date !"); 
+        MessageBox.Show("Your application is up to date !"); 
       }
     }
 

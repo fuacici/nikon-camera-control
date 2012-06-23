@@ -260,7 +260,7 @@ namespace PortableDeviceLib
       return res;
     }
 
-    public byte[] ExecuteWriteData(int code,byte[] data, int param1, int param2)
+    public int ExecuteWriteData(int code,byte[] data, int param1, int param2)
     {
       // source: http://msdn.microsoft.com/en-us/library/windows/desktop/ff384843(v=vs.85).aspx
       // and view-source:http://www.experts-exchange.com/Programming/Languages/C_Sharp/Q_26860397.html
@@ -308,7 +308,7 @@ namespace PortableDeviceLib
         pResults.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
         if (pValue != 0)
         {
-          return null;
+          return pValue;
         }
       }
       catch (Exception ex)
@@ -317,39 +317,10 @@ namespace PortableDeviceLib
       string tmpTransferContext = string.Empty;
       pResults.GetStringValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_CONTEXT, out tmpTransferContext);
 
-      //string pwszContext = string.Empty;
-      //pResults.GetStringValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_CONTEXT, out pwszContext);
-      //uint cbReportedDataSize = 0;
-      //pResults.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_TOTAL_DATA_SIZE, out cbReportedDataSize);
-      
-
-      //uint tmpBufferSize = 0;
-      //uint tmpTransferSize = 0;
-      //string tmpTransferContext = string.Empty;
-      //{
-      //  pResults.GetStringValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_CONTEXT, out tmpTransferContext);
-      //  pResults.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_TOTAL_DATA_SIZE, out tmpBufferSize);
-      //  pResults.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPTIMAL_TRANSFER_BUFFER_SIZE, out tmpTransferSize);
-
-      //  try
-      //  {
-      //    int pValue;
-      //    pResults.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
-      //    if (pValue != 0)
-      //    {
-      //      return null;
-      //    }
-      //  }
-      //  catch
-      //  {
-      //  }
-      //}
 
       pParameters.Clear();
       pResults.Clear();
 
-      //byte[] tmpData = new byte[(int)tmpTransferSize];
-      //CCustomReadContext{81CD75F1-A997-4DA2-BAB1-FF5EC514E355}
       pParameters.SetGuidValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_CATEGORY, PortableDevicePKeys.WPD_COMMAND_MTP_EXT_WRITE_DATA.fmtid);
       pParameters.SetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_ID, PortableDevicePKeys.WPD_COMMAND_MTP_EXT_WRITE_DATA.pid);
       pParameters.SetStringValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_CONTEXT, tmpTransferContext);
@@ -368,26 +339,12 @@ namespace PortableDeviceLib
         int pValue = 0;
         pResults.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
         if (pValue != 0)
-          return null;
+          return pValue;
       }
       catch (Exception ex)
       {
       }
 
-
-      //GCHandle pinnedArray = GCHandle.Alloc(imgdate, GCHandleType.Pinned);
-      //IntPtr ptr = pinnedArray.AddrOfPinnedObject();
-
-      //uint dataread = 0;
-      //pResults.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_NUM_BYTES_READ, out dataread);
-      //pResults.GetBufferValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_DATA, ptr, out cbBytesRead);
-
-      //IntPtr tmpPtr = new IntPtr(Marshal.ReadInt64(ptr));
-      //byte[] res = new byte[(int)cbBytesRead];
-      //for (int i = 0; i < cbBytesRead; i++)
-      //{
-      //  res[i] = Marshal.ReadByte(tmpPtr, i);
-      //}
 
       pParameters.Clear();
       pResults.Clear();
@@ -399,9 +356,6 @@ namespace PortableDeviceLib
 
       portableDeviceClass.SendCommand(0, pParameters, out pResults);
 
-      //Marshal.FreeHGlobal(tmpPtr);
-      //pinnedArray.Free();
-      //Marshal.FreeHGlobal(ptr);
 
       try
       {
@@ -410,13 +364,13 @@ namespace PortableDeviceLib
         pResults.GetErrorValue(ref PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out tmpResult);
         if (tmpResult != 0)
         {
-
+          return tmpResult;
         }
       }
       catch
       {
       }
-      return null;
+      return 0;
     }
 
     private void StringToPropVariant(string value,

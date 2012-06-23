@@ -24,7 +24,7 @@ namespace CameraControl.Devices.Classes
     {
       if(code!=0)
       {
-        throw new DeviceException("Device MTP error code:"+code);
+        throw new DeviceException("Device MTP error code:" + code + " " + code.ToString("X"));
       }
     }
 
