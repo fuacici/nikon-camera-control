@@ -5,7 +5,7 @@ Name NikonCameraControl
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.7.149
+!define VERSION 0.7.153
 !define COMPANY "Duka Istvan"
 !define URL http://code.google.com/p/nikon-camera-control/
 
@@ -46,7 +46,7 @@ CRCCheck on
 XPStyle on
 ShowInstDetails show
 VIProductVersion 0.1.0.0
-VIAddVersionKey ProductName NikonCameraControl
+VIAddVersionKey ProductName NCC
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"
 VIAddVersionKey CompanyWebsite "${URL}"
