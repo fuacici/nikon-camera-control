@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading;
 using WIA;
 using DeviceManager = WIA.DeviceManager;
 
@@ -54,20 +55,36 @@ namespace CameraControl.Classes
     public bool ConnectToCamera(bool retry)
     {
       bool ret = false;
+      int retries = 0;
       foreach (IDeviceInfo devInfo in new DeviceManager().DeviceInfos)
       {
         // Look for CameraDeviceType devices
         if (devInfo.Type == WiaDeviceType.CameraDeviceType)
         {
-          try
+          do
           {
-            ServiceProvider.DeviceManager.GetIDevice(this, devInfo);
-          }
-          catch (Exception exception)
-          {
-            ServiceProvider.Log.Error("Unable to connect to the camera", exception);
-            ServiceProvider.Settings.SystemMessage = "Unable to connect to the camera. Please reconnect your camera !";
-          }
+            try
+            {
+              ServiceProvider.DeviceManager.GetIDevice(this, devInfo);
+              retries = 4;
+            }
+            catch (Exception exception)
+            {
+              ServiceProvider.Log.Error("Unable to connect to the camera", exception);
+              retries++;
+              if (retries < 3)
+              {
+                ServiceProvider.Log.Debug("Retrying");
+                ServiceProvider.Settings.SystemMessage = "Unable to connect to the camera. Retrying";
+              }
+              else
+              {
+                ServiceProvider.Settings.SystemMessage =
+                  "Unable to connect to the camera. Please reconnect your camera !";
+              }
+              Thread.Sleep(1000);
+            }
+          } while (retries < 3);
           ret = true;
         }
       }
