@@ -307,7 +307,7 @@ namespace CameraControl.Devices.Others
       }
       catch (Exception exception)
       {
-        ServiceProvider.Log.Error("Unable to connect camera using via driver", exception);
+        ServiceProvider.Log.Error("Unable to connect camera using wia driver", exception);
         return false;
       }
       DeviceManager = new DeviceManager();
