@@ -740,7 +740,8 @@ namespace CameraControl.Devices.Others
         Marshal.ReleaseComObject(Device);
       Device = null;
       HaveLiveView = false;
-      DeviceManager.OnEvent -= DeviceManager_OnEvent;
+      if (DeviceName != null)
+        DeviceManager.OnEvent -= DeviceManager_OnEvent;
     }
 
     public virtual void ReadDeviceProperties(int o)

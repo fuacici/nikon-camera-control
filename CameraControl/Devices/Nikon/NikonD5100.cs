@@ -21,6 +21,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_CMD_StartLiveView = 0x9201;
     public const int CONST_CMD_EndLiveView = 0x9202;
     public const int CONST_CMD_GetLiveViewImage = 0x9203;
+    public const int CONST_CMD_InitiateCapture = 0x100E;
     public const int CONST_CMD_InitiateCaptureRecInMedia = 0x9207;
     public const int CONST_CMD_AfAndCaptureRecInSdram = 0x90CB;
     public const int CONST_CMD_ChangeAfArea = 0x9205;
@@ -42,6 +43,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_PROP_CompressionSetting = 0x5004;
     public const int CONST_PROP_ExposureMeteringMode = 0x500B;
     public const int CONST_PROP_FocusMode = 0x500A;
+    public const int CONST_PROP_LiveViewStatus = 0xD1A2;
 
 
 
@@ -843,11 +845,11 @@ namespace CameraControl.Devices.Nikon
         byte[] val = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
         if (val != null && val.Length > 0)
           oldval = val[0];
-        ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] {(byte) 4},
+        ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] { (byte)4 },
                                            CONST_PROP_AFModeSelect, -1));
         ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF, 0x0000));
         if (val != null && val.Length > 0)
-          ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] {oldval},
+          ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] { oldval },
                                              CONST_PROP_AFModeSelect, -1));
       }
     }
