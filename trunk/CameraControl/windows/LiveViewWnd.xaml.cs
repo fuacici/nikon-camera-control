@@ -723,16 +723,18 @@ namespace CameraControl.windows
         if (IsBusy)
         {
           FreezeImage = true;
-          PhotoCount++;
           StartLiveView();
           Thread.Sleep(300);
+          PhotoCount++;
           if (PhotoCount > 0)
+          {
             SetFocus(FocusStep);
+          }
           Thread.Sleep(700);
           GetLiveImage();
           //ServiceProvider.DeviceManager.SelectedCameraDevice.Focus(FocusStep);
           Thread.Sleep(1000);
-          if (PhotoCount < PhotoNo)
+          if (PhotoCount <= PhotoNo)
           {
             if (!preview)
             {
