@@ -463,5 +463,10 @@ namespace CameraControl
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.MultipleCameraWnd_Show);
     }
 
+    private void mnu_reconnect_Click(object sender, RoutedEventArgs e)
+    {
+      WiaManager.ConnectToCamera();
+    }
+
   }
 }
