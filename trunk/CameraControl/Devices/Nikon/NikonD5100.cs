@@ -835,18 +835,18 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public  void TakePictureNoAf()
+    public virtual void TakePictureNoAf()
     {
       lock (Locker)
       {
         byte oldval = 0;
         byte[] val = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
-        if (val != null)
+        if (val != null && val.Length > 0)
           oldval = val[0];
         ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] {(byte) 4},
                                            CONST_PROP_AFModeSelect, -1));
         ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF, 0x0000));
-        if (val != null)
+        if (val != null && val.Length > 0)
           ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] {oldval},
                                              CONST_PROP_AFModeSelect, -1));
       }

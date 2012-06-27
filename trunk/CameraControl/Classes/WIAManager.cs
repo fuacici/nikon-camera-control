@@ -54,6 +54,7 @@ namespace CameraControl.Classes
 
     public bool ConnectToCamera(bool retry)
     {
+      Thread.Sleep(500);
       bool ret = false;
       int retries = 0;
       foreach (IDeviceInfo devInfo in new DeviceManager().DeviceInfos)

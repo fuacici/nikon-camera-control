@@ -136,6 +136,7 @@
         <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="12,6,8,14" Width="100" Grid.Row="2" />
         <Menu Grid.ColumnSpan="3" Name="menu1">
             <MenuItem Header="_File">
+                <MenuItem Header="Rescan connected cameras" Name="mnu_reconnect" Click="mnu_reconnect_Click" />
                 <MenuItem Header="Connected cameras" ItemsSource="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" >
                     <MenuItem.ItemTemplate>
                         <DataTemplate>
