@@ -134,6 +134,7 @@
     <Compile Include="Devices\Nikon\NikonD3X.cs" />
     <Compile Include="Devices\Nikon\NikonD40.cs" />
     <Compile Include="Devices\Nikon\NikonD5100.cs" />
+    <Compile Include="Devices\Nikon\NikonD80.cs" />
     <Compile Include="Devices\Nikon\NikonD90.cs" />
     <Compile Include="Devices\Others\NotConnectedCameraDevice.cs" />
     <Compile Include="Devices\Others\WiaCameraDevice.cs" />
