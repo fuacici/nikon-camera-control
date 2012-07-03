@@ -749,6 +749,11 @@ namespace CameraControl.Devices.Others
       HaveLiveView = false;
     }
 
+    public void TransferFile(object o, string filename)
+    {
+      
+    }
+
     public event PhotoCapturedEventHandler PhotoCaptured;
 
     #endregion

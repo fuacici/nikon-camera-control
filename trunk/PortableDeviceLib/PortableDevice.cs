@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using PortableDeviceApiLib;
 using System.Runtime.InteropServices;
 using PortableDeviceLib.Model;
@@ -306,27 +307,6 @@ namespace PortableDeviceLib
 
         }
 
-      public void StoptLiveView()
-        {
-          IPortableDeviceValues commandValues = (IPortableDeviceValues)new PortableDeviceTypesLib.PortableDeviceValuesClass();
-          IPortableDevicePropVariantCollection propVariant =
-            (IPortableDevicePropVariantCollection)new PortableDeviceTypesLib.PortableDevicePropVariantCollection();
-          IPortableDeviceValues results;
-
-          //commandValues.SetGuidValue(ref PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_CATEGORY, ref command.fmtid);
-          commandValues.SetGuidValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_CATEGORY,
-                                           PortableDevicePKeys.WPD_COMMAND_MTP_EXT_EXECUTE_COMMAND_WITHOUT_DATA_PHASE.fmtid);
-          commandValues.SetUnsignedIntegerValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_ID,
-                                 PortableDevicePKeys.WPD_COMMAND_MTP_EXT_EXECUTE_COMMAND_WITHOUT_DATA_PHASE.pid);
-
-          commandValues.SetIPortableDevicePropVariantCollectionValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPERATION_PARAMS, propVariant);
-          commandValues.SetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPERATION_CODE, 0x9202);
-
-          // According to documentation, first parameter should be 0 (see http://msdn.microsoft.com/en-us/library/dd375691%28v=VS.85%29.aspx)
-          this.portableDeviceClass.SendCommand(0, commandValues, out results);
-          int pvalue = 0;
-          results.GetSignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out pvalue);
-        }
 
         public byte[] GetLiveView()
         {
@@ -471,6 +451,62 @@ namespace PortableDeviceLib
        }
       
         /// <summary>
+        /// Transfer from device to computer
+        /// Source : http://cgeers.com/2011/08/13/wpd-transferring-content/
+        /// </summary>
+        /// <param name="deviceObject"></param>
+        /// <param name="fileName"></param>
+        public void SaveFile(PortableDeviceObject deviceObject, string fileName)
+        {
+          IPortableDeviceContent content;
+          portableDeviceClass.Content(out content);
+          IPortableDeviceResources resources;
+          content.Transfer(out resources);
+
+          PortableDeviceApiLib.IStream wpdStream = null;
+          uint optimalTransferSize = 0;
+
+          var property = PortableDevicePKeys.WPD_RESOURCE_DEFAULT;
+
+          
+          try
+          {
+            resources.GetStream(deviceObject.ID, ref property, 0, ref optimalTransferSize,
+                    out wpdStream);
+          }
+          catch (COMException comException)
+          {
+            // check if the device is busy, this may hapen when a another transfer not finished 
+            if ((uint)comException.ErrorCode == PortableDeviceErrorCodes.ERROR_BUSY)
+            {
+              Thread.Sleep(500);
+              SaveFile(deviceObject, fileName);
+              return;
+            }
+            throw comException;
+          }
+
+          System.Runtime.InteropServices.ComTypes.IStream sourceStream =
+              (System.Runtime.InteropServices.ComTypes.IStream)wpdStream;
+
+          FileStream targetStream = new FileStream(fileName,
+              FileMode.Create, FileAccess.Write);
+
+          unsafe
+          {
+            var buffer = new byte[1024*256];
+            int bytesRead;
+            do
+            {
+              sourceStream.Read(buffer, buffer.Length, new IntPtr(&bytesRead));
+              targetStream.Write(buffer, 0, bytesRead);
+            } while (bytesRead > 0);
+
+            targetStream.Close();
+          }
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
@@ -559,17 +595,6 @@ namespace PortableDeviceLib
 
           content.Properties(out properties);
           properties.GetValues(devisd, null, out propertyValues);
-          //uint i = 0;
-          //propertyValues.GetCount(ref i);
-          //for (uint j = 0; j < i; j++)
-          //{
-          //  _tagpropertykey pkey = new _tagpropertykey();
-          //  tag_inner_PROPVARIANT pva = new tag_inner_PROPVARIANT();
-          //  propertyValues.GetAt(j, ref pkey, ref pva);
-          //  string s = "";
-          //  propertyValues.GetStringValue(pkey,out s);
-
-          //}
           float val = -1;
           propertyValues.GetFloatValue(ref propertyKey, out val);
           return Convert.ToInt32(val);

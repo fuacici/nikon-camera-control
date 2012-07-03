@@ -34,6 +34,7 @@ namespace CameraControl.Devices
     void TakePicture();
     void Close();
     void ReadDeviceProperties(int prop);
+    void TransferFile(object o, string filename);
 
     event PhotoCapturedEventHandler PhotoCaptured;
   }

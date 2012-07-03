@@ -6,11 +6,12 @@ using WIA;
 
 namespace CameraControl.Devices.Classes
 {
-  public delegate void PhotoCapturedEventHandler(object sender,PhotoCapturedEventArgs eventArgs);
+  public delegate void PhotoCapturedEventHandler(object sender, PhotoCapturedEventArgs eventArgs);
 
   public class PhotoCapturedEventArgs
   {
     private Item _wiaImageItem;
+
     public Item WiaImageItem
     {
       get { return _wiaImageItem; }
@@ -29,5 +30,9 @@ namespace CameraControl.Devices.Classes
       return true;
     }
 
+    public object EventArgs { get; set; }
+
+    public ICameraDevice CameraDevice { get; set; }
+    public string FileName { get; set; }
   }
 }

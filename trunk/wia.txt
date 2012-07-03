@@ -54,3 +54,8 @@ White balance
 
 
 Icon source : http://iconleak.com/
+
+WPD/MTP
+Events:
+400d0000-5738-4ff2-8445-be3126691059 - ?
+

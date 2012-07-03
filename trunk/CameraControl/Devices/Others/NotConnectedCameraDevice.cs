@@ -97,6 +97,11 @@ namespace CameraControl.Devices.Others
       
     }
 
+    public void TransferFile(object o, string filename)
+    {
+      
+    }
+
     public event PhotoCapturedEventHandler PhotoCaptured;
 
     #endregion

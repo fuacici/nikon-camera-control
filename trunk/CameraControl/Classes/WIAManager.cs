@@ -97,7 +97,7 @@ namespace CameraControl.Classes
 
     public delegate void PhotoTakedEventHandler(Item imageFile);
 
-    //public virtual event PhotoTakedEventHandler PhotoTaked;
+
     public virtual event PhotoTakedEventHandler PhotoTakenDone;
 
     #endregion
