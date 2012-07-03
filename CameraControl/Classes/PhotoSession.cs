@@ -167,7 +167,7 @@ namespace CameraControl.Classes
       if (string.IsNullOrEmpty(ext))
         ext = "nef";
       Counter++;
-      string fileName = Path.Combine(Folder, FormatFileName() + "." + ext);
+      string fileName = Path.Combine(Folder, FormatFileName() + (!ext.StartsWith(".") ? "." : "") + ext);
       if (File.Exists(fileName))
         return GetNextFileName(ext);
       return fileName;

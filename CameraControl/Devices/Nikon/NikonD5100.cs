@@ -403,18 +403,10 @@ namespace CameraControl.Devices.Nikon
 
     public virtual bool Init(DeviceDescriptor deviceDescriptor)
     {
-      if(deviceDescriptor.WiaDevice==null)
-      {
-        ServiceProvider.Log.Error("No wia device connected aborting ...");
-        return false;
-      }
-      Device = deviceDescriptor.WiaDevice;
-      DeviceManager = new DeviceManager();
-      DeviceManager.RegisterEvent(Conts.wiaEventItemCreated, deviceDescriptor.WiaId);
-      DeviceManager.OnEvent += DeviceManager_OnEvent;
       HaveLiveView = true;
       _stillImageDevice = new StillImageDevice(deviceDescriptor.WpdId);
       _stillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
+      _stillImageDevice.DeviceEvent += _stillImageDevice_DeviceEvent;
       DeviceName = _stillImageDevice.Model;
       Manufacturer = _stillImageDevice.Manufacturer;
       InitIso();
@@ -432,14 +424,21 @@ namespace CameraControl.Devices.Nikon
       return true;
     }
 
-    void DeviceManager_OnEvent(string EventID, string DeviceID, string ItemID)
+    void _stillImageDevice_DeviceEvent(object sender, PortableDeviceEventArgs e)
     {
-      if (PhotoCaptured != null)
+      if (PhotoCaptured != null && e.EventType.EventGuid == PortableDeviceGuids.WPD_EVENT_OBJECT_ADDED)
       {
-        PhotoCapturedEventArgs args = new PhotoCapturedEventArgs { WiaImageItem = Device.GetItem(ItemID) };
+        PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
+                                        {
+                                          WiaImageItem = null,
+                                          EventArgs = e,
+                                          CameraDevice = this,
+                                          FileName = e.EventType.DeviceObject.Name
+                                        };
         PhotoCaptured(this, args);
       }
     }
+
 
     void IsoNumber_ValueChanged(object sender, string key, int val)
     {
@@ -789,7 +788,8 @@ namespace CameraControl.Devices.Nikon
       Monitor.Enter(Locker);
       try
       {
-        Device.ExecuteCommand(Conts.wiaCommandTakePicture);
+        //Device.ExecuteCommand(Conts.wiaCommandTakePicture);
+        ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
       }
       catch (COMException comException)
       {
@@ -971,6 +971,15 @@ namespace CameraControl.Devices.Nikon
         catch (Exception)
         {
         }
+      }
+    }
+
+    public void TransferFile(object o, string filename)
+    {
+      PortableDeviceEventArgs deviceEventArgs = o as PortableDeviceEventArgs;
+      if (deviceEventArgs != null)
+      {
+        _stillImageDevice.SaveFile(deviceEventArgs.EventType.DeviceObject, filename);
       }
     }
 

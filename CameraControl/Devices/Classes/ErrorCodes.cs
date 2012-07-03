@@ -19,7 +19,7 @@ namespace CameraControl.Devices.Classes
     public const uint WIA_ERROR_INVALID_DRIVER_RESPONSE = 0x8021000F;
     public const uint WIA_S_NO_DEVICE_AVAILABLE = 0x80210015;
     public const uint WIA_ERROR_UNABLE_TO_FOCUS = 0x80004005;
-
+    
     public static void GetException(int code)
     {
       if(code!=0)

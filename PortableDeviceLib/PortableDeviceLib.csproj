@@ -51,6 +51,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -71,6 +72,7 @@
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -115,10 +117,12 @@
     <Compile Include="Model\PortableDeviceEventDescription.cs" />
     <Compile Include="Model\PortableDeviceEventOption.cs" />
     <Compile Include="Model\PortableDeviceEventType.cs" />
+    <Compile Include="Model\PortableDeviceFile.cs" />
     <Compile Include="Model\PortableDeviceFonctionalObject.cs" />
     <Compile Include="MTPConstants.cs" />
     <Compile Include="PortableDevice.cs" />
     <Compile Include="Model\PortableDeviceContainerObject.cs" />
+    <Compile Include="PortableDeviceErrorCodes.cs" />
     <Compile Include="PortableDeviceEventArgs.cs" />
     <Compile Include="PortableDeviceEventCallback.cs" />
     <Compile Include="PortableDeviceCapabilities.cs" />

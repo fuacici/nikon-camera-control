@@ -10,6 +10,7 @@ namespace PortableDeviceLib.Model
     /// </summary>
     public class PortableDeviceEventType
     {
-
+      public PortableDeviceObject DeviceObject { get; set; }
+      public Guid EventGuid { get; set; }
     }
 }
