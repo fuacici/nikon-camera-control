@@ -180,7 +180,7 @@ namespace CameraControl.Devices.Nikon
                     {32787, "Custom"}
                   };
     
-    private Dictionary<int, string> _csTable = new Dictionary<int, string>()
+    protected Dictionary<int, string> _csTable = new Dictionary<int, string>()
                                                 {
                                                   {0, "JPEG (BASIC)"},
                                                   {1, "JPEG (NORMAL)"},
@@ -431,6 +431,7 @@ namespace CameraControl.Devices.Nikon
       {
         _timer.Stop();
         _stillImageDevice.Disconnect();
+        _stillImageDevice.IsConnected = false;
         IsConnected = false;
       }
       if (PhotoCaptured != null && e.EventType.EventGuid == PortableDeviceGuids.WPD_EVENT_OBJECT_ADDED)
@@ -663,7 +664,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    private void InitCompressionSetting()
+    protected virtual void InitCompressionSetting()
     {
       try
       {
@@ -686,7 +687,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    void CompressionSetting_ValueChanged(object sender, string key, int val)
+    protected void CompressionSetting_ValueChanged(object sender, string key, int val)
     {
       _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((byte)val),
                         CONST_PROP_CompressionSetting, -1); 

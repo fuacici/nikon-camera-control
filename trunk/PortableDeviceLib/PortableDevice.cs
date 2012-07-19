@@ -92,7 +92,7 @@ namespace PortableDeviceLib
         public bool IsConnected
         {
             get;
-            private set;
+            set;
         }
 
         /// <summary>
@@ -622,7 +622,7 @@ namespace PortableDeviceLib
 
         private void CheckIfIsConnected()
         {
-            if (!IsConnected)
+            if (!this.IsConnected)
                 throw new Exception("Not connected");
         }
 
