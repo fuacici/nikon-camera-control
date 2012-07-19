@@ -2,17 +2,52 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CameraControl.Classes;
 using CameraControl.Devices.Classes;
 
 namespace CameraControl.Devices.Nikon
 {
   public class NikonD80 : NikonD5100
   {
+    protected Dictionary<int, string> _csTable = new Dictionary<int, string>()
+                                                {
+                                                  {0, "JPEG (BASIC)"},
+                                                  {1, "JPEG (NORMAL)"},
+                                                  {2, "JPEG (FINE)"},
+                                                  {3, "RAW"},
+                                                  {4, "RAW + JPEG (BASIC)"},
+                                                  {5, "RAW + JPEG (NORMAL)"},
+                                                  {6, "RAW + JPEG (FINE)"}
+                                                };
+
     public override bool Init(DeviceDescriptor deviceDescriptor)
     {
       bool res = base.Init(deviceDescriptor);
       HaveLiveView = false;
       return res;
+    }
+
+    protected override void InitCompressionSetting()
+    {
+      try
+      {
+        byte datasize = 1;
+        CompressionSetting = new PropertyValue<int>();
+        CompressionSetting.ValueChanged += CompressionSetting_ValueChanged;
+        byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_CompressionSetting);
+        int type = BitConverter.ToInt16(result, 2);
+        byte formFlag = result[(2 * datasize) + 5];
+        byte defval = result[datasize + 5];
+        for (int i = 0; i < result.Length - ((2 * datasize) + 6 + 2); i += datasize)
+        {
+          byte val = result[((2 * datasize) + 6 + 2) + i];
+          CompressionSetting.AddValues(_csTable.ContainsKey(val) ? _csTable[val] : val.ToString(), val);
+        }
+        CompressionSetting.SetValue(defval);
+      }
+      catch (Exception ex)
+      {
+      }
     }
 
     public override void ReadDeviceProperties(int prop)
