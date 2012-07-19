@@ -218,6 +218,8 @@ namespace PortableDeviceLib
             if (string.IsNullOrEmpty(appName))
                 throw new ArgumentNullException("appName");
 
+          if(IsConnected)
+            return;
             //Creating propValues for connection
             IPortableDeviceValues clientValues = (IPortableDeviceValues)new PortableDeviceTypesLib.PortableDeviceValuesClass();
 
@@ -235,7 +237,7 @@ namespace PortableDeviceLib
             this.portableDeviceClass.Open(this.DeviceId, clientValues);
 
             //Extract device capabilities
-            this.ExtractDeviceCapabilities();
+            //this.ExtractDeviceCapabilities();
 
             this.eventCallback = new PortableDeviceEventCallback(this);
             // According to documentation pParameters should be null (see http://msdn.microsoft.com/en-us/library/dd375684%28v=VS.85%29.aspx )

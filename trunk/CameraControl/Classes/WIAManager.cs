@@ -54,19 +54,23 @@ namespace CameraControl.Classes
 
     public bool ConnectToCamera(bool retry)
     {
-      Thread.Sleep(500);
+      if (!ServiceProvider.Settings.DisableNativeDrivers)
+      {
+        ServiceProvider.DeviceManager.ConnectDevices();
+      }
       bool ret = false;
       int retries = 0;
       foreach (IDeviceInfo devInfo in new DeviceManager().DeviceInfos)
       {
         // Look for CameraDeviceType devices
-        if (devInfo.Type == WiaDeviceType.CameraDeviceType)
+        string model = devInfo.Properties["Name"].get_Value();
+        if (devInfo.Type == WiaDeviceType.CameraDeviceType && (!ServiceProvider.DeviceManager.DeviceClass.ContainsKey(model) || ServiceProvider.Settings.DisableNativeDrivers))
         {
           do
           {
             try
             {
-              ServiceProvider.DeviceManager.GetIDevice(this, devInfo);
+              ServiceProvider.DeviceManager.GetWiaIDevice(this, devInfo);
               retries = 4;
             }
             catch (Exception exception)

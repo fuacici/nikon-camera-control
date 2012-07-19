@@ -24,6 +24,20 @@ namespace CameraControl.Devices.Classes
       return Devices.FirstOrDefault(deviceDescriptor => deviceDescriptor.WiaId == id);
     }
 
+    public DeviceDescriptor GetByWpdId(string id)
+    {
+      return Devices.FirstOrDefault(deviceDescriptor => deviceDescriptor.WpdId == id);
+    }
+
+    public void RemoveDisconnected()
+    {
+      List<DeviceDescriptor> removedDevices= Devices.Where(deviceDescriptor => !deviceDescriptor.CameraDevice.IsConnected).ToList();
+      foreach (DeviceDescriptor deviceDescriptor in removedDevices)
+      {
+        Devices.Remove(deviceDescriptor);
+      }
+    }
+
     public void Add(DeviceDescriptor descriptor)
     {
       Devices.Add(descriptor);
