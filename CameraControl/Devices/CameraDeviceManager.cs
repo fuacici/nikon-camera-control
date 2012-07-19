@@ -65,6 +65,31 @@ namespace CameraControl.Devices
       _deviceEnumerator = new DeviceDescriptorEnumerator();
     }
 
+    public ICameraDevice GetWiaIDevice(WIAManager manager, IDeviceInfo devInfo)
+    {
+      if (_deviceEnumerator.GetByWiaId(devInfo.DeviceID) != null)
+        return _deviceEnumerator.GetByWiaId(devInfo.DeviceID).CameraDevice;
+      _deviceEnumerator.RemoveDisconnected();
+      DeviceDescriptor descriptor = new DeviceDescriptor { WiaDeviceInfo = devInfo, WiaId = devInfo.DeviceID };
+
+      ICameraDevice cameraDevice = new WiaCameraDevice();
+      cameraDevice.Init(descriptor);
+      descriptor.CameraDevice = cameraDevice;
+      _deviceEnumerator.Add(descriptor);
+      ConnectedDevices.Add(cameraDevice);
+      SelectedCameraDevice = cameraDevice;
+      cameraDevice.PhotoCaptured += cameraDevice_PhotoCaptured;
+      ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
+      ServiceProvider.Settings.SystemMessage = "New Camera is connected ! Driver :" + cameraDevice.DeviceName;
+      ServiceProvider.Log.Debug("===========Camera is connected==============");
+      ServiceProvider.Log.Debug("Driver :" + cameraDevice.GetType().Name);
+      ServiceProvider.Log.Debug("Name :" + cameraDevice.DeviceName);
+      ServiceProvider.Log.Debug("Manufacturer :" + cameraDevice.Manufacturer);
+
+      return SelectedCameraDevice; 
+    }
+
+    [Obsolete]
     public ICameraDevice GetIDevice(WIAManager manager, IDeviceInfo devInfo)
     {
       // already the camera is connected
@@ -117,6 +142,42 @@ namespace CameraControl.Devices
     {
       if (PhotoCaptured != null)
         PhotoCaptured(sender, eventArgs);
+    }
+
+    public void ConnectDevices()
+    {
+      if (PortableDeviceCollection.Instance == null)
+      {
+        PortableDeviceCollection.CreateInstance(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
+        PortableDeviceCollection.Instance.AutoConnectToPortableDevice = false;
+      }
+      _deviceEnumerator.RemoveDisconnected();
+
+      foreach (PortableDevice portableDevice in PortableDeviceCollection.Instance.Devices)
+      {
+        if (!portableDevice.DeviceId.StartsWith("\\\\?\\usb"))
+          continue;
+        portableDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
+        if(_deviceEnumerator.GetByWpdId(portableDevice.DeviceId)==null && DeviceClass.ContainsKey(portableDevice.Model))
+        {
+          ICameraDevice cameraDevice;
+          DeviceDescriptor descriptor = new DeviceDescriptor {WpdId = portableDevice.DeviceId};
+          cameraDevice = (ICameraDevice)Activator.CreateInstance(DeviceClass[portableDevice.Model]);
+          cameraDevice.SerialNumber = PhotoUtils.GetSerial(portableDevice.DeviceId);
+          cameraDevice.Init(descriptor);
+          descriptor.CameraDevice = cameraDevice;
+          _deviceEnumerator.Add(descriptor);
+          ConnectedDevices.Add(cameraDevice);
+          SelectedCameraDevice = cameraDevice;
+          cameraDevice.PhotoCaptured += cameraDevice_PhotoCaptured;
+          ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
+          ServiceProvider.Settings.SystemMessage = "New Camera is connected ! Driver :" + cameraDevice.DeviceName;
+          ServiceProvider.Log.Debug("===========Camera is connected==============");
+          ServiceProvider.Log.Debug("Driver :" + cameraDevice.GetType().Name);
+          ServiceProvider.Log.Debug("Name :" + cameraDevice.DeviceName);
+          ServiceProvider.Log.Debug("Manufacturer :" + cameraDevice.Manufacturer);
+        }
+      }
     }
 
     public void DisconnectCamera(string wiaId)

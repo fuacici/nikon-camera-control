@@ -30,6 +30,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_CMD_SetDevicePropValue = 0x1016;
     public const int CONST_CMD_GetEvent = 0x90C7;
     public const int CONST_CMD_GetDevicePropDesc = 0x1014;
+    public const int CONST_CMD_DeviceReady = 0x90C8;
 
     public const int CONST_PROP_Fnumber = 0x5007;
     public const int CONST_PROP_ExposureIndex = 0x500F;
@@ -353,15 +354,15 @@ namespace CameraControl.Devices.Nikon
     }
 
 
-    private bool _isConected;
+    private bool _isConnected;
 
     public bool IsConnected
     {
-      get { return _isConected; }
+      get { return _isConnected; }
       set
       {
-        _isConected = value;
-        NotifyPropertyChanged("IsConected");
+        _isConnected = value;
+        NotifyPropertyChanged("IsConnected");
       }
     }
 
@@ -426,6 +427,12 @@ namespace CameraControl.Devices.Nikon
 
     void _stillImageDevice_DeviceEvent(object sender, PortableDeviceEventArgs e)
     {
+      if (e.EventType.EventGuid == PortableDeviceGuids.WPD_EVENT_DEVICE_REMOVED)
+      {
+        _timer.Stop();
+        _stillImageDevice.Disconnect();
+        IsConnected = false;
+      }
       if (PhotoCaptured != null && e.EventType.EventGuid == PortableDeviceGuids.WPD_EVENT_OBJECT_ADDED)
       {
         PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
@@ -790,6 +797,7 @@ namespace CameraControl.Devices.Nikon
       {
         //Device.ExecuteCommand(Conts.wiaCommandTakePicture);
         ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
+        DeviceReady();
       }
       catch (COMException comException)
       {
@@ -1002,6 +1010,15 @@ namespace CameraControl.Devices.Nikon
             ReadDeviceProperties(eventParam);
           }
         }
+      }
+    }
+
+    private void DeviceReady()
+    {
+      int cod =_stillImageDevice.ExecuteWithNoData(CONST_CMD_DeviceReady);
+      if(cod!=0)
+      {
+        
       }
     }
 

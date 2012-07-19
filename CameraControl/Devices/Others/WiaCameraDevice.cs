@@ -314,10 +314,17 @@ namespace CameraControl.Devices.Others
       DeviceManager.RegisterEvent(Conts.wiaEventItemCreated, deviceDescriptor.WiaId);
       DeviceManager.OnEvent += DeviceManager_OnEvent;
 
-      Device = deviceDescriptor.WiaDevice;
-      DeviceName = Device.Properties["Description"].get_Value();
-      Manufacturer = Device.Properties["Manufacturer"].get_Value();
-      SerialNumber = PhotoUtils.GetSerial(Device.Properties["PnP ID String"].get_Value());
+      try
+      {
+        Device = deviceDescriptor.WiaDevice;
+        DeviceName = Device.Properties["Description"].get_Value();
+        Manufacturer = Device.Properties["Manufacturer"].get_Value();
+        SerialNumber = PhotoUtils.GetSerial(Device.Properties["PnP ID String"].get_Value());
+      }
+      catch (Exception ex)
+      {
+        ServiceProvider.Log.Error(ex);
+      }
       IsConnected = true;
       try
       {
