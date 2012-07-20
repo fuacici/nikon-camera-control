@@ -137,19 +137,34 @@ namespace CameraControl
           //file exist : : 0x80070050
           // busy :  0x80210006
           imageFile.SaveFile(fileName);
-          Dispatcher.Invoke(
-            new Action(delegate { ImageLIst.SelectedValue = ServiceProvider.Settings.DefaultSession.AddFile(fileName); }));
-          ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
+          if (ServiceProvider.Settings.AutoPreview)
+          {
+            Dispatcher.Invoke(
+              new Action(
+                delegate { ImageLIst.SelectedValue = ServiceProvider.Settings.DefaultSession.AddFile(fileName); }));
+          }
+          else
+          {
+            ServiceProvider.Settings.DefaultSession.AddFile(fileName);
+          }
         }
         else
         {
           string fileName =
             ServiceProvider.Settings.DefaultSession.GetNextFileName(Path.GetExtension(eventArgs.FileName));
           eventArgs.CameraDevice.TransferFile(eventArgs.EventArgs, fileName);
-          Dispatcher.Invoke(
-            new Action(delegate { ImageLIst.SelectedValue = ServiceProvider.Settings.DefaultSession.AddFile(fileName); }));
-          ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
+          if (ServiceProvider.Settings.AutoPreview)
+          {
+            Dispatcher.Invoke(
+              new Action(
+                delegate { ImageLIst.SelectedValue = ServiceProvider.Settings.DefaultSession.AddFile(fileName); }));
+          }
+          else
+          {
+            ServiceProvider.Settings.DefaultSession.AddFile(fileName);
+          }
         }
+        ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
         ServiceProvider.Settings.SystemMessage = "Photo transfer done.";
         if (ServiceProvider.Settings.Preview)
           ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_ShowTimed);

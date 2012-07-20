@@ -218,7 +218,9 @@ namespace CameraControl.Classes
     }
 
     private bool _preview;
-
+    /// <summary>
+    /// preview in full screen
+    /// </summary>
     public bool Preview
     {
       get { return _preview; }
@@ -237,6 +239,17 @@ namespace CameraControl.Classes
       {
         _previewSeconds = value;
         NotifyPropertyChanged("PreviewSeconds");
+      }
+    }
+
+    private bool _autoPreview;
+    public bool AutoPreview
+    {
+      get { return _autoPreview; }
+      set
+      {
+        _autoPreview = value;
+        NotifyPropertyChanged("AutoPreview");
       }
     }
 
@@ -263,6 +276,7 @@ namespace CameraControl.Classes
       CurrentTheme = "ExpressionDark";
       SystemMessage = "";
       DisableNativeDrivers = false;
+      AutoPreview = true;
       VideoTypes = new ObservableCollection<VideoType>
                      {
                        new VideoType("HD 1080 16:9", 1920, 1080),
