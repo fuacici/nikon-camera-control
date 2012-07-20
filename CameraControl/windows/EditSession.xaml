@@ -35,6 +35,9 @@
                 <Label Content="Counter :" Width="120" />
                 <TextBox Text="{Binding Path=Counter}" Width="200"/>
             </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox Content="Use original filename gave by the camera" ToolTip="This option isn't works with WIA driver" IsChecked="{Binding Path=UseOriginalFilename}"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

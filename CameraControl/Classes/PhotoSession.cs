@@ -68,6 +68,18 @@ namespace CameraControl.Classes
       }
     }
 
+    private bool _useOriginalFilename;
+    public bool UseOriginalFilename
+    {
+      get { return _useOriginalFilename; }
+      set
+      {
+        _useOriginalFilename = value;
+        NotifyPropertyChanged("UseOriginalFilename");
+      }
+    }
+
+
     private AsyncObservableCollection<FileItem> _files;
 
     [XmlIgnore]
@@ -123,6 +135,7 @@ namespace CameraControl.Classes
         TimeLapse.VideoType = ServiceProvider.Settings.VideoTypes[0];
       TimeLapse.OutputFIleName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos),
                                               Name + ".avi");
+      UseOriginalFilename = false;
     }
 
     void _systemWatcher_Created(object sender, FileSystemEventArgs e)
