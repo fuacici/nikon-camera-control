@@ -262,6 +262,17 @@ namespace CameraControl.Devices.Others
       }
     }
 
+    private int _exposureStatus;
+    public int ExposureStatus
+    {
+      get { return _exposureStatus; }
+      set
+      {
+        _exposureStatus = value;
+        NotifyPropertyChanged("ExposureStatus");
+      }
+    }
+
     private bool _isConected;
 
     public bool IsConnected

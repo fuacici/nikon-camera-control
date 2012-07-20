@@ -1,5 +1,6 @@
 using System.Windows.Controls;
 using System.Windows.Input;
+using CameraControl.Devices;
 
 namespace CameraControl.Controls
 {
@@ -11,6 +12,7 @@ namespace CameraControl.Controls
     public Controler()
     {
       InitializeComponent();
+      CameraDeviceManager cameraDeviceManager = DataContext as CameraDeviceManager;
     }
 
     private void cmb_shutter_GotFocus(object sender, System.Windows.RoutedEventArgs e)

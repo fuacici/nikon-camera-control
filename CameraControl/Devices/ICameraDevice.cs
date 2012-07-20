@@ -19,6 +19,7 @@ namespace CameraControl.Devices
     string DeviceName { get; set; }
     string Manufacturer { get; set; }
     string SerialNumber { get; set; }
+    int	ExposureStatus { get; set; }
 
     int Battery { get; set; }
     byte LiveViewImageZoomRatio { get; set; }
