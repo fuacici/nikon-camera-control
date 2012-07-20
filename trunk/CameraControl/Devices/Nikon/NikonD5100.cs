@@ -45,6 +45,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_PROP_ExposureMeteringMode = 0x500B;
     public const int CONST_PROP_FocusMode = 0x500A;
     public const int CONST_PROP_LiveViewStatus = 0xD1A2;
+    public const int CONST_PROP_ExposureIndicateStatus = 0xD1B1;
 
 
 
@@ -55,10 +56,6 @@ namespace CameraControl.Devices.Nikon
 
     protected StillImageDevice _stillImageDevice = null;
     
-    //TODO: remove reference from wia device
-    private Device Device { get; set; }
-    public DeviceManager DeviceManager { get; set; }
-
     private Dictionary<uint, string> _isoTable = new Dictionary<uint, string>()
                                                   {
                                                     {0x0064, "100"},
@@ -353,6 +350,16 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
+    private int _exposureStatus;
+    public int ExposureStatus
+    {
+      get { return _exposureStatus; }
+      set
+      {
+        _exposureStatus = value;
+        NotifyPropertyChanged("ExposureStatus");
+      }
+    }
 
     private bool _isConnected;
 
@@ -419,7 +426,9 @@ namespace CameraControl.Devices.Nikon
       InitCompressionSetting();
       InitExposureMeteringMode();
       InitFocusMode();
+      InitOther();
       ReadDeviceProperties(CONST_PROP_BatteryLevel);
+      ReadDeviceProperties(CONST_PROP_ExposureIndicateStatus);
       _timer.Start();
       IsConnected = true;
       return true;
@@ -461,6 +470,18 @@ namespace CameraControl.Devices.Nikon
         _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
                                            CONST_PROP_ExposureBiasCompensation, -1);
       }
+    }
+
+    private void InitOther()
+    {
+      //byte datasize = 1;
+      //byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureIndicateStatus);
+      //int type = BitConverter.ToInt16(result, 2);
+      //byte formFlag = result[(2 * datasize) + 5];
+      //UInt16 defval = BitConverter.ToUInt16(result, datasize + 5);
+      //sbyte minval =(sbyte) result[8];
+      //byte maxval = result[9];
+      //byte step = result[10];
     }
 
     private void InitIso()
@@ -592,7 +613,7 @@ namespace CameraControl.Devices.Nikon
         {
           UInt16 val = BitConverter.ToUInt16(result, ((2 * datasize) + 6 + 2) + i);
           double d = val;
-          string s = "f/" + (d / 100).ToString("0.0");
+          string s = "ƒ/" + (d / 100).ToString("0.0");
           FNumber.AddValues(s, val);
         }
         FNumber.SetValue(defval);
@@ -932,6 +953,7 @@ namespace CameraControl.Devices.Nikon
     {
       lock (Locker)
       {
+        Console.WriteLine(prop.ToString("X"));
         try
         {
           HaveLiveView = true;
@@ -975,9 +997,19 @@ namespace CameraControl.Devices.Nikon
             case CONST_PROP_BatteryLevel:
               Battery = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_BatteryLevel, -1)[0];
               break;
+            case CONST_PROP_ExposureIndicateStatus:
+              // transform exposure value to max +/-100 from +/-60 
+              sbyte i =
+                unchecked(
+                  (sbyte)
+                  _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureIndicateStatus, -1)
+                    [0]);
+              //ExposureStatus = Convert.ToInt32(i*1.66);
+              ExposureStatus = Convert.ToInt32(i);
+              break;
           }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
         }
       }
@@ -1005,7 +1037,7 @@ namespace CameraControl.Devices.Nikon
         for (int i = 0; i < eventCount; i++)
         {
           int eventCode = BitConverter.ToInt16(result, 6*i + 2);
-          int eventParam = BitConverter.ToInt16(result, 6*i + 4);
+          ushort eventParam =BitConverter.ToUInt16(result, 6*i + 4);
           if (eventCode == 0x4006)
           {
             ReadDeviceProperties(eventParam);

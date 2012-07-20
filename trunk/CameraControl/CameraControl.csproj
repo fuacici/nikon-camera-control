@@ -120,6 +120,9 @@
     <Compile Include="Controls\Controler.xaml.cs">
       <DependentUpon>Controler.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ExposureStatusControl.xaml.cs">
+      <DependentUpon>ExposureStatusControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ZoomBorder.cs" />
     <Compile Include="Devices\CameraDeviceManager.cs" />
     <Compile Include="Devices\Classes\DeviceDescriptor.cs" />
@@ -179,6 +182,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Controler.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ExposureStatusControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

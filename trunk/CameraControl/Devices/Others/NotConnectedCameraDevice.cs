@@ -36,6 +36,7 @@ namespace CameraControl.Devices.Others
 
     public string SerialNumber{ get; set; }
 
+    public int ExposureStatus { get; set; }
 
     public int Battery { get; set; }
 
@@ -110,6 +111,7 @@ namespace CameraControl.Devices.Others
     {
       IsConnected = false;
       HaveLiveView = false;
+      ExposureStatus = 10;
     }
   }
 }
