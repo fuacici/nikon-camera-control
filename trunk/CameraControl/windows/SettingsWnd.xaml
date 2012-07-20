@@ -5,7 +5,7 @@
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=CurrentTheme}"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Settings" Height="350" Width="350" Loaded="Window_Loaded" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" Background="{DynamicResource WindowBackgroundBrush}" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
+        Title="Settings" Height="431" Width="350" Loaded="Window_Loaded" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" Background="{DynamicResource WindowBackgroundBrush}" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="220*" />
@@ -23,7 +23,10 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="3">
                         <CheckBox Content="Play sound after photo taken"  IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=PlaySound}" />
-                    </StackPanel>                    
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <CheckBox Content="Auto preview"  IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=AutoPreview}" ToolTip="Disable this option if you use Lightroom"/>
+                    </StackPanel>
                     <StackPanel Margin="3">
                         <CheckBox Content="Preview image after shot in fullscreen" IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=Preview}"/>
                         <StackPanel Orientation="Horizontal" Margin="3">
