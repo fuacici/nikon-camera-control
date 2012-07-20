@@ -150,8 +150,21 @@ namespace CameraControl
         }
         else
         {
-          string fileName =
-            ServiceProvider.Settings.DefaultSession.GetNextFileName(Path.GetExtension(eventArgs.FileName));
+          string fileName = "";
+          if (!ServiceProvider.Settings.DefaultSession.UseOriginalFilename)
+          {
+            fileName =
+              ServiceProvider.Settings.DefaultSession.GetNextFileName(Path.GetExtension(eventArgs.FileName));
+          }
+          else
+          {
+            fileName = Path.Combine(ServiceProvider.Settings.DefaultSession.Folder, eventArgs.FileName);
+            if (File.Exists(fileName))
+              fileName =
+                PhotoUtils.GetUniqueFilename(
+                  Path.GetDirectoryName(fileName) +"\\"+ Path.GetFileNameWithoutExtension(fileName)+"_", 0,
+                  Path.GetExtension(fileName));
+          }
           eventArgs.CameraDevice.TransferFile(eventArgs.EventArgs, fileName);
           if (ServiceProvider.Settings.AutoPreview)
           {
