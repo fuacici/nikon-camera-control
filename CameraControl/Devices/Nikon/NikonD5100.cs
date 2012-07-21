@@ -998,13 +998,11 @@ namespace CameraControl.Devices.Nikon
               Battery = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_BatteryLevel, -1)[0];
               break;
             case CONST_PROP_ExposureIndicateStatus:
-              // transform exposure value to max +/-100 from +/-60 
               sbyte i =
                 unchecked(
                   (sbyte)
                   _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureIndicateStatus, -1)
                     [0]);
-              //ExposureStatus = Convert.ToInt32(i*1.66);
               ExposureStatus = Convert.ToInt32(i);
               break;
           }
