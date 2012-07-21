@@ -3,26 +3,29 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:CameraControl="clr-namespace:CameraControl" xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
-        Title="Braketing" Height="436" Width="284" Background="{DynamicResource WindowBackgroundBrush}" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="Braketing" Height="482" Width="284" Background="{DynamicResource WindowBackgroundBrush}" Loaded="Window_Loaded" Closing="Window_Closing" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="334*" />
-            <RowDefinition Height="63*" />
+            <RowDefinition Height="340*" />
+            <RowDefinition Height="33*" />
+            <RowDefinition Height="70*" />
         </Grid.RowDefinitions>
-        <TabControl Name="tabControl1">
+        <TabControl Name="tabControl1" Height="334" VerticalAlignment="Top">
             <TabItem Header="Exposure bracketing" Name="tabItem1">
                 <Grid>
-                    <ListBox Height="260" HorizontalAlignment="Left" Margin="22,20,0,0" Name="listBox1" VerticalAlignment="Top" Width="180" >
+                    <ListBox Margin="22,72,20,22" Name="listBox1">
                         <ListBox.ItemTemplate>
                             <HierarchicalDataTemplate>
                                 <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked}"/>
                             </HierarchicalDataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+                    <TextBlock Height="58" HorizontalAlignment="Left" Margin="5,5,0,0"  Text="Set camera to Aperture mode and turn off Auto ISO and Auto White Balance for most reliable results." VerticalAlignment="Top"  TextWrapping="Wrap" Width="241" />
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button Content="Take Photo" Grid.Row="1" HorizontalAlignment="Left" Margin="12,0,0,12" Name="btn_shot" Width="75" Height="23" VerticalAlignment="Bottom" Click="btn_shot_Click" />
-        <Button Content="Close" Grid.Row="1" Height="23" HorizontalAlignment="Right" Margin="0,26,12,0" Name="btn_close" VerticalAlignment="Top" Width="75" Click="btn_close_Click" />
+        <Button Content="Start" Grid.Row="2" HorizontalAlignment="Left" Margin="12,0,0,14" Name="btn_shot" Width="75" Height="23" VerticalAlignment="Bottom" Click="btn_shot_Click" />
+        <Button Content="Close" Grid.Row="2" HorizontalAlignment="Right" Margin="0,0,12,14" Name="btn_close" Width="75" Click="btn_close_Click" Height="23" VerticalAlignment="Bottom" />
+        <Label Content="" Name="lbl_status" Grid.Row="1" />
     </Grid>
 </Window>

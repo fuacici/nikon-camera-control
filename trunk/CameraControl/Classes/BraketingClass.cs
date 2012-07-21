@@ -10,10 +10,15 @@ namespace CameraControl.Classes
 {
   public class BraketingClass : BaseFieldClass
   {
-    private int index = 0;
+    public int Index = 0;
     private string _defec = "0";
 
+    public event EventHandler PhotoCaptured;
+    public event EventHandler IsBusyChanged;
+    public event EventHandler BracketingDone;
+
     private bool _isBusy;
+
     public bool IsBusy
     {
       get { return _isBusy; }
@@ -21,6 +26,8 @@ namespace CameraControl.Classes
       {
         _isBusy = value;
         NotifyPropertyChanged("IsBusy");
+        if (IsBusyChanged != null)
+          IsBusyChanged(this, new EventArgs());
       }
     }
 
@@ -45,17 +52,17 @@ namespace CameraControl.Classes
     {
       if (ExposureValues.Count == 0)
         return;
-      index = 0;
+      Index = 0;
       try
       {
         _defec = ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.Value;
         ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTakenDone;
         IsBusy = true;
-        ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue(ExposureValues[index]);
+        ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue(ExposureValues[Index]);
         Thread.Sleep(100);
         ServiceProvider.DeviceManager.SelectedCameraDevice.TakePicture();
         Thread.Sleep(100);
-        index++;
+        Index++;
       }
       catch (DeviceException exception)
       {
@@ -64,16 +71,16 @@ namespace CameraControl.Classes
       }
     }
 
-    private void TakeNextPhoto()
+    private void CaptureNextPhoto()
     {
       try
       {
         Thread.Sleep(100);
-        ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue(ExposureValues[index]);
+        ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue(ExposureValues[Index]);
         Thread.Sleep(100);
         ServiceProvider.DeviceManager.SelectedCameraDevice.TakePictureNoAf();
         Thread.Sleep(100);
-        index++;
+        Index++;
       }
       catch (DeviceException exception)
       {
@@ -86,22 +93,28 @@ namespace CameraControl.Classes
     {
       if (!IsBusy)
         return;
-      if (index < ExposureValues.Count)
+      if (PhotoCaptured != null)
+        PhotoCaptured(this, new EventArgs());
+      if (Index < ExposureValues.Count)
       {
-        Thread thread = new Thread(TakeNextPhoto);
+        Thread thread = new Thread(CaptureNextPhoto);
         thread.Start();
       }
       else
       {
-        IsBusy = false;
-        ServiceProvider.Settings.Manager.PhotoTakenDone -= Manager_PhotoTakenDone;
-        Thread thread = new Thread(new ThreadStart(delegate
-                                                     {
-                                                       ServiceProvider.DeviceManager.SelectedCameraDevice.
-                                                         ExposureCompensation.SetValue(_defec);
-                                                     }));
-        thread.Start();
+        Stop();
       }
+    }
+
+    public void Stop()
+    {
+      IsBusy = false;
+      ServiceProvider.Settings.Manager.PhotoTakenDone -= Manager_PhotoTakenDone;
+      Thread thread = new Thread(() => ServiceProvider.DeviceManager.SelectedCameraDevice.
+                                         ExposureCompensation.SetValue(_defec));
+      thread.Start();
+      if (BracketingDone != null)
+        BracketingDone(this, new EventArgs());
     }
 
   }

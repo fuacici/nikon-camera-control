@@ -1,16 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using CameraControl.Classes;
 using CameraControl.Devices;
 
@@ -31,7 +21,30 @@ namespace CameraControl.windows
       InitializeComponent();
       _device = device;
       _photoSession = session;
+      _photoSession.Braketing.IsBusy = false;
       backgroundWorker.DoWork += delegate { _photoSession.Braketing.TakePhoto(); };
+      _photoSession.Braketing.IsBusyChanged += Braketing_IsBusyChanged;
+      _photoSession.Braketing.PhotoCaptured += Braketing_PhotoCaptured;
+      _photoSession.Braketing.BracketingDone += Braketing_BracketingDone;
+    }
+
+    void Braketing_BracketingDone(object sender, EventArgs e)
+    {
+      Dispatcher.Invoke(new Action(delegate { lbl_status.Content = "Bracketing done"; }));
+    }
+
+    void Braketing_PhotoCaptured(object sender, EventArgs e)
+    {
+      Dispatcher.Invoke(new Action(delegate
+      {
+        lbl_status.Content = "Action in progress " + _photoSession.Braketing.ExposureValues.Count + "/" +
+          _photoSession.Braketing.Index;
+      }));
+    }
+
+    void Braketing_IsBusyChanged(object sender, EventArgs e)
+    {
+      Dispatcher.Invoke(new Action(delegate { btn_shot.Content = _photoSession.Braketing.IsBusy ? "Stop" : "Start"; }));
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -48,7 +61,7 @@ namespace CameraControl.windows
       listBox1.ItemsSource = collection;
     }
 
-    void item_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    void item_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
       _photoSession.Braketing.ExposureValues.Clear();
       foreach (CheckedListItem listItem in collection)
@@ -60,17 +73,26 @@ namespace CameraControl.windows
 
     private void btn_shot_Click(object sender, RoutedEventArgs e)
     {
-      backgroundWorker.RunWorkerAsync();
+      if (!_photoSession.Braketing.IsBusy)
+      {
+        backgroundWorker.RunWorkerAsync();
+      }
+      else
+      {
+        _photoSession.Braketing.Stop();
+      }
+      
     }
 
     private void btn_close_Click(object sender, RoutedEventArgs e)
     {
+      _photoSession.Braketing.Stop();
       this.Close();
     }
 
     private void Window_Closing(object sender, CancelEventArgs e)
     {
-      _photoSession.Braketing.IsBusy = false;
+      _photoSession.Braketing.Stop();
     }
 
   }

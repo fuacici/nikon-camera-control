@@ -1048,10 +1048,10 @@ namespace CameraControl.Devices.Nikon
 
     private void DeviceReady()
     {
-      int cod =_stillImageDevice.ExecuteWithNoData(CONST_CMD_DeviceReady);
+      uint cod =Convert.ToUInt32(_stillImageDevice.ExecuteWithNoData(CONST_CMD_DeviceReady));
       if(cod!=0)
       {
-        
+        Console.WriteLine("Device ready code #0" + cod.ToString("X"));
       }
     }
 
