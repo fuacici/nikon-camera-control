@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using CameraControl.Classes;
 using CameraControl.Devices;
@@ -14,6 +15,7 @@ namespace CameraControl.windows
     private ICameraDevice _device;
     private PhotoSession _photoSession;
     AsyncObservableCollection<CheckedListItem> collection = new AsyncObservableCollection<CheckedListItem>();
+    AsyncObservableCollection<CheckedListItem> shuttercollection = new AsyncObservableCollection<CheckedListItem>();
     BackgroundWorker backgroundWorker = new BackgroundWorker();
 
     public BraketingWnd(ICameraDevice device, PhotoSession session)
@@ -37,7 +39,7 @@ namespace CameraControl.windows
     {
       Dispatcher.Invoke(new Action(delegate
       {
-        lbl_status.Content = "Action in progress " + _photoSession.Braketing.ExposureValues.Count + "/" +
+        lbl_status.Content = "Action in progress " + (_photoSession.Braketing.Mode == 0 ? _photoSession.Braketing.ExposureValues.Count : _photoSession.Braketing.ShutterValues.Count) + "/" +
           _photoSession.Braketing.Index;
       }));
     }
@@ -59,15 +61,56 @@ namespace CameraControl.windows
         collection.Add(item);
       }
       listBox1.ItemsSource = collection;
+
+      int s_index = _device.ShutterSpeed.Values.IndexOf(_device.ShutterSpeed.Value);
+      int s_min = s_index - 4;
+      int s_max = s_index + 4;
+      if (s_min < 0)
+      {
+        s_min = 0;
+      }
+      if (s_max >= _device.ShutterSpeed.Values.Count)
+        s_max = _device.ShutterSpeed.Values.Count - 1;
+      for (int i = 0; i < _device.ShutterSpeed.Values.Count; i++)
+      {
+        if (_device.ShutterSpeed.Values[i] == "Bulb")
+          continue;
+        CheckedListItem item = new CheckedListItem() {Name = _device.ShutterSpeed.Values[i]};
+        if (i == s_index || i == s_min || i == s_max)
+          item.IsChecked = true;
+        item.PropertyChanged += item_PropertyChanged;
+        shuttercollection.Add(item);
+      }
+      lst_shutter.ItemsSource = shuttercollection;
+
+      if(_device.Mode.Value=="M")
+      {
+        tab_exposure.IsEnabled = false;
+        tab_manual.IsEnabled = true;
+        tab_manual.IsSelected = true;
+        _photoSession.Braketing.Mode = 1;
+      }
+      else
+      {
+        _photoSession.Braketing.Mode = 0;
+        tab_exposure.IsEnabled = true;
+        tab_exposure.IsSelected = true;
+        tab_manual.IsEnabled = false;
+      }
+      item_PropertyChanged(null, null);
     }
 
     void item_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
       _photoSession.Braketing.ExposureValues.Clear();
-      foreach (CheckedListItem listItem in collection)
+      foreach (CheckedListItem listItem in collection.Where(listItem => listItem.IsChecked && !_photoSession.Braketing.ExposureValues.Contains(listItem.Name)))
       {
-        if (listItem.IsChecked && !_photoSession.Braketing.ExposureValues.Contains(listItem.Name))
-          _photoSession.Braketing.ExposureValues.Add(listItem.Name);
+        _photoSession.Braketing.ExposureValues.Add(listItem.Name);
+      }
+      _photoSession.Braketing.ShutterValues.Clear();
+      foreach (CheckedListItem listItem in shuttercollection.Where(listItem => listItem.IsChecked && !_photoSession.Braketing.ShutterValues.Contains(listItem.Name)))
+      {
+        _photoSession.Braketing.ShutterValues.Add(listItem.Name);
       }
     }
 
