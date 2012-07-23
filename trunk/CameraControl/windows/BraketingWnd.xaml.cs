@@ -138,5 +138,10 @@ namespace CameraControl.windows
       _photoSession.Braketing.Stop();
     }
 
+    private void button3_Click(object sender, RoutedEventArgs e)
+    {
+      HelpProvider.Run(HelpSections.Bracketig);
+    }
+
   }
 }

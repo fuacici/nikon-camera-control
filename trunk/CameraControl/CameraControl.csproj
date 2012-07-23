@@ -107,6 +107,7 @@
     <Compile Include="Classes\CheckedListItem.cs" />
     <Compile Include="Classes\DictionaryItem.cs" />
     <Compile Include="Classes\FileItem.cs" />
+    <Compile Include="Classes\HelpProvider.cs" />
     <Compile Include="Classes\PhotoUtils.cs" />
     <Compile Include="Classes\PropertyValue.cs" />
     <Compile Include="Classes\RelayCommand.cs" />
@@ -322,6 +323,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\unlock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\help.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
