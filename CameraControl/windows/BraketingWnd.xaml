@@ -38,6 +38,10 @@
         </TabControl>
         <Button Content="Start" Grid.Row="2" HorizontalAlignment="Left" Margin="12,0,0,14" Name="btn_shot" Width="75" Height="23" VerticalAlignment="Bottom" Click="btn_shot_Click" />
         <Button Content="Close" Grid.Row="2" HorizontalAlignment="Right" Margin="0,0,12,14" Name="btn_close" Width="75" Click="btn_close_Click" Height="23" VerticalAlignment="Bottom" />
+        <Button Height="29" HorizontalAlignment="Right" Margin="0,0,5,4" Name="button3" VerticalAlignment="Bottom" Width="33" Grid.Row="1" Click="button3_Click">
+            <Image Source="/CameraControl;component/Images/help.png" />
+        </Button>
+
         <Label Content="" Name="lbl_status" Grid.Row="1" />
     </Grid>
 </Window>

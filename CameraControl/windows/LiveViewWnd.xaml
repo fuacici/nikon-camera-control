@@ -4,7 +4,7 @@
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
         Background="{DynamicResource WindowBackgroundBrush}"
-        Title="Live View" Height="575" Width="758" Loaded="Window_Loaded" Closed="Window_Closed" Closing="Window_Closing" xmlns:my="clr-namespace:CameraControl.windows"
+        Title="Live View" Height="632" Width="758" Loaded="Window_Loaded" Closed="Window_Closed" Closing="Window_Closing" xmlns:my="clr-namespace:CameraControl.windows"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
     <Window.Resources>
         <SolidColorBrush x:Key="GlyphBrush" Color="#444" />
@@ -166,5 +166,8 @@
             </Border>
         </GroupBox>
         <ToggleButton Content="Freeze Image" Height="23" HorizontalAlignment="Left" Margin="12,57,0,0" VerticalAlignment="Top" Width="182" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=FreezeImage}"/>
+        <Button Height="29" HorizontalAlignment="Left" Margin="12,0,0,11" Name="button3" VerticalAlignment="Bottom" Width="33" Click="button3_Click">
+            <Image Source="/CameraControl;component/Images/help.png"  />
+        </Button>
     </Grid>
 </Window>

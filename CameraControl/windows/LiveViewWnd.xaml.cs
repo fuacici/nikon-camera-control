@@ -38,23 +38,21 @@ namespace CameraControl.windows
 
     private int _retries = 0;
     private ICameraDevice selectedPortableDevice;
-    private Rectangle _focusrect=new Rectangle(); 
-    Line _line11=new Line();
-    Line _line12 = new Line();
-    Line _line21 = new Line();
-    Line _line22 = new Line();
+    private Rectangle _focusrect = new Rectangle();
+    private Line _line11 = new Line();
+    private Line _line12 = new Line();
+    private Line _line21 = new Line();
+    private Line _line22 = new Line();
     private BackgroundWorker _worker = new BackgroundWorker();
     private bool preview = false;
 
     public LiveViewData LiveViewData { get; set; }
 
     private PointCollection luminanceHistogramPoints = null;
+
     public PointCollection LuminanceHistogramPoints
     {
-      get
-      {
-        return this.luminanceHistogramPoints;
-      }
+      get { return this.luminanceHistogramPoints; }
       set
       {
         if (this.luminanceHistogramPoints != value)
@@ -67,6 +65,7 @@ namespace CameraControl.windows
 
 
     private bool _isBusy;
+
     public bool IsBusy
     {
       get { return _isBusy; }
@@ -84,6 +83,7 @@ namespace CameraControl.windows
     }
 
     private int _photoNo;
+
     public int PhotoNo
     {
       get { return _photoNo; }
@@ -95,6 +95,7 @@ namespace CameraControl.windows
     }
 
     private int _focusStep;
+
     public int FocusStep
     {
       get { return _focusStep; }
@@ -102,12 +103,13 @@ namespace CameraControl.windows
       {
         _focusStep = value;
         NotifyPropertyChanged("FocusStep");
-        PhotoNo = FocusValue / FocusStep;
+        PhotoNo = FocusValue/FocusStep;
       }
     }
 
 
     private int _photoCount;
+
     public int PhotoCount
     {
       get { return _photoCount; }
@@ -119,6 +121,7 @@ namespace CameraControl.windows
     }
 
     private string _counterMessage;
+
     public string CounterMessage
     {
       get
@@ -139,6 +142,7 @@ namespace CameraControl.windows
     }
 
     private int _focusCounter;
+
     public int FocusCounter
     {
       get { return _focusCounter; }
@@ -151,13 +155,14 @@ namespace CameraControl.windows
     }
 
     private int _focusValue;
+
     public int FocusValue
     {
       get { return _focusValue; }
       set
       {
         _focusValue = value;
-        PhotoNo = FocusValue / FocusStep;
+        PhotoNo = FocusValue/FocusStep;
         NotifyPropertyChanged("FocusValue");
         NotifyPropertyChanged("CounterMessage");
       }
@@ -188,6 +193,7 @@ namespace CameraControl.windows
     }
 
     private bool _lockB;
+
     public bool LockB
     {
       get { return _lockB; }
@@ -202,6 +208,7 @@ namespace CameraControl.windows
     }
 
     private bool _freezeImage;
+
     public bool FreezeImage
     {
       get { return _freezeImage; }
@@ -218,14 +225,11 @@ namespace CameraControl.windows
     private Timer _freezeTimer = new Timer(ServiceProvider.Settings.LiveViewFreezeTimeOut*1000);
 
     private bool oper_in_progress = false;
+
     /// <summary>
     /// Gets the <see cref="PortableDevice"/> connected
     /// </summary>
-    public ObservableCollection<PortableDevice> PortableDevices
-    {
-      get;
-      private set;
-    }
+    public ObservableCollection<PortableDevice> PortableDevices { get; private set; }
 
     public ICameraDevice SelectedPortableDevice
     {
@@ -249,9 +253,9 @@ namespace CameraControl.windows
       ServiceProvider.Settings.SelectedBitmap.BitmapLoaded += SelectedBitmap_BitmapLoaded;
     }
 
-    void SelectedBitmap_BitmapLoaded(object sender)
+    private void SelectedBitmap_BitmapLoaded(object sender)
     {
-      if(ServiceProvider.Settings.PreviewLiveViewImage && IsVisible)
+      if (ServiceProvider.Settings.PreviewLiveViewImage && IsVisible)
       {
         FreezeImage = true;
         Dispatcher.Invoke(new Action(delegate
@@ -292,12 +296,12 @@ namespace CameraControl.windows
                           };
     }
 
-    void _freezeTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+    private void _freezeTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
     {
       FreezeImage = false;
     }
 
-    void Manager_PhotoTaked(WIA.Item imageFile)
+    private void Manager_PhotoTaked(WIA.Item imageFile)
     {
       if (!IsVisible)
         return;
@@ -318,20 +322,20 @@ namespace CameraControl.windows
       thread.Start();
     }
 
-    void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+    private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
     {
       if (_retries > 100)
       {
         _timer.Stop();
 
         Dispatcher.Invoke(new ThreadStart(delegate
-                                                 {
-                                                   image1.Visibility = Visibility.Hidden;
-                                                   chk_grid.IsChecked = false;
-                                                 }));
+                                            {
+                                              image1.Visibility = Visibility.Hidden;
+                                              chk_grid.IsChecked = false;
+                                            }));
         return;
       }
-      if(!_worker.IsBusy)
+      if (!_worker.IsBusy)
         _worker.RunWorkerAsync();
     }
 
@@ -409,31 +413,35 @@ namespace CameraControl.windows
       oper_in_progress = false;
     }
 
-    void DrawLines()
+    private void DrawLines()
     {
       if (LiveViewData == null)
         return;
       _focusrect.BeginInit();
       _focusrect.Visibility = LiveViewData.HaveFocusData ? Visibility.Visible : Visibility.Hidden;
-      double xt = image1.ActualWidth / LiveViewData.ImageWidth;
-      double yt = image1.ActualHeight / LiveViewData.ImageHeight;
-      _focusrect.Height = LiveViewData.FocusFrameXSize * xt;
-      _focusrect.Width = LiveViewData.FocusFrameYSize * yt;
-      double xx = (canvas.ActualWidth - image1.ActualWidth) / 2;
-      double yy = (canvas.ActualHeight - image1.ActualHeight) / 2;
-      SetLinePos(_line11, (int)(xx + image1.ActualWidth / 3), (int)yy, (int)(xx + image1.ActualWidth / 3), (int)(yy + image1.ActualHeight));
-      SetLinePos(_line12, (int)(xx + (image1.ActualWidth / 3) * 2), (int)yy, (int)(xx + (image1.ActualWidth / 3) * 2), (int)(yy + image1.ActualHeight));
+      double xt = image1.ActualWidth/LiveViewData.ImageWidth;
+      double yt = image1.ActualHeight/LiveViewData.ImageHeight;
+      _focusrect.Height = LiveViewData.FocusFrameXSize*xt;
+      _focusrect.Width = LiveViewData.FocusFrameYSize*yt;
+      double xx = (canvas.ActualWidth - image1.ActualWidth)/2;
+      double yy = (canvas.ActualHeight - image1.ActualHeight)/2;
+      SetLinePos(_line11, (int) (xx + image1.ActualWidth/3), (int) yy, (int) (xx + image1.ActualWidth/3),
+                 (int) (yy + image1.ActualHeight));
+      SetLinePos(_line12, (int) (xx + (image1.ActualWidth/3)*2), (int) yy, (int) (xx + (image1.ActualWidth/3)*2),
+                 (int) (yy + image1.ActualHeight));
 
-      SetLinePos(_line21, (int)xx, (int) (yy+ (image1.ActualHeight/3)), (int) (xx + image1.ActualWidth),(int) (yy + image1.ActualHeight/3));
-      SetLinePos(_line22, (int)xx, (int)(yy+(image1.ActualHeight / 3)*2), (int)(xx + image1.ActualWidth), (int)(yy + (image1.ActualHeight / 3)*2));
+      SetLinePos(_line21, (int) xx, (int) (yy + (image1.ActualHeight/3)), (int) (xx + image1.ActualWidth),
+                 (int) (yy + image1.ActualHeight/3));
+      SetLinePos(_line22, (int) xx, (int) (yy + (image1.ActualHeight/3)*2), (int) (xx + image1.ActualWidth),
+                 (int) (yy + (image1.ActualHeight/3)*2));
 
-      _focusrect.SetValue(Canvas.LeftProperty, LiveViewData.FocusX * xt - (_focusrect.Height / 2) + xx);
-      _focusrect.SetValue(Canvas.TopProperty, LiveViewData.FocusY * yt - (_focusrect.Width / 2) + yy);
+      _focusrect.SetValue(Canvas.LeftProperty, LiveViewData.FocusX*xt - (_focusrect.Height/2) + xx);
+      _focusrect.SetValue(Canvas.TopProperty, LiveViewData.FocusY*yt - (_focusrect.Width/2) + yy);
       _focusrect.Stroke = new SolidColorBrush(LiveViewData.Focused ? Colors.Green : Colors.Red);
       _focusrect.EndInit();
     }
 
-    private void SetLinePos(Line line,int x1, int y1, int x2, int y2)
+    private void SetLinePos(Line line, int x1, int y1, int x2, int y2)
     {
       line.X1 = x1;
       line.X2 = x2;
@@ -576,19 +584,19 @@ namespace CameraControl.windows
       {
         case WindowsCmdConsts.LiveViewWnd_Show:
           Dispatcher.Invoke(new Action(delegate
-                                              {
-                                                SelectedPortableDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
-                                                Show();
-                                                Activate();
-                                                Topmost = true;
-                                                Topmost = false;
-                                                Focus();
-                                                ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTaked;
-                                                StartLiveView();
-                                                Thread.Sleep(500);
-                                                FreezeImage = false;
-                                                _timer.Start();
-                                              }));
+                                         {
+                                           SelectedPortableDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
+                                           Show();
+                                           Activate();
+                                           Topmost = true;
+                                           Topmost = false;
+                                           Focus();
+                                           ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTaked;
+                                           StartLiveView();
+                                           Thread.Sleep(500);
+                                           FreezeImage = false;
+                                           _timer.Start();
+                                         }));
           break;
         case WindowsCmdConsts.LiveViewWnd_Hide:
           Dispatcher.Invoke(new Action(delegate
@@ -678,7 +686,7 @@ namespace CameraControl.windows
       }
       catch (DeviceException exception)
       {
-       ServiceProvider.Log.Error("Unable to focus",exception);
+        ServiceProvider.Log.Error("Unable to focus", exception);
         ServiceProvider.Settings.SystemMessage = exception.Message;
       }
     }
@@ -696,6 +704,7 @@ namespace CameraControl.windows
     #region Implementation of INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
+
     public virtual void NotifyPropertyChanged(String info)
     {
       if (PropertyChanged != null)
@@ -703,6 +712,7 @@ namespace CameraControl.windows
         PropertyChanged(this, new PropertyChangedEventArgs(info));
       }
     }
+
     #endregion
 
 
@@ -759,10 +769,10 @@ namespace CameraControl.windows
           FreezeImage = false;
         }
       }
-      catch (DeviceException exception )
+      catch (DeviceException exception)
       {
         ServiceProvider.Settings.SystemMessage = exception.Message;
-        ServiceProvider.Log.Error("Live view. Unable to take photo",exception);
+        ServiceProvider.Log.Error("Live view. Unable to take photo", exception);
       }
     }
 
@@ -775,7 +785,7 @@ namespace CameraControl.windows
       IsBusy = true;
       preview = true;
       Thread thread = new Thread(TakePhoto);
-      thread.Start(); 
+      thread.Start();
     }
 
     private void btn_stop_Click(object sender, RoutedEventArgs e)
@@ -792,7 +802,7 @@ namespace CameraControl.windows
       IsBusy = true;
       preview = false;
       Thread thread = new Thread(TakePhoto);
-      thread.Start(); 
+      thread.Start();
     }
 
     private PointCollection ConvertToPointCollection(int[] values)
@@ -812,5 +822,11 @@ namespace CameraControl.windows
       points.Freeze();
       return points;
     }
+
+    private void button3_Click(object sender, RoutedEventArgs e)
+    {
+      HelpProvider.Run(HelpSections.FocusStacking);
+    }
+
   }
 }
