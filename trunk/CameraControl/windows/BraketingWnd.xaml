@@ -3,15 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:CameraControl="clr-namespace:CameraControl" xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
-        Title="Braketing" Height="482" Width="284" Background="{DynamicResource WindowBackgroundBrush}" Loaded="Window_Loaded" Closing="Window_Closing" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen">
+        Title="Braketing" Height="482" Width="284" Background="{DynamicResource WindowBackgroundBrush}" Loaded="Window_Loaded" Closing="Window_Closing" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="340*" />
             <RowDefinition Height="33*" />
             <RowDefinition Height="70*" />
         </Grid.RowDefinitions>
-        <TabControl Name="tabControl1" Height="334" VerticalAlignment="Top">
-            <TabItem Header="Exposure bracketing" Name="tabItem1">
+        <TabControl Height="334" VerticalAlignment="Top">
+            <TabItem Header="Exposure bracketing" Name="tab_exposure" >
                 <Grid>
                     <ListBox Margin="22,72,20,22" Name="listBox1">
                         <ListBox.ItemTemplate>
@@ -21,6 +21,18 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                     <TextBlock Height="58" HorizontalAlignment="Left" Margin="5,5,0,0"  Text="Set camera to Aperture mode and turn off Auto ISO and Auto White Balance for most reliable results." VerticalAlignment="Top"  TextWrapping="Wrap" Width="241" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Manual Exposure bracketing" Name="tab_manual">
+                <Grid>
+                    <TextBlock Height="58" HorizontalAlignment="Left" Margin="5,5,0,0"  Text="Set camera to Manual (M) mode and turn off Auto ISO and Auto White Balance for most reliable results." VerticalAlignment="Top"  TextWrapping="Wrap" Width="241" Grid.RowSpan="2" />
+                    <ListBox Margin="22,72,20,22" Name="lst_shutter">
+                        <ListBox.ItemTemplate>
+                            <HierarchicalDataTemplate>
+                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked}"/>
+                            </HierarchicalDataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Grid>
             </TabItem>
         </TabControl>
