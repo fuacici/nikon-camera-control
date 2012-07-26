@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -62,9 +63,40 @@ namespace CameraControl.windows
       }
       listBox1.ItemsSource = collection;
 
+      Dictionary<long, string> exposurevals = new Dictionary<long, string>();
+      
       int s_index = _device.ShutterSpeed.Values.IndexOf(_device.ShutterSpeed.Value);
       int s_min = s_index - 4;
       int s_max = s_index + 4;
+      //exposurevals.Add(s_index, "0");
+      long incre = _device.ShutterSpeed.NumericValues[s_index];
+      int step = 0;
+      for (int i = s_index; i < _device.ShutterSpeed.Values.Count; i++)
+      {
+        if (_device.ShutterSpeed.NumericValues[i]%incre == 0)
+        {
+          exposurevals.Add(i, step.ToString());
+          step++;
+          incre = _device.ShutterSpeed.NumericValues[i];
+        }
+      }
+
+      incre = _device.ShutterSpeed.NumericValues[s_index];
+      step = 0;
+      
+      for (int i = s_index; i >0; i--)
+      {
+        if (incre % _device.ShutterSpeed.NumericValues[i] == 0)
+        {
+          if (step != 0)
+          {
+            exposurevals.Add(i, (-step).ToString());
+          }
+          step++;
+          incre = _device.ShutterSpeed.NumericValues[i];
+        }
+      }
+
       if (s_min < 0)
       {
         s_min = 0;
@@ -75,7 +107,12 @@ namespace CameraControl.windows
       {
         if (_device.ShutterSpeed.Values[i] == "Bulb")
           continue;
-        CheckedListItem item = new CheckedListItem() {Name = _device.ShutterSpeed.Values[i]};
+        CheckedListItem item = new CheckedListItem()
+                                 {
+                                   Name =
+                                     _device.ShutterSpeed.Values[i] +
+                                     (exposurevals.ContainsKey(i) ? " EV " + exposurevals[i] : "")
+                                 };
         if (i == s_index || i == s_min || i == s_max)
           item.IsChecked = true;
         item.PropertyChanged += item_PropertyChanged;

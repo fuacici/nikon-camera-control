@@ -55,6 +55,11 @@ namespace CameraControl.Classes
       get { return new AsyncObservableCollection<string>(_valuesDictionary.Keys); }
     }
 
+    public AsyncObservableCollection<T> NumericValues
+    {
+      get { return new AsyncObservableCollection<T>(_valuesDictionary.Values); }
+    }
+
     public PropertyValue()
     {
       _valuesDictionary = new Dictionary<string, T>();

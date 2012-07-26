@@ -16,7 +16,9 @@
                     <ListBox Margin="22,72,20,22" Name="listBox1">
                         <ListBox.ItemTemplate>
                             <HierarchicalDataTemplate>
+                                <WrapPanel>
                                 <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked}"/>
+                                </WrapPanel>
                             </HierarchicalDataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
