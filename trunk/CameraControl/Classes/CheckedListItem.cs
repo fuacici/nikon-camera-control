@@ -9,6 +9,7 @@ namespace CameraControl.Classes
   {
     public int Id { get; set; }
     public string Name { get; set; }
+    public string Tag { get; set; }
     private bool _isChecked;
 
     public bool IsChecked

@@ -76,9 +76,9 @@ namespace CameraControl.Classes
           ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTakenDone;
           IsBusy = true;
           ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue(ExposureValues[Index]);
-          Thread.Sleep(100);
+          //Thread.Sleep(100);
           ServiceProvider.DeviceManager.SelectedCameraDevice.TakePicture();
-          Thread.Sleep(100);
+          //Thread.Sleep(100);
           Index++;
         }
         catch (DeviceException exception)
@@ -98,9 +98,9 @@ namespace CameraControl.Classes
           ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTakenDone;
           IsBusy = true;
           ServiceProvider.DeviceManager.SelectedCameraDevice.ShutterSpeed.SetValue(ShutterValues[Index]);
-          Thread.Sleep(100);
+          //Thread.Sleep(100);
           ServiceProvider.DeviceManager.SelectedCameraDevice.TakePicture();
-          Thread.Sleep(100);
+          //Thread.Sleep(100);
           Index++;
         }
         catch (DeviceException exception)
