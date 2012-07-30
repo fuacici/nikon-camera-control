@@ -459,17 +459,18 @@ namespace CameraControl.Devices.Nikon
 
     void IsoNumber_ValueChanged(object sender, string key, int val)
     {
-      DeviceReady();
-      _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
-                                         CONST_PROP_ExposureIndex, -1);
+      lock (Locker)
+      {
+        SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                                           CONST_PROP_ExposureIndex, -1);
+      }
     }
 
     void ExposureCompensation_ValueChanged(object sender, string key, int val)
     {
       lock (Locker)
       {
-        DeviceReady();
-        _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+        SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
                                            CONST_PROP_ExposureBiasCompensation, -1);
       }
     }
@@ -539,8 +540,7 @@ namespace CameraControl.Devices.Nikon
 
     void ShutterSpeed_ValueChanged(object sender, string key, long val)
     {
-      DeviceReady();
-      _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+      SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
                                          CONST_PROP_ExposureTime, -1);
     }
 
@@ -632,8 +632,7 @@ namespace CameraControl.Devices.Nikon
 
     void FNumber_ValueChanged(object sender, string key, int val)
     {
-      DeviceReady();
-      _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+      SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
                                    CONST_PROP_Fnumber, -1);
     }
 
@@ -663,8 +662,7 @@ namespace CameraControl.Devices.Nikon
 
     void WhiteBalance_ValueChanged(object sender, string key, long val)
     {
-      DeviceReady();
-      _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt16)val),
+      SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt16)val),
                               CONST_PROP_WhiteBalance, -1); 
     }
 
@@ -722,8 +720,7 @@ namespace CameraControl.Devices.Nikon
 
     protected void CompressionSetting_ValueChanged(object sender, string key, int val)
     {
-      DeviceReady();
-      _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((byte)val),
+      SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((byte)val),
                         CONST_PROP_CompressionSetting, -1); 
     }
 
@@ -753,8 +750,7 @@ namespace CameraControl.Devices.Nikon
 
     void ExposureMeteringMode_ValueChanged(object sender, string key, int val)
     {
-      DeviceReady();
-      _stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt16)val),
+      SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt16)val),
                         CONST_PROP_ExposureMeteringMode, -1);      
     }
 
@@ -976,7 +972,6 @@ namespace CameraControl.Devices.Nikon
     {
       lock (Locker)
       {
-        Console.WriteLine(prop.ToString("X"));
         try
         {
           HaveLiveView = true;
@@ -1069,10 +1064,11 @@ namespace CameraControl.Devices.Nikon
 
     private void DeviceReady()
     {
-      uint cod = Convert.ToUInt32(_stillImageDevice.ExecuteWithNoData(CONST_CMD_DeviceReady));
-      if (cod != 0)
+      //uint cod = Convert.ToUInt32(_stillImageDevice.ExecuteWithNoData(CONST_CMD_DeviceReady));
+      ulong cod = (ulong)_stillImageDevice.ExecuteWithNoData(CONST_CMD_DeviceReady);
+      if (cod != 0 || cod != ErrorCodes.MTP_OK)
       {
-        if (cod == 0x2019)
+        if (cod == ErrorCodes.MTP_Device_Busy)
         {
           Console.WriteLine("Device not ready");
           Thread.Sleep(100);
@@ -1083,6 +1079,32 @@ namespace CameraControl.Devices.Nikon
           Console.WriteLine("Device ready code #0" + cod.ToString("X"));
         }
       }
+    }
+
+    private void SetProperty(int code, byte[] data, int param1, int param2)
+    {
+      bool retry = false;
+      int retrynum = 0;
+      DeviceReady();
+      do
+      {
+        if (retrynum > 5)
+        {
+          return;
+        }
+        retry = false;
+        uint resp = _stillImageDevice.ExecuteWriteData(code, data, param1, param2);
+        if (resp != 0 || resp != ErrorCodes.MTP_OK)
+        {
+          //Console.WriteLine("Retry ...." + resp.ToString("X"));
+          if (resp == ErrorCodes.MTP_Device_Busy || resp == 0x800700AA)
+          {
+            Thread.Sleep(100);
+            retry = true;
+            retrynum++;
+          }
+        }
+      } while (retry);
     }
 
   }

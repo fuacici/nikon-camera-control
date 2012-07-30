@@ -118,11 +118,11 @@ namespace CameraControl.Classes
       {
         try
         {
-          Thread.Sleep(100);
+          //Thread.Sleep(100);
           ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue(ExposureValues[Index]);
-          Thread.Sleep(100);
+          //Thread.Sleep(100);
           ServiceProvider.DeviceManager.SelectedCameraDevice.TakePictureNoAf();
-          Thread.Sleep(100);
+          //Thread.Sleep(100);
           Index++;
         }
         catch (DeviceException exception)
@@ -135,11 +135,11 @@ namespace CameraControl.Classes
       {
         try
         {
-          Thread.Sleep(100);
+          //Thread.Sleep(100);
           ServiceProvider.DeviceManager.SelectedCameraDevice.ShutterSpeed.SetValue(ShutterValues[Index]);
-          Thread.Sleep(100);
+          //Thread.Sleep(100);
           ServiceProvider.DeviceManager.SelectedCameraDevice.TakePictureNoAf();
-          Thread.Sleep(100);
+          //Thread.Sleep(100);
           Index++;
         }
         catch (DeviceException exception)

@@ -15,7 +15,7 @@ namespace PortableDeviceLib
    
     }
 
-    public int ExecuteWithNoData(int code)
+    public uint ExecuteWithNoData(int code)
     {
       IPortableDeviceValues commandValues = (IPortableDeviceValues)new PortableDeviceTypesLib.PortableDeviceValuesClass();
       IPortableDevicePropVariantCollection propVariant =
@@ -36,10 +36,14 @@ namespace PortableDeviceLib
       int pvalue = 0;
       try
       {
-        int pValue = 0;
-        results.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
+        uint pValue = 0;
+        //results.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
+        //if (pValue != 0)
+        //  return pValue;
+        results.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE,out pValue);
         if (pValue != 0)
           return pValue;
+
       }
       catch (Exception ex)
       {
@@ -260,7 +264,7 @@ namespace PortableDeviceLib
       return res;
     }
 
-    public int ExecuteWriteData(int code,byte[] data, int param1, int param2)
+    public uint ExecuteWriteData(int code,byte[] data, int param1, int param2)
     {
       // source: http://msdn.microsoft.com/en-us/library/windows/desktop/ff384843(v=vs.85).aspx
       // and view-source:http://www.experts-exchange.com/Programming/Languages/C_Sharp/Q_26860397.html
@@ -308,8 +312,12 @@ namespace PortableDeviceLib
         pResults.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
         if (pValue != 0)
         {
-          return pValue;
+          return (uint)pValue;
         }
+        //uint mtperror;
+        //pResults.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out mtperror);
+        //if (mtperror != 0)
+        //  return mtperror;
       }
       catch (Exception ex)
       {
@@ -339,7 +347,11 @@ namespace PortableDeviceLib
         int pValue = 0;
         pResults.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
         if (pValue != 0)
-          return pValue;
+          return (uint) pValue;
+        //uint mtperror;
+        //pResults.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out mtperror);
+        //if (mtperror != 0)
+        //  return mtperror;
       }
       catch (Exception ex)
       {
@@ -364,8 +376,12 @@ namespace PortableDeviceLib
         pResults.GetErrorValue(ref PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out tmpResult);
         if (tmpResult != 0)
         {
-          return tmpResult;
+          return (uint) tmpResult;
         }
+        uint mtperror;
+        pResults.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out mtperror);
+        if (mtperror != 0)
+          return mtperror;
       }
       catch
       {
