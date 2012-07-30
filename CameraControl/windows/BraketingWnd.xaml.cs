@@ -111,7 +111,8 @@ namespace CameraControl.windows
                                  {
                                    Name =
                                      _device.ShutterSpeed.Values[i] +
-                                     (exposurevals.ContainsKey(i) ? " EV " + exposurevals[i] : "")
+                                     (exposurevals.ContainsKey(i) ? " EV " + exposurevals[i] : ""),
+                                   Tag = _device.ShutterSpeed.Values[i]
                                  };
         if (i == s_index || i == s_min || i == s_max)
           item.IsChecked = true;
@@ -147,7 +148,7 @@ namespace CameraControl.windows
       _photoSession.Braketing.ShutterValues.Clear();
       foreach (CheckedListItem listItem in shuttercollection.Where(listItem => listItem.IsChecked && !_photoSession.Braketing.ShutterValues.Contains(listItem.Name)))
       {
-        _photoSession.Braketing.ShutterValues.Add(listItem.Name);
+        _photoSession.Braketing.ShutterValues.Add(listItem.Tag);
       }
     }
 

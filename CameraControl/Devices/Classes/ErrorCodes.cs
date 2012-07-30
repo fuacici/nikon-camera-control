@@ -20,9 +20,21 @@ namespace CameraControl.Devices.Classes
     public const uint WIA_S_NO_DEVICE_AVAILABLE = 0x80210015;
     public const uint WIA_ERROR_UNABLE_TO_FOCUS = 0x80004005;
     
+    public const uint MTP_OK = 0x2001;
+    public const uint MTP_Device_Busy = 0x2019;
+    public const uint MTP_Set_Property_Not_Support = 0xA005;
+    
     public static void GetException(int code)
     {
       if(code!=0)
+      {
+        throw new DeviceException("Device MTP error code:" + code + " " + code.ToString("X"));
+      }
+    }
+
+    public static void GetException(uint code)
+    {
+      if (code != 0 && code!=MTP_OK)
       {
         throw new DeviceException("Device MTP error code:" + code + " " + code.ToString("X"));
       }
