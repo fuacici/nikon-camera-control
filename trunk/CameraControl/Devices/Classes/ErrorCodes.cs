@@ -23,13 +23,15 @@ namespace CameraControl.Devices.Classes
     public const uint MTP_OK = 0x2001;
     public const uint MTP_Device_Busy = 0x2019;
     public const uint MTP_Set_Property_Not_Support = 0xA005;
-    
+    public const uint MTP_Store_Not_Available = 0x2013;
+    public const uint MTP_Out_of_Focus = 0xA002;
+    public const uint MTP_Shutter_Speed_Bulb = 0xA008;
+    public const uint MTP_Store_Full = 0x200C;
+    public const uint MTP_Store_Read_Only = 0x200E;
+
     public static void GetException(int code)
     {
-      if(code!=0)
-      {
-        throw new DeviceException("Device MTP error code: " +   code.ToString("X"));
-      }
+      GetException((uint) code);
     }
 
     public static void GetException(uint code)
@@ -40,10 +42,18 @@ namespace CameraControl.Devices.Classes
         {
           case MTP_Device_Busy:
             throw new DeviceException("Device MTP error: Device is busy");
-            break;
+          case MTP_Store_Not_Available:
+            throw new DeviceException("The card cannot be accessed");
+          case MTP_Shutter_Speed_Bulb:
+            throw new DeviceException("Bulb mode isn't supported");
+          case MTP_Out_of_Focus:
+            throw new DeviceException("Unable to focus.");
+          case MTP_Store_Full:
+            throw new DeviceException("Storage is full.");
+          case MTP_Store_Read_Only:
+            throw new DeviceException("Storage is read only.");
           default:
             throw new DeviceException("Device MTP error code: " + code.ToString("X"));
-            break;
         }
       }
     }
@@ -54,37 +64,26 @@ namespace CameraControl.Devices.Classes
       {
         case WIA_ERROR_BUSY:
           throw new DeviceException("Device is bussy. Error code :WIA_ERROR_BUSY", exception);
-          break;
         case WIA_ERROR_DEVICE_COMMUNICATION:
           throw new DeviceException("Device communication error. Error code :WIA_ERROR_DEVICE_COMMUNICATION", exception);
-          break;
         case WIA_ERROR_DEVICE_LOCKED:
           throw new DeviceException("Device is locked. Error code :WIA_ERROR_DEVICE_LOCKED", exception);
-          break;
         case WIA_ERROR_EXCEPTION_IN_DRIVER:
           throw new DeviceException("Exception in driver. Error code :WIA_ERROR_EXCEPTION_IN_DRIVER", exception);
-          break;
         case WIA_ERROR_GENERAL_ERROR:
           throw new DeviceException("General error. Error code :WIA_ERROR_GENERAL_ERROR", exception);
-          break;
         case WIA_ERROR_INCORRECT_HARDWARE_SETTING:
           throw new DeviceException("Incorrect hardware error. Error code :WIA_ERROR_INCORRECT_HARDWARE_SETTING", exception);
-          break;
         case WIA_ERROR_INVALID_COMMAND:
           throw new DeviceException("Invalid command. Error code :WIA_ERROR_INVALID_COMMAND", exception);
-          break;
         case WIA_ERROR_INVALID_DRIVER_RESPONSE:
           throw new DeviceException("Invalid driver response. Error code :WIA_ERROR_INVALID_DRIVER_RESPONSE", exception);
-          break;
         case WIA_ERROR_OFFLINE:
           throw new DeviceException("Device is offline. Error code :WIA_ERROR_OFFLINE", exception, WIA_ERROR_OFFLINE);
-          break;
         case WIA_ERROR_UNABLE_TO_FOCUS:
           throw new DeviceException("Unable to focus. Error code :WIA_ERROR_UNABLE_TO_FOCUS", exception, WIA_ERROR_UNABLE_TO_FOCUS);
-          break;
         default:
           throw new DeviceException("Unknow error. Error code:" + (uint)exception.ErrorCode, exception);
-          break;
       }
 
     }

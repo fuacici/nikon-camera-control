@@ -13,6 +13,8 @@ namespace CameraControl.Devices.Others
 
     public bool HaveLiveView { get; set; }
 
+    public bool CaptureInSdRam { get; set; }
+
     public PropertyValue<int> FNumber { get; set; }
 
     public PropertyValue<int> IsoNumber { get; set; }

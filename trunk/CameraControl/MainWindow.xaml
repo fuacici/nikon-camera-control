@@ -4,7 +4,7 @@
         xmlns:myclass="clr-namespace:CameraControl.Classes"
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         themes:ThemeManager.Theme="{Binding  Path=CurrentTheme}"
-        Title="NCC" Height="700" Width="1024" Loaded="Window_Loaded" xmlns:my="clr-namespace:CameraControl"
+        Title="NCC" Height="768" Width="1024" Loaded="Window_Loaded" xmlns:my="clr-namespace:CameraControl"
         xmlns:local="clr-namespace:CameraControl.Controls" Background="{DynamicResource WindowBackgroundBrush}"
         Closed="Window_Closed" Closing="Window_Closing" Icon="/CameraControl;component/Images/logo.png">
     <Window.Resources>

@@ -137,6 +137,8 @@ namespace CameraControl.Devices.Others
       }
     }
 
+    public bool CaptureInSdRam { get; set; }
+
 
     private PropertyValue<int> _fNumber;
     public PropertyValue<int> FNumber

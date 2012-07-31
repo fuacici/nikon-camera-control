@@ -6,6 +6,7 @@ namespace CameraControl.Devices
   public interface ICameraDevice
   {
     bool HaveLiveView { get; set; }
+    bool CaptureInSdRam { get; set; }
     PropertyValue<int> FNumber { get; set; }
     PropertyValue<int> IsoNumber { get; set; }
     PropertyValue<long> ShutterSpeed { get; set; }
