@@ -7,7 +7,7 @@ using CameraControl.Devices.Classes;
 
 namespace CameraControl.Devices.Nikon
 {
-  public class NikonD90:NikonD5100
+  public class NikonD90:NikonBase
   {
 
     override public LiveViewData GetLiveViewImage()

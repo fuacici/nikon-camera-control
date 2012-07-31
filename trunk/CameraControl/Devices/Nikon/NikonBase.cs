@@ -15,7 +15,7 @@ using Timer = System.Timers.Timer;
 
 namespace CameraControl.Devices.Nikon
 {
-  public class NikonD5100 :BaseFieldClass,  ICameraDevice
+  public class NikonBase :BaseFieldClass,  ICameraDevice
   {
     public const int CONST_CMD_AfDrive = 0x90C1;
     public const int CONST_CMD_StartLiveView = 0x9201;
@@ -384,7 +384,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public NikonD5100()
+    public NikonBase()
     {
       _timer.AutoReset = true;
       _timer.Elapsed += _timer_Elapsed;
@@ -1044,6 +1044,7 @@ namespace CameraControl.Devices.Nikon
 
     private void getEvent()
     {
+      DeviceReady();
       byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetEvent);
       if (result == null)
         return;
@@ -1076,7 +1077,7 @@ namespace CameraControl.Devices.Nikon
         }
         else
         {
-          Console.WriteLine("Device ready code #0" + cod.ToString("X"));
+          //Console.WriteLine("Device ready code #0" + cod.ToString("X"));
         }
       }
     }

@@ -7,7 +7,7 @@ using CameraControl.Devices.Classes;
 
 namespace CameraControl.Devices.Nikon
 {
-  public class NikonD80 : NikonD5100
+  public class NikonD80 : NikonBase
   {
     protected Dictionary<int, string> _csTable = new Dictionary<int, string>()
                                                 {

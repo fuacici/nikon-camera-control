@@ -6,7 +6,7 @@ using CameraControl.Devices.Classes;
 
 namespace CameraControl.Devices.Nikon
 {
-  public class NikonD40:NikonD5100
+  public class NikonD40:NikonBase
   {
     public override bool Init(DeviceDescriptor deviceDescriptor)
     {
