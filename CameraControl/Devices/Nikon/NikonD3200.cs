@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CameraControl.Devices.Nikon
 {
-  public class NikonD3200: NikonD5100
+  public class NikonD3200: NikonBase
   {
     protected override void GetAditionalLIveViewData(Classes.LiveViewData viewData, byte[] result)
     {
