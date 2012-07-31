@@ -10,6 +10,7 @@
 ||Nikon D300||X||?||?||Native||
 ||Nikon D3000||X||-||?||WIA||
 ||Nikon D3100||X||-||?||WIA||
+||Nikon D3200||X||/||X||Native||
 ||Nikon D4||X||?||?||Native||
 ||Nikon D40||?||-||?||Native||
 ||Nikon D5000||X||?||?||Native||
@@ -29,6 +30,7 @@
  * X  confirmed
  * ?  implemented, but need to be tested
  * -  not working or not implemented yet
+ * /  some features not working
  * +  planed
  
 With Native driver the application can use live view (if is supported by the camera) and read camera properties in real time
