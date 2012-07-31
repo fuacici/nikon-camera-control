@@ -36,10 +36,11 @@ namespace PortableDeviceLib
       int pvalue = 0;
       try
       {
+        int iValue = 0;
+        results.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out iValue);
+        if (iValue != 0)
+          return (uint)iValue;
         uint pValue = 0;
-        //results.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
-        //if (pValue != 0)
-        //  return pValue;
         results.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE,out pValue);
         if (pValue != 0)
           return pValue;

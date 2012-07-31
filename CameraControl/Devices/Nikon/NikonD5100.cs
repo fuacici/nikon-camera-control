@@ -1068,7 +1068,7 @@ namespace CameraControl.Devices.Nikon
       ulong cod = (ulong)_stillImageDevice.ExecuteWithNoData(CONST_CMD_DeviceReady);
       if (cod != 0 || cod != ErrorCodes.MTP_OK)
       {
-        if (cod == ErrorCodes.MTP_Device_Busy)
+        if (cod == ErrorCodes.MTP_Device_Busy || cod == 0x800700AA)
         {
           Console.WriteLine("Device not ready");
           Thread.Sleep(100);
