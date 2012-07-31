@@ -10,6 +10,7 @@ using CameraControl.Classes;
 using CameraControl.Devices.Classes;
 using CameraControl.Devices.Others;
 using PortableDeviceLib;
+using PortableDeviceLib.Model;
 using WIA;
 using Timer = System.Timers.Timer;
 
@@ -31,6 +32,8 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_CMD_GetEvent = 0x90C7;
     public const int CONST_CMD_GetDevicePropDesc = 0x1014;
     public const int CONST_CMD_DeviceReady = 0x90C8;
+    public const int CONST_CMD_GetObjectInfo = 0x1008;
+    public const int CONST_CMD_GetObject = 0x1009;
 
     public const int CONST_PROP_Fnumber = 0x5007;
     public const int CONST_PROP_ExposureIndex = 0x500F;
@@ -47,6 +50,11 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_PROP_LiveViewStatus = 0xD1A2;
     public const int CONST_PROP_ExposureIndicateStatus = 0xD1B1;
 
+    public const int CONST_Event_DevicePropChanged = 0x4006;
+    public const int CONST_Event_StoreFull = 0x400A;
+    public const int CONST_Event_CaptureComplete = 0x400D;
+    public const int CONST_Event_ObjectAdded = 0x4002;
+    public const int CONST_Event_ObjectAddedInSdram = 0xC101;
 
 
     private const string AppName = "CameraControl";
@@ -445,14 +453,14 @@ namespace CameraControl.Devices.Nikon
       }
       if (PhotoCaptured != null && e.EventType.EventGuid == PortableDeviceGuids.WPD_EVENT_OBJECT_ADDED)
       {
-        PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
-                                        {
-                                          WiaImageItem = null,
-                                          EventArgs = e,
-                                          CameraDevice = this,
-                                          FileName = e.EventType.DeviceObject.Name
-                                        };
-        PhotoCaptured(this, args);
+        //PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
+        //                                {
+        //                                  WiaImageItem = null,
+        //                                  EventArgs = e,
+        //                                  CameraDevice = this,
+        //                                  FileName = e.EventType.DeviceObject.Name
+        //                                };
+        //PhotoCaptured(this, args);
       }
     }
 
@@ -1033,10 +1041,17 @@ namespace CameraControl.Devices.Nikon
 
     public void TransferFile(object o, string filename)
     {
+      DeviceReady();
       PortableDeviceEventArgs deviceEventArgs = o as PortableDeviceEventArgs;
       if (deviceEventArgs != null)
       {
-        _stillImageDevice.SaveFile(deviceEventArgs.EventType.DeviceObject, filename);
+        //_stillImageDevice.SaveFile(deviceEventArgs.EventType.DeviceObject, filename);
+        byte[] result = _stillImageDevice.ExecuteReadBigData(CONST_CMD_GetObject,
+                                                             (int) deviceEventArgs.EventType.ObjectHandle, -1);
+        using (BinaryWriter writer=new BinaryWriter(File.Open(filename,FileMode.Create)))
+        {
+          writer.Write(result);
+        }
       }
     }
 
@@ -1053,11 +1068,33 @@ namespace CameraControl.Devices.Nikon
       {
         for (int i = 0; i < eventCount; i++)
         {
+          DeviceReady();
           int eventCode = BitConverter.ToInt16(result, 6*i + 2);
-          ushort eventParam =BitConverter.ToUInt16(result, 6*i + 4);
-          if (eventCode == 0x4006)
+          ushort eventParam = BitConverter.ToUInt16(result, 6*i + 4);
+          int longeventParam = BitConverter.ToInt32(result, 6 * i + 4);
+          switch (eventCode)
           {
-            ReadDeviceProperties(eventParam);
+            case CONST_Event_DevicePropChanged:
+              ReadDeviceProperties(eventParam);
+              break;
+            case CONST_Event_ObjectAdded:
+              {
+                byte[] objectdata = _stillImageDevice.ExecuteReadData(CONST_CMD_GetObjectInfo, longeventParam);
+                string filename = Encoding.Unicode.GetString(objectdata, 53, 12*2);
+                PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
+                {
+                  WiaImageItem = null,
+                  EventArgs = new PortableDeviceEventArgs(new PortableDeviceEventType() { ObjectHandle = (uint)longeventParam }),
+                  CameraDevice = this,
+                  FileName = filename
+                };
+                if (PhotoCaptured != null)
+                  PhotoCaptured(this, args);
+              }
+              break;
+            default:
+              Console.WriteLine("Unknow event code " + eventCode.ToString("X"));
+              break;
           }
         }
       }
