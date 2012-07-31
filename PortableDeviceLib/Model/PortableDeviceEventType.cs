@@ -12,5 +12,7 @@ namespace PortableDeviceLib.Model
     {
       public PortableDeviceObject DeviceObject { get; set; }
       public Guid EventGuid { get; set; }
+      public uint ObjectHandle { get; set; }
+      public bool IsInSdram { get; set; }
     }
 }
