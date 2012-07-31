@@ -28,15 +28,23 @@ namespace CameraControl.Devices.Classes
     {
       if(code!=0)
       {
-        throw new DeviceException("Device MTP error code:" + code + " " + code.ToString("X"));
+        throw new DeviceException("Device MTP error code: " +   code.ToString("X"));
       }
     }
 
     public static void GetException(uint code)
     {
-      if (code != 0 && code!=MTP_OK)
+      if (code != 0 && code != MTP_OK)
       {
-        throw new DeviceException("Device MTP error code:" + code + " " + code.ToString("X"));
+        switch (code)
+        {
+          case MTP_Device_Busy:
+            throw new DeviceException("Device MTP error: Device is busy");
+            break;
+          default:
+            throw new DeviceException("Device MTP error code: " + code.ToString("X"));
+            break;
+        }
       }
     }
 
