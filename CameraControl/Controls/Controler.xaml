@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Devices="clr-namespace:CameraControl.Devices" mc:Ignorable="d" 
-             d:DesignHeight="57" d:DesignWidth="1168" BorderBrush="{x:Null}" BorderThickness="1" xmlns:my="clr-namespace:CameraControl.Controls">
+             d:DesignHeight="57" d:DesignWidth="1203" BorderBrush="{x:Null}" BorderThickness="1" xmlns:my="clr-namespace:CameraControl.Controls">
     <UserControl.DataContext>
         <Devices:CameraDeviceManager/>
     </UserControl.DataContext>
@@ -59,6 +59,9 @@
                     </LinearGradientBrush>
                 </ProgressBar.Foreground>
             </ProgressBar>
+        </StackPanel>
+        <StackPanel Margin="1">
+            <CheckBox Content="SD_Ram" IsChecked="{Binding Path=SelectedCameraDevice.CaptureInSdRam}" ToolTip="Capture images direct to PC without using card"/>
         </StackPanel>
     </WrapPanel>
 </UserControl>

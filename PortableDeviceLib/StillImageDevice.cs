@@ -60,7 +60,7 @@ namespace PortableDeviceLib
     /// <param name="param1"></param>
     /// <param name="param2"></param>
     /// <returns>Zero if no error else error code</returns>
-    public int ExecuteWithNoData(int code, uint param1, uint param2)
+    public uint ExecuteWithNoData(int code, uint param1, uint param2)
     {
       IPortableDeviceValues commandValues =
         (IPortableDeviceValues) new PortableDeviceTypesLib.PortableDeviceValuesClass();
@@ -91,8 +91,57 @@ namespace PortableDeviceLib
       int pvalue = 0;
       try
       {
-        int pValue = 0;
-        results.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
+        int iValue = 0;
+        results.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out iValue);
+        if (iValue != 0)
+          return (uint)iValue;
+        uint pValue = 0;
+        results.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out pValue);
+        if (pValue != 0)
+          return pValue;
+      }
+      catch (Exception ex)
+      {
+      }
+      //results.GetSignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out pvalue);
+      return 0;
+    }
+
+    public uint ExecuteWithNoData(int code, uint param1)
+    {
+      IPortableDeviceValues commandValues =
+        (IPortableDeviceValues)new PortableDeviceTypesLib.PortableDeviceValuesClass();
+      IPortableDevicePropVariantCollection propVariant =
+        (IPortableDevicePropVariantCollection)new PortableDeviceTypesLib.PortableDevicePropVariantCollection();
+      IPortableDeviceValues results;
+
+      //commandValues.SetGuidValue(ref PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_CATEGORY, ref command.fmtid);
+      commandValues.SetGuidValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_CATEGORY,
+                                 PortableDevicePKeys.WPD_COMMAND_MTP_EXT_EXECUTE_COMMAND_WITHOUT_DATA_PHASE.fmtid);
+      commandValues.SetUnsignedIntegerValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_ID,
+                                            PortableDevicePKeys.WPD_COMMAND_MTP_EXT_EXECUTE_COMMAND_WITHOUT_DATA_PHASE.
+                                              pid);
+
+      tag_inner_PROPVARIANT vparam1 = new tag_inner_PROPVARIANT();
+      tag_inner_PROPVARIANT vparam2 = new tag_inner_PROPVARIANT();
+      UintToPropVariant(param1, out vparam1);
+      propVariant.Add(ref vparam1);
+
+      commandValues.SetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPERATION_CODE, (uint)code);
+
+      commandValues.SetIPortableDevicePropVariantCollectionValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPERATION_PARAMS, propVariant);
+
+      // According to documentation, first parameter should be 0 (see http://msdn.microsoft.com/en-us/library/dd375691%28v=VS.85%29.aspx)
+      this.portableDeviceClass.SendCommand(0, commandValues, out results);
+      int pvalue = 0;
+      try
+      {
+        int iValue = 0;
+        results.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out iValue);
+        if (iValue != 0)
+          return (uint)iValue;
+        uint pValue = 0;
+        results.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out pValue);
         if (pValue != 0)
           return pValue;
       }

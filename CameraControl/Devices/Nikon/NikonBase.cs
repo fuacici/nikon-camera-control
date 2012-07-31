@@ -25,6 +25,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_CMD_InitiateCapture = 0x100E;
     public const int CONST_CMD_InitiateCaptureRecInMedia = 0x9207;
     public const int CONST_CMD_AfAndCaptureRecInSdram = 0x90CB;
+    public const int CONST_CMD_InitiateCaptureRecInSdram = 0x90C0;
     public const int CONST_CMD_ChangeAfArea = 0x9205;
     public const int CONST_CMD_MfDrive = 0x9204;
     public const int CONST_CMD_GetDevicePropValue = 0x1015;
@@ -224,6 +225,17 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
+    private bool _captureInSdRam;
+    public bool CaptureInSdRam
+    {
+      get { return _captureInSdRam; }
+      set
+      {
+        _captureInSdRam = value;
+        NotifyPropertyChanged("CaptureInSdRam");
+      }
+    }
+
     private PropertyValue<int> _isoNumber;
     public PropertyValue<int> IsoNumber
     {
@@ -420,6 +432,7 @@ namespace CameraControl.Devices.Nikon
     public virtual bool Init(DeviceDescriptor deviceDescriptor)
     {
       HaveLiveView = true;
+      CaptureInSdRam = true;
       _stillImageDevice = new StillImageDevice(deviceDescriptor.WpdId);
       _stillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
       _stillImageDevice.DeviceEvent += _stillImageDevice_DeviceEvent;
@@ -841,7 +854,9 @@ namespace CameraControl.Devices.Nikon
       try
       {
         DeviceReady();
-        ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
+        ErrorCodes.GetException(CaptureInSdRam
+                                  ? _stillImageDevice.ExecuteWithNoData(CONST_CMD_AfAndCaptureRecInSdram)
+                                  : _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
       }
       catch (COMException comException)
       {
@@ -896,16 +911,23 @@ namespace CameraControl.Devices.Nikon
       lock (Locker)
       {
         DeviceReady();
-        byte oldval = 0;
-        byte[] val = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
-        if (val != null && val.Length > 0)
-          oldval = val[0];
-        ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] { (byte)4 },
-                                           CONST_PROP_AFModeSelect, -1));
-        ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF, 0x0000));
-        if (val != null && val.Length > 0)
-          ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] { oldval },
+        if(CaptureInSdRam)
+        {
+          ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_AfAndCaptureRecInSdram, 0xFFFFFFFF));
+        }
+        else
+        {
+          byte oldval = 0;
+          byte[] val = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
+          if (val != null && val.Length > 0)
+            oldval = val[0];
+          ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] { (byte)4 },
                                              CONST_PROP_AFModeSelect, -1));
+          ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF, 0x0000));
+          if (val != null && val.Length > 0)
+            ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] { oldval },
+                                               CONST_PROP_AFModeSelect, -1));
+        }
       }
     }
 
@@ -1069,7 +1091,7 @@ namespace CameraControl.Devices.Nikon
         for (int i = 0; i < eventCount; i++)
         {
           DeviceReady();
-          int eventCode = BitConverter.ToInt16(result, 6*i + 2);
+          uint eventCode = BitConverter.ToUInt16(result, 6*i + 2);
           ushort eventParam = BitConverter.ToUInt16(result, 6*i + 4);
           int longeventParam = BitConverter.ToInt32(result, 6 * i + 4);
           switch (eventCode)
@@ -1077,6 +1099,7 @@ namespace CameraControl.Devices.Nikon
             case CONST_Event_DevicePropChanged:
               ReadDeviceProperties(eventParam);
               break;
+            case CONST_Event_ObjectAddedInSdram:
             case CONST_Event_ObjectAdded:
               {
                 byte[] objectdata = _stillImageDevice.ExecuteReadData(CONST_CMD_GetObjectInfo, longeventParam);
