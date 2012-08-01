@@ -11,6 +11,8 @@ namespace CameraControl.Classes
     public event ValueChangedEventHandler ValueChanged;
     
     private Dictionary<string, T> _valuesDictionary;
+    private AsyncObservableCollection<T> _numericValues = new AsyncObservableCollection<T>();
+    private AsyncObservableCollection<string> _values = new AsyncObservableCollection<string>();
 
     private string _value;
     public string Value
@@ -52,12 +54,12 @@ namespace CameraControl.Classes
 
     public AsyncObservableCollection<string> Values
     {
-      get { return new AsyncObservableCollection<string>(_valuesDictionary.Keys); }
+      get { return _values; }
     }
 
     public AsyncObservableCollection<T> NumericValues
     {
-      get { return new AsyncObservableCollection<T>(_valuesDictionary.Values); }
+      get { return _numericValues; }
     }
 
     public PropertyValue()
@@ -116,6 +118,8 @@ namespace CameraControl.Classes
     {
       if (!_valuesDictionary.ContainsKey(key))
         _valuesDictionary.Add(key, value);
+      _values = new AsyncObservableCollection<string>(_valuesDictionary.Keys);
+      _numericValues = new AsyncObservableCollection<T>(_valuesDictionary.Values);
       NotifyPropertyChanged("Values");
     }
 

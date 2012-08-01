@@ -913,7 +913,7 @@ namespace CameraControl.Devices.Nikon
         DeviceReady();
         if(CaptureInSdRam)
         {
-          ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_AfAndCaptureRecInSdram, 0xFFFFFFFF));
+          ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF));
         }
         else
         {
@@ -923,7 +923,7 @@ namespace CameraControl.Devices.Nikon
             oldval = val[0];
           ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] { (byte)4 },
                                              CONST_PROP_AFModeSelect, -1));
-          ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF, 0x0000));
+          ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
           if (val != null && val.Length > 0)
             ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] { oldval },
                                                CONST_PROP_AFModeSelect, -1));
@@ -1131,8 +1131,8 @@ namespace CameraControl.Devices.Nikon
       {
         if (cod == ErrorCodes.MTP_Device_Busy || cod == 0x800700AA)
         {
-          Console.WriteLine("Device not ready");
-          Thread.Sleep(100);
+          //Console.WriteLine("Device not ready");
+          Thread.Sleep(50);
           DeviceReady();
         }
         else
