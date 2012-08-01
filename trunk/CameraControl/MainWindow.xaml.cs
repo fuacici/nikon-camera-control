@@ -418,8 +418,9 @@ namespace CameraControl
         {
           foreach (FileItem fileItem in filestodelete)
           {
-            Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fileItem.FileName, UIOption.OnlyErrorDialogs,
-                                                               RecycleOption.SendToRecycleBin);
+            if (File.Exists(fileItem.FileName))
+              Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fileItem.FileName, UIOption.OnlyErrorDialogs,
+                                                                 RecycleOption.SendToRecycleBin);
           }
           if (ImageLIst.Items.Count > 0)
             ImageLIst.SelectedIndex = 0;
