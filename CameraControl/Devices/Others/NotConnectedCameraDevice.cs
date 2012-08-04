@@ -40,6 +40,11 @@ namespace CameraControl.Devices.Others
 
     public int ExposureStatus { get; set; }
 
+    public bool GetCapability(CapabilityEnum capabilityEnum)
+    {
+      return false;
+    }
+
     public int Battery { get; set; }
 
     public byte LiveViewImageZoomRatio { get; set; }

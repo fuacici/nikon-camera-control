@@ -289,6 +289,11 @@ namespace CameraControl.Devices.Others
 
 
     private int _battery;
+    public bool GetCapability(CapabilityEnum capabilityEnum)
+    {
+      return false;
+    }
+
     public int Battery
     {
       get { return _battery; }
