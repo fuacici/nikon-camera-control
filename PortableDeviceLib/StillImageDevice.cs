@@ -40,7 +40,15 @@ namespace PortableDeviceLib
         int iValue = 0;
         results.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out iValue);
         if (iValue != 0)
-          return (uint)iValue;
+        {
+          // check if the device is busy, and after 10 ms seconds try again 
+          if (((uint) iValue) == PortableDeviceErrorCodes.ERROR_BUSY)
+          {
+            Thread.Sleep(10);
+            return ExecuteWithNoData(code);
+          }
+        }
+
         uint pValue = 0;
         results.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE,out pValue);
         if (pValue != 0)
@@ -460,12 +468,14 @@ namespace PortableDeviceLib
       pResults.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_NUM_BYTES_READ, out dataread);
       pResults.GetBufferValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_DATA, ptr, out cbBytesRead);
 
+      
       IntPtr tmpPtr = new IntPtr(Marshal.ReadInt64(ptr));
       byte[] res = new byte[(int)cbBytesRead];
-      for (int i = 0; i < cbBytesRead; i++)
-      {
-        res[i] = Marshal.ReadByte(tmpPtr, i);
-      }
+      System.Runtime.InteropServices.Marshal.Copy(tmpPtr, res, 0, (int) cbBytesRead);
+      //for (int i = 0; i < cbBytesRead; i++)
+      //{
+      //  res[i] = Marshal.ReadByte(tmpPtr, i);
+      //}
 
       pParameters.Clear();
       pResults.Clear();

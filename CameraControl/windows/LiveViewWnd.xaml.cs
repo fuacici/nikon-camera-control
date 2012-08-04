@@ -316,7 +316,7 @@ namespace CameraControl.windows
       }
       Thread thread = new Thread(new ThreadStart(delegate
                                                    {
-                                                     StartLiveView();
+                                                     //StartLiveView();
                                                      _timer.Start();
                                                    }));
       thread.Start();
@@ -484,6 +484,7 @@ namespace CameraControl.windows
       Thread.Sleep(100);
       try
       {
+        selectedPortableDevice.StopLiveView();
         selectedPortableDevice.TakePictureNoAf();
       }
       catch (DeviceException exception)
@@ -669,6 +670,7 @@ namespace CameraControl.windows
 
     private void SetFocus(int step)
     {
+      
       if (LockA)
       {
         if (FocusCounter + step < 0)
@@ -681,6 +683,7 @@ namespace CameraControl.windows
       }
       try
       {
+        selectedPortableDevice.StartLiveView();
         selectedPortableDevice.Focus(step);
         FocusCounter += step;
       }
@@ -733,21 +736,20 @@ namespace CameraControl.windows
         if (IsBusy)
         {
           FreezeImage = true;
-          StartLiveView();
           Thread.Sleep(300);
-          PhotoCount++;
+          StartLiveView();
           if (PhotoCount > 0)
           {
             SetFocus(FocusStep);
           }
-          Thread.Sleep(700);
+          PhotoCount++;
           GetLiveImage();
           //ServiceProvider.DeviceManager.SelectedCameraDevice.Focus(FocusStep);
-          Thread.Sleep(1000);
           if (PhotoCount <= PhotoNo)
           {
             if (!preview)
             {
+              ServiceProvider.DeviceManager.SelectedCameraDevice.StopLiveView();
               ServiceProvider.DeviceManager.SelectedCameraDevice.TakePictureNoAf();
             }
             else
@@ -811,14 +813,14 @@ namespace CameraControl.windows
 
       PointCollection points = new PointCollection();
       // first point (lower-left corner)
-      points.Add(new System.Windows.Point(0, max));
+      points.Add(new Point(0, max));
       // middle points
       for (int i = 0; i < values.Length; i++)
       {
-        points.Add(new System.Windows.Point(i, max - values[i]));
+        points.Add(new Point(i, max - values[i]));
       }
       // last point (lower-right corner)
-      points.Add(new System.Windows.Point(values.Length - 1, max));
+      points.Add(new Point(values.Length - 1, max));
       points.Freeze();
       return points;
     }

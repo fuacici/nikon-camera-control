@@ -809,9 +809,15 @@ namespace CameraControl.Devices.Nikon
     {
       lock (Locker)
       {
+        //check if the live view already is started if yes returning without doing anything
+        byte[] val = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_LiveViewStatus, -1);
+        if (val != null && val.Length > 0 && val[0] > 0)
+          return;
         DeviceReady();
         LiveViewImageZoomRatio = 0;
+        DeviceReady();
         ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_StartLiveView));
+        DeviceReady();
       }
     }
 
@@ -821,6 +827,7 @@ namespace CameraControl.Devices.Nikon
       {
         DeviceReady();
         ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_EndLiveView));
+        DeviceReady();
       }
     }
 
@@ -893,13 +900,14 @@ namespace CameraControl.Devices.Nikon
 
     public void Focus(int step)
     {
+      if (step == 0)
+        return;
       lock (Locker)
       {
         DeviceReady();
-        if (step > 0)
-          ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000001, (uint) step));
-        else
-          ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000002, (uint) -step));
+        ErrorCodes.GetException(step > 0
+                                  ? _stillImageDevice.ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000001, (uint) step)
+                                  : _stillImageDevice.ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000002, (uint) -step));
       }
     }
 
@@ -928,6 +936,7 @@ namespace CameraControl.Devices.Nikon
           if (val != null && val.Length > 0)
             oldval = val[0];
           SetProperty(CONST_CMD_SetDevicePropValue, new[] {(byte) 4}, CONST_PROP_AFModeSelect, -1);
+          DeviceReady();
           ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
           if (val != null && val.Length > 0)
             SetProperty(CONST_CMD_SetDevicePropValue, new[] {oldval}, CONST_PROP_AFModeSelect, -1);
@@ -1136,7 +1145,7 @@ namespace CameraControl.Devices.Nikon
         if (cod == ErrorCodes.MTP_Device_Busy || cod == 0x800700AA)
         {
           //Console.WriteLine("Device not ready");
-          Thread.Sleep(50);
+          //Thread.Sleep(50);
           DeviceReady();
         }
         else
