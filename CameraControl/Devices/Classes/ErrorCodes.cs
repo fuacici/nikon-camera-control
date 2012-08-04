@@ -21,6 +21,7 @@ namespace CameraControl.Devices.Classes
     public const uint WIA_ERROR_UNABLE_TO_FOCUS = 0x80004005;
     
     public const uint MTP_OK = 0x2001;
+    public const uint MTP_General_Error = 0x2002;
     public const uint MTP_Device_Busy = 0x2019;
     public const uint MTP_Set_Property_Not_Support = 0xA005;
     public const uint MTP_Store_Not_Available = 0x2013;
@@ -45,6 +46,8 @@ namespace CameraControl.Devices.Classes
         {
           case MTP_Device_Busy:
             throw new DeviceException("Device MTP error: Device is busy", code);
+          case MTP_General_Error:
+            throw new DeviceException("General error. No focus ?", code);
           case MTP_Store_Not_Available:
             throw new DeviceException("The card cannot be accessed", code);
           case MTP_Shutter_Speed_Bulb:

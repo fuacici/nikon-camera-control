@@ -346,7 +346,8 @@ Tag (hex)	Tag (dec)	IFD	Key	Type	Tag description
     {
       FileItem = item;
       IsLoaded = false;
-      DisplayImage = FileItem.Thumbnail;
+      if (DisplayImage == null)
+        DisplayImage = FileItem.Thumbnail;
     }
 
     private PointCollection ConvertToPointCollection(int[] values)
