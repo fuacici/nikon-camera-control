@@ -213,6 +213,7 @@ namespace CameraControl.Devices.Nikon
                                                 {0x8013, "[F] Constant AF servo"},
                                               };
     internal object Locker = new object(); // object used to lock multi hreaded mothods 
+    protected List<CapabilityEnum> Capabilities = new List<CapabilityEnum>();
 
     private bool _haveLiveView;
     public bool HaveLiveView
@@ -394,6 +395,11 @@ namespace CameraControl.Devices.Nikon
     }
 
     private int _battery;
+    public bool GetCapability(CapabilityEnum capabilityEnum)
+    {
+      return Capabilities.Contains(capabilityEnum);
+    }
+
     public int Battery
     {
       get { return _battery; }
@@ -921,12 +927,10 @@ namespace CameraControl.Devices.Nikon
           byte[] val = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
           if (val != null && val.Length > 0)
             oldval = val[0];
-          ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] { (byte)4 },
-                                             CONST_PROP_AFModeSelect, -1));
+          SetProperty(CONST_CMD_SetDevicePropValue, new[] {(byte) 4}, CONST_PROP_AFModeSelect, -1);
           ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
           if (val != null && val.Length > 0)
-            ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] { oldval },
-                                               CONST_PROP_AFModeSelect, -1));
+            SetProperty(CONST_CMD_SetDevicePropValue, new[] {oldval}, CONST_PROP_AFModeSelect, -1);
         }
       }
     }

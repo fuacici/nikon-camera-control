@@ -126,6 +126,7 @@
     </Compile>
     <Compile Include="Controls\ZoomBorder.cs" />
     <Compile Include="Devices\CameraDeviceManager.cs" />
+    <Compile Include="Devices\Classes\CapabilityEnum.cs" />
     <Compile Include="Devices\Classes\DeviceDescriptor.cs" />
     <Compile Include="Devices\Classes\DeviceDescriptorEnumerator.cs" />
     <Compile Include="Devices\Classes\DeviceException.cs" />
