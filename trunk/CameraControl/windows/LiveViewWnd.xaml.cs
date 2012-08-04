@@ -316,7 +316,8 @@ namespace CameraControl.windows
       }
       Thread thread = new Thread(new ThreadStart(delegate
                                                    {
-                                                     //StartLiveView();
+                                                     Thread.Sleep(300);
+                                                     StartLiveView();
                                                      _timer.Start();
                                                    }));
       thread.Start();
@@ -609,6 +610,8 @@ namespace CameraControl.windows
                                              ServiceProvider.Settings.Manager.PhotoTakenDone -= Manager_PhotoTaked;
                                              Thread.Sleep(100);
                                              SelectedPortableDevice.StopLiveView();
+                                             LockA = false;
+                                             LockB = false;
                                            }
                                            catch (Exception exception)
                                            {

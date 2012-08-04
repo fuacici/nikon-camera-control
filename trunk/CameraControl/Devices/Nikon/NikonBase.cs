@@ -925,22 +925,17 @@ namespace CameraControl.Devices.Nikon
       lock (Locker)
       {
         DeviceReady();
-        if(CaptureInSdRam)
-        {
-          ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF));
-        }
-        else
-        {
-          byte oldval = 0;
-          byte[] val = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
-          if (val != null && val.Length > 0)
-            oldval = val[0];
-          SetProperty(CONST_CMD_SetDevicePropValue, new[] {(byte) 4}, CONST_PROP_AFModeSelect, -1);
-          DeviceReady();
-          ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
-          if (val != null && val.Length > 0)
-            SetProperty(CONST_CMD_SetDevicePropValue, new[] {oldval}, CONST_PROP_AFModeSelect, -1);
-        }
+        byte oldval = 0;
+        byte[] val = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
+        if (val != null && val.Length > 0)
+          oldval = val[0];
+        SetProperty(CONST_CMD_SetDevicePropValue, new[] {(byte) 4}, CONST_PROP_AFModeSelect, -1);
+        DeviceReady();
+        ErrorCodes.GetException(CaptureInSdRam
+                                  ? _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF)
+                                  : _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
+        if (val != null && val.Length > 0)
+          SetProperty(CONST_CMD_SetDevicePropValue, new[] {oldval}, CONST_PROP_AFModeSelect, -1);
       }
     }
 
@@ -1117,6 +1112,8 @@ namespace CameraControl.Devices.Nikon
               {
                 byte[] objectdata = _stillImageDevice.ExecuteReadData(CONST_CMD_GetObjectInfo, longeventParam);
                 string filename = Encoding.Unicode.GetString(objectdata, 53, 12*2);
+                if (filename.Contains("\0"))
+                  filename = filename.Split('\0')[0];
                 PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
                 {
                   WiaImageItem = null,
