@@ -105,7 +105,7 @@
             </ListBox>
         </StackPanel>
         <ToolBar Grid.ColumnSpan="3" Name="toolBar1" Grid.Row="1">
-            <Button ToolTip="Take picture"  Height="30" Name="button3" Click="button3_Click" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5">
+            <Button ToolTip="Capture photo"  Height="30" Name="button3" Click="button3_Click" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5">
                 <Image Source="/CameraControl;component/Images/Camera.png"/>
             </Button>
             <Button Content="[BR]" ToolTip="Braketing"  Height="30" Name="btn_br" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_br_Click" />

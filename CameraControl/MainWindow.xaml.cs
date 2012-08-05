@@ -233,6 +233,19 @@ namespace CameraControl
 
       try
       {
+        if (ServiceProvider.DeviceManager.SelectedCameraDevice.ShutterSpeed.Value == "Bulb")
+        {
+          if (ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.Bulb))
+          {
+            BulbWnd wnd = new BulbWnd();
+            wnd.ShowDialog();
+          }
+          else
+          {
+            ServiceProvider.Settings.SystemMessage = "Bulb mode not supported !";
+            return;
+          }
+        }
         ServiceProvider.DeviceManager.SelectedCameraDevice.TakePicture();
       }
       catch (DeviceException exception)
