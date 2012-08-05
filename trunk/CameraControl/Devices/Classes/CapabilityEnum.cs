@@ -3,5 +3,6 @@
   public enum CapabilityEnum
   {
     LiveView,
+    Bulb
   }
 }
