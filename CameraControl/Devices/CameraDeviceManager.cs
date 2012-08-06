@@ -48,7 +48,7 @@ namespace CameraControl.Devices
                         {"D3200", typeof (NikonD3200)},
                         {"D4", typeof (NikonBase)},
                         {"D40", typeof (NikonD40)},
-                        {"D5100", typeof (NikonBase)},
+                        {"D5100", typeof (NikonD800)},
                         {"D5000", typeof (NikonD90)},
                         {"D60", typeof (NikonD40)},
                         {"D70", typeof (NikonD40)},
@@ -56,8 +56,8 @@ namespace CameraControl.Devices
                         {"D700", typeof (NikonD3X)},
                         {"D7000", typeof (NikonBase)},
                         {"D80", typeof (NikonD80)},
-                        {"D800", typeof (NikonBase)},
-                        {"D800E", typeof (NikonBase)},
+                        {"D800", typeof (NikonD800)},
+                        {"D800e", typeof (NikonD800)},
                         {"D90", typeof (NikonD90)},
                       };
       SelectedCameraDevice = new NotConnectedCameraDevice();

@@ -734,15 +734,15 @@ namespace CameraControl.Devices.Others
       //throw new NotImplementedException();
     }
 
-    public virtual void TakePictureNoAf()
+    public virtual void CapturePhotoNoAf()
     {
       lock (Locker)
       {
-          TakePicture();
+          CapturePhoto();
       }
     }
 
-    public virtual void TakePicture()
+    public virtual void CapturePhoto()
     {
       Monitor.Enter(Locker);
       try
@@ -757,6 +757,11 @@ namespace CameraControl.Devices.Others
       {
         Monitor.Exit(Locker);
       }
+    }
+
+    public void EndCapture()
+    {
+      throw new NotImplementedException();
     }
 
     public virtual void Close()

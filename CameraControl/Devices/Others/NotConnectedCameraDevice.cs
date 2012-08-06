@@ -85,14 +85,19 @@ namespace CameraControl.Devices.Others
      
     }
 
-    public void TakePictureNoAf()
+    public void CapturePhotoNoAf()
     {
       
     }
 
-    public void TakePicture()
+    public void CapturePhoto()
     {
       
+    }
+
+    public void EndCapture()
+    {
+      throw new NotImplementedException();
     }
 
     public void Close()

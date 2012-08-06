@@ -861,7 +861,7 @@ namespace CameraControl.Devices.Nikon
       return viewData;
     }
 
-    public  void TakePicture()
+    public  void CapturePhoto()
     {
       Monitor.Enter(Locker);
       try
@@ -879,6 +879,11 @@ namespace CameraControl.Devices.Nikon
       {
         Monitor.Exit(Locker); 
       }
+    }
+
+    public virtual void EndCapture()
+    {
+      throw new NotImplementedException();
     }
 
     protected virtual void GetAditionalLIveViewData(LiveViewData viewData, byte[] result)
@@ -920,7 +925,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public virtual void TakePictureNoAf()
+    public virtual void CapturePhotoNoAf()
     {
       lock (Locker)
       {
@@ -1133,7 +1138,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    private void DeviceReady()
+    public void DeviceReady()
     {
       //uint cod = Convert.ToUInt32(_stillImageDevice.ExecuteWithNoData(CONST_CMD_DeviceReady));
       ulong cod = (ulong)_stillImageDevice.ExecuteWithNoData(CONST_CMD_DeviceReady);

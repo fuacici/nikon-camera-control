@@ -3,20 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:CameraControl="clr-namespace:CameraControl" xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
-        Title="Bulb" Height="182" Width="441" Background="{DynamicResource WindowBackgroundBrush}" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
+        Title="Bulb" Height="227" Width="441" Background="{DynamicResource WindowBackgroundBrush}" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:my="clr-namespace:CameraControl.windows" Closed="Window_Closed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="114*" />
             <RowDefinition Height="29*" />
         </Grid.RowDefinitions>
-        <Button Content="Start Capture" Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="btn_start" VerticalAlignment="Top" Width="75" />
-        <Button Content="Stop Capture" Height="23" HorizontalAlignment="Right" Margin="0,12,12,0" Name="btn_stop" VerticalAlignment="Top" Width="75" />
-        <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="225,15,0,0" Name="upd_time" VerticalAlignment="Top" Width="78" Minimum="30" Maximum="6000" Value="60" />
+        <Button Content="Start Capture" Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="btn_start" VerticalAlignment="Top" Width="75" Click="btn_start_Click" />
+        <Button Content="Stop Capture" Height="23" HorizontalAlignment="Right" Margin="0,12,12,0" Name="btn_stop" VerticalAlignment="Top" Width="75" Click="btn_stop_Click" />
+        <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="225,15,0,0" Name="upd_time" VerticalAlignment="Top" Width="78" Minimum="30" Maximum="6000" Value="{Binding Path=CaptureTime, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" />
         <Label Content="Capture time (sec)" Height="28" HorizontalAlignment="Left" Margin="116,12,0,0" Name="label1" VerticalAlignment="Top" />
-        <Label Content="" Name="lbl_status" Grid.Row="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-        <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="225,54,0,0" Name="upd_num" VerticalAlignment="Top" Width="78" Minimum="1" Maximum="10000" />
+        <Label Content="{Binding Source={x:Static CameraControl:ServiceProvider.Settings}, Path=SystemMessage}" Name="lbl_status" Grid.Row="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+        <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="223,54,0,0" Name="upd_num" VerticalAlignment="Top" Width="78" Minimum="1" Maximum="10000" Value="{Binding Path=NumOfPhotos, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" />
         <Label Content="Number of photos" Height="28" HorizontalAlignment="Left" Margin="12,46,0,0" Name="label2" VerticalAlignment="Top" />
         <Label Content="Time berween shots" Height="28" HorizontalAlignment="Left" Margin="12,77,0,0" Name="label3" VerticalAlignment="Top" />
-        <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="227,85,0,0" Name="upd_time" VerticalAlignment="Top" Width="76" Minimum="0" Maximum="6000" />
+        <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="225,85,0,0" Name="upd_waittime" VerticalAlignment="Top" Width="76" Minimum="0" Maximum="6000" Value="{Binding Path=WaitTime, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}"/>
+        <CheckBox Content="Don't autofocus" Height="16" HorizontalAlignment="Left" Margin="19,111,0,0" Name="checkBox1" VerticalAlignment="Top" IsChecked="{Binding Path=NoAutofocus, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" />
     </Grid>
 </Window>
