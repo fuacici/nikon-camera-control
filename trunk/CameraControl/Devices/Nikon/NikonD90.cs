@@ -35,7 +35,7 @@ namespace CameraControl.Devices.Nikon
     /// Take picture with no autofocus
     /// If live view runnig the live view is stoped after done restarted
     /// </summary>
-    public override void TakePictureNoAf()
+    public override void CapturePhotoNoAf()
     {
       lock (Locker)
       {

@@ -156,9 +156,9 @@ namespace CameraControl.Classes
         {
           _timer.Enabled = false;
           if (NoAutofocus)
-            ServiceProvider.DeviceManager.SelectedCameraDevice.TakePictureNoAf();
+            ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhotoNoAf();
           else
-            ServiceProvider.DeviceManager.SelectedCameraDevice.TakePicture();
+            ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
           //_timer.Enabled = true;
         }
         catch (DeviceException exception)

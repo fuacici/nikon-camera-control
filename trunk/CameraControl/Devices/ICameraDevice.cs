@@ -33,8 +33,13 @@ namespace CameraControl.Devices
     void AutoFocus();
     void Focus(int step);
     void Focus(int x, int y);
-    void TakePictureNoAf();
-    void TakePicture();
+    void CapturePhotoNoAf();
+    void CapturePhoto();
+
+    /// <summary>
+    /// Support only if capability Bulb is specified
+    /// </summary>
+    void EndCapture();
     void Close();
     void ReadDeviceProperties(int prop);
     void TransferFile(object o, string filename);

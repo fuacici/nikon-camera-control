@@ -486,7 +486,7 @@ namespace CameraControl.windows
       try
       {
         selectedPortableDevice.StopLiveView();
-        selectedPortableDevice.TakePictureNoAf();
+        selectedPortableDevice.CapturePhotoNoAf();
       }
       catch (DeviceException exception)
       {
@@ -753,7 +753,7 @@ namespace CameraControl.windows
             if (!preview)
             {
               ServiceProvider.DeviceManager.SelectedCameraDevice.StopLiveView();
-              ServiceProvider.DeviceManager.SelectedCameraDevice.TakePictureNoAf();
+              ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhotoNoAf();
             }
             else
             {

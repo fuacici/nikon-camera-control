@@ -10,9 +10,9 @@ namespace CameraControl.Devices.Nikon
   
   class NikonD300 : NikonD3X
   {
-    public override void TakePictureNoAf()
+    public override void CapturePhotoNoAf()
     {
-      base.TakePicture();
+      base.CapturePhoto();
     }
 
   }

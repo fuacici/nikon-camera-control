@@ -219,7 +219,7 @@ namespace CameraControl
 
     private void button3_Click(object sender, RoutedEventArgs e)
     {
-
+       
       if (!ServiceProvider.Settings.DefaultSession.TimeLapse.IsDisabled)
       {
         if (
@@ -239,6 +239,7 @@ namespace CameraControl
           {
             BulbWnd wnd = new BulbWnd();
             wnd.ShowDialog();
+            return;
           }
           else
           {
@@ -246,7 +247,7 @@ namespace CameraControl
             return;
           }
         }
-        ServiceProvider.DeviceManager.SelectedCameraDevice.TakePicture();
+        ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
       }
       catch (DeviceException exception)
         {

@@ -81,9 +81,9 @@ namespace CameraControl.windows
                                                          try
                                                          {
                                                            if(DisbleAutofocus)
-                                                             connectedDevice.TakePictureNoAf();
+                                                             connectedDevice.CapturePhotoNoAf();
                                                            else
-                                                             connectedDevice.TakePicture();
+                                                             connectedDevice.CapturePhoto();
                                                            Thread.Sleep(WaitSec*1000);
                                                          }
                                                          catch (COMException exception)

@@ -52,7 +52,7 @@ namespace CameraControl.Classes
           try
           {
             ServiceProvider.DeviceManager.SelectedCameraDevice.
-              TakePictureNoAf();
+              CapturePhotoNoAf();
           }
           catch (Exception)
           {
@@ -133,7 +133,7 @@ namespace CameraControl.Classes
         try
         {
           ServiceProvider.DeviceManager.SelectedCameraDevice.
-            TakePicture();
+            CapturePhoto();
         }
         catch (Exception)
         {

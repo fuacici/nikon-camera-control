@@ -77,7 +77,7 @@ namespace CameraControl.Classes
           IsBusy = true;
           ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue(ExposureValues[Index]);
           //Thread.Sleep(100);
-          ServiceProvider.DeviceManager.SelectedCameraDevice.TakePicture();
+          ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
           //Thread.Sleep(100);
           Index++;
         }
@@ -99,7 +99,7 @@ namespace CameraControl.Classes
           IsBusy = true;
           ServiceProvider.DeviceManager.SelectedCameraDevice.ShutterSpeed.SetValue(ShutterValues[Index]);
           //Thread.Sleep(100);
-          ServiceProvider.DeviceManager.SelectedCameraDevice.TakePicture();
+          ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
           //Thread.Sleep(100);
           Index++;
         }
@@ -121,7 +121,7 @@ namespace CameraControl.Classes
           //Thread.Sleep(100);
           ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue(ExposureValues[Index]);
           //Thread.Sleep(100);
-          ServiceProvider.DeviceManager.SelectedCameraDevice.TakePictureNoAf();
+          ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhotoNoAf();
           //Thread.Sleep(100);
           Index++;
         }
@@ -138,7 +138,7 @@ namespace CameraControl.Classes
           //Thread.Sleep(100);
           ServiceProvider.DeviceManager.SelectedCameraDevice.ShutterSpeed.SetValue(ShutterValues[Index]);
           //Thread.Sleep(100);
-          ServiceProvider.DeviceManager.SelectedCameraDevice.TakePictureNoAf();
+          ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhotoNoAf();
           //Thread.Sleep(100);
           Index++;
         }

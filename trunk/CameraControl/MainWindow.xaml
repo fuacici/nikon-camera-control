@@ -72,7 +72,7 @@
         <StackPanel Grid.Column="1" Grid.Row="3" Margin="41,0,0,0">
 
             <StackPanel  Orientation="Horizontal" Margin="10,0,0,0">
-                <Label Content="{Binding Path=SystemMessage }" FontWeight="Bold" />
+                <Label Content="{Binding Path=SystemMessage }" FontWeight="Bold" HorizontalContentAlignment="Right" />
             </StackPanel>
         </StackPanel>
         <Label Content="Loading ..." Name="lbl_loading" Grid.Column="1" Grid.Row="2" Margin="338,2,200,0" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="{Binding Path=ImageLoading}" FontSize="25" FontWeight="ExtraBold">
