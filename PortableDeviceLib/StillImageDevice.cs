@@ -42,11 +42,11 @@ namespace PortableDeviceLib
         if (iValue != 0)
         {
           // check if the device is busy, and after 10 ms seconds try again 
-          if (((uint) iValue) == PortableDeviceErrorCodes.ERROR_BUSY)
-          {
-            Thread.Sleep(10);
-            return ExecuteWithNoData(code);
-          }
+          //if (((uint) iValue) == PortableDeviceErrorCodes.ERROR_BUSY)
+          //{
+          //  Thread.Sleep(10);
+          //  return ExecuteWithNoData(code);
+          //}
         }
 
         uint pValue = 0;

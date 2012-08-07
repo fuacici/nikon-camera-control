@@ -764,6 +764,16 @@ namespace CameraControl.Devices.Others
       throw new NotImplementedException();
     }
 
+    public void LockCamera()
+    {
+      throw new NotImplementedException();
+    }
+
+    public void UnLockCamera()
+    {
+      throw new NotImplementedException();
+    }
+
     public virtual void Close()
     {
       if (Device != null)

@@ -35,6 +35,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_CMD_DeviceReady = 0x90C8;
     public const int CONST_CMD_GetObjectInfo = 0x1008;
     public const int CONST_CMD_GetObject = 0x1009;
+    public const int CONST_CMD_ChangeCameraMode = 0x90C2;
 
     public const int CONST_PROP_Fnumber = 0x5007;
     public const int CONST_PROP_ExposureIndex = 0x500F;
@@ -442,6 +443,7 @@ namespace CameraControl.Devices.Nikon
       _stillImageDevice = new StillImageDevice(deviceDescriptor.WpdId);
       _stillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
       _stillImageDevice.DeviceEvent += _stillImageDevice_DeviceEvent;
+      DeviceReady();
       DeviceName = _stillImageDevice.Model;
       Manufacturer = _stillImageDevice.Manufacturer;
       InitIso();
@@ -537,14 +539,19 @@ namespace CameraControl.Devices.Nikon
 
     private void InitShutterSpeed()
     {
+      ShutterSpeed = new PropertyValue<long>();
+      ShutterSpeed.ValueChanged += ShutterSpeed_ValueChanged;
+      ReInitShutterSpeed();
+    }
+
+    private void ReInitShutterSpeed()
+    {
       lock (Locker)
       {
         DeviceReady();
         try
         {
           byte datasize = 4;
-          ShutterSpeed = new PropertyValue<long>();
-          ShutterSpeed.ValueChanged += ShutterSpeed_ValueChanged;
           ShutterSpeed.Clear();
           byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureTime);
           int type = BitConverter.ToInt16(result, 2);
@@ -559,12 +566,11 @@ namespace CameraControl.Devices.Nikon
         }
         catch (Exception ex)
         {
-          
-         
+
+
         }
       }
     }
-
     void ShutterSpeed_ValueChanged(object sender, string key, long val)
     {
       SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
@@ -605,6 +611,7 @@ namespace CameraControl.Devices.Nikon
         case "M":
           ShutterSpeed.IsEnabled = true;
           FNumber.IsEnabled = true;
+          ReInitShutterSpeed();
           break;
         case "P":
           ShutterSpeed.IsEnabled = false;
@@ -622,7 +629,7 @@ namespace CameraControl.Devices.Nikon
           ShutterSpeed.IsEnabled = false;
           FNumber.IsEnabled = false;
           break;
-      } 
+      }
     }
 
     private void InitFNumber()
@@ -882,6 +889,16 @@ namespace CameraControl.Devices.Nikon
     }
 
     public virtual void EndCapture()
+    {
+      throw new NotImplementedException();
+    }
+
+    public virtual void LockCamera()
+    {
+      throw new NotImplementedException();
+    }
+
+    public virtual void UnLockCamera()
     {
       throw new NotImplementedException();
     }
