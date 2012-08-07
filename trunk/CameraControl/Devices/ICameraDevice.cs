@@ -40,6 +40,9 @@ namespace CameraControl.Devices
     /// Support only if capability Bulb is specified
     /// </summary>
     void EndCapture();
+
+    void LockCamera();
+    void UnLockCamera();
     void Close();
     void ReadDeviceProperties(int prop);
     void TransferFile(object o, string filename);

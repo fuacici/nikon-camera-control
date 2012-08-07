@@ -108,7 +108,7 @@ namespace CameraControl.windows
         StopCapture();
         _photoCount++;
         _waitSecs = 0;
-        if (_photoCount <= NumOfPhotos)
+        if (_photoCount < NumOfPhotos)
         {
           _waitTimer.Start();
         }
@@ -125,6 +125,8 @@ namespace CameraControl.windows
     {
       try
       {
+        ServiceProvider.Log.Debug("Bulb capture started");
+        CameraDevice.LockCamera();
         if (NoAutofocus)
         {
           CameraDevice.CapturePhotoNoAf();
@@ -137,6 +139,7 @@ namespace CameraControl.windows
       catch (Exception exception)
       {
         ServiceProvider.Settings.SystemMessage = exception.Message;
+        ServiceProvider.Log.Error("Bulb start", exception);
       }
       _waitSecs = 0;
       _captureSecs = 0;
@@ -163,6 +166,7 @@ namespace CameraControl.windows
       _captureTimer.Stop();
       _waitTimer.Stop();
       ServiceProvider.Settings.SystemMessage = "Capture stoped";
+      ServiceProvider.Log.Debug("Bulb capture stoped");
     }
 
     private void StopCapture()
@@ -170,18 +174,24 @@ namespace CameraControl.windows
       try
       {
         CameraDevice.EndCapture();
+        CameraDevice.UnLockCamera();
         ServiceProvider.Settings.SystemMessage = "Capture done";
+        ServiceProvider.Log.Debug("Bulb capture done");
       }
       catch (Exception exception)
       {
         ServiceProvider.Settings.SystemMessage = exception.Message;
+        ServiceProvider.Log.Error("Bulb done",exception);
       }
     }
 
     private void Window_Closed(object sender, EventArgs e)
     {
       if (_captureTimer.Enabled)
+      {
         StopCapture();
+        CameraDevice.UnLockCamera();
+      }
       _captureTimer.Stop();
       _waitTimer.Stop();
     }

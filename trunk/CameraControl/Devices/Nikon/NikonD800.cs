@@ -23,7 +23,16 @@ namespace CameraControl.Devices.Nikon
         ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_TerminateCapture));
         DeviceReady();
       }
+    }
 
+    public override void LockCamera()
+    {
+      _stillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 1);  
+    }
+
+    public override void UnLockCamera()
+    {
+      _stillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 0);
     }
 
   }
