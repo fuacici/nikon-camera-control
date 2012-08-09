@@ -137,6 +137,7 @@
     <Compile Include="Devices\Nikon\NikonD300.cs" />
     <Compile Include="Devices\Nikon\NikonD3200.cs" />
     <Compile Include="Devices\Nikon\NikonD3X.cs" />
+    <Compile Include="Devices\Nikon\NikonD4.cs" />
     <Compile Include="Devices\Nikon\NikonD40.cs" />
     <Compile Include="Devices\Nikon\NikonBase.cs" />
     <Compile Include="Devices\Nikon\NikonD80.cs" />

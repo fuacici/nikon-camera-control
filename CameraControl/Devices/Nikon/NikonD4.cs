@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using CameraControl.Devices.Classes;
 
 namespace CameraControl.Devices.Nikon
 {
-  public class NikonD800 : NikonBase
+  public class NikonD4 : NikonBase
   {
     public const int CONST_CMD_TerminateCapture = 0x920C;
 
@@ -22,7 +25,7 @@ namespace CameraControl.Devices.Nikon
       _stillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 1);
       SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt16) 0x0001),
                   CONST_PROP_ExposureProgramMode, -1);
-      SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt32)0xFFFFFFFF),
+      SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt32) 0xFFFFFFFF),
                   CONST_PROP_ExposureTime, -1);
 
       ErrorCodes.GetException(CaptureInSdRam
@@ -45,13 +48,12 @@ namespace CameraControl.Devices.Nikon
 
     public override void LockCamera()
     {
-      _stillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 1);  
+      _stillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 1);
     }
 
     public override void UnLockCamera()
     {
       _stillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 0);
     }
-
   }
 }
