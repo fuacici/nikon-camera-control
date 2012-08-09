@@ -127,14 +127,15 @@ namespace CameraControl.windows
       {
         ServiceProvider.Log.Debug("Bulb capture started");
         CameraDevice.LockCamera();
-        if (NoAutofocus)
-        {
-          CameraDevice.CapturePhotoNoAf();
-        }
-        else
-        {
-          CameraDevice.CapturePhoto();
-        }
+        //if (NoAutofocus)
+        //{
+        //  CameraDevice.CapturePhotoNoAf();
+        //}
+        //else
+        //{
+        //  CameraDevice.CapturePhoto();
+        //}
+        CameraDevice.StartBulbMode();
       }
       catch (Exception exception)
       {
@@ -173,8 +174,7 @@ namespace CameraControl.windows
     {
       try
       {
-        CameraDevice.EndCapture();
-        CameraDevice.UnLockCamera();
+        CameraDevice.EndBulbMode();
         ServiceProvider.Settings.SystemMessage = "Capture done";
         ServiceProvider.Log.Debug("Bulb capture done");
       }

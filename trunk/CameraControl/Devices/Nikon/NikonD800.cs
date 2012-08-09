@@ -1,4 +1,5 @@
-﻿using CameraControl.Devices.Classes;
+﻿using System;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.Devices.Nikon
 {
@@ -15,13 +16,30 @@ namespace CameraControl.Devices.Nikon
       return res;
     }
 
-    public override void EndCapture()
+    public override void StartBulbMode()
+    {
+      DeviceReady();
+      _stillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 1);
+      SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt16) 0x0001),
+                  CONST_PROP_ExposureProgramMode, -1);
+      SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt32)0xFFFFFFFF),
+                  CONST_PROP_ExposureTime, -1);
+
+      ErrorCodes.GetException(CaptureInSdRam
+                                ? _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF,
+                                                                      0x0001)
+                                : _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF,
+                                                                      0x0000));
+    }
+
+    public override void EndBulbMode()
     {
       lock (Locker)
       {
         DeviceReady();
         ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_TerminateCapture));
         DeviceReady();
+        _stillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 0);
       }
     }
 
