@@ -888,7 +888,12 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public virtual void EndCapture()
+    public virtual void EndBulbMode()
+    {
+      throw new NotImplementedException();
+    }
+
+    public virtual void StartBulbMode()
     {
       throw new NotImplementedException();
     }
@@ -1174,7 +1179,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    private void SetProperty(int code, byte[] data, int param1, int param2)
+    protected void SetProperty(int code, byte[] data, int param1, int param2)
     {
       bool retry = false;
       int retrynum = 0;

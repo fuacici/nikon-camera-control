@@ -95,7 +95,12 @@ namespace CameraControl.Devices.Others
       
     }
 
-    public void EndCapture()
+    public void EndBulbMode()
+    {
+      throw new NotImplementedException();
+    }
+
+    public void StartBulbMode()
     {
       throw new NotImplementedException();
     }

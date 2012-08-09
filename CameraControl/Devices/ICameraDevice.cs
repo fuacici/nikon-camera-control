@@ -39,7 +39,9 @@ namespace CameraControl.Devices
     /// <summary>
     /// Support only if capability Bulb is specified
     /// </summary>
-    void EndCapture();
+    void EndBulbMode();
+
+    void StartBulbMode();
 
     void LockCamera();
     void UnLockCamera();
