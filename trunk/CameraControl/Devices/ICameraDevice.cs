@@ -20,6 +20,7 @@ namespace CameraControl.Devices
     string DeviceName { get; set; }
     string Manufacturer { get; set; }
     string SerialNumber { get; set; }
+    string DisplayName { get; set; }
     int	ExposureStatus { get; set; }
     bool GetCapability(CapabilityEnum capabilityEnum);
 
