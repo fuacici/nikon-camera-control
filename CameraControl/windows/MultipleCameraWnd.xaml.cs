@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -24,10 +25,30 @@ namespace CameraControl.windows
   public partial class MultipleCameraWnd : Window,IWindow
   {
     public bool DisbleAutofocus { get; set; }
+    public int DelaySec { get; set; }
     public int WaitSec { get; set; }
+    public int NumOfPhotos { get; set; }
+
+    private System.Timers.Timer _timer = new System.Timers.Timer(1000);
+    private int _secounter = 0;
+    private int _photocounter = 0;
+
     public MultipleCameraWnd()
     {
       InitializeComponent();
+      _timer.Elapsed += new ElapsedEventHandler(_timer_Elapsed);
+    }
+
+    void _timer_Elapsed(object sender, ElapsedEventArgs e)
+    {
+      _secounter++;
+      if(_secounter>WaitSec)
+      {
+        WaitSec = 0;
+        _timer.Stop();
+        CapturePhotos();
+      }
+      ServiceProvider.Settings.SystemMessage = string.Format("Waiting {0})", _secounter);
     }
 
     #region Implementation of IWindow
@@ -72,33 +93,61 @@ namespace CameraControl.windows
 
     private void btn_shot_Click(object sender, RoutedEventArgs e)
     {
+      _secounter = 0;
+      _photocounter = 0;
+      _timer.Start();
+    }
+
+    private void CapturePhotos()
+    {
+      _photocounter++;
+      ServiceProvider.Settings.SystemMessage = string.Format("Capture started {0}", _photocounter);
       Thread thread = new Thread(new ThreadStart(delegate
-                                                   {
-                                                     try
-                                                     {
-                                                       foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices)
-                                                       {
-                                                         try
-                                                         {
-                                                           if(DisbleAutofocus)
-                                                             connectedDevice.CapturePhotoNoAf();
-                                                           else
-                                                             connectedDevice.CapturePhoto();
-                                                           Thread.Sleep(WaitSec*1000);
-                                                         }
-                                                         catch (COMException exception)
-                                                         {
-                                                           ServiceProvider.Log.Error(exception);
-                                                           throw;
-                                                         }
-                                                       }
-                                                     }
-                                                     catch (Exception exception)
-                                                     {
-                                                       ServiceProvider.Log.Error(exception);
-                                                     }
-                                                   }));
+      {
+        try
+        {
+          foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices)
+          {
+            try
+            {
+              if (DisbleAutofocus)
+                connectedDevice.CapturePhotoNoAf();
+              else
+                connectedDevice.CapturePhoto();
+              Thread.Sleep(DelaySec * 1000);
+            }
+            catch (COMException exception)
+            {
+              ServiceProvider.Log.Error(exception);
+              throw;
+            }
+          }
+        }
+        catch (Exception exception)
+        {
+          ServiceProvider.Log.Error(exception);
+        }
+        if (_photocounter < NumOfPhotos)
+          _timer.Start();
+        else
+        {
+          StopCapture();
+        }
+      }));
       thread.Start();
     }
+
+    private void btn_stop_Click(object sender, RoutedEventArgs e)
+    {
+      _timer.Stop();
+      _photocounter = NumOfPhotos;
+      StopCapture();
+    }
+
+    private void StopCapture()
+    {
+      ServiceProvider.Settings.SystemMessage = "All captures done !";
+    }
+
   }
 }

@@ -4,13 +4,18 @@
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
         Background="{DynamicResource WindowBackgroundBrush}"
-        Title="Multiple camera support" Height="188" Width="326" xmlns:my="clr-namespace:Xceed.Wpf.Toolkit.Chromes;assembly=WPFToolkit.Extended" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" Closing="Window_Closing" xmlns:my1="clr-namespace:CameraControl.windows"
-        xmlns:CameraControl="clr-namespace:CameraControl" WindowStartupLocation="CenterOwner">
+        Title="Multiple camera support" Height="236" Width="367" xmlns:my="clr-namespace:Xceed.Wpf.Toolkit.Chromes;assembly=WPFToolkit.Extended" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" Closing="Window_Closing" xmlns:my1="clr-namespace:CameraControl.windows"
+        xmlns:CameraControl="clr-namespace:CameraControl" WindowStartupLocation="CenterScreen">
     <Grid>
         <Button Content="Capture photos" Height="54" HorizontalAlignment="Left" Margin="17,22,0,0" Name="btn_shot" VerticalAlignment="Top" Width="154" Click="btn_shot_Click" />
-        <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="193,56,0,0" Name="int_wait" VerticalAlignment="Top" Width="62" ToolTip="Wait beetven cameras shots in seconds " Minimum="0" Maximum="10" Value="{Binding Path=WaitSec, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:MultipleCameraWnd, AncestorLevel=1}}"/>
-        <Label Content="Wait (sec)" HorizontalAlignment="Left" Margin="193,36,0,85" Name="label1" />
-        <Label Content="" Height="37" HorizontalAlignment="Left" Margin="8,112,0,0" VerticalAlignment="Top" Width="284" Name="lbl_message"/>
-        <CheckBox Content="Disable autofocus" Height="16" HorizontalAlignment="Left" Margin="17,90,0,0" Name="chk_noautofocus" VerticalAlignment="Top" IsChecked="{Binding Path=DisbleAutofocus, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:MultipleCameraWnd, AncestorLevel=1}}" />
+        <xctk:IntegerUpDown Margin="191,22,30,0" Name="int_wait" VerticalAlignment="Top" ToolTip="Wait beetven cameras shots in seconds " Minimum="0" Maximum="1000" Value="{Binding Path=WaitSec, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:MultipleCameraWnd, AncestorLevel=1}}"/>
+        <Label Content="Delay (sec)" ToolTip="Delay between camera shouts" HorizontalAlignment="Left" Margin="191,2,0,0" Name="label1" Height="28" VerticalAlignment="Top" />
+        <Label Content="{Binding Source={x:Static CameraControl:ServiceProvider.Settings}, Path=SystemMessage}" Margin="31,0,30,12" Name="lbl_message" Height="28" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+        <CheckBox Content="Disable autofocus" Height="16" HorizontalAlignment="Left" Margin="17,126,0,0" Name="chk_noautofocus" VerticalAlignment="Top" IsChecked="{Binding Path=DisbleAutofocus, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:MultipleCameraWnd, AncestorLevel=1}}" />
+        <xctk:IntegerUpDown Margin="191,68,30,0" Name="integerUpDown1" VerticalAlignment="Top" Value="{Binding Path=NumOfPhotos, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:MultipleCameraWnd, AncestorLevel=1}}" ShowButtonSpinner="True" Maximum="10000" Minimum="1" />
+        <Label Content="Number of captures" Height="28" HorizontalAlignment="Left" Margin="191,48,0,0" Name="label2" VerticalAlignment="Top" />
+        <xctk:IntegerUpDown Margin="191,111,30,0" Name="integerUpDown2" VerticalAlignment="Top" Value="{Binding Path=WaitSec, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:MultipleCameraWnd, AncestorLevel=1}}" Minimum="0" Maximum="100000" />
+        <Label Content="Wait time (sec)" Height="28" HorizontalAlignment="Left" Margin="191,90,0,0" Name="label3" VerticalAlignment="Top" ToolTip="Wait time between capture circles" />
+        <Button Content="Stop" Height="23" HorizontalAlignment="Left" Margin="17,90,0,0" Name="btn_stop" VerticalAlignment="Top" Width="154" Click="btn_stop_Click" />
     </Grid>
 </Window>
