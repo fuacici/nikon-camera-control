@@ -140,7 +140,7 @@
                 <MenuItem Header="Connected cameras" ItemsSource="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" >
                     <MenuItem.ItemTemplate>
                         <DataTemplate>
-                            <MenuItem Header="{Binding Path=DeviceName}" 
+                            <MenuItem Header="{Binding Path=DisplayName}" 
                                       Command="{Binding Path=SelectDeviceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" 
                                       CommandParameter="{Binding}" IsEnabled="{Binding Path=IsConnected}" />
                         </DataTemplate>

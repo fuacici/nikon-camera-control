@@ -38,6 +38,8 @@ namespace CameraControl.Devices.Others
 
     public string SerialNumber{ get; set; }
 
+    public string DisplayName { get; set; }
+
     public int ExposureStatus { get; set; }
 
     public bool GetCapability(CapabilityEnum capabilityEnum)

@@ -372,6 +372,23 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
+    private string _displayName;
+    public string DisplayName
+    {
+      get
+      {
+        if (string.IsNullOrEmpty(_displayName))
+          return DeviceName + " (" + SerialNumber + ")";
+        return _displayName;
+      }
+      set
+      {
+        _displayName = value;
+        NotifyPropertyChanged("DisplayName");
+      }
+    }
+
+
     private int _exposureStatus;
     public int ExposureStatus
     {

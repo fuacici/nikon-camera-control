@@ -114,7 +114,7 @@ namespace CameraControl.windows
                 connectedDevice.CapturePhotoNoAf();
               else
                 connectedDevice.CapturePhoto();
-              Thread.Sleep(DelaySec * 1000);
+              Thread.Sleep(DelaySec);
             }
             catch (COMException exception)
             {
