@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Media;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -128,24 +129,37 @@ namespace CameraControl
         PhotoCapturedEventArgs eventArgs = o as PhotoCapturedEventArgs;
         if (eventArgs.WiaImageItem != null)
         {
-          Item item = eventArgs.WiaImageItem;
-          string s = item.ItemID;
-          ImageFile imageFile = null;
+          try
+          {
+            Item item = eventArgs.WiaImageItem;
+            string s = item.ItemID;
+            ImageFile imageFile = null;
 
-          imageFile = (ImageFile)item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
-          string fileName = ServiceProvider.Settings.DefaultSession.GetNextFileName(imageFile.FileExtension);
-          //file exist : : 0x80070050
-          // busy :  0x80210006
-          imageFile.SaveFile(fileName);
-          if (ServiceProvider.Settings.AutoPreview)
-          {
-            Dispatcher.Invoke(
-              new Action(
-                delegate { ImageLIst.SelectedValue = ServiceProvider.Settings.DefaultSession.AddFile(fileName); }));
+            imageFile = (ImageFile) item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
+            string fileName = ServiceProvider.Settings.DefaultSession.GetNextFileName(imageFile.FileExtension);
+            //file exist : : 0x80070050
+            // busy :  0x80210006
+            imageFile.SaveFile(fileName);
+            if (ServiceProvider.Settings.AutoPreview)
+            {
+              Dispatcher.Invoke(
+                new Action(
+                  delegate { ImageLIst.SelectedValue = ServiceProvider.Settings.DefaultSession.AddFile(fileName); }));
+            }
+            else
+            {
+              ServiceProvider.Settings.DefaultSession.AddFile(fileName);
+            }
           }
-          else
+          catch (COMException exception)
           {
-            ServiceProvider.Settings.DefaultSession.AddFile(fileName);
+            if (exception.ErrorCode == 0x80210006)
+            {
+              Thread.Sleep(10);
+              PhotoCaptured(o);
+              return;
+            }
+            throw;
           }
         }
         else
@@ -162,7 +176,7 @@ namespace CameraControl
             if (File.Exists(fileName))
               fileName =
                 PhotoUtils.GetUniqueFilename(
-                  Path.GetDirectoryName(fileName) +"\\"+ Path.GetFileNameWithoutExtension(fileName)+"_", 0,
+                  Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_", 0,
                   Path.GetExtension(fileName));
           }
           eventArgs.CameraDevice.TransferFile(eventArgs.EventArgs, fileName);
