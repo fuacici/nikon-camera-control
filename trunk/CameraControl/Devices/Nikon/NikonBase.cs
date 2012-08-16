@@ -812,7 +812,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
     
-    public void StartLiveView()
+    public virtual void StartLiveView()
     {
       lock (Locker)
       {
@@ -828,7 +828,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public void StopLiveView()
+    public virtual void StopLiveView()
     {
       lock (Locker)
       {
