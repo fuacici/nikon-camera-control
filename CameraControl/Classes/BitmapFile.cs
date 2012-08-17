@@ -201,8 +201,6 @@ namespace CameraControl.Classes
       //}
       using (FreeImageBitmap bitmap = new FreeImageBitmap(FileItem.FileName))
       {
-
-        long i = 0;
         foreach (MetadataModel metadataModel in bitmap.Metadata)
         {
           foreach (MetadataTag metadataTag in metadataModel)
