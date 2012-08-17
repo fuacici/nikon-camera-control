@@ -100,54 +100,54 @@ namespace CameraControl.Classes
     {
       return "";
 
-      StreamReader sr;
-      String sLine = "";
-      String sMimeType = "";
-      String sFileExt = "";
-      String sMimeExt = "";
+      //StreamReader sr;
+      //String sLine = "";
+      //String sMimeType = "";
+      //String sFileExt = "";
+      //String sMimeExt = "";
 
-      // Convert to lowercase
-      sRequestedFile = sRequestedFile.ToLower();
+      //// Convert to lowercase
+      //sRequestedFile = sRequestedFile.ToLower();
 
-      int iStartPos = sRequestedFile.IndexOf(".");
+      //int iStartPos = sRequestedFile.IndexOf(".");
 
-      sFileExt = sRequestedFile.Substring(iStartPos);
+      //sFileExt = sRequestedFile.Substring(iStartPos);
 
-      //try
-      //{
-      //  //Open the Vdirs.dat to find out the list virtual directories
-      //  sr = new StreamReader("data\\Mime.Dat");
+      ////try
+      ////{
+      ////  //Open the Vdirs.dat to find out the list virtual directories
+      ////  sr = new StreamReader("data\\Mime.Dat");
 
-      //  while ((sLine = sr.ReadLine()) != null)
-      //  {
+      ////  while ((sLine = sr.ReadLine()) != null)
+      ////  {
 
-      //    sLine.Trim();
+      ////    sLine.Trim();
 
-      //    if (sLine.Length > 0)
-      //    {
-      //      //find the separator
-      //      iStartPos = sLine.IndexOf(";");
+      ////    if (sLine.Length > 0)
+      ////    {
+      ////      //find the separator
+      ////      iStartPos = sLine.IndexOf(";");
 
-      //      // Convert to lower case
-      //      sLine = sLine.ToLower();
+      ////      // Convert to lower case
+      ////      sLine = sLine.ToLower();
 
-      //      sMimeExt = sLine.Substring(0, iStartPos);
-      //      sMimeType = sLine.Substring(iStartPos + 1);
+      ////      sMimeExt = sLine.Substring(0, iStartPos);
+      ////      sMimeType = sLine.Substring(iStartPos + 1);
 
-      //      if (sMimeExt == sFileExt)
-      //        break;
-      //    }
-      //  }
-      //}
-      //catch (Exception e)
-      //{
-      //  Console.WriteLine("An Exception Occurred : " + e.ToString());
-      //}
+      ////      if (sMimeExt == sFileExt)
+      ////        break;
+      ////    }
+      ////  }
+      ////}
+      ////catch (Exception e)
+      ////{
+      ////  Console.WriteLine("An Exception Occurred : " + e.ToString());
+      ////}
 
-      if (sMimeExt == sFileExt)
-        return sMimeType;
-      else
-        return "";
+      //if (sMimeExt == sFileExt)
+      //  return sMimeType;
+      //else
+      //  return "";
     }
 
 

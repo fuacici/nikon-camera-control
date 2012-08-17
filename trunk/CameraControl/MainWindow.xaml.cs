@@ -153,7 +153,7 @@ namespace CameraControl
           }
           catch (COMException exception)
           {
-            if (exception.ErrorCode == 0x80210006)
+            if ((uint)exception.ErrorCode == 0x80210006)
             {
               Thread.Sleep(10);
               PhotoCaptured(o);

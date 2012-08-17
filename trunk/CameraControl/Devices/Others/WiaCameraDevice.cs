@@ -8,7 +8,7 @@ using WIA;
 
 namespace CameraControl.Devices.Others
 {
-  public class WiaCameraDevice : BaseFieldClass, ICameraDevice
+  public class WiaCameraDevice : BaseCameraDevice
   {
        Dictionary<int,string> ShutterTable = new Dictionary<int, string>
                        {
@@ -126,146 +126,9 @@ namespace CameraControl.Devices.Others
 
     #region Implementation of ICameraDevice
 
-    private bool _haveLiveView;
-    public bool HaveLiveView
-    {
-      get { return _haveLiveView; }
-      set
-      {
-        _haveLiveView = value;
-        NotifyPropertyChanged("HaveLiveView");
-      }
-    }
-
-    public bool CaptureInSdRam { get; set; }
-
-
-    private PropertyValue<int> _fNumber;
-    public PropertyValue<int> FNumber
-    {
-      get { return _fNumber; }
-      set
-      {
-        _fNumber = value;
-        NotifyPropertyChanged("FNumber");
-      }
-    }
-
-    private PropertyValue<int> _isoNumber;
-    public virtual PropertyValue<int> IsoNumber
-    {
-      get { return _isoNumber; }
-      set
-      {
-        _isoNumber = value;
-        NotifyPropertyChanged("IsoNumber");
-      }
-    }
-
-    private PropertyValue<long> _shutterSpeed;
-    public PropertyValue<long> ShutterSpeed
-    {
-      get { return _shutterSpeed; }
-      set
-      {
-        _shutterSpeed = value;
-        NotifyPropertyChanged("ShutterSpeed");
-      }
-    }
-
-    private PropertyValue<long> _whiteBalance;
-    public PropertyValue<long> WhiteBalance
-    {
-      get { return _whiteBalance; }
-      set
-      {
-        _whiteBalance = value;
-        NotifyPropertyChanged("WhiteBalance");
-      }
-    }
-
-    private PropertyValue<uint> _mode;
-    public PropertyValue<uint> Mode
-    {
-      get { return _mode; }
-      set
-      {
-        _mode = value;
-        NotifyPropertyChanged("Mode");
-      }
-    }
-
-    private PropertyValue<int> _exposureCompensation;
-    public PropertyValue<int> ExposureCompensation
-    {
-      get { return _exposureCompensation; }
-      set
-      {
-        _exposureCompensation = value;
-        NotifyPropertyChanged("ExposureCompensation");
-      }
-    }
-
-    private PropertyValue<int> _compressionSetting;
-    public PropertyValue<int> CompressionSetting
-    {
-      get { return _compressionSetting; }
-      set
-      {
-        _compressionSetting = value;
-        NotifyPropertyChanged("CompressionSetting");
-      }
-    }
-
-    private PropertyValue<int> _exposureMeteringMode;
-    public PropertyValue<int> ExposureMeteringMode
-    {
-      get { return _exposureMeteringMode; }
-      set
-      {
-        _exposureMeteringMode = value;
-        NotifyPropertyChanged("ExposureMeteringMode");
-      }
-    }
-
-    public PropertyValue<uint> FocusMode { get; set; }
-    private string _deviceName;
-
-    public string DeviceName
-    {
-      get { return _deviceName; }
-      set
-      {
-        _deviceName = value;
-        NotifyPropertyChanged("DeviceName");
-      }
-    }
-
-    private string _manufacturer;
-
-    public string Manufacturer
-    {
-      get { return _manufacturer; }
-      set
-      {
-        _manufacturer = value;
-        NotifyPropertyChanged("Manufacturer");
-      }
-    }
-
-    private string _serialNumber;
-    public string SerialNumber
-    {
-      get { return _serialNumber; }
-      set
-      {
-        _serialNumber = value;
-        NotifyPropertyChanged("SerialNumber");
-      }
-    }
 
     private string _displayName;
-    public string DisplayName
+    public override string DisplayName
     {
       get
       {
@@ -280,53 +143,18 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    private int _exposureStatus;
-    public int ExposureStatus
-    {
-      get { return _exposureStatus; }
-      set
-      {
-        _exposureStatus = value;
-        NotifyPropertyChanged("ExposureStatus");
-      }
-    }
 
-    private bool _isConected;
-
-    public bool IsConnected
-    {
-      get { return _isConected; }
-      set
-      {
-        _isConected = value;
-        NotifyPropertyChanged("IsConected");
-      }
-    }
-
-
-    private int _battery;
-    public bool GetCapability(CapabilityEnum capabilityEnum)
+    public override bool GetCapability(CapabilityEnum capabilityEnum)
     {
       return false;
     }
 
-    public int Battery
-    {
-      get { return _battery; }
-      set
-      {
-        _battery = value;
-        NotifyPropertyChanged("Battery");
-      }
-    }
-
-    public virtual byte LiveViewImageZoomRatio { get; set; }
 
     private Device Device { get; set; }
     internal object Locker = new object(); // object used to lock multi hreaded mothods 
     public DeviceManager DeviceManager { get; set; }
 
-    public virtual bool Init(DeviceDescriptor deviceDescriptor)
+    public override bool Init(DeviceDescriptor deviceDescriptor)
     {
       //the device not connected
       try
@@ -719,38 +547,38 @@ namespace CameraControl.Devices.Others
     }
 
  
-    public virtual void StartLiveView()
+    public override void StartLiveView()
     {
       //throw new NotImplementedException();
     }
 
-    public virtual void StopLiveView()
+    public override void StopLiveView()
     {
       //throw new NotImplementedException();
     }
 
-    public virtual LiveViewData GetLiveViewImage()
+    public override LiveViewData GetLiveViewImage()
     {
       //throw new NotImplementedException();
       return new LiveViewData();
     }
 
-    public virtual void AutoFocus()
+    public override void AutoFocus()
     {
       //throw new NotImplementedException();
     }
 
-    public virtual void Focus(int step)
+    public override void Focus(int step)
     {
       //throw new NotImplementedException();
     }
 
-    public virtual void Focus(int x, int y)
+    public override void Focus(int x, int y)
     {
       //throw new NotImplementedException();
     }
 
-    public virtual void CapturePhotoNoAf()
+    public override void CapturePhotoNoAf()
     {
       lock (Locker)
       {
@@ -758,7 +586,7 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    public virtual void CapturePhoto()
+    public override void CapturePhoto()
     {
       Monitor.Enter(Locker);
       try
@@ -775,27 +603,7 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    public void EndBulbMode()
-    {
-      throw new NotImplementedException();
-    }
-
-    public void StartBulbMode()
-    {
-      throw new NotImplementedException();
-    }
-
-    public void LockCamera()
-    {
-      throw new NotImplementedException();
-    }
-
-    public void UnLockCamera()
-    {
-      throw new NotImplementedException();
-    }
-
-    public virtual void Close()
+    public override void Close()
     {
       if (Device != null)
         Marshal.ReleaseComObject(Device);
@@ -805,17 +613,17 @@ namespace CameraControl.Devices.Others
         DeviceManager.OnEvent -= DeviceManager_OnEvent;
     }
 
-    public virtual void ReadDeviceProperties(int o)
+    public override void ReadDeviceProperties(int o)
     {
       HaveLiveView = false;
     }
 
-    public void TransferFile(object o, string filename)
+    public override void TransferFile(object o, string filename)
     {
       
     }
 
-    public event PhotoCapturedEventHandler PhotoCaptured;
+    public override event PhotoCapturedEventHandler PhotoCaptured;
 
     #endregion
   }

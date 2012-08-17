@@ -168,7 +168,7 @@ namespace CameraControl.Classes
           //Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => Files.Remove(
           //  deletedItem)));
       }
-      catch (Exception exception)
+      catch (Exception )
       {
 
 

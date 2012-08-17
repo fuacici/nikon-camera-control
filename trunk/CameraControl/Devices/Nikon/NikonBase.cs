@@ -16,7 +16,7 @@ using Timer = System.Timers.Timer;
 
 namespace CameraControl.Devices.Nikon
 {
-  public class NikonBase :BaseFieldClass,  ICameraDevice
+  public class NikonBase : BaseCameraDevice
   {
     public const int CONST_CMD_AfDrive = 0x90C1;
     public const int CONST_CMD_StartLiveView = 0x9201;
@@ -216,217 +216,7 @@ namespace CameraControl.Devices.Nikon
     internal object Locker = new object(); // object used to lock multi hreaded mothods 
     protected List<CapabilityEnum> Capabilities = new List<CapabilityEnum>();
 
-    private bool _haveLiveView;
-    public bool HaveLiveView
-    {
-      get { return _haveLiveView; }
-      set
-      {
-        _haveLiveView = value;
-        NotifyPropertyChanged("HaveLiveView");
-      }
-    }
 
-    private bool _captureInSdRam;
-    public bool CaptureInSdRam
-    {
-      get { return _captureInSdRam; }
-      set
-      {
-        _captureInSdRam = value;
-        NotifyPropertyChanged("CaptureInSdRam");
-      }
-    }
-
-    private PropertyValue<int> _isoNumber;
-    public PropertyValue<int> IsoNumber
-    {
-      get { return _isoNumber; }
-      set
-      {
-        _isoNumber = value;
-        NotifyPropertyChanged("IsoNumber");
-      }
-    }
-
-    private PropertyValue<long> _shutterSpeed;
-    public PropertyValue<long> ShutterSpeed
-    {
-      get { return _shutterSpeed; }
-      set
-      {
-        _shutterSpeed = value;
-        NotifyPropertyChanged("ShutterSpeed");
-      }
-    }
-
-    private PropertyValue<uint> _mode;
-    public PropertyValue<uint> Mode
-    {
-      get { return _mode; }
-      set
-      {
-        _mode = value;
-        NotifyPropertyChanged("Mode");
-      }
-    }
-
-    private PropertyValue<int> _fNumber;
-    public PropertyValue<int> FNumber
-    {
-      get { return _fNumber; }
-      set
-      {
-        _fNumber = value;
-        NotifyPropertyChanged("FNumber");
-      }
-    }
-
-    private PropertyValue<long> _whiteBalance;
-    public PropertyValue<long> WhiteBalance
-    {
-      get { return _whiteBalance; }
-      set
-      {
-        _whiteBalance = value;
-        NotifyPropertyChanged("WhiteBalance");
-      }
-    }
-
-    private PropertyValue<int> _exposureCompensation;
-    public PropertyValue<int> ExposureCompensation
-    {
-      get { return _exposureCompensation; }
-      set
-      {
-        _exposureCompensation = value;
-        NotifyPropertyChanged("ExposureCompensation");
-      }
-    }
-
-    private PropertyValue<int> _compressionSetting;
-    public PropertyValue<int> CompressionSetting
-    {
-      get { return _compressionSetting; }
-      set
-      {
-        _compressionSetting = value;
-        NotifyPropertyChanged("CompressionSetting");
-      }
-    }
-
-    private PropertyValue<int> _exposureMeteringMode;
-    public PropertyValue<int> ExposureMeteringMode
-    {
-      get { return _exposureMeteringMode; }
-      set
-      {
-        _exposureMeteringMode = value;
-        NotifyPropertyChanged("ExposureMeteringMode");
-      }
-    }
-
-    private PropertyValue<uint> _focusMode;
-    public PropertyValue<uint> FocusMode
-    {
-      get { return _focusMode; }
-      set
-      {
-        _focusMode = value;
-        NotifyPropertyChanged("FocusMode");
-      }
-    }
-
-    private string _deviceName;
-
-    public string DeviceName
-    {
-      get { return _deviceName; }
-      set
-      {
-        _deviceName = value;
-        NotifyPropertyChanged("DeviceName");
-      }
-    }
-
-    private string _manufacturer;
-
-    public string Manufacturer
-    {
-      get { return _manufacturer; }
-      set
-      {
-        _manufacturer = value;
-        NotifyPropertyChanged("Manufacturer");
-      }
-    }
-
-    private string _serialNumber;
-    public string SerialNumber
-    {
-      get { return _serialNumber; }
-      set
-      {
-        _serialNumber = value;
-        NotifyPropertyChanged("SerialNumber");
-      }
-    }
-
-    private string _displayName;
-    public string DisplayName
-    {
-      get
-      {
-        if (string.IsNullOrEmpty(_displayName))
-          return DeviceName + " (" + SerialNumber + ")";
-        return _displayName;
-      }
-      set
-      {
-        _displayName = value;
-        NotifyPropertyChanged("DisplayName");
-      }
-    }
-
-
-    private int _exposureStatus;
-    public int ExposureStatus
-    {
-      get { return _exposureStatus; }
-      set
-      {
-        _exposureStatus = value;
-        NotifyPropertyChanged("ExposureStatus");
-      }
-    }
-
-    private bool _isConnected;
-
-    public bool IsConnected
-    {
-      get { return _isConnected; }
-      set
-      {
-        _isConnected = value;
-        NotifyPropertyChanged("IsConnected");
-      }
-    }
-
-    private int _battery;
-    public bool GetCapability(CapabilityEnum capabilityEnum)
-    {
-      return Capabilities.Contains(capabilityEnum);
-    }
-
-    public int Battery
-    {
-      get { return _battery; }
-      set
-      {
-        _battery = value;
-        NotifyPropertyChanged("Battery");
-      }
-    }
 
     public NikonBase()
     {
@@ -453,7 +243,7 @@ namespace CameraControl.Devices.Nikon
     }
 
 
-    public virtual bool Init(DeviceDescriptor deviceDescriptor)
+    public override bool Init(DeviceDescriptor deviceDescriptor)
     {
       HaveLiveView = true;
       CaptureInSdRam = true;
@@ -794,7 +584,7 @@ namespace CameraControl.Devices.Nikon
         }
         ExposureMeteringMode.SetValue(defval);
       }
-      catch (Exception ex)
+      catch (Exception)
       {
       }
     }
@@ -824,12 +614,12 @@ namespace CameraControl.Devices.Nikon
         }
         FocusMode.SetValue(defval);
       }
-      catch (Exception ex)
+      catch (Exception )
       {
       }
     }
     
-    public virtual void StartLiveView()
+    public override void StartLiveView()
     {
       lock (Locker)
       {
@@ -845,7 +635,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public virtual void StopLiveView()
+    public override void StopLiveView()
     {
       lock (Locker)
       {
@@ -855,7 +645,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public virtual LiveViewData GetLiveViewImage()
+    public override LiveViewData GetLiveViewImage()
     {
       LiveViewData viewData = new LiveViewData();
       if (Monitor.TryEnter(Locker,100))
@@ -885,7 +675,7 @@ namespace CameraControl.Devices.Nikon
       return viewData;
     }
 
-    public  void CapturePhoto()
+    public override void CapturePhoto()
     {
       Monitor.Enter(Locker);
       try
@@ -905,26 +695,6 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public virtual void EndBulbMode()
-    {
-      throw new NotImplementedException();
-    }
-
-    public virtual void StartBulbMode()
-    {
-      throw new NotImplementedException();
-    }
-
-    public virtual void LockCamera()
-    {
-      throw new NotImplementedException();
-    }
-
-    public virtual void UnLockCamera()
-    {
-      throw new NotImplementedException();
-    }
-
     protected virtual void GetAditionalLIveViewData(LiveViewData viewData, byte[] result)
     {
       viewData.LiveViewImageWidth = ToInt16(result, 0);
@@ -942,7 +712,7 @@ namespace CameraControl.Devices.Nikon
       viewData.Focused = result[40] != 1;
     }
 
-    public void Focus(int step)
+    public override void Focus(int step)
     {
       if (step == 0)
         return;
@@ -955,7 +725,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public  void AutoFocus()
+    public override void AutoFocus()
     {
       lock (Locker)
       {
@@ -964,7 +734,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public virtual void CapturePhotoNoAf()
+    public override void CapturePhotoNoAf()
     {
       lock (Locker)
       {
@@ -983,7 +753,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public void Focus(int x, int y)
+    public override void Focus(int x, int y)
     {
       lock (Locker)
       {
@@ -992,7 +762,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public void Close()
+    public override void Close()
     {
       lock (Locker)
       {
@@ -1019,7 +789,7 @@ namespace CameraControl.Devices.Nikon
 
     private byte _liveViewImageZoomRatio;
 
-    public byte LiveViewImageZoomRatio
+    public override byte LiveViewImageZoomRatio
     {
       get
       {
@@ -1050,7 +820,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public virtual void ReadDeviceProperties(int prop)
+    public override void ReadDeviceProperties(int prop)
     {
       lock (Locker)
       {
@@ -1113,7 +883,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public void TransferFile(object o, string filename)
+    public override void TransferFile(object o, string filename)
     {
       DeviceReady();
       PortableDeviceEventArgs deviceEventArgs = o as PortableDeviceEventArgs;
@@ -1129,7 +899,6 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public event PhotoCapturedEventHandler PhotoCaptured;
 
     private void getEvent()
     {
@@ -1221,6 +990,9 @@ namespace CameraControl.Devices.Nikon
         }
       } while (retry);
     }
+
+    public override event PhotoCapturedEventHandler PhotoCaptured;
+
 
   }
 }

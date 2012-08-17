@@ -45,8 +45,9 @@ namespace CameraControl.Devices.Nikon
         }
         CompressionSetting.SetValue(defval);
       }
-      catch (Exception ex)
+      catch (Exception )
       {
+        
       }
     }
 
