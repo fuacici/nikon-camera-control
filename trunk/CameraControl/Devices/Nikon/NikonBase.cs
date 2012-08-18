@@ -51,6 +51,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_PROP_FocusMode = 0x500A;
     public const int CONST_PROP_LiveViewStatus = 0xD1A2;
     public const int CONST_PROP_ExposureIndicateStatus = 0xD1B1;
+    public const int CONST_PROP_RecordingMedia = 0xD10B;
 
     public const int CONST_Event_DevicePropChanged = 0x4006;
     public const int CONST_Event_StoreFull = 0x400A;
@@ -93,7 +94,7 @@ namespace CameraControl.Devices.Nikon
                                                     {0x6400, "Hi 2"},
                                                   };
     Dictionary<uint, string> _shutterTable = new Dictionary<uint, string>
-                       {
+                                               {
                          {1, "1/6400"},
                          {2, "1/4000"},
                          {3, "1/3200"},
@@ -199,7 +200,7 @@ namespace CameraControl.Devices.Nikon
                                                   {7, "RAW + JPEG (FINE)"}
                                                 };
     private Dictionary<int, string> _emmTable = new Dictionary<int, string>
-                                              {
+                                                  {
                                                 {2, "Center-weighted metering"},
                                                 {3, "Multi-pattern metering"},
                                                 {4, "Spot metering"}
@@ -523,7 +524,7 @@ namespace CameraControl.Devices.Nikon
         {
           Int16 val = BitConverter.ToInt16(result, ((2*datasize) + 6 + 2) + i);
           decimal d = val;
-          string s = decimal.Round(d/1000, 1).ToString();
+          string s = Decimal.Round(d/1000, 1).ToString();
           if (d > 0)
             s = "+" + s;
           ExposureCompensation.AddValues(s, val);
@@ -948,6 +949,13 @@ namespace CameraControl.Devices.Nikon
 
     public void DeviceReady()
     {
+      DeviceReady(0);
+    }
+
+    public void DeviceReady(int retrynum)
+    {
+      if (retrynum > 100)
+        return;
       //uint cod = Convert.ToUInt32(_stillImageDevice.ExecuteWithNoData(CONST_CMD_DeviceReady));
       ulong cod = (ulong)_stillImageDevice.ExecuteWithNoData(CONST_CMD_DeviceReady);
       if (cod != 0 || cod != ErrorCodes.MTP_OK)
@@ -956,7 +964,8 @@ namespace CameraControl.Devices.Nikon
         {
           //Console.WriteLine("Device not ready");
           //Thread.Sleep(50);
-          DeviceReady();
+          retrynum++;
+          DeviceReady(retrynum);
         }
         else
         {
@@ -992,7 +1001,5 @@ namespace CameraControl.Devices.Nikon
     }
 
     public override event PhotoCapturedEventHandler PhotoCaptured;
-
-
   }
 }
