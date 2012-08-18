@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using CameraControl.Classes;
 using CameraControl.Devices;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.windows
 {

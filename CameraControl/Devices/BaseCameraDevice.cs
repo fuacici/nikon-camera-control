@@ -129,6 +129,29 @@ namespace CameraControl.Devices
     }
 
     private string _deviceName;
+
+    private bool _isChecked;
+    public virtual bool IsChecked
+    {
+      get { return _isChecked; }
+      set
+      {
+        _isChecked = value;
+        NotifyPropertyChanged("IsChecked");
+      }
+    }
+
+    private PhotoSession _attachedPhotoSession;
+    public virtual PhotoSession AttachedPhotoSession
+    {
+      get { return _attachedPhotoSession; }
+      set
+      {
+        _attachedPhotoSession = value;
+        NotifyPropertyChanged("AttachedPhotoSession");
+      }
+    }
+
     public virtual string DeviceName
     {
       get { return _deviceName; }

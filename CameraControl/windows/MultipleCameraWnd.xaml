@@ -25,7 +25,7 @@
             <ListBox.ItemTemplate>
                 <HierarchicalDataTemplate>
                     <WrapPanel>
-                        <CheckBox Content="{Binding DisplayName}" />
+                        <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding IsChecked}" IsEnabled="{Binding IsConnected}"/>
                     </WrapPanel>
                 </HierarchicalDataTemplate>
             </ListBox.ItemTemplate>
