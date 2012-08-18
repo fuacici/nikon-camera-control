@@ -6,7 +6,7 @@
         themes:ThemeManager.Theme="{Binding  Path=CurrentTheme}"
         Title="NCC" Height="768" Width="1024" Loaded="Window_Loaded" xmlns:my="clr-namespace:CameraControl"
         xmlns:local="clr-namespace:CameraControl.Controls" Background="{DynamicResource WindowBackgroundBrush}"
-        Closed="Window_Closed" Closing="Window_Closing" Icon="/CameraControl;component/Images/logo.png">
+        Closed="Window_Closed" Closing="Window_Closing" Icon="/CameraControl;component/Images/logo.png" WindowState="Maximized">
     <Window.Resources>
         <Style TargetType="{x:Type ListBox}">
             <!-- Set the ItemTemplate of the ListBox to a DataTemplate which

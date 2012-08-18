@@ -17,6 +17,8 @@ namespace CameraControl.Devices
     PropertyValue<int> ExposureMeteringMode { get; set; }
     PropertyValue<uint> FocusMode { get; set; }
     bool IsConnected { get; set; }
+    bool IsChecked { get; set; }
+    PhotoSession AttachedPhotoSession { get; set; }
     string DeviceName { get; set; }
     string Manufacturer { get; set; }
     string SerialNumber { get; set; }

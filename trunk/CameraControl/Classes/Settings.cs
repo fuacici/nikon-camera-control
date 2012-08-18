@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml.Serialization;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.Classes
 {
@@ -265,6 +266,8 @@ namespace CameraControl.Classes
       }
     }
 
+    public CameraPropertyEnumerator CameraProperties { get; set; }
+
     public Settings()
     {
       ConfigFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,
@@ -292,6 +295,7 @@ namespace CameraControl.Classes
       PreviewSeconds = 3;
       LiveViewFreezeTimeOut = 3;
       PreviewLiveViewImage = true;
+      CameraProperties = new CameraPropertyEnumerator();
     }
 
     public void Add(PhotoSession session)

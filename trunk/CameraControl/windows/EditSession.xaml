@@ -3,12 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:myclass="clr-namespace:CameraControl.Classes"
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
-        xmlns:CameraControl="clr-namespace:CameraControl"
+        xmlns:CameraControl="clr-namespace:CameraControl" xmlns:Classes="clr-namespace:CameraControl.Devices.Classes"
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
         Background="{DynamicResource WindowBackgroundBrush}"
         Title="Session [Add/Edit]" Height="317" Width="374" Loaded="Window_Loaded" ResizeMode="NoResize">
     <Window.DataContext>
-        <myclass:PhotoSession/>
+        <Classes:PhotoSession/>
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>

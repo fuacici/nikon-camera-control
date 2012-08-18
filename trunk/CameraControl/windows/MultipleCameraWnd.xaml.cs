@@ -106,7 +106,7 @@ namespace CameraControl.windows
       {
         try
         {
-          foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices)
+          foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices.Where(connectedDevice => connectedDevice.IsConnected && connectedDevice.IsChecked))
           {
             try
             {

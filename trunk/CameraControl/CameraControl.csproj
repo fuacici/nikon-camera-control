@@ -104,6 +104,8 @@
     <Compile Include="Classes\BitmapFile.cs" />
     <Compile Include="Classes\BitmapSourceConvert.cs" />
     <Compile Include="Classes\BraketingClass.cs" />
+    <Compile Include="Classes\CameraProperty.cs" />
+    <Compile Include="Classes\CameraPropertyEnumerator.cs" />
     <Compile Include="Classes\CheckedListItem.cs" />
     <Compile Include="Classes\DictionaryItem.cs" />
     <Compile Include="Classes\FileItem.cs" />
@@ -134,6 +136,7 @@
     <Compile Include="Devices\Classes\ErrorCodes.cs" />
     <Compile Include="Devices\Classes\LiveViewData.cs" />
     <Compile Include="Devices\Classes\PhotoCapturedEventArgs.cs" />
+    <Compile Include="Devices\Classes\PhotoSession.cs" />
     <Compile Include="Devices\ICameraDevice.cs" />
     <Compile Include="Devices\Nikon\NikonD300.cs" />
     <Compile Include="Devices\Nikon\NikonD3200.cs" />
@@ -141,6 +144,7 @@
     <Compile Include="Devices\Nikon\NikonD4.cs" />
     <Compile Include="Devices\Nikon\NikonD40.cs" />
     <Compile Include="Devices\Nikon\NikonBase.cs" />
+    <Compile Include="Devices\Nikon\NikonD700.cs" />
     <Compile Include="Devices\Nikon\NikonD80.cs" />
     <Compile Include="Devices\Nikon\NikonD800.cs" />
     <Compile Include="Devices\Nikon\NikonD90.cs" />
@@ -207,7 +211,6 @@
     </Compile>
     <Compile Include="Classes\BaseFieldClass.cs" />
     <Compile Include="Classes\Conts.cs" />
-    <Compile Include="Classes\PhotoSession.cs" />
     <Compile Include="Classes\Settings.cs" />
     <Compile Include="Classes\WIAManager.cs" />
     <Compile Include="MainWindow.xaml.cs">
