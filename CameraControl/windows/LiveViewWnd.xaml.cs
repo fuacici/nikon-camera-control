@@ -481,12 +481,15 @@ namespace CameraControl.windows
 
     private void button2_Click(object sender, RoutedEventArgs e)
     {
+      ServiceProvider.Log.Debug("LiveView: Capture started");
       _timer.Stop();
       Thread.Sleep(100);
       try
       {
         selectedPortableDevice.StopLiveView();
+        ServiceProvider.Log.Debug("LiveView: LiveViewStoped");
         selectedPortableDevice.CapturePhotoNoAf();
+        ServiceProvider.Log.Debug("LiveView: Capture Initialization Done");
       }
       catch (DeviceException exception)
       {
@@ -500,9 +503,11 @@ namespace CameraControl.windows
     {
       try
       {
+        ServiceProvider.Log.Debug("LiveView: Liveview started");
         SelectedPortableDevice.StartLiveView();
         oper_in_progress = false;
         _retries = 0;
+        ServiceProvider.Log.Debug("LiveView: Liveview start done");
       }
       catch (Exception exception)
       {
@@ -738,6 +743,7 @@ namespace CameraControl.windows
       {
         if (IsBusy)
         {
+          ServiceProvider.Log.Debug("LiveView: Stackphoto capture started");
           FreezeImage = true;
           Thread.Sleep(300);
           StartLiveView();
