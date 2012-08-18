@@ -396,8 +396,8 @@ namespace PortableDeviceLib
           // check if the device is busy, and after 100 ms seconds try again 
           if (((uint)pValue) == PortableDeviceErrorCodes.ERROR_BUSY)
           {
-            Thread.Sleep(100);
-            return ExecuteReadData(code, param1, param2);
+            //Thread.Sleep(100);
+            //return ExecuteReadData(code, param1, param2);
           }
         }
       }
