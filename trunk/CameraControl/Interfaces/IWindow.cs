@@ -2,6 +2,6 @@
 {
   public interface IWindow
   {
-    void ExecuteCommand(string cmd);
+    void ExecuteCommand(string cmd, object param);
   }
 }

@@ -19,14 +19,20 @@ namespace CameraControl.Classes
       WindowsList.Add(new FullScreenWnd());
       WindowsList.Add(new LiveViewWnd());
       WindowsList.Add(new MultipleCameraWnd());
+      WindowsList.Add(new CameraPropertyWnd());
     }
 
     public void ExecuteCommand(string cmd)
     {
+      ExecuteCommand(cmd, null);
+    }
+
+    public void ExecuteCommand(string cmd, object o)
+    {
       ServiceProvider.Log.Debug("Window command received :" + cmd);
       foreach (IWindow window in WindowsList)
       {
-        window.ExecuteCommand(cmd);
+        window.ExecuteCommand(cmd, o);
       }
       if (Event != null)
         Event(cmd);

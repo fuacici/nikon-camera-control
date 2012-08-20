@@ -148,8 +148,9 @@
                 </MenuItem>
                 <MenuItem Header="Exit" Command="ApplicationCommands.Close"/>
             </MenuItem>
-            <MenuItem Header="_View" Click="MenuItem_Click_2">
-                <MenuItem Header="Multiple camera control"/>
+            <MenuItem Header="_View">
+                <MenuItem Header="Multiple camera control" Click="MenuItem_Click_2"/>
+                <MenuItem Header="Selected camera property" Click="MenuItem_Click_3" />    
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="Home page" Click="MenuItem_Click" />

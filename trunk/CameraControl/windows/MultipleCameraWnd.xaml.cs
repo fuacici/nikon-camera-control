@@ -53,7 +53,7 @@ namespace CameraControl.windows
 
     #region Implementation of IWindow
 
-    public void ExecuteCommand(string cmd)
+    public void ExecuteCommand(string cmd, object param)
     {
       switch (cmd)
       {

@@ -538,5 +538,11 @@ namespace CameraControl
       WiaManager.ConnectToCamera();
     }
 
+    private void MenuItem_Click_3(object sender, RoutedEventArgs e)
+    {
+      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.CameraPropertyWnd_Show,
+                                                    ServiceProvider.DeviceManager.SelectedCameraDevice);
+    }
+
   }
 }
