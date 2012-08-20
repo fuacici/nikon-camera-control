@@ -17,9 +17,9 @@
         </Grid.RowDefinitions>
         <Button Content="Ok" Grid.Row="1" HorizontalAlignment="Left" Margin="12,0,0,12" Name="button1" Width="75" Height="23" VerticalAlignment="Bottom" Click="button1_Click" IsDefault="True" />
         <Button Content="Cancel" Grid.Row="1" Margin="0,0,12,12" Name="button2" HorizontalAlignment="Right" Width="75" Height="23" VerticalAlignment="Bottom" Click="button2_Click" IsCancel="True" />
-        <StackPanel >
+        <StackPanel Margin="5">
             <StackPanel Orientation="Horizontal">
-                <Label Content="Name :" Width="120" />
+                <Label Content="Sesson name :" Width="120" />
                 <TextBox Text="{Binding Path=Name}" Width="200"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
@@ -37,6 +37,9 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <CheckBox Content="Use original filename gave by the camera" ToolTip="This option isn't works with WIA driver" IsChecked="{Binding Path=UseOriginalFilename}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox Content="Don't download photos to PC" ToolTip="" IsChecked="{Binding Path=NoDownload}"/>
             </StackPanel>
         </StackPanel>
     </Grid>

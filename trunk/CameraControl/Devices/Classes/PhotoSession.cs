@@ -112,6 +112,17 @@ namespace CameraControl.Devices.Classes
       }
     }
 
+    private bool _noDownload;
+    public bool NoDownload
+    {
+      get { return _noDownload; }
+      set
+      {
+        _noDownload = value;
+        NotifyPropertyChanged("NoDownload");
+      }
+    }
+
     public string ConfigFile { get; set; }
     private FileSystemWatcher _systemWatcher;
 
