@@ -166,6 +166,9 @@
     <Compile Include="windows\BulbWnd.xaml.cs">
       <DependentUpon>BulbWnd.xaml</DependentUpon>
     </Compile>
+    <Compile Include="windows\CameraPropertyWnd.xaml.cs">
+      <DependentUpon>CameraPropertyWnd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="windows\CreateTimeLapseWnd.xaml.cs">
       <DependentUpon>CreateTimeLapseWnd.xaml</DependentUpon>
     </Compile>
@@ -231,6 +234,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="windows\BulbWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="windows\CameraPropertyWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

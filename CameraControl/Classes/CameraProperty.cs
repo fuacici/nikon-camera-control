@@ -32,13 +32,13 @@ namespace CameraControl.Classes
     }
 
     private string _profileNmae;
-    public string PhotoSessionNmae
+    public string PhotoSessionName
     {
       get { return _profileNmae; }
       set
       {
         _profileNmae = value;
-        NotifyPropertyChanged("PhotoSessionNmae");
+        NotifyPropertyChanged("PhotoSessionName");
       }
     }
 
