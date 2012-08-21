@@ -324,5 +324,11 @@ namespace CameraControl.Devices
     public virtual event PhotoCapturedEventHandler PhotoCaptured;
 
     #endregion
+
+    public BaseCameraDevice()
+    {
+      IsChecked = true;
+    }
+
   }
 }

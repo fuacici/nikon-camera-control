@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -13,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using CameraControl.Classes;
 using CameraControl.Devices;
+using CameraControl.Devices.Classes;
 using CameraControl.Interfaces;
 
 namespace CameraControl.windows
@@ -22,6 +24,8 @@ namespace CameraControl.windows
   /// </summary>
   public partial class CameraPropertyWnd : Window, IWindow, INotifyPropertyChanged
   {
+    private ICameraDevice _cameraDevice;
+
     private CameraProperty _cameraProperty;
     public CameraProperty CameraProperty
     {
@@ -33,9 +37,26 @@ namespace CameraControl.windows
       }
     }
 
+    private AsyncObservableCollection<string> _photoSessionNames;
+    public AsyncObservableCollection<string> PhotoSessionNames
+    {
+      get { return _photoSessionNames; }
+      set
+      {
+        _photoSessionNames = value;
+        NotifyPropertyChanged("PhotoSessionNames");
+      }
+    }
+
     public CameraPropertyWnd()
     {
       InitializeComponent();
+      PhotoSessionNames = new AsyncObservableCollection<string>();
+      PhotoSessionNames.Add("(None)");
+      foreach (PhotoSession photoSession in ServiceProvider.Settings.PhotoSessions)
+      {
+        PhotoSessionNames.Add(photoSession.Name);
+      }
     }
 
     #region Implementation of IWindow
@@ -53,8 +74,8 @@ namespace CameraControl.windows
             Topmost = false;
             Focus();
           }));
-          ICameraDevice cameraDevice = param as ICameraDevice;
-          CameraProperty=new CameraProperty(){SerialNumber = cameraDevice.SerialNumber};
+          _cameraDevice = param as ICameraDevice;
+          CameraProperty = ServiceProvider.Settings.CameraProperties.Get(_cameraDevice);
           CameraProperty.BeginEdit();
           break;
         case WindowsCmdConsts.CameraPropertyWnd_Hide:
@@ -72,7 +93,7 @@ namespace CameraControl.windows
 
     #endregion
 
-    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    private void Window_Closing(object sender, CancelEventArgs e)
     {
       if (IsVisible)
       {
@@ -97,6 +118,7 @@ namespace CameraControl.windows
     private void btn_save_Click(object sender, RoutedEventArgs e)
     {
       CameraProperty.EndEdit();
+      ServiceProvider.Settings.Save();
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.CameraPropertyWnd_Hide);
     }
 
@@ -105,5 +127,22 @@ namespace CameraControl.windows
       CameraProperty.CancelEdit();
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.CameraPropertyWnd_Hide);
     }
+
+    private void btn_identify_Click(object sender, RoutedEventArgs e)
+    {
+      Thread thread = new Thread(new ThreadStart(delegate
+                                                   {
+                                                     for (int i = 0; i < 5; i++)
+                                                     {
+                                                       _cameraDevice.LockCamera();
+                                                       Thread.Sleep(800);
+                                                       _cameraDevice.UnLockCamera();
+                                                       Thread.Sleep(800);
+                                                     }
+                                                   }));
+      thread.Start();
+    }
+
+
   }
 }

@@ -149,5 +149,12 @@ namespace CameraControl.windows
       ServiceProvider.Settings.SystemMessage = "All captures done !";
     }
 
+    private void MenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      if(listBox1.SelectedItem!=null)
+        ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.CameraPropertyWnd_Show,
+                                                    listBox1.SelectedItem);
+    }
+
   }
 }

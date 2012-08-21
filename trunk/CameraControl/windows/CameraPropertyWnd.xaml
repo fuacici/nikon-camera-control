@@ -4,23 +4,30 @@
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes" xmlns:CameraControl="clr-namespace:CameraControl"
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
         Background="{DynamicResource WindowBackgroundBrush}"
-        Title="Camera Property" Height="332" Width="331" Closing="Window_Closing" WindowStartupLocation="CenterScreen" xmlns:my="clr-namespace:CameraControl.windows">
-    <Grid>
+        Title="Camera Property" Height="332" Width="331" Closing="Window_Closing" WindowStartupLocation="CenterScreen" xmlns:my="clr-namespace:CameraControl.windows" WindowStyle="ToolWindow" UseLayoutRounding="False">
+    <Grid >
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="149*" />
-            <ColumnDefinition Width="160*" />
+            <ColumnDefinition Width="127*" />
+            <ColumnDefinition Width="182*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="28*" />
-            <RowDefinition Height="28*" />
-            <RowDefinition Height="196*" />
+            <RowDefinition Height="32*" />
+            <RowDefinition Height="32*" />
+            <RowDefinition Height="32*" />
+            <RowDefinition Height="32*" />
+            <RowDefinition Height="32*" />
+            <RowDefinition Height="32*" />
+            <RowDefinition Height="80*" />
             <RowDefinition Height="41*" />
         </Grid.RowDefinitions>
-        <Button Content="Save" Grid.Row="3" HorizontalAlignment="Left" Margin="12,6,0,12" Name="btn_save" Width="75" Click="btn_save_Click" />
-        <Button Content="Cancel" Grid.Row="3" Margin="0,6,12,12" Name="btn_cancel" HorizontalAlignment="Right" Width="75" Grid.Column="1" Click="btn_cancel_Click" />
-        <Label Content="Camera name" Grid.Row="1" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" />
-        <TextBox Grid.Column="1" Grid.Row="1" Name="textBox1" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}, Path=CameraProperty.DeviceName}" />
-        <Label Content="Serial number" Height="28" HorizontalAlignment="Left" Name="label2" VerticalAlignment="Top" />
-        <TextBox Grid.Column="1" Name="textBox2" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}, Path=CameraProperty.SerialNumber}" IsReadOnly="True"/>
+        <Label Content="Camera name" Grid.Row="1" Margin="2,2,0,0" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" Grid.RowSpan="2" />
+        <TextBox Margin="3" Grid.Column="1" Grid.Row="1" Name="textBox1" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}, Path=CameraProperty.DeviceName}" />
+        <Label Content="Serial number" Margin="2,2,0,0" Height="28" HorizontalAlignment="Left" Name="label2" VerticalAlignment="Top" Grid.RowSpan="2" />
+        <TextBox Margin="3" Grid.Column="1" Name="textBox2" Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}, Path=CameraProperty.SerialNumber}" IsReadOnly="True"/>
+        <Button Content="Save" Grid.Row="7" HorizontalAlignment="Left" Margin="12,6,0,12" Name="btn_save" Width="75" Click="btn_save_Click" />
+        <Button Content="Cancel" Grid.Row="7" Margin="0,6,12,12" Name="btn_cancel" HorizontalAlignment="Right" Width="75" Grid.Column="1" Click="btn_cancel_Click" />
+        <Label Content="Default session" Margin="2,2,162,2" Grid.Row="2" Name="label3" Grid.ColumnSpan="2" />
+        <ComboBox Margin="3" Grid.Column="1" Grid.Row="2" Name="comboBox1" ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}, Path=PhotoSessionNames}" SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}, Path=CameraProperty.PhotoSessionName}"/>
+        <Button Content="Indentify" Grid.Column="1" Grid.Row="5" Name="btn_identify" Click="btn_identify_Click" />
     </Grid>
 </Window>
