@@ -8,6 +8,7 @@ namespace CameraControl.Devices.Nikon
 {
   public class NikonD40:NikonBase
   {
+
     public override bool Init(DeviceDescriptor deviceDescriptor)
     {
       bool res = base.Init(deviceDescriptor);
