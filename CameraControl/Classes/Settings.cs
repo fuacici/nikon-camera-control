@@ -379,6 +379,23 @@ namespace CameraControl.Classes
       return settings;
     }
 
+    public PhotoSession GetSession(string name)
+    {
+      if (string.IsNullOrEmpty(name))
+        return null;
+      if (!string.IsNullOrEmpty(name))
+      {
+        foreach (PhotoSession photoSession in PhotoSessions)
+        {
+          if (photoSession.Name == name)
+          {
+            return photoSession;
+          }
+        }
+      }
+      return null;
+    }
+
     public void LoadSessionData()
     {
       string sesionFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),

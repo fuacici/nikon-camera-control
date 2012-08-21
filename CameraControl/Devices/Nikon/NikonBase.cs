@@ -900,6 +900,15 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
+    public override void LockCamera()
+    {
+      _stillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 1);
+    }
+
+    public override void UnLockCamera()
+    {
+      _stillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 0);
+    }
 
     private void getEvent()
     {

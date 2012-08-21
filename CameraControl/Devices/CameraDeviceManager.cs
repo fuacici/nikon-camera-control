@@ -28,6 +28,10 @@ namespace CameraControl.Devices
       get { return _selectedCameraDevice; }
       set
       {
+        if (CameraSelected!=null)
+        {
+          CameraSelected(_selectedCameraDevice, value);
+        }
         _selectedCameraDevice = value;
         NotifyPropertyChanged("SelectedCameraDevice");
       }
@@ -80,6 +84,8 @@ namespace CameraControl.Devices
       SelectedCameraDevice = cameraDevice;
       cameraDevice.PhotoCaptured += cameraDevice_PhotoCaptured;
       ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
+      if (CameraConnected != null)
+        CameraConnected(cameraDevice);
       ServiceProvider.Settings.SystemMessage = "New Camera is connected ! Driver :" + cameraDevice.DeviceName;
       ServiceProvider.Log.Debug("===========Camera is connected==============");
       ServiceProvider.Log.Debug("Driver :" + cameraDevice.GetType().Name);
@@ -171,6 +177,8 @@ namespace CameraControl.Devices
           SelectedCameraDevice = cameraDevice;
           cameraDevice.PhotoCaptured += cameraDevice_PhotoCaptured;
           ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
+          if (CameraConnected != null)
+            CameraConnected(cameraDevice);
           ServiceProvider.Settings.SystemMessage = "New Camera is connected ! Driver :" + cameraDevice.DeviceName;
           ServiceProvider.Log.Debug("===========Camera is connected==============");
           ServiceProvider.Log.Debug("Driver :" + cameraDevice.GetType().Name);
@@ -205,5 +213,12 @@ namespace CameraControl.Devices
     }
 
     public event PhotoCapturedEventHandler PhotoCaptured;
+    
+    public delegate void CameraConnectedEventHandler(ICameraDevice  cameraDevice);
+    public event CameraConnectedEventHandler CameraConnected;
+
+    public delegate void CameraSelectedEventHandler(ICameraDevice oldcameraDevice, ICameraDevice newcameraDevice);
+
+    public event CameraSelectedEventHandler CameraSelected;
   }
 }

@@ -59,6 +59,23 @@ namespace CameraControl
       }
       ServiceProvider.WindowsManager = new WindowsManager();
       ServiceProvider.WindowsManager.Event += Trigger_Event;
+      ServiceProvider.DeviceManager.CameraConnected += DeviceManager_CameraConnected;
+      ServiceProvider.DeviceManager.CameraSelected += DeviceManager_CameraSelected;
+    }
+
+    void DeviceManager_CameraSelected(ICameraDevice oldcameraDevice, ICameraDevice newcameraDevice)
+    {
+      CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(newcameraDevice);
+      newcameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
+      if (newcameraDevice.AttachedPhotoSession != null)
+        ServiceProvider.Settings.DefaultSession = newcameraDevice.AttachedPhotoSession;
+    }
+
+    void DeviceManager_CameraConnected(ICameraDevice cameraDevice)
+    {
+      CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(cameraDevice);
+      cameraDevice.DisplayName = property.DeviceName;
+      cameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
     }
 
     void DeviceManager_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)

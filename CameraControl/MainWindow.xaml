@@ -43,23 +43,23 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="120" />
-            <ColumnDefinition Width="659*" />
-            <ColumnDefinition Width="223" />
+            <ColumnDefinition Width="651*" />
+            <ColumnDefinition Width="231" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
-            <RowDefinition Height="45" />
+            <RowDefinition Height="65" />
             <RowDefinition Height="463*" />
             <RowDefinition Height="35" />
             <RowDefinition Height="121" />
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
-        <local:ZoomBorder  BorderThickness="1" CornerRadius="5" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,0">
+        <local:ZoomBorder  BorderThickness="1" CornerRadius="5" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2">
             <Image Name="image1" Stretch="Uniform" Source="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" MouseDown="image1_MouseDown">
             </Image>
         </local:ZoomBorder>
-        <StackPanel Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="0,0,618,0"></StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,618,0">
+        <StackPanel Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="0,0,610,0"></StackPanel>
+        <StackPanel Orientation="Vertical" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,610,0">
             <StackPanel  Orientation="Horizontal">
                 <Label Content="Manufacturer:" />
                 <Label Content="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.Manufacturer}"/>
@@ -69,18 +69,18 @@
                 <Label Content="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.DeviceName}" />
             </StackPanel>
         </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="3" Margin="41,0,0,0">
+        <StackPanel Grid.Column="1" Grid.Row="3" Margin="41,0,223,0" Grid.ColumnSpan="2">
 
             <StackPanel  Orientation="Horizontal" Margin="10,0,0,0">
                 <Label Content="{Binding Path=SystemMessage }" FontWeight="Bold" HorizontalContentAlignment="Right" />
             </StackPanel>
         </StackPanel>
-        <Label Content="Loading ..." Name="lbl_loading" Grid.Column="1" Grid.Row="2" Margin="338,2,200,0" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="{Binding Path=ImageLoading}" FontSize="25" FontWeight="ExtraBold">
+        <Label Content="Loading ..." Name="lbl_loading" Grid.Column="1" Grid.Row="2" Margin="338,2,192,0" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="{Binding Path=ImageLoading}" FontSize="25" FontWeight="ExtraBold">
         </Label>
         <StackPanel Grid.Row="4" Grid.ColumnSpan="3" Name="ImagePanel"  Grid.RowSpan="2" >
             <ListBox  Name="ImageLIst" ItemsSource="{Binding Path=DefaultSession.Files, IsAsync=True}" SelectionChanged="ImageLIst_SelectionChanged" Background="{DynamicResource WindowBackgroundBrush}">
                 <ListBox.ContextMenu>
-                        <ContextMenu>
+                    <ContextMenu>
                         <MenuItem Header="Actions" ItemsSource="{Binding Source={x:Static Member=my:ServiceProvider.ActionManager}, Path=Actions}" >
                             <MenuItem.ItemTemplate>
                                 <DataTemplate>
@@ -91,47 +91,41 @@
                             </MenuItem.ItemTemplate>
                         </MenuItem>
                         <Separator/>
-                            <MenuItem Header="Select" >
+                        <MenuItem Header="Select" >
                             <MenuItem Header="All" Name="mnu_select_all" Click="mnu_select_all_Click" />
                             <MenuItem Header="None" Name="mnu_select_none" Click="mnu_select_none_Click" />
                         </MenuItem>
                         <Separator/>
-                            <MenuItem Header="Delete File(s)" Name="mnu_delete_file" Click="mnu_delete_file_Click" />
-                            <MenuItem Header="Show in explorer" Name="mnu_show_explorer" Click="mnu_show_explorer_Click" />
-                            <MenuItem Header="Open in external viewer" Name="mnu_open" Click="mnu_open_Click" />
-                            <MenuItem Header="Copy full path in clipboard" Name="mnu_copypath" Click="mnu_copypath_Click" />
+                        <MenuItem Header="Delete File(s)" Name="mnu_delete_file" Click="mnu_delete_file_Click" />
+                        <MenuItem Header="Show in explorer" Name="mnu_show_explorer" Click="mnu_show_explorer_Click" />
+                        <MenuItem Header="Open in external viewer" Name="mnu_open" Click="mnu_open_Click" />
+                        <MenuItem Header="Copy full path in clipboard" Name="mnu_copypath" Click="mnu_copypath_Click" />
                     </ContextMenu>
                 </ListBox.ContextMenu>
             </ListBox>
         </StackPanel>
         <ToolBar Grid.ColumnSpan="3" Name="toolBar1" Grid.Row="1">
-            <Button ToolTip="Capture photo"  Height="30" Name="button3" Click="button3_Click" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5">
-                <Image Source="/CameraControl;component/Images/Camera.png"/>
+            <Button ToolTip="Capture photo"  Height="50" Name="button3" Click="button3_Click" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5">
+                <Image Margin="5" Source="/CameraControl;component/Images/Camera.png"/>
             </Button>
-            <Button Content="[BR]" ToolTip="Braketing"  Height="30" Name="btn_br" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_br_Click" />
-            <ToggleButton ToolTip="Image property" Height="30" Width="50" Name="button1"  Click="button1_Click" Margin="5">
-                <Image Source="/CameraControl;component/Images/Properties.png"/>
+            <Button Content="[BR]" ToolTip="Braketing"  Height="50" Name="btn_br" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_br_Click" FontSize="15" />
+            <ToggleButton ToolTip="Image property" Height="50" Width="50" Name="button1"  Click="button1_Click" Margin="5">
+                <Image Margin="5" Source="/CameraControl;component/Images/Properties.png"/>
             </ToggleButton>
-            <Button ToolTip="Settings" Height="30" Name="button2" Width="50" Click="button2_Click" Margin="5" >
-                <Image Source="/CameraControl;component/Images/Settings.png" />
+            <Button ToolTip="Settings" Height="50" Name="button2" Width="50" Click="button2_Click" Margin="5" >
+                <Image Margin="5" Source="/CameraControl;component/Images/Settings.png" />
             </Button>
-            <Button ToolTip="Time lapse" Height="30" Name="but_timelapse" Width="50" Margin="5" Click="but_timelapse_Click">
-                <Image Source="/CameraControl;component/Images/Timelapse.png" />
+            <Button ToolTip="Time lapse" Height="50" Name="but_timelapse" Width="50" Margin="5" Click="but_timelapse_Click">
+                <Image Margin="5" Source="/CameraControl;component/Images/Timelapse.png" />
             </Button>
-            <Button ToolTip="Fullscreen" Height="30" Name="but_fullscreen" Width="50" Margin="5" Click="but_fullscreen_Click">
-                <Image Source="/CameraControl;component/Images/Fullscreen.png" />
+            <Button ToolTip="Fullscreen" Height="50" Name="but_fullscreen" Width="50" Margin="5" Click="but_fullscreen_Click">
+                <Image Margin="5" Source="/CameraControl;component/Images/Fullscreen.png" />
             </Button>
-            <Button Content="Lv" ToolTip="Live view" Height="30" Name="btn_liveview" Width="50" Margin="5" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.HaveLiveView}" Click="btn_liveview_Click" />
-            <Button ToolTip="About" Height="30" Name="btn_about" Width="50" Margin="5" Click="btn_about_Click">
-                <Image Source="/CameraControl;component/Images/About.png" />
+            <Button Content="Lv" ToolTip="Live view" Height="50" Name="btn_liveview" Width="50" Margin="5" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.HaveLiveView}" Click="btn_liveview_Click" FontSize="15" />
+            <Button ToolTip="About" Height="50" Name="btn_about" Width="50" Margin="5" Click="btn_about_Click">
+                <Image Margin="5" Source="/CameraControl;component/Images/About.png" />
             </Button>
-            <StackPanel HorizontalAlignment="Right" IsEnabled="{Binding Path=DefaultSession.TimeLapse.IsDisabled}">
-                <StackPanel  Orientation="Horizontal">
-                    <ComboBox  Name="cmb_session" SelectedValue="{Binding Path=DefaultSession}" ItemsSource="{Binding Path=PhotoSessions}" Width="150"  Margin="3"/>
-                    <Button Content="Add" Grid.Column="3" Name="btn_add_Sesion" Margin="3" Click="btn_add_Sesion_Click"/>
-                    <Button Content="Edit" Grid.Column="3" Name="btn_edit_Sesion" Margin="3" Click="btn_edit_Sesion_Click" />
-                </StackPanel>
-            </StackPanel>
+            <StackPanel HorizontalAlignment="Right" IsEnabled="{Binding Path=DefaultSession.TimeLapse.IsDisabled}"></StackPanel>
         </ToolBar>
         <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="12,6,8,14" Width="100" Grid.Row="2" />
         <Menu Grid.ColumnSpan="3" Name="menu1">
@@ -150,7 +144,7 @@
             </MenuItem>
             <MenuItem Header="_View">
                 <MenuItem Header="Multiple camera control" Click="MenuItem_Click_2"/>
-                <MenuItem Header="Selected camera property" Click="MenuItem_Click_3" />    
+                <MenuItem Header="Selected camera property" Click="MenuItem_Click_3" />
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="Home page" Click="MenuItem_Click" />
@@ -159,5 +153,17 @@
                 <MenuItem Header="About" Name="mnu_about" Click="btn_about_Click" />
             </MenuItem>
         </Menu>
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,20,0" Grid.Row="1" HorizontalAlignment="Right" Width="214" Height="65">
+            <StackPanel Orientation="Vertical" >
+                <StackPanel>
+                    <Label Content="Session" Margin="5,1,1,1"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox Name="cmb_session" SelectedValue="{Binding Path=DefaultSession}" ItemsSource="{Binding Path=PhotoSessions}" Width="150" Margin="3" />
+                    <Button Content="Add" Grid.Column="3" Name="btn_add_Sesion" Margin="3" Click="btn_add_Sesion_Click" />
+                    <Button Content="Edit" Grid.Column="3" Name="btn_edit_Sesion" Margin="3" Click="btn_edit_Sesion_Click" />
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>
