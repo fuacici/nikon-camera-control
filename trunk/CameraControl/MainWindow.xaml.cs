@@ -37,6 +37,7 @@ namespace CameraControl
     {
       CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (sender, args) => this.Close()));
       SelectDeviceCommand = new RelayCommand<ICameraDevice>(SelectCamera);
+      SelectPresetCommand = new RelayCommand<CameraPreset>(SelectPreset);
       ServiceProvider.Configure();
       ServiceProvider.Settings = new Settings();
       ServiceProvider.ThumbWorker = new ThumbWorker();
@@ -238,11 +239,22 @@ namespace CameraControl
       private set;
     }
 
+    public RelayCommand<CameraPreset> SelectPresetCommand
+    {
+      get;
+      private set;
+    }
+
     private void SelectCamera(ICameraDevice cameraDevice)
     {
       ServiceProvider.DeviceManager.SelectedCameraDevice = cameraDevice;
     }
 
+    private void SelectPreset(CameraPreset preset)
+    {
+      preset.Set(ServiceProvider.DeviceManager.SelectedCameraDevice);
+    }
+    
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       WiaManager.ConnectToCamera();
@@ -559,6 +571,18 @@ namespace CameraControl
     {
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.CameraPropertyWnd_Show,
                                                     ServiceProvider.DeviceManager.SelectedCameraDevice);
+    }
+
+    private void MenuItem_Click_4(object sender, RoutedEventArgs e)
+    {
+      CameraPreset cameraPreset = new CameraPreset();
+      SavePresetWnd wnd=new SavePresetWnd(cameraPreset);
+      if (wnd.ShowDialog() == true)
+      {
+        cameraPreset.Get(ServiceProvider.DeviceManager.SelectedCameraDevice);
+        ServiceProvider.Settings.CameraPresets.Add(cameraPreset);
+        ServiceProvider.Settings.Save();
+      }
     }
 
   }
