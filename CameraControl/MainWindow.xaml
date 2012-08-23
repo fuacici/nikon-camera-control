@@ -144,7 +144,20 @@
             </MenuItem>
             <MenuItem Header="_View">
                 <MenuItem Header="Multiple camera control" Click="MenuItem_Click_2"/>
-                <MenuItem Header="Selected camera property" Click="MenuItem_Click_3" />
+                <Separator/>
+                <MenuItem Header="Selected camera property" Click="MenuItem_Click_3" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}"/>
+            </MenuItem>
+            <MenuItem Header="Presets" IsEnabled="{Binding Source={x:Static Member=my:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}">
+                <MenuItem Header="Load" ItemsSource="{Binding Source={x:Static Member=my:ServiceProvider.Settings}, Path=CameraPresets}" >
+                    <MenuItem.ItemTemplate>
+                        <DataTemplate>
+                            <MenuItem Header="{Binding Path=Name}" 
+                                      Command="{Binding Path=SelectPresetCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" 
+                                      CommandParameter="{Binding}"/>
+                        </DataTemplate>
+                    </MenuItem.ItemTemplate>
+                </MenuItem>
+                <MenuItem Header="Save" Click="MenuItem_Click_4" />
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="Home page" Click="MenuItem_Click" />
