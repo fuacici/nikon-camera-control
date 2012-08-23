@@ -104,6 +104,7 @@
     <Compile Include="Classes\BitmapFile.cs" />
     <Compile Include="Classes\BitmapSourceConvert.cs" />
     <Compile Include="Classes\BraketingClass.cs" />
+    <Compile Include="Classes\CameraPreset.cs" />
     <Compile Include="Classes\CameraProperty.cs" />
     <Compile Include="Classes\CameraPropertyEnumerator.cs" />
     <Compile Include="Classes\CheckedListItem.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Classes\ThumbWorker.cs" />
     <Compile Include="Classes\TimeLapseClass.cs" />
     <Compile Include="Classes\TriggerClass.cs" />
+    <Compile Include="Classes\ValuePair.cs" />
     <Compile Include="Classes\VideoType.cs" />
     <Compile Include="Classes\WebServer.cs" />
     <Compile Include="Classes\WindowsCmdConsts.cs" />
@@ -152,6 +154,8 @@
     <Compile Include="Devices\Nikon\NikonD90.cs" />
     <Compile Include="Devices\Others\NotConnectedCameraDevice.cs" />
     <Compile Include="Devices\Others\WiaCameraDevice.cs" />
+    <Compile Include="Exif\EXIFextractor.cs" />
+    <Compile Include="Exif\translation.cs" />
     <Compile Include="Interfaces\IMenuAction.cs" />
     <Compile Include="Interfaces\IWindow.cs" />
     <Compile Include="ServiceProvider.cs" />

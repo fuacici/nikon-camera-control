@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Media.Imaging;
+using CameraControl.Exif.EXIF;
 using FreeImageAPI;
 
 namespace CameraControl.Classes
@@ -131,6 +132,16 @@ namespace CameraControl.Classes
             Image.GetThumbnailImageAbort myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
             Stream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite); // or any stream
             Image tempImage = Image.FromStream(fs, true, false);
+            var exif = new EXIFextractor(ref tempImage, "n");
+            if (exif["Orientation"] != null)
+            {
+              RotateFlipType flip = EXIFextractorEnumerator.OrientationToFlipType(exif["Orientation"].ToString());
+
+              if (flip != RotateFlipType.RotateNoneFlipNone)  // don't flip of orientation is correct
+              {
+                tempImage.RotateFlip(flip);
+              }
+            }
             Thumbnail = byteArrayToImageEx(ImageToByteArray(tempImage.GetThumbnailImage(160, 120, myCallback, IntPtr.Zero)));
             fs.Close();
           }

@@ -5,7 +5,7 @@ Name NikonCameraControl
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.7.198
+!define VERSION 0.7.199
 !define COMPANY "Duka Istvan"
 !define URL http://code.google.com/p/nikon-camera-control/
 
