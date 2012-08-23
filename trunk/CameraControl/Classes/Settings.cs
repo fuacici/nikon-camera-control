@@ -267,11 +267,13 @@ namespace CameraControl.Classes
     }
 
     public CameraPropertyEnumerator CameraProperties { get; set; }
+    public AsyncObservableCollection<CameraPreset> CameraPresets { get; set; }
 
     public Settings()
     {
       ConfigFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,
                                 "settings.xml");
+      CameraPresets = new AsyncObservableCollection<CameraPreset>();
       DefaultSession = new PhotoSession();
       PhotoSessions = new ObservableCollection<PhotoSession>();
       ImageLoading = Visibility.Hidden;

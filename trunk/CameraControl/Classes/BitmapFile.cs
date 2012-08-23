@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using CameraControl.Exif.EXIF;
 using FreeImageAPI;
 using FreeImageAPI.Metadata;
 using AForge.Imaging;
@@ -154,6 +155,16 @@ namespace CameraControl.Classes
         else
         {
           Image image = Image.FromFile(FileItem.FileName);
+          var exif = new EXIFextractor(ref image, "n");
+          if (exif["Orientation"] != null)
+          {
+            RotateFlipType flip = EXIFextractorEnumerator.OrientationToFlipType(exif["Orientation"].ToString());
+
+            if (flip != RotateFlipType.RotateNoneFlipNone)  // don't flip of orientation is correct
+            {
+              image.RotateFlip(flip);
+            }
+          }
           DisplayImage = ToBitmap(image);
           image.Dispose();
           Thread thread_photo = new Thread(GetAdditionalData);

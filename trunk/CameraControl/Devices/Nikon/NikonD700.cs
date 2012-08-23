@@ -26,6 +26,31 @@ namespace CameraControl.Devices.Nikon
       DeviceReady();
     }
 
+    public override void CapturePhotoNoAf()
+    {
+      ServiceProvider.Log.Debug("CapturePhotoNoAf: Started");
+      //lock (Locker)
+      //{
+        DeviceReady();
+        ServiceProvider.Log.Debug("CapturePhotoNoAf: Step 1");
+        byte oldval = 0;
+        byte[] val = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
+        if (val != null && val.Length > 0)
+          oldval = val[0];
+        ServiceProvider.Log.Debug("CapturePhotoNoAf: Step 2");
+        SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)4 }, CONST_PROP_AFModeSelect, -1);
+        ServiceProvider.Log.Debug("CapturePhotoNoAf: Step 3");
+        DeviceReady();
+        ServiceProvider.Log.Debug("CapturePhotoNoAf: Step 4");
+        ErrorCodes.GetException(CaptureInSdRam
+                                  ? _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF)
+                                  : _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
+        ServiceProvider.Log.Debug("CapturePhotoNoAf: Step 5");
+        if (val != null && val.Length > 0)
+          SetProperty(CONST_CMD_SetDevicePropValue, new[] { oldval }, CONST_PROP_AFModeSelect, -1);
+        ServiceProvider.Log.Debug("CapturePhotoNoAf: Step 6");
+      //}
+    }
 
     override public LiveViewData GetLiveViewImage()
     {

@@ -488,6 +488,7 @@ namespace CameraControl.windows
       {
         selectedPortableDevice.StopLiveView();
         ServiceProvider.Log.Debug("LiveView: LiveViewStoped");
+        Thread.Sleep(300);
         selectedPortableDevice.CapturePhotoNoAf();
         ServiceProvider.Log.Debug("LiveView: Capture Initialization Done");
       }
