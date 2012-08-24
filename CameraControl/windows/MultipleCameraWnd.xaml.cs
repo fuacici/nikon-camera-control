@@ -156,5 +156,19 @@ namespace CameraControl.windows
                                                     listBox1.SelectedItem);
     }
 
+    private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+    {
+      if(listBox1.SelectedItem!=null)
+      {
+        CameraPreset preset=new CameraPreset();
+        preset.Get((ICameraDevice)listBox1.SelectedItem);
+        foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices)
+        {
+          if (connectedDevice.IsConnected && connectedDevice.IsChecked)
+            preset.Set(connectedDevice); 
+        }
+      }
+    }
+
   }
 }
