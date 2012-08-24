@@ -79,7 +79,6 @@ namespace CameraControl.Devices.Classes
 
     private AsyncObservableCollection<FileItem> _files;
 
-    [XmlIgnore]
     public AsyncObservableCollection<FileItem> Files
     {
       get { return _files; }

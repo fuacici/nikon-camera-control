@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Media.Imaging;
+using System.Xml.Serialization;
 using CameraControl.Exif.EXIF;
 using FreeImageAPI;
 
@@ -37,6 +38,7 @@ namespace CameraControl.Classes
 
     public string Name { get; set; }
 
+    [XmlIgnore]
     public string ToolTip
     {
       get { return string.Format("File name: {0}\nFile date :{1}",Name,FileDate.ToShortDateString()); }
@@ -54,7 +56,7 @@ namespace CameraControl.Classes
     }
 
     private BitmapImage _bitmapImage;
-
+    [XmlIgnore]
     public BitmapImage BitmapImage
     {
       get
@@ -85,6 +87,10 @@ namespace CameraControl.Classes
       }
     }
 
+    public FileItem()
+    {
+      
+    }
 
     public FileItem(string file)
     {
@@ -93,7 +99,7 @@ namespace CameraControl.Classes
     }
 
     private BitmapSource _thumbnail;
-
+    [XmlIgnore]
     public BitmapSource Thumbnail
     {
       get
