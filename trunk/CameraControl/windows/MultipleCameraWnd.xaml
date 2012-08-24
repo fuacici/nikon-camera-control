@@ -28,7 +28,8 @@
         <ListBox Grid.Column="1" Name="listBox1" ItemsSource="{Binding Source={x:Static Member=CameraControl:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" Grid.Row="1">
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Properties" Click="MenuItem_Click" />
+                    <MenuItem Header="Propertes" Click="MenuItem_Click" />
+                    <MenuItem Header="Use selected camera preset" Click="MenuItem_Click_1" />
                 </ContextMenu>
             </ListBox.ContextMenu>
             <ListBox.ItemTemplate>

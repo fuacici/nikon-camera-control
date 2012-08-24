@@ -1,5 +1,6 @@
 using System.Windows.Controls;
 using System.Windows.Input;
+using CameraControl.Classes;
 using CameraControl.Devices;
 
 namespace CameraControl.Controls
@@ -22,6 +23,12 @@ namespace CameraControl.Controls
       {
         //cmb.IsDropDownOpen = !cmb.IsDropDownOpen;
       }
+    }
+
+    private void button1_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.CameraPropertyWnd_Show,
+                                              ServiceProvider.DeviceManager.SelectedCameraDevice);
     }
 
 
