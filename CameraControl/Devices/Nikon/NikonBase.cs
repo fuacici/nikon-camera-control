@@ -246,11 +246,10 @@ namespace CameraControl.Devices.Nikon
 
     public override bool Init(DeviceDescriptor deviceDescriptor)
     {
-      HaveLiveView = true;
-      CaptureInSdRam = true;
       _stillImageDevice = new StillImageDevice(deviceDescriptor.WpdId);
       _stillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
       _stillImageDevice.DeviceEvent += _stillImageDevice_DeviceEvent;
+      HaveLiveView = true;
       DeviceReady();
       DeviceName = _stillImageDevice.Model;
       Manufacturer = _stillImageDevice.Manufacturer;
@@ -268,7 +267,17 @@ namespace CameraControl.Devices.Nikon
       ReadDeviceProperties(CONST_PROP_ExposureIndicateStatus);
       _timer.Start();
       IsConnected = true;
+      PropertyChanged += NikonBase_PropertyChanged;
+      CaptureInSdRam = true;
       return true;
+    }
+
+    void NikonBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+      if (e.PropertyName == "CaptureInSdRam")
+      {
+        SetProperty(CONST_CMD_SetDevicePropValue, CaptureInSdRam ? new[] { (byte)1 } : new[] { (byte)0 }, CONST_PROP_RecordingMedia, -1);        
+      }
     }
 
     void _stillImageDevice_DeviceEvent(object sender, PortableDeviceEventArgs e)

@@ -145,7 +145,7 @@ namespace CameraControl
       {
         ServiceProvider.Settings.SystemMessage = "Photo transfer begin.";
         PhotoCapturedEventArgs eventArgs = o as PhotoCapturedEventArgs;
-        if (ServiceProvider.Settings.DefaultSession.NoDownload)
+        if (ServiceProvider.Settings.DefaultSession.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam)
           return;
         if (eventArgs.WiaImageItem != null)
         {
