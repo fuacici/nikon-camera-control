@@ -17,7 +17,8 @@ namespace CameraControl.Devices.Nikon
 
     public override void StartLiveView()
     {
-      SetProperty(CONST_CMD_SetDevicePropValue, new[] {(byte) 1}, CONST_PROP_RecordingMedia, -1);
+      if (!CaptureInSdRam)
+        SetProperty(CONST_CMD_SetDevicePropValue, new[] {(byte) 1}, CONST_PROP_RecordingMedia, -1);
       DeviceReady();
       base.StartLiveView();
     }
@@ -26,8 +27,10 @@ namespace CameraControl.Devices.Nikon
     {
       base.StopLiveView();
       DeviceReady();
-      SetProperty(CONST_CMD_SetDevicePropValue, new[] {(byte) 0}, CONST_PROP_RecordingMedia, -1);
+      if (!CaptureInSdRam)
+        SetProperty(CONST_CMD_SetDevicePropValue, new[] {(byte) 0}, CONST_PROP_RecordingMedia, -1);
       DeviceReady();
     }
+
   }
 }

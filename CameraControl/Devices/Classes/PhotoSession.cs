@@ -183,32 +183,27 @@ namespace CameraControl.Devices.Classes
       }
     }
 
-    public string GetNextFileName(string ext)
+    public string GetNextFileName(string ext, ICameraDevice device)
     {
       if (string.IsNullOrEmpty(ext))
         ext = "nef";
       Counter++;
-      string fileName = Path.Combine(Folder, FormatFileName() + (!ext.StartsWith(".") ? "." : "") + ext);
+      string fileName = Path.Combine(Folder, FormatFileName(device) + (!ext.StartsWith(".") ? "." : "") + ext);
       if (File.Exists(fileName))
-        return GetNextFileName(ext);
+        return GetNextFileName(ext, device);
       return fileName;
     }
 
-    private string FormatFileName()
+    private string FormatFileName(ICameraDevice device)
     {
       string res = FileNameTemplate;
       if (!res.Contains("$C"))
         res += "$C";
       res = res.Replace("$C", Counter.ToString("00000"));
       res = res.Replace("$N", Name.Trim());
-      if(ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.Value!="0")
-      {
-        res = res.Replace("$E", ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.Value);
-      }
-      else
-      {
-        res = res.Replace("$E", "");
-      }
+      res = res.Replace("$E", device.ExposureCompensation.Value!="0" ? device.ExposureCompensation.Value : "");
+      res = res.Replace("$D", DateTime.Now.ToString("yyyy-MM-dd"));
+      res = res.Replace("$X", device.DisplayName.Replace(":","_"));
       return res;
     }
 

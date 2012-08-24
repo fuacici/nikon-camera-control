@@ -156,9 +156,14 @@ namespace CameraControl
             ImageFile imageFile = null;
 
             imageFile = (ImageFile) item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
-            string fileName = ServiceProvider.Settings.DefaultSession.GetNextFileName(imageFile.FileExtension);
+            string fileName = ServiceProvider.Settings.DefaultSession.GetNextFileName(imageFile.FileExtension,
+                                                                                      eventArgs.CameraDevice);
             //file exist : : 0x80070050
             // busy :  0x80210006
+            if (!Directory.Exists(Path.GetDirectoryName(fileName)))
+            {
+              Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+            }
             imageFile.SaveFile(fileName);
             if (ServiceProvider.Settings.AutoPreview)
             {
@@ -188,7 +193,8 @@ namespace CameraControl
           if (!ServiceProvider.Settings.DefaultSession.UseOriginalFilename)
           {
             fileName =
-              ServiceProvider.Settings.DefaultSession.GetNextFileName(Path.GetExtension(eventArgs.FileName));
+              ServiceProvider.Settings.DefaultSession.GetNextFileName(Path.GetExtension(eventArgs.FileName),
+                                                                                      eventArgs.CameraDevice);
           }
           else
           {
@@ -198,6 +204,10 @@ namespace CameraControl
                 PhotoUtils.GetUniqueFilename(
                   Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_", 0,
                   Path.GetExtension(fileName));
+          }
+          if (!Directory.Exists(Path.GetDirectoryName(fileName)))
+          {
+            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
           }
           eventArgs.CameraDevice.TransferFile(eventArgs.EventArgs, fileName);
           if (ServiceProvider.Settings.AutoPreview)
