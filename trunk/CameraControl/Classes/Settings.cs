@@ -328,7 +328,13 @@ namespace CameraControl.Classes
            session.AddFile(file);
        }
       }
-      session.Files=new AsyncObservableCollection<FileItem>(session.Files.OrderBy(x => x.FileDate));
+      // remove files which was deleted or not exist
+      List<FileItem> removedItems = session.Files.Where(fileItem => !File.Exists(fileItem.FileName)).ToList();
+      foreach (FileItem removedItem in removedItems)
+      {
+        session.Files.Remove(removedItem);
+      }
+      session.Files = new AsyncObservableCollection<FileItem>(session.Files.OrderBy(x => x.FileDate));
     }
 
     public void Save(PhotoSession session)
@@ -347,14 +353,21 @@ namespace CameraControl.Classes
     public PhotoSession Load(string filename)
     {
       PhotoSession photoSession = new PhotoSession();
-      if (File.Exists(filename))
+      try
       {
-        XmlSerializer mySerializer =
-          new XmlSerializer(typeof(PhotoSession));
-        FileStream myFileStream = new FileStream(filename, FileMode.Open);
-        photoSession = (PhotoSession)mySerializer.Deserialize(myFileStream);
-        myFileStream.Close();
-        photoSession.ConfigFile = filename;
+        if (File.Exists(filename))
+        {
+          XmlSerializer mySerializer =
+            new XmlSerializer(typeof(PhotoSession));
+          FileStream myFileStream = new FileStream(filename, FileMode.Open);
+          photoSession = (PhotoSession)mySerializer.Deserialize(myFileStream);
+          myFileStream.Close();
+          photoSession.ConfigFile = filename;
+        }
+      }
+      catch (Exception e)
+      {
+        ServiceProvider.Log.Error(e);
       }
       return photoSession;
     }
