@@ -382,7 +382,7 @@ namespace CameraControl.Devices.Others
     {
       if (PhotoCaptured != null)
       {
-        PhotoCapturedEventArgs args = new PhotoCapturedEventArgs {WiaImageItem = Device.GetItem(ItemID)};
+        PhotoCapturedEventArgs args = new PhotoCapturedEventArgs {WiaImageItem = Device.GetItem(ItemID),CameraDevice = this};
         PhotoCaptured(this, args);
       }
     }
