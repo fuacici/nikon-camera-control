@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using CameraControl.Classes;
 using CameraControl.Devices.Classes;
 
@@ -6,6 +7,7 @@ namespace CameraControl.Devices
   public class BaseCameraDevice:BaseFieldClass, ICameraDevice
   {
     #region Implementation of ICameraDevice
+    protected List<CapabilityEnum> Capabilities = new List<CapabilityEnum>();
 
     private bool _haveLiveView;
     public virtual bool HaveLiveView
@@ -237,7 +239,7 @@ namespace CameraControl.Devices
 
     public virtual bool GetCapability(CapabilityEnum capabilityEnum)
     {
-      return false;
+      return Capabilities.Contains(capabilityEnum);
     }
 
     public virtual byte LiveViewImageZoomRatio { get; set; }
@@ -282,6 +284,16 @@ namespace CameraControl.Devices
     }
 
     public virtual void CapturePhoto()
+    {
+      
+    }
+
+    public virtual void StartRecordMovie()
+    {
+      
+    }
+
+    public virtual void StopRecordMovie()
     {
       
     }

@@ -36,6 +36,8 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_CMD_GetObjectInfo = 0x1008;
     public const int CONST_CMD_GetObject = 0x1009;
     public const int CONST_CMD_ChangeCameraMode = 0x90C2;
+    public const int CONST_CMD_StartMovieRecInCard = 0x920A;
+    public const int CONST_CMD_EndMovieRec = 0x920B;
 
     public const int CONST_PROP_Fnumber = 0x5007;
     public const int CONST_PROP_ExposureIndex = 0x500F;
@@ -215,7 +217,6 @@ namespace CameraControl.Devices.Nikon
                                                 {0x8013, "[F] Constant AF servo"},
                                               };
     internal object Locker = new object(); // object used to lock multi hreaded mothods 
-    protected List<CapabilityEnum> Capabilities = new List<CapabilityEnum>();
 
 
 
@@ -925,6 +926,18 @@ namespace CameraControl.Devices.Nikon
     public override void UnLockCamera()
     {
       _stillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 0);
+    }
+
+    public override void StartRecordMovie()
+    {
+      base.StartRecordMovie();
+      ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_StartMovieRecInCard));
+    }
+
+    public override void StopRecordMovie()
+    {
+      base.StopRecordMovie();
+      ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_EndMovieRec));
     }
 
     private void getEvent()

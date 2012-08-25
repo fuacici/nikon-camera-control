@@ -13,6 +13,7 @@ namespace CameraControl.Devices.Nikon
       Capabilities.Clear();
       Capabilities.Add(CapabilityEnum.LiveView);
       Capabilities.Add(CapabilityEnum.Bulb);
+      Capabilities.Add(CapabilityEnum.RecordMovie);
       return res;
     }
 

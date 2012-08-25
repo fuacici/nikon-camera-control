@@ -11,6 +11,16 @@ namespace CameraControl.Devices.Nikon
   {
     public const int CONST_PROP_RecordingMedia = 0xD10B;
 
+    public override bool Init(DeviceDescriptor deviceDescriptor)
+    {
+      bool res = base.Init(deviceDescriptor);
+      Capabilities.Clear();
+      Capabilities.Add(CapabilityEnum.LiveView);
+      Capabilities.Add(CapabilityEnum.RecordMovie);
+      return res;
+    }
+
+
     public override void StartLiveView()
     {
       SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)1 }, CONST_PROP_RecordingMedia, -1);

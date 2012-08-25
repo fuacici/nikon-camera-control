@@ -221,6 +221,34 @@ namespace CameraControl.windows
       }
     }
 
+    private bool _recording;
+    public bool Recording
+    {
+      get { return _recording; }
+      set
+      {
+        _recording = value;
+        if (_recording)
+        {
+          Dispatcher.Invoke(new Action(delegate
+                                         {
+                                           btn_record.Content = "Stop record movie";
+                                           lbl_rec.Visibility=Visibility.Visible;
+                                         }));
+        }
+        else
+        {
+          Dispatcher.Invoke(new Action(delegate
+                                         {
+                                           btn_record.Content = "Start record movie";
+                                           lbl_rec.Visibility = Visibility.Hidden;
+                                         }));
+        }
+        NotifyPropertyChanged("Recording");
+      }
+    }
+
+
     private Timer _timer = new Timer(1000/20);
     private Timer _freezeTimer = new Timer(ServiceProvider.Settings.LiveViewFreezeTimeOut*1000);
 
@@ -250,6 +278,7 @@ namespace CameraControl.windows
       LockA = false;
       FocusStep = 75;
       FreezeImage = false;
+      Recording = false;
       ServiceProvider.Settings.SelectedBitmap.BitmapLoaded += SelectedBitmap_BitmapLoaded;
     }
 
@@ -593,6 +622,7 @@ namespace CameraControl.windows
         case WindowsCmdConsts.LiveViewWnd_Show:
           Dispatcher.Invoke(new Action(delegate
                                          {
+                                           Recording = false;
                                            SelectedPortableDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
                                            Show();
                                            Activate();
@@ -603,6 +633,8 @@ namespace CameraControl.windows
                                            StartLiveView();
                                            Thread.Sleep(500);
                                            FreezeImage = false;
+                                           btn_record.IsEnabled =
+                                             SelectedPortableDevice.GetCapability(CapabilityEnum.RecordMovie);
                                            _timer.Start();
                                          }));
           break;
@@ -616,6 +648,7 @@ namespace CameraControl.windows
                                              ServiceProvider.Settings.Manager.PhotoTakenDone -= Manager_PhotoTaked;
                                              Thread.Sleep(100);
                                              SelectedPortableDevice.StopLiveView();
+                                             Recording = false;
                                              LockA = false;
                                              LockB = false;
                                            }
@@ -759,6 +792,7 @@ namespace CameraControl.windows
           {
             if (!preview)
             {
+              Recording = false;
               ServiceProvider.DeviceManager.SelectedCameraDevice.StopLiveView();
               ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhotoNoAf();
             }
@@ -838,6 +872,32 @@ namespace CameraControl.windows
     private void button3_Click(object sender, RoutedEventArgs e)
     {
       HelpProvider.Run(HelpSections.FocusStacking);
+    }
+
+    private void btn_record_Click(object sender, RoutedEventArgs e)
+    {
+      try
+      {
+        if (Recording)
+        {
+          SelectedPortableDevice.StopRecordMovie();
+        }
+        else
+        {
+          SelectedPortableDevice.StartRecordMovie();
+        }
+        Recording = !Recording;
+      }
+      catch (Exception exception)
+      {
+        ServiceProvider.Settings.SystemMessage = exception.Message;
+        ServiceProvider.Log.Error("Recording error",exception);
+      }
+    }
+
+    private void ToggleButton_Checked(object sender, RoutedEventArgs e)
+    {
+
     }
 
   }
