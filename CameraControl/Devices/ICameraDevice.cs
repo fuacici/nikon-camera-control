@@ -38,6 +38,8 @@ namespace CameraControl.Devices
     void Focus(int x, int y);
     void CapturePhotoNoAf();
     void CapturePhoto();
+    void StartRecordMovie();
+    void StopRecordMovie();
 
     /// <summary>
     /// Support only if capability Bulb is specified

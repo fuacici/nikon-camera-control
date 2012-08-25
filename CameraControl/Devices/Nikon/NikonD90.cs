@@ -10,6 +10,15 @@ namespace CameraControl.Devices.Nikon
   public class NikonD90:NikonBase
   {
 
+    public override bool Init(DeviceDescriptor deviceDescriptor)
+    {
+      bool res = base.Init(deviceDescriptor);
+      Capabilities.Clear();
+      Capabilities.Add(CapabilityEnum.LiveView);
+      Capabilities.Add(CapabilityEnum.RecordMovie);
+      return res;
+    }
+
     override public LiveViewData GetLiveViewImage()
     {
       LiveViewData viewData = new LiveViewData();

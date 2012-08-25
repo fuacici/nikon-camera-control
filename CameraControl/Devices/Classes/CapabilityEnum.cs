@@ -3,6 +3,7 @@
   public enum CapabilityEnum
   {
     LiveView,
-    Bulb
+    Bulb,
+    RecordMovie
   }
 }
