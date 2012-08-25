@@ -63,7 +63,10 @@ namespace CameraControl.Devices
                         {"D800", typeof (NikonD800)},
                         {"D800e", typeof (NikonD800)},
                         {"D90", typeof (NikonD90)},
+                        // for mtp simulator
+                        //{"Test Camera ", typeof (NikonBase)},
                       };
+      
       SelectedCameraDevice = new NotConnectedCameraDevice();
       ConnectedDevices = new AsyncObservableCollection<ICameraDevice>();
       _deviceEnumerator = new DeviceDescriptorEnumerator();
@@ -161,7 +164,9 @@ namespace CameraControl.Devices
 
       foreach (PortableDevice portableDevice in PortableDeviceCollection.Instance.Devices)
       {
-        if (!portableDevice.DeviceId.StartsWith("\\\\?\\usb"))
+        ServiceProvider.Log.Debug("Connection device " + portableDevice.DeviceId);
+        // avoid to load some mas storage in my computer need to find a general solution
+        if (!portableDevice.DeviceId.StartsWith("\\\\?\\usb") && !portableDevice.DeviceId.StartsWith("\\\\?\\comp"))
           continue;
         portableDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
         if(_deviceEnumerator.GetByWpdId(portableDevice.DeviceId)==null && DeviceClass.ContainsKey(portableDevice.Model))
@@ -206,6 +211,27 @@ namespace CameraControl.Devices
           {
             SelectedCameraDevice = new NotConnectedCameraDevice();
           }
+        }
+        descriptor.CameraDevice.Close();
+        _deviceEnumerator.Remove(descriptor);
+      }
+    }
+
+    public void DisconnectCamera(StillImageDevice device)
+    {
+      DeviceDescriptor descriptor = _deviceEnumerator.GetByWpdId(device.DeviceId);
+      if (descriptor != null)
+      {
+        descriptor.CameraDevice.PhotoCaptured -= cameraDevice_PhotoCaptured;
+        ConnectedDevices.Remove(descriptor.CameraDevice);
+        ServiceProvider.Settings.SystemMessage = "Camera disconnected :" + descriptor.CameraDevice.DeviceName;
+        ServiceProvider.Log.Debug("===========Camera disconnected==============");
+        ServiceProvider.Log.Debug("Name :" + descriptor.CameraDevice.DeviceName);
+        PortableDeviceCollection.Instance.RemoveDevice(device.DeviceId);
+        device.IsConnected = false;
+        if (SelectedCameraDevice == descriptor.CameraDevice)
+        {
+          SelectedCameraDevice = ConnectedDevices.Count > 0 ? ConnectedDevices[0] : new NotConnectedCameraDevice();
         }
         descriptor.CameraDevice.Close();
         _deviceEnumerator.Remove(descriptor);

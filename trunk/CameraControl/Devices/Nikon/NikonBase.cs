@@ -288,6 +288,7 @@ namespace CameraControl.Devices.Nikon
         _stillImageDevice.Disconnect();
         _stillImageDevice.IsConnected = false;
         IsConnected = false;
+        ServiceProvider.DeviceManager.DisconnectCamera(_stillImageDevice);
       }
       if (PhotoCaptured != null && e.EventType.EventGuid == PortableDeviceGuids.WPD_EVENT_OBJECT_ADDED)
       {
@@ -337,20 +338,27 @@ namespace CameraControl.Devices.Nikon
     {
       lock (Locker)
       {
-        DeviceReady();
         IsoNumber = new PropertyValue<int>();
         IsoNumber.ValueChanged += IsoNumber_ValueChanged;
         IsoNumber.Clear();
-        byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc,CONST_PROP_ExposureIndex);
-        int type = BitConverter.ToInt16(result, 2);
-        byte formFlag = result[9];
-        UInt16 defval = BitConverter.ToUInt16(result, 7);
-        for (int i = 0; i < result.Length - 12; i += 2)
+        try
         {
-          UInt16 val = BitConverter.ToUInt16(result, 12 + i);
-          IsoNumber.AddValues(_isoTable.ContainsKey(val) ? _isoTable[val] : val.ToString(), val);
+          DeviceReady();
+          byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureIndex);
+          int type = BitConverter.ToInt16(result, 2);
+          byte formFlag = result[9];
+          UInt16 defval = BitConverter.ToUInt16(result, 7);
+          for (int i = 0; i < result.Length - 12; i += 2)
+          {
+            UInt16 val = BitConverter.ToUInt16(result, 12 + i);
+            IsoNumber.AddValues(_isoTable.ContainsKey(val) ? _isoTable[val] : val.ToString(), val);
+          }
+          IsoNumber.SetValue(defval);
         }
-        IsoNumber.SetValue(defval);
+        catch (Exception)
+        {
+          IsoNumber.IsEnabled = false;
+        }
       }
     }
 
