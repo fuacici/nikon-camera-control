@@ -164,6 +164,10 @@ namespace CameraControl.Classes
             {
               image.RotateFlip(flip);
             }
+            if(ServiceProvider.Settings.Rotate!=RotateFlipType.RotateNoneFlipNone)
+            {
+              image.RotateFlip(ServiceProvider.Settings.Rotate);
+            }
           }
           DisplayImage = ToBitmap(image);
           image.Dispose();

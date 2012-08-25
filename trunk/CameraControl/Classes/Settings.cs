@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -254,6 +255,17 @@ namespace CameraControl.Classes
       }
     }
 
+    private RotateFlipType _rotate;
+    public RotateFlipType Rotate
+    {
+      get { return _rotate; }
+      set
+      {
+        _rotate = value;
+        NotifyPropertyChanged("AutoPreview");
+      }
+    }
+
     private string _systemMessage;
     [XmlIgnore]
     public string SystemMessage
@@ -297,6 +309,7 @@ namespace CameraControl.Classes
       PreviewSeconds = 3;
       LiveViewFreezeTimeOut = 3;
       PreviewLiveViewImage = true;
+      Rotate = RotateFlipType.RotateNoneFlipNone;
       CameraProperties = new CameraPropertyEnumerator();
     }
 

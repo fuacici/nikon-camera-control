@@ -5,7 +5,8 @@
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=CurrentTheme}"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Settings" Height="431" Width="350" Loaded="Window_Loaded" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" Background="{DynamicResource WindowBackgroundBrush}" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
+        Title="Settings" Height="431" Width="350" Loaded="Window_Loaded" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" Background="{DynamicResource WindowBackgroundBrush}" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:windows="clr-namespace:CameraControl.windows">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="220*" />
@@ -21,6 +22,11 @@
                     <StackPanel Orientation="Horizontal" Margin="3">
                         <CheckBox Content="Disable native drivers (not recomanded)" ToolTip="This option disable special handig of some cameras. Use this if you experience some problem"  IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=DisableNativeDrivers}" />
                     </StackPanel>
+                    <Button Content="Locate log file" Height="23" Name="button3" Width="100" Click="button3_Click" />
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Preview">
+                <StackPanel Margin="10" >
                     <StackPanel Orientation="Horizontal" Margin="3">
                         <CheckBox Content="Play sound after photo taken"  IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=PlaySound}" />
                     </StackPanel>
@@ -41,7 +47,10 @@
                             <xctk:IntegerUpDown Minimum="2" Maximum="120" Width="100" Value="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=LiveViewFreezeTimeOut}"/>
                         </StackPanel>
                     </StackPanel>
-                    <Button Content="Locate log file" Height="23" Name="button3" Width="100" Click="button3_Click" />
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Label Content="Rotate image :"/>
+                        <ComboBox ItemsSource="{Binding Path=RotateFlipTypesValues, RelativeSource={RelativeSource FindAncestor, AncestorType=windows:SettingsWnd, AncestorLevel=1}}" SelectedItem="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=Rotate}" />
+                    </StackPanel>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Triggers">

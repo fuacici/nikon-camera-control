@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -24,6 +25,9 @@ namespace CameraControl.windows
   /// </summary>
   public partial class SettingsWnd : Window
   {
+
+    public AsyncObservableCollection<RotateFlipType> RotateFlipTypesValues { get; set; }
+
     public SettingsWnd()
     {
       InitializeComponent();
@@ -31,6 +35,7 @@ namespace CameraControl.windows
       {
         cmb_keys.Items.Add(key);
       }
+      RotateFlipTypesValues = new AsyncObservableCollection<RotateFlipType>(Enum.GetValues(typeof(RotateFlipType)).Cast<RotateFlipType>().Distinct());
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
