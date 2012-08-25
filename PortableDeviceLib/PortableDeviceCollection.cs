@@ -142,7 +142,20 @@ namespace PortableDeviceLib
             return this.portableDevices[id];
         }
 
-        /// <summary>
+
+      /// <summary>
+      /// remove a disconected device, this should be call after device disconnected
+      ///  </summary>
+      /// <param name="id">Device ide of the disconnected device</param>
+        public void RemoveDevice(string id)
+        {
+          if(portableDevices.ContainsKey(id))
+          {
+            portableDevices.Remove(id);
+          }
+        }
+
+      /// <summary>
         /// Create the unique instance of PortableDeviceCollection
         /// </summary>
         /// <param name="appName"></param>
@@ -160,7 +173,7 @@ namespace PortableDeviceLib
             return _instance;
         }
 
-        private void RefreshDevices()
+        public void RefreshDevices()
         {
             this.deviceManager.RefreshDeviceList();
             uint _countDevices = 1;
