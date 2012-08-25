@@ -471,11 +471,14 @@ namespace PortableDeviceLib
       
       IntPtr tmpPtr = new IntPtr(Marshal.ReadInt64(ptr));
       byte[] res = new byte[(int)cbBytesRead];
-      System.Runtime.InteropServices.Marshal.Copy(tmpPtr, res, 0, (int) cbBytesRead);
+      System.Runtime.InteropServices.Marshal.Copy(tmpPtr, res, 0, (int)cbBytesRead);
       //for (int i = 0; i < cbBytesRead; i++)
       //{
       //  res[i] = Marshal.ReadByte(tmpPtr, i);
       //}
+
+      Marshal.FreeHGlobal(tmpPtr);
+      pinnedArray.Free();
 
       pParameters.Clear();
       pResults.Clear();
@@ -487,8 +490,6 @@ namespace PortableDeviceLib
 
       portableDeviceClass.SendCommand(0, pParameters, out pResults);
 
-      Marshal.FreeHGlobal(tmpPtr);
-      pinnedArray.Free();
 
 
       try
