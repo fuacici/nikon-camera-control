@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 //using System.Threading;
 using System.Threading;
@@ -503,6 +504,12 @@ namespace CameraControl.windows
       {
         ServiceProvider.Log.Error("Unable to autofocus", exception);
         ServiceProvider.Settings.SystemMessage = exception.Message;
+      }
+      catch (COMException comException)
+      {
+        ServiceProvider.Log.Error("Unable to autofocus unhadled error", comException);
+        ServiceProvider.Settings.SystemMessage = comException.Message;
+
       }
       FocusCounter = 0;
       _timer.Start();

@@ -643,8 +643,10 @@ namespace CameraControl.Devices.Nikon
       lock (Locker)
       {
         //check if the live view already is started if yes returning without doing anything
-        byte[] val = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_LiveViewStatus, -1);
-        if (val != null && val.Length > 0 && val[0] > 0)
+        MTPDataResponse response = _stillImageDevice.ExecuteReadDataEx(CONST_CMD_GetDevicePropValue,
+                                                                       CONST_PROP_LiveViewStatus, -1);
+        ErrorCodes.GetException(response.ErrorCode);
+        if (response.Data != null && response.Data.Length > 0 && response.Data[0] > 0)
           return;
         DeviceReady();
         LiveViewImageZoomRatio = 0;

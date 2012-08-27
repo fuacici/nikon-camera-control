@@ -346,9 +346,15 @@ namespace PortableDeviceLib
       return ExecuteReadData(code, param1, -1);
     }
 
-
     public byte[] ExecuteReadData(int code, int param1, int param2)
     {
+      return ExecuteReadDataEx(code, param1, param2).Data;
+    }
+
+    public MTPDataResponse ExecuteReadDataEx(int code, int param1, int param2)
+    {
+      MTPDataResponse resp = new MTPDataResponse();
+
       // source: http://msdn.microsoft.com/en-us/library/windows/desktop/ff384843(v=vs.85).aspx
       // and view-source:http://www.experts-exchange.com/Programming/Languages/C_Sharp/Q_26860397.html
       // error codes http://msdn.microsoft.com/en-us/library/windows/desktop/dd319335(v=vs.85).aspx
@@ -389,16 +395,19 @@ namespace PortableDeviceLib
 
       try
       {
-        int pValue = 0;
+        int pValue;
         pResults.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
         if (pValue != 0)
         {
-          // check if the device is busy, and after 100 ms seconds try again 
-          if (((uint)pValue) == PortableDeviceErrorCodes.ERROR_BUSY)
-          {
-            //Thread.Sleep(100);
-            //return ExecuteReadData(code, param1, param2);
-          }
+          resp.ErrorCode = (uint) pValue;
+          return resp;
+        }
+        uint iValue;
+        pResults.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out iValue);
+        if (iValue != 0)
+        {
+          resp.ErrorCode = iValue;
+          return resp;
         }
       }
       catch (Exception ex)
@@ -451,10 +460,13 @@ namespace PortableDeviceLib
 
       try
       {
-        int pValue = 0;
+        int pValue;
         pResults.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
         if (pValue != 0)
-          return null;
+        {
+          resp.ErrorCode = (uint)pValue;
+          return resp;
+        }
       }
       catch (Exception ex)
       {
@@ -470,8 +482,8 @@ namespace PortableDeviceLib
 
       
       IntPtr tmpPtr = new IntPtr(Marshal.ReadInt64(ptr));
-      byte[] res = new byte[(int)cbBytesRead];
-      System.Runtime.InteropServices.Marshal.Copy(tmpPtr, res, 0, (int)cbBytesRead);
+      resp.Data = new byte[(int)cbBytesRead];
+      System.Runtime.InteropServices.Marshal.Copy(tmpPtr, resp.Data, 0, (int)cbBytesRead);
       //for (int i = 0; i < cbBytesRead; i++)
       //{
       //  res[i] = Marshal.ReadByte(tmpPtr, i);
@@ -505,7 +517,7 @@ namespace PortableDeviceLib
       catch
       {
       }
-      return res;
+      return resp;
     }
 
     public uint ExecuteWriteData(int code,byte[] data, int param1, int param2)
