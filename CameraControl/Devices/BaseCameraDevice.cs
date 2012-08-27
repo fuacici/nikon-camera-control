@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CameraControl.Classes;
 using CameraControl.Devices.Classes;
@@ -334,6 +335,7 @@ namespace CameraControl.Devices
     }
 
     public virtual event PhotoCapturedEventHandler PhotoCaptured;
+    public virtual event EventHandler CaptureCompleted;
 
     #endregion
 

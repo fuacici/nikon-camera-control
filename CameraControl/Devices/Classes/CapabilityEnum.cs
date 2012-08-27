@@ -4,6 +4,7 @@
   {
     LiveView,
     Bulb,
-    RecordMovie
+    RecordMovie,
+    CanLockFocus
   }
 }
