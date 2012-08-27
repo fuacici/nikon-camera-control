@@ -41,12 +41,7 @@ namespace PortableDeviceLib
         results.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out iValue);
         if (iValue != 0)
         {
-          // check if the device is busy, and after 10 ms seconds try again 
-          //if (((uint) iValue) == PortableDeviceErrorCodes.ERROR_BUSY)
-          //{
-          //  Thread.Sleep(10);
-          //  return ExecuteWithNoData(code);
-          //}
+          return (uint)iValue;
         }
 
         uint pValue = 0;
@@ -402,13 +397,6 @@ namespace PortableDeviceLib
           resp.ErrorCode = (uint) pValue;
           return resp;
         }
-        uint iValue;
-        pResults.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out iValue);
-        if (iValue != 0)
-        {
-          resp.ErrorCode = iValue;
-          return resp;
-        }
       }
       catch (Exception ex)
       {
@@ -427,18 +415,6 @@ namespace PortableDeviceLib
         pResults.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_TOTAL_DATA_SIZE, out tmpBufferSize);
         pResults.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPTIMAL_TRANSFER_BUFFER_SIZE, out tmpTransferSize);
 
-        try
-        {
-          int pValue;
-          pResults.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
-          if (pValue != 0)
-          {
-            return null;
-          }
-        }
-        catch
-        {
-        }
       }
 
       pParameters.Clear();
@@ -506,12 +482,20 @@ namespace PortableDeviceLib
 
       try
       {
-        int tmpResult = 0;
-
-        pResults.GetErrorValue(ref PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out tmpResult);
-        if (tmpResult != 0)
+        int pValue;
+        pResults.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
+        if (pValue != 0)
         {
+          resp.ErrorCode = (uint)pValue;
+          return resp;
+        }
 
+        uint iValue;
+        pResults.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out iValue);
+        if (iValue != 0)
+        {
+          resp.ErrorCode = iValue;
+          return resp;
         }
       }
       catch

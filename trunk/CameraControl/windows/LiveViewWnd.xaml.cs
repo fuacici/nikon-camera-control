@@ -333,24 +333,7 @@ namespace CameraControl.windows
 
     private void Manager_PhotoTaked(WIA.Item imageFile)
     {
-      if (!IsVisible)
-        return;
-      if (PhotoCount <= PhotoNo && IsBusy)
-      {
-        Thread thread_photo = new Thread(TakePhoto);
-        thread_photo.Start();
-      }
-      else
-      {
-        IsBusy = false;
-      }
-      Thread thread = new Thread(new ThreadStart(delegate
-                                                   {
-                                                     Thread.Sleep(300);
-                                                     StartLiveView();
-                                                     _timer.Start();
-                                                   }));
-      thread.Start();
+
     }
 
     private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -522,7 +505,7 @@ namespace CameraControl.windows
       Thread.Sleep(100);
       try
       {
-        selectedPortableDevice.StopLiveView();
+        //selectedPortableDevice.StopLiveView();
         ServiceProvider.Log.Debug("LiveView: LiveViewStoped");
         Thread.Sleep(300);
         selectedPortableDevice.CapturePhotoNoAf();
@@ -636,12 +619,13 @@ namespace CameraControl.windows
                                            Topmost = true;
                                            Topmost = false;
                                            Focus();
-                                           ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTaked;
+                                           //ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTaked;
                                            StartLiveView();
                                            Thread.Sleep(500);
                                            FreezeImage = false;
                                            btn_record.IsEnabled =
                                              SelectedPortableDevice.GetCapability(CapabilityEnum.RecordMovie);
+                                           selectedPortableDevice.CaptureCompleted += selectedPortableDevice_CaptureCompleted;
                                            _timer.Start();
                                          }));
           break;
@@ -652,7 +636,7 @@ namespace CameraControl.windows
                                            try
                                            {
                                              _timer.Stop();
-                                             ServiceProvider.Settings.Manager.PhotoTakenDone -= Manager_PhotoTaked;
+                                             selectedPortableDevice.CaptureCompleted -= selectedPortableDevice_CaptureCompleted;
                                              Thread.Sleep(100);
                                              SelectedPortableDevice.StopLiveView();
                                              Recording = false;
@@ -713,6 +697,28 @@ namespace CameraControl.windows
           button1_Click(null, null);
           break;
       }
+    }
+
+    void selectedPortableDevice_CaptureCompleted(object sender, EventArgs e)
+    {
+      if (!IsVisible)
+        return;
+      if (PhotoCount <= PhotoNo && IsBusy)
+      {
+        Thread thread_photo = new Thread(TakePhoto);
+        thread_photo.Start();
+      }
+      else
+      {
+        IsBusy = false;
+      }
+      Thread thread = new Thread(new ThreadStart(delegate
+      {
+        Thread.Sleep(300);
+        StartLiveView();
+        _timer.Start();
+      }));
+      thread.Start(); 
     }
 
     #endregion
@@ -800,7 +806,7 @@ namespace CameraControl.windows
             if (!preview)
             {
               Recording = false;
-              ServiceProvider.DeviceManager.SelectedCameraDevice.StopLiveView();
+              //ServiceProvider.DeviceManager.SelectedCameraDevice.StopLiveView();
               ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhotoNoAf();
             }
             else

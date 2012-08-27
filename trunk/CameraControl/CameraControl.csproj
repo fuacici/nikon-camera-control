@@ -130,6 +130,7 @@
     </Compile>
     <Compile Include="Controls\ZoomBorder.cs" />
     <Compile Include="Devices\BaseCameraDevice.cs" />
+    <Compile Include="Devices\BaseMTPCamera.cs" />
     <Compile Include="Devices\CameraDeviceManager.cs" />
     <Compile Include="Devices\Classes\CapabilityEnum.cs" />
     <Compile Include="Devices\Classes\DeviceDescriptor.cs" />

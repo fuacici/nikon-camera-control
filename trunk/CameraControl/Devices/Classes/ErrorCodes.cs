@@ -33,6 +33,8 @@ namespace CameraControl.Devices.Classes
     public const uint MTP_Invalid_Parameter = 0x201D;
     public const uint MTP_Invalid_Status = 0xA004;
 
+    public const uint E_WPD_DEVICE_IS_HUNG = 0x802A0006;
+
     public static void GetException(int code)
     {
       GetException((uint) code);
@@ -64,6 +66,8 @@ namespace CameraControl.Devices.Classes
             throw new DeviceException("Invalid parameter. Coding error !", code);
           case MTP_Invalid_Status:
             throw new DeviceException("Invalid status.", code);
+          case E_WPD_DEVICE_IS_HUNG:
+            throw new DeviceException("E_WPD_DEVICE_IS_HUNG", code);
           default:
             throw new DeviceException("Device MTP error code: " + code.ToString("X"), code);
         }

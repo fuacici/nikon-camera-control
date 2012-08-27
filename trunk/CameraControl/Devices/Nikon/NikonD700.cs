@@ -4,12 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using CameraControl.Devices.Classes;
+using PortableDeviceLib;
 
 namespace CameraControl.Devices.Nikon
 {
   public class NikonD700:NikonBase
   {
     public const int CONST_PROP_RecordingMedia = 0xD10B;
+    public const int CONST_PROP_LiveViewMode = 0xD1A0;
 
     public override bool Init(DeviceDescriptor deviceDescriptor)
     {
@@ -17,13 +19,18 @@ namespace CameraControl.Devices.Nikon
       Capabilities.Clear();
       Capabilities.Add(CapabilityEnum.LiveView);
       Capabilities.Add(CapabilityEnum.RecordMovie);
+      CaptureInSdRam = true;
       return res;
     }
 
 
     public override void StartLiveView()
     {
+      // set record media to SDRAM
       SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)1 }, CONST_PROP_RecordingMedia, -1);
+      DeviceReady();
+      // set to Tripod shooting mode
+      SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)1 }, CONST_PROP_LiveViewMode, -1);
       DeviceReady();
       base.StartLiveView();
     }
@@ -38,28 +45,24 @@ namespace CameraControl.Devices.Nikon
 
     public override void CapturePhotoNoAf()
     {
-      ServiceProvider.Log.Debug("CapturePhotoNoAf: Started");
-      //lock (Locker)
-      //{
+      lock (Locker)
+      {
+        MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetDevicePropValue, CONST_PROP_LiveViewStatus, -1);
+        ErrorCodes.GetException(response.ErrorCode);
+        // test if live view is on 
+        if (response.Data != null && response.Data.Length > 0 && response.Data[0] > 0)
+        {
+          if (CaptureInSdRam)
+          {
+            DeviceReady();
+            ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF));
+            return;
+          }
+          StopLiveView();
+        }
         DeviceReady();
-        ServiceProvider.Log.Debug("CapturePhotoNoAf: Step 1");
-        byte oldval = 0;
-        byte[] val = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
-        if (val != null && val.Length > 0)
-          oldval = val[0];
-        ServiceProvider.Log.Debug("CapturePhotoNoAf: Step 2");
-        SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)4 }, CONST_PROP_AFModeSelect, -1);
-        ServiceProvider.Log.Debug("CapturePhotoNoAf: Step 3");
-        DeviceReady();
-        ServiceProvider.Log.Debug("CapturePhotoNoAf: Step 4");
-        ErrorCodes.GetException(CaptureInSdRam
-                                  ? _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF)
-                                  : _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
-        ServiceProvider.Log.Debug("CapturePhotoNoAf: Step 5");
-        if (val != null && val.Length > 0)
-          SetProperty(CONST_CMD_SetDevicePropValue, new[] { oldval }, CONST_PROP_AFModeSelect, -1);
-        ServiceProvider.Log.Debug("CapturePhotoNoAf: Step 6");
-      //}
+        ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
+      }
     }
 
     override public LiveViewData GetLiveViewImage()

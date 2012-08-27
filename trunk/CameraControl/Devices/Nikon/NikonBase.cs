@@ -16,7 +16,7 @@ using Timer = System.Timers.Timer;
 
 namespace CameraControl.Devices.Nikon
 {
-  public class NikonBase : BaseCameraDevice
+  public class NikonBase : BaseMTPCamera
   {
     public const int CONST_CMD_AfDrive = 0x90C1;
     public const int CONST_CMD_StartLiveView = 0x9201;
@@ -58,6 +58,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_Event_DevicePropChanged = 0x4006;
     public const int CONST_Event_StoreFull = 0x400A;
     public const int CONST_Event_CaptureComplete = 0x400D;
+    public const int CONST_Event_CaptureCompleteRecInSdram = 0xC102;
     public const int CONST_Event_ObjectAdded = 0x4002;
     public const int CONST_Event_ObjectAddedInSdram = 0xC101;
 
@@ -67,8 +68,7 @@ namespace CameraControl.Devices.Nikon
     private const int AppMinorVersionNumber = 0;
     private Timer _timer = new Timer(1000/15);
 
-    protected StillImageDevice _stillImageDevice = null;
-    
+   
     private Dictionary<uint, string> _isoTable = new Dictionary<uint, string>()
                                                   {
                                                     {0x0064, "100"},
@@ -266,10 +266,10 @@ namespace CameraControl.Devices.Nikon
       InitOther();
       ReadDeviceProperties(CONST_PROP_BatteryLevel);
       ReadDeviceProperties(CONST_PROP_ExposureIndicateStatus);
-      _timer.Start();
       IsConnected = true;
       PropertyChanged += NikonBase_PropertyChanged;
       CaptureInSdRam = true;
+      _timer.Start();
       return true;
     }
 
@@ -642,9 +642,9 @@ namespace CameraControl.Devices.Nikon
     {
       lock (Locker)
       {
+        DeviceReady();
         //check if the live view already is started if yes returning without doing anything
-        MTPDataResponse response = _stillImageDevice.ExecuteReadDataEx(CONST_CMD_GetDevicePropValue,
-                                                                       CONST_PROP_LiveViewStatus, -1);
+        MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetDevicePropValue, CONST_PROP_LiveViewStatus, -1);
         ErrorCodes.GetException(response.ErrorCode);
         if (response.Data != null && response.Data.Length > 0 && response.Data[0] > 0)
           return;
@@ -759,6 +759,20 @@ namespace CameraControl.Devices.Nikon
     {
       lock (Locker)
       {
+        MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetDevicePropValue, CONST_PROP_LiveViewStatus, -1);
+        ErrorCodes.GetException(response.ErrorCode);
+        // test if live view is on 
+        if (response.Data != null && response.Data.Length > 0 && response.Data[0] > 0)
+        {
+          if (CaptureInSdRam)
+          {
+            DeviceReady();
+            ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF));
+            return;
+          }
+          StopLiveView();
+        }
+          
         DeviceReady();
         byte oldval = 0;
         byte[] val = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
@@ -766,9 +780,7 @@ namespace CameraControl.Devices.Nikon
           oldval = val[0];
         SetProperty(CONST_CMD_SetDevicePropValue, new[] {(byte) 4}, CONST_PROP_AFModeSelect, -1);
         DeviceReady();
-        ErrorCodes.GetException(CaptureInSdRam
-                                  ? _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF)
-                                  : _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
+        ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
         if (val != null && val.Length > 0)
           SetProperty(CONST_CMD_SetDevicePropValue, new[] {oldval}, CONST_PROP_AFModeSelect, -1);
       }
@@ -980,6 +992,15 @@ namespace CameraControl.Devices.Nikon
                   PhotoCaptured(this, args);
               }
               break;
+            case CONST_Event_CaptureComplete:
+            case CONST_Event_CaptureCompleteRecInSdram:
+              {
+                if (CaptureCompleted != null)
+                {
+                  CaptureCompleted(this, new EventArgs());
+                }
+              }
+              break;
             default:
               Console.WriteLine("Unknow event code " + eventCode.ToString("X"));
               break;
@@ -1042,5 +1063,7 @@ namespace CameraControl.Devices.Nikon
     }
 
     public override event PhotoCapturedEventHandler PhotoCaptured;
+    public override event EventHandler CaptureCompleted;
+
   }
 }

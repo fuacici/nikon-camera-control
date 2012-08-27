@@ -209,7 +209,9 @@ namespace CameraControl
           {
             Directory.CreateDirectory(Path.GetDirectoryName(fileName));
           }
+          Console.WriteLine("Transfer started :" + fileName);
           eventArgs.CameraDevice.TransferFile(eventArgs.EventArgs, fileName);
+          Console.WriteLine("Transfer done :" + fileName);
           if (ServiceProvider.Settings.AutoPreview)
           {
             Dispatcher.Invoke(

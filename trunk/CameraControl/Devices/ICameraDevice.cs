@@ -1,4 +1,5 @@
-﻿using CameraControl.Classes;
+﻿using System;
+using CameraControl.Classes;
 using CameraControl.Devices.Classes;
 
 namespace CameraControl.Devices
@@ -55,5 +56,6 @@ namespace CameraControl.Devices
     void TransferFile(object o, string filename);
 
     event PhotoCapturedEventHandler PhotoCaptured;
+    event EventHandler CaptureCompleted;
   }
 }
