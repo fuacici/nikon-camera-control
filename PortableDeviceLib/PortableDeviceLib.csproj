@@ -120,6 +120,7 @@
     <Compile Include="Model\PortableDeviceFile.cs" />
     <Compile Include="Model\PortableDeviceFonctionalObject.cs" />
     <Compile Include="MTPConstants.cs" />
+    <Compile Include="MTPDataResponse.cs" />
     <Compile Include="PortableDevice.cs" />
     <Compile Include="Model\PortableDeviceContainerObject.cs" />
     <Compile Include="PortableDeviceErrorCodes.cs" />
