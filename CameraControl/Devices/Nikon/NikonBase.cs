@@ -780,7 +780,9 @@ namespace CameraControl.Devices.Nikon
           oldval = val[0];
         SetProperty(CONST_CMD_SetDevicePropValue, new[] {(byte) 4}, CONST_PROP_AFModeSelect, -1);
         DeviceReady();
-        ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
+        ErrorCodes.GetException(CaptureInSdRam
+                                  ? _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF)
+                                  : _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
         if (val != null && val.Length > 0)
           SetProperty(CONST_CMD_SetDevicePropValue, new[] {oldval}, CONST_PROP_AFModeSelect, -1);
       }

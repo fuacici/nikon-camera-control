@@ -34,6 +34,7 @@ namespace CameraControl.Devices.Classes
     public const uint MTP_Invalid_Status = 0xA004;
 
     public const uint E_WPD_DEVICE_IS_HUNG = 0x802A0006;
+    public const uint ERROR_BUSY = 0x800700AA;
 
     public static void GetException(int code)
     {
@@ -68,6 +69,8 @@ namespace CameraControl.Devices.Classes
             throw new DeviceException("Invalid status.", code);
           case E_WPD_DEVICE_IS_HUNG:
             throw new DeviceException("E_WPD_DEVICE_IS_HUNG", code);
+          case ERROR_BUSY:
+            throw new DeviceException("MTP device busy", code);
           default:
             throw new DeviceException("Device MTP error code: " + code.ToString("X"), code);
         }
