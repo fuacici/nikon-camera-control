@@ -79,6 +79,32 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
+            <TabItem Header="Focus &amp; Live view">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="168*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="5" />                        
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="260*" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Smal focus step" Grid.Row="1" Name="label1" />
+                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="1" Minimum="1" Value="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=SmalFocusStep}" />
+                    <Label Content="Medium focus step" Grid.Row="3" Grid.RowSpan="2" Name="label2" />
+                    <Label Content="Larg focus step" Grid.Row="5" Grid.RowSpan="2" Name="label3" />
+                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="3" Minimum="1" Value="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=MediumFocusStep}"/>
+                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="5" Minimum="1" Value="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=LargeFocusStep}"/>
+                </Grid>
+            </TabItem>
         </TabControl>
         <Button Content="Ok" Height="23" IsDefault="True" Name="button1" Width="75" Margin="12,0,0,16" Grid.Row="1" HorizontalAlignment="Left" Click="button1_Click" VerticalAlignment="Bottom" />
         <Button Content="Cancel" Height="23" IsCancel="True" Name="button2" Width="75" Margin="0,0,12,16" Grid.Row="1" Click="button2_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom" />

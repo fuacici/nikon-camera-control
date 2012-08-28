@@ -33,9 +33,6 @@ namespace CameraControl.windows
   /// </summary>
   public partial class LiveViewWnd : Window, IWindow, INotifyPropertyChanged
   {
-    private const int Step1 = 10;
-    private const int Step2 = 100;
-    private const int Step3 = 500;
 
     private int _retries = 0;
     private ICameraDevice selectedPortableDevice;
@@ -554,32 +551,32 @@ namespace CameraControl.windows
 
     private void btn_focusm_Click(object sender, RoutedEventArgs e)
     {
-      SetFocus(-Step1);
+      SetFocus(-ServiceProvider.Settings.SmalFocusStep);
     }
 
     private void btn_focusp_Click(object sender, RoutedEventArgs e)
     {
-      SetFocus(Step1);
+      SetFocus(ServiceProvider.Settings.SmalFocusStep);
     }
 
     private void btn_focusmm_Click(object sender, RoutedEventArgs e)
     {
-      SetFocus(-Step2);
+      SetFocus(-ServiceProvider.Settings.MediumFocusStep);
     }
 
     private void btn_focuspp_Click(object sender, RoutedEventArgs e)
     {
-      SetFocus(Step2);
+      SetFocus(ServiceProvider.Settings.MediumFocusStep);
     }
 
     private void btn_focusmmm_Click(object sender, RoutedEventArgs e)
     {
-      SetFocus(-Step3);
+      SetFocus(-ServiceProvider.Settings.LargeFocusStep);
     }
 
     private void btn_focusppp_Click(object sender, RoutedEventArgs e)
     {
-      SetFocus(Step3);
+      SetFocus(ServiceProvider.Settings.LargeFocusStep);
     }
 
     private void canvas_SizeChanged(object sender, SizeChangedEventArgs e)
