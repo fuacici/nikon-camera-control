@@ -266,6 +266,39 @@ namespace CameraControl.Classes
       }
     }
 
+    private int _smalFocusStep;
+    public int SmalFocusStep
+    {
+      get { return _smalFocusStep; }
+      set
+      {
+        _smalFocusStep = value;
+        NotifyPropertyChanged("SmalFocusStep");
+      }
+    }
+
+    private int _mediumFocusStep;
+    public int MediumFocusStep
+    {
+      get { return _mediumFocusStep; }
+      set
+      {
+        _mediumFocusStep = value;
+        NotifyPropertyChanged("MediumFocusStep");
+      }
+    }
+
+    private int _largeFocusStep;
+    public int LargeFocusStep
+    {
+      get { return _largeFocusStep; }
+      set
+      {
+        _largeFocusStep = value;
+        NotifyPropertyChanged("LargeFocusStep");
+      }
+    }
+
     private string _systemMessage;
     [XmlIgnore]
     public string SystemMessage
@@ -309,6 +342,9 @@ namespace CameraControl.Classes
       PreviewSeconds = 3;
       LiveViewFreezeTimeOut = 3;
       PreviewLiveViewImage = true;
+      SmalFocusStep = 10;
+      MediumFocusStep = 100;
+      LargeFocusStep = 500;
       Rotate = RotateFlipType.RotateNoneFlipNone;
       CameraProperties = new CameraPropertyEnumerator();
     }
