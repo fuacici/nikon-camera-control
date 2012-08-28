@@ -65,6 +65,7 @@ namespace CameraControl.Classes
 
     public void TakePhoto()
     {
+      ServiceProvider.Log.Debug("Bracketing started");
       if (Mode == 0)
       {
         if (ExposureValues.Count == 0)
@@ -114,6 +115,7 @@ namespace CameraControl.Classes
 
     private void CaptureNextPhoto()
     {
+      ServiceProvider.Log.Debug("Bracketing take next photo");
       if (Mode == 0)
       {
         try
@@ -184,6 +186,7 @@ namespace CameraControl.Classes
 
     public void Stop()
     {
+      ServiceProvider.Log.Debug("Bracketing stop");
       IsBusy = false;
       ServiceProvider.Settings.Manager.PhotoTakenDone -= Manager_PhotoTakenDone;
       Thread thread = null;
