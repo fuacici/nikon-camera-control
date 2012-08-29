@@ -489,6 +489,10 @@ namespace CameraControl
         {
           foreach (FileItem fileItem in filestodelete)
           {
+            if(fileItem.FileName==ServiceProvider.Settings.SelectedBitmap.FileItem.FileName)
+            {
+              ServiceProvider.Settings.SelectedBitmap.DisplayImage = null;
+            }
             if (File.Exists(fileItem.FileName))
               Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fileItem.FileName, UIOption.OnlyErrorDialogs,
                                                                  RecycleOption.SendToRecycleBin);
