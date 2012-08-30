@@ -273,7 +273,7 @@ namespace CameraControl.Devices.Nikon
       return true;
     }
 
-    void NikonBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    protected void NikonBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
       if (e.PropertyName == "CaptureInSdRam")
       {
@@ -947,12 +947,14 @@ namespace CameraControl.Devices.Nikon
     public override void StartRecordMovie()
     {
       base.StartRecordMovie();
+      DeviceReady();
       ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_StartMovieRecInCard));
     }
 
     public override void StopRecordMovie()
     {
       base.StopRecordMovie();
+      DeviceReady();
       ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_EndMovieRec));
     }
 
