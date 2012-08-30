@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 
 namespace CameraControl.Classes
@@ -12,6 +13,8 @@ namespace CameraControl.Classes
   {
     public int Index = 0;
     private string _defec = "0";
+    private CameraPreset _cameraPreset = new CameraPreset();
+    private ICameraDevice _cameraDevice = null;
 
     public event EventHandler PhotoCaptured;
     public event EventHandler IsBusyChanged;
@@ -55,150 +58,231 @@ namespace CameraControl.Classes
       }
     }
 
+    private AsyncObservableCollection<string> _presetValues;
+    public AsyncObservableCollection<string> PresetValues
+    {
+      get { return _presetValues; }
+      set
+      {
+        _presetValues = value;
+        NotifyPropertyChanged("PresetValues");
+      }
+    }
+
+
     public BraketingClass()
     {
       IsBusy = false;
-      ExposureValues = new AsyncObservableCollection<string> ();
-      ShutterValues=new AsyncObservableCollection<string>();
+      ExposureValues = new AsyncObservableCollection<string>();
+      ShutterValues = new AsyncObservableCollection<string>();
+      PresetValues = new AsyncObservableCollection<string>();
       Mode = 0;
     }
 
-    public void TakePhoto()
+    public void TakePhoto(ICameraDevice device)
     {
+      _cameraDevice = device;
       ServiceProvider.Log.Debug("Bracketing started");
-      if (Mode == 0)
+      _cameraDevice.PhotoCaptured += _cameraDevice_PhotoCaptured;
+      IsBusy = true;
+      switch (Mode)
       {
-        if (ExposureValues.Count == 0)
-          return;
-        Index = 0;
-        try
-        {
-          _defec = ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.Value;
-          ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTakenDone;
-          IsBusy = true;
-          ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue(ExposureValues[Index]);
-          //Thread.Sleep(100);
-          ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
-          //Thread.Sleep(100);
-          Index++;
-        }
-        catch (DeviceException exception)
-        {
-          ServiceProvider.Log.Error(exception);
-          ServiceProvider.Settings.SystemMessage = exception.Message;
-        }
+        case 0:
+          {
+            if (ExposureValues.Count == 0)
+              return;
+            Index = 0;
+            try
+            {
+              _defec = _cameraDevice.ExposureCompensation.Value;
+              _cameraDevice.ExposureCompensation.SetValue(ExposureValues[Index]);
+              _cameraDevice.CapturePhoto();
+              Index++;
+            }
+            catch (DeviceException exception)
+            {
+              ServiceProvider.Log.Error(exception);
+              ServiceProvider.Settings.SystemMessage = exception.Message;
+            }
+          }
+          break;
+        case 1:
+          {
+            if (ShutterValues.Count == 0)
+              return;
+            Index = 0;
+            try
+            {
+              _defec = _cameraDevice.ShutterSpeed.Value;
+              _cameraDevice.ShutterSpeed.SetValue(ShutterValues[Index]);
+              _cameraDevice.CapturePhoto();
+              Index++;
+            }
+            catch (DeviceException exception)
+            {
+              ServiceProvider.Log.Error(exception);
+              ServiceProvider.Settings.SystemMessage = exception.Message;
+            }
+          }
+          break;
+        case 2:
+          {
+            if (PresetValues.Count == 0)
+              return;
+            Index = 0;
+            try
+            {
+              _cameraPreset.Get(_cameraDevice);
+              CameraPreset preset = ServiceProvider.Settings.GetPreset(PresetValues[Index]);
+              if (preset != null)
+                preset.Set(_cameraDevice);
+              _cameraDevice.CapturePhoto();
+              Index++;
+            }
+            catch (DeviceException exception)
+            {
+              ServiceProvider.Log.Error(exception);
+              ServiceProvider.Settings.SystemMessage = exception.Message;
+            }
+
+          }
+          break;
       }
-      else
+    }
+
+    void _cameraDevice_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
+    {
+      if (!IsBusy)
+        return;
+      if (PhotoCaptured != null)
+        PhotoCaptured(this, new EventArgs());
+      switch (Mode)
       {
-        if (ShutterValues.Count == 0)
-          return;
-        Index = 0;
-        try
-        {
-          _defec = ServiceProvider.DeviceManager.SelectedCameraDevice.ShutterSpeed.Value;
-          ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTakenDone;
-          IsBusy = true;
-          ServiceProvider.DeviceManager.SelectedCameraDevice.ShutterSpeed.SetValue(ShutterValues[Index]);
-          //Thread.Sleep(100);
-          ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
-          //Thread.Sleep(100);
-          Index++;
-        }
-        catch (DeviceException exception)
-        {
-          ServiceProvider.Log.Error(exception);
-          ServiceProvider.Settings.SystemMessage = exception.Message;
-        }
-        
+        case 0:
+          {
+            if (Index < ExposureValues.Count)
+            {
+              Thread thread = new Thread(CaptureNextPhoto);
+              thread.Start();
+            }
+            else
+            {
+              Stop();
+            }
+          }
+          break;
+        case 1:
+          {
+            if (Index < ShutterValues.Count)
+            {
+              Thread thread = new Thread(CaptureNextPhoto);
+              thread.Start();
+            }
+            else
+            {
+              Stop();
+            }
+          }
+          break;
+        case 2:
+          {
+            if (Index < PresetValues.Count)
+            {
+              Thread thread = new Thread(CaptureNextPhoto);
+              thread.Start();
+            }
+            else
+            {
+              Stop();
+            }
+          }
+          break;
       }
     }
 
     private void CaptureNextPhoto()
     {
       ServiceProvider.Log.Debug("Bracketing take next photo");
-      if (Mode == 0)
+      switch (Mode)
       {
-        try
-        {
-          //Thread.Sleep(100);
-          ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue(ExposureValues[Index]);
-          //Thread.Sleep(100);
-          ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhotoNoAf();
-          //Thread.Sleep(100);
-          Index++;
-        }
-        catch (DeviceException exception)
-        {
-          ServiceProvider.Log.Error(exception);
-          ServiceProvider.Settings.SystemMessage = exception.Message;
-        }
-      }
-      else
-      {
-        try
-        {
-          //Thread.Sleep(100);
-          ServiceProvider.DeviceManager.SelectedCameraDevice.ShutterSpeed.SetValue(ShutterValues[Index]);
-          //Thread.Sleep(100);
-          ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhotoNoAf();
-          //Thread.Sleep(100);
-          Index++;
-        }
-        catch (DeviceException exception)
-        {
-          ServiceProvider.Log.Error(exception);
-          ServiceProvider.Settings.SystemMessage = exception.Message;
-        }
-      }
-    }
+        case 0:
+          {
+            try
+            {
+              _cameraDevice.ExposureCompensation.SetValue(ExposureValues[Index]);
+              _cameraDevice.CapturePhotoNoAf();
+              Index++;
+            }
+            catch (DeviceException exception)
+            {
+              ServiceProvider.Log.Error(exception);
+              ServiceProvider.Settings.SystemMessage = exception.Message;
+            }
+          }
+          break;
+        case 1:
+          {
+            try
+            {
+              _cameraDevice.ShutterSpeed.SetValue(ShutterValues[Index]);
+              _cameraDevice.CapturePhotoNoAf();
+              Index++;
+            }
+            catch (DeviceException exception)
+            {
+              ServiceProvider.Log.Error(exception);
+              ServiceProvider.Settings.SystemMessage = exception.Message;
+            }
+          }
+          break;
+        case 2:
+          {
+            try
+            {
+              CameraPreset preset = ServiceProvider.Settings.GetPreset(PresetValues[Index]);
+              if (preset != null)
+                preset.Set(_cameraDevice);
+              _cameraDevice.CapturePhotoNoAf();
+              Index++;
+            }
+            catch (DeviceException exception)
+            {
+              ServiceProvider.Log.Error(exception);
+              ServiceProvider.Settings.SystemMessage = exception.Message;
+            }
 
-    void Manager_PhotoTakenDone(WIA.Item imageFile)
-    {
-      if (!IsBusy)
-        return;
-      if (PhotoCaptured != null)
-        PhotoCaptured(this, new EventArgs());
-      if (Mode == 0)
-      {
-        if (Index < ExposureValues.Count)
-        {
-          Thread thread = new Thread(CaptureNextPhoto);
-          thread.Start();
-        }
-        else
-        {
-          Stop();
-        }
-      }
-      else
-      {
-        if (Index < ShutterValues.Count)
-        {
-          Thread thread = new Thread(CaptureNextPhoto);
-          thread.Start();
-        }
-        else
-        {
-          Stop();
-        }
+          }
+          break;
       }
     }
 
     public void Stop()
     {
+      if (_cameraDevice == null)
+        return;
       ServiceProvider.Log.Debug("Bracketing stop");
       IsBusy = false;
-      ServiceProvider.Settings.Manager.PhotoTakenDone -= Manager_PhotoTakenDone;
+      _cameraDevice.PhotoCaptured += _cameraDevice_PhotoCaptured;
       Thread thread = null;
-      if (Mode == 0)
+      switch (Mode)
       {
-        thread = new Thread(() => ServiceProvider.DeviceManager.SelectedCameraDevice.
-                                    ExposureCompensation.SetValue(_defec));
-      }
-      else
-      {
-        thread = new Thread(() => ServiceProvider.DeviceManager.SelectedCameraDevice.
-                                    ShutterSpeed.SetValue(_defec));
+        case 0:
+          {
+            thread = new Thread(() => _cameraDevice.
+                                        ExposureCompensation.SetValue(_defec));
+          }
+          break;
+        case 1:
+          {
+            thread = new Thread(() => _cameraDevice.
+                                        ShutterSpeed.SetValue(_defec));
+          }
+          break;
+        case 2:
+          {
+            thread = new Thread(() => _cameraPreset.Set(_cameraDevice));
+          }
+          break;
       }
       thread.Start();
       if (BracketingDone != null)

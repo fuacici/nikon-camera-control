@@ -18,6 +18,7 @@ namespace CameraControl.windows
     private PhotoSession _photoSession;
     AsyncObservableCollection<CheckedListItem> collection = new AsyncObservableCollection<CheckedListItem>();
     AsyncObservableCollection<CheckedListItem> shuttercollection = new AsyncObservableCollection<CheckedListItem>();
+    AsyncObservableCollection<CheckedListItem> presetcollection = new AsyncObservableCollection<CheckedListItem>();
     BackgroundWorker backgroundWorker = new BackgroundWorker();
 
     public BraketingWnd(ICameraDevice device, PhotoSession session)
@@ -26,7 +27,7 @@ namespace CameraControl.windows
       _device = device;
       _photoSession = session;
       _photoSession.Braketing.IsBusy = false;
-      backgroundWorker.DoWork += delegate { _photoSession.Braketing.TakePhoto(); };
+      backgroundWorker.DoWork += delegate { _photoSession.Braketing.TakePhoto(ServiceProvider.DeviceManager.SelectedCameraDevice); };
       _photoSession.Braketing.IsBusyChanged += Braketing_IsBusyChanged;
       _photoSession.Braketing.PhotoCaptured += Braketing_PhotoCaptured;
       _photoSession.Braketing.BracketingDone += Braketing_BracketingDone;
@@ -40,11 +41,25 @@ namespace CameraControl.windows
 
     void Braketing_PhotoCaptured(object sender, EventArgs e)
     {
-      Dispatcher.Invoke(new Action(delegate
+      int count = 0;
+      switch (_photoSession.Braketing.Mode)
       {
-        lbl_status.Content = "Action in progress " + (_photoSession.Braketing.Mode == 0 ? _photoSession.Braketing.ExposureValues.Count : _photoSession.Braketing.ShutterValues.Count) + "/" +
-          _photoSession.Braketing.Index;
-      }));
+        case 0:
+          count = _photoSession.Braketing.ExposureValues.Count;
+          break;
+        case 1:
+          count = _photoSession.Braketing.ShutterValues.Count;
+          break;
+        case 2:
+          count = _photoSession.Braketing.PresetValues.Count;
+          break;
+
+      }
+      Dispatcher.Invoke(new Action(delegate
+                                     {
+                                       lbl_status.Content = "Action in progress " + count + "/" +
+                                                            _photoSession.Braketing.Index;
+                                     }));
     }
 
     void Braketing_IsBusyChanged(object sender, EventArgs e)
@@ -123,6 +138,18 @@ namespace CameraControl.windows
       }
       lst_shutter.ItemsSource = shuttercollection;
 
+      foreach (CameraPreset cameraPreset in ServiceProvider.Settings.CameraPresets)
+      {
+        CheckedListItem item = new CheckedListItem()
+                                 {
+                                   Name = cameraPreset.Name,
+                                   IsChecked = _photoSession.Braketing.PresetValues.Contains(cameraPreset.Name)
+                                 };
+        item.PropertyChanged += item_PropertyChanged;
+        presetcollection.Add(item);
+      }
+      lst_preset.ItemsSource = presetcollection;
+
       if(_device.Mode.Value=="M")
       {
         tab_exposure.IsEnabled = false;
@@ -151,6 +178,11 @@ namespace CameraControl.windows
       foreach (CheckedListItem listItem in shuttercollection.Where(listItem => listItem.IsChecked && !_photoSession.Braketing.ShutterValues.Contains(listItem.Name)))
       {
         _photoSession.Braketing.ShutterValues.Add(listItem.Tag);
+      }
+      _photoSession.Braketing.PresetValues.Clear();
+      foreach (CheckedListItem listItem in presetcollection.Where((item) => item.IsChecked && !_photoSession.Braketing.PresetValues.Contains(item.Name)))
+      {
+        _photoSession.Braketing.PresetValues.Add(listItem.Name);
       }
     }
 
@@ -181,6 +213,23 @@ namespace CameraControl.windows
     private void button3_Click(object sender, RoutedEventArgs e)
     {
       HelpProvider.Run(HelpSections.Bracketig);
+    }
+
+    private void TabControl_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+      if(e.AddedItems[0]==tab_exposure)
+      {
+        _photoSession.Braketing.Mode = 0;
+      }
+      if (e.AddedItems[0] == tab_manual)
+      {
+        _photoSession.Braketing.Mode = 1;
+      }
+      if (e.AddedItems[0] == tab_preset)
+      {
+        _photoSession.Braketing.Mode = 2;
+      }
+
     }
 
   }

@@ -10,7 +10,7 @@
             <RowDefinition Height="33*" />
             <RowDefinition Height="70*" />
         </Grid.RowDefinitions>
-        <TabControl Height="334" VerticalAlignment="Top">
+        <TabControl Height="334" VerticalAlignment="Top" SelectionChanged="TabControl_SelectionChanged">
             <TabItem Header="Exposure bracketing" Name="tab_exposure" >
                 <Grid>
                     <ListBox Margin="22,72,20,22" Name="listBox1">
@@ -37,7 +37,7 @@
                     </ListBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="Preset bracketing">
+            <TabItem Header="Preset bracketing" Name="tab_preset">
                 <Grid>
                     <ListBox Margin="22,14,20,22" Name="lst_preset">
                         <ListBox.ItemTemplate>
@@ -47,7 +47,6 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
-
             </TabItem>
         </TabControl>
         <Button Content="Start" Grid.Row="2" HorizontalAlignment="Left" Margin="12,0,0,14" Name="btn_shot" Width="75" Height="23" VerticalAlignment="Bottom" Click="btn_shot_Click" />

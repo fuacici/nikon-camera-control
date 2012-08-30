@@ -15,9 +15,43 @@ namespace CameraControl.Devices
 
     public MTPDataResponse ExecuteReadDataEx(int code, int param1, int param2)
     {
-      return ExecuteReadDataEx(code, param1, param2, 100, 0);
+      return ExecuteReadDataEx(code, param1, param2, 1000, 0);
     }
 
+    public uint ExecuteWithNoData(int code, uint param1)
+    {
+      return ExecuteWithNoData(code, param1, 1000, 0);
+    }
+
+    public uint ExecuteWithNoData(int code)
+    {
+      return ExecuteWithNoData(code, 1000, 0);
+    }
+
+
+    public uint ExecuteWithNoData(int code, uint param1, int loop, int counter)
+    {
+      uint res = _stillImageDevice.ExecuteWithNoData(code, param1);
+      if ((res == ErrorCodes.MTP_Device_Busy || res == PortableDeviceErrorCodes.ERROR_BUSY) && loop < counter)
+      {
+        Thread.Sleep(10);
+        loop++;
+        return ExecuteWithNoData(code, param1, loop, counter);
+      }
+      return res;
+    }
+
+    public uint ExecuteWithNoData(int code,  int loop, int counter)
+    {
+      uint res = _stillImageDevice.ExecuteWithNoData(code);
+      if ((res == ErrorCodes.MTP_Device_Busy || res == PortableDeviceErrorCodes.ERROR_BUSY) && loop < counter)
+      {
+        Thread.Sleep(10);
+        loop++;
+        return ExecuteWithNoData(code, loop, counter);
+      }
+      return res;
+    }
 
     public MTPDataResponse ExecuteReadDataEx(int code, int param1, int param2, int loop, int counter)
     {
