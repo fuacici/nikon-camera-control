@@ -144,6 +144,7 @@ namespace CameraControl
       try
       {
         ServiceProvider.Settings.SystemMessage = "Photo transfer begin.";
+        ServiceProvider.Log.Debug("Photo transfer begin.");
         PhotoCapturedEventArgs eventArgs = o as PhotoCapturedEventArgs;
         if (ServiceProvider.Settings.DefaultSession.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam)
           return;
@@ -209,9 +210,9 @@ namespace CameraControl
           {
             Directory.CreateDirectory(Path.GetDirectoryName(fileName));
           }
-          Console.WriteLine("Transfer started :" + fileName);
+          ServiceProvider.Log.Debug("Transfer started :" + fileName);
           eventArgs.CameraDevice.TransferFile(eventArgs.EventArgs, fileName);
-          Console.WriteLine("Transfer done :" + fileName);
+          ServiceProvider.Log.Debug("Transfer done :" + fileName);
           if (ServiceProvider.Settings.AutoPreview)
           {
             Dispatcher.Invoke(
@@ -276,7 +277,7 @@ namespace CameraControl
 
     private void button3_Click(object sender, RoutedEventArgs e)
     {
-       
+      ServiceProvider.Log.Debug("Main window capture started"); 
       if (!ServiceProvider.Settings.DefaultSession.TimeLapse.IsDisabled)
       {
         if (

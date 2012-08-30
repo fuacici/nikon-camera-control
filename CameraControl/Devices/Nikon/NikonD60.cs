@@ -19,6 +19,8 @@ namespace CameraControl.Devices.Nikon
                                                   {4, "RAW + JPEG (BASIC)"},
                                                 };
 
+    
+
     protected override void InitCompressionSetting()
     {
       try
@@ -46,6 +48,7 @@ namespace CameraControl.Devices.Nikon
       bool res = base.Init(deviceDescriptor);
       HaveLiveView = false;
       CaptureInSdRam = false;
+      PropertyChanged -= NikonBase_PropertyChanged;
       return res;
     }
 
