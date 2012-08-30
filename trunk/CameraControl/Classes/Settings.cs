@@ -460,6 +460,18 @@ namespace CameraControl.Classes
       return null;
     }
 
+    public CameraPreset GetPreset(string name)
+    {
+      if (string.IsNullOrEmpty(name))
+        return null;
+      foreach (CameraPreset cameraPreset in CameraPresets)
+      {
+        if (cameraPreset.Name == name)
+          return cameraPreset;
+      }
+      return null;
+    }
+
     public void LoadSessionData()
     {
       string sesionFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),

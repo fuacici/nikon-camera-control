@@ -759,32 +759,42 @@ namespace CameraControl.Devices.Nikon
     {
       lock (Locker)
       {
-        MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetDevicePropValue, CONST_PROP_LiveViewStatus, -1);
-        ErrorCodes.GetException(response.ErrorCode);
-        // test if live view is on 
-        if (response.Data != null && response.Data.Length > 0 && response.Data[0] > 0)
-        {
-          if (CaptureInSdRam)
-          {
-            DeviceReady();
-            ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF));
-            return;
-          }
-          StopLiveView();
-        }
-          
-        DeviceReady();
+        byte[] val = null;
         byte oldval = 0;
-        byte[] val = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
-        if (val != null && val.Length > 0)
-          oldval = val[0];
-        SetProperty(CONST_CMD_SetDevicePropValue, new[] {(byte) 4}, CONST_PROP_AFModeSelect, -1);
-        DeviceReady();
-        ErrorCodes.GetException(CaptureInSdRam
-                                  ? _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF)
-                                  : _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
-        if (val != null && val.Length > 0)
-          SetProperty(CONST_CMD_SetDevicePropValue, new[] {oldval}, CONST_PROP_AFModeSelect, -1);
+        try
+        {
+          DeviceReady();
+          MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetDevicePropValue, CONST_PROP_LiveViewStatus, -1);
+          ErrorCodes.GetException(response.ErrorCode);
+          // test if live view is on 
+          if (response.Data != null && response.Data.Length > 0 && response.Data[0] > 0)
+          {
+            if (CaptureInSdRam)
+            {
+              DeviceReady();
+              ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF));
+              return;
+            }
+            StopLiveView();
+          }
+
+          DeviceReady();
+          val = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
+          if (val != null && val.Length > 0)
+            oldval = val[0];
+          SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)4 }, CONST_PROP_AFModeSelect, -1);
+          DeviceReady();
+          ErrorCodes.GetException(CaptureInSdRam
+                                    ? ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF)
+                                    : ExecuteWithNoData(CONST_CMD_InitiateCapture));
+          DeviceReady();
+        }
+        finally
+        {
+          if (val != null && val.Length > 0)
+            SetProperty(CONST_CMD_SetDevicePropValue, new[] { oldval }, CONST_PROP_AFModeSelect, -1);
+        }
+
       }
     }
 
