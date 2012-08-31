@@ -971,18 +971,22 @@ namespace CameraControl.Devices.Nikon
     private void getEvent()
     {
       DeviceReady();
-      byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetEvent);
-      if (result == null)
+      MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetEvent);
+
+      if (response.Data == null)
+      {
+        ServiceProvider.Log.Debug("Get event error :" + response.ErrorCode.ToString("X"));
         return;
-      int eventCount = BitConverter.ToInt16(result, 0);
+      }
+      int eventCount = BitConverter.ToInt16(response.Data, 0);
       if (eventCount > 0)
       {
         for (int i = 0; i < eventCount; i++)
         {
           DeviceReady();
-          uint eventCode = BitConverter.ToUInt16(result, 6*i + 2);
-          ushort eventParam = BitConverter.ToUInt16(result, 6*i + 4);
-          int longeventParam = BitConverter.ToInt32(result, 6 * i + 4);
+          uint eventCode = BitConverter.ToUInt16(response.Data, 6 * i + 2);
+          ushort eventParam = BitConverter.ToUInt16(response.Data, 6 * i + 4);
+          int longeventParam = BitConverter.ToInt32(response.Data, 6 * i + 4);
           switch (eventCode)
           {
             case CONST_Event_DevicePropChanged:
@@ -1017,6 +1021,8 @@ namespace CameraControl.Devices.Nikon
               break;
             default:
               Console.WriteLine("Unknow event code " + eventCode.ToString("X"));
+              ServiceProvider.Log.Debug("Unknow event code :" + eventCode.ToString("X") + "|" +
+                                        longeventParam.ToString("X"));
               break;
           }
         }
