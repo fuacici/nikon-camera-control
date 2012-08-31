@@ -210,7 +210,7 @@ namespace CameraControl.Classes
             try
             {
               _cameraDevice.ExposureCompensation.SetValue(ExposureValues[Index]);
-              _cameraDevice.CapturePhotoNoAf();
+              _cameraDevice.CapturePhoto();
               Index++;
             }
             catch (DeviceException exception)
@@ -225,7 +225,7 @@ namespace CameraControl.Classes
             try
             {
               _cameraDevice.ShutterSpeed.SetValue(ShutterValues[Index]);
-              _cameraDevice.CapturePhotoNoAf();
+              _cameraDevice.CapturePhoto();
               Index++;
             }
             catch (DeviceException exception)
@@ -242,7 +242,7 @@ namespace CameraControl.Classes
               CameraPreset preset = ServiceProvider.Settings.GetPreset(PresetValues[Index]);
               if (preset != null)
                 preset.Set(_cameraDevice);
-              _cameraDevice.CapturePhotoNoAf();
+              _cameraDevice.CapturePhoto();
               Index++;
             }
             catch (DeviceException exception)
