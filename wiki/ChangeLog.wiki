@@ -1,5 +1,5 @@
 #summary ChangeLog
-#labels Featured
+#labels Deprecated
 [http://cameracontrol.host-ed.me/2012/05/20/beta-release-0-7-115/ 0.7.115]
   * Configure camera "Compression Settings"
   * Configure camera "Metering Mode"
