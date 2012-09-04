@@ -24,6 +24,7 @@
 ||Nikon D800||X||?||?||X||Native||
 ||Nikon D800E||X||?||?||?||Native||
 ||Nikon D90||X||?||?||-||Native|| 
+||Other DSLR||X||-||?||-||WIA|| 
 
 
 
