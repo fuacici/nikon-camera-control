@@ -30,6 +30,11 @@ namespace CameraControl.Classes
       return true;
     }
 
+    public static bool Run(string exe)
+    {
+      return Run(exe, "");
+    }
+
     public static bool Run(string exe, string param)
     {
       try

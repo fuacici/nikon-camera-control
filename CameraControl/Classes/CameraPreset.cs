@@ -12,11 +12,11 @@ namespace CameraControl.Classes
   {
     public string Name { get; set; }
     
-    public List<ValuePair> Values { get; set; }
+    public AsyncObservableCollection<ValuePair> Values { get; set; }
 
     public CameraPreset()
     {
-      Values = new List<ValuePair>();
+      Values = new AsyncObservableCollection<ValuePair>();
     }
 
     public void Get(ICameraDevice camera)
@@ -117,6 +117,9 @@ namespace CameraControl.Classes
       return cameraPreset;
     }
 
-
+    public override string ToString()
+    {
+      return Name;
+    }
   }
 }

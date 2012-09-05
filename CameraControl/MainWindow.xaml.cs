@@ -602,5 +602,11 @@ namespace CameraControl
       }
     }
 
+    private void MenuItem_Click_5(object sender, RoutedEventArgs e)
+    {
+      PresetEditWnd wnd = new PresetEditWnd();
+      wnd.ShowDialog();
+    }
+
   }
 }

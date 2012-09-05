@@ -48,6 +48,7 @@ namespace CameraControl.Devices
                         {"D3S", typeof (NikonD90)},
                         {"D3X", typeof (NikonD3X)},
                         {"D300", typeof (NikonD300)},
+                        {"D300s", typeof (NikonD300)},
                         {"D300S", typeof (NikonD300)},
                         {"D3200", typeof (NikonD3200)},
                         {"D4", typeof (NikonD4)},
@@ -61,6 +62,7 @@ namespace CameraControl.Devices
                         {"D7000", typeof (NikonBase)},
                         {"D80", typeof (NikonD80)},
                         {"D800", typeof (NikonD800)},
+                        {"D800E", typeof (NikonD800)},
                         {"D800e", typeof (NikonD800)},
                         {"D90", typeof (NikonD90)},
                         // for mtp simulator
