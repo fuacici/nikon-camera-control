@@ -148,48 +148,48 @@ namespace CameraControl
         PhotoCapturedEventArgs eventArgs = o as PhotoCapturedEventArgs;
         if (ServiceProvider.Settings.DefaultSession.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam)
           return;
-        if (eventArgs.WiaImageItem != null)
-        {
-          try
-          {
-            Item item = eventArgs.WiaImageItem;
-            string s = item.ItemID;
-            ImageFile imageFile = null;
+        //if (eventArgs.WiaImageItem != null)
+        //{
+        //  try
+        //  {
+        //    Item item = eventArgs.WiaImageItem;
+        //    string s = item.ItemID;
+        //    ImageFile imageFile = null;
 
-            imageFile = (ImageFile) item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
-            string fileName = ServiceProvider.Settings.DefaultSession.GetNextFileName(imageFile.FileExtension,
-                                                                                      eventArgs.CameraDevice);
-            //file exist : : 0x80070050
-            // busy :  0x80210006
-            if (!Directory.Exists(Path.GetDirectoryName(fileName)))
-            {
-              Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-            }
-            imageFile.SaveFile(fileName);
-            if (ServiceProvider.Settings.AutoPreview)
-            {
-              Dispatcher.Invoke(
-                new Action(
-                  delegate { ImageLIst.SelectedValue = ServiceProvider.Settings.DefaultSession.AddFile(fileName); }));
-            }
-            else
-            {
-              ServiceProvider.Settings.DefaultSession.AddFile(fileName);
-            }
-          }
-          catch (COMException exception)
-          {
-            if ((uint)exception.ErrorCode == 0x80210006)
-            {
-              Thread.Sleep(10);
-              PhotoCaptured(o);
-              return;
-            }
-            throw;
-          }
-        }
-        else
-        {
+        //    imageFile = (ImageFile) item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
+        //    string fileName = ServiceProvider.Settings.DefaultSession.GetNextFileName(imageFile.FileExtension,
+        //                                                                              eventArgs.CameraDevice);
+        //    //file exist : : 0x80070050
+        //    // busy :  0x80210006
+        //    if (!Directory.Exists(Path.GetDirectoryName(fileName)))
+        //    {
+        //      Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+        //    }
+        //    imageFile.SaveFile(fileName);
+        //    if (ServiceProvider.Settings.AutoPreview)
+        //    {
+        //      Dispatcher.Invoke(
+        //        new Action(
+        //          delegate { ImageLIst.SelectedValue = ServiceProvider.Settings.DefaultSession.AddFile(fileName); }));
+        //    }
+        //    else
+        //    {
+        //      ServiceProvider.Settings.DefaultSession.AddFile(fileName);
+        //    }
+        //  }
+        //  catch (COMException exception)
+        //  {
+        //    if ((uint)exception.ErrorCode == 0x80210006)
+        //    {
+        //      Thread.Sleep(10);
+        //      PhotoCaptured(o);
+        //      return;
+        //    }
+        //    throw;
+        //  }
+        //}
+        //else
+        //{
           string fileName = "";
           if (!ServiceProvider.Settings.DefaultSession.UseOriginalFilename)
           {
@@ -223,16 +223,14 @@ namespace CameraControl
           {
             ServiceProvider.Settings.DefaultSession.AddFile(fileName);
           }
-        }
+        //}
         ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
         ServiceProvider.Settings.SystemMessage = "Photo transfer done.";
         if (ServiceProvider.Settings.Preview)
           ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_ShowTimed);
         if (ServiceProvider.Settings.PlaySound)
         {
-          string _basedir = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-          var mplayer = new SoundPlayer(Path.Combine(_basedir, "Data", "takephoto.wav"));
-          mplayer.Play();
+          PhotoUtils.PlayCaptureSound();
         }
         WiaManager.OnPhotoTakenDone();
       }

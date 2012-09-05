@@ -7,7 +7,7 @@ Name NCC
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.7.218
+!define VERSION 0.7.222
 !define COMPANY "Duka Istvan"
 !define URL http://code.google.com/p/nikon-camera-control/
 
@@ -65,7 +65,7 @@ Section -Main SEC0000
     SetOverwrite on
     File /r ..\CameraControl\bin\Debug\*
     WriteRegStr HKLM "${REGKEY}\Components" Main 1
-	SimpleFC::AddPort 5513 "$(^Name)" 6 0 2 "" 1
+	SimpleFC::AddPort 5513 "CameraControl" 6 0 2 "" 1
 SectionEnd
 
 Section "WMP" SEC0001

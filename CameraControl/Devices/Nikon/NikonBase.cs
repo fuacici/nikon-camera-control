@@ -1013,10 +1013,7 @@ namespace CameraControl.Devices.Nikon
             case CONST_Event_CaptureComplete:
             case CONST_Event_CaptureCompleteRecInSdram:
               {
-                if (CaptureCompleted != null)
-                {
-                  CaptureCompleted(this, new EventArgs());
-                }
+                OnCaptureCompleted(this, new EventArgs());
               }
               break;
             default:
@@ -1083,7 +1080,7 @@ namespace CameraControl.Devices.Nikon
     }
 
     public override event PhotoCapturedEventHandler PhotoCaptured;
-    public override event EventHandler CaptureCompleted;
+    //public override event EventHandler CaptureCompleted;
 
   }
 }

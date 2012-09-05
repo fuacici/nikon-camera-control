@@ -86,33 +86,33 @@ namespace CameraControl.windows
       int s_min = s_index - 4;
       int s_max = s_index + 4;
       //exposurevals.Add(s_index, "0");
-      long incre = _device.ShutterSpeed.NumericValues[s_index];
-      int step = 0;
-      for (int i = s_index; i < _device.ShutterSpeed.Values.Count; i++)
-      {
-        if (_device.ShutterSpeed.NumericValues[i]%incre == 0)
-        {
-          exposurevals.Add(i, step.ToString());
-          step++;
-          incre = _device.ShutterSpeed.NumericValues[i];
-        }
-      }
+      //long incre = _device.ShutterSpeed.NumericValues[s_index];
+      //int step = 0;
+      //for (int i = s_index; i < _device.ShutterSpeed.Values.Count; i++)
+      //{
+      //  if (_device.ShutterSpeed.NumericValues[i]%incre == 0)
+      //  {
+      //    exposurevals.Add(i, step.ToString());
+      //    step++;
+      //    incre = _device.ShutterSpeed.NumericValues[i];
+      //  }
+      //}
 
-      incre = _device.ShutterSpeed.NumericValues[s_index];
-      step = 0;
+      //incre = _device.ShutterSpeed.NumericValues[s_index];
+      //step = 0;
       
-      for (int i = s_index; i >0; i--)
-      {
-        if (incre % _device.ShutterSpeed.NumericValues[i] == 0)
-        {
-          if (step != 0)
-          {
-            exposurevals.Add(i, (-step).ToString());
-          }
-          step++;
-          incre = _device.ShutterSpeed.NumericValues[i];
-        }
-      }
+      //for (int i = s_index; i >0; i--)
+      //{
+      //  if (incre % _device.ShutterSpeed.NumericValues[i] == 0)
+      //  {
+      //    if (step != 0)
+      //    {
+      //      exposurevals.Add(i, (-step).ToString());
+      //    }
+      //    step++;
+      //    incre = _device.ShutterSpeed.NumericValues[i];
+      //  }
+      //}
 
       if (s_min < 0)
       {

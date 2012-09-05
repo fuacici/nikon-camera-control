@@ -334,6 +334,14 @@ namespace CameraControl.Devices
       
     }
 
+    public void OnCaptureCompleted(object sender, EventArgs args )
+    {
+      if(CaptureCompleted!=null)
+      {
+        CaptureCompleted(sender, args);
+      }
+    }
+
     public virtual event PhotoCapturedEventHandler PhotoCaptured;
     public virtual event EventHandler CaptureCompleted;
 
