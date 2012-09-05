@@ -190,6 +190,9 @@
     <Compile Include="windows\MultipleCameraWnd.xaml.cs">
       <DependentUpon>MultipleCameraWnd.xaml</DependentUpon>
     </Compile>
+    <Compile Include="windows\PresetEditWnd.xaml.cs">
+      <DependentUpon>PresetEditWnd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="windows\PropertyWnd.xaml.cs">
       <DependentUpon>PropertyWnd.xaml</DependentUpon>
     </Compile>
@@ -267,6 +270,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="windows\MultipleCameraWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="windows\PresetEditWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

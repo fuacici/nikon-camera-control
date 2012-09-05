@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using CameraControl.Classes;
 
 namespace CameraControl.windows
 {
@@ -32,12 +21,17 @@ namespace CameraControl.windows
 
     private void button1_Click(object sender, RoutedEventArgs e)
     {
-      System.Diagnostics.Process.Start("http://nccsoftware.blogspot.ro/");
+      PhotoUtils.Run("http://nccsoftware.blogspot.com/");
     }
 
     private void button3_Click(object sender, RoutedEventArgs e)
     {
-      System.Diagnostics.Process.Start("http://www.gnu.org/licenses/gpl-3.0.txt");
+      PhotoUtils.Run("http://www.gnu.org/licenses/gpl-3.0.txt");
+    }
+
+    private void btn_donate_Click(object sender, RoutedEventArgs e)
+    {
+      PhotoUtils.Run("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2FE55TA7MK9DL");
     }
   }
 }

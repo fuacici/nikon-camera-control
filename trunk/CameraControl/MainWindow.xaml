@@ -158,6 +158,7 @@
                     </MenuItem.ItemTemplate>
                 </MenuItem>
                 <MenuItem Header="Save" Click="MenuItem_Click_4" />
+                <MenuItem Header="Edit" Click="MenuItem_Click_5" />
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="Home page" Click="MenuItem_Click" />
