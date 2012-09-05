@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using CameraControl.Classes;
 using CameraControl.Devices.Classes;
+using PortableDeviceLib;
 using WIA;
 
 namespace CameraControl.Devices.Others
@@ -382,9 +384,10 @@ namespace CameraControl.Devices.Others
     {
       if (PhotoCaptured != null)
       {
-        PhotoCapturedEventArgs args = new PhotoCapturedEventArgs {WiaImageItem = Device.GetItem(ItemID),CameraDevice = this};
+        PhotoCapturedEventArgs args = new PhotoCapturedEventArgs {EventArgs = Device.GetItem(ItemID),CameraDevice = this};
         PhotoCaptured(this, args);
       }
+      OnCaptureCompleted(this, new EventArgs());
     }
 
     public WiaCameraDevice()
@@ -620,7 +623,17 @@ namespace CameraControl.Devices.Others
 
     public override void TransferFile(object o, string filename)
     {
-      
+      Item deviceEventArgs = o as Item;
+      if (deviceEventArgs != null)
+      {
+        Item item = deviceEventArgs;
+        //string s = item.ItemID;
+        ImageFile imageFile = null;
+
+        imageFile = (ImageFile)item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
+        imageFile.SaveFile(filename);
+
+      }
     }
 
     public override event PhotoCapturedEventHandler PhotoCaptured;

@@ -58,6 +58,10 @@ namespace CameraControl.Classes
       {
         ServiceProvider.DeviceManager.ConnectDevices();
       }
+      else
+      {
+        ServiceProvider.Log.Debug("Native drivers are disabled !!!!");
+      }
       bool ret = false;
       int retries = 0;
       foreach (IDeviceInfo devInfo in new DeviceManager().DeviceInfos)

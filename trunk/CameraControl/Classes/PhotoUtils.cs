@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Net;
 using System.Text;
 using System.Windows.Forms;
@@ -132,14 +133,13 @@ namespace CameraControl.Classes
         if (selectSingleNode != null)
           url = selectSingleNode.InnerText;
         Version v_ver = new Version(ver);
-        Version app_ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         if (v_ver > System.Reflection.Assembly.GetExecutingAssembly().GetName().Version)
         {
           if (
-            MessageBox.Show("New version of application released\nDo you want to download?", "Update",
+            MessageBox.Show("New version of application released.\nDo you want to download?", "Update",
                             MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
           {
-            System.Diagnostics.Process.Start(url);
+            Process.Start(url);
             return true;
           }
         }
@@ -173,6 +173,22 @@ namespace CameraControl.Classes
       return ret;
     }
 
+    public static void PlayCaptureSound()
+    {
+      try
+      {
+        string basedir = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+        if (basedir != null)
+        {
+          var mplayer = new SoundPlayer(Path.Combine(basedir, "Data", "takephoto.wav"));
+          mplayer.Play();
+        }
+      }
+      catch (Exception exception)
+      {
+        ServiceProvider.Log.Debug(exception);
+      }
+    }
 
   }
 }
