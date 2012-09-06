@@ -13,7 +13,7 @@
 ||Nikon D3200||X||/||X||-||Native||
 ||Nikon D4||X||?||?||?||Native||
 ||Nikon D40||?||-||?||-||Native||
-||Nikon D5000||X||?||?||-||Native||
+||Nikon D5000||X||X||X||-||Native||
 ||Nikon D5100||X||X||X||-||Native||
 ||Nikon D60||?||-||?||-||Native||
 ||Nikon D70||X||-||?||-||Native||
