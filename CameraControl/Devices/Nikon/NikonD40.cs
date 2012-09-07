@@ -13,6 +13,7 @@ namespace CameraControl.Devices.Nikon
     {
       bool res = base.Init(deviceDescriptor);
       HaveLiveView = false;
+      CaptureInSdRam = false;
       return res;
     }
 

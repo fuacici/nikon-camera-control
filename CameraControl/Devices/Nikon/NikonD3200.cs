@@ -2,12 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.Devices.Nikon
 {
   public class NikonD3200: NikonBase
   {
-    protected override void GetAditionalLIveViewData(Classes.LiveViewData viewData, byte[] result)
+    public override bool Init(DeviceDescriptor deviceDescriptor)
+    {
+      bool res = base.Init(deviceDescriptor);
+      CaptureInSdRam = false;
+      PropertyChanged -= NikonBase_PropertyChanged;
+      return res;
+    }
+
+
+    protected override void GetAditionalLIveViewData(LiveViewData viewData, byte[] result)
     {
       viewData.LiveViewImageWidth = ToInt16(result, 8);
       viewData.LiveViewImageHeight = ToInt16(result, 10);

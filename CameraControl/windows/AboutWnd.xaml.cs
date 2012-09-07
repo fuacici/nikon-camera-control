@@ -31,7 +31,7 @@ namespace CameraControl.windows
 
     private void btn_donate_Click(object sender, RoutedEventArgs e)
     {
-      PhotoUtils.Run("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2FE55TA7MK9DL");
+      PhotoUtils.Donate();
     }
   }
 }

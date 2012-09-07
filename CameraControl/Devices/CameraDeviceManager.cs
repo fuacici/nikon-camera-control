@@ -88,7 +88,7 @@ namespace CameraControl.Devices
       ConnectedDevices.Add(cameraDevice);
       SelectedCameraDevice = cameraDevice;
       cameraDevice.PhotoCaptured += cameraDevice_PhotoCaptured;
-      ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
+      //ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
       if (CameraConnected != null)
         CameraConnected(cameraDevice);
       ServiceProvider.Settings.SystemMessage = "New Camera is connected ! Driver :" + cameraDevice.DeviceName;
@@ -139,7 +139,7 @@ namespace CameraControl.Devices
       ConnectedDevices.Add(cameraDevice);
       SelectedCameraDevice = cameraDevice;
       cameraDevice.PhotoCaptured += cameraDevice_PhotoCaptured;
-      ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
+      //ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
       ServiceProvider.Settings.SystemMessage = "New Camera is connected ! Driver :" + cameraDevice.DeviceName;
       ServiceProvider.Log.Debug("===========Camera is connected==============");
       ServiceProvider.Log.Debug("Driver :" + cameraDevice.GetType().Name);
@@ -183,7 +183,7 @@ namespace CameraControl.Devices
           ConnectedDevices.Add(cameraDevice);
           SelectedCameraDevice = cameraDevice;
           cameraDevice.PhotoCaptured += cameraDevice_PhotoCaptured;
-          ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
+          //ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
           if (CameraConnected != null)
             CameraConnected(cameraDevice);
           ServiceProvider.Settings.SystemMessage = "New Camera is connected ! Driver :" + cameraDevice.DeviceName;

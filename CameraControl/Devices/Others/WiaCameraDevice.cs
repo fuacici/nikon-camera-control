@@ -380,11 +380,18 @@ namespace CameraControl.Devices.Others
       return true;
     }
 
-    void DeviceManager_OnEvent(string EventID, string DeviceID, string ItemID)
+    void DeviceManager_OnEvent(string eventId, string deviceId, string itemId)
     {
       if (PhotoCaptured != null)
       {
-        PhotoCapturedEventArgs args = new PhotoCapturedEventArgs {EventArgs = Device.GetItem(ItemID),CameraDevice = this};
+        Item tem = Device.GetItem(itemId);
+        ImageFile imageFile = (ImageFile)tem.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
+        PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
+                                        {
+                                          EventArgs = imageFile,
+                                          CameraDevice = this,
+                                          FileName = "00000." + imageFile.FileExtension
+                                        };
         PhotoCaptured(this, args);
       }
       OnCaptureCompleted(this, new EventArgs());
@@ -623,16 +630,10 @@ namespace CameraControl.Devices.Others
 
     public override void TransferFile(object o, string filename)
     {
-      Item deviceEventArgs = o as Item;
+      ImageFile deviceEventArgs = o as ImageFile;
       if (deviceEventArgs != null)
       {
-        Item item = deviceEventArgs;
-        //string s = item.ItemID;
-        ImageFile imageFile = null;
-
-        imageFile = (ImageFile)item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
-        imageFile.SaveFile(filename);
-
+        deviceEventArgs.SaveFile(filename);
       }
     }
 

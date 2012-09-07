@@ -606,5 +606,10 @@ namespace CameraControl
       wnd.ShowDialog();
     }
 
+    private void mnu_donate_Click(object sender, RoutedEventArgs e)
+    {
+      PhotoUtils.Donate();
+    }
+
   }
 }
