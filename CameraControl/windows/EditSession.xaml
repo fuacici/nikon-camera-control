@@ -6,7 +6,7 @@
         xmlns:CameraControl="clr-namespace:CameraControl" xmlns:Classes="clr-namespace:CameraControl.Devices.Classes"
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
         Background="{DynamicResource WindowBackgroundBrush}"
-        Title="Session [Add/Edit]" Height="317" Width="374" Loaded="Window_Loaded" ResizeMode="NoResize">
+        Title="Session [Add/Edit]" Height="317" Width="374" Loaded="Window_Loaded" ResizeMode="NoResize" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
     <Window.DataContext>
         <Classes:PhotoSession/>
     </Window.DataContext>
@@ -33,7 +33,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Counter :" Width="120" />
-                <TextBox Text="{Binding Path=Counter}" Width="200"/>
+                <xctk:IntegerUpDown Value="{Binding Path=Counter}" Width="200" Minimum="0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <CheckBox Content="Use original filename gave by the camera" ToolTip="This option isn't works with WIA driver" IsChecked="{Binding Path=UseOriginalFilename}"/>
@@ -41,6 +41,6 @@
             <StackPanel Orientation="Horizontal">
                 <CheckBox Content="Don't download photos to PC" ToolTip="" IsChecked="{Binding Path=NoDownload}"/>
             </StackPanel>
-        </StackPanel>
+         </StackPanel>
     </Grid>
 </Window>

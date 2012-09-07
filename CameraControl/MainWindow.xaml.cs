@@ -146,7 +146,9 @@ namespace CameraControl
         ServiceProvider.Settings.SystemMessage = "Photo transfer begin.";
         ServiceProvider.Log.Debug("Photo transfer begin.");
         PhotoCapturedEventArgs eventArgs = o as PhotoCapturedEventArgs;
-        if (ServiceProvider.Settings.DefaultSession.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam)
+        if(eventArgs == null)
+          return;
+        if ((ServiceProvider.Settings.DefaultSession.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
           return;
         //if (eventArgs.WiaImageItem != null)
         //{
@@ -191,7 +193,7 @@ namespace CameraControl
         //else
         //{
           string fileName = "";
-          if (!ServiceProvider.Settings.DefaultSession.UseOriginalFilename)
+          if (!ServiceProvider.Settings.DefaultSession.UseOriginalFilename || eventArgs.CameraDevice.CaptureInSdRam)
           {
             fileName =
               ServiceProvider.Settings.DefaultSession.GetNextFileName(Path.GetExtension(eventArgs.FileName),
