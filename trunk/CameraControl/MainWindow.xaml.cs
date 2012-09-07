@@ -490,7 +490,7 @@ namespace CameraControl
         {
           foreach (FileItem fileItem in filestodelete)
           {
-            if(fileItem.FileName==ServiceProvider.Settings.SelectedBitmap.FileItem.FileName)
+            if ((ServiceProvider.Settings.SelectedBitmap != null && ServiceProvider.Settings.SelectedBitmap.FileItem != null && fileItem.FileName == ServiceProvider.Settings.SelectedBitmap.FileItem.FileName))
             {
               ServiceProvider.Settings.SelectedBitmap.DisplayImage = null;
             }

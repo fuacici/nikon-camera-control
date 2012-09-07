@@ -326,14 +326,24 @@ namespace CameraControl.Devices.Nikon
 
     private void InitOther()
     {
-      //byte datasize = 1;
-      //byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureIndicateStatus);
-      //int type = BitConverter.ToInt16(result, 2);
-      //byte formFlag = result[(2 * datasize) + 5];
-      //UInt16 defval = BitConverter.ToUInt16(result, datasize + 5);
-      //sbyte minval =(sbyte) result[8];
-      //byte maxval = result[9];
-      //byte step = result[10];
+      LiveViewImageZoomRatio = new PropertyValue<int>();
+      LiveViewImageZoomRatio.AddValues("All", 0);
+      LiveViewImageZoomRatio.AddValues("25%", 1);
+      LiveViewImageZoomRatio.AddValues("33%", 2);
+      LiveViewImageZoomRatio.AddValues("50%", 3);
+      LiveViewImageZoomRatio.AddValues("66%", 4);
+      LiveViewImageZoomRatio.AddValues("100%", 5);
+      LiveViewImageZoomRatio.SetValue("All");
+      LiveViewImageZoomRatio.ValueChanged += LiveViewImageZoomRatio_ValueChanged;
+    }
+
+    void LiveViewImageZoomRatio_ValueChanged(object sender, string key, int val)
+    {
+      lock (Locker)
+      {
+        SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                                   CONST_PROP_LiveViewImageZoomRatio, -1);
+      }
     }
 
     private void InitIso()
@@ -650,10 +660,9 @@ namespace CameraControl.Devices.Nikon
         if (response.Data != null && response.Data.Length > 0 && response.Data[0] > 0)
           return;
         DeviceReady();
-        LiveViewImageZoomRatio = 0;
-        DeviceReady();
         ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_StartLiveView));
         DeviceReady();
+        LiveViewImageZoomRatio.SetValue();
       }
     }
 
@@ -835,36 +844,36 @@ namespace CameraControl.Devices.Nikon
 
     private byte _liveViewImageZoomRatio;
 
-    public override byte LiveViewImageZoomRatio
-    {
-      get
-      {
-        if (_stillImageDevice == null)
-          return 0;
-        lock (Locker)
-        {
-          byte[] data = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
-                                                          CONST_PROP_LiveViewImageZoomRatio,
-                                                          -1);
-          if (data != null && data.Length == 1)
-          {
-            _liveViewImageZoomRatio = data[0];
-            ////NotifyPropertyChanged("LiveViewImageZoomRatio");
-          }
-        }
-        return _liveViewImageZoomRatio;
-      }
-      set
-      {
-        lock (Locker)
-        {
-          if (_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] {value},
-                                                 CONST_PROP_LiveViewImageZoomRatio, -1) == 0)
-            _liveViewImageZoomRatio = value;
-          NotifyPropertyChanged("LiveViewImageZoomRatio");
-        }
-      }
-    }
+    //public override PropertyValue<int> LiveViewImageZoomRatio
+    //{
+    //  get
+    //  {
+    //    if (_stillImageDevice == null)
+    //      return 0;
+    //    lock (Locker)
+    //    {
+    //      byte[] data = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+    //                                                      CONST_PROP_LiveViewImageZoomRatio,
+    //                                                      -1);
+    //      if (data != null && data.Length == 1)
+    //      {
+    //        _liveViewImageZoomRatio = data[0];
+    //        ////NotifyPropertyChanged("LiveViewImageZoomRatio");
+    //      }
+    //    }
+    //    return _liveViewImageZoomRatio;
+    //  }
+    //  set
+    //  {
+    //    lock (Locker)
+    //    {
+    //      if (_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] {value},
+    //                                             CONST_PROP_LiveViewImageZoomRatio, -1) == 0)
+    //        _liveViewImageZoomRatio = value;
+    //      NotifyPropertyChanged("LiveViewImageZoomRatio");
+    //    }
+    //  }
+    //}
 
     public override void ReadDeviceProperties(int prop)
     {

@@ -81,6 +81,12 @@ namespace CameraControl.Classes
       Console.WriteLine("Value not found");
     }
 
+    public void SetValue()
+    {
+      Value = Value;
+    }
+
+
     public void SetValue(string o)
     {
       foreach (KeyValuePair<string, T> keyValuePair in _valuesDictionary)

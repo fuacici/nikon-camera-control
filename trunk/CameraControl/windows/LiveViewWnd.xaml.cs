@@ -265,6 +265,7 @@ namespace CameraControl.windows
         if (this.selectedPortableDevice != value)
         {
           this.selectedPortableDevice = value;
+          NotifyPropertyChanged("selectedPortableDevice");
         }
       }
     }
@@ -655,22 +656,22 @@ namespace CameraControl.windows
                                          }));
           break;
         case WindowsCmdConsts.LiveView_Zoom_All:
-          SelectedPortableDevice.LiveViewImageZoomRatio = 0;
+          SelectedPortableDevice.LiveViewImageZoomRatio.SetValue(0);  
           break;
         case WindowsCmdConsts.LiveView_Zoom_25:
-          SelectedPortableDevice.LiveViewImageZoomRatio = 1;
+          SelectedPortableDevice.LiveViewImageZoomRatio.SetValue(1); 
           break;
         case WindowsCmdConsts.LiveView_Zoom_33:
-          SelectedPortableDevice.LiveViewImageZoomRatio = 2;
+          SelectedPortableDevice.LiveViewImageZoomRatio.SetValue(2); 
           break;
         case WindowsCmdConsts.LiveView_Zoom_50:
-          SelectedPortableDevice.LiveViewImageZoomRatio = 3;
+          SelectedPortableDevice.LiveViewImageZoomRatio.SetValue(3);
           break;
         case WindowsCmdConsts.LiveView_Zoom_66:
-          SelectedPortableDevice.LiveViewImageZoomRatio = 4;
+          SelectedPortableDevice.LiveViewImageZoomRatio.SetValue(4); 
           break;
         case WindowsCmdConsts.LiveView_Zoom_100:
-          SelectedPortableDevice.LiveViewImageZoomRatio = 5;
+          SelectedPortableDevice.LiveViewImageZoomRatio.SetValue(5); 
           break;
         case WindowsCmdConsts.LiveView_Focus_M:
           btn_focusm_Click(null, null);
