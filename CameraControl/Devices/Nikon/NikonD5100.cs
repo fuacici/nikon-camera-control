@@ -14,6 +14,7 @@ namespace CameraControl.Devices.Nikon
       Capabilities.Clear();
       Capabilities.Add(CapabilityEnum.LiveView);
       Capabilities.Add(CapabilityEnum.RecordMovie);
+      Capabilities.Add(CapabilityEnum.CaptureInRam);
       return res;
     }
 

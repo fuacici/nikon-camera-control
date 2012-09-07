@@ -1,7 +1,9 @@
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using CameraControl.Classes;
 using CameraControl.Devices;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.Controls
 {
@@ -10,10 +12,26 @@ namespace CameraControl.Controls
   /// </summary>
   public partial class Controler : UserControl
   {
+
     public Controler()
     {
       InitializeComponent();
       CameraDeviceManager cameraDeviceManager = DataContext as CameraDeviceManager;
+      if (ServiceProvider.DeviceManager != null)
+        ServiceProvider.DeviceManager.PropertyChanged += DeviceManager_PropertyChanged;
+    }
+
+    void DeviceManager_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+      if (ServiceProvider.DeviceManager == null || ServiceProvider.DeviceManager.SelectedCameraDevice==null)
+        return;
+      if (e.PropertyName == "SelectedCameraDevice")
+      {
+        chk_sdram.Visibility =
+          ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.CaptureInRam)
+            ? Visibility.Visible
+            : Visibility.Hidden;
+      }
     }
 
     private void cmb_shutter_GotFocus(object sender, System.Windows.RoutedEventArgs e)

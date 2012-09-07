@@ -247,6 +247,7 @@ namespace CameraControl.Devices.Nikon
 
     public override bool Init(DeviceDescriptor deviceDescriptor)
     {
+      Capabilities.Add(CapabilityEnum.CaptureInRam);
       _stillImageDevice = new StillImageDevice(deviceDescriptor.WpdId);
       _stillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
       _stillImageDevice.DeviceEvent += _stillImageDevice_DeviceEvent;
