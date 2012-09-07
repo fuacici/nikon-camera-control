@@ -622,5 +622,10 @@ namespace CameraControl
       PhotoUtils.Donate();
     }
 
+    private void btn_browse_Click(object sender, RoutedEventArgs e)
+    {
+      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.BrowseWnd_Show);
+    }
+
   }
 }

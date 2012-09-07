@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using CameraControl.Interfaces;
 using CameraControl.windows;
 
@@ -20,6 +18,7 @@ namespace CameraControl.Classes
       WindowsList.Add(new LiveViewWnd());
       WindowsList.Add(new MultipleCameraWnd());
       WindowsList.Add(new CameraPropertyWnd());
+      WindowsList.Add(new BrowseWnd());
     }
 
     public void ExecuteCommand(string cmd)
