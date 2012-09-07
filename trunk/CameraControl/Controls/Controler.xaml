@@ -61,7 +61,7 @@
             </ProgressBar>
         </StackPanel>
         <StackPanel Margin="1">
-            <CheckBox Content="SD_Ram" IsChecked="{Binding Path=SelectedCameraDevice.CaptureInSdRam}" ToolTip="Capture images direct to PC without using card"/>
+            <CheckBox Content="SD_Ram" IsChecked="{Binding Path=SelectedCameraDevice.CaptureInSdRam}" ToolTip="Capture images direct to PC without using card" Name="chk_sdram"/>
             <Button Height="23" Name="button1" Width="25" Click="button1_Click">
                 <Button.Content>
                     <Image Source="/CameraControl;component/Images/Properties.png" />

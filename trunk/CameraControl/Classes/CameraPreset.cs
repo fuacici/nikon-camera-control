@@ -28,6 +28,7 @@ namespace CameraControl.Classes
       Add(GetFrom(camera.IsoNumber, "IsoNumber"));
       Add(GetFrom(camera.ShutterSpeed, "ShutterSpeed"));
       Add(GetFrom(camera.WhiteBalance, "WhiteBalance"));
+      Add(new ValuePair() {Name = "CaptureInSdRam", Value = camera.CaptureInSdRam.ToString()});
     }
 
     public void Set(ICameraDevice camera)
@@ -39,6 +40,12 @@ namespace CameraControl.Classes
       SetTo(camera.IsoNumber, "IsoNumber");
       SetTo(camera.ShutterSpeed, "ShutterSpeed");
       SetTo(camera.WhiteBalance, "WhiteBalance");
+      if(!string.IsNullOrEmpty(GetValue("CaptureInSdRam")))
+      {
+        bool val;
+        if (bool.TryParse(GetValue("CaptureInSdRam"), out val))
+          camera.CaptureInSdRam = val;
+      }
     }
 
     public void SetTo(PropertyValue<int> value, string name)
@@ -89,6 +96,18 @@ namespace CameraControl.Classes
         }
       }
       Values.Add(pair);
+    }
+
+    public string GetValue(string name)
+    {
+      foreach (ValuePair valuePair in Values)
+      {
+        if (valuePair.Name == name)
+        {
+          return valuePair.Value;
+        }
+      }
+      return null;
     }
 
     public void Save(string filename)

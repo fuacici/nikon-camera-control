@@ -596,8 +596,17 @@ namespace CameraControl
       SavePresetWnd wnd=new SavePresetWnd(cameraPreset);
       if (wnd.ShowDialog() == true)
       {
+        foreach (CameraPreset preset in ServiceProvider.Settings.CameraPresets)
+        {
+          if(preset.Name==cameraPreset.Name)
+          {
+            cameraPreset = preset;
+            break;
+          }
+        }
         cameraPreset.Get(ServiceProvider.DeviceManager.SelectedCameraDevice);
-        ServiceProvider.Settings.CameraPresets.Add(cameraPreset);
+        if (!ServiceProvider.Settings.CameraPresets.Contains(cameraPreset))
+          ServiceProvider.Settings.CameraPresets.Add(cameraPreset);
         ServiceProvider.Settings.Save();
       }
     }

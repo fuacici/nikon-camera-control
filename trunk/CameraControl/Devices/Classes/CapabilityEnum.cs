@@ -5,6 +5,7 @@
     LiveView,
     Bulb,
     RecordMovie,
-    CanLockFocus
+    CanLockFocus,
+    CaptureInRam
   }
 }
