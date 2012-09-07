@@ -18,7 +18,7 @@ Name NCC
 !define MUI_STARTMENUPAGE_NODISABLE
 !define MUI_STARTMENUPAGE_REGISTRY_KEY ${REGKEY}
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME StartMenuGroup
-!define MUI_STARTMENUPAGE_DEFAULTFOLDER NikonCameraControl
+!define MUI_STARTMENUPAGE_DEFAULTFOLDER NCC
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\classic-uninstall.ico"
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 
@@ -44,7 +44,7 @@ Var TempResult
 
 # Installer attributes
 OutFile NCCsetup_${VERSION}.exe
-InstallDir $PROGRAMFILES\NikonCameraControl
+InstallDir $PROGRAMFILES\NCC
 CRCCheck on
 XPStyle on
 ShowInstDetails show
@@ -91,7 +91,7 @@ Section -post SEC0002
     SetOutPath $INSTDIR
     WriteUninstaller $INSTDIR\uninstall.exe
     !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-
+    CreateDirectory "$SMPROGRAMS\$StartMenuGroup"
     CreateShortCut "$SMPROGRAMS\$StartMenuGroup\NCC.lnk" "$INSTDIR\CameraControl.exe"
     CreateShortCut "$DESKTOP\NCC.lnk" "$INSTDIR\CameraControl.exe" "" "$INSTDIR\CameraControl.exe" 0 "" "" "NCC"
     
@@ -142,17 +142,28 @@ SectionEnd
 # Installer functions
 Function .onInit
 
+  ReadRegStr $R1 HKLM \
+  "Software\Microsoft\Windows\CurrentVersion\Uninstall\NikonCameraControl" \
+  "InstallLocation"
+
   ReadRegStr $R0 HKLM \
   "Software\Microsoft\Windows\CurrentVersion\Uninstall\NikonCameraControl" \
   "UninstallString"
-  StrCmp $R0 "" done
+  StrCmp $R0 "" nextun
  
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
   "NikonCameraControl is already installed. $\n$\nClick `OK` to remove the \
   previous version or `Cancel` to cancel this upgrade." \
-  IDOK uninst
+  IDOK uninstold
   Abort
+
+ uninstold:
+  ClearErrors
+  ExecWait '$R0' ;Do not copy the uninstaller to a temp file
  
+  IfErrors no_remove_uninstaller done
+
+nextun:  
   ReadRegStr $R0 HKLM \
   "Software\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" \
   "UninstallString"
