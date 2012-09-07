@@ -169,6 +169,9 @@
     <Compile Include="windows\BraketingWnd.xaml.cs">
       <DependentUpon>BraketingWnd.xaml</DependentUpon>
     </Compile>
+    <Compile Include="windows\BrowseWnd.xaml.cs">
+      <DependentUpon>BrowseWnd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="windows\BulbWnd.xaml.cs">
       <DependentUpon>BulbWnd.xaml</DependentUpon>
     </Compile>
@@ -242,6 +245,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="windows\BraketingWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="windows\BrowseWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

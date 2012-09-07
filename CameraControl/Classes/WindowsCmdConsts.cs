@@ -7,6 +7,8 @@ namespace CameraControl.Classes
 {
   class WindowsCmdConsts
   {
+    public const string BrowseWnd_Show = "BrowseWnd_Show";
+    public const string BrowseWnd_Hide = "BrowseWnd_Hide";
     public const string MultipleCameraWnd_Show = "MultipleCameraWnd_Show";
     public const string MultipleCameraWnd_Hide = "MultipleCameraWnd_Hide";
     public const string CameraPropertyWnd_Show = "CameraPropertyWnd_Show";
