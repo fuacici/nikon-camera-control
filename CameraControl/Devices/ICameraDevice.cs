@@ -28,7 +28,7 @@ namespace CameraControl.Devices
     bool GetCapability(CapabilityEnum capabilityEnum);
 
     int Battery { get; set; }
-    byte LiveViewImageZoomRatio { get; set; }
+    PropertyValue<int> LiveViewImageZoomRatio { get; set; }
 
     bool Init(DeviceDescriptor deviceDescriptor);
     void StartLiveView();
