@@ -52,7 +52,7 @@ namespace CameraControl.Devices
     void LockCamera();
     void UnLockCamera();
     void Close();
-    void ReadDeviceProperties(int prop);
+    //void ReadDeviceProperties(int prop);
     void TransferFile(object o, string filename);
 
     event PhotoCapturedEventHandler PhotoCaptured;

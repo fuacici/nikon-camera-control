@@ -163,6 +163,7 @@
             <MenuItem Header="_Help">
                 <MenuItem Header="Home page" Click="MenuItem_Click" />
                 <MenuItem Header="Check for update" Name="mnu_update" Click="MenuItem_Click_1" />
+                <MenuItem Header="Donate" Name="mnu_donate" Click="mnu_donate_Click" />                
                 <Separator />
                 <MenuItem Header="About" Name="mnu_about" Click="btn_about_Click" />
             </MenuItem>
