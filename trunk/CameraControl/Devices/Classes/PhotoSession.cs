@@ -8,8 +8,13 @@ namespace CameraControl.Devices.Classes
 {
   public class PhotoSession : BaseFieldClass
   {
+
+    private string _lastFilename = null;
+
     [XmlIgnore]
-    public List<string> SupportedExtensions = new List<string>() {".jpg", ".nef", ".tif"};
+    public List<string> SupportedExtensions = new List<string>() {".jpg", ".nef", ".tif", ".png"};
+    [XmlIgnore]
+    public List<string> RawExtensions = new List<string>() { ".cr2", ".nef" };
 
     private string _name;
     public string Name
@@ -185,11 +190,18 @@ namespace CameraControl.Devices.Classes
     public string GetNextFileName(string ext, ICameraDevice device)
     {
       if (string.IsNullOrEmpty(ext))
-        ext = "nef";
-      Counter++;
+        ext = ".nef";
+      if (!string.IsNullOrEmpty(_lastFilename) && RawExtensions.Contains(ext.ToLower()) && !RawExtensions.Contains(Path.GetExtension(_lastFilename).ToLower()))
+      {
+        string rawfile =Path.Combine(Path.GetDirectoryName(_lastFilename) ,Path.GetFileNameWithoutExtension(_lastFilename) + (!ext.StartsWith(".") ? "." : "") + ext);
+        if (!File.Exists(rawfile))
+          return rawfile;
+      }
+      Counter++;        
       string fileName = Path.Combine(Folder, FormatFileName(device) + (!ext.StartsWith(".") ? "." : "") + ext);
       if (File.Exists(fileName))
         return GetNextFileName(ext, device);
+      _lastFilename = fileName;
       return fileName;
     }
 
