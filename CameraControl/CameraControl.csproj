@@ -113,8 +113,9 @@
     <Compile Include="Classes\HelpProvider.cs" />
     <Compile Include="Classes\PhotoUtils.cs" />
     <Compile Include="Classes\PropertyValue.cs" />
+    <Compile Include="Classes\QueueManager.cs" />
+    <Compile Include="Classes\Queue\QueueItemFileItem.cs" />
     <Compile Include="Classes\RelayCommand.cs" />
-    <Compile Include="Classes\ThumbWorker.cs" />
     <Compile Include="Classes\TimeLapseClass.cs" />
     <Compile Include="Classes\TriggerClass.cs" />
     <Compile Include="Classes\ValuePair.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Exif\EXIFextractor.cs" />
     <Compile Include="Exif\translation.cs" />
     <Compile Include="Interfaces\IMenuAction.cs" />
+    <Compile Include="Interfaces\IQueueItem.cs" />
     <Compile Include="Interfaces\IWindow.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="windows\AboutWnd.xaml.cs">
@@ -379,6 +381,7 @@
   <ItemGroup>
     <SplashScreen Include="SplashScreen.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
