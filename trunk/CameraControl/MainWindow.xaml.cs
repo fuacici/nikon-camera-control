@@ -40,7 +40,6 @@ namespace CameraControl
       SelectPresetCommand = new RelayCommand<CameraPreset>(SelectPreset);
       ServiceProvider.Configure();
       ServiceProvider.Settings = new Settings();
-      ServiceProvider.ThumbWorker = new ThumbWorker();
       ServiceProvider.Settings = ServiceProvider.Settings.Load();
       ServiceProvider.Settings.PropertyChanged += Settings_PropertyChanged;
       ServiceProvider.Settings.LoadSessionData();
@@ -117,24 +116,24 @@ namespace CameraControl
     {
       if (e.PropertyName == "DefaultSession")
       {
-        BackgroundWorker backgroundWorker = new BackgroundWorker();
-        backgroundWorker.DoWork += delegate
-                                     {
-                                       try
-                                       {
-                                         //ServiceProvider.ThumbWorker.Start();
-                                         foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
-                                         {
-                                           if (fileItem.Thumbnail == null)
-                                             fileItem.GetExtendedThumb();
-                                         }
-                                       }
-                                       catch (Exception)
-                                       {
+        //BackgroundWorker backgroundWorker = new BackgroundWorker();
+        //backgroundWorker.DoWork += delegate
+        //                             {
+        //                               try
+        //                               {
+        //                                 //ServiceProvider.ThumbWorker.Start();
+        //                                 foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
+        //                                 {
+        //                                   if (fileItem.Thumbnail == null)
+        //                                     fileItem.GetExtendedThumb();
+        //                                 }
+        //                               }
+        //                               catch (Exception)
+        //                               {
 
-                                       }
-                                     };
-        backgroundWorker.RunWorkerAsync();
+        //                               }
+        //                             };
+        //backgroundWorker.RunWorkerAsync();
       }
     }
 

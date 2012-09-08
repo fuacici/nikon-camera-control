@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
+using CameraControl.Classes.Queue;
 using CameraControl.Exif.EXIF;
 using FreeImageAPI;
 
@@ -14,6 +11,8 @@ namespace CameraControl.Classes
 {
   public class FileItem:BaseFieldClass
   {
+    private BitmapSource _defaulImage;
+
     private string _fileName;
     public string FileName
     {
@@ -106,7 +105,9 @@ namespace CameraControl.Classes
       {
         if (_thumbnail == null)
         {
-          GetExtendedThumb();
+          _thumbnail = new BitmapImage(new Uri("pack://application:,,,/Images/logo.png"));
+          ServiceProvider.QueueManager.Add(new QueueItemFileItem() {FileItem = this});
+          //GetExtendedThumb();
           //ServiceProvider.ThumbWorker.AddItem(this);
         }
         return _thumbnail;
