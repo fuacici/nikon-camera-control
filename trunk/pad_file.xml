@@ -71,7 +71,7 @@
 			<Char_Desc_45> A DSLR camera remote control software</Char_Desc_45>
 			<Char_Desc_80>NCC - A DSLR camera remote control open source software</Char_Desc_80>
 			<Char_Desc_250>NCC - A DSLR camera remote control open source software</Char_Desc_250>
-			<Char_Desc_450 />
+			<Char_Desc_450>NCC - A DSLR camera remote control open source software</Char_Desc_450>
 			<Char_Desc_2000>NCC - A DSLR camera remote control open source software
 
 Basic functionality
@@ -87,7 +87,6 @@ Manage multiple profiles
 - Manage camera presets (saved camera settings)
 - Webserver (using smart phone or any device which support web browser to control application functions)
 - Multiple camera support, you can control multiple connected camera in same time, like capture photos in same time or one by one 
-
 </Char_Desc_2000>
 		</English>
 	</Program_Descriptions>
