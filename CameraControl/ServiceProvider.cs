@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using CameraControl.Classes;
+using CameraControl.Core.Classes;
 using CameraControl.Devices;
 using CameraControl.Devices.Others;
 

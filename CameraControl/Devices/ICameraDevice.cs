@@ -1,5 +1,6 @@
 ﻿using System;
 using CameraControl.Classes;
+using CameraControl.Core.Devices.Classes;
 using CameraControl.Devices.Classes;
 
 namespace CameraControl.Devices

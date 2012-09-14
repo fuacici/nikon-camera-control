@@ -1,4 +1,5 @@
 ﻿using System;
+using CameraControl.Core.Devices.Classes;
 using CameraControl.Devices.Classes;
 
 namespace CameraControl.Devices.Nikon

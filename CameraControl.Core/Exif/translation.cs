@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace CameraControl.Exif
+namespace CameraControl.Core.Exif
 {
 	namespace EXIF
 	{

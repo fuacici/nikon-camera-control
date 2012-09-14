@@ -1,4 +1,4 @@
-﻿namespace CameraControl.Devices.Classes
+namespace CameraControl.Core.Devices.Classes
 {
   public enum CapabilityEnum
   {

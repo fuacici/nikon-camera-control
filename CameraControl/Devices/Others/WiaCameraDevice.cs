@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using CameraControl.Classes;
+using CameraControl.Core.Devices.Classes;
 using CameraControl.Devices.Classes;
 using PortableDeviceLib;
 using WIA;

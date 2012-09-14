@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
-namespace CameraControl.Classes
+namespace CameraControl.Core.Classes
 {
   public static class BitmapSourceConvert
   {

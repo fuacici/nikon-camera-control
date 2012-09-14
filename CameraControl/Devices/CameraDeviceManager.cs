@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using CameraControl.Classes;
+using CameraControl.Core.Classes;
 using CameraControl.Devices.Classes;
 using CameraControl.Devices.Nikon;
 using CameraControl.Devices.Others;

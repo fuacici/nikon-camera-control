@@ -5,15 +5,15 @@
 ///
 
 using System;
-using System.Drawing;
-using System.Text;
 using System.Collections;
+using System.Drawing;
 using System.Drawing.Imaging;
-using System.Reflection;
 using System.IO;
+using System.Reflection;
+using System.Text;
 using System.Web.UI;
 
-namespace CameraControl.Exif
+namespace CameraControl.Core.Exif
 {
 	namespace EXIF
 	{	
@@ -683,7 +683,7 @@ namespace CameraControl.Exif
 		// dont touch this class. its for IEnumerator
 		// 
 		//
-		class EXIFextractorEnumerator : IEnumerator
+	  public class EXIFextractorEnumerator : IEnumerator
 		{
 			Hashtable exifTable;
 			IDictionaryEnumerator index;

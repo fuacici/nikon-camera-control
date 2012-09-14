@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using CameraControl.Classes;
+using CameraControl.Core.Classes;
 
 namespace CameraControl.Devices.Classes
 {

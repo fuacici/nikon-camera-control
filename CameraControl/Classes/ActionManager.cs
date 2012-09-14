@@ -1,6 +1,7 @@
 ﻿using CameraControl.Actions;
 using CameraControl.Actions.Enfuse;
-using CameraControl.Interfaces;
+using CameraControl.Core.Classes;
+using CameraControl.Core.Interfaces;
 
 namespace CameraControl.Classes
 {

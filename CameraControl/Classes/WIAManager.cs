@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading;
+using CameraControl.Core.Devices.Classes;
 using WIA;
 using DeviceManager = WIA.DeviceManager;
 

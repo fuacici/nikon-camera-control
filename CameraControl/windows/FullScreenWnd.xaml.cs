@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using CameraControl.Classes;
-using CameraControl.Interfaces;
+using CameraControl.Core.Interfaces;
 
 namespace CameraControl.windows
 {

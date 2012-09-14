@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml.Serialization;
+using CameraControl.Core.Classes;
 using CameraControl.Devices.Classes;
 
 namespace CameraControl.Classes

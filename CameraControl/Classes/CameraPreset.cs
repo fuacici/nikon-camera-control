@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using CameraControl.Core.Classes;
+using CameraControl.Core.Devices.Classes;
 using CameraControl.Devices;
 
 namespace CameraControl.Classes

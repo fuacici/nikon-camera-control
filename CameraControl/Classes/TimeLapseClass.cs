@@ -5,6 +5,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Timers;
 using System.Xml.Serialization;
+using CameraControl.Core.Classes;
+using CameraControl.Core.Devices.Classes;
 using CameraControl.Devices.Classes;
 
 namespace CameraControl.Classes

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CameraControl.Interfaces;
+using CameraControl.Core.Classes;
+using CameraControl.Core.Interfaces;
 
 namespace CameraControl.Classes.Queue
 {
@@ -20,7 +21,7 @@ namespace CameraControl.Classes.Queue
       }
       catch (Exception e)
       {
-        ServiceProvider.Log.Error(e);
+        //ServiceProvider.Log.Error(e);
       }
 
       return true;
