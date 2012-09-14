@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Windows.Input;
 using CameraControl.Classes;
+using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
 

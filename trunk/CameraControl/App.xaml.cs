@@ -6,7 +6,13 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Threading;
+using CameraControl.Actions;
+using CameraControl.Actions.Enfuse;
 using CameraControl.Classes;
+using CameraControl.Core;
+using CameraControl.Core.Classes;
+using CameraControl.Core.Interfaces;
+using CameraControl.windows;
 
 namespace CameraControl
 {
@@ -26,8 +32,7 @@ namespace CameraControl
     private void Application_Startup(object sender, StartupEventArgs e)
     {
       // Global exception handling  
-      Application.Current.DispatcherUnhandledException +=
-        new DispatcherUnhandledExceptionEventHandler(AppDispatcherUnhandledException);
+      Current.DispatcherUnhandledException += AppDispatcherUnhandledException;
       //check if wia 2.0 is registered 
       try
       {
@@ -37,7 +42,39 @@ namespace CameraControl
       {
         System.Windows.Forms.MessageBox.Show("Wia 2.0 not installed");
       }
+      InitApplication();
     }
+
+    private void InitApplication()
+    {
+      ServiceProvider.Configure();
+      ServiceProvider.ActionManager.Actions = new AsyncObservableCollection<IMenuAction>
+                                                {
+                                                  new CmdFocusStackingCombineZP(),
+                                                  new CmdEnfuse(),
+                                                  new CmdToJpg(),
+                                                  new CmdExpJpg()
+                                                };
+      ServiceProvider.Settings = new Settings();
+      ServiceProvider.Settings = ServiceProvider.Settings.Load();
+      ServiceProvider.Settings.LoadSessionData();
+
+      ServiceProvider.WindowsManager = new WindowsManager();
+      ServiceProvider.WindowsManager.Add(new FullScreenWnd());
+      ServiceProvider.WindowsManager.Add(new LiveViewWnd());
+      ServiceProvider.WindowsManager.Add(new MultipleCameraWnd());
+      ServiceProvider.WindowsManager.Add(new CameraPropertyWnd());
+      ServiceProvider.WindowsManager.Add(new BrowseWnd());
+      ServiceProvider.WindowsManager.Event += WindowsManager_Event;
+
+      ServiceProvider.Trigger.Start();
+    }
+
+    void WindowsManager_Event(string cmd)
+    {
+      Log.Debug("Window command received :" + cmd);
+    }
+
 
     private void AppDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
@@ -58,10 +95,7 @@ namespace CameraControl
     {
       e.Handled = true;
 
-      if (ServiceProvider.Log != null && ServiceProvider.Log.Logger.Repository.Configured)
-      {
-        ServiceProvider.Log.Error("Unhandled error ", e.Exception);
-      }
+      Log.Error("Unhandled error ", e.Exception);
 
       string errorMessage =
         string.Format(

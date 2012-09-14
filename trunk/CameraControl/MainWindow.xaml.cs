@@ -11,10 +11,10 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using CameraControl.Classes;
+using CameraControl.Core;
 using CameraControl.Core.Classes;
+using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
-using CameraControl.Devices;
-using CameraControl.Devices.Classes;
 using CameraControl.windows;
 using Microsoft.VisualBasic.FileIO;
 using WIA;
@@ -40,14 +40,8 @@ namespace CameraControl
       CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (sender, args) => this.Close()));
       SelectDeviceCommand = new RelayCommand<ICameraDevice>(SelectCamera);
       SelectPresetCommand = new RelayCommand<CameraPreset>(SelectPreset);
-      ServiceProvider.Configure();
-      ServiceProvider.Settings = new Settings();
-      ServiceProvider.Settings = ServiceProvider.Settings.Load();
-      ServiceProvider.Settings.PropertyChanged += Settings_PropertyChanged;
-      ServiceProvider.Settings.LoadSessionData();
-      ServiceProvider.Trigger.Start();
       WiaManager = new WIAManager();
-      ServiceProvider.Settings.Manager = WiaManager;
+      //ServiceProvider.Settings.Manager = WiaManager;
       ServiceProvider.DeviceManager.PhotoCaptured += DeviceManager_PhotoCaptured;
       InitializeComponent();
       DataContext = ServiceProvider.Settings;
@@ -59,7 +53,7 @@ namespace CameraControl
         ServiceProvider.Settings.Save();
         CheckForUpdate();
       }
-      ServiceProvider.WindowsManager = new WindowsManager();
+      ServiceProvider.Settings.PropertyChanged += Settings_PropertyChanged;
       ServiceProvider.WindowsManager.Event += Trigger_Event;
       ServiceProvider.DeviceManager.CameraConnected += DeviceManager_CameraConnected;
       ServiceProvider.DeviceManager.CameraSelected += DeviceManager_CameraSelected;
@@ -144,8 +138,8 @@ namespace CameraControl
     {
       try
       {
-        ServiceProvider.Settings.SystemMessage = "Photo transfer begin.";
-        ServiceProvider.Log.Debug("Photo transfer begin.");
+       StaticHelper.Instance.SystemMessage = "Photo transfer begin.";
+        Log.Debug("Photo transfer begin.");
         PhotoCapturedEventArgs eventArgs = o as PhotoCapturedEventArgs;
         if(eventArgs == null)
           return;
@@ -213,9 +207,9 @@ namespace CameraControl
           {
             Directory.CreateDirectory(Path.GetDirectoryName(fileName));
           }
-          ServiceProvider.Log.Debug("Transfer started :" + fileName);
+          Log.Debug("Transfer started :" + fileName);
           eventArgs.CameraDevice.TransferFile(eventArgs.EventArgs, fileName);
-          ServiceProvider.Log.Debug("Transfer done :" + fileName);
+          Log.Debug("Transfer done :" + fileName);
           if (ServiceProvider.Settings.AutoPreview)
           {
             Dispatcher.Invoke(
@@ -228,19 +222,19 @@ namespace CameraControl
           }
         //}
         ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
-        ServiceProvider.Settings.SystemMessage = "Photo transfer done.";
+       StaticHelper.Instance.SystemMessage = "Photo transfer done.";
         if (ServiceProvider.Settings.Preview)
           ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_ShowTimed);
         if (ServiceProvider.Settings.PlaySound)
         {
           PhotoUtils.PlayCaptureSound();
         }
-        WiaManager.OnPhotoTakenDone();
+        //WiaManager.OnPhotoTakenDone();
       }
       catch (Exception ex)
       {
-        ServiceProvider.Settings.SystemMessage = "Transfer error !\nMessage :" + ex.Message;
-        ServiceProvider.Log.Error("Transfer error !", ex);
+       StaticHelper.Instance.SystemMessage = "Transfer error !\nMessage :" + ex.Message;
+        Log.Error("Transfer error !", ex);
       }
     }
 
@@ -278,7 +272,7 @@ namespace CameraControl
 
     private void button3_Click(object sender, RoutedEventArgs e)
     {
-      ServiceProvider.Log.Debug("Main window capture started"); 
+      Log.Debug("Main window capture started"); 
       if (!ServiceProvider.Settings.DefaultSession.TimeLapse.IsDisabled)
       {
         if (
@@ -302,7 +296,7 @@ namespace CameraControl
           }
           else
           {
-            ServiceProvider.Settings.SystemMessage = "Bulb mode not supported !";
+           StaticHelper.Instance.SystemMessage = "Bulb mode not supported !";
             return;
           }
         }
@@ -310,13 +304,13 @@ namespace CameraControl
       }
       catch (DeviceException exception)
         {
-          ServiceProvider.Settings.SystemMessage = exception.Message;
-          ServiceProvider.Log.Error("Take photo", exception);
+         StaticHelper.Instance.SystemMessage = exception.Message;
+          Log.Error("Take photo", exception);
         }
       catch (Exception exception)
       {
         MessageBox.Show("No picture was taken !\n" + exception.Message);
-        ServiceProvider.Log.Error("Take photo", exception);
+        Log.Error("Take photo", exception);
       }
 
     }
@@ -505,7 +499,7 @@ namespace CameraControl
       }
       catch (Exception exception)
       {
-        ServiceProvider.Log.Error("Error to delete file", exception);
+        Log.Error("Error to delete file", exception);
       }
     }
 
@@ -525,7 +519,7 @@ namespace CameraControl
       }
       catch (Exception exception)
       {
-        ServiceProvider.Log.Error("Error to show file in explorer", exception);
+        Log.Error("Error to show file in explorer", exception);
       }
     }
 

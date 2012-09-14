@@ -14,8 +14,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using CameraControl.Classes;
+using CameraControl.Core;
+using CameraControl.Core.Devices;
+using CameraControl.Core.Devices.Classes;
 using CameraControl.Core.Interfaces;
-using CameraControl.Devices;
 
 namespace CameraControl.windows
 {
@@ -48,7 +50,7 @@ namespace CameraControl.windows
         _timer.Stop();
         CapturePhotos();
       }
-      ServiceProvider.Settings.SystemMessage = string.Format("Waiting {0})", _secounter);
+     StaticHelper.Instance.SystemMessage = string.Format("Waiting {0})", _secounter);
     }
 
     #region Implementation of IWindow
@@ -101,7 +103,7 @@ namespace CameraControl.windows
     private void CapturePhotos()
     {
       _photocounter++;
-      ServiceProvider.Settings.SystemMessage = string.Format("Capture started {0}", _photocounter);
+     StaticHelper.Instance.SystemMessage = string.Format("Capture started {0}", _photocounter);
       Thread thread = new Thread(new ThreadStart(delegate
       {
         try
@@ -118,14 +120,14 @@ namespace CameraControl.windows
             }
             catch (COMException exception)
             {
-              ServiceProvider.Log.Error(exception);
+              Log.Error(exception);
               throw;
             }
           }
         }
         catch (Exception exception)
         {
-          ServiceProvider.Log.Error(exception);
+          Log.Error(exception);
         }
         if (_photocounter < NumOfPhotos)
           _timer.Start();
@@ -146,7 +148,7 @@ namespace CameraControl.windows
 
     private void StopCapture()
     {
-      ServiceProvider.Settings.SystemMessage = "All captures done !";
+     StaticHelper.Instance.SystemMessage = "All captures done !";
     }
 
     private void MenuItem_Click(object sender, RoutedEventArgs e)

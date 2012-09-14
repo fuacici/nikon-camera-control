@@ -1,6 +1,6 @@
 using System.Windows;
 using CameraControl.Classes;
-using CameraControl.Devices.Classes;
+using CameraControl.Core.Devices.Classes;
 
 namespace CameraControl.windows
 {

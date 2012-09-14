@@ -2,11 +2,11 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:Devices="clr-namespace:CameraControl.Devices" mc:Ignorable="d" 
-             d:DesignHeight="57" d:DesignWidth="1203" BorderBrush="{x:Null}" BorderThickness="1" xmlns:my="clr-namespace:CameraControl.Controls">
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" 
+             d:DesignHeight="57" d:DesignWidth="1203" BorderBrush="{x:Null}" BorderThickness="1" xmlns:my="clr-namespace:CameraControl.Controls"
+             xmlns:Devices1="clr-namespace:CameraControl.Core.Devices;assembly=CameraControl.Core">
     <UserControl.DataContext>
-        <Devices:CameraDeviceManager/>
+        <Devices1:CameraDeviceManager/>
     </UserControl.DataContext>
     <WrapPanel  HorizontalAlignment="Left"  Name="wrapPanel1" VerticalAlignment="Top" ItemWidth="100">
         <StackPanel>

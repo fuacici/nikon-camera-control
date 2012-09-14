@@ -13,10 +13,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using CameraControl.Classes;
+using CameraControl.Core;
 using CameraControl.Core.Classes;
+using CameraControl.Core.Devices;
+using CameraControl.Core.Devices.Classes;
 using CameraControl.Core.Interfaces;
-using CameraControl.Devices;
-using CameraControl.Devices.Classes;
 
 namespace CameraControl.windows
 {
@@ -53,11 +54,6 @@ namespace CameraControl.windows
     {
       InitializeComponent();
       PhotoSessionNames = new AsyncObservableCollection<string>();
-      PhotoSessionNames.Add("(None)");
-      foreach (PhotoSession photoSession in ServiceProvider.Settings.PhotoSessions)
-      {
-        PhotoSessionNames.Add(photoSession.Name);
-      }
     }
 
     #region Implementation of IWindow
@@ -68,13 +64,19 @@ namespace CameraControl.windows
       {
         case WindowsCmdConsts.CameraPropertyWnd_Show:
           Dispatcher.Invoke(new Action(delegate
+                                         {
+                                           Show();
+                                           Activate();
+                                           Topmost = true;
+                                           Topmost = false;
+                                           Focus();
+                                         }));
+          PhotoSessionNames.Clear();
+          PhotoSessionNames.Add("(None)");
+          foreach (PhotoSession photoSession in ServiceProvider.Settings.PhotoSessions)
           {
-            Show();
-            Activate();
-            Topmost = true;
-            Topmost = false;
-            Focus();
-          }));
+            PhotoSessionNames.Add(photoSession.Name);
+          }
           _cameraDevice = param as ICameraDevice;
           CameraProperty = ServiceProvider.Settings.CameraProperties.Get(_cameraDevice);
           CameraProperty.BeginEdit();
@@ -84,10 +86,10 @@ namespace CameraControl.windows
           break;
         case WindowsCmdConsts.All_Close:
           Dispatcher.Invoke(new Action(delegate
-          {
-            Hide();
-            Close();
-          }));
+                                         {
+                                           Hide();
+                                           Close();
+                                         }));
           break;
       }
     }

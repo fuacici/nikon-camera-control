@@ -18,11 +18,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using AForge.Imaging;
 using CameraControl.Classes;
+using CameraControl.Core;
+using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
 using CameraControl.Core.Interfaces;
-using CameraControl.Devices;
-using CameraControl.Devices.Classes;
-using CameraControl.Devices.Nikon;
 using PortableDeviceLib;
 using MessageBox = System.Windows.Forms.MessageBox;
 using Timer = System.Timers.Timer;
@@ -249,7 +248,7 @@ namespace CameraControl.windows
 
 
     private Timer _timer = new Timer(1000/20);
-    private Timer _freezeTimer = new Timer(ServiceProvider.Settings.LiveViewFreezeTimeOut*1000);
+    private Timer _freezeTimer = new Timer();
 
     private bool oper_in_progress = false;
 
@@ -279,7 +278,6 @@ namespace CameraControl.windows
       FocusStep = 75;
       FreezeImage = false;
       Recording = false;
-      ServiceProvider.Settings.SelectedBitmap.BitmapLoaded += SelectedBitmap_BitmapLoaded;
     }
 
     private void SelectedBitmap_BitmapLoaded(object sender)
@@ -328,11 +326,6 @@ namespace CameraControl.windows
     private void _freezeTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
     {
       FreezeImage = false;
-    }
-
-    private void Manager_PhotoTaked(WIA.Item imageFile)
-    {
-
     }
 
     private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -410,7 +403,7 @@ namespace CameraControl.windows
                                        }
                                        catch (Exception exception)
                                        {
-                                         ServiceProvider.Log.Error(exception);
+                                         Log.Error(exception);
                                          _retries++;
                                          oper_in_progress = false;
                                          return;
@@ -484,13 +477,13 @@ namespace CameraControl.windows
       }
       catch (DeviceException exception)
       {
-        ServiceProvider.Log.Error("Unable to autofocus", exception);
-        ServiceProvider.Settings.SystemMessage = exception.Message;
+        Log.Error("Unable to autofocus", exception);
+       StaticHelper.Instance.SystemMessage = exception.Message;
       }
       catch (COMException comException)
       {
-        ServiceProvider.Log.Error("Unable to autofocus unhadled error", comException);
-        ServiceProvider.Settings.SystemMessage = comException.Message;
+        Log.Error("Unable to autofocus unhadled error", comException);
+       StaticHelper.Instance.SystemMessage = comException.Message;
 
       }
       FocusCounter = 0;
@@ -499,21 +492,21 @@ namespace CameraControl.windows
 
     private void button2_Click(object sender, RoutedEventArgs e)
     {
-      ServiceProvider.Log.Debug("LiveView: Capture started");
+      Log.Debug("LiveView: Capture started");
       _timer.Stop();
       Thread.Sleep(100);
       try
       {
         //selectedPortableDevice.StopLiveView();
-        ServiceProvider.Log.Debug("LiveView: LiveViewStoped");
+        Log.Debug("LiveView: LiveViewStoped");
         Thread.Sleep(300);
         selectedPortableDevice.CapturePhotoNoAf();
-        ServiceProvider.Log.Debug("LiveView: Capture Initialization Done");
+        Log.Debug("LiveView: Capture Initialization Done");
       }
       catch (DeviceException exception)
       {
-        ServiceProvider.Settings.SystemMessage = exception.Message;
-        ServiceProvider.Log.Error("Unable to take pictore with no af", exception);
+       StaticHelper.Instance.SystemMessage = exception.Message;
+        Log.Error("Unable to take pictore with no af", exception);
       }
       //_timer.Start();
     }
@@ -522,15 +515,15 @@ namespace CameraControl.windows
     {
       try
       {
-        ServiceProvider.Log.Debug("LiveView: Liveview started");
+        Log.Debug("LiveView: Liveview started");
         SelectedPortableDevice.StartLiveView();
         oper_in_progress = false;
         _retries = 0;
-        ServiceProvider.Log.Debug("LiveView: Liveview start done");
+        Log.Debug("LiveView: Liveview start done");
       }
       catch (Exception exception)
       {
-        ServiceProvider.Log.Error("Unable to start liveview !", exception);
+        Log.Error("Unable to start liveview !", exception);
         MessageBox.Show("Unable to start liveview !");
         ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide);
       }
@@ -611,6 +604,8 @@ namespace CameraControl.windows
         case WindowsCmdConsts.LiveViewWnd_Show:
           Dispatcher.Invoke(new Action(delegate
                                          {
+                                           _timer.Interval = ServiceProvider.Settings.LiveViewFreezeTimeOut*1000;
+                                           ServiceProvider.Settings.SelectedBitmap.BitmapLoaded += SelectedBitmap_BitmapLoaded;
                                            Recording = false;
                                            SelectedPortableDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
                                            Show();
@@ -636,6 +631,7 @@ namespace CameraControl.windows
                                            {
                                              _timer.Stop();
                                              selectedPortableDevice.CaptureCompleted -= selectedPortableDevice_CaptureCompleted;
+                                             ServiceProvider.Settings.SelectedBitmap.BitmapLoaded -= SelectedBitmap_BitmapLoaded;
                                              Thread.Sleep(100);
                                              SelectedPortableDevice.StopLiveView();
                                              Recording = false;
@@ -644,7 +640,7 @@ namespace CameraControl.windows
                                            }
                                            catch (Exception exception)
                                            {
-                                             ServiceProvider.Log.Error("Unable to stop liveview", exception);
+                                             Log.Error("Unable to stop liveview", exception);
                                            }
                                            //ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FocusStackingWnd_Hide);
                                          }));
@@ -743,8 +739,8 @@ namespace CameraControl.windows
       }
       catch (DeviceException exception)
       {
-        ServiceProvider.Log.Error("Unable to focus", exception);
-        ServiceProvider.Settings.SystemMessage = exception.Message;
+        Log.Error("Unable to focus", exception);
+       StaticHelper.Instance.SystemMessage = exception.Message;
       }
     }
 
@@ -789,7 +785,7 @@ namespace CameraControl.windows
       {
         if (IsBusy)
         {
-          ServiceProvider.Log.Debug("LiveView: Stackphoto capture started");
+          Log.Debug("LiveView: Stackphoto capture started");
           FreezeImage = true;
           Thread.Sleep(300);
           StartLiveView();
@@ -829,8 +825,8 @@ namespace CameraControl.windows
       }
       catch (DeviceException exception)
       {
-        ServiceProvider.Settings.SystemMessage = exception.Message;
-        ServiceProvider.Log.Error("Live view. Unable to take photo", exception);
+       StaticHelper.Instance.SystemMessage = exception.Message;
+        Log.Error("Live view. Unable to take photo", exception);
       }
     }
 
@@ -902,8 +898,8 @@ namespace CameraControl.windows
       }
       catch (Exception exception)
       {
-        ServiceProvider.Settings.SystemMessage = exception.Message;
-        ServiceProvider.Log.Error("Recording error",exception);
+       StaticHelper.Instance.SystemMessage = exception.Message;
+        Log.Error("Recording error",exception);
       }
     }
 

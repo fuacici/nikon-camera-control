@@ -98,22 +98,8 @@
     <Compile Include="Actions\Enfuse\EnfuseSettingsWnd.xaml.cs">
       <DependentUpon>EnfuseSettingsWnd.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Classes\ActionEventArgs.cs" />
-    <Compile Include="Classes\ActionManager.cs" />
-    <Compile Include="Classes\BitmapFile.cs" />
-    <Compile Include="Classes\BraketingClass.cs" />
-    <Compile Include="Classes\CameraPreset.cs" />
-    <Compile Include="Classes\CameraProperty.cs" />
-    <Compile Include="Classes\CameraPropertyEnumerator.cs" />
-    <Compile Include="Classes\FileItem.cs" />
     <Compile Include="Classes\HelpProvider.cs" />
-    <Compile Include="Classes\PhotoUtils.cs" />
-    <Compile Include="Classes\Queue\QueueItemFileItem.cs" />
-    <Compile Include="Classes\TimeLapseClass.cs" />
-    <Compile Include="Classes\TriggerClass.cs" />
-    <Compile Include="Classes\WebServer.cs" />
     <Compile Include="Classes\WindowsCmdConsts.cs" />
-    <Compile Include="Classes\WindowsManager.cs" />
     <Compile Include="Controls\Controler.xaml.cs">
       <DependentUpon>Controler.xaml</DependentUpon>
     </Compile>
@@ -121,29 +107,6 @@
       <DependentUpon>ExposureStatusControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ZoomBorder.cs" />
-    <Compile Include="Devices\BaseCameraDevice.cs" />
-    <Compile Include="Devices\BaseMTPCamera.cs" />
-    <Compile Include="Devices\CameraDeviceManager.cs" />
-    <Compile Include="Devices\Classes\DeviceDescriptor.cs" />
-    <Compile Include="Devices\Classes\DeviceDescriptorEnumerator.cs" />
-    <Compile Include="Devices\Classes\PhotoCapturedEventArgs.cs" />
-    <Compile Include="Devices\Classes\PhotoSession.cs" />
-    <Compile Include="Devices\ICameraDevice.cs" />
-    <Compile Include="Devices\Nikon\NikonD300.cs" />
-    <Compile Include="Devices\Nikon\NikonD3200.cs" />
-    <Compile Include="Devices\Nikon\NikonD3X.cs" />
-    <Compile Include="Devices\Nikon\NikonD4.cs" />
-    <Compile Include="Devices\Nikon\NikonD40.cs" />
-    <Compile Include="Devices\Nikon\NikonBase.cs" />
-    <Compile Include="Devices\Nikon\NikonD5100.cs" />
-    <Compile Include="Devices\Nikon\NikonD60.cs" />
-    <Compile Include="Devices\Nikon\NikonD700.cs" />
-    <Compile Include="Devices\Nikon\NikonD80.cs" />
-    <Compile Include="Devices\Nikon\NikonD800.cs" />
-    <Compile Include="Devices\Nikon\NikonD90.cs" />
-    <Compile Include="Devices\Others\NotConnectedCameraDevice.cs" />
-    <Compile Include="Devices\Others\WiaCameraDevice.cs" />
-    <Compile Include="ServiceProvider.cs" />
     <Compile Include="windows\AboutWnd.xaml.cs">
       <DependentUpon>AboutWnd.xaml</DependentUpon>
     </Compile>
@@ -212,8 +175,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\Settings.cs" />
-    <Compile Include="Classes\WIAManager.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -365,7 +326,9 @@
   <ItemGroup>
     <SplashScreen Include="SplashScreen.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Devices\Classes\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

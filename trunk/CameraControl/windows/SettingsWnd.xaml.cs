@@ -18,6 +18,7 @@ using CameraControl.Classes;
 using CameraControl.Core.Classes;
 using WPF.Themes;
 using Path = System.IO.Path;
+using CameraControl.Core;
 
 namespace CameraControl.windows
 {
@@ -76,7 +77,7 @@ namespace CameraControl.windows
       }
       catch (Exception exception)
       {
-        ServiceProvider.Log.Error("Error to show file in explorer", exception);
+        Log.Error("Error to show file in explorer", exception);
       }
     }
 
