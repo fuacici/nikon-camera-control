@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         xmlns:CameraControl="clr-namespace:CameraControl"
-        themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
+        xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
+        themes:ThemeManager.Theme="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CurrentTheme}"
         Title="About" Height="346" Width="433" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" Background="{DynamicResource WindowBackgroundBrush}">
     <Grid>
         <Grid.RowDefinitions>

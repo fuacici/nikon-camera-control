@@ -2,9 +2,10 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes" xmlns:CameraControl="clr-namespace:CameraControl"
-        themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
+        themes:ThemeManager.Theme="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CurrentTheme}"
         Background="{DynamicResource WindowBackgroundBrush}"
-        Title="Camera Property" Height="332" Width="331" Closing="Window_Closing" WindowStartupLocation="CenterScreen" xmlns:my="clr-namespace:CameraControl.windows" WindowStyle="ToolWindow" UseLayoutRounding="False">
+        Title="Camera Property" Height="332" Width="331" Closing="Window_Closing" WindowStartupLocation="CenterScreen" xmlns:my="clr-namespace:CameraControl.windows"
+        xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core" WindowStyle="ToolWindow" UseLayoutRounding="False">
     <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="127*" />

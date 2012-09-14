@@ -12,7 +12,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using CameraControl.Devices;
+using CameraControl.Core;
+using CameraControl.Core.Devices;
 
 namespace CameraControl.windows
 {
@@ -89,7 +90,7 @@ namespace CameraControl.windows
     void _waitTimer_Elapsed(object sender, ElapsedEventArgs e)
     {
       _waitSecs++;
-      ServiceProvider.Settings.SystemMessage = string.Format("Waiting for next capture {0} sec. Photo done {1}",
+     StaticHelper.Instance.SystemMessage = string.Format("Waiting for next capture {0} sec. Photo done {1}",
                                                              _waitSecs, _photoCount);
       if (_waitSecs >= WaitTime)
       {
@@ -101,7 +102,7 @@ namespace CameraControl.windows
     void _captureTimer_Elapsed(object sender, ElapsedEventArgs e)
     {
       _captureSecs ++;
-      ServiceProvider.Settings.SystemMessage = string.Format("Capture time {0} sec", _captureSecs);
+     StaticHelper.Instance.SystemMessage = string.Format("Capture time {0} sec", _captureSecs);
       if (_captureSecs > CaptureTime)
       {
         _captureTimer.Stop();
@@ -125,7 +126,7 @@ namespace CameraControl.windows
     {
       try
       {
-        ServiceProvider.Log.Debug("Bulb capture started");
+        Log.Debug("Bulb capture started");
         CameraDevice.LockCamera();
         //if (NoAutofocus)
         //{
@@ -139,8 +140,8 @@ namespace CameraControl.windows
       }
       catch (Exception exception)
       {
-        ServiceProvider.Settings.SystemMessage = exception.Message;
-        ServiceProvider.Log.Error("Bulb start", exception);
+       StaticHelper.Instance.SystemMessage = exception.Message;
+        Log.Error("Bulb start", exception);
       }
       _waitSecs = 0;
       _captureSecs = 0;
@@ -166,8 +167,8 @@ namespace CameraControl.windows
       StopCapture();
       _captureTimer.Stop();
       _waitTimer.Stop();
-      ServiceProvider.Settings.SystemMessage = "Capture stoped";
-      ServiceProvider.Log.Debug("Bulb capture stoped");
+     StaticHelper.Instance.SystemMessage = "Capture stoped";
+      Log.Debug("Bulb capture stoped");
     }
 
     private void StopCapture()
@@ -175,13 +176,13 @@ namespace CameraControl.windows
       try
       {
         CameraDevice.EndBulbMode();
-        ServiceProvider.Settings.SystemMessage = "Capture done";
-        ServiceProvider.Log.Debug("Bulb capture done");
+       StaticHelper.Instance.SystemMessage = "Capture done";
+        Log.Debug("Bulb capture done");
       }
       catch (Exception exception)
       {
-        ServiceProvider.Settings.SystemMessage = exception.Message;
-        ServiceProvider.Log.Error("Bulb done",exception);
+       StaticHelper.Instance.SystemMessage = exception.Message;
+        Log.Error("Bulb done",exception);
       }
     }
 

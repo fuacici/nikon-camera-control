@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using CameraControl.Classes;
+using CameraControl.Core.Classes;
 
 namespace CameraControl.windows
 {

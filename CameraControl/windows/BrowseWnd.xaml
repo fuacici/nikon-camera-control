@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes" xmlns:CameraControl="clr-namespace:CameraControl"
         xmlns:windows="clr-namespace:CameraControl.windows"
-        themes:ThemeManager.Theme="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=CurrentTheme}"
+        xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
+        themes:ThemeManager.Theme="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CurrentTheme}"
         Background="{DynamicResource WindowBackgroundBrush}"
         Title="Browse" Height="346" Width="478" Closing="Window_Closing" WindowState="Maximized" WindowStartupLocation="CenterScreen">
     <Window.Resources>
@@ -41,7 +42,7 @@
             <RowDefinition Height="282*" />
             <RowDefinition Height="10" />
         </Grid.RowDefinitions>
-        <ListBox Grid.Column="1" Grid.Row="1" Name="lst_profiles" ItemsSource="{Binding Source={x:Static Member=CameraControl:ServiceProvider.Settings}, Path=PhotoSessions}" SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type windows:BrowseWnd}}, Path=SelectedPhotoSession}" MouseDoubleClick="lst_profiles_MouseDoubleClick" />
+        <ListBox Grid.Column="1" Grid.Row="1" Name="lst_profiles" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=PhotoSessions}" SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type windows:BrowseWnd}}, Path=SelectedPhotoSession}" MouseDoubleClick="lst_profiles_MouseDoubleClick" Background="{DynamicResource WindowBackgroundBrush}"/>
         <ListBox Grid.Column="3" Grid.Row="1" Name="lst_files" ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type windows:BrowseWnd}}, Path=SelectedPhotoSession.Files}" Style="{StaticResource Style1}" Background="{DynamicResource WindowBackgroundBrush}">
             <ListBox.ItemTemplate>
                 <DataTemplate>

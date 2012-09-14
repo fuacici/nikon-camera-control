@@ -3,10 +3,11 @@
         xmlns:myclass="clr-namespace:CameraControl"
         xmlns:my="System.Windows.Forms"
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
-        themes:ThemeManager.Theme="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=CurrentTheme}"
+        themes:ThemeManager.Theme="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CurrentTheme}"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Settings" Height="431" Width="350" Loaded="Window_Loaded" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" Background="{DynamicResource WindowBackgroundBrush}" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:windows="clr-namespace:CameraControl.windows">
+        xmlns:windows="clr-namespace:CameraControl.windows"
+        xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="220*" />
@@ -17,10 +18,10 @@
                 <StackPanel Margin="5">
                     <StackPanel Orientation="Horizontal" Margin="3">
                         <Label Content="Theme :"/>
-                        <ComboBox Name="cmb_themes" SelectedItem="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=CurrentTheme}" />
+                        <ComboBox Name="cmb_themes" SelectedItem="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CurrentTheme}" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <CheckBox Content="Disable native drivers (not recomanded)" ToolTip="This option disable special handig of some cameras. Use this if you experience some problem"  IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=DisableNativeDrivers}" />
+                        <CheckBox Content="Disable native drivers (not recomanded)" ToolTip="This option disable special handig of some cameras. Use this if you experience some problem"  IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DisableNativeDrivers}" />
                     </StackPanel>
                     <Button Content="Locate log file" Height="23" Name="button3" Width="100" Click="button3_Click" />
                 </StackPanel>
@@ -28,28 +29,28 @@
             <TabItem Header="Preview">
                 <StackPanel Margin="10" >
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <CheckBox Content="Play sound after photo taken"  IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=PlaySound}" />
+                        <CheckBox Content="Play sound after photo taken"  IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=PlaySound}" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <CheckBox Content="Auto preview"  IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=AutoPreview}" ToolTip="Disable this option if you use Lightroom"/>
+                        <CheckBox Content="Auto preview"  IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=AutoPreview}" ToolTip="Disable this option if you use Lightroom"/>
                     </StackPanel>
                     <StackPanel Margin="3">
-                        <CheckBox Content="Preview image after shot in fullscreen" IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=Preview}"/>
+                        <CheckBox Content="Preview image after shot in fullscreen" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=Preview}"/>
                         <StackPanel Orientation="Horizontal" Margin="3">
                             <Label Content="Preview time in sec : "/>
-                            <xctk:IntegerUpDown Minimum="2" Width="100" Value="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=PreviewSeconds}"/>
+                            <xctk:IntegerUpDown Minimum="2" Width="100" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=PreviewSeconds}"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Margin="3">
-                        <CheckBox Content="Preview image after shot in live view" IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=PreviewLiveViewImage}"/>
+                        <CheckBox Content="Preview image after shot in live view" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=PreviewLiveViewImage}"/>
                         <StackPanel Orientation="Horizontal" Margin="3">
                             <Label Content="Live view image freeze in sec : "/>
-                            <xctk:IntegerUpDown Minimum="2" Maximum="120" Width="100" Value="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=LiveViewFreezeTimeOut}"/>
+                            <xctk:IntegerUpDown Minimum="2" Maximum="120" Width="100" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=LiveViewFreezeTimeOut}"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="3">
                         <Label Content="Rotate image :"/>
-                        <ComboBox ItemsSource="{Binding Path=RotateFlipTypesValues, RelativeSource={RelativeSource FindAncestor, AncestorType=windows:SettingsWnd, AncestorLevel=1}}" SelectedItem="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=Rotate}" />
+                        <ComboBox ItemsSource="{Binding Path=RotateFlipTypesValues, RelativeSource={RelativeSource FindAncestor, AncestorType=windows:SettingsWnd, AncestorLevel=1}}" SelectedItem="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=Rotate}" />
                     </StackPanel>
                 </StackPanel>
             </TabItem>
@@ -64,17 +65,17 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="25*" />
                             </Grid.RowDefinitions>
-                            <CheckBox Content="Use keyboard to trigger take photo" Height="16" HorizontalAlignment="Left" Margin="10,8,0,0" Name="chk_usekey" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=UseTriggerKey}"/>
-                            <CheckBox Content="Alt" Height="16" HorizontalAlignment="Left" Margin="10,32,0,0" Name="checkBox2" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=TriggerKeyAlt}" IsEnabled="{Binding ElementName=chk_usekey, Path=IsChecked}"/>
-                            <CheckBox Content="Ctrl" Height="16" HorizontalAlignment="Left" Margin="83,31,0,0" Name="checkBox3" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=TriggerKeyCtrl}" IsEnabled="{Binding ElementName=chk_usekey, Path=IsChecked}"/>
-                            <CheckBox Content="Shift" Height="16" HorizontalAlignment="Left" Margin="161,31,0,0" Name="checkBox4" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=TriggerKeyShift}" IsEnabled="{Binding ElementName=chk_usekey, Path=IsChecked}"/>
-                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="10,58,0,0" Name="cmb_keys" VerticalAlignment="Top" Width="111" SelectedItem="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=TriggerKey}" IsEnabled="{Binding ElementName=chk_usekey, Path=IsChecked}"/>
+                            <CheckBox Content="Use keyboard to trigger take photo" Height="16" HorizontalAlignment="Left" Margin="10,8,0,0" Name="chk_usekey" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=UseTriggerKey}"/>
+                            <CheckBox Content="Alt" Height="16" HorizontalAlignment="Left" Margin="10,32,0,0" Name="checkBox2" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=TriggerKeyAlt}" IsEnabled="{Binding ElementName=chk_usekey, Path=IsChecked}"/>
+                            <CheckBox Content="Ctrl" Height="16" HorizontalAlignment="Left" Margin="83,31,0,0" Name="checkBox3" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=TriggerKeyCtrl}" IsEnabled="{Binding ElementName=chk_usekey, Path=IsChecked}"/>
+                            <CheckBox Content="Shift" Height="16" HorizontalAlignment="Left" Margin="161,31,0,0" Name="checkBox4" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=TriggerKeyShift}" IsEnabled="{Binding ElementName=chk_usekey, Path=IsChecked}"/>
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="10,58,0,0" Name="cmb_keys" VerticalAlignment="Top" Width="111" SelectedItem="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=TriggerKey}" IsEnabled="{Binding ElementName=chk_usekey, Path=IsChecked}"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Grid.Row="1" Header="Webserver" Name="groupBox2">
                         <Grid ToolTip="You need to restart the application for this changes to take affect">
-                            <CheckBox Content="Use web server" Height="16" HorizontalAlignment="Left" Margin="10,14,0,0" Name="checkBox1" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=UseWebserver}"/>
-                            <TextBox Height="23" HorizontalAlignment="Left" Margin="6,49,0,0" Name="textBox1" VerticalAlignment="Top" Width="290" IsReadOnly="True" Text="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=Webaddress, Mode=OneTime}"/>
+                            <CheckBox Content="Use web server" Height="16" HorizontalAlignment="Left" Margin="10,14,0,0" Name="checkBox1" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=UseWebserver}"/>
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="6,49,0,0" Name="textBox1" VerticalAlignment="Top" Width="290" IsReadOnly="True" Text="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=Webaddress, Mode=OneTime}"/>
                         </Grid>
                     </GroupBox>
                 </Grid>
@@ -98,11 +99,11 @@
                         <RowDefinition Height="260*" />
                     </Grid.RowDefinitions>
                     <Label Content="Smal focus step" Grid.Row="1" Name="label1" />
-                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="1" Minimum="1" Value="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=SmalFocusStep}" />
+                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="1" Minimum="1" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SmalFocusStep}" />
                     <Label Content="Medium focus step" Grid.Row="3" Grid.RowSpan="2" Name="label2" />
                     <Label Content="Larg focus step" Grid.Row="5" Grid.RowSpan="2" Name="label3" />
-                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="3" Minimum="1" Value="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=MediumFocusStep}"/>
-                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="5" Minimum="1" Value="{Binding Source={x:Static Member=myclass:ServiceProvider.Settings}, Path=LargeFocusStep}"/>
+                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="3" Minimum="1" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=MediumFocusStep}"/>
+                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="5" Minimum="1" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=LargeFocusStep}"/>
                 </Grid>
             </TabItem>
         </TabControl>

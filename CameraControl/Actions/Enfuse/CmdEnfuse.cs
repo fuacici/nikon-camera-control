@@ -9,6 +9,7 @@ using CameraControl.Classes;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
 using CameraControl.windows;
+using CameraControl.Core;
 
 namespace CameraControl.Actions.Enfuse
 {
@@ -153,7 +154,7 @@ namespace CameraControl.Actions.Enfuse
       catch (Exception exception)
       {
         OnProgressChange("Error copy files " + exception.Message);
-        ServiceProvider.Log.Error("Error copy files ", exception);
+        Log.Error("Error copy files ", exception);
         _shouldStop = true;
       }
     }
@@ -204,7 +205,7 @@ namespace CameraControl.Actions.Enfuse
       catch (Exception exception)
       {
         OnProgressChange("Error copy files " + exception.Message);
-        ServiceProvider.Log.Error("Error copy files ", exception);
+        Log.Error("Error copy files ", exception);
         _shouldStop = true;
       }
     }
@@ -257,7 +258,7 @@ namespace CameraControl.Actions.Enfuse
       catch (Exception exception)
       {
         OnProgressChange("Error copy files " + exception.Message);
-        ServiceProvider.Log.Error("Error copy files ", exception);
+        Log.Error("Error copy files ", exception);
         _shouldStop = true;
       }
     }

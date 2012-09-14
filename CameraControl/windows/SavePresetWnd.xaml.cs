@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using CameraControl.Classes;
+using CameraControl.Core.Devices.Classes;
 
 namespace CameraControl.windows
 {
