@@ -1,9 +1,8 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.ComponentModel;
-using CameraControl.Interfaces;
+using CameraControl.Core.Interfaces;
 
-namespace CameraControl.Classes
+namespace CameraControl.Core.Classes
 {
   public class QueueManager
   {

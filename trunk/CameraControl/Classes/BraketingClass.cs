@@ -4,6 +4,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using CameraControl.Core.Classes;
+using CameraControl.Core.Devices.Classes;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 

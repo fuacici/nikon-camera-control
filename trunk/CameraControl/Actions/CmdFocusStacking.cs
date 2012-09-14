@@ -7,7 +7,8 @@ using System.Text;
 using System.Threading;
 using System.Windows.Input;
 using CameraControl.Classes;
-using CameraControl.Interfaces;
+using CameraControl.Core.Classes;
+using CameraControl.Core.Interfaces;
 using CameraControl.windows;
 
 namespace CameraControl.Actions

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using CameraControl.Interfaces;
+using CameraControl.Core.Interfaces;
 using CameraControl.windows;
 
 namespace CameraControl.Classes

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Windows.Input;
 
-namespace CameraControl.Classes
+namespace CameraControl.Core.Classes
 {
   public class RelayCommand<T> : ICommand
   {

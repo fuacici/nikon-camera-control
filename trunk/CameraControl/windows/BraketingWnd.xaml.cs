@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using CameraControl.Classes;
+using CameraControl.Core.Classes;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 
