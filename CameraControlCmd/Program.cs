@@ -113,6 +113,7 @@ namespace CameraControlCmd
     private static void InitApplication()
     {
       ServiceProvider.Configure();
+      Log.Debug("Command line utility started");
       ServiceProvider.Settings = new Settings();
       ServiceProvider.Settings = ServiceProvider.Settings.Load();
       ServiceProvider.Settings.LoadSessionData();
