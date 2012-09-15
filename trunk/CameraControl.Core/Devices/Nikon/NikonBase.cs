@@ -1023,7 +1023,7 @@ namespace CameraControl.Core.Devices.Nikon
               }
               break;
             default:
-              Console.WriteLine("Unknow event code " + eventCode.ToString("X"));
+              //Console.WriteLine("Unknow event code " + eventCode.ToString("X"));
               Log.Debug("Unknow event code :" + eventCode.ToString("X") + "|" +
                                         longeventParam.ToString("X"));
               break;

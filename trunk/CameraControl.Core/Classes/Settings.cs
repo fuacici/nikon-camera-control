@@ -437,13 +437,7 @@ namespace CameraControl.Core.Classes
         return null;
       if (!string.IsNullOrEmpty(name))
       {
-        foreach (PhotoSession photoSession in PhotoSessions)
-        {
-          if (photoSession.Name == name)
-          {
-            return photoSession;
-          }
-        }
+        return PhotoSessions.FirstOrDefault(photoSession => photoSession.Name == name);
       }
       return null;
     }
