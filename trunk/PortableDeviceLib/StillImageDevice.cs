@@ -8,8 +8,11 @@ using PortableDeviceApiLib;
 
 namespace PortableDeviceLib
 {
+
   public class StillImageDevice:PortableDevice
   {
+    public delegate void TransferCallback(int total, int current);
+
     public StillImageDevice(string deviceId)
       :base(deviceId)
     {
@@ -155,7 +158,7 @@ namespace PortableDeviceLib
       return 0;
     }
 
-    public byte[] ExecuteReadBigData(int code, int param1, int param2)
+    public byte[] ExecuteReadBigData(int code, int param1, int param2,TransferCallback callback)
     {
       // source: http://msdn.microsoft.com/en-us/library/windows/desktop/ff384843(v=vs.85).aspx
       // and view-source:http://www.experts-exchange.com/Programming/Languages/C_Sharp/Q_26860397.html
@@ -205,7 +208,7 @@ namespace PortableDeviceLib
           if (((uint)pValue) == PortableDeviceErrorCodes.ERROR_BUSY)
           {
             Thread.Sleep(100);
-            return ExecuteReadBigData(code, param1, param2);
+            return ExecuteReadBigData(code, param1, param2, callback);
           }
         }
       }
@@ -283,11 +286,12 @@ namespace PortableDeviceLib
         catch (Exception ex)
         {
         }
-        // 24,142,174,9
-        // 18, 8E  
+
+        callback((int)tmpBufferSize, (int)offset);
+        
         GCHandle pinnedArray = GCHandle.Alloc(imgdate, GCHandleType.Pinned);
         IntPtr ptr = pinnedArray.AddrOfPinnedObject();
-
+        
         uint dataread = 0;
         pResults.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_NUM_BYTES_READ,
                                          out dataread);

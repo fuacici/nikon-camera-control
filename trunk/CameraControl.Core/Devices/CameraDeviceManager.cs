@@ -34,6 +34,17 @@ namespace CameraControl.Core.Devices
       }
     }
 
+    private uint _transferProgress;
+    public uint TransferProgress
+    {
+      get { return _transferProgress; }
+      set
+      {
+        _transferProgress = value;
+        NotifyPropertyChanged("TransferProgress");
+      }
+    }
+
     public AsyncObservableCollection<ICameraDevice> ConnectedDevices { get; set; }
 
 
