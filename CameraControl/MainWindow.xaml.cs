@@ -145,48 +145,6 @@ namespace CameraControl
           return;
         if ((ServiceProvider.Settings.DefaultSession.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
           return;
-        //if (eventArgs.WiaImageItem != null)
-        //{
-        //  try
-        //  {
-        //    Item item = eventArgs.WiaImageItem;
-        //    string s = item.ItemID;
-        //    ImageFile imageFile = null;
-
-        //    imageFile = (ImageFile) item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
-        //    string fileName = ServiceProvider.Settings.DefaultSession.GetNextFileName(imageFile.FileExtension,
-        //                                                                              eventArgs.CameraDevice);
-        //    //file exist : : 0x80070050
-        //    // busy :  0x80210006
-        //    if (!Directory.Exists(Path.GetDirectoryName(fileName)))
-        //    {
-        //      Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-        //    }
-        //    imageFile.SaveFile(fileName);
-        //    if (ServiceProvider.Settings.AutoPreview)
-        //    {
-        //      Dispatcher.Invoke(
-        //        new Action(
-        //          delegate { ImageLIst.SelectedValue = ServiceProvider.Settings.DefaultSession.AddFile(fileName); }));
-        //    }
-        //    else
-        //    {
-        //      ServiceProvider.Settings.DefaultSession.AddFile(fileName);
-        //    }
-        //  }
-        //  catch (COMException exception)
-        //  {
-        //    if ((uint)exception.ErrorCode == 0x80210006)
-        //    {
-        //      Thread.Sleep(10);
-        //      PhotoCaptured(o);
-        //      return;
-        //    }
-        //    throw;
-        //  }
-        //}
-        //else
-        //{
           string fileName = "";
           if (!ServiceProvider.Settings.DefaultSession.UseOriginalFilename || eventArgs.CameraDevice.CaptureInSdRam)
           {
@@ -220,7 +178,6 @@ namespace CameraControl
           {
             ServiceProvider.Settings.DefaultSession.AddFile(fileName);
           }
-        //}
         ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
        StaticHelper.Instance.SystemMessage = "Photo transfer done.";
         if (ServiceProvider.Settings.Preview)
@@ -229,7 +186,6 @@ namespace CameraControl
         {
           PhotoUtils.PlayCaptureSound();
         }
-        //WiaManager.OnPhotoTakenDone();
       }
       catch (Exception ex)
       {
