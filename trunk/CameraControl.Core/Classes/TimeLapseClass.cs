@@ -123,6 +123,49 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private bool _virtualMove;
+    public bool VirtualMove
+    {
+      get { return _virtualMove; }
+      set
+      {
+        _virtualMove = value;
+        NotifyPropertyChanged("VirtualMove");
+      }
+    }
+
+    private int _movePercent;
+    public int MovePercent
+    {
+      get { return _movePercent; }
+      set
+      {
+        _movePercent = value;
+        NotifyPropertyChanged("MovePercent");
+      }
+    }
+
+    private int _moveDirection;
+    public int MoveDirection
+    {
+      get { return _moveDirection; }
+      set
+      {
+        _moveDirection = value;
+        NotifyPropertyChanged("MoveDirection");
+      }
+    }
+
+    private int _moveAlignment;
+    public int MoveAlignment
+    {
+      get { return _moveAlignment; }
+      set
+      {
+        _moveAlignment = value;
+        NotifyPropertyChanged("MoveAlignment");
+      }
+    }
 
     public TimeLapseClass()
     {
@@ -133,6 +176,9 @@ namespace CameraControl.Core.Classes
       VideoType = new VideoType("",0,0);
       Fps = 15;
       FillImage = false;
+      VirtualMove = false;
+      MovePercent = 10;
+      MoveDirection = 0;
       _timer.Elapsed += _timer_Elapsed;
     }
 
