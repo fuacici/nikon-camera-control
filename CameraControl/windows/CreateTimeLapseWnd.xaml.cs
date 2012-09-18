@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,10 +16,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 //using System.Windows.Shapes;
+using AForge.Imaging.Filters;
 using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
 using FreeImageAPI;
+using Image = System.Drawing.Image;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace CameraControl.windows
@@ -38,8 +42,9 @@ namespace CameraControl.windows
     public CreateTimeLapseWnd()
     {
       InitializeComponent();
-      _backgroundWorker.DoWork += new DoWorkEventHandler(_backgroundWorker_DoWork);
-      _backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_backgroundWorker_RunWorkerCompleted);
+      _backgroundWorker.DoWork += _backgroundWorker_DoWork;
+      _backgroundWorker.RunWorkerCompleted += _backgroundWorker_RunWorkerCompleted;
+      _backgroundWorker.WorkerSupportsCancellation = true;
       _tempFolder = Path.Combine(Path.GetTempPath(), "NCC_TimeLapse", ServiceProvider.Settings.DefaultSession.Name);
       if (Directory.Exists(_tempFolder))
       {
@@ -61,11 +66,23 @@ namespace CameraControl.windows
     void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
     {
       _starTime = DateTime.Now;
-      foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
+      for (int i = 0; i < ServiceProvider.Settings.DefaultSession.Files.Count; i++)
       {
+        
+      //}
+      //foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
+      //{
         _counter++;
-        FileItem item = fileItem;
-        ResizeImage(fileItem.FileName);
+        FileItem item = ServiceProvider.Settings.DefaultSession.Files[i];
+        if(ServiceProvider.Settings.DefaultSession.TimeLapse.VirtualMove)
+        {
+          ResizeImageMove(item.FileName, i, ServiceProvider.Settings.DefaultSession.Files.Count);
+        }
+        else
+        {
+          ResizeImage(item.FileName);
+        }
+
         Dispatcher.BeginInvoke(new ThreadStart(delegate
                                                  {
                                                    progressBar1.Value++;
@@ -137,6 +154,128 @@ namespace CameraControl.windows
       _backgroundWorker.RunWorkerAsync();
     }
 
+    private void ResizeImageMove(string file, int index, int total)
+    {
+      string newfile = Path.Combine(_tempFolder, "img" + _counter.ToString("000000") + ".jpg");
+
+      Bitmap image = (Bitmap)Image.FromFile(file);
+      // format image
+      //AForge.Imaging.Image.FormatImage(ref image);
+      //FIBITMAP dib = FreeImage.LoadEx(file);
+
+
+      int dw = (int)image.Width; //FreeImage.GetWidth(dib);
+      int dh = (int)image.Height; //FreeImage.GetHeight(dib);
+      int tw = ServiceProvider.Settings.DefaultSession.TimeLapse.VideoType.Width;
+      int th = ServiceProvider.Settings.DefaultSession.TimeLapse.VideoType.Height;
+      double movieaspectration = (double) th/tw;
+      double mouviesize = ((double) (ServiceProvider.Settings.DefaultSession.TimeLapse.MovePercent)/100);
+      int frame_h = dh >= dw ? dh : (int) (dw*movieaspectration);
+      int frame_w = dw >= dh ? dw : (int) (dh*movieaspectration);
+      int frame_h_dif = (int) (dh*mouviesize);
+      int frame_w_dif = (int) (dw*mouviesize);
+      frame_h = frame_h - frame_h_dif;
+      frame_w = frame_w - frame_w_dif;
+      double zw = (tw / (double)dw);
+      double zh = (th / (double)dh);
+      double z = ((zw <= zh) ? zw : zh); //!ServiceProvider.Settings.DefaultSession.TimeLapse.FillImage ? ((zw <= zh) ? zw : zh) : ((zw >= zh) ? zw : zh);
+
+      int crop_x = frame_h_dif/total*index;
+      int crop_y = 0;
+
+      switch (ServiceProvider.Settings.DefaultSession.TimeLapse.MoveDirection)
+      {
+        // left to right
+        case 0:
+          {
+            crop_x = (dw-frame_w)/total*index;
+            switch (ServiceProvider.Settings.DefaultSession.TimeLapse.MoveAlignment)
+            {
+              case 0:
+                crop_y = 0;
+                break;
+              case 1:
+                crop_y = (dh - frame_h)/2;
+                break;
+              case 2:
+                crop_y = (dh - frame_h);
+                break;
+            }
+          }
+          break;
+        // right to left
+        case 1:
+          {
+            crop_x = (dw - frame_w)/total*(total - index);
+            switch (ServiceProvider.Settings.DefaultSession.TimeLapse.MoveAlignment)
+            {
+              case 0:
+                crop_y = 0;
+                break;
+              case 1:
+                crop_y = (dh - frame_h) / 2;
+                break;
+              case 2:
+                crop_y = (dh - frame_h);
+                break;
+            }
+          }
+          break;
+        // top to bottom
+        case 2:
+          {
+            crop_y = (dh - frame_h)/total*index;
+            switch (ServiceProvider.Settings.DefaultSession.TimeLapse.MoveAlignment)
+            {
+              case 0:
+                crop_x = 0;
+                break;
+              case 1:
+                crop_x = (dw - frame_w) / 2;
+                break;
+              case 2:
+                crop_x = (dw - frame_w);
+                break;
+            }
+          }
+          break;
+          // bottom to top
+        case 3:
+          {
+            crop_y = (dh - frame_h) / total * (total - index);
+            switch (ServiceProvider.Settings.DefaultSession.TimeLapse.MoveAlignment)
+            {
+              case 0:
+                crop_x = 0;
+                break;
+              case 1:
+                crop_x = (dw - frame_w) / 2;
+                break;
+              case 2:
+                crop_x = (dw - frame_w);
+                break;
+            }
+          }
+          break;
+        case 4:
+          crop_x = (dw - frame_w) / total * index;
+          crop_y = (dh - frame_h) / total * index;
+          break;
+        case 5:
+          crop_x = (dw - frame_w) / total * (total - index);
+          crop_y = (dh - frame_h) / total * (total - index);
+          break;
+      }
+
+      Crop crop = new Crop(new Rectangle(crop_x, crop_y, frame_w , frame_h ));
+      Bitmap newimage = crop.Apply(image);
+      ResizeBilinear resizeBilinearFilter = new ResizeBilinear(tw, th);
+      newimage = resizeBilinearFilter.Apply(newimage);
+      newimage.Save(newfile, ImageFormat.Jpeg);
+      image.Dispose();
+      newimage.Dispose();
+    }
+
     private void ResizeImage(string file)
     {
       string newfile = Path.Combine(_tempFolder, "img" + _counter.ToString("000000") + ".jpg");
@@ -182,6 +321,8 @@ namespace CameraControl.windows
 
     private void button1_Click(object sender, RoutedEventArgs e)
     {
+      if (_backgroundWorker.IsBusy)
+        _backgroundWorker.CancelAsync();
       Close();
     }
 
@@ -192,6 +333,11 @@ namespace CameraControl.windows
         if(MessageBox.Show("A task is running !\n Do you want to cancel it ?","",MessageBoxButtons.YesNo)==System.Windows.Forms.DialogResult.No)
         {
           e.Cancel = true;
+        }
+        else
+        {
+          if (_backgroundWorker.IsBusy)
+            _backgroundWorker.CancelAsync();
         }
       }
     }
