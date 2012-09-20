@@ -43,6 +43,10 @@ namespace CameraControl.windows
     private Line _line22 = new Line();
     private BackgroundWorker _worker = new BackgroundWorker();
     private bool preview = false;
+    private int _totalframes = 0;
+    private DateTime _framestart;
+
+
 
     public LiveViewData LiveViewData { get; set; }
 
@@ -58,6 +62,17 @@ namespace CameraControl.windows
           this.luminanceHistogramPoints = value;
           NotifyPropertyChanged("LuminanceHistogramPoints");
         }
+      }
+    }
+
+    private int _fps;
+    public int Fps
+    {
+      get { return _fps; }
+      set
+      {
+        _fps = value;
+        NotifyPropertyChanged("Fps");
       }
     }
 
@@ -349,6 +364,9 @@ namespace CameraControl.windows
     {
       if (oper_in_progress)
         return;
+      _totalframes++;
+      if ((DateTime.Now - _framestart).TotalSeconds > 0)
+        Fps = (int) (_totalframes/(DateTime.Now - _framestart).TotalSeconds);
       oper_in_progress = true;
       try
       {
@@ -515,6 +533,8 @@ namespace CameraControl.windows
     {
       try
       {
+        _totalframes = 0;
+        _framestart = DateTime.Now;
         Log.Debug("LiveView: Liveview started");
         SelectedPortableDevice.StartLiveView();
         oper_in_progress = false;
@@ -604,7 +624,7 @@ namespace CameraControl.windows
         case WindowsCmdConsts.LiveViewWnd_Show:
           Dispatcher.Invoke(new Action(delegate
                                          {
-                                           _timer.Interval = ServiceProvider.Settings.LiveViewFreezeTimeOut*1000;
+                                           _freezeTimer.Interval = ServiceProvider.Settings.LiveViewFreezeTimeOut * 1000;
                                            ServiceProvider.Settings.SelectedBitmap.BitmapLoaded += SelectedBitmap_BitmapLoaded;
                                            Recording = false;
                                            SelectedPortableDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
