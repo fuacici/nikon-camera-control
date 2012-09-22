@@ -64,6 +64,7 @@ namespace CameraControl.Core.Devices
                         {"D5100", typeof (NikonD5100)},
                         {"D5000", typeof (NikonD90)},
                         {"D60", typeof (NikonD60)},
+                        {"D600", typeof (NikonD600)},
                         {"D70", typeof (NikonD40)},
                         {"D70s", typeof (NikonD40)},
                         {"D700", typeof (NikonD700)},
