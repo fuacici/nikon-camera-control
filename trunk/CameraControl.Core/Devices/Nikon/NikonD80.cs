@@ -21,6 +21,7 @@ namespace CameraControl.Core.Devices.Nikon
     {
       bool res = base.Init(deviceDescriptor);
       Capabilities.Clear();
+      Capabilities.Add(CapabilityEnum.CaptureNoAf);
       HaveLiveView = false;
       CaptureInSdRam = false;
       return res;

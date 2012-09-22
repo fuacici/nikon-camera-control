@@ -65,6 +65,8 @@ namespace CameraControl
       newcameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
       if (newcameraDevice.AttachedPhotoSession != null)
         ServiceProvider.Settings.DefaultSession = newcameraDevice.AttachedPhotoSession;
+      btn_capture_noaf.IsEnabled = newcameraDevice.GetCapability(CapabilityEnum.CaptureNoAf);
+      btn_liveview.IsEnabled = newcameraDevice.GetCapability(CapabilityEnum.LiveView);
     }
 
     void DeviceManager_CameraConnected(ICameraDevice cameraDevice)
@@ -576,6 +578,39 @@ namespace CameraControl
     private void btn_browse_Click(object sender, RoutedEventArgs e)
     {
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.BrowseWnd_Show);
+    }
+
+    private void btn_capture_noaf_Click(object sender, RoutedEventArgs e)
+    {
+      Log.Debug("Main window capture no af started");
+      try
+      {
+        if (ServiceProvider.DeviceManager.SelectedCameraDevice.ShutterSpeed.Value == "Bulb")
+        {
+          if (ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.Bulb))
+          {
+            BulbWnd wnd = new BulbWnd();
+            wnd.ShowDialog();
+            return;
+          }
+          else
+          {
+            StaticHelper.Instance.SystemMessage = "Bulb mode not supported !";
+            return;
+          }
+        }
+        ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhotoNoAf();
+      }
+      catch (DeviceException exception)
+      {
+        StaticHelper.Instance.SystemMessage = exception.Message;
+        Log.Error("Take photo", exception);
+      }
+      catch (Exception exception)
+      {
+        MessageBox.Show("No picture was taken !\n" + exception.Message);
+        Log.Error("Take photo", exception);
+      }
     }
 
   }

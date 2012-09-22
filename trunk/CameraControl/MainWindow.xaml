@@ -9,7 +9,7 @@
         xmlns:Classes="clr-namespace:CameraControl.Core.Classes;assembly=CameraControl.Core"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
         Background="{DynamicResource WindowBackgroundBrush}"
-        Closed="Window_Closed" Closing="Window_Closing" Icon="/CameraControl;component/Images/logo.png" WindowState="Maximized">
+        Closed="Window_Closed" Closing="Window_Closing" Icon="/CameraControl;component/Images/logo.png" WindowState="Maximized" VerticalContentAlignment="Center">
     <Window.Resources>
         <Style TargetType="{x:Type ListBox}">
             <!-- Set the ItemTemplate of the ListBox to a DataTemplate which
@@ -110,6 +110,12 @@
         <ToolBar Grid.ColumnSpan="3" Name="toolBar1" Grid.Row="1">
             <Button ToolTip="Capture photo"  Height="50" Name="button3" Click="button3_Click" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5">
                 <Image Margin="5" Source="/CameraControl;component/Images/Camera.png"/>
+            </Button>
+            <Button ToolTip="Capture photo"  Height="50" Name="btn_capture_noaf" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_capture_noaf_Click">
+                <Grid>
+                    <Image Margin="5" Source="/CameraControl;component/Images/Camera.png"/>
+                    <Label Content="NoAf" HorizontalContentAlignment="Center" FontSize="14" />
+                </Grid>
             </Button>
             <Button Content="[BR]" ToolTip="Braketing"  Height="50" Name="btn_br" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_br_Click" FontSize="15" />
             <ToggleButton ToolTip="Image property" Height="50" Width="50" Name="button1"  Click="button1_Click" Margin="5">
