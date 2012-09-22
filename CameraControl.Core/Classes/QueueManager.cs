@@ -28,6 +28,14 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    public void Clear()
+    {
+      while (Queue.Count > 0)
+      {
+        IQueueItem item;
+        Queue.TryTake(out item);
+      }
+    }
 
     public void Add(IQueueItem item)
     {

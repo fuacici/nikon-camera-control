@@ -13,6 +13,7 @@ using System.Windows.Input;
 using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
+using CameraControl.Core.Classes.Queue;
 using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
 using CameraControl.windows;
@@ -53,10 +54,18 @@ namespace CameraControl
         ServiceProvider.Settings.Save();
         CheckForUpdate();
       }
+      ServiceProvider.Settings.SessionSelected += Settings_SessionSelected;
       ServiceProvider.Settings.PropertyChanged += Settings_PropertyChanged;
       ServiceProvider.WindowsManager.Event += Trigger_Event;
       ServiceProvider.DeviceManager.CameraConnected += DeviceManager_CameraConnected;
       ServiceProvider.DeviceManager.CameraSelected += DeviceManager_CameraSelected;
+    }
+
+    void Settings_SessionSelected(PhotoSession oldvalue, PhotoSession newvalue)
+    {
+      if (oldvalue != null)
+        ServiceProvider.Settings.Save(oldvalue);
+      ServiceProvider.QueueManager.Clear();
     }
 
     void DeviceManager_CameraSelected(ICameraDevice oldcameraDevice, ICameraDevice newcameraDevice)
@@ -114,24 +123,7 @@ namespace CameraControl
     {
       if (e.PropertyName == "DefaultSession")
       {
-        //BackgroundWorker backgroundWorker = new BackgroundWorker();
-        //backgroundWorker.DoWork += delegate
-        //                             {
-        //                               try
-        //                               {
-        //                                 //ServiceProvider.ThumbWorker.Start();
-        //                                 foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
-        //                                 {
-        //                                   if (fileItem.Thumbnail == null)
-        //                                     fileItem.GetExtendedThumb();
-        //                                 }
-        //                               }
-        //                               catch (Exception)
-        //                               {
-
-        //                               }
-        //                             };
-        //backgroundWorker.RunWorkerAsync();
+        ImageLIst.SelectedIndex = 0;
       }
     }
 

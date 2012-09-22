@@ -28,6 +28,8 @@ namespace CameraControl.Core.Classes
       get { return _defaultSession; }
       set
       {
+        if (SessionSelected != null)
+          SessionSelected(_defaultSession, value);
         _defaultSession = value;
         LoadData(_defaultSession);
         NotifyPropertyChanged("DefaultSession");
@@ -488,5 +490,8 @@ namespace CameraControl.Core.Classes
       serializer.Serialize(writer, this);
       writer.Close();
     }
+
+    public delegate void SessionSelectedEventHandler(PhotoSession oldvalu, PhotoSession newvalue);
+    public event SessionSelectedEventHandler SessionSelected;
   }
 }
