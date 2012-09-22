@@ -3,12 +3,30 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" 
-             d:DesignHeight="57" d:DesignWidth="1203" BorderBrush="{x:Null}" BorderThickness="1" xmlns:my="clr-namespace:CameraControl.Controls"
+             d:DesignHeight="528" d:DesignWidth="235" BorderBrush="{x:Null}" BorderThickness="1" xmlns:my="clr-namespace:CameraControl.Controls"
              xmlns:Devices1="clr-namespace:CameraControl.Core.Devices;assembly=CameraControl.Core">
     <UserControl.DataContext>
         <Devices1:CameraDeviceManager/>
     </UserControl.DataContext>
-    <WrapPanel  HorizontalAlignment="Left"  Name="wrapPanel1" VerticalAlignment="Top" ItemWidth="100">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type ListBox}"  x:Key="Style1">
+            <!-- Swap out the default items panel with a WrapPanel so that
+           the images will be arranged with a different layout. -->
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="43*" />
+        </Grid.ColumnDefinitions>
+        <WrapPanel  HorizontalAlignment="Left"  Name="wrapPanel1" VerticalAlignment="Top" ItemWidth="100">
         <StackPanel>
             <my:ExposureStatusControl x:Name="exposureStatusControl1" ExposureStatus="{Binding Path=SelectedCameraDevice.ExposureStatus, Mode=TwoWay}" />
         </StackPanel>
@@ -69,4 +87,19 @@
             </Button>
         </StackPanel>
     </WrapPanel>
+        <Expander Grid.Column="1"  Name="expander1" UseLayoutRounding="True" ExpandDirection="Right" IsExpanded="False" BorderThickness="0">
+            <Grid>
+                <ListBox Name="listBox1" ItemsSource="{Binding Path=SelectedCameraDevice.AdvancedProperties}" Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control, AncestorLevel=1}, Path=Background}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="1" Width="100">
+                                <Label Content="{Binding Path=Name}"/>
+                                <ComboBox IsEnabled="{Binding Path=IsEnabled}" ItemsSource="{Binding Path=Values}" SelectedValue="{Binding Path=Value}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Expander>
+    </Grid>
 </UserControl>

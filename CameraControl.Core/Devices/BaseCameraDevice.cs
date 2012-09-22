@@ -345,11 +345,23 @@ namespace CameraControl.Core.Devices
     public virtual event PhotoCapturedEventHandler PhotoCaptured;
     public virtual event EventHandler CaptureCompleted;
 
+    private AsyncObservableCollection<PropertyValue<long>> _advancedProperties;
+    public AsyncObservableCollection<PropertyValue<long>> AdvancedProperties
+    {
+      get { return _advancedProperties; }
+      set
+      {
+        _advancedProperties = value;
+        NotifyPropertyChanged("AdvancedProperties");        
+      }
+    }
+
     #endregion
 
     public BaseCameraDevice()
     {
       IsChecked = true;
+      AdvancedProperties=new AsyncObservableCollection<PropertyValue<long>>();
     }
 
   }

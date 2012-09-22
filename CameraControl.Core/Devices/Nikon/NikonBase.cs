@@ -268,6 +268,7 @@ namespace CameraControl.Core.Devices.Nikon
       PropertyChanged += NikonBase_PropertyChanged;
       CaptureInSdRam = true;
       _timer.Start();
+      AdvancedProperties.Add(new PropertyValue<long>(){Name = "Test",IsEnabled = true});
       return true;
     }
 

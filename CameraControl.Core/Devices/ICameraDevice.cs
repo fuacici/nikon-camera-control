@@ -1,4 +1,5 @@
 using System;
+using CameraControl.Core.Classes;
 using CameraControl.Core.Devices.Classes;
 
 namespace CameraControl.Core.Devices
@@ -56,5 +57,8 @@ namespace CameraControl.Core.Devices
 
     event PhotoCapturedEventHandler PhotoCaptured;
     event EventHandler CaptureCompleted;
+
+    AsyncObservableCollection<PropertyValue<long>> AdvancedProperties { get; set; }
+    
   }
 }

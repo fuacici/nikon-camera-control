@@ -13,6 +13,17 @@ namespace CameraControl.Core.Devices.Classes
     private AsyncObservableCollection<T> _numericValues = new AsyncObservableCollection<T>();
     private AsyncObservableCollection<string> _values = new AsyncObservableCollection<string>();
 
+    private string _name;
+    public string Name
+    {
+      get { return _name; }
+      set
+      {
+        _name = value;
+        NotifyPropertyChanged("Name");
+      }
+    }
+
     private string _value;
     public string Value
     {
