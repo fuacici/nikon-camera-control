@@ -16,6 +16,7 @@ namespace CameraControl.Core.Devices.Nikon
       Capabilities.Add(CapabilityEnum.LiveView);
       Capabilities.Add(CapabilityEnum.RecordMovie);
       Capabilities.Add(CapabilityEnum.CaptureInRam);
+      Capabilities.Add(CapabilityEnum.CaptureNoAf);
       CaptureInSdRam = true;
       return res;
     }

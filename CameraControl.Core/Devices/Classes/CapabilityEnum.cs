@@ -6,6 +6,7 @@ namespace CameraControl.Core.Devices.Classes
     Bulb,
     RecordMovie,
     CanLockFocus,
-    CaptureInRam
+    CaptureInRam,
+    CaptureNoAf
   }
 }
