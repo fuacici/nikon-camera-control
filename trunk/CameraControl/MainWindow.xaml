@@ -46,7 +46,8 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="120" />
-            <ColumnDefinition Width="651*" />
+            <ColumnDefinition Width="220*" />
+            <ColumnDefinition Width="431*" />
             <ColumnDefinition Width="231" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -57,12 +58,12 @@
             <RowDefinition Height="121" />
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
-        <local:ZoomBorder  BorderThickness="1" CornerRadius="5" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2">
+        <local:ZoomBorder  BorderThickness="1" CornerRadius="5" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3">
             <Image Name="image1" Stretch="Uniform" Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" MouseDown="image1_MouseDown">
             </Image>
         </local:ZoomBorder>
-        <StackPanel Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="0,0,610,0"></StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,610,0">
+        <StackPanel Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="0,0,179,0"></StackPanel>
+        <StackPanel Orientation="Vertical" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,179,0">
             <StackPanel  Orientation="Horizontal">
                 <Label Content="Manufacturer:" />
                 <Label Content="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.Manufacturer}"/>
@@ -72,15 +73,15 @@
                 <Label Content="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.DeviceName}" />
             </StackPanel>
         </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="3" Margin="41,0,223,0" Grid.ColumnSpan="2">
+        <StackPanel Grid.Column="1" Grid.Row="3" Margin="41,0,223,0" Grid.ColumnSpan="3">
 
             <StackPanel  Orientation="Horizontal" Margin="10,0,0,0" HorizontalAlignment="Right">
                 <Label Content="{Binding Source={x:Static Member=Core:StaticHelper.Instance}, Path=SystemMessage}" FontWeight="Bold" HorizontalContentAlignment="Right" />
             </StackPanel>
         </StackPanel>
-        <Label Content="Loading ..." Name="lbl_loading" Grid.Column="1" Grid.Row="2" Margin="338,2,192,0" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="{Binding Path=ImageLoading}" FontSize="25" FontWeight="ExtraBold">
+        <Label Content="Loading ..." Name="lbl_loading" Grid.Column="2" Grid.Row="2" Margin="118,2,192,0" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="{Binding Path=ImageLoading}" FontSize="25" FontWeight="ExtraBold">
         </Label>
-        <StackPanel Grid.Row="4" Grid.ColumnSpan="3" Name="ImagePanel"  Grid.RowSpan="2" >
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="4" Name="ImagePanel"  Grid.RowSpan="2" >
             <ListBox  Name="ImageLIst" ItemsSource="{Binding Path=DefaultSession.Files}" SelectionChanged="ImageLIst_SelectionChanged" Background="{DynamicResource WindowBackgroundBrush}">
                 <ListBox.ContextMenu>
                     <ContextMenu>
@@ -107,7 +108,7 @@
                 </ListBox.ContextMenu>
             </ListBox>
         </StackPanel>
-        <ToolBar Grid.ColumnSpan="3" Name="toolBar1" Grid.Row="1">
+        <ToolBar Grid.ColumnSpan="4" Name="toolBar1" Grid.Row="1">
             <Button ToolTip="Capture photo"  Height="50" Name="button3" Click="button3_Click" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5">
                 <Image Margin="5" Source="/CameraControl;component/Images/Camera.png"/>
             </Button>
@@ -137,8 +138,8 @@
             </Button>
             <StackPanel HorizontalAlignment="Right" IsEnabled="{Binding Path=DefaultSession.TimeLapse.IsDisabled}"></StackPanel>
         </ToolBar>
-        <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="12,6,8,14" Width="100" Grid.Row="2" />
-        <Menu Grid.ColumnSpan="3" Name="menu1">
+        <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="12,6,179,14" Grid.Row="2" Grid.ColumnSpan="2" />
+        <Menu Grid.ColumnSpan="4" Name="menu1">
             <MenuItem Header="_File">
                 <MenuItem Header="Rescan connected cameras" Name="mnu_reconnect" Click="mnu_reconnect_Click" />
                 <MenuItem Header="Connected cameras" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" >
@@ -178,7 +179,7 @@
                 <MenuItem Header="About" Name="mnu_about" Click="btn_about_Click" />
             </MenuItem>
         </Menu>
-        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,20,0" Grid.Row="1" HorizontalAlignment="Right" Width="214" Height="65">
+        <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,20,0" Grid.Row="1" HorizontalAlignment="Right" Width="214" Height="65">
             <StackPanel Orientation="Vertical" >
                 <StackPanel>
                     <Label Content="Session" Margin="5,1,1,1"/>
@@ -190,6 +191,6 @@
                 </StackPanel>
             </StackPanel>
         </StackPanel>
-        <ProgressBar Grid.Column="2" Grid.Row="3" Height="7" Margin="0,0,12,12" Name="progressBar1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="157" Value="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=TransferProgress}" ToolTip="File transfer progress"/>
+        <ProgressBar Grid.Column="3" Grid.Row="3" Height="7" Margin="0,0,12,12" Name="progressBar1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="157" Value="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=TransferProgress}" ToolTip="File transfer progress"/>
     </Grid>
 </Window>

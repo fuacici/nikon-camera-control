@@ -35,7 +35,7 @@ namespace CameraControl.Controls
       }
     }
 
-    private void cmb_shutter_GotFocus(object sender, System.Windows.RoutedEventArgs e)
+    private void cmb_shutter_GotFocus(object sender, RoutedEventArgs e)
     {
       ComboBox cmb = sender as ComboBox;
       if (cmb != null && cmb.IsFocused)
@@ -44,7 +44,7 @@ namespace CameraControl.Controls
       }
     }
 
-    private void button1_Click(object sender, System.Windows.RoutedEventArgs e)
+    private void button1_Click(object sender, RoutedEventArgs e)
     {
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.CameraPropertyWnd_Show,
                                               ServiceProvider.DeviceManager.SelectedCameraDevice);
