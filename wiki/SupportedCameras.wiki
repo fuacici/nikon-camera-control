@@ -18,7 +18,7 @@
 ||Nikon D60||?||-||?||-||Native||
 ||Nikon D70||X||-||?||-||Native||
 ||Nikon D70s||X||-||?||-||Native||
-||Nikon D700||X||?||?||-||Native||
+||Nikon D700||X||X||X||-||Native||
 ||Nikon D7000||X||X||X||-||Native||
 ||Nikon D80||X||-||X||-||Native||
 ||Nikon D800||X||X||?||X||Native||
