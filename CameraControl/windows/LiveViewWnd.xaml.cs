@@ -17,8 +17,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using AForge.Imaging;
+using AForge.Imaging.Filters;
 using CameraControl.Classes;
 using CameraControl.Core;
+using CameraControl.Core.Classes;
 using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
 using CameraControl.Core.Interfaces;
@@ -73,6 +75,18 @@ namespace CameraControl.windows
       {
         _fps = value;
         NotifyPropertyChanged("Fps");
+      }
+    }
+
+
+    private bool _blackAndWhite;
+    public bool BlackAndWhite
+    {
+      get { return _blackAndWhite; }
+      set
+      {
+        _blackAndWhite = value;
+        NotifyPropertyChanged("BlackAndWhite");
       }
     }
 
@@ -402,19 +416,15 @@ namespace CameraControl.windows
                                              ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
                                              this.LuminanceHistogramPoints =
                                                ConvertToPointCollection(hslStatistics.Luminance.Values);
-                                           }
-                                           stream.Seek(0, SeekOrigin.Begin);
-                                           JpegBitmapDecoder decoder = new JpegBitmapDecoder(stream,
-                                                                                             BitmapCreateOptions.
-                                                                                               None,
-                                                                                             BitmapCacheOption.
-                                                                                               OnLoad);
-
-                                           decoder.Frames[0].Freeze();
-
-                                           if (decoder.Frames.Count > 0)
-                                           {
-                                             image1.Source = decoder.Frames[0];
+                                             if (BlackAndWhite)
+                                             {
+                                               Grayscale filter = new Grayscale(0.299, 0.587, 0.114);
+                                               image1.Source = Imaging.CreateBitmapSourceFromBitmap(filter.Apply(bmp));
+                                             }
+                                             else
+                                             {
+                                               image1.Source = Imaging.CreateBitmapSourceFromBitmap(bmp);
+                                             }
                                            }
                                            stream.Close();
                                          }

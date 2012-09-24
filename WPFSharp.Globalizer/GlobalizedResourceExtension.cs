@@ -94,6 +94,7 @@ namespace WPFSharp.Globalizer
         /// </returns>
         public override object ProvideValue(IServiceProvider inServiceProvider)
         {
+          //return "???";
             if (ResourceKey == null || String.IsNullOrWhiteSpace(ResourceKey.ToString()))
                 throw new InvalidOperationException("ResourceKey cannot be null or empty.");
 
