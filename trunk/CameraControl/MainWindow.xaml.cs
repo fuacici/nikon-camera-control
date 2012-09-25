@@ -143,48 +143,52 @@ namespace CameraControl
         StaticHelper.Instance.SystemMessage = "Photo transfer begin.";
         Log.Debug("Photo transfer begin.");
         PhotoCapturedEventArgs eventArgs = o as PhotoCapturedEventArgs;
-        if(eventArgs == null)
+        if (eventArgs == null)
           return;
         PhotoSession session = eventArgs.CameraDevice.AttachedPhotoSession;
         if (session == null)
           session = ServiceProvider.Settings.DefaultSession;
         if ((session.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
+        {
+          eventArgs.CameraDevice.IsBusy = false;
           return;
-          string fileName = "";
-          if (!session.UseOriginalFilename || eventArgs.CameraDevice.CaptureInSdRam)
-          {
+        }
+        string fileName = "";
+        if (!session.UseOriginalFilename || eventArgs.CameraDevice.CaptureInSdRam)
+        {
+          fileName =
+            session.GetNextFileName(Path.GetExtension(eventArgs.FileName),
+                                    eventArgs.CameraDevice);
+        }
+        else
+        {
+          fileName = Path.Combine(session.Folder, eventArgs.FileName);
+          if (File.Exists(fileName))
             fileName =
-              session.GetNextFileName(Path.GetExtension(eventArgs.FileName),
-                                                                                      eventArgs.CameraDevice);
-          }
-          else
-          {
-            fileName = Path.Combine(session.Folder, eventArgs.FileName);
-            if (File.Exists(fileName))
-              fileName =
-                PhotoUtils.GetUniqueFilename(
-                  Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_", 0,
-                  Path.GetExtension(fileName));
-          }
-          if (!Directory.Exists(Path.GetDirectoryName(fileName)))
-          {
-            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-          }
-          Log.Debug("Transfer started :" + fileName);
-          eventArgs.CameraDevice.TransferFile(eventArgs.EventArgs, fileName);
-          Log.Debug("Transfer done :" + fileName);
-          if (ServiceProvider.Settings.AutoPreview)
-          {
-            Dispatcher.Invoke(
-              new Action(
-                delegate { ImageLIst.SelectedValue = session.AddFile(fileName); }));
-          }
-          else
-          {
-            session.AddFile(fileName);
-          }
-          ServiceProvider.Settings.Save(session);
+              PhotoUtils.GetUniqueFilename(
+                Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_", 0,
+                Path.GetExtension(fileName));
+        }
+        if (!Directory.Exists(Path.GetDirectoryName(fileName)))
+        {
+          Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+        }
+        Log.Debug("Transfer started :" + fileName);
+        eventArgs.CameraDevice.TransferFile(eventArgs.EventArgs, fileName);
+        Log.Debug("Transfer done :" + fileName);
+        if (ServiceProvider.Settings.AutoPreview)
+        {
+          Dispatcher.Invoke(
+            new Action(
+              delegate { ImageLIst.SelectedValue = session.AddFile(fileName); }));
+        }
+        else
+        {
+          session.AddFile(fileName);
+        }
+        ServiceProvider.Settings.Save(session);
         StaticHelper.Instance.SystemMessage = "Photo transfer done.";
+        eventArgs.CameraDevice.IsBusy = false;
         if (ServiceProvider.Settings.Preview)
           ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_ShowTimed);
         if (ServiceProvider.Settings.PlaySound)
@@ -194,7 +198,7 @@ namespace CameraControl
       }
       catch (Exception ex)
       {
-       StaticHelper.Instance.SystemMessage = "Transfer error !\nMessage :" + ex.Message;
+        StaticHelper.Instance.SystemMessage = "Transfer error !\nMessage :" + ex.Message;
         Log.Error("Transfer error !", ex);
       }
     }
@@ -429,7 +433,7 @@ namespace CameraControl
       {
         foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
         {
-          if (fileItem.IsChecked)
+          if (fileItem.IsChecked || !File.Exists(fileItem.FileName))
             filestodelete.Add(fileItem);
         }
 
@@ -446,13 +450,19 @@ namespace CameraControl
         {
           foreach (FileItem fileItem in filestodelete)
           {
-            if ((ServiceProvider.Settings.SelectedBitmap != null && ServiceProvider.Settings.SelectedBitmap.FileItem != null && fileItem.FileName == ServiceProvider.Settings.SelectedBitmap.FileItem.FileName))
+            if ((ServiceProvider.Settings.SelectedBitmap != null &&
+                 ServiceProvider.Settings.SelectedBitmap.FileItem != null &&
+                 fileItem.FileName == ServiceProvider.Settings.SelectedBitmap.FileItem.FileName))
             {
               ServiceProvider.Settings.SelectedBitmap.DisplayImage = null;
             }
             if (File.Exists(fileItem.FileName))
-              Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fileItem.FileName, UIOption.OnlyErrorDialogs,
-                                                                 RecycleOption.SendToRecycleBin);
+              FileSystem.DeleteFile(fileItem.FileName, UIOption.OnlyErrorDialogs,
+                                    RecycleOption.SendToRecycleBin);
+            else
+            {
+              ServiceProvider.Settings.DefaultSession.Files.Remove(fileItem);
+            }
           }
           if (ImageLIst.Items.Count > 0)
             ImageLIst.SelectedIndex = 0;

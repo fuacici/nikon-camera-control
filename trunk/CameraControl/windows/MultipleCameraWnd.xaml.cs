@@ -50,7 +50,10 @@ namespace CameraControl.windows
         _timer.Stop();
         CapturePhotos();
       }
-     StaticHelper.Instance.SystemMessage = string.Format("Waiting {0})", _secounter);
+      else
+      {
+        StaticHelper.Instance.SystemMessage = string.Format("Waiting {0})", _secounter);        
+      }
     }
 
     #region Implementation of IWindow
@@ -103,40 +106,48 @@ namespace CameraControl.windows
     private void CapturePhotos()
     {
       _photocounter++;
-     StaticHelper.Instance.SystemMessage = string.Format("Capture started {0}", _photocounter);
+     StaticHelper.Instance.SystemMessage = string.Format("Capture started multiple cameras {0}", _photocounter);
       Thread thread = new Thread(new ThreadStart(delegate
       {
+        while (CamerasAreBusy())
+        {
+
+        }
         try
         {
           foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices.Where(connectedDevice => connectedDevice.IsConnected && connectedDevice.IsChecked))
           {
-            try
-            {
-              if (DisbleAutofocus)
-              {
-                ICameraDevice device = connectedDevice;
-                Thread threadcamera=new Thread(device.CapturePhotoNoAf);
-                threadcamera.Start();
-              }
-              else
-              {
-                ICameraDevice device = connectedDevice;
-                Thread threadcamera = new Thread(device.CapturePhoto);
-                threadcamera.Start();
-              }
-              Thread.Sleep(DelaySec);
-            }
-            catch (COMException exception)
-            {
-              Log.Error(exception);
-              throw;
-            }
+            Thread.Sleep(DelaySec);
+            ICameraDevice device = connectedDevice;
+            Thread threadcamera = new Thread(new ThreadStart(delegate
+                                                               {
+                                                                 try
+                                                                 {
+                                                                   if (DisbleAutofocus)
+                                                                   {
+                                                                     device.CapturePhotoNoAf();
+                                                                   }
+                                                                   else
+                                                                   {
+                                                                     device.CapturePhoto();
+                                                                   }
+                                                                 }
+                                                                 catch (Exception exception)
+                                                                 {
+                                                                   Log.Error(exception);
+                                                                   StaticHelper.Instance.SystemMessage =
+                                                                     exception.Message;
+                                                                 }
+                                                               }));
+            threadcamera.Start();
           }
         }
         catch (Exception exception)
         {
           Log.Error(exception);
         }
+
+        Thread.Sleep(DelaySec);
         if (_photocounter < NumOfPhotos)
           _timer.Start();
         else
@@ -145,6 +156,12 @@ namespace CameraControl.windows
         }
       }));
       thread.Start();
+    }
+
+
+    private bool CamerasAreBusy()
+    {
+      return ServiceProvider.DeviceManager.ConnectedDevices.Aggregate(false, (current, connectedDevice) => connectedDevice.IsBusy || current);
     }
 
     private void btn_stop_Click(object sender, RoutedEventArgs e)

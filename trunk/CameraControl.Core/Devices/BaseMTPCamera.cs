@@ -9,7 +9,8 @@ namespace CameraControl.Core.Devices
     private const int CONST_READY_TIME = 1;
     private const int CONST_LOOP_TIME = 1000;
 
-    protected StillImageDevice _stillImageDevice = null;
+    protected StillImageDevice StillImageDevice = null;
+    protected bool DeviceIsBusy = false;
 
 
     public MTPDataResponse ExecuteReadDataEx(int code)
@@ -35,39 +36,76 @@ namespace CameraControl.Core.Devices
 
     public uint ExecuteWithNoData(int code, uint param1, int loop, int counter)
     {
-      uint res = _stillImageDevice.ExecuteWithNoData(code, param1);
-      if ((res == ErrorCodes.MTP_Device_Busy || res == PortableDeviceErrorCodes.ERROR_BUSY) &&  counter<loop)
+      WaitForReady();
+      uint res = 0;
+      bool allok;
+      do
       {
-        Thread.Sleep(CONST_READY_TIME);
-        counter++;
-        return ExecuteWithNoData(code, param1, loop, counter);
-      }
+        allok = true;
+        res = StillImageDevice.ExecuteWithNoData(code, param1);
+        if ((res == ErrorCodes.MTP_Device_Busy || res == PortableDeviceErrorCodes.ERROR_BUSY) && counter < loop)
+        {
+          Thread.Sleep(CONST_READY_TIME);
+          counter++;
+          allok = false;
+        }
+      } while (!allok);
       return res;
     }
 
-    public uint ExecuteWithNoData(int code,  int loop, int counter)
+    public uint ExecuteWithNoData(int code, int loop, int counter)
     {
-      uint res = _stillImageDevice.ExecuteWithNoData(code);
-      if ((res == ErrorCodes.MTP_Device_Busy || res == PortableDeviceErrorCodes.ERROR_BUSY) && counter < loop)
+      WaitForReady();
+      uint res = 0;
+      bool allok;
+      do
       {
-        Thread.Sleep(CONST_READY_TIME);
-        counter++;
-        return ExecuteWithNoData(code, loop, counter);
-      }
+        allok = true;
+        res = StillImageDevice.ExecuteWithNoData(code);
+        if ((res == ErrorCodes.MTP_Device_Busy || res == PortableDeviceErrorCodes.ERROR_BUSY) && counter < loop)
+        {
+          Thread.Sleep(CONST_READY_TIME);
+          counter++;
+          allok = false;
+        }
+      } while (!allok);
+      return res;
+    }
+
+    public uint ExecuteWithNoData(int code, uint param1, uint param2)
+    {
+      uint res = StillImageDevice.ExecuteWithNoData(code, param1, param2);
       return res;
     }
 
     public MTPDataResponse ExecuteReadDataEx(int code, int param1, int param2, int loop, int counter)
     {
-      MTPDataResponse res=new MTPDataResponse();
-      res = _stillImageDevice.ExecuteReadDataEx(code, param1, param2);
-      if ((res.ErrorCode == ErrorCodes.MTP_Device_Busy || res.ErrorCode == PortableDeviceErrorCodes.ERROR_BUSY) && counter < loop)
+      WaitForReady();
+      DeviceIsBusy = true;
+      MTPDataResponse res = new MTPDataResponse();
+      bool allok;
+      do
       {
-        Thread.Sleep(CONST_READY_TIME);
-        counter++;
-        return ExecuteReadDataEx(code, param1, param2, loop, counter);
-      }
+        allok = true;
+        if ((res.ErrorCode == ErrorCodes.MTP_Device_Busy || res.ErrorCode == PortableDeviceErrorCodes.ERROR_BUSY) &&
+            counter < loop)
+        {
+          Thread.Sleep(CONST_READY_TIME);
+          counter++;
+          allok = false;
+        }
+        res = StillImageDevice.ExecuteReadDataEx(code, param1, param2);
+      } while (!allok);
+      DeviceIsBusy = false;
       return res;
+    }
+
+    protected void WaitForReady()
+    {
+      while (DeviceIsBusy)
+      {
+        Thread.Sleep(1);
+      }
     }
 
   }

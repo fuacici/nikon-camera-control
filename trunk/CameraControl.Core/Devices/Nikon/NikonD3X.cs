@@ -12,7 +12,7 @@ namespace CameraControl.Core.Devices.Nikon
 
       const int headerSize = 64;
 
-      byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetLiveViewImage);
+      byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetLiveViewImage);
       if (result == null || result.Length <= headerSize)
         return null;
       int cbBytesRead = result.Length;

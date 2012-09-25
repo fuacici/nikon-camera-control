@@ -53,13 +53,13 @@ namespace CameraControl.Core.Devices.Nikon
           if (CaptureInSdRam)
           {
             DeviceReady();
-            ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF));
+            ErrorCodes.GetException(StillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF));
             return;
           }
           StopLiveView();
         }
         DeviceReady();
-        ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
+        ErrorCodes.GetException(StillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
       }
     }
 
@@ -70,7 +70,7 @@ namespace CameraControl.Core.Devices.Nikon
 
       const int headerSize = 64;
 
-      byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetLiveViewImage);
+      byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetLiveViewImage);
       if (result == null || result.Length <= headerSize)
         return null;
       int cbBytesRead = result.Length;

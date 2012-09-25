@@ -34,7 +34,7 @@ namespace CameraControl.Core.Devices.Nikon
         byte datasize = 1;
         CompressionSetting = new PropertyValue<int>();
         CompressionSetting.ValueChanged += CompressionSetting_ValueChanged;
-        byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_CompressionSetting);
+        byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_CompressionSetting);
         int type = BitConverter.ToInt16(result, 2);
         byte formFlag = result[(2 * datasize) + 5];
         byte defval = result[datasize + 5];
@@ -66,15 +66,15 @@ namespace CameraControl.Core.Devices.Nikon
       lock (Locker)
       {
         byte oldval = 0;
-        byte[] val = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
+        byte[] val = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
         if (val != null && val.Length > 0)
           oldval = val[0];
 
-        ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] { (byte)4 },
+        ErrorCodes.GetException(StillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] { (byte)4 },
                                                                    CONST_PROP_AFModeSelect, -1));
-        ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
+        ErrorCodes.GetException(StillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
         if (val != null && val.Length > 0)
-          ErrorCodes.GetException(_stillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] { oldval },
+          ErrorCodes.GetException(StillImageDevice.ExecuteWriteData(CONST_CMD_SetDevicePropValue, new[] { oldval },
                                                                      CONST_PROP_AFModeSelect, -1));
       }
     }
