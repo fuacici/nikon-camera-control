@@ -6,6 +6,11 @@ namespace CameraControl.Core.Devices
 {
   public interface ICameraDevice
   {
+    /// <summary>
+    /// If false the camera is ready to take next capture
+    /// Should set to false by the user code
+    /// </summary>
+    bool IsBusy { get; set; }
     bool HaveLiveView { get; set; }
     bool CaptureInSdRam { get; set; }
     PropertyValue<int> FNumber { get; set; }

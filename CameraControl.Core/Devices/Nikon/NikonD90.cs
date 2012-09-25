@@ -25,7 +25,7 @@ namespace CameraControl.Core.Devices.Nikon
 
       const int headerSize = 128;
 
-      byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetLiveViewImage);
+      byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetLiveViewImage);
       if (result == null || result.Length <= headerSize)
         return null;
       int cbBytesRead = result.Length;
@@ -55,7 +55,7 @@ namespace CameraControl.Core.Devices.Nikon
           if (CaptureInSdRam)
           {
             DeviceReady();
-            ErrorCodes.GetException(_stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF));
+            ErrorCodes.GetException(StillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF));
             return;
           }
           StopLiveView();
@@ -63,15 +63,15 @@ namespace CameraControl.Core.Devices.Nikon
         // the focus mode can be sett only in host mode
         LockCamera();
         byte oldval = 0;
-        byte[] val = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
+        byte[] val = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
         if (val != null && val.Length > 0)
           oldval = val[0];
         
         SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)4 }, CONST_PROP_AFModeSelect, -1);
         
         ErrorCodes.GetException(CaptureInSdRam
-                                  ? _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF)
-                                  : _stillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
+                                  ? StillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF)
+                                  : StillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
         
         if (val != null && val.Length > 0)
           SetProperty(CONST_CMD_SetDevicePropValue, new[] { oldval }, CONST_PROP_AFModeSelect, -1);

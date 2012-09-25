@@ -25,7 +25,7 @@ namespace CameraControl.Core.Devices.Nikon
         byte datasize = 1;
         CompressionSetting = new PropertyValue<int>();
         CompressionSetting.ValueChanged += CompressionSetting_ValueChanged;
-        byte[] result = _stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_CompressionSetting);
+        byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_CompressionSetting);
         byte defval = result[datasize + 5];
         for (int i = 0; i < result.Length - ((2 * datasize) + 6 + 2); i += datasize)
         {

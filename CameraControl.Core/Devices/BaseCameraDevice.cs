@@ -11,6 +11,18 @@ namespace CameraControl.Core.Devices
     protected List<CapabilityEnum> Capabilities = new List<CapabilityEnum>();
 
     private bool _haveLiveView;
+
+    private bool _isBusy;
+    public bool IsBusy
+    {
+      get { return _isBusy; }
+      set
+      {
+        _isBusy = value;
+        NotifyPropertyChanged("IsBusy");
+      }
+    }
+
     public virtual bool HaveLiveView
     {
       get { return _haveLiveView; }

@@ -6,7 +6,11 @@
         Background="{DynamicResource WindowBackgroundBrush}"
         Title="Multiple camera support" Height="244" Width="586" xmlns:my="clr-namespace:Xceed.Wpf.Toolkit.Chromes;assembly=WPFToolkit.Extended" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" Closing="Window_Closing" xmlns:my1="clr-namespace:CameraControl.windows"
         xmlns:CameraControl="clr-namespace:CameraControl"
-        xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core" WindowStartupLocation="CenterScreen">
+        xmlns:CoreWpf="clr-namespace:CameraControl.Core.Wpf;assembly=CameraControl.Core"
+        xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
+    <Window.Resources>
+        <CoreWpf:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter1" />
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30*" />
@@ -19,7 +23,7 @@
         <Button Content="Capture photos" Height="54" HorizontalAlignment="Left" Margin="17,22,0,0" Name="btn_shot" VerticalAlignment="Top" Width="154" Click="btn_shot_Click" Grid.RowSpan="2" />
         <xctk:IntegerUpDown Margin="191,22,0,0" Name="int_wait" VerticalAlignment="Top" ToolTip="Wait beetven cameras shots in seconds " Minimum="0" Maximum="1000000" Value="{Binding Path=DelaySec, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:MultipleCameraWnd, AncestorLevel=1}}" HorizontalAlignment="Left" Width="124" Grid.RowSpan="2" />
         <Label Content="Delay (msec)" ToolTip="Delay between camera shouts" HorizontalAlignment="Left" Margin="191,2,0,0" Name="label1" Height="28" VerticalAlignment="Top" />
-        <Label Content="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SystemMessage}" Margin="31,0,0,12" Name="lbl_message" Height="28" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="284" Grid.Row="1" />
+        <Label Content="{Binding Source={x:Static Member=Core:StaticHelper.Instance}, Path=SystemMessage}" Margin="17,0,0,12" Name="lbl_message" Height="28" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="298" Grid.Row="1" />
         <CheckBox Content="Disable autofocus" Height="16" HorizontalAlignment="Left" Margin="17,96,0,0" Name="chk_noautofocus" VerticalAlignment="Top" IsChecked="{Binding Path=DisbleAutofocus, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:MultipleCameraWnd, AncestorLevel=1}}" Grid.Row="1" />
         <xctk:IntegerUpDown Margin="191,38,0,0" Name="integerUpDown1" VerticalAlignment="Top" Value="{Binding Path=NumOfPhotos, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:MultipleCameraWnd, AncestorLevel=1}}" ShowButtonSpinner="True" Maximum="10000" Minimum="1" HorizontalAlignment="Left" Grid.Row="1" />
         <Label Content="Number of captures" Height="28" HorizontalAlignment="Left" Margin="191,18,0,0" Name="label2" VerticalAlignment="Top" Grid.Row="1" />
@@ -36,6 +40,7 @@
             <ListBox.ItemTemplate>
                 <HierarchicalDataTemplate>
                     <WrapPanel>
+                        <Rectangle Fill="Red" Width="10" Height="10" Visibility="{Binding Path=IsBusy, Converter={StaticResource BooleanToVisibilityConverter1}}"/>
                         <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding IsChecked}" IsEnabled="{Binding IsConnected}"/>
                     </WrapPanel>
                 </HierarchicalDataTemplate>

@@ -156,6 +156,7 @@ namespace CameraControl.Core.Devices.Others
 
     public override bool Init(DeviceDescriptor deviceDescriptor)
     {
+      IsBusy = false;
       //the device not connected
       try
       {
@@ -599,11 +600,18 @@ namespace CameraControl.Core.Devices.Others
       Monitor.Enter(Locker);
       try
       {
+        IsBusy = true;
         Device.ExecuteCommand(Conts.wiaCommandTakePicture);
       }
       catch (COMException comException)
       {
+        IsBusy = false;
         ErrorCodes.GetException(comException);
+      }
+      catch
+      {
+        IsBusy = false;
+        throw;
       }
       finally
       {

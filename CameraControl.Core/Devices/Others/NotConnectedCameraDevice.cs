@@ -10,6 +10,7 @@ namespace CameraControl.Core.Devices.Others
     public override bool Init(DeviceDescriptor deviceDescriptor)
     {
       HaveLiveView = false;
+      IsBusy = false;
       return true;
     }
 
