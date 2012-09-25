@@ -66,12 +66,18 @@ namespace CameraControl
       if (oldvalue != null)
         ServiceProvider.Settings.Save(oldvalue);
       ServiceProvider.QueueManager.Clear();
+      if (ServiceProvider.DeviceManager.SelectedCameraDevice != null)
+        ServiceProvider.DeviceManager.SelectedCameraDevice.AttachedPhotoSession = newvalue;
     }
 
     void DeviceManager_CameraSelected(ICameraDevice oldcameraDevice, ICameraDevice newcameraDevice)
     {
-      CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(newcameraDevice);
-      newcameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
+      // load session data only if not sessiom attached to the selected camera
+      if (newcameraDevice.AttachedPhotoSession == null)
+      {
+        CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(newcameraDevice);
+        newcameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
+      }
       if (newcameraDevice.AttachedPhotoSession != null)
         ServiceProvider.Settings.DefaultSession = newcameraDevice.AttachedPhotoSession;
       btn_capture_noaf.IsEnabled = newcameraDevice.GetCapability(CapabilityEnum.CaptureNoAf);
@@ -124,6 +130,8 @@ namespace CameraControl
       if (e.PropertyName == "DefaultSession")
       {
         ImageLIst.SelectedIndex = 0;
+        if (ImageLIst.Items.Count == 0)
+          ServiceProvider.Settings.SelectedBitmap.DisplayImage = null;
       }
     }
 
@@ -132,23 +140,26 @@ namespace CameraControl
     {
       try
       {
-       StaticHelper.Instance.SystemMessage = "Photo transfer begin.";
+        StaticHelper.Instance.SystemMessage = "Photo transfer begin.";
         Log.Debug("Photo transfer begin.");
         PhotoCapturedEventArgs eventArgs = o as PhotoCapturedEventArgs;
         if(eventArgs == null)
           return;
-        if ((ServiceProvider.Settings.DefaultSession.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
+        PhotoSession session = eventArgs.CameraDevice.AttachedPhotoSession;
+        if (session == null)
+          session = ServiceProvider.Settings.DefaultSession;
+        if ((session.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
           return;
           string fileName = "";
-          if (!ServiceProvider.Settings.DefaultSession.UseOriginalFilename || eventArgs.CameraDevice.CaptureInSdRam)
+          if (!session.UseOriginalFilename || eventArgs.CameraDevice.CaptureInSdRam)
           {
             fileName =
-              ServiceProvider.Settings.DefaultSession.GetNextFileName(Path.GetExtension(eventArgs.FileName),
+              session.GetNextFileName(Path.GetExtension(eventArgs.FileName),
                                                                                       eventArgs.CameraDevice);
           }
           else
           {
-            fileName = Path.Combine(ServiceProvider.Settings.DefaultSession.Folder, eventArgs.FileName);
+            fileName = Path.Combine(session.Folder, eventArgs.FileName);
             if (File.Exists(fileName))
               fileName =
                 PhotoUtils.GetUniqueFilename(
@@ -166,14 +177,14 @@ namespace CameraControl
           {
             Dispatcher.Invoke(
               new Action(
-                delegate { ImageLIst.SelectedValue = ServiceProvider.Settings.DefaultSession.AddFile(fileName); }));
+                delegate { ImageLIst.SelectedValue = session.AddFile(fileName); }));
           }
           else
           {
-            ServiceProvider.Settings.DefaultSession.AddFile(fileName);
+            session.AddFile(fileName);
           }
-        ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
-       StaticHelper.Instance.SystemMessage = "Photo transfer done.";
+          ServiceProvider.Settings.Save(session);
+        StaticHelper.Instance.SystemMessage = "Photo transfer done.";
         if (ServiceProvider.Settings.Preview)
           ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_ShowTimed);
         if (ServiceProvider.Settings.PlaySound)

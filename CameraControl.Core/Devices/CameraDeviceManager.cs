@@ -25,11 +25,13 @@ namespace CameraControl.Core.Devices
       get { return _selectedCameraDevice; }
       set
       {
-        if (CameraSelected!=null)
-        {
-          CameraSelected(_selectedCameraDevice, value);
-        }
+        ICameraDevice device = _selectedCameraDevice;
         _selectedCameraDevice = value;
+        if (CameraSelected != null)
+        {
+          CameraSelected(device, _selectedCameraDevice);
+        }
+
         NotifyPropertyChanged("SelectedCameraDevice");
       }
     }
