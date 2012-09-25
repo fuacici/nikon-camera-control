@@ -113,9 +113,17 @@ namespace CameraControl.windows
             try
             {
               if (DisbleAutofocus)
-                connectedDevice.CapturePhotoNoAf();
+              {
+                ICameraDevice device = connectedDevice;
+                Thread threadcamera=new Thread(device.CapturePhotoNoAf);
+                threadcamera.Start();
+              }
               else
-                connectedDevice.CapturePhoto();
+              {
+                ICameraDevice device = connectedDevice;
+                Thread threadcamera = new Thread(device.CapturePhoto);
+                threadcamera.Start();
+              }
               Thread.Sleep(DelaySec);
             }
             catch (COMException exception)
