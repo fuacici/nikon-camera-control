@@ -1,3 +1,4 @@
+using System;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Devices;
 
@@ -23,7 +24,7 @@ namespace CameraControl.Core
       ActionManager = new ActionManager();
       QueueManager = new QueueManager();
       Log.Debug("Application starting");
-      Log.Debug("Application verison" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
+      Log.Debug("Application verison" + System.Reflection.Assembly.GetEntryAssembly().GetName().Version);
     }
   }
 }
