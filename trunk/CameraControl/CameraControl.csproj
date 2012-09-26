@@ -331,7 +331,8 @@
     <SplashScreen Include="SplashScreen.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Devices\Classes\" />
+    <Folder Include="Devices\" />
+    <Folder Include="Images\Classes\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
