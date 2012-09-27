@@ -52,6 +52,9 @@
                         <Label Content="Rotate image :"/>
                         <ComboBox ItemsSource="{Binding Path=RotateFlipTypesValues, RelativeSource={RelativeSource FindAncestor, AncestorType=windows:SettingsWnd, AncestorLevel=1}}" SelectedItem="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=Rotate}" />
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <CheckBox Content="Don't load thumbnails" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DontLoadThumbnails}"/>
+                    </StackPanel>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Triggers">

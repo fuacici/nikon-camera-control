@@ -106,10 +106,8 @@ namespace CameraControl.Core.Classes
         if (_thumbnail == null)
         {
           _thumbnail = new BitmapImage(new Uri("pack://application:,,,/Images/logo.png"));
-          //TODO: remove
-          ServiceProvider.QueueManager.Add(new QueueItemFileItem() { FileItem = this });
-          //GetExtendedThumb();
-          //ServiceProvider.ThumbWorker.AddItem(this);
+          if (!ServiceProvider.Settings.DontLoadThumbnails)
+            ServiceProvider.QueueManager.Add(new QueueItemFileItem() {FileItem = this});
         }
         return _thumbnail;
       }
