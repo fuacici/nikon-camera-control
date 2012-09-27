@@ -57,6 +57,7 @@ namespace CameraControl.Core.Devices.Nikon
     public const int CONST_Event_CaptureCompleteRecInSdram = 0xC102;
     public const int CONST_Event_ObjectAdded = 0x4002;
     public const int CONST_Event_ObjectAddedInSdram = 0xC101;
+    public const int CONST_Event_ObsoleteEvent = 0xC104;
 
 
     private const string AppName = "CameraControl";
@@ -1047,6 +1048,8 @@ namespace CameraControl.Core.Devices.Nikon
               {
                 OnCaptureCompleted(this, new EventArgs());
               }
+              break;
+            case CONST_Event_ObsoleteEvent:
               break;
             default:
               //Console.WriteLine("Unknow event code " + eventCode.ToString("X"));
