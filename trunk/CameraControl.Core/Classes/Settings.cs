@@ -300,7 +300,16 @@ namespace CameraControl.Core.Classes
       }
     }
 
-    
+    private bool _dontLoadThumbnails;
+    public bool DontLoadThumbnails
+    {
+      get { return _dontLoadThumbnails; }
+      set
+      {
+        _dontLoadThumbnails = value;
+        NotifyPropertyChanged("DontLoadThumbnails");
+      }
+    }
 
     public CameraPropertyEnumerator CameraProperties { get; set; }
     public AsyncObservableCollection<CameraPreset> CameraPresets { get; set; }
