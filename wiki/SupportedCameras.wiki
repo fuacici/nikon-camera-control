@@ -6,7 +6,7 @@
 ||Nikon D2x||X||-||-||-||WIA||
 ||Nikon D200||?||-||?||-||Native||
 ||Nikon D3X||X||?||?||-||Native||
-||Nikon D3S||X||?||?||-||Native||
+||Nikon D3S||X||X||X||-||Native||
 ||Nikon D300||X||?||?||-||Native||
 ||Nikon D3000||X||-||?||-||WIA||
 ||Nikon D3100||X||-||?||-||WIA||
