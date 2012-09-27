@@ -8,7 +8,7 @@
         Background="{DynamicResource WindowBackgroundBrush}"
         Title="Session [Add/Edit]" Height="317" Width="374" Loaded="Window_Loaded" ResizeMode="NoResize" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:Classes="clr-namespace:CameraControl.Core.Devices.Classes;assembly=CameraControl.Core"
-        xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core">
+        xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core" WindowStartupLocation="CenterScreen" Topmost="True">
     <Window.DataContext>
         <Classes:PhotoSession/>
     </Window.DataContext>
@@ -43,6 +43,9 @@
             <StackPanel Orientation="Horizontal">
                 <CheckBox Content="Don't download photos to PC" ToolTip="" IsChecked="{Binding Path=NoDownload}"/>
             </StackPanel>
-         </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox Content="Alow folder change using using image browser" ToolTip="" IsChecked="{Binding Path=AlowFolderChange}"/>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>

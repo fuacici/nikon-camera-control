@@ -61,6 +61,7 @@ namespace CameraControl.windows
       switch (cmd)
       {
         case WindowsCmdConsts.BrowseWnd_Show:
+          ServiceProvider.Settings.PropertyChanged += Settings_PropertyChanged;
           Dispatcher.Invoke(new Action(delegate
                                          {
                                            SelectedPhotoSession = ServiceProvider.Settings.DefaultSession;
@@ -73,17 +74,26 @@ namespace CameraControl.windows
           break;
         case WindowsCmdConsts.BrowseWnd_Hide:
           {
+            ServiceProvider.Settings.PropertyChanged -= Settings_PropertyChanged;
             Dispatcher.Invoke(new Action(Hide));
           }
           break;
         case WindowsCmdConsts.All_Close:
           Dispatcher.Invoke(new Action(delegate
-          {
-            Hide();
-            Close();
-          }));
+                                         {
+                                           Hide();
+                                           Close();
+                                         }));
           break;
-      } 
+      }
+    }
+
+    void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+      if (e.PropertyName == "DefaultSession")
+      {
+        SelectedPhotoSession = ServiceProvider.Settings.DefaultSession;
+      }
     }
 
     #endregion
@@ -104,6 +114,14 @@ namespace CameraControl.windows
         ServiceProvider.Settings.DefaultSession = SelectedPhotoSession;
         ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.BrowseWnd_Hide);
       }
+    }
+
+    private void folderBrowser1_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+      ServiceProvider.Settings.DefaultSession.Folder = folderBrowser1.SelectedImagePath;
+      ServiceProvider.QueueManager.Clear();
+      ServiceProvider.Settings.DefaultSession.Files.Clear();
+      ServiceProvider.Settings.LoadData(ServiceProvider.Settings.DefaultSession);
     }
 
   }

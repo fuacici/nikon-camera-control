@@ -148,6 +148,7 @@
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="StaticHelper.cs" />
     <Compile Include="Wpf\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Wpf\HeaderToImageConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PortableDeviceLib\PortableDeviceLib.csproj">

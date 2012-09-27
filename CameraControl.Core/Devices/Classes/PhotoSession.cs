@@ -27,6 +27,18 @@ namespace CameraControl.Core.Devices.Classes
       }
     }
 
+    private bool _alowFolderChange;
+    public bool AlowFolderChange
+    {
+      get { return _alowFolderChange; }
+      set
+      {
+        _alowFolderChange = value;
+        NotifyPropertyChanged("AlowFolderChange");
+      }
+    }
+
+
     private string _folder;
     public string Folder
     {

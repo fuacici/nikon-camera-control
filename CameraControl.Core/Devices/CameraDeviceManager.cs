@@ -63,6 +63,7 @@ namespace CameraControl.Core.Devices
                         {"D3200", typeof (NikonD3200)},
                         {"D4", typeof (NikonD4)},
                         {"D40", typeof (NikonD40)},
+                        {"D50", typeof (NikonD40)},
                         {"D5100", typeof (NikonD5100)},
                         {"D5000", typeof (NikonD90)},
                         {"D60", typeof (NikonD60)},

@@ -25,6 +25,7 @@ namespace CameraControl.Core.Devices.Classes
     public const uint MTP_Shutter_Speed_Bulb = 0xA008;
     public const uint MTP_Store_Full = 0x200C;
     public const uint MTP_Store_Read_Only = 0x200E;
+    public const uint MTP_Parameter_Not_Supported = 0x2006;
     public const uint MTP_Not_LiveView = 0xA00B;
     public const uint MTP_Invalid_Parameter = 0x201D;
     public const uint MTP_Invalid_Status = 0xA004;
@@ -61,6 +62,8 @@ namespace CameraControl.Core.Devices.Classes
             throw new DeviceException("Not in liveview.", code);
           case MTP_Invalid_Parameter:
             throw new DeviceException("Invalid parameter. Coding error !", code);
+          case MTP_Parameter_Not_Supported:
+            throw new DeviceException("Parameter Not Supported. Coding error !", code);
           case MTP_Invalid_Status:
             throw new DeviceException("Invalid status.", code);
           case E_WPD_DEVICE_IS_HUNG:
