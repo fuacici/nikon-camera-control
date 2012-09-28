@@ -340,6 +340,7 @@
   <ItemGroup>
     <Folder Include="Devices\" />
     <Folder Include="Images\Classes\" />
+    <Folder Include="Layouts\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\diskdrive.png" />
