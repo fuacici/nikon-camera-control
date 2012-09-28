@@ -7,7 +7,7 @@ Name NCC
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.7.253
+!define VERSION 0.7.256
 !define COMPANY "Duka Istvan"
 !define URL http://code.google.com/p/nikon-camera-control/
 
