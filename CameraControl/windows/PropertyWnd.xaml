@@ -1,7 +1,6 @@
 ﻿<Window x:Class="CameraControl.windows.PropertyWnd"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:myclass="clr-namespace:CameraControl"
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
         themes:ThemeManager.Theme="{Binding  Path=Settings.CurrentTheme}"

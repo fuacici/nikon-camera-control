@@ -5,7 +5,6 @@
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CurrentTheme}"
         Background="{DynamicResource WindowBackgroundBrush}"
         Title="Preset Edit" Height="355" Width="520" WindowStartupLocation="CenterScreen" xmlns:my="clr-namespace:CameraControl.windows"
-        xmlns:CameraControl1="clr-namespace:CameraControl"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>

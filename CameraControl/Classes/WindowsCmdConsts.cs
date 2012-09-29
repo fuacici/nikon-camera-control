@@ -35,6 +35,7 @@ namespace CameraControl.Classes
     public const string LiveView_Focus = "LiveView_Focus";
     public const string Prev_Image = "Prev_Image";
     public const string Next_Image = "Next_Image";
+    public const string Select_Image = "Select_Image";
     public const string All_Close = "All_Close";
   }
 }

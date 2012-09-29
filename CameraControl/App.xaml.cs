@@ -70,7 +70,7 @@ namespace CameraControl
       ServiceProvider.Trigger.Start();
     }
 
-    void WindowsManager_Event(string cmd)
+    void WindowsManager_Event(string cmd, object o)
     {
       Log.Debug("Window command received :" + cmd);
     }

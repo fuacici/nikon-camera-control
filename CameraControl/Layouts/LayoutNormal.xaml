@@ -1,0 +1,96 @@
+﻿<Layouts:LayoutBase x:Class="CameraControl.Layouts.LayoutNormal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
+             xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
+             xmlns:local="clr-namespace:CameraControl.Controls" xmlns:Layouts="clr-namespace:CameraControl.Layouts"
+             Background="{DynamicResource WindowBackgroundBrush}"
+             themes:ThemeManager.Theme="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CurrentTheme}"
+             mc:Ignorable="d" 
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"                    
+             d:DesignHeight="484" d:DesignWidth="689">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type ListBox}">
+            <!-- Set the ItemTemplate of the ListBox to a DataTemplate which
+           explains how to display an object of type BitmapImage. -->
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <StackPanel>
+                            <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" Margin="6" >
+                                <Image Source="{Binding Path=Thumbnail}" ToolTip="{Binding Path=ToolTip}" Stretch="Uniform" Width="120" Height="80"  />
+                            </Border>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding Path=IsChecked}"/>
+                                <Label Content="{Binding Path=Name}" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="345*" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="135" />
+        </Grid.RowDefinitions>
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+ 
+            <local:ZoomBorder  BorderThickness="1" CornerRadius="5" >
+            <Image Name="image1" Stretch="Uniform"  Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}"  >
+                    <Image.InputBindings>
+                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=ImageDoubleClickCommand}" />
+                    </Image.InputBindings>
+                </Image>
+        </local:ZoomBorder>
+ 
+        </Grid>
+        
+        <Label Content="Loading ..." Name="lbl_loading"  Margin="118,2,192,0" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading}" FontSize="25" FontWeight="ExtraBold"/>
+        <StackPanel Grid.Row="1" Margin="0,0,190,0">
+            <StackPanel  Orientation="Horizontal" Margin="10,0,0,0" HorizontalAlignment="Right">
+                <Label Content="{Binding Source={x:Static Member=Core:StaticHelper.Instance}, Path=SystemMessage}" FontWeight="Bold" HorizontalContentAlignment="Right" />
+            </StackPanel>
+        </StackPanel>
+        <ProgressBar Grid.Row="1" Height="7" Margin="0,0,12,13" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="157" Value="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=TransferProgress}" ToolTip="File transfer progress"/>
+        <StackPanel Grid.Row="2"  Name="ImagePanel"  >
+            <ListBox  Name="ImageLIstBox" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.Files}"  Background="{DynamicResource WindowBackgroundBrush}">
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Actions" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.ActionManager}, Path=Actions}" >
+                            <MenuItem.ItemTemplate>
+                                <DataTemplate>
+                                    <MenuItem Header="{Binding Path=Title}" 
+                                      Command="{Binding }" 
+                                      CommandParameter="{Binding}" />
+                                </DataTemplate>
+                            </MenuItem.ItemTemplate>
+                        </MenuItem>
+                        <Separator/>
+                        <MenuItem Header="Select" >
+                            <MenuItem Header="All" Name="mnu_select_all" Command="{Binding Path=SelectAllCommand}" />
+                            <MenuItem Header="None" Name="mnu_select_none" Command="{Binding Path=SelectNoneCommand}" />
+                        </MenuItem>
+                        <Separator/>
+                        <MenuItem Header="Delete File(s)" Name="mnu_delete_file" Command="{Binding Path=DeleteItemCommand}" />
+                        <MenuItem Header="Show in explorer" Name="mnu_show_explorer" Command="{Binding Path=OpenExplorerCommand}" />
+                        <MenuItem Header="Open in external viewer" Name="mnu_open" Command="{Binding Path=OpenViewerCommand}" />
+                        <MenuItem Header="Copy full path in clipboard" Name="mnu_copypath" Command="{Binding Path=CopyNameClipboardCommand}" />
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+            </ListBox>
+        </StackPanel>
+    </Grid>
+</Layouts:LayoutBase>

@@ -110,6 +110,11 @@
       <DependentUpon>FolderBrowser.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ZoomBorder.cs" />
+    <Compile Include="Layouts\LayoutBase.cs" />
+    <Compile Include="Layouts\LayoutNormal.xaml.cs">
+      <DependentUpon>LayoutNormal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Layouts\LayoutTypeEnum.cs" />
     <Compile Include="windows\AboutWnd.xaml.cs">
       <DependentUpon>AboutWnd.xaml</DependentUpon>
     </Compile>
@@ -171,6 +176,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\FolderBrowser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Layouts\LayoutNormal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -340,7 +349,6 @@
   <ItemGroup>
     <Folder Include="Devices\" />
     <Folder Include="Images\Classes\" />
-    <Folder Include="Layouts\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\diskdrive.png" />
