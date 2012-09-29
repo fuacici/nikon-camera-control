@@ -1,31 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.Media;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
-using CameraControl.Core.Classes.Queue;
 using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
 using CameraControl.Layouts;
 using CameraControl.windows;
-using Microsoft.VisualBasic.FileIO;
-using WIA;
-using Clipboard = System.Windows.Clipboard;
 using EditSession = CameraControl.windows.EditSession;
-using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using MessageBox = System.Windows.Forms.MessageBox;
 using Path = System.IO.Path;
-using UserControl = System.Windows.Controls.UserControl;
 
 namespace CameraControl
 {
@@ -58,7 +47,8 @@ namespace CameraControl
       ServiceProvider.Settings.SessionSelected += Settings_SessionSelected;
       ServiceProvider.DeviceManager.CameraConnected += DeviceManager_CameraConnected;
       ServiceProvider.DeviceManager.CameraSelected += DeviceManager_CameraSelected;
-      SetLayout(LayoutTypeEnum.Normal);
+
+      SetLayout(ServiceProvider.Settings.SelectedLayout);
     }
 
     void Settings_SessionSelected(PhotoSession oldvalue, PhotoSession newvalue)
@@ -474,18 +464,36 @@ namespace CameraControl
       }
     }
 
+    void SetLayout(string enumname)
+    {
+      LayoutTypeEnum type;
+      if (Enum.TryParse(enumname, true, out type))
+      {
+        
+      }
+      SetLayout(type);
+    }
+
     void SetLayout(LayoutTypeEnum type)
     {
+      ServiceProvider.Settings.SelectedLayout = type.ToString();
       switch (type)
       {
         case LayoutTypeEnum.Normal:
-          StackLayout.Children.Clear();
-          LayoutNormal control = new LayoutNormal();
-          StackLayout.Children.Add(control);
+          {
+            StackLayout.Children.Clear();
+            LayoutNormal control = new LayoutNormal();
+            StackLayout.Children.Add(control);
+          }
           break;
         case LayoutTypeEnum.Grid:
           break;
         case LayoutTypeEnum.GridRight:
+          {
+            StackLayout.Children.Clear();
+            LayoutGridRight control = new LayoutGridRight();
+            StackLayout.Children.Add(control);
+          }
           break;
       }
     }
@@ -493,6 +501,11 @@ namespace CameraControl
     private void MenuItem_Click_6(object sender, RoutedEventArgs e)
     {
       SetLayout(LayoutTypeEnum.Normal);
+    }
+
+    private void MenuItem_Click_7(object sender, RoutedEventArgs e)
+    {
+      SetLayout(LayoutTypeEnum.GridRight);
     }
 
 
