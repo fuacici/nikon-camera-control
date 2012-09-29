@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CameraControl.Core;
 
 namespace CameraControl.Layouts
 {
@@ -24,6 +25,21 @@ namespace CameraControl.Layouts
       InitializeComponent();
       ImageLIst = ImageLIstBox;
       InitServices();
+      ServiceProvider.Settings.PropertyChanged += Settings_PropertyChanged;
+      ServiceProvider.Settings.DefaultSession.PropertyChanged += Settings_PropertyChanged;
+    }
+
+    void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+      if (e.PropertyName == "DefaultSession" || e.PropertyName == "Folder")
+      {
+        folderBrowserComboBox1.SelectedPath = ServiceProvider.Settings.DefaultSession.Folder;
+      }
+    }
+
+    private void folderBrowserComboBox1_ValueChanged(object sender, EventArgs e)
+    {
+      ServiceProvider.Settings.DefaultSession.Folder = folderBrowserComboBox1.SelectedPath;
     }
   }
 }

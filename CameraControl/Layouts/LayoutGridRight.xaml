@@ -7,7 +7,7 @@
              xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
              DataContext="{Binding RelativeSource={RelativeSource Self}}"                                        
              xmlns:Layouts="clr-namespace:CameraControl.Layouts" mc:Ignorable="d" 
-             d:DesignHeight="426" d:DesignWidth="558">
+             d:DesignHeight="426" d:DesignWidth="652">
     <UserControl.Resources>
         <Style TargetType="{x:Type ListBox}">
             <!-- Set the ItemTemplate of the ListBox to a DataTemplate which
@@ -37,6 +37,7 @@
             </Setter>
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"   Value="Disabled"  />
         </Style>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter1" />
     </UserControl.Resources>
 
     <Grid>
@@ -93,6 +94,6 @@
                     </ContextMenu>
                 </ListBox.ContextMenu>
             </ListBox>
-
+        <local:FolderBrowserComboBox x:Name="folderBrowserComboBox1" Grid.Column="2" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.AlowFolderChange, Converter={StaticResource BooleanToVisibilityConverter1}, ConverterParameter=false}" ValueChanged="folderBrowserComboBox1_ValueChanged" />
     </Grid>
 </Layouts:LayoutBase>
