@@ -6,7 +6,7 @@ namespace CameraControl.Core.Classes
 {
   public class WindowsManager
   {
-    public delegate void EventEventHandler(string cmd);
+    public delegate void EventEventHandler(string cmd, object o);
     public virtual event EventEventHandler Event;
 
     private List<IWindow> WindowsList; 
@@ -32,7 +32,7 @@ namespace CameraControl.Core.Classes
         window.ExecuteCommand(cmd, o);
       }
       if (Event != null)
-        Event(cmd);
+        Event(cmd, o);
     }
 
     public IWindow Get(Type t) 

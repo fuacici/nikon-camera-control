@@ -312,6 +312,7 @@ namespace CameraControl.Core.Classes
     }
 
     public CameraPropertyEnumerator CameraProperties { get; set; }
+    public string SelectedLayout { get; set; }
     public AsyncObservableCollection<CameraPreset> CameraPresets { get; set; }
 
     public Settings()
