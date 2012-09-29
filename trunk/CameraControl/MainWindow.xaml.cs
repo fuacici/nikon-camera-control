@@ -16,13 +16,16 @@ using CameraControl.Core.Classes;
 using CameraControl.Core.Classes.Queue;
 using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
+using CameraControl.Layouts;
 using CameraControl.windows;
 using Microsoft.VisualBasic.FileIO;
 using WIA;
 using Clipboard = System.Windows.Clipboard;
 using EditSession = CameraControl.windows.EditSession;
+using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using MessageBox = System.Windows.Forms.MessageBox;
 using Path = System.IO.Path;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace CameraControl
 {
@@ -46,8 +49,6 @@ namespace CameraControl
       ServiceProvider.DeviceManager.PhotoCaptured += DeviceManager_PhotoCaptured;
       InitializeComponent();
       DataContext = ServiceProvider.Settings;
-      if (ServiceProvider.Settings.DefaultSession.Files.Count > 0)
-        ImageLIst.SelectedIndex = 0;
       if ((DateTime.Now - ServiceProvider.Settings.LastUpdateCheckDate).TotalDays > 7)
       {
         ServiceProvider.Settings.LastUpdateCheckDate = DateTime.Now;
@@ -55,10 +56,9 @@ namespace CameraControl
         CheckForUpdate();
       }
       ServiceProvider.Settings.SessionSelected += Settings_SessionSelected;
-      ServiceProvider.Settings.PropertyChanged += Settings_PropertyChanged;
-      ServiceProvider.WindowsManager.Event += Trigger_Event;
       ServiceProvider.DeviceManager.CameraConnected += DeviceManager_CameraConnected;
       ServiceProvider.DeviceManager.CameraSelected += DeviceManager_CameraSelected;
+      SetLayout(LayoutTypeEnum.Normal);
     }
 
     void Settings_SessionSelected(PhotoSession oldvalue, PhotoSession newvalue)
@@ -80,8 +80,13 @@ namespace CameraControl
       }
       if (newcameraDevice.AttachedPhotoSession != null)
         ServiceProvider.Settings.DefaultSession = newcameraDevice.AttachedPhotoSession;
-      btn_capture_noaf.IsEnabled = newcameraDevice.GetCapability(CapabilityEnum.CaptureNoAf);
-      btn_liveview.IsEnabled = newcameraDevice.GetCapability(CapabilityEnum.LiveView);
+      Dispatcher.Invoke(
+        new Action(
+          delegate
+            {
+              btn_capture_noaf.IsEnabled = newcameraDevice.GetCapability(CapabilityEnum.CaptureNoAf);
+              btn_liveview.IsEnabled = newcameraDevice.GetCapability(CapabilityEnum.LiveView);
+            }));
     }
 
     void DeviceManager_CameraConnected(ICameraDevice cameraDevice)
@@ -97,44 +102,11 @@ namespace CameraControl
       thread.Start(eventArgs);
     }
 
-    void Trigger_Event(string cmd)
-    {
-      Dispatcher.Invoke(new Action(delegate
-                                     {
-                                       switch (cmd)
-                                       {
-                                         case WindowsCmdConsts.Next_Image:
-                                           if (ImageLIst.SelectedIndex < ImageLIst.Items.Count - 1)
-                                           {
-                                             ImageLIst.SelectedIndex++;
-                                           }
-                                           break;
-                                         case WindowsCmdConsts.Prev_Image:
-                                           if (ImageLIst.SelectedIndex > 0)
-                                           {
-                                             ImageLIst.SelectedIndex--;
-                                           }
-                                           break;
-                                       }
-                                     }));
-    }
-
     private void CheckForUpdate()
     {
       if(PhotoUtils.CheckForUpdate())
         Close();
     }
-
-    private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-      if (e.PropertyName == "DefaultSession")
-      {
-        ImageLIst.SelectedIndex = 0;
-        if (ImageLIst.Items.Count == 0)
-          ServiceProvider.Settings.SelectedBitmap.DisplayImage = null;
-      }
-    }
-
 
     void PhotoCaptured(object o)
     {
@@ -178,9 +150,7 @@ namespace CameraControl
         Log.Debug("Transfer done :" + fileName);
         if (ServiceProvider.Settings.AutoPreview)
         {
-          Dispatcher.Invoke(
-            new Action(
-              delegate { ImageLIst.SelectedValue = session.AddFile(fileName); }));
+          ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Select_Image, session.AddFile(fileName));
         }
         else
         {
@@ -231,7 +201,6 @@ namespace CameraControl
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       WiaManager.ConnectToCamera();
-      ImagePanel.DataContext = ServiceProvider.Settings;
     }
 
 
@@ -299,34 +268,6 @@ namespace CameraControl
         ServiceProvider.Settings.Add(editSession.Session);
         ServiceProvider.Settings.DefaultSession = editSession.Session;
       }
-    }
-
-    private void ImageLIst_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-
-      if (e.AddedItems.Count > 0)
-      {
-        BackgroundWorker worker = new BackgroundWorker();
-        worker.DoWork += worker_DoWork;
-        FileItem item = e.AddedItems[0] as FileItem;
-        if (item != null)
-        {
-          //image1.Source = item.Thumbnail;
-          ServiceProvider.Settings.SelectedBitmap.SetFileItem(item);
-          worker.RunWorkerAsync(item);
-        }
-      }
-    }
-
-    private void worker_DoWork(object sender, DoWorkEventArgs e)
-    {
-      Thread.Sleep(200);
-      FileItem fileItem = e.Argument as FileItem;
-      if (ServiceProvider.Settings.SelectedBitmap.FileItem.FileName != fileItem.FileName)
-        return;
-      ServiceProvider.Settings.ImageLoading = Visibility.Visible;
-      ServiceProvider.Settings.SelectedBitmap.GetBitmap();
-      ServiceProvider.Settings.ImageLoading = Visibility.Hidden;
     }
 
     private void button1_Click(object sender, RoutedEventArgs e)
@@ -409,12 +350,6 @@ namespace CameraControl
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_Show);
     }
 
-    private void image1_MouseDown(object sender, MouseButtonEventArgs e)
-    {
-      if (e.ClickCount >= 2 && e.LeftButton == MouseButtonState.Pressed)
-        ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_Show);
-    }
-
     private void btn_liveview_Click(object sender, RoutedEventArgs e)
     {
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Show);
@@ -426,80 +361,7 @@ namespace CameraControl
       wnd.ShowDialog();
     }
 
-    private void mnu_delete_file_Click(object sender, RoutedEventArgs e)
-    {
-      List<FileItem> filestodelete = new List<FileItem>();
-      try
-      {
-        foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
-        {
-          if (fileItem.IsChecked || !File.Exists(fileItem.FileName))
-            filestodelete.Add(fileItem);
-        }
 
-        if (ServiceProvider.Settings.SelectedBitmap != null && ServiceProvider.Settings.SelectedBitmap.FileItem != null &&
-            filestodelete.Count == 0)
-          filestodelete.Add(ServiceProvider.Settings.SelectedBitmap.FileItem);
-
-        if (filestodelete.Count == 0)
-          return;
-
-        if (
-          MessageBox.Show("Do you really want to delete selected file(s) ?", "Delete file", MessageBoxButtons.YesNo) ==
-          System.Windows.Forms.DialogResult.Yes)
-        {
-          foreach (FileItem fileItem in filestodelete)
-          {
-            if ((ServiceProvider.Settings.SelectedBitmap != null &&
-                 ServiceProvider.Settings.SelectedBitmap.FileItem != null &&
-                 fileItem.FileName == ServiceProvider.Settings.SelectedBitmap.FileItem.FileName))
-            {
-              ServiceProvider.Settings.SelectedBitmap.DisplayImage = null;
-            }
-            if (File.Exists(fileItem.FileName))
-              FileSystem.DeleteFile(fileItem.FileName, UIOption.OnlyErrorDialogs,
-                                    RecycleOption.SendToRecycleBin);
-            else
-            {
-              ServiceProvider.Settings.DefaultSession.Files.Remove(fileItem);
-            }
-          }
-          if (ImageLIst.Items.Count > 0)
-            ImageLIst.SelectedIndex = 0;
-        }
-      }
-      catch (Exception exception)
-      {
-        Log.Error("Error to delete file", exception);
-      }
-    }
-
-    private void mnu_show_explorer_Click(object sender, RoutedEventArgs e)
-    {
-      if (ServiceProvider.Settings.SelectedBitmap == null || ServiceProvider.Settings.SelectedBitmap.FileItem == null)
-        return;
-      try
-      {
-        ProcessStartInfo processStartInfo = new ProcessStartInfo();
-        processStartInfo.FileName = "explorer";
-        processStartInfo.UseShellExecute = true;
-        processStartInfo.WindowStyle = ProcessWindowStyle.Normal;
-        processStartInfo.Arguments =
-            string.Format("/e,/select,\"{0}\"", ServiceProvider.Settings.SelectedBitmap.FileItem.FileName);
-        Process.Start(processStartInfo);
-      }
-      catch (Exception exception)
-      {
-        Log.Error("Error to show file in explorer", exception);
-      }
-    }
-
-    private void mnu_open_Click(object sender, RoutedEventArgs e)
-    {
-      if (ServiceProvider.Settings.SelectedBitmap == null || ServiceProvider.Settings.SelectedBitmap.FileItem == null)
-        return;
-      Process.Start(ServiceProvider.Settings.SelectedBitmap.FileItem.FileName);
-    }
 
     private void btn_br_Click(object sender, RoutedEventArgs e)
     {
@@ -508,20 +370,6 @@ namespace CameraControl
     }
 
 
-    private void mnu_select_none_Click(object sender, RoutedEventArgs e)
-    {
-      ServiceProvider.Settings.DefaultSession.SelectNone();
-    }
-
-    private void mnu_select_all_Click(object sender, RoutedEventArgs e)
-    {
-      ServiceProvider.Settings.DefaultSession.SelectAll();
-    }
-
-    private void mnu_copypath_Click(object sender, RoutedEventArgs e)
-    {
-      Clipboard.SetText(ServiceProvider.Settings.SelectedBitmap.FileItem.FileName);
-    }
 
     private void MenuItem_Click(object sender, RoutedEventArgs e)
     {
@@ -625,6 +473,29 @@ namespace CameraControl
         Log.Error("Take photo", exception);
       }
     }
+
+    void SetLayout(LayoutTypeEnum type)
+    {
+      switch (type)
+      {
+        case LayoutTypeEnum.Normal:
+          StackLayout.Children.Clear();
+          LayoutNormal control = new LayoutNormal();
+          StackLayout.Children.Add(control);
+          break;
+        case LayoutTypeEnum.Grid:
+          break;
+        case LayoutTypeEnum.GridRight:
+          break;
+      }
+    }
+
+    private void MenuItem_Click_6(object sender, RoutedEventArgs e)
+    {
+      SetLayout(LayoutTypeEnum.Normal);
+    }
+
+
 
   }
 }
