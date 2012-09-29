@@ -109,6 +109,9 @@
     <Compile Include="Controls\FolderBrowser.xaml.cs">
       <DependentUpon>FolderBrowser.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FolderBrowserComboBox.xaml.cs">
+      <DependentUpon>FolderBrowserComboBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ZoomBorder.cs" />
     <Compile Include="Layouts\LayoutBase.cs" />
     <Compile Include="Layouts\LayoutGridRight.xaml.cs">
@@ -179,6 +182,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\FolderBrowser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\FolderBrowserComboBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

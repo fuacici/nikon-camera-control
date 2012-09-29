@@ -34,6 +34,8 @@ namespace CameraControl.Controls
 
     private void UserControl_Loaded(object sender, RoutedEventArgs e)
     {
+      if (foldersItem.Items.Count > 0)
+        return;
       foreach (string s in Directory.GetLogicalDrives())
       {
         TreeViewItem item = new TreeViewItem();
