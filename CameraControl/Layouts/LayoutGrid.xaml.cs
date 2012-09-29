@@ -18,9 +18,9 @@ namespace CameraControl.Layouts
   /// <summary>
   /// Interaction logic for LayoutGridRight.xaml
   /// </summary>
-  public partial class LayoutGridRight : LayoutBase
+  public partial class LayoutGrid : LayoutBase
   {
-    public LayoutGridRight()
+    public LayoutGrid()
     {
       InitializeComponent();
       ImageLIst = ImageLIstBox;

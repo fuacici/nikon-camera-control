@@ -113,6 +113,9 @@
       <DependentUpon>FolderBrowserComboBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ZoomBorder.cs" />
+    <Compile Include="Layouts\LayoutGrid.xaml.cs">
+      <DependentUpon>LayoutGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Layouts\LayoutBase.cs" />
     <Compile Include="Layouts\LayoutGridRight.xaml.cs">
       <DependentUpon>LayoutGridRight.xaml</DependentUpon>
@@ -188,6 +191,10 @@
     <Page Include="Controls\FolderBrowserComboBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Layouts\LayoutGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Layouts\LayoutGridRight.xaml">
       <SubType>Designer</SubType>

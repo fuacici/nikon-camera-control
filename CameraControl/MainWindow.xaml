@@ -102,6 +102,7 @@
             <MenuItem Header="Layout">
                 <MenuItem Header="Normal" Click="MenuItem_Click_6" />
                 <MenuItem Header="Grid right" Click="MenuItem_Click_7" />
+                <MenuItem Header="Grid" Click="MenuItem_Click_8" />
             </MenuItem>
             <MenuItem Header="{Globalizer:GlobalizedResource Menu_Presets, FallbackValue='Presets'}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}">
                 <MenuItem Header="{Globalizer:GlobalizedResource Menu_PresetsLoad, FallbackValue='Load'}" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CameraPresets}" >
