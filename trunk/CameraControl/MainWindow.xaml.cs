@@ -487,6 +487,11 @@ namespace CameraControl
           }
           break;
         case LayoutTypeEnum.Grid:
+          {
+            StackLayout.Children.Clear();
+            LayoutGrid control = new LayoutGrid();
+            StackLayout.Children.Add(control);
+          }
           break;
         case LayoutTypeEnum.GridRight:
           {
@@ -506,6 +511,11 @@ namespace CameraControl
     private void MenuItem_Click_7(object sender, RoutedEventArgs e)
     {
       SetLayout(LayoutTypeEnum.GridRight);
+    }
+
+    private void MenuItem_Click_8(object sender, RoutedEventArgs e)
+    {
+      SetLayout(LayoutTypeEnum.Grid);
     }
 
 
