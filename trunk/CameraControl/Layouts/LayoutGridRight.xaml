@@ -69,31 +69,34 @@
         </StackPanel>
         <ProgressBar Grid.Row="2" Height="7" Margin="0,0,12,12" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="157" Value="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=TransferProgress}" ToolTip="File transfer progress" Grid.Column="2" />
 
-            <ListBox  Name="ImageLIstBox" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.Files}"  Background="{DynamicResource WindowBackgroundBrush}" Grid.Column="2" Grid.Row="1" BorderThickness="0">
-                <ListBox.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Actions" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.ActionManager}, Path=Actions}" >
-                            <MenuItem.ItemTemplate>
-                                <DataTemplate>
-                                    <MenuItem Header="{Binding Path=Title}" 
+        <ListBox  Name="ImageLIstBox" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.Files}"  Background="{DynamicResource WindowBackgroundBrush}" Grid.Column="2" Grid.Row="1" BorderThickness="0">
+            <ListBox.InputBindings>
+                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=ImageDoubleClickCommand}" />
+            </ListBox.InputBindings>
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Actions" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.ActionManager}, Path=Actions}" >
+                        <MenuItem.ItemTemplate>
+                            <DataTemplate>
+                                <MenuItem Header="{Binding Path=Title}" 
                                       Command="{Binding }" 
                                       CommandParameter="{Binding}" />
-                                </DataTemplate>
-                            </MenuItem.ItemTemplate>
-                        </MenuItem>
-                        <Separator/>
-                        <MenuItem Header="Select" >
-                            <MenuItem Header="All" Name="mnu_select_all" Command="{Binding Path=SelectAllCommand}" />
-                            <MenuItem Header="None" Name="mnu_select_none" Command="{Binding Path=SelectNoneCommand}" />
-                        </MenuItem>
-                        <Separator/>
-                        <MenuItem Header="Delete File(s)" Name="mnu_delete_file" Command="{Binding Path=DeleteItemCommand}" />
-                        <MenuItem Header="Show in explorer" Name="mnu_show_explorer" Command="{Binding Path=OpenExplorerCommand}" />
-                        <MenuItem Header="Open in external viewer" Name="mnu_open" Command="{Binding Path=OpenViewerCommand}" />
-                        <MenuItem Header="Copy full path in clipboard" Name="mnu_copypath" Command="{Binding Path=CopyNameClipboardCommand}" />
-                    </ContextMenu>
-                </ListBox.ContextMenu>
-            </ListBox>
+                            </DataTemplate>
+                        </MenuItem.ItemTemplate>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Select" >
+                        <MenuItem Header="All" Name="mnu_select_all" Command="{Binding Path=SelectAllCommand}" />
+                        <MenuItem Header="None" Name="mnu_select_none" Command="{Binding Path=SelectNoneCommand}" />
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Delete File(s)" Name="mnu_delete_file" Command="{Binding Path=DeleteItemCommand}" />
+                    <MenuItem Header="Show in explorer" Name="mnu_show_explorer" Command="{Binding Path=OpenExplorerCommand}" />
+                    <MenuItem Header="Open in external viewer" Name="mnu_open" Command="{Binding Path=OpenViewerCommand}" />
+                    <MenuItem Header="Copy full path in clipboard" Name="mnu_copypath" Command="{Binding Path=CopyNameClipboardCommand}" />
+                </ContextMenu>
+            </ListBox.ContextMenu>
+        </ListBox>
         <local:FolderBrowserComboBox x:Name="folderBrowserComboBox1" Grid.Column="2" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.AlowFolderChange, Converter={StaticResource BooleanToVisibilityConverter1}, ConverterParameter=false}" ValueChanged="folderBrowserComboBox1_ValueChanged" />
     </Grid>
 </Layouts:LayoutBase>
