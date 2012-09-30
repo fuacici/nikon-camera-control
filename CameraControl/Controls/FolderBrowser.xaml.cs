@@ -12,7 +12,7 @@ namespace CameraControl.Controls
   /// </summary>
   public partial class FolderBrowser : UserControl, INotifyPropertyChanged
   {
-    public event MouseButtonEventHandler MouseDoubleClick;
+    public new event MouseButtonEventHandler MouseDoubleClick;
 
     private object dummyNode = null;
 

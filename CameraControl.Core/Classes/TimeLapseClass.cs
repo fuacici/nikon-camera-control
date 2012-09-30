@@ -1,3 +1,4 @@
+using System;
 using System.Timers;
 using System.Xml.Serialization;
 using CameraControl.Core.Devices.Classes;
@@ -16,6 +17,8 @@ namespace CameraControl.Core.Classes
       set
       {
         _period = value;
+        _timePeriod = new DateTime().AddSeconds(Period * NumberOfPhotos);
+        NotifyPropertyChanged("TimePeriod");
         NotifyPropertyChanged("Period");
       }
     }
@@ -27,6 +30,13 @@ namespace CameraControl.Core.Classes
       set
       {
         _numberOfPhotos = value;
+        _timePeriod = new DateTime().AddSeconds(Period*NumberOfPhotos);
+        if (Fps > 0)
+        {
+          _movieLength = new DateTime().AddSeconds(_numberOfPhotos/_fps);
+          NotifyPropertyChanged("MovieLength");
+        }
+        NotifyPropertyChanged("TimePeriod");
         NotifyPropertyChanged("NumberOfPhotos");
       }
     }
@@ -52,6 +62,33 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private DateTime _timePeriod;
+    public DateTime  TimePeriod
+    {
+      get { return _timePeriod; }
+      set
+      {
+        _timePeriod = value;
+        _numberOfPhotos = (int) ((_timePeriod.Ticks/TimeSpan.TicksPerSecond)/Period);
+        NotifyPropertyChanged("TimePeriod");
+        NotifyPropertyChanged("NumberOfPhotos");
+      }
+    }
+
+    private DateTime _movieLength;
+    public DateTime MovieLength
+    {
+      get { return _movieLength; }
+      set
+      {
+        _movieLength = value;
+        _numberOfPhotos = (int)((_movieLength.Ticks / TimeSpan.TicksPerSecond) * Fps);
+        NotifyPropertyChanged("NumberOfPhotos");
+        NotifyPropertyChanged("MovieLength");
+      }
+    }
+
+
     private string _outputFIleName;
     public string OutputFIleName
     {
@@ -73,6 +110,13 @@ namespace CameraControl.Core.Classes
       set
       {
         _fps = value;
+        if (_fps > 0)
+        {
+          _movieLength = new DateTime().AddSeconds(_numberOfPhotos / _fps);
+          NotifyPropertyChanged("MovieLength");
+        }
+
+        NotifyPropertyChanged("MovieLength");
         NotifyPropertyChanged("Fps");
       }
     }

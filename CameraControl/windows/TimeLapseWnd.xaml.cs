@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Management;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using CameraControl.Core;
 using MessageBox = System.Windows.Forms.MessageBox;
 
@@ -25,6 +16,7 @@ namespace CameraControl.windows
     public TimeLapseWnd()
     {
       InitializeComponent();
+      
     }
 
     private void btn_start_Click(object sender, RoutedEventArgs e)
@@ -73,16 +65,17 @@ namespace CameraControl.windows
 
     private bool CheckCodec()
     {
-      ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_CodecFile");
-      ManagementObjectCollection collection = searcher.Get();
-     foreach (ManagementObject obj in collection)
+      try
       {
-        if ((string)obj["Description"] == "Xvid MPEG-4 Video Codec")
-        {
-          return true;
-        }
+        ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_CodecFile");
+        ManagementObjectCollection collection = searcher.Get();
+        return collection.Cast<ManagementObject>().Any(obj => (string)obj["Description"] == "Xvid MPEG-4 Video Codec");
       }
-      return false;
+      catch (Exception exception)
+      {
+        Log.Error("Check codec",exception);
+      }
+      return true;
     }
   }
 }
