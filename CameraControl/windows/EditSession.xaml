@@ -42,7 +42,7 @@
                         <CheckBox Content="Don't download photos to PC" ToolTip="" IsChecked="{Binding Path=NoDownload}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Content="Alow folder change using using image browser" ToolTip="" IsChecked="{Binding Path=AlowFolderChange}"/>
+                        <CheckBox Content="Alow folder change using image browser" ToolTip="" IsChecked="{Binding Path=AlowFolderChange}"/>
                     </StackPanel>
                 </StackPanel>
             </TabItem>
