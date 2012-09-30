@@ -518,7 +518,11 @@ namespace CameraControl
       SetLayout(LayoutTypeEnum.Grid);
     }
 
-
-
+    private void btn_Tags_Click(object sender, RoutedEventArgs e)
+    {
+      ServiceProvider.WindowsManager.ExecuteCommand(btn_Tags.IsChecked == false
+                                                      ? WindowsCmdConsts.TagSelectorWnd_Hide
+                                                      : WindowsCmdConsts.TagSelectorWnd_Show);
+    }
   }
 }

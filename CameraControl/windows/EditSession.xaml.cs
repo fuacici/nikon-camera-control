@@ -1,5 +1,6 @@
 using System.Windows;
 using CameraControl.Classes;
+using CameraControl.Core.Classes;
 using CameraControl.Core.Devices.Classes;
 
 namespace CameraControl.windows
@@ -45,5 +46,36 @@ namespace CameraControl.windows
       Session.CancelEdit();
       Close();
     }
+
+    private void btn_add_tag_Click(object sender, RoutedEventArgs e)
+    {
+      TagItem item = new TagItem();
+      EditTagWnd wnd = new EditTagWnd(item);
+      if (wnd.ShowDialog() == true)
+      {
+        Session.Tags.Add(item);
+      }
+    }
+
+    private void btn_del_tag_Click(object sender, RoutedEventArgs e)
+    {
+      TagItem item = lst_tags.SelectedItem as TagItem;
+      if (item != null)
+      {
+        Session.Tags.Remove(item);
+      }
+    }
+
+    private void btn_edit_tag_Click(object sender, RoutedEventArgs e)
+    {
+      TagItem item = lst_tags.SelectedItem as TagItem;
+      if (item != null)
+      {
+        EditTagWnd wnd = new EditTagWnd(item);
+        wnd.ShowDialog();
+      }
+    }
+
+
   }
 }

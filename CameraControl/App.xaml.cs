@@ -23,6 +23,7 @@ namespace CameraControl
   {
     private void Application_Exit(object sender, ExitEventArgs e)
     {
+      ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
       ServiceProvider.Settings.Save();
       if (ServiceProvider.Trigger != null)
       {
@@ -66,6 +67,7 @@ namespace CameraControl
       ServiceProvider.WindowsManager.Add(new MultipleCameraWnd());
       ServiceProvider.WindowsManager.Add(new CameraPropertyWnd());
       ServiceProvider.WindowsManager.Add(new BrowseWnd());
+      ServiceProvider.WindowsManager.Add(new TagSelectorWnd());
       ServiceProvider.WindowsManager.Event += WindowsManager_Event;
 
       ServiceProvider.Trigger.Start();
