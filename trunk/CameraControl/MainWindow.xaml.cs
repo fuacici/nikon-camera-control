@@ -520,6 +520,11 @@ namespace CameraControl
 
     private void btn_Tags_Click(object sender, RoutedEventArgs e)
     {
+      if(ServiceProvider.Settings.DefaultSession.Tags.Count==0)
+      {
+        MessageBox.Show("Use session editor to define tags !");
+        return;
+      }
       ServiceProvider.WindowsManager.ExecuteCommand(btn_Tags.IsChecked == false
                                                       ? WindowsCmdConsts.TagSelectorWnd_Hide
                                                       : WindowsCmdConsts.TagSelectorWnd_Show);

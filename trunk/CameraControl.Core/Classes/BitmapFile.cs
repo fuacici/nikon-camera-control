@@ -130,25 +130,23 @@ namespace CameraControl.Core.Classes
 
     public BitmapImage GetBitmap()
     {
+      if(!File.Exists(FileItem.FileName))
+      {
+        Log.Error("File not found " + FileItem.FileName);
+        StaticHelper.Instance.SystemMessage = "File not found " + FileItem.FileName;
+      }
       BitmapImage res = null;
       //Metadata.Clear();
       try
       {
-        
-        if (FreeImage.GetFileType(FileItem.FileName, 0) == FREE_IMAGE_FORMAT.FIF_RAW)
+        if (FileItem.IsRaw)
         {
-          FIBITMAP dib = FreeImage.LoadEx(FileItem.FileName);
-          FIBITMAP bmp = FreeImage.ToneMapping(dib, FREE_IMAGE_TMO.FITMO_REINHARD05, 0, 0); // ConvertToType(dib, FREE_IMAGE_TYPE.FIT_BITMAP, false);
-          FileItem.Thumbnail = ToBitmap(FreeImage.GetBitmap(FreeImage.MakeThumbnail(dib, 255, true)));
-          DisplayImage = ToBitmap(FreeImage.GetBitmap(bmp));
-          //CreateHistogram(bmp);
-          //CreateHistogramBlack(bmp);
-          FreeImage.UnloadEx(ref dib);
-          FreeImage.UnloadEx(ref bmp);
+          BitmapDecoder bmpDec = BitmapDecoder.Create(new Uri(FileItem.FileName), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+          DisplayImage = bmpDec.Frames.Single();
         }
         else
         {
-          Image image = Image.FromFile(FileItem.FileName);
+          Bitmap image = (Bitmap) Image.FromFile(FileItem.FileName);
           var exif = new EXIFextractor(ref image, "n");
           if (exif["Orientation"] != null)
           {
@@ -158,15 +156,15 @@ namespace CameraControl.Core.Classes
             {
               image.RotateFlip(flip);
             }
-            if(ServiceProvider.Settings.Rotate!=RotateFlipType.RotateNoneFlipNone)
+            if (ServiceProvider.Settings.Rotate != RotateFlipType.RotateNoneFlipNone)
             {
               image.RotateFlip(ServiceProvider.Settings.Rotate);
             }
           }
-          DisplayImage = ToBitmap(image);
+          DisplayImage = BitmapSourceConvert.ToBitmapSource(image);
           image.Dispose();
-          Thread thread_photo = new Thread(GetAdditionalData);
-          thread_photo.Start();
+          Thread threadPhoto = new Thread(GetAdditionalData);
+          threadPhoto.Start();
         }
       }
       catch (Exception exception)
@@ -269,36 +267,8 @@ Tag (hex)	Tag (dec)	IFD	Key	Type	Tag description
       Metadata.Add(new DictionaryItem { Name = tag.Description.Trim(), Value = tag.ToString()});
     }
 
-    private void SetBitmap(BitmapImage bi,Image image)
-    {
-      try
-      {
-        MemoryStream ms = new MemoryStream();
-        image.Save(ms, ImageFormat.Bmp);
-        ms.Position = 0;
-        if(bi.IsFrozen)
-        {
-          BitmapImage bic = bi.Clone();
-          bic.BeginInit();
-          bic.StreamSource = ms;
-          bic.EndInit();
-        }
-        else
-        {
-          bi.BeginInit();
-          bi.StreamSource = ms;
-          bi.EndInit();
-          bi.Freeze();
-        }
-      }
-      catch (Exception ex)
-      {
-        
-        
-      }
-    }
 
-    public BitmapImage ToBitmap(Bitmap image)
+    private BitmapImage ToBitmap(Bitmap image)
     {
       MemoryStream ms = new MemoryStream();
       image.Save(ms, ImageFormat.Bmp);
@@ -311,7 +281,7 @@ Tag (hex)	Tag (dec)	IFD	Key	Type	Tag description
       return bi;
     }
 
-    public BitmapImage ToBitmap(Image image)
+    private BitmapImage ToBitmap(Image image)
     {
       MemoryStream ms = new MemoryStream();
       image.Save(ms, ImageFormat.Bmp);
