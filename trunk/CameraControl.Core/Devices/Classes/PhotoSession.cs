@@ -12,9 +12,9 @@ namespace CameraControl.Core.Devices.Classes
     private string _lastFilename = null;
 
     [XmlIgnore]
-    public List<string> SupportedExtensions = new List<string>() {".jpg", ".nef", ".tif", ".png"};
+    public List<string> SupportedExtensions = new List<string> {".jpg", ".nef", ".tif", ".png"};
     [XmlIgnore]
-    public List<string> RawExtensions = new List<string>() { ".cr2", ".nef" };
+    public List<string> RawExtensions = new List<string> { ".cr2", ".nef" };
 
     private string _name;
     public string Name
@@ -139,6 +139,61 @@ namespace CameraControl.Core.Devices.Classes
       }
     }
 
+    private AsyncObservableCollection<TagItem> _tags;
+    public AsyncObservableCollection<TagItem> Tags
+    {
+      get { return _tags; }
+      set
+      {
+        _tags = value;
+        NotifyPropertyChanged("Tags");
+      }
+    }
+
+    private TagItem _selectedTag1;
+    public TagItem SelectedTag1
+    {
+      get { return _selectedTag1; }
+      set
+      {
+        _selectedTag1 = value;
+        NotifyPropertyChanged("SelectedTag1");
+      }
+    }
+
+    private TagItem _selectedTag2;
+    public TagItem SelectedTag2
+    {
+      get { return _selectedTag2; }
+      set
+      {
+        _selectedTag2 = value;
+        NotifyPropertyChanged("SelectedTag2");
+      }
+    }
+
+    private TagItem _selectedTag3;
+    public TagItem SelectedTag3
+    {
+      get { return _selectedTag3; }
+      set
+      {
+        _selectedTag3 = value;
+        NotifyPropertyChanged("SelectedTag3");
+      }
+    }
+
+    private TagItem _selectedTag4;
+    public TagItem SelectedTag4
+    {
+      get { return _selectedTag4; }
+      set
+      {
+        _selectedTag4 = value;
+        NotifyPropertyChanged("SelectedTag4");
+      }
+    }
+
     public string ConfigFile { get; set; }
     private FileSystemWatcher _systemWatcher;
 
@@ -160,6 +215,8 @@ namespace CameraControl.Core.Devices.Classes
       TimeLapse.OutputFIleName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos),
                                               Name + ".avi");
       UseOriginalFilename = false;
+      AlowFolderChange = false;
+      Tags = new AsyncObservableCollection<TagItem>();
     }
 
     void _systemWatcher_Created(object sender, FileSystemEventArgs e)
@@ -227,6 +284,10 @@ namespace CameraControl.Core.Devices.Classes
       res = res.Replace("$E", device.ExposureCompensation.Value!="0" ? device.ExposureCompensation.Value : "");
       res = res.Replace("$D", DateTime.Now.ToString("yyyy-MM-dd"));
       res = res.Replace("$X", device.DisplayName.Replace(":","_"));
+      res = res.Replace("$Tag1", SelectedTag1 != null ? SelectedTag1.Value.Trim() : "");
+      res = res.Replace("$Tag2", SelectedTag1 != null ? SelectedTag2.Value.Trim() : "");
+      res = res.Replace("$Tag3", SelectedTag1 != null ? SelectedTag3.Value.Trim() : "");
+      res = res.Replace("$Tag4", SelectedTag1 != null ? SelectedTag4.Value.Trim() : "");
       return res;
     }
 

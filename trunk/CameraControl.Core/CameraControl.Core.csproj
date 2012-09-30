@@ -92,6 +92,7 @@
     <Compile Include="Classes\PhotoUtils.cs" />
     <Compile Include="Classes\Queue\QueueItemFileItem.cs" />
     <Compile Include="Classes\Settings.cs" />
+    <Compile Include="Classes\TagItem.cs" />
     <Compile Include="Classes\TimeLapseClass.cs" />
     <Compile Include="Classes\TriggerClass.cs" />
     <Compile Include="Classes\WebServer.cs" />

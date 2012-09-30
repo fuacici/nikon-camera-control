@@ -74,6 +74,7 @@
             </Button>
             <Button Content="Lv" ToolTip="Live view" Height="50" Name="btn_liveview" Width="50" Margin="5" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.HaveLiveView}" Click="btn_liveview_Click" FontSize="15" />
             <Button Content="B" ToolTip="Browse sessions" Height="50" Name="btn_browse" Width="50" Margin="5"  FontSize="15" Click="btn_browse_Click" />
+            <ToggleButton Content="Tags" ToolTip="Select tags" Height="50" Name="btn_Tags" Width="50" Margin="5"  FontSize="15" Click="btn_Tags_Click" />
             <Button ToolTip="About" Height="50" Name="btn_about" Width="50" Margin="5" Click="btn_about_Click">
                 <Image Margin="5" Source="/CameraControl;component/Images/About.png" />
             </Button>

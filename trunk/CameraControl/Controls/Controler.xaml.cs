@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -24,14 +25,18 @@ namespace CameraControl.Controls
 
     void DeviceManager_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-      if (ServiceProvider.DeviceManager == null || ServiceProvider.DeviceManager.SelectedCameraDevice==null)
+      if (ServiceProvider.DeviceManager == null || ServiceProvider.DeviceManager.SelectedCameraDevice == null)
         return;
       if (e.PropertyName == "SelectedCameraDevice")
       {
-        chk_sdram.Visibility =
-          ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.CaptureInRam)
-            ? Visibility.Visible
-            : Visibility.Hidden;
+        Dispatcher.Invoke(new Action(delegate
+                                       {
+                                         chk_sdram.Visibility =
+                                           ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(
+                                             CapabilityEnum.CaptureInRam)
+                                             ? Visibility.Visible
+                                             : Visibility.Hidden;
+                                       }));
       }
     }
 
