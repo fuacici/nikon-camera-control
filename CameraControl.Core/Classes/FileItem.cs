@@ -60,19 +60,6 @@ namespace CameraControl.Core.Classes
     {
       get
       {
-        if (_bitmapImage == null)
-        {
-          //_bitmapImage = new BitmapImage();
-          //_bitmapImage.BeginInit();
-          //_bitmapImage.UriSource = new Uri(FileName);
-          //_bitmapImage.EndInit();
-          //http://stackoverflow.com/questions/1738978/loading-image-in-thread-with-wpf
-          //using (BackgroundWorker bg = new BackgroundWorker())
-          //{
-          //  bg.DoWork += (sender, args) => FetchImages(viewModelObjectsNeedingImages);
-          //  bg.RunWorkerAsync();
-          //}
-        }
         return _bitmapImage;
       }
       set
@@ -130,12 +117,12 @@ namespace CameraControl.Core.Classes
           {
             dib = FreeImage.LoadEx(FileName, FREE_IMAGE_LOAD_FLAGS.RAW_PREVIEW);
             FIBITMAP bit = FreeImage.MakeThumbnail(dib, 255, true);
-            Thumbnail = byteArrayToImageEx(ImageToByteArray(FreeImage.GetBitmap(bit)));
+            Thumbnail = BitmapSourceConvert.ToBitmapSource(FreeImage.GetBitmap(bit));
             FreeImage.UnloadEx(ref dib);
           }
           else
           {
-            Image.GetThumbnailImageAbort myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
+            Image.GetThumbnailImageAbort myCallback = ThumbnailCallback;
             Stream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite); // or any stream
             Image tempImage = Image.FromStream(fs, true, false);
             var exif = new EXIFextractor(ref tempImage, "n");
@@ -148,38 +135,11 @@ namespace CameraControl.Core.Classes
                 tempImage.RotateFlip(flip);
               }
             }
-            Thumbnail = byteArrayToImageEx(ImageToByteArray(tempImage.GetThumbnailImage(160, 120, myCallback, IntPtr.Zero)));
+            Thumbnail =
+              BitmapSourceConvert.ToBitmapSource((Bitmap) tempImage.GetThumbnailImage(160, 120, myCallback, IntPtr.Zero));
+            tempImage.Dispose();
             fs.Close();
           }
-
-          //int dw = bitmap.Width;
-          //int dh = bitmap.Height;
-          //int tw = 160;
-          //int th = 160;
-          //double zw = (tw/(double) dw);
-          //double zh = (th/(double) dh);
-          //double z = (zw <= zh) ? zw : zh;
-          //dw = (int) (dw*z);
-          //dh = (int) (dh*z);
-          //_thumbnail = byteArrayToImageEx(ImageToByteArray((Bitmap) bitmap.GetThumbnailImage(dw, dh, null, IntPtr.Zero)));
-
-          //switch (Photo.Orientation)
-          //{
-          //  case 3:
-          //    _thumbnail.RotateFlip(RotateFlipType.Rotate180FlipNone);
-          //    break;
-          //  case 6:
-          //    _thumbnail.RotateFlip(RotateFlipType.Rotate90FlipNone);
-          //    break;
-          //  case 8:
-          //    _thumbnail.RotateFlip(RotateFlipType.Rotate270FlipNone);
-          //    break;
-          //  default:
-          //    break;
-          //}
-          //_thumbData = ImageToByteArray(_thumbnail);
-          //Size = 256;
-          //NotifyPropertyChanged("Thumbnail");
         }
       }
       catch (Exception)
@@ -191,32 +151,5 @@ namespace CameraControl.Core.Classes
     {
       return false;
     }
-
-
-    private byte[] ImageToByteArray(Image p_ImageIn)
-    {
-      byte[] aRet = null;
-
-      using (MemoryStream oMS = new MemoryStream())
-      {
-        p_ImageIn.Save(oMS, System.Drawing.Imaging.ImageFormat.Jpeg);
-        aRet = oMS.ToArray();
-      }
-      return aRet;
-    }
-
-    private BitmapImage byteArrayToImageEx(byte[] byteArrayIn)
-    {
-      if (byteArrayIn == null)
-        return null;
-      BitmapImage img = new BitmapImage();
-      MemoryStream ms = new MemoryStream(byteArrayIn);
-      img.BeginInit();
-      img.StreamSource = ms;
-      img.EndInit();
-      img.Freeze();
-      return img;
-    }
-
   }
 }
