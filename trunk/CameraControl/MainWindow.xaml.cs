@@ -529,5 +529,24 @@ namespace CameraControl
                                                       ? WindowsCmdConsts.TagSelectorWnd_Hide
                                                       : WindowsCmdConsts.TagSelectorWnd_Show);
     }
+
+    private void btn_del_Sesion_Click(object sender, RoutedEventArgs e)
+    {
+      if(ServiceProvider.Settings.PhotoSessions.Count>1)
+      {
+        if (MessageBox.Show(string.Format("Do you want continue to deleting sesion <{0}>?\nNo files will be deleted !",ServiceProvider.Settings.DefaultSession.Name),"Delete session",MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+        {
+          PhotoSession session = ServiceProvider.Settings.DefaultSession;
+          ServiceProvider.Settings.DefaultSession = ServiceProvider.Settings.PhotoSessions[0];
+          File.Delete(session.ConfigFile);
+          ServiceProvider.Settings.PhotoSessions.Remove(session);
+          ServiceProvider.Settings.Save();
+        }
+      }
+      else
+      {
+        MessageBox.Show("More that one sesion needed !");
+      }
+    }
   }
 }
