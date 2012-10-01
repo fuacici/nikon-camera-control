@@ -5,6 +5,13 @@ namespace CameraControl.Core.Devices.Nikon
 {
   public class NikonD3X : NikonBase
   {
+    public override bool Init(DeviceDescriptor deviceDescriptor)
+    {
+      bool ret = base.Init(deviceDescriptor);
+      Capabilities.Add(CapabilityEnum.LiveView);
+      return ret;
+    }
+
     override public LiveViewData GetLiveViewImage()
     {
       LiveViewData viewData = new LiveViewData();
