@@ -20,8 +20,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="120" />
             <ColumnDefinition Width="220*" />
-            <ColumnDefinition Width="431*" />
-            <ColumnDefinition Width="231" />
+            <ColumnDefinition Width="399*" />
+            <ColumnDefinition Width="263" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
@@ -126,16 +126,16 @@
                 <MenuItem Header="{Globalizer:GlobalizedResource Menu_About, FallbackValue='About'}" Name="mnu_about" Click="btn_about_Click" />
             </MenuItem>
         </Menu>
-        <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,20,0" Grid.Row="1" HorizontalAlignment="Right" Width="214" Height="65">
-            <StackPanel Orientation="Vertical" >
-                <StackPanel>
-                    <Label Content="Session" Margin="5,1,1,1"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <ComboBox Name="cmb_session" SelectedValue="{Binding Path=DefaultSession}" ItemsSource="{Binding Path=PhotoSessions}" Width="150" Margin="3" />
-                    <Button Content="Add" Grid.Column="3" Name="btn_add_Sesion" Margin="3" Click="btn_add_Sesion_Click" />
-                    <Button Content="Edit" Grid.Column="3" Name="btn_edit_Sesion" Margin="3" Click="btn_edit_Sesion_Click" />
-                </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,20,0" Grid.Row="1" HorizontalAlignment="Right" Width="214" Height="65"></StackPanel>
+        <StackPanel Orientation="Vertical" Grid.Column="3"  Grid.Row="1">
+            <StackPanel>
+                <Label Content="Session" Margin="5,1,1,1" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <ComboBox Name="cmb_session" SelectedValue="{Binding Path=DefaultSession}" ItemsSource="{Binding Path=PhotoSessions}" Width="150" Margin="3" />
+                <Button Content="Add" Grid.Column="3" Name="btn_add_Sesion" Margin="3" Click="btn_add_Sesion_Click" />
+                <Button Content="Edit" Grid.Column="3" Name="btn_edit_Sesion" Margin="3" Click="btn_edit_Sesion_Click" />
+                <Button Content="Del" Grid.Column="3" Name="btn_del_Sesion" Margin="3" Click="btn_del_Sesion_Click" />
             </StackPanel>
         </StackPanel>
     </Grid>
