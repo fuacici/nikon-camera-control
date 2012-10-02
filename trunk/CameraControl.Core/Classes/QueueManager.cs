@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.ComponentModel;
+using System.Threading;
 using CameraControl.Core.Interfaces;
 
 namespace CameraControl.Core.Classes
@@ -20,9 +21,10 @@ namespace CameraControl.Core.Classes
 
     void _worker_DoWork(object sender, DoWorkEventArgs e)
     {
-      while (true)
+      IQueueItem item;
+      while (Queue.TryTake(out item))
       {
-        var item = Queue.Take();
+        Thread.Sleep(70);
         if (!item.Execute(this))
           break;
       }
