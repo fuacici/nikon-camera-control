@@ -11,7 +11,6 @@ namespace CameraControl.Core.Classes
 {
   public class FileItem:BaseFieldClass
   {
-    private BitmapSource _defaulImage;
 
     private string _fileName;
     public string FileName
@@ -125,18 +124,21 @@ namespace CameraControl.Core.Classes
             Image.GetThumbnailImageAbort myCallback = ThumbnailCallback;
             Stream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite); // or any stream
             Image tempImage = Image.FromStream(fs, true, false);
-            var exif = new EXIFextractor(ref tempImage, "n");
-            if (exif["Orientation"] != null)
-            {
-              RotateFlipType flip = EXIFextractorEnumerator.OrientationToFlipType(exif["Orientation"].ToString());
+            //var exif = new EXIFextractor(ref tempImage, "n");
+            //if (exif["Orientation"] != null)
+            //{
+            //  RotateFlipType flip = EXIFextractorEnumerator.OrientationToFlipType(exif["Orientation"].ToString());
 
-              if (flip != RotateFlipType.RotateNoneFlipNone)  // don't flip of orientation is correct
-              {
-                tempImage.RotateFlip(flip);
-              }
-            }
+            //  if (flip != RotateFlipType.RotateNoneFlipNone) // don't flip of orientation is correct
+            //  {
+            //    tempImage.RotateFlip(flip);
+            //  }
+            //}
+            //Thumbnail =
+            //  BitmapSourceConvert.ToBitmapSource((Bitmap) tempImage.GetThumbnailImage(160, 120, myCallback, IntPtr.Zero));
             Thumbnail =
-              BitmapSourceConvert.ToBitmapSource((Bitmap) tempImage.GetThumbnailImage(160, 120, myCallback, IntPtr.Zero));
+              Imaging.CreateBitmapSourceFromBitmap(
+                (Bitmap) tempImage.GetThumbnailImage(160, 120, myCallback, IntPtr.Zero));
             tempImage.Dispose();
             fs.Close();
           }
