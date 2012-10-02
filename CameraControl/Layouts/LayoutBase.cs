@@ -178,12 +178,12 @@ namespace CameraControl.Layouts
 
     private void worker_DoWork(object sender, DoWorkEventArgs e)
     {
-      Thread.Sleep(200);
-      FileItem fileItem = e.Argument as FileItem;
-      if (ServiceProvider.Settings.SelectedBitmap.FileItem.FileName != fileItem.FileName)
-        return;
+      //Thread.Sleep(200);
+      //FileItem fileItem = e.Argument as FileItem;
+      //if (ServiceProvider.Settings.SelectedBitmap.FileItem.FileName != fileItem.FileName)
+      //  return;
       ServiceProvider.Settings.ImageLoading = Visibility.Visible;
-      ServiceProvider.Settings.SelectedBitmap.GetBitmap();
+      BitmapLoader.Instance.GetBitmap(ServiceProvider.Settings.SelectedBitmap);
       ServiceProvider.Settings.ImageLoading = Visibility.Hidden;
     }
 
