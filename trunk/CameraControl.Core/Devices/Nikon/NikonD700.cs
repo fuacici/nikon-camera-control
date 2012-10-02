@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using CameraControl.Core.Devices.Classes;
 using PortableDeviceLib;
@@ -45,21 +46,30 @@ namespace CameraControl.Core.Devices.Nikon
     {
       lock (Locker)
       {
-        MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetDevicePropValue, CONST_PROP_LiveViewStatus, -1);
-        ErrorCodes.GetException(response.ErrorCode);
-        // test if live view is on 
-        if (response.Data != null && response.Data.Length > 0 && response.Data[0] > 0)
+        try
         {
-          if (CaptureInSdRam)
+          IsBusy = true;
+          MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetDevicePropValue, CONST_PROP_LiveViewStatus, -1);
+          ErrorCodes.GetException(response.ErrorCode);
+          // test if live view is on 
+          if (response.Data != null && response.Data.Length > 0 && response.Data[0] > 0)
           {
-            DeviceReady();
-            ErrorCodes.GetException(StillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF));
-            return;
+            if (CaptureInSdRam)
+            {
+              DeviceReady();
+              ErrorCodes.GetException(ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF));
+              return;
+            }
+            StopLiveView();
           }
-          StopLiveView();
+          DeviceReady();
+          ErrorCodes.GetException(ExecuteWithNoData(CONST_CMD_InitiateCapture));
         }
-        DeviceReady();
-        ErrorCodes.GetException(StillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCapture));
+        catch
+        {
+          IsBusy = false;
+          throw;
+        }
       }
     }
 

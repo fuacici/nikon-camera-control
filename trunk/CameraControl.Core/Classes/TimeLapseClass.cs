@@ -1,12 +1,17 @@
 using System;
+using System.Threading;
 using System.Timers;
 using System.Xml.Serialization;
+using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
+using Timer = System.Timers.Timer;
 
 namespace CameraControl.Core.Classes
 {
   public class TimeLapseClass : BaseFieldClass
   {
+    public event EventHandler TimeLapseDone;
+
     private Timer _timer = new Timer(1000);
     private int _timecounter = 0;
 
@@ -211,6 +216,28 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    public int ProgresPictures
+    {
+      get
+      {
+        if (NumberOfPhotos != 0)
+        {
+          return (int) ((double) PhotosTaken/NumberOfPhotos*100);
+        }
+        return 0;
+      }
+    }
+
+    public int ProgresTime
+    {
+      get
+      {
+        if (Period != 0)
+          return (int) ((double) _timecounter/Period*100);
+        return 0;
+      }
+    }
+
     public TimeLapseClass()
     {
       Period = 5;
@@ -229,51 +256,53 @@ namespace CameraControl.Core.Classes
     void _timer_Elapsed(object sender, ElapsedEventArgs e)
     {
       _timecounter++;
-      if(_timecounter>=Period)
+      if (_timecounter >= Period)
       {
-        try
-        {
-          _timer.Enabled = false;
-          if (NoAutofocus)
-            ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhotoNoAf();
-          else
-            ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
-          //_timer.Enabled = true;
-        }
-        catch (DeviceException exception)
-        {
-          if(exception.ErrorCode==ErrorCodes.WIA_ERROR_UNABLE_TO_FOCUS)
-          {
-           StaticHelper.Instance.SystemMessage = " Camera is busy retrying ....";
-            _timer.Enabled = true;
-          }
-          else
-          {
-            Log.Error(exception);
-           StaticHelper.Instance.SystemMessage = exception.Message;
-          }
-        }
         _timecounter = 0;
+        new Thread(Capture).Start();
         PhotosTaken++;
         if (PhotosTaken >= NumberOfPhotos)
         {
           Stop();
-         StaticHelper.Instance.SystemMessage = " Time lapse done !";
         }
       }
       else
       {
-       StaticHelper.Instance.SystemMessage = PhotosTaken == 0
-                                                   ? string.Format("Time Lapse will start in {0} second(s)", (Period - _timecounter))
-                                                   : string.Format("Next Time Lapse photo will be taken in  {0} second(s). Total photos :{1}/{2}", (Period - _timecounter), PhotosTaken, NumberOfPhotos);
+        StaticHelper.Instance.SystemMessage = PhotosTaken == 0
+                                                ? string.Format("Time Lapse will start in {0} second(s)",
+                                                                (Period - _timecounter))
+                                                : string.Format(
+                                                  "Next Time Lapse photo will be taken in  {0} second(s). Total photos :{1}/{2}",
+                                                  (Period - _timecounter), PhotosTaken, NumberOfPhotos);
+      }
+      NotifyPropertyChanged("ProgresPictures");
+      NotifyPropertyChanged("ProgresTime");
+    }
+
+
+    private void Capture()
+    {
+      try
+      {
+        WaitForReady(ServiceProvider.DeviceManager.SelectedCameraDevice);
+        if (NoAutofocus)
+          ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhotoNoAf();
+        else
+          ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
+        //_timer.Enabled = true;
+      }
+      catch (Exception exception)
+      {
+        Log.Error(exception);
+        StaticHelper.Instance.SystemMessage = exception.Message;
       }
     }
 
-    public TimeLapseClass Copy()
-    {
-      TimeLapseClass timeLapseClass = new TimeLapseClass {NumberOfPhotos = this.NumberOfPhotos, Period = this.Period};
-      return timeLapseClass;
-    }
+    //public TimeLapseClass Copy()
+    //{
+    //  TimeLapseClass timeLapseClass = new TimeLapseClass {NumberOfPhotos = this.NumberOfPhotos, Period = this.Period};
+    //  return timeLapseClass;
+    //}
 
     public void Start()
     {
@@ -286,8 +315,8 @@ namespace CameraControl.Core.Classes
 
     void DeviceManager_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
     {
-      if (!IsDisabled)
-        _timer.Start();
+      //if (!IsDisabled)
+      //  _timer.Start();
     }
 
     public void Stop()
@@ -296,6 +325,16 @@ namespace CameraControl.Core.Classes
       IsDisabled = true;
       ServiceProvider.DeviceManager.PhotoCaptured -= DeviceManager_PhotoCaptured;
       StaticHelper.Instance.SystemMessage = "Timelapse done";
+      if (TimeLapseDone != null)
+        TimeLapseDone(this, new EventArgs());
+    }
+
+    private void WaitForReady(ICameraDevice device)
+    {
+      while (device.IsBusy)
+      {
+        
+      }
     }
 
   }

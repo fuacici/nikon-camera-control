@@ -27,6 +27,7 @@ namespace CameraControl.Layouts
       InitServices();
       ServiceProvider.Settings.PropertyChanged += Settings_PropertyChanged;
       ServiceProvider.Settings.DefaultSession.PropertyChanged += Settings_PropertyChanged;
+      folderBrowserComboBox1.SelectedPath = ServiceProvider.Settings.DefaultSession.Folder;
     }
 
     void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

@@ -711,8 +711,8 @@ namespace CameraControl.Core.Devices.Nikon
       Monitor.Enter(Locker);
       try
       {
-        DeviceReady();
         IsBusy = true;
+        DeviceReady();
         ErrorCodes.GetException(CaptureInSdRam
                                   ? ExecuteWithNoData(CONST_CMD_AfAndCaptureRecInSdram)
                                   : ExecuteWithNoData(CONST_CMD_InitiateCapture));
@@ -780,8 +780,8 @@ namespace CameraControl.Core.Devices.Nikon
         byte oldval = 0;
         try
         {
-          DeviceReady();
           IsBusy = true;
+          DeviceReady();
           MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetDevicePropValue, CONST_PROP_LiveViewStatus, -1);
           ErrorCodes.GetException(response.ErrorCode);
           // test if live view is on 

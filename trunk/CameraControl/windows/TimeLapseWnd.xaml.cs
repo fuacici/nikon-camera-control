@@ -16,13 +16,29 @@ namespace CameraControl.windows
     public TimeLapseWnd()
     {
       InitializeComponent();
-      
+      ServiceProvider.Settings.DefaultSession.TimeLapse.TimeLapseDone += TimeLapse_TimeLapseDone;
+    }
+
+    void TimeLapse_TimeLapseDone(object sender, EventArgs e)
+    {
+      Dispatcher.Invoke(new Action(delegate { btn_start.Content = "Start time lapse"; }));
     }
 
     private void btn_start_Click(object sender, RoutedEventArgs e)
     {
-      ServiceProvider.Settings.DefaultSession.TimeLapse.Start();
-      Close();
+      if (ServiceProvider.Settings.DefaultSession.TimeLapse.IsDisabled)
+      {
+        ServiceProvider.Settings.DefaultSession.TimeLapse.Start();
+        Dispatcher.Invoke(new Action(delegate { btn_start.Content = "Stop time lapse"; }));
+      }
+      else
+      {
+        if (MessageBox.Show("The time lapse not finished! Do you want to stop the time lapse ?", "Time lapse", MessageBoxButtons.YesNo) ==
+            System.Windows.Forms.DialogResult.Yes)
+        {
+          ServiceProvider.Settings.DefaultSession.TimeLapse.Stop();
+        }
+      }
     }
 
     private void button2_Click(object sender, RoutedEventArgs e)
@@ -76,6 +92,22 @@ namespace CameraControl.windows
         Log.Error("Check codec",exception);
       }
       return true;
+    }
+
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!ServiceProvider.Settings.DefaultSession.TimeLapse.IsDisabled)
+      {
+        if (MessageBox.Show("The time lapse not finished! Do you want to stop the time lapse ?", "Time lapse", MessageBoxButtons.YesNo) ==
+            System.Windows.Forms.DialogResult.Yes)
+        {
+          ServiceProvider.Settings.DefaultSession.TimeLapse.Stop();
+        }
+        else
+        {
+          e.Cancel = true;
+        }
+      }
     }
   }
 }
