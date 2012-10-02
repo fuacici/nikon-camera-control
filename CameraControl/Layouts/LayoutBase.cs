@@ -192,9 +192,12 @@ namespace CameraControl.Layouts
     {
       if (e.PropertyName == "DefaultSession")
       {
-        ImageLIst.SelectedIndex = 0;
-        if (ImageLIst.Items.Count == 0)
-          ServiceProvider.Settings.SelectedBitmap.DisplayImage = null;
+        Dispatcher.Invoke(new Action(delegate
+                                       {
+                                         ImageLIst.SelectedIndex = 0;
+                                         if (ImageLIst.Items.Count == 0)
+                                           ServiceProvider.Settings.SelectedBitmap.DisplayImage = null;
+                                       }));
       }
     }
 
