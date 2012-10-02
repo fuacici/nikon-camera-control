@@ -142,6 +142,7 @@ namespace CameraControl.Core.Classes
         if (FileItem.IsRaw)
         {
           BitmapDecoder bmpDec = BitmapDecoder.Create(new Uri(FileItem.FileName), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+      
           DisplayImage = bmpDec.Frames.Single();
         }
         else
