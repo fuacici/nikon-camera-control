@@ -268,57 +268,12 @@ Tag (hex)	Tag (dec)	IFD	Key	Type	Tag description
       Metadata.Add(new DictionaryItem { Name = tag.Description.Trim(), Value = tag.ToString()});
     }
 
-
-    private BitmapImage ToBitmap(Bitmap image)
+    public void OnBitmapLoaded()
     {
-      MemoryStream ms = new MemoryStream();
-      image.Save(ms, ImageFormat.Bmp);
-      ms.Position = 0;
-      BitmapImage bi = new BitmapImage();
-      bi.BeginInit();
-      bi.StreamSource = ms;
-      bi.EndInit();
-      bi.Freeze();
-      return bi;
+      if (BitmapLoaded != null)
+        BitmapLoaded(this);
     }
 
-    private BitmapImage ToBitmap(Image image)
-    {
-      MemoryStream ms = new MemoryStream();
-      image.Save(ms, ImageFormat.Bmp);
-      ms.Position = 0;
-      BitmapImage bi = new BitmapImage();
-      bi.BeginInit();
-      bi.StreamSource = ms;
-      bi.EndInit();
-      bi.Freeze();
-      return bi;
-    }
-
-    private byte[] ImageToByteArray(Image p_ImageIn)
-    {
-      byte[] aRet = null;
-
-      using (MemoryStream oMS = new MemoryStream())
-      {
-        p_ImageIn.Save(oMS, System.Drawing.Imaging.ImageFormat.Bmp);
-        aRet = oMS.ToArray();
-      }
-      return aRet;
-    }
-
-    public BitmapImage byteArrayToImageEx(byte[] byteArrayIn)
-    {
-      if (byteArrayIn == null)
-        return null;
-      BitmapImage img = new BitmapImage();
-      MemoryStream ms = new MemoryStream(byteArrayIn);
-      img.BeginInit();
-      img.StreamSource = ms;
-      img.EndInit();
-      img.Freeze();
-      return img;
-    }
 
     public void SetFileItem(FileItem item)
     {

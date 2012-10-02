@@ -54,9 +54,9 @@
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.RowSpan="2">
             <local:ZoomBorder  BorderThickness="1" CornerRadius="5" >
                 <Image Name="image1" Stretch="Uniform"  Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}"  >
-                    <Image.InputBindings>
+                    <!--<Image.InputBindings>
                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=ImageDoubleClickCommand}" />
-                    </Image.InputBindings>
+                    </Image.InputBindings>-->
                 </Image>
             </local:ZoomBorder>
             <Label Content="Loading ..." Name="lbl_loading" Margin="66,25,72,0" VerticalAlignment="Top" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading}" FontSize="25" FontWeight="ExtraBold" />
