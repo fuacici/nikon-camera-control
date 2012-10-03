@@ -15,7 +15,7 @@ namespace CameraControlCmd
 {
   class Program
   {
-    public static bool IsBusy { get; set; }
+    //public static bool IsBusy { get; set; }
 
     private static InputArguments _arguments;
     static void Main(string[] args)
@@ -35,9 +35,8 @@ namespace CameraControlCmd
         Console.WriteLine("No connected device was found ! Exiting");
         return;
       }
-      IsBusy = false;
       ExecuteArgs();
-      while (IsBusy)
+      while (CamerasAreBusy())
       {
         Thread.Sleep(1);
       }
@@ -71,7 +70,10 @@ namespace CameraControlCmd
           if (preset != null)
           {
             Console.WriteLine("Using preset {0}", _arguments["preset"]);
-            preset.Set(ServiceProvider.DeviceManager.SelectedCameraDevice);
+            foreach (ICameraDevice cameraDevice in ServiceProvider.DeviceManager.ConnectedDevices)
+            {
+              preset.Set(cameraDevice);              
+            }
           }
           else
           {
@@ -81,16 +83,21 @@ namespace CameraControlCmd
         if (_arguments.Contains("capture"))
         {
           ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
-          IsBusy = true;
           return;
         }
         if (_arguments.Contains("capturenoaf"))
         {
           ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
-          IsBusy = true;
           return;
         }
-
+        if (_arguments.Contains("captureall"))
+        {
+          foreach (ICameraDevice cameraDevice in ServiceProvider.DeviceManager.ConnectedDevices)
+          {
+            ICameraDevice device = cameraDevice;
+            new Thread(device.CapturePhoto).Start();
+          }
+        }
       }
       catch (Exception exception)
       {
@@ -105,6 +112,7 @@ namespace CameraControlCmd
       Console.WriteLine(" /help                     - this screen");
       Console.WriteLine(" /capture                  - capture photo");
       Console.WriteLine(" /capturenoaf              - capture photo without autofocus");
+      Console.WriteLine(" /captureall               - capture photo with all connected devices");
       Console.WriteLine(" /session session_name     - use session [session_name]");
       Console.WriteLine(" /preset preset_name       - use preset [session_name]");
       Console.WriteLine(" /wait                     - after done wait for keypress ");
@@ -118,7 +126,7 @@ namespace CameraControlCmd
       ServiceProvider.Settings = ServiceProvider.Settings.Load();
       ServiceProvider.Settings.LoadSessionData();
       ServiceProvider.WindowsManager = new WindowsManager();
-      WIAManager manager=new WIAManager();
+      WIAManager manager = new WIAManager();
       StaticHelper.Instance.PropertyChanged += Instance_PropertyChanged;
       ServiceProvider.DeviceManager.CameraConnected += DeviceManagerCameraConnected;
       manager.ConnectToCamera();
@@ -126,12 +134,17 @@ namespace CameraControlCmd
       if (ServiceProvider.DeviceManager.SelectedCameraDevice.AttachedPhotoSession != null)
         ServiceProvider.Settings.DefaultSession =
           ServiceProvider.DeviceManager.SelectedCameraDevice.AttachedPhotoSession;
-      ServiceProvider.DeviceManager.SelectedCameraDevice.CaptureCompleted += SelectedCameraDevice_CaptureCompleted;
+      foreach (ICameraDevice cameraDevice in ServiceProvider.DeviceManager.ConnectedDevices)
+      {
+        cameraDevice.CaptureCompleted += SelectedCameraDevice_CaptureCompleted;
+      }
+      //ServiceProvider.DeviceManager.SelectedCameraDevice.CaptureCompleted += SelectedCameraDevice_CaptureCompleted;
     }
 
     static void SelectedCameraDevice_CaptureCompleted(object sender, EventArgs e)
     {
-      IsBusy = false;
+      ICameraDevice device = sender as ICameraDevice;
+      device.IsBusy = false;
     }
 
     static void Instance_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -204,6 +217,10 @@ namespace CameraControlCmd
       }
     }
 
+    private static bool CamerasAreBusy()
+    {
+      return ServiceProvider.DeviceManager.ConnectedDevices.Aggregate(false, (current, connectedDevice) => connectedDevice.IsBusy || current);
+    }
 
   }
 }
