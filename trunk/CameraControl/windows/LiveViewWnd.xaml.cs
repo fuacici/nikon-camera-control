@@ -419,11 +419,11 @@ namespace CameraControl.windows
                                              if (BlackAndWhite)
                                              {
                                                Grayscale filter = new Grayscale(0.299, 0.587, 0.114);
-                                               image1.Source = Imaging.CreateBitmapSourceFromBitmap(filter.Apply(bmp));
+                                               image1.Source = BitmapSourceConvert.ToBitmapSource(filter.Apply(bmp));
                                              }
                                              else
                                              {
-                                               image1.Source = Imaging.CreateBitmapSourceFromBitmap(bmp);
+                                               image1.Source =BitmapSourceConvert.ToBitmapSource(bmp);
                                              }
                                            }
                                            stream.Close();
@@ -554,8 +554,8 @@ namespace CameraControl.windows
       catch (Exception exception)
       {
         Log.Error("Unable to start liveview !", exception);
-        MessageBox.Show("Unable to start liveview !");
-        ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide);
+        //MessageBox.Show("Unable to start liveview !");
+        //ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide);
       }
       Dispatcher.Invoke(new Action(delegate { image1.Visibility = Visibility.Visible; }));
     }
@@ -763,8 +763,10 @@ namespace CameraControl.windows
       }
       try
       {
+        _timer.Stop();
         selectedPortableDevice.StartLiveView();
         selectedPortableDevice.Focus(step);
+        _timer.Start();
         FocusCounter += step;
       }
       catch (DeviceException exception)
@@ -818,6 +820,10 @@ namespace CameraControl.windows
           Log.Debug("LiveView: Stackphoto capture started");
           FreezeImage = true;
           Thread.Sleep(300);
+          while (ServiceProvider.DeviceManager.SelectedCameraDevice.IsBusy)
+          {
+            Thread.Sleep(1);
+          }
           StartLiveView();
           if (PhotoCount > 0)
           {

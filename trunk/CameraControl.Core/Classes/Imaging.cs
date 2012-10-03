@@ -27,7 +27,7 @@ namespace CameraControl.Core.Classes
         {
           // You need to specify the image format to fill the stream. 
           // I'm assuming it is PNG
-          bitmap.Save(memoryStream, ImageFormat.Png);
+          bitmap.Save(memoryStream, ImageFormat.MemoryBmp);
           memoryStream.Seek(0, SeekOrigin.Begin);
 
           // Make sure to create the bitmap in the UI thread
@@ -63,6 +63,7 @@ namespace CameraControl.Core.Classes
       writable.Freeze();
 
       return writable;
+      //return bitmapDecoder.Frames.Single();
     }
   } 
 }
