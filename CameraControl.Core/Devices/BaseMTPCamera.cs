@@ -102,10 +102,10 @@ namespace CameraControl.Core.Devices
 
     protected void WaitForReady()
     {
-      while (DeviceIsBusy)
-      {
-        Thread.Sleep(1);
-      }
+      //while (DeviceIsBusy)
+      //{
+      //  Thread.Sleep(1);
+      //}
     }
 
   }

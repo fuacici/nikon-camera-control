@@ -124,6 +124,7 @@ namespace CameraControl.Core.Classes
             Image.GetThumbnailImageAbort myCallback = ThumbnailCallback;
             Stream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite); // or any stream
             Image tempImage = Image.FromStream(fs, true, false);
+
             //var exif = new EXIFextractor(ref tempImage, "n");
             //if (exif["Orientation"] != null)
             //{
@@ -137,7 +138,7 @@ namespace CameraControl.Core.Classes
             //Thumbnail =
             //  BitmapSourceConvert.ToBitmapSource((Bitmap) tempImage.GetThumbnailImage(160, 120, myCallback, IntPtr.Zero));
             Thumbnail =
-              Imaging.CreateBitmapSourceFromBitmap(
+              BitmapSourceConvert.ToBitmapSource(
                 (Bitmap) tempImage.GetThumbnailImage(160, 120, myCallback, IntPtr.Zero));
             tempImage.Dispose();
             fs.Close();
