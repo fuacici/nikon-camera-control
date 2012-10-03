@@ -98,6 +98,14 @@ namespace CameraControlCmd
             new Thread(device.CapturePhoto).Start();
           }
         }
+        if (_arguments.Contains("captureallnoaf"))
+        {
+          foreach (ICameraDevice cameraDevice in ServiceProvider.DeviceManager.ConnectedDevices)
+          {
+            ICameraDevice device = cameraDevice;
+            new Thread(device.CapturePhotoNoAf).Start();
+          }
+        }
       }
       catch (Exception exception)
       {
@@ -113,6 +121,7 @@ namespace CameraControlCmd
       Console.WriteLine(" /capture                  - capture photo");
       Console.WriteLine(" /capturenoaf              - capture photo without autofocus");
       Console.WriteLine(" /captureall               - capture photo with all connected devices");
+      Console.WriteLine(" /captureallnoaf           - capture photo without autofocus with all connected devices");
       Console.WriteLine(" /session session_name     - use session [session_name]");
       Console.WriteLine(" /preset preset_name       - use preset [session_name]");
       Console.WriteLine(" /wait                     - after done wait for keypress ");

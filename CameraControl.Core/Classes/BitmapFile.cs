@@ -53,10 +53,10 @@ namespace CameraControl.Core.Classes
       get { return _displayImage; }
       set
       {
-        if(_displayImage==null && FileItem!=null)
-        {
-          _displayImage = FileItem.Thumbnail;
-        }
+        //if(_displayImage==null && FileItem!=null)
+        //{
+        //  _displayImage = FileItem.Thumbnail;
+        //}
         _displayImage = value;
         NotifyPropertyChanged("DisplayImage");
       }
