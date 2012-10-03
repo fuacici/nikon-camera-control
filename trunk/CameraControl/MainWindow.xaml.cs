@@ -100,13 +100,13 @@ namespace CameraControl
 
     void PhotoCaptured(object o)
     {
+      PhotoCapturedEventArgs eventArgs = o as PhotoCapturedEventArgs;
+      if (eventArgs == null)
+        return;
       try
       {
         StaticHelper.Instance.SystemMessage = "Photo transfer begin.";
         Log.Debug("Photo transfer begin.");
-        PhotoCapturedEventArgs eventArgs = o as PhotoCapturedEventArgs;
-        if (eventArgs == null)
-          return;
         PhotoSession session = eventArgs.CameraDevice.AttachedPhotoSession;
         if (session == null)
           session = ServiceProvider.Settings.DefaultSession;
@@ -158,6 +158,7 @@ namespace CameraControl
       }
       catch (Exception ex)
       {
+        eventArgs.CameraDevice.IsBusy = false;
         StaticHelper.Instance.SystemMessage = "Transfer error !\nMessage :" + ex.Message;
         Log.Error("Transfer error !", ex);
       }
