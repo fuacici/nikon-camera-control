@@ -7,7 +7,7 @@ namespace CameraControl.Core.Devices
   public class BaseMTPCamera : BaseCameraDevice
   {
     private const int CONST_READY_TIME = 1;
-    private const int CONST_LOOP_TIME = 1000;
+    private const int CONST_LOOP_TIME = 100;
 
     protected StillImageDevice StillImageDevice = null;
     protected bool DeviceIsBusy = false;

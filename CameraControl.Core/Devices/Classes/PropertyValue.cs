@@ -13,6 +13,17 @@ namespace CameraControl.Core.Devices.Classes
     private AsyncObservableCollection<T> _numericValues = new AsyncObservableCollection<T>();
     private AsyncObservableCollection<string> _values = new AsyncObservableCollection<string>();
 
+    private ushort _code;
+    public UInt16 Code
+    {
+      get { return _code; }
+      set
+      {
+        _code = value;
+        NotifyPropertyChanged("Code");
+      }
+    }
+
     private string _name;
     public string Name
     {
@@ -111,12 +122,30 @@ namespace CameraControl.Core.Devices.Classes
 
     public void SetValue(byte[] ba)
     {
-      if (ba == null || ba.Length < 2)
+      if (ba == null || ba.Length < 1)
         return;
       if (typeof(T) == typeof(int))
       {
         int val = BitConverter.ToInt16(ba, 0);
         SetValue((T)((object)val));
+      }
+      if (typeof(T) == typeof(long) && ba.Length==1)
+      {
+        long val = ba[0];
+        SetValue((T)((object)val));
+        return;
+      }
+      if (typeof(T) == typeof(long) && ba.Length == 2)
+      {
+        long val = BitConverter.ToInt16(ba, 0); 
+        SetValue((T)((object)val));
+        return;
+      }
+      if (typeof(T) == typeof(long) && ba.Length == 4)
+      {
+        long val = BitConverter.ToInt32(ba, 0);
+        SetValue((T)((object)val));
+        return;
       }
       if (typeof(T) == typeof(long))
       {

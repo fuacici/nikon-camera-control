@@ -750,7 +750,7 @@ namespace CameraControl.windows
 
     private void SetFocus(int step)
     {
-      
+      Console.WriteLine("Focus start");
       if (LockA)
       {
         if (FocusCounter + step < 0)
@@ -774,6 +774,7 @@ namespace CameraControl.windows
         Log.Error("Unable to focus", exception);
        StaticHelper.Instance.SystemMessage = exception.Message;
       }
+      Console.WriteLine("Focus end");
     }
 
     private void Window_Closing(object sender, CancelEventArgs e)
