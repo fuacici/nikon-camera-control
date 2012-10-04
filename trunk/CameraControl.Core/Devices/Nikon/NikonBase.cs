@@ -270,8 +270,37 @@ namespace CameraControl.Core.Devices.Nikon
       PropertyChanged += NikonBase_PropertyChanged;
       CaptureInSdRam = true;
       _timer.Start();
-      AdvancedProperties.Add(new PropertyValue<long>(){Name = "Test",IsEnabled = true});
+      AdvancedProperties.Add(InitAutoIso());
+      AdvancedProperties.Add(InitFlash());
+      foreach (PropertyValue<long> value in AdvancedProperties)
+      {
+        ReadDeviceProperties(value.Code);        
+      }
       return true;
+    }
+
+    private PropertyValue<long> InitAutoIso()
+    {
+      PropertyValue<long> res = new PropertyValue<long>() {Name = "Auto Iso", IsEnabled = true, Code = 0xD054};
+      res.AddValues("OFF", 0);
+      res.AddValues("ON", 1);
+      res.ValueChanged += (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)val },
+                                                            res.Code, -1);
+      return res;
+    }
+
+    private PropertyValue<long> InitFlash()
+    {
+      PropertyValue<long> res = new PropertyValue<long>() { Name = "Flash", IsEnabled = true, Code = 0x500C };
+      res.AddValues("Flash prohibited", 0x0002);
+      res.AddValues("Red-eye reduction", 0x0004);
+      res.AddValues("Normal synchronization", 0x8010);
+      res.AddValues("Slow synchronization", 0x8011);
+      res.AddValues("Rear synchronization", 0x8012);
+      res.AddValues("Red-eye reduction slow synchronization", 0x8013);
+      res.ValueChanged += (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                                                            res.Code, -1);
+      return res;
     }
 
     protected void NikonBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -856,7 +885,7 @@ namespace CameraControl.Core.Devices.Nikon
       //return System.BitConverter.ToInt16(value.Reverse().ToArray(), value.Length - sizeof(Int16) - startIndex);
     }
 
-    private byte _liveViewImageZoomRatio;
+    //private byte _liveViewImageZoomRatio;
 
     //public override PropertyValue<int> LiveViewImageZoomRatio
     //{
@@ -943,6 +972,13 @@ namespace CameraControl.Core.Devices.Nikon
                   StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureIndicateStatus, -1)
                     [0]);
               ExposureStatus = Convert.ToInt32(i);
+              break;
+            default:
+              foreach (PropertyValue<long> advancedProperty in AdvancedProperties)
+              {
+                advancedProperty.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                                           advancedProperty.Code));
+              }
               break;
           }
         }

@@ -18,9 +18,9 @@
     </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120" />
-            <ColumnDefinition Width="220*" />
-            <ColumnDefinition Width="399*" />
+            <ColumnDefinition Width="136" />
+            <ColumnDefinition Width="118*" />
+            <ColumnDefinition Width="485*" />
             <ColumnDefinition Width="263" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -80,7 +80,7 @@
             </Button>
             <StackPanel HorizontalAlignment="Right" IsEnabled="{Binding Path=DefaultSession.TimeLapse.IsDisabled}"></StackPanel>
         </ToolBar>
-        <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="12,6,179,14" Grid.Row="2" Grid.ColumnSpan="2" />
+        <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="12,6,131,14" Grid.Row="2" Grid.ColumnSpan="2" />
         <Menu Grid.ColumnSpan="4" Name="menu1">
             <MenuItem Header="{Globalizer:GlobalizedResource Menu_File, FallbackValue='_File'}">
                 <MenuItem Header="{Globalizer:GlobalizedResource Menu_ReScan, FallbackValue='Rescan connected cameras'}" Name="mnu_reconnect" Click="mnu_reconnect_Click" />
