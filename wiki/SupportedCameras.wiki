@@ -1,4 +1,4 @@
-#summary Confirmed working cameras
+#summary Confirmed working/not working cameras
 #labels Featured
 
 = Supported Cameras  =
@@ -24,9 +24,8 @@
 ||Nikon D800||X||X||?||X||Native||
 ||Nikon D800E||X||?||?||?||Native||
 ||Nikon D90||X||?||?||-||Native|| 
+||PowerShot G9||X||-||-||-||WIA|| 
 ||Other DSLR||X||-||?||-||WIA|| 
-
-
 
  * X  confirmed
  * ?  implemented, but need to be tested
@@ -35,3 +34,6 @@
  * +  planed
  
 With Native driver the application can use live view (if is supported by the camera) and read camera properties in real time
+
+= Not Supported Cameras  =
+Panasonic Lumix DMC-FZ38 - no MTP/PTP support
