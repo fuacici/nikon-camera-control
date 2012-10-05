@@ -60,9 +60,6 @@ namespace CameraControl.Core.Devices.Nikon
     public const int CONST_Event_ObsoleteEvent = 0xC104;
 
 
-    private const string AppName = "CameraControl";
-    private const int AppMajorVersionNumber = 1;
-    private const int AppMinorVersionNumber = 0;
     private Timer _timer = new Timer(1000/15);
 
    
@@ -213,9 +210,6 @@ namespace CameraControl.Core.Devices.Nikon
                                                 {0x8012, "[A] AF servo mode automatic switching"},
                                                 {0x8013, "[F] Constant AF servo"},
                                               };
-    internal object Locker = new object(); // object used to lock multi hreaded mothods 
-
-
 
     public NikonBase()
     {
@@ -320,17 +314,6 @@ namespace CameraControl.Core.Devices.Nikon
         StillImageDevice.IsConnected = false;
         IsConnected = false;
         ServiceProvider.DeviceManager.DisconnectCamera(StillImageDevice);
-      }
-      if (PhotoCaptured != null && e.EventType.EventGuid == PortableDeviceGuids.WPD_EVENT_OBJECT_ADDED)
-      {
-        //PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
-        //                                {
-        //                                  WiaImageItem = null,
-        //                                  EventArgs = e,
-        //                                  CameraDevice = this,
-        //                                  FileName = e.EventType.DeviceObject.Name
-        //                                };
-        //PhotoCaptured(this, args);
       }
     }
 
@@ -1076,8 +1059,7 @@ namespace CameraControl.Core.Devices.Nikon
                   CameraDevice = this,
                   FileName = filename
                 };
-                if (PhotoCaptured != null)
-                  PhotoCaptured(this, args);
+                OnPhotoCapture(this, args);
               }
               break;
             case CONST_Event_CaptureComplete:
@@ -1105,7 +1087,7 @@ namespace CameraControl.Core.Devices.Nikon
 
     public void DeviceReady(int retrynum)
     {
-      if (retrynum > 100)
+      if (retrynum > 50)
         return;
       WaitForReady();
       //uint cod = Convert.ToUInt32(_stillImageDevice.ExecuteWithNoData(CONST_CMD_DeviceReady));
@@ -1152,7 +1134,7 @@ namespace CameraControl.Core.Devices.Nikon
       } while (retry);
     }
 
-    public override event PhotoCapturedEventHandler PhotoCaptured;
+    //public override event PhotoCapturedEventHandler PhotoCaptured;
     //public override event EventHandler CaptureCompleted;
 
   }

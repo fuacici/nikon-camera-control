@@ -9,6 +9,7 @@ namespace CameraControl.Core.Devices
   {
     #region Implementation of ICameraDevice
     protected List<CapabilityEnum> Capabilities = new List<CapabilityEnum>();
+    protected object Locker = new object(); // object used to lock multi hreaded mothods 
 
     private bool _haveLiveView;
 
@@ -351,6 +352,14 @@ namespace CameraControl.Core.Devices
       if(CaptureCompleted!=null)
       {
         CaptureCompleted(sender, args);
+      }
+    }
+
+    public void OnPhotoCapture(object sender, PhotoCapturedEventArgs args)
+    {
+      if (CaptureCompleted != null)
+      {
+        PhotoCaptured(sender, args);
       }
     }
 
