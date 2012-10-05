@@ -6,6 +6,11 @@ namespace CameraControl.Core.Devices
 {
   public class BaseMTPCamera : BaseCameraDevice
   {
+    protected const string AppName = "CameraControl";
+    protected const int AppMajorVersionNumber = 1;
+    protected const int AppMinorVersionNumber = 0;
+
+
     private const int CONST_READY_TIME = 1;
     private const int CONST_LOOP_TIME = 100;
 

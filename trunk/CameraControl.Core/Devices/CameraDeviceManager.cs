@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CameraControl.Core.Classes;
+using CameraControl.Core.Devices.Canon;
 using CameraControl.Core.Devices.Classes;
 using CameraControl.Core.Devices.Nikon;
 using CameraControl.Core.Devices.Others;
@@ -77,6 +78,8 @@ namespace CameraControl.Core.Devices
                         {"D800E", typeof (NikonD800)},
                         {"D800e", typeof (NikonD800)},
                         {"D90", typeof (NikonD90)},
+                        {"Canon EOS DIGITAL REBEL XTi", typeof (Canon400D)},
+                        {"Canon EOS 400D DIGITAL", typeof (Canon400D)},
                         // for mtp simulator
                         //{"Test Camera ", typeof (NikonBase)},
                       };
