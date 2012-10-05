@@ -80,6 +80,40 @@ namespace CameraControlCmd
             Console.WriteLine("Preset not found {0}!", _arguments["preset"]);
           }
         }
+        if (_arguments.Contains("folder"))
+        {
+          if (string.IsNullOrEmpty(_arguments["folder"]))
+          {
+            Console.WriteLine("No folder !!!");
+          }
+          else
+          {
+            ServiceProvider.Settings.DefaultSession.Folder = _arguments["folder"];
+          }
+        }
+        if (_arguments.Contains("filename"))
+        {
+          if (string.IsNullOrEmpty(_arguments["filename"]))
+          {
+            Console.WriteLine("Wrong filename !!!");
+          }
+          else
+          {
+            ServiceProvider.Settings.DefaultSession.FileNameTemplate = _arguments["filename"];
+          }
+        }
+        if (_arguments.Contains("counter"))
+        {
+          int i = 0;
+          if (string.IsNullOrEmpty(_arguments["counter"]) && !int.TryParse(_arguments["counter"], out i))
+          {
+            Console.WriteLine("Wrong counter !!!");
+          }
+          else
+          {
+            ServiceProvider.Settings.DefaultSession.Counter = i;
+          }
+        }
         if (_arguments.Contains("capture"))
         {
           ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
@@ -124,6 +158,9 @@ namespace CameraControlCmd
       Console.WriteLine(" /captureallnoaf           - capture photo without autofocus with all connected devices");
       Console.WriteLine(" /session session_name     - use session [session_name]");
       Console.WriteLine(" /preset preset_name       - use preset [session_name]");
+      Console.WriteLine(" /folder path              - set the photo save folder" );
+      Console.WriteLine(" /filename filename        - set the photo save file name template");
+      Console.WriteLine(" /counter number           - set the photo initial counter");
       Console.WriteLine(" /wait                     - after done wait for keypress ");
     }
 
