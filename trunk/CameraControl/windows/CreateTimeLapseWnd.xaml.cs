@@ -51,7 +51,7 @@ namespace CameraControl.windows
         Directory.Delete(_tempFolder, true);
       }
       Directory.CreateDirectory(_tempFolder);
-      _basedir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+      _basedir = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
       _virtualdubdir = Path.Combine(_basedir, "VirtualDub", "VirtualDub.exe");
       btn_paly.Visibility=Visibility.Hidden;
     }
@@ -185,10 +185,10 @@ namespace CameraControl.windows
 
       switch (ServiceProvider.Settings.DefaultSession.TimeLapse.MoveDirection)
       {
-        // left to right
+          // left to right
         case 0:
           {
-            crop_x = (dw-frame_w)/total*index;
+            crop_x = (int)((dw - frame_w)/(double)total*index);
             switch (ServiceProvider.Settings.DefaultSession.TimeLapse.MoveAlignment)
             {
               case 0:
@@ -203,17 +203,17 @@ namespace CameraControl.windows
             }
           }
           break;
-        // right to left
+          // right to left
         case 1:
           {
-            crop_x = (dw - frame_w)/total*(total - index);
+            crop_x = (int)((dw - frame_w)/(double)total*(total - index));
             switch (ServiceProvider.Settings.DefaultSession.TimeLapse.MoveAlignment)
             {
               case 0:
                 crop_y = 0;
                 break;
               case 1:
-                crop_y = (dh - frame_h) / 2;
+                crop_y = (dh - frame_h)/2;
                 break;
               case 2:
                 crop_y = (dh - frame_h);
@@ -221,17 +221,17 @@ namespace CameraControl.windows
             }
           }
           break;
-        // top to bottom
+          // top to bottom
         case 2:
           {
-            crop_y = (dh - frame_h)/total*index;
+            crop_y = (int)((dh - frame_h)/(double)total*index);
             switch (ServiceProvider.Settings.DefaultSession.TimeLapse.MoveAlignment)
             {
               case 0:
                 crop_x = 0;
                 break;
               case 1:
-                crop_x = (dw - frame_w) / 2;
+                crop_x = (dw - frame_w)/2;
                 break;
               case 2:
                 crop_x = (dw - frame_w);
@@ -242,14 +242,14 @@ namespace CameraControl.windows
           // bottom to top
         case 3:
           {
-            crop_y = (dh - frame_h) / total * (total - index);
+            crop_y =(int) ((dh - frame_h)/(double)total*(total - index));
             switch (ServiceProvider.Settings.DefaultSession.TimeLapse.MoveAlignment)
             {
               case 0:
                 crop_x = 0;
                 break;
               case 1:
-                crop_x = (dw - frame_w) / 2;
+                crop_x = (dw - frame_w)/2;
                 break;
               case 2:
                 crop_x = (dw - frame_w);
@@ -258,12 +258,12 @@ namespace CameraControl.windows
           }
           break;
         case 4:
-          crop_x = (dw - frame_w) / total * index;
-          crop_y = (dh - frame_h) / total * index;
+          crop_x = (int) ((dw - frame_w)/(double) total*index);
+          crop_y = (int) ((dh - frame_h)/(double) total*index);
           break;
         case 5:
-          crop_x = (dw - frame_w) / total * (total - index);
-          crop_y = (dh - frame_h) / total * (total - index);
+          crop_x = (int) ((dw - frame_w)/(double) total*(total - index));
+          crop_y = (int) ((dh - frame_h)/(double) total*(total - index));
           break;
       }
 

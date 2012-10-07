@@ -39,7 +39,7 @@
                     <xctk:IntegerUpDown Minimum="0" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.NumberOfPhotos}" Grid.Row="2" Grid.Column="3" Margin="2"/>
                     <Label Content="Number of photos" Name="label2" Grid.Row="2" Grid.Column="1" />
                     <Button Content="Start TimeLapse" Margin="0,0,0,14" Name="btn_start" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="123" Click="btn_start_Click" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConected}" Grid.Row="10" Grid.Column="3" />
-                    <CheckBox Content="Don't autofocus on every shot " ToolTip="This option work only if you use native drive and isn't work for all cameras" Height="16" HorizontalAlignment="Left" Name="chk_noaf" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.NoAutofocus}" Grid.Row="5" Grid.Column="1" Width="179" Margin="2,0,0,0" />
+                    <CheckBox Content="Don't autofocus on every capture" ToolTip="This option work only if you use native drive, but isn't work for all cameras" Height="16" HorizontalAlignment="Left" Name="chk_noaf" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.NoAutofocus}" Grid.Row="5" Grid.Column="1" Width="199" Margin="2,0,0,0" />
                     <Button Content="Close" Height="23" HorizontalAlignment="Left"  Name="button2" VerticalAlignment="Bottom" Width="75" Click="button2_Click" Grid.Row="10" Grid.Column="1" Margin="2,0,0,14" />
                     <xctk:TimePicker Grid.Column="3" Grid.Row="3" TimeInterval="00:00:01" Background="White" UseLayoutRounding="True" Margin="2" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.TimePeriod}" Format="LongTime" />
                     <Label Content="Capture interval (HH:MM:SS)" Grid.Column="1" Grid.Row="3"/>
@@ -81,7 +81,7 @@
                                 <ColumnDefinition Width="150*" />
                                 <ColumnDefinition Width="221*" />
                             </Grid.ColumnDefinitions>
-                            <CheckBox Content="Add virtual moving (paning) to video " Height="16" HorizontalAlignment="Left" Margin="5,6,0,0" Name="chk_video_move" VerticalAlignment="Top" Grid.ColumnSpan="2" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.VirtualMove}"/>
+                            <CheckBox Content="Add virtual moving to video " Height="16" HorizontalAlignment="Left" Margin="5,6,0,0" Name="chk_video_move" VerticalAlignment="Top" Grid.ColumnSpan="2" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.VirtualMove}"/>
                             <Label Content="Moving surface (%):" Name="label6" Grid.Row="1" />
                             <xctk:IntegerUpDown Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Name="integerUpDown4" VerticalAlignment="Top" Width="170" Minimum="0" Maximum="50" IsEnabled="{Binding ElementName=chk_video_move, Path=IsChecked}" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.MovePercent}"/>
                             <Label Content="Moving direction:" Grid.Row="2" Name="label7" />

@@ -138,7 +138,8 @@ namespace CameraControl
         Log.Debug("Transfer started :" + fileName);
         eventArgs.CameraDevice.TransferFile(eventArgs.EventArgs, fileName);
         Log.Debug("Transfer done :" + fileName);
-        if (ServiceProvider.Settings.AutoPreview)
+        //select the new file only when the multiple camera support isn't used to prevent high CPU usage on raw files
+        if (ServiceProvider.Settings.AutoPreview && !ServiceProvider.WindowsManager.Get(typeof(MultipleCameraWnd)).IsVisible)
         {
           ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Select_Image, session.AddFile(fileName));
         }
@@ -149,7 +150,8 @@ namespace CameraControl
         ServiceProvider.Settings.Save(session);
         StaticHelper.Instance.SystemMessage = "Photo transfer done.";
         eventArgs.CameraDevice.IsBusy = false;
-        if (ServiceProvider.Settings.Preview)
+        //show fullscreen only when the multiple camera support isn't used
+        if (ServiceProvider.Settings.Preview && !ServiceProvider.WindowsManager.Get(typeof(MultipleCameraWnd)).IsVisible)
           ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_ShowTimed);
         if (ServiceProvider.Settings.PlaySound)
         {
@@ -526,7 +528,7 @@ namespace CameraControl
         MessageBox.Show("Use session editor to define tags !");
         return;
       }
-      ServiceProvider.WindowsManager.ExecuteCommand(btn_Tags.IsChecked == false
+      ServiceProvider.WindowsManager.ExecuteCommand(ServiceProvider.WindowsManager.Get(typeof(TagSelectorWnd)).IsVisible
                                                       ? WindowsCmdConsts.TagSelectorWnd_Hide
                                                       : WindowsCmdConsts.TagSelectorWnd_Show);
     }
