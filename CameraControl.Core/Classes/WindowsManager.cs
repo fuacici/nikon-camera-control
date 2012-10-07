@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CameraControl.Core.Interfaces;
 
 namespace CameraControl.Core.Classes
@@ -35,15 +36,9 @@ namespace CameraControl.Core.Classes
         Event(cmd, o);
     }
 
-    public IWindow Get(Type t) 
+    public IWindow Get(Type t)
     {
-      foreach (IWindow window in WindowsList)
-      {
-        if (window.GetType() == t)
-          return window;
-      }
-      return null;
+      return WindowsList.FirstOrDefault(window => window.GetType() == t);
     }
-
   }
 }
