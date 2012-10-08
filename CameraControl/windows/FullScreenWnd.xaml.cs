@@ -28,6 +28,7 @@ namespace CameraControl.windows
       InitializeComponent();
       KeyDown += FullScreenWnd_KeyDown;
       _timer.Elapsed += _timer_Elapsed;
+     
     }
 
     void _timer_Elapsed(object sender, ElapsedEventArgs e)
