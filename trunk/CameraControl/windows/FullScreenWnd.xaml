@@ -5,7 +5,10 @@
         xmlns:Controls="clr-namespace:CameraControl.Controls"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CurrentTheme}"
-        Title="FullScreenWnd" Height="300" Width="300" WindowState="Maximized" WindowStyle="None" KeyDown="image1_KeyDown" Background="Black" MouseDown="image1_MouseDown">
+        Title="FullScreenWnd" Height="300" Width="300" WindowState="Maximized" WindowStyle="None" KeyDown="image1_KeyDown" MouseDown="image1_MouseDown">
+    <Window.Background>
+        <SolidColorBrush Color="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=FullScreenColor}"/>
+    </Window.Background>
     <Grid>
         <Controls:ZoomBorder>
         <Image Name="image1" Stretch="Uniform" Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" KeyDown="image1_KeyDown" MouseDown="image1_MouseDown" KeyUp="image1_KeyUp" />

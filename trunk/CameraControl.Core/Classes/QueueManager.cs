@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Threading;
@@ -24,9 +25,16 @@ namespace CameraControl.Core.Classes
       IQueueItem item;
       while (Queue.TryTake(out item))
       {
-        Thread.Sleep(70);
-        if (!item.Execute(this))
-          break;
+        try
+        {
+          Thread.Sleep(70);
+          if (!item.Execute(this))
+            break;
+        }
+        catch (Exception exception)
+        {
+          Log.Error("Queue manager error:", exception);
+        }
       }
     }
 

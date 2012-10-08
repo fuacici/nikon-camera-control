@@ -44,6 +44,7 @@ namespace CameraControl.windows
     {
       cmb_themes.ItemsSource = ThemeManager.GetThemes();
       ServiceProvider.Settings.BeginEdit();
+
     }
 
     private void button2_Click(object sender, RoutedEventArgs e)

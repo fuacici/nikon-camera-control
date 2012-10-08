@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Xml.Serialization;
 using CameraControl.Core.Devices.Classes;
 
@@ -234,6 +235,17 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private System.Windows.Media.Color _fullScreenColor;
+    public System.Windows.Media.Color FullScreenColor
+    {
+      get { return _fullScreenColor; }
+      set
+      {
+        _fullScreenColor = value;
+        NotifyPropertyChanged("FullScreenColor");
+      }
+    }
+
     private int _previewSeconds;
     public int PreviewSeconds
     {
@@ -347,6 +359,7 @@ namespace CameraControl.Core.Classes
       LargeFocusStep = 500;
       Rotate = RotateFlipType.RotateNoneFlipNone;
       CameraProperties = new CameraPropertyEnumerator();
+      FullScreenColor = System.Windows.Media.Colors.Black;
     }
 
     public void Add(PhotoSession session)

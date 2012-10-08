@@ -63,13 +63,16 @@ namespace CameraControl.Core.Classes
         {
           if (_currentfile.FileItem.IsRaw)
           {
+            Log.Debug("Loading raw file.");
             BitmapDecoder bmpDec = BitmapDecoder.Create(new Uri(_currentfile.FileItem.FileName), BitmapCreateOptions.None,
                                                         BitmapCacheOption.OnLoad);
 
             _currentfile.DisplayImage = bmpDec.Frames.Single();
+            Log.Debug("Loading raw file done.");
           }
           else
           {
+            Log.Debug("Loading bitmap file.");
             Bitmap image = (Bitmap)Image.FromFile(_currentfile.FileItem.FileName);
             var exif = new EXIFextractor(ref image, "n");
             if (exif["Orientation"] != null)
@@ -87,6 +90,7 @@ namespace CameraControl.Core.Classes
             }
             _currentfile.DisplayImage = BitmapSourceConvert.ToBitmapSource(image);
             image.Dispose();
+            Log.Debug("Loading bitmap file done.");
           }
         }
         catch (Exception exception)
@@ -115,16 +119,19 @@ namespace CameraControl.Core.Classes
       BitmapFile file = o as BitmapFile;
       try
       {
-        using (Bitmap bmp = new Bitmap(file.FileItem.FileName))
+        if (!file.FileItem.IsRaw)
         {
-          // Luminance
-          ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
-          file.LuminanceHistogramPoints = ConvertToPointCollection(hslStatistics.Luminance.Values);
-          // RGB
-          ImageStatistics rgbStatistics = new ImageStatistics(bmp);
-          file.RedColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Red.Values);
-          file.GreenColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Green.Values);
-          file.BlueColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Blue.Values);
+          using (Bitmap bmp = new Bitmap(file.FileItem.FileName))
+          {
+            // Luminance
+            ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
+            file.LuminanceHistogramPoints = ConvertToPointCollection(hslStatistics.Luminance.Values);
+            // RGB
+            ImageStatistics rgbStatistics = new ImageStatistics(bmp);
+            file.RedColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Red.Values);
+            file.GreenColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Green.Values);
+            file.BlueColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Blue.Values);
+          }
         }
         GetMetadata(file);
       }

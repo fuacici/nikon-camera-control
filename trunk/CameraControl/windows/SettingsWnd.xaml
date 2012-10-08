@@ -35,7 +35,7 @@
                         <CheckBox Content="Auto preview"  IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=AutoPreview}" ToolTip="Disable this option if you use Lightroom"/>
                     </StackPanel>
                     <StackPanel Margin="3">
-                        <CheckBox Content="Preview image after shot in fullscreen" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=Preview}"/>
+                        <CheckBox Content="Preview image after capture in fullscreen" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=Preview}"/>
                         <StackPanel Orientation="Horizontal" Margin="3">
                             <Label Content="Preview time in sec : "/>
                             <xctk:IntegerUpDown Minimum="2" Width="100" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=PreviewSeconds}"/>
@@ -54,6 +54,10 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="3">
                         <CheckBox Content="Don't load thumbnails" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DontLoadThumbnails}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Label Content="Fullscreen window background : "/>
+                        <xctk:ColorPicker SelectedColor="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=FullScreenColor}" Width="110"/>
                     </StackPanel>
                 </StackPanel>
             </TabItem>
@@ -94,7 +98,7 @@
                         <RowDefinition Height="25" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="25" />
-                        <RowDefinition Height="5" />                        
+                        <RowDefinition Height="5" />
                         <RowDefinition Height="25" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="25" />
