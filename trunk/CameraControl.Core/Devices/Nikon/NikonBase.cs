@@ -315,6 +315,10 @@ namespace CameraControl.Core.Devices.Nikon
         IsConnected = false;
         ServiceProvider.DeviceManager.DisconnectCamera(StillImageDevice);
       }
+      else
+      {
+        getEvent();
+      }
     }
 
 

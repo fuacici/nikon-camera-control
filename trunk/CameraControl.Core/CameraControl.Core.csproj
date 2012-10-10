@@ -113,6 +113,7 @@
     <Compile Include="Devices\Nikon\NikonD60.cs" />
     <Compile Include="Devices\Nikon\NikonD600.cs" />
     <Compile Include="Devices\Nikon\NikonD700.cs" />
+    <Compile Include="Devices\Nikon\NikonD7000.cs" />
     <Compile Include="Devices\Nikon\NikonD80.cs" />
     <Compile Include="Devices\Nikon\NikonD800.cs" />
     <Compile Include="Devices\Nikon\NikonD90.cs" />

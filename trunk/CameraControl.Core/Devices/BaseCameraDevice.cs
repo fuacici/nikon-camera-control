@@ -357,7 +357,7 @@ namespace CameraControl.Core.Devices
 
     public void OnPhotoCapture(object sender, PhotoCapturedEventArgs args)
     {
-      if (CaptureCompleted != null)
+      if (PhotoCaptured != null)
       {
         PhotoCaptured(sender, args);
       }

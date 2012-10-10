@@ -200,16 +200,16 @@ namespace CameraControl
     private void button3_Click(object sender, RoutedEventArgs e)
     {
       Log.Debug("Main window capture started"); 
-      if (!ServiceProvider.Settings.DefaultSession.TimeLapse.IsDisabled)
-      {
-        if (
-          MessageBox.Show("A time lapse photo session runnig !\n Do you want to stop it  ?",
-                          "", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
-        {
-          ServiceProvider.Settings.DefaultSession.TimeLapse.Stop();
-          return;
-        }
-      }
+      //if (!ServiceProvider.Settings.DefaultSession.TimeLapse.IsDisabled)
+      //{
+      //  if (
+      //    MessageBox.Show("A time lapse photo session runnig !\n Do you want to stop it  ?",
+      //                    "", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+      //  {
+      //    ServiceProvider.Settings.DefaultSession.TimeLapse.Stop();
+      //    return;
+      //  }
+      //}
 
       try
       {
