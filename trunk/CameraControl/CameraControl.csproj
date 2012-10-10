@@ -124,6 +124,9 @@
       <DependentUpon>LayoutNormal.xaml</DependentUpon>
     </Compile>
     <Compile Include="Layouts\LayoutTypeEnum.cs" />
+    <Compile Include="Translation\TranslateExtension.cs" />
+    <Compile Include="Translation\TranslationManager.cs" />
+    <Compile Include="Translation\TranslationStrings.cs" />
     <Compile Include="windows\AboutWnd.xaml.cs">
       <DependentUpon>AboutWnd.xaml</DependentUpon>
     </Compile>
@@ -344,10 +347,6 @@
       <Project>{E9F048C1-C6A0-4CCD-BE57-4E76A7F8B32D}</Project>
       <Name>PortableDeviceLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WPFSharp.Globalizer\WPFSharp.Globalizer.csproj">
-      <Project>{715461E8-4E54-4993-80A8-8E72892135E0}</Project>
-      <Name>WPFSharp.Globalizer</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\About.png" />
@@ -382,7 +381,6 @@
     <SplashScreen Include="SplashScreen.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Devices\" />
     <Folder Include="Images\Classes\" />
   </ItemGroup>
   <ItemGroup>
