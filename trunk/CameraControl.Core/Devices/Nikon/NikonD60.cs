@@ -45,8 +45,9 @@ namespace CameraControl.Core.Devices.Nikon
       bool res = base.Init(deviceDescriptor);
       Capabilities.Clear();
       Capabilities.Add(CapabilityEnum.CaptureNoAf);
+      Capabilities.Add(CapabilityEnum.CaptureInRam);
       HaveLiveView = false;
-      CaptureInSdRam = false;
+      CaptureInSdRam = true;
       PropertyChanged -= NikonBase_PropertyChanged;
       return res;
     }
