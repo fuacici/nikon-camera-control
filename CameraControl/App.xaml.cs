@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using CameraControl.Actions;
@@ -12,6 +13,7 @@ using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
+using CameraControl.Translation;
 using CameraControl.windows;
 
 namespace CameraControl
@@ -69,8 +71,8 @@ namespace CameraControl
       ServiceProvider.WindowsManager.Add(new BrowseWnd());
       ServiceProvider.WindowsManager.Add(new TagSelectorWnd());
       ServiceProvider.WindowsManager.Event += WindowsManager_Event;
-
       ServiceProvider.Trigger.Start();
+      TranslationManager.LoadLanguage(Thread.CurrentThread.CurrentCulture.Name);
     }
 
     void WindowsManager_Event(string cmd, object o)

@@ -1,13 +1,13 @@
 ﻿<Window x:Class="CameraControl.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:Globalizer="clr-namespace:WPFSharp.Globalizer;assembly=WPFSharp.Globalizer"
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         themes:ThemeManager.Theme="{Binding  Path=CurrentTheme}"
         Title="NCC" Height="768" Width="1024" Loaded="Window_Loaded" xmlns:my="clr-namespace:CameraControl"
         xmlns:local="clr-namespace:CameraControl.Controls"
         xmlns:Classes="clr-namespace:CameraControl.Core.Classes;assembly=CameraControl.Core"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
+        xmlns:T="clr-namespace:CameraControl.Translation"
         Background="{DynamicResource WindowBackgroundBrush}"
         Closed="Window_Closed" Closing="Window_Closing" Icon="/CameraControl;component/Images/logo.png" WindowState="Maximized" VerticalContentAlignment="Center">
     <Window.Resources>
@@ -82,9 +82,9 @@
         </ToolBar>
         <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="12,6,131,14" Grid.Row="2" Grid.ColumnSpan="2" />
         <Menu Grid.ColumnSpan="4" Name="menu1">
-            <MenuItem Header="{Globalizer:GlobalizedResource Menu_File, FallbackValue='_File'}">
-                <MenuItem Header="{Globalizer:GlobalizedResource Menu_ReScan, FallbackValue='Rescan connected cameras'}" Name="mnu_reconnect" Click="mnu_reconnect_Click" />
-                <MenuItem Header="{Globalizer:GlobalizedResource Menu_ConnectedCameras, FallbackValue='Connected cameras'}" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" >
+            <MenuItem Header="{T:TranslateExtension MenuFile}">
+                <MenuItem Header="{T:TranslateExtension MenuReScan}" Name="mnu_reconnect" Click="mnu_reconnect_Click" />
+                <MenuItem Header="{T:TranslateExtension MenuConnectedCameras}" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" >
                     <MenuItem.ItemTemplate>
                         <DataTemplate>
                             <MenuItem Header="{Binding Path=DisplayName}" 
@@ -93,20 +93,20 @@
                         </DataTemplate>
                     </MenuItem.ItemTemplate>
                 </MenuItem>
-                <MenuItem Header="{Globalizer:GlobalizedResource Menu_Exit, FallbackValue='Exit'}" Command="ApplicationCommands.Close"/>
+                <MenuItem Header="{T:TranslateExtension MenuExit}" Command="ApplicationCommands.Close"/>
             </MenuItem>
-            <MenuItem Header="{Globalizer:GlobalizedResource Menu_View, FallbackValue='_View'}">
-                <MenuItem Header="{Globalizer:GlobalizedResource Menu_MultipleCamera, FallbackValue='Multiple camera control'}" Click="MenuItem_Click_2"/>
+            <MenuItem Header="{T:TranslateExtension MenuView}">
+                <MenuItem Header="{T:TranslateExtension MenuMultipleCamera}" Click="MenuItem_Click_2"/>
                 <Separator/>
-                <MenuItem Header="{Globalizer:GlobalizedResource Menu_SelectedCameraProperty, FallbackValue='Selected camera property'}" Click="MenuItem_Click_3" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}"/>
+                <MenuItem Header="{T:TranslateExtension MenuSelectedCameraProperty}" Click="MenuItem_Click_3" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}"/>
             </MenuItem>
-            <MenuItem Header="Layout">
-                <MenuItem Header="Normal" Click="MenuItem_Click_6" />
-                <MenuItem Header="Grid right" Click="MenuItem_Click_7" />
-                <MenuItem Header="Grid" Click="MenuItem_Click_8" />
+            <MenuItem Header="{T:TranslateExtension MenuLayout}">
+                <MenuItem Header="{T:TranslateExtension MenuLayoutNormal}" Click="MenuItem_Click_6" />
+                <MenuItem Header="{T:TranslateExtension MenuLayoutGridRight}" Click="MenuItem_Click_7" />
+                <MenuItem Header="{T:TranslateExtension MenuLayoutGrid}" Click="MenuItem_Click_8" />
             </MenuItem>
-            <MenuItem Header="{Globalizer:GlobalizedResource Menu_Presets, FallbackValue='Presets'}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}">
-                <MenuItem Header="{Globalizer:GlobalizedResource Menu_PresetsLoad, FallbackValue='Load'}" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CameraPresets}" >
+            <MenuItem Header="{T:TranslateExtension MenuPresets}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}">
+                <MenuItem Header="{T:TranslateExtension MenuPresetsLoad}" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CameraPresets}" >
                     <MenuItem.ItemTemplate>
                         <DataTemplate>
                             <MenuItem Header="{Binding Path=Name}" 
@@ -115,15 +115,15 @@
                         </DataTemplate>
                     </MenuItem.ItemTemplate>
                 </MenuItem>
-                <MenuItem Header="{Globalizer:GlobalizedResource Menu_PresetsSave, FallbackValue='Save'}" Click="MenuItem_Click_4" />
-                <MenuItem Header="{Globalizer:GlobalizedResource Menu_PresetsEdit, FallbackValue='Edit'}" Click="MenuItem_Click_5" />
+                <MenuItem Header="{T:TranslateExtension MenuPresetsSave}" Click="MenuItem_Click_4" />
+                <MenuItem Header="{T:TranslateExtension MenuPresetsEdit}" Click="MenuItem_Click_5" />
             </MenuItem>
-            <MenuItem Header="{Globalizer:GlobalizedResource Menu_Help, FallbackValue='_Help'}">
-                <MenuItem Header="{Globalizer:GlobalizedResource Menu_HomePage, FallbackValue='Home page'}" Click="MenuItem_Click" />
-                <MenuItem Header="{Globalizer:GlobalizedResource Menu_CheckForUpdate, FallbackValue='Check for update'}" Name="mnu_update" Click="MenuItem_Click_1" />
-                <MenuItem Header="{Globalizer:GlobalizedResource Menu_Donate, FallbackValue='Donate'}" Name="mnu_donate" Click="mnu_donate_Click" />                
+            <MenuItem Header="{T:TranslateExtension MenuHelp}">
+                <MenuItem Header="{T:TranslateExtension MenuHomePage}" Click="MenuItem_Click" />
+                <MenuItem Header="{T:TranslateExtension MenuCheckForUpdate}" Name="mnu_update" Click="MenuItem_Click_1" />
+                <MenuItem Header="{T:TranslateExtension MenuDonate}" Name="mnu_donate" Click="mnu_donate_Click" />                
                 <Separator />
-                <MenuItem Header="{Globalizer:GlobalizedResource Menu_About, FallbackValue='About'}" Name="mnu_about" Click="btn_about_Click" />
+                <MenuItem Header="{T:TranslateExtension MenuAbout}" Name="mnu_about" Click="btn_about_Click" />
             </MenuItem>
         </Menu>
         <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,20,0" Grid.Row="1" HorizontalAlignment="Right" Width="214" Height="65"></StackPanel>
