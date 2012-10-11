@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         themes:ThemeManager.Theme="{Binding  Path=CurrentTheme}"
-        Title="NCC" Height="768" Width="1024" Loaded="Window_Loaded" xmlns:my="clr-namespace:CameraControl"
+        Title="{T:TranslateExtension MainWindowTitle}" Height="768" Width="1024" Loaded="Window_Loaded" xmlns:my="clr-namespace:CameraControl"
         xmlns:local="clr-namespace:CameraControl.Controls"
         xmlns:Classes="clr-namespace:CameraControl.Core.Classes;assembly=CameraControl.Core"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
@@ -20,8 +20,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="136" />
             <ColumnDefinition Width="118*" />
-            <ColumnDefinition Width="485*" />
-            <ColumnDefinition Width="263" />
+            <ColumnDefinition Width="454*" />
+            <ColumnDefinition Width="294" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
@@ -50,32 +50,32 @@
 
         
         <ToolBar Grid.ColumnSpan="4" Name="toolBar1" Grid.Row="1">
-            <Button ToolTip="Capture photo"  Height="50" Name="button3" Click="button3_Click" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5">
+            <Button ToolTip="{T:TranslateExtension CapturePhotoToolTip}"  Height="50" Name="button3" Click="button3_Click" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5">
                 <Image Margin="5" Source="/CameraControl;component/Images/Camera.png"/>
             </Button>
-            <Button ToolTip="Capture photo"  Height="50" Name="btn_capture_noaf" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_capture_noaf_Click">
+            <Button ToolTip="{T:TranslateExtension CapturePhotoNoAfToolTip}"  Height="50" Name="btn_capture_noaf" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_capture_noaf_Click">
                 <Grid>
                     <Image Margin="5" Source="/CameraControl;component/Images/Camera.png"/>
                     <Label Content="NoAf" HorizontalContentAlignment="Center" FontSize="14" />
                 </Grid>
             </Button>
-            <Button Content="[BR]" ToolTip="Braketing"  Height="50" Name="btn_br" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_br_Click" FontSize="15" />
+            <Button Content="[BR]" ToolTip="{T:TranslateExtension BraketingToolTip}"  Height="50" Name="btn_br" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_br_Click" FontSize="15" />
             <ToggleButton ToolTip="Image property" Height="50" Width="50" Name="button1"  Click="button1_Click" Margin="5">
                 <Image Margin="5" Source="/CameraControl;component/Images/Properties.png"/>
             </ToggleButton>
-            <Button ToolTip="Settings" Height="50" Name="button2" Width="50" Click="button2_Click" Margin="5" >
+            <Button ToolTip="{T:TranslateExtension SettingsToolTip}" Height="50" Name="button2" Width="50" Click="button2_Click" Margin="5" >
                 <Image Margin="5" Source="/CameraControl;component/Images/Settings.png" />
             </Button>
-            <Button ToolTip="Time lapse" Height="50" Name="but_timelapse" Width="50" Margin="5" Click="but_timelapse_Click">
+            <Button ToolTip="{T:TranslateExtension TimeLapseToolTip}" Height="50" Name="but_timelapse" Width="50" Margin="5" Click="but_timelapse_Click">
                 <Image Margin="5" Source="/CameraControl;component/Images/Timelapse.png" />
             </Button>
-            <Button ToolTip="Fullscreen" Height="50" Name="but_fullscreen" Width="50" Margin="5" Click="but_fullscreen_Click">
+            <Button ToolTip="{T:TranslateExtension FullscreenToolTip}" Height="50" Name="but_fullscreen" Width="50" Margin="5" Click="but_fullscreen_Click">
                 <Image Margin="5" Source="/CameraControl;component/Images/Fullscreen.png" />
             </Button>
-            <Button Content="Lv" ToolTip="Live view" Height="50" Name="btn_liveview" Width="50" Margin="5" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.HaveLiveView}" Click="btn_liveview_Click" FontSize="15" />
-            <Button Content="B" ToolTip="Browse sessions" Height="50" Name="btn_browse" Width="50" Margin="5"  FontSize="15" Click="btn_browse_Click" />
-            <Button Content="Tags" ToolTip="Select tags" Height="50" Name="btn_Tags" Width="50" Margin="5"  FontSize="15" Click="btn_Tags_Click" />
-            <Button ToolTip="About" Height="50" Name="btn_about" Width="50" Margin="5" Click="btn_about_Click">
+            <Button Content="Lv" ToolTip="{T:TranslateExtension LiveViewToolTip}" Height="50" Name="btn_liveview" Width="50" Margin="5" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.HaveLiveView}" Click="btn_liveview_Click" FontSize="15" />
+            <Button Content="B" ToolTip="{T:TranslateExtension BrowseSessionsToolTip}" Height="50" Name="btn_browse" Width="50" Margin="5"  FontSize="15" Click="btn_browse_Click" />
+            <Button Content="Tags" ToolTip="{T:TranslateExtension SelectTagsToolTip}" Height="50" Name="btn_Tags" Width="50" Margin="5"  FontSize="15" Click="btn_Tags_Click" />
+            <Button ToolTip="{T:TranslateExtension AboutToolTip}" Height="50" Name="btn_about" Width="50" Margin="5" Click="btn_about_Click">
                 <Image Margin="5" Source="/CameraControl;component/Images/About.png" />
             </Button>
             <StackPanel HorizontalAlignment="Right" IsEnabled="{Binding Path=DefaultSession.TimeLapse.IsDisabled}"></StackPanel>
@@ -129,13 +129,13 @@
         <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,20,0" Grid.Row="1" HorizontalAlignment="Right" Width="214" Height="65"></StackPanel>
         <StackPanel Orientation="Vertical" Grid.Column="3"  Grid.Row="1">
             <StackPanel>
-                <Label Content="Session" Margin="5,1,1,1" />
+                <Label Content="{T:TranslateExtension Session}" Margin="5,1,1,1" />
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <ComboBox Name="cmb_session" SelectedValue="{Binding Path=DefaultSession}" ItemsSource="{Binding Path=PhotoSessions}" Width="150" Margin="3" />
-                <Button Content="Add" Grid.Column="3" Name="btn_add_Sesion" Margin="3" Click="btn_add_Sesion_Click" />
-                <Button Content="Edit" Grid.Column="3" Name="btn_edit_Sesion" Margin="3" Click="btn_edit_Sesion_Click" />
-                <Button Content="Del" Grid.Column="3" Name="btn_del_Sesion" Margin="3" Click="btn_del_Sesion_Click" />
+                <Button Content="{T:TranslateExtension SessionAdd}" Grid.Column="3" Name="btn_add_Sesion" Margin="3" Click="btn_add_Sesion_Click" />
+                <Button Content="{T:TranslateExtension SessionEdit}" Grid.Column="3" Name="btn_edit_Sesion" Margin="3" Click="btn_edit_Sesion_Click" />
+                <Button Content="{T:TranslateExtension SessionDel}" Grid.Column="3" Name="btn_del_Sesion" Margin="3" Click="btn_del_Sesion_Click" />
             </StackPanel>
         </StackPanel>
     </Grid>
