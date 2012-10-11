@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" 
-             d:DesignHeight="528" d:DesignWidth="235" BorderBrush="{x:Null}" BorderThickness="1" xmlns:my="clr-namespace:CameraControl.Controls"
-             xmlns:Devices1="clr-namespace:CameraControl.Core.Devices;assembly=CameraControl.Core">
+             d:DesignHeight="593" d:DesignWidth="235" BorderBrush="{x:Null}" BorderThickness="1" xmlns:my="clr-namespace:CameraControl.Controls"
+             xmlns:Devices1="clr-namespace:CameraControl.Core.Devices;assembly=CameraControl.Core"
+             xmlns:T="clr-namespace:CameraControl.Translation">
     <UserControl.DataContext>
         <Devices1:CameraDeviceManager/>
     </UserControl.DataContext>
@@ -27,67 +28,67 @@
             <ColumnDefinition Width="43*" />
         </Grid.ColumnDefinitions>
         <WrapPanel  HorizontalAlignment="Left"  Name="wrapPanel1" VerticalAlignment="Top" ItemWidth="100">
-        <StackPanel>
-            <my:ExposureStatusControl x:Name="exposureStatusControl1" ExposureStatus="{Binding Path=SelectedCameraDevice.ExposureStatus, Mode=TwoWay}" />
-        </StackPanel>
-        <StackPanel Margin="1">
-            <Label Content="Mode" />
-            <ComboBox Name="cmb_mode" IsEnabled="{Binding Path=SelectedCameraDevice.Mode.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.Mode.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.Mode.Value}" />
-        </StackPanel>
-        <StackPanel Margin="1">
-            <Label Content="_Iso" Name="label1" Target="{Binding ElementName=cmb_iso}" />
-            <ComboBox Name="cmb_iso" IsEnabled="{Binding Path=SelectedCameraDevice.IsoNumber.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.IsoNumber.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.IsoNumber.Value}" GotFocus="cmb_shutter_GotFocus" />
-        </StackPanel>
-        <StackPanel Margin="1">
-            <Label Content="_Shutter speed" Name="label2" Target="{Binding ElementName=cmb_shutter}"/>
-            <ComboBox Name="cmb_shutter" IsEnabled="{Binding Path=SelectedCameraDevice.ShutterSpeed.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.ShutterSpeed.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.ShutterSpeed.Value}" GotFocus="cmb_shutter_GotFocus" />
-        </StackPanel>
-        <StackPanel Margin="1">
-            <Label Content="_Aperture" Name="label3" Target="{Binding ElementName=cmb_aperture}"/>
-            <ComboBox Name="cmb_aperture" IsEnabled="{Binding Path=SelectedCameraDevice.FNumber.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.FNumber.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.FNumber.Value}" GotFocus="cmb_shutter_GotFocus" />
-        </StackPanel>
-        <StackPanel Margin="1">
-            <Label Content="_White Balance" Target="{Binding ElementName=cmb_WB}"/>
-            <ComboBox Name="cmb_WB" IsEnabled="{Binding Path=SelectedCameraDevice.WhiteBalance.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.WhiteBalance.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.WhiteBalance.Value}" GotFocus="cmb_shutter_GotFocus" />
-        </StackPanel>
-        <StackPanel Margin="1">
-            <Label Content="_Exposure Comp." Target="{Binding ElementName=cmb_EComp}"/>
-            <ComboBox Name="cmb_EComp" IsEnabled="{Binding Path=SelectedCameraDevice.ExposureCompensation.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.ExposureCompensation.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.ExposureCompensation.Value}" GotFocus="cmb_shutter_GotFocus" />
-        </StackPanel>
-        <StackPanel Margin="1">
-            <Label Content="_Compression" Target="{Binding ElementName=cmb_com}"/>
-            <ComboBox Name="cmb_com" IsEnabled="{Binding Path=SelectedCameraDevice.CompressionSetting.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.CompressionSetting.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.CompressionSetting.Value}" GotFocus="cmb_shutter_GotFocus" />
-        </StackPanel>
-        <StackPanel Margin="1">
-            <Label Content="_Metering Mode" Target="{Binding ElementName=cmb_meter}"/>
-            <ComboBox Name="cmb_meter"  IsEnabled="{Binding Path=SelectedCameraDevice.ExposureMeteringMode.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.ExposureMeteringMode.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.ExposureMeteringMode.Value}" GotFocus="cmb_shutter_GotFocus" />
-        </StackPanel>
-        <StackPanel Margin="1">
-            <Label Content="_Focus Mode" Target="{Binding ElementName=cmb_focus}"/>
-            <ComboBox Name="cmb_focus" IsEnabled="{Binding Path=SelectedCameraDevice.FocusMode.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.FocusMode.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.FocusMode.Value}" GotFocus="cmb_shutter_GotFocus" />
-        </StackPanel>
-        <StackPanel Margin="1">
-            <Label Content="Battery"  />
-            <ProgressBar Minimum="0" Maximum="100" Height="20" Value="{Binding Path=SelectedCameraDevice.Battery}" ToolTip="{Binding Path=SelectedCameraDevice.Battery}" Style="{x:Null}">
-                <ProgressBar.Foreground>
-                    <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
-                        <GradientStop Color="#FFDEDE17" Offset="0.541" />
-                        <GradientStop Color="#FF009600" Offset="0.988" />
-                        <GradientStop Color="#FF0DAD1D" Offset="0.023" />
-                    </LinearGradientBrush>
-                </ProgressBar.Foreground>
-            </ProgressBar>
-        </StackPanel>
-        <StackPanel Margin="1">
-            <CheckBox Content="SD_Ram" IsChecked="{Binding Path=SelectedCameraDevice.CaptureInSdRam}" ToolTip="Capture images direct to PC without using card" Name="chk_sdram"/>
-            <Button Height="23" Name="button1" Width="25" Click="button1_Click">
-                <Button.Content>
-                    <Image Source="/CameraControl;component/Images/Properties.png" />
-                </Button.Content>
-            </Button>
-        </StackPanel>
-    </WrapPanel>
-        <Expander Grid.Column="1"  Name="expander1" UseLayoutRounding="True" ExpandDirection="Right" IsExpanded="False" BorderThickness="0">
+            <StackPanel>
+                <my:ExposureStatusControl x:Name="exposureStatusControl1" ExposureStatus="{Binding Path=SelectedCameraDevice.ExposureStatus, Mode=TwoWay}" />
+            </StackPanel>
+            <StackPanel Margin="1">
+                <Label Content="{T:TranslateExtension Mode}" />
+                <ComboBox Name="cmb_mode" IsEnabled="{Binding Path=SelectedCameraDevice.Mode.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.Mode.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.Mode.Value}" />
+            </StackPanel>
+            <StackPanel Margin="1">
+                <Label Content="{T:TranslateExtension Iso}" Target="{Binding ElementName=cmb_iso}" />
+                <ComboBox Name="cmb_iso" IsEnabled="{Binding Path=SelectedCameraDevice.IsoNumber.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.IsoNumber.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.IsoNumber.Value}" GotFocus="cmb_shutter_GotFocus" />
+            </StackPanel>
+            <StackPanel Margin="1">
+                <Label Content="{T:TranslateExtension ShutterSpeed}" Target="{Binding ElementName=cmb_shutter}"/>
+                <ComboBox Name="cmb_shutter" IsEnabled="{Binding Path=SelectedCameraDevice.ShutterSpeed.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.ShutterSpeed.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.ShutterSpeed.Value}" GotFocus="cmb_shutter_GotFocus" />
+            </StackPanel>
+            <StackPanel Margin="1">
+                <Label Content="{T:TranslateExtension Aperture}" Target="{Binding ElementName=cmb_aperture}"/>
+                <ComboBox Name="cmb_aperture" IsEnabled="{Binding Path=SelectedCameraDevice.FNumber.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.FNumber.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.FNumber.Value}" GotFocus="cmb_shutter_GotFocus" />
+            </StackPanel>
+            <StackPanel Margin="1">
+                <Label Content="{T:TranslateExtension WhiteBalance}" Target="{Binding ElementName=cmb_WB}"/>
+                <ComboBox Name="cmb_WB" IsEnabled="{Binding Path=SelectedCameraDevice.WhiteBalance.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.WhiteBalance.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.WhiteBalance.Value}" GotFocus="cmb_shutter_GotFocus" />
+            </StackPanel>
+            <StackPanel Margin="1">
+                <Label Content="{T:TranslateExtension ExposureComp}" Target="{Binding ElementName=cmb_EComp}"/>
+                <ComboBox Name="cmb_EComp" IsEnabled="{Binding Path=SelectedCameraDevice.ExposureCompensation.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.ExposureCompensation.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.ExposureCompensation.Value}" GotFocus="cmb_shutter_GotFocus" />
+            </StackPanel>
+            <StackPanel Margin="1">
+                <Label Content="{T:TranslateExtension Compression}" Target="{Binding ElementName=cmb_com}"/>
+                <ComboBox Name="cmb_com" IsEnabled="{Binding Path=SelectedCameraDevice.CompressionSetting.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.CompressionSetting.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.CompressionSetting.Value}" GotFocus="cmb_shutter_GotFocus" />
+            </StackPanel>
+            <StackPanel Margin="1">
+                <Label Content="{T:TranslateExtension MeteringMode}" Target="{Binding ElementName=cmb_meter}"/>
+                <ComboBox Name="cmb_meter"  IsEnabled="{Binding Path=SelectedCameraDevice.ExposureMeteringMode.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.ExposureMeteringMode.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.ExposureMeteringMode.Value}" GotFocus="cmb_shutter_GotFocus" />
+            </StackPanel>
+            <StackPanel Margin="1">
+                <Label Content="{T:TranslateExtension FocusMode}" Target="{Binding ElementName=cmb_focus}"/>
+                <ComboBox Name="cmb_focus" IsEnabled="{Binding Path=SelectedCameraDevice.FocusMode.IsEnabled}" ItemsSource="{Binding Path=SelectedCameraDevice.FocusMode.Values}" SelectedValue="{Binding Path=SelectedCameraDevice.FocusMode.Value}" GotFocus="cmb_shutter_GotFocus" />
+            </StackPanel>
+            <StackPanel Margin="1">
+                <Label Content="{T:TranslateExtension Battery}"  />
+                <ProgressBar Minimum="0" Maximum="100" Height="20" Value="{Binding Path=SelectedCameraDevice.Battery}" ToolTip="{Binding Path=SelectedCameraDevice.Battery}" Style="{x:Null}">
+                    <ProgressBar.Foreground>
+                        <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                            <GradientStop Color="#FFDEDE17" Offset="0.541" />
+                            <GradientStop Color="#FF009600" Offset="0.988" />
+                            <GradientStop Color="#FF0DAD1D" Offset="0.023" />
+                        </LinearGradientBrush>
+                    </ProgressBar.Foreground>
+                </ProgressBar>
+            </StackPanel>
+            <StackPanel Margin="1">
+                <CheckBox Content="{T:TranslateExtension SDRam}" IsChecked="{Binding Path=SelectedCameraDevice.CaptureInSdRam}" ToolTip="{T:TranslateExtension SDRamToolTip}" Name="chk_sdram"/>
+                <Button Height="23" Name="button1" Width="25" Click="button1_Click">
+                    <Button.Content>
+                        <Image Source="/CameraControl;component/Images/Properties.png" />
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </WrapPanel>
+        <Expander Grid.Column="1"  Name="expander1" UseLayoutRounding="True" ExpandDirection="Right" IsExpanded="False" BorderThickness="0" Margin="0,0,0,3">
             <Grid>
                 <ListBox Name="listBox1" ItemsSource="{Binding Path=SelectedCameraDevice.AdvancedProperties}" Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control, AncestorLevel=1}, Path=Background}">
                     <ListBox.ItemTemplate>

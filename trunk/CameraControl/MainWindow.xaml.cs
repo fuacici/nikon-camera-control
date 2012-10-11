@@ -11,6 +11,7 @@ using CameraControl.Core.Classes;
 using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
 using CameraControl.Layouts;
+using CameraControl.Translation;
 using CameraControl.windows;
 using EditSession = CameraControl.windows.EditSession;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -105,7 +106,7 @@ namespace CameraControl
         return;
       try
       {
-        StaticHelper.Instance.SystemMessage = "Photo transfer begin.";
+        StaticHelper.Instance.SystemMessage = TranslationStrings.MsgPhotoTransferBegin;
         Log.Debug("Photo transfer begin.");
         PhotoSession session = eventArgs.CameraDevice.AttachedPhotoSession;
         if (session == null)
@@ -148,7 +149,7 @@ namespace CameraControl
           session.AddFile(fileName);
         }
         ServiceProvider.Settings.Save(session);
-        StaticHelper.Instance.SystemMessage = "Photo transfer done.";
+        StaticHelper.Instance.SystemMessage = TranslationStrings.MsgPhotoTransferDone;
         eventArgs.CameraDevice.IsBusy = false;
         //show fullscreen only when the multiple camera support isn't used
         if (ServiceProvider.Settings.Preview && !ServiceProvider.WindowsManager.Get(typeof(MultipleCameraWnd)).IsVisible)
@@ -161,7 +162,7 @@ namespace CameraControl
       catch (Exception ex)
       {
         eventArgs.CameraDevice.IsBusy = false;
-        StaticHelper.Instance.SystemMessage = "Transfer error !\nMessage :" + ex.Message;
+        StaticHelper.Instance.SystemMessage = string.Format(TranslationStrings.MsgPhotoTransferError, ex.Message);
         Log.Error("Transfer error !", ex);
       }
     }
@@ -199,7 +200,7 @@ namespace CameraControl
 
     private void button3_Click(object sender, RoutedEventArgs e)
     {
-      Log.Debug("Main window capture started"); 
+      Log.Debug("Main window capture started");
       //if (!ServiceProvider.Settings.DefaultSession.TimeLapse.IsDisabled)
       //{
       //  if (
@@ -223,23 +224,22 @@ namespace CameraControl
           }
           else
           {
-           StaticHelper.Instance.SystemMessage = "Bulb mode not supported !";
+            StaticHelper.Instance.SystemMessage = TranslationStrings.MsgBulbModeNotSupported;
             return;
           }
         }
         ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
       }
       catch (DeviceException exception)
-        {
-         StaticHelper.Instance.SystemMessage = exception.Message;
-          Log.Error("Take photo", exception);
-        }
+      {
+        StaticHelper.Instance.SystemMessage = exception.Message;
+        Log.Error("Take photo", exception);
+      }
       catch (Exception exception)
       {
         MessageBox.Show("No picture was taken !\n" + exception.Message);
         Log.Error("Take photo", exception);
       }
-
     }
 
     private void btn_edit_Sesion_Click(object sender, RoutedEventArgs e)
@@ -323,19 +323,19 @@ namespace CameraControl
 
     private void Window_Closing(object sender, CancelEventArgs e)
     {
-      if (!ServiceProvider.Settings.DefaultSession.TimeLapse.IsDisabled)
-      {
-        if (
-          MessageBox.Show("A time lapse photo session runnig !\n Do you want to stop it and exit from application ?",
-                          "Closing", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
-        {
-          e.Cancel = true;
-        }
-        else
-        {
-          ServiceProvider.Settings.DefaultSession.TimeLapse.Stop();
-        }
-      }
+      //if (!ServiceProvider.Settings.DefaultSession.TimeLapse.IsDisabled)
+      //{
+      //  if (
+      //    MessageBox.Show("A time lapse photo session runnig !\n Do you want to stop it and exit from application ?",
+      //                    "Closing", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
+      //  {
+      //    e.Cancel = true;
+      //  }
+      //  else
+      //  {
+      //    ServiceProvider.Settings.DefaultSession.TimeLapse.Stop();
+      //  }
+      //}
     }
 
     private void but_fullscreen_Click(object sender, RoutedEventArgs e)
@@ -377,7 +377,7 @@ namespace CameraControl
       }
       else
       {
-        MessageBox.Show("Your application is up to date !"); 
+        MessageBox.Show(TranslationStrings.MsgApplicationUpToDate); 
       }
     }
 
@@ -449,7 +449,7 @@ namespace CameraControl
           }
           else
           {
-            StaticHelper.Instance.SystemMessage = "Bulb mode not supported !";
+            StaticHelper.Instance.SystemMessage = TranslationStrings.MsgBulbModeNotSupported;
             return;
           }
         }
@@ -525,7 +525,7 @@ namespace CameraControl
     {
       if(ServiceProvider.Settings.DefaultSession.Tags.Count==0)
       {
-        MessageBox.Show("Use session editor to define tags !");
+        MessageBox.Show(TranslationStrings.MsgUseSessionEditorTags);
         return;
       }
       ServiceProvider.WindowsManager.ExecuteCommand(ServiceProvider.WindowsManager.Get(typeof(TagSelectorWnd)).IsVisible
@@ -537,7 +537,7 @@ namespace CameraControl
     {
       if(ServiceProvider.Settings.PhotoSessions.Count>1)
       {
-        if (MessageBox.Show(string.Format("Do you want continue to deleting sesion <{0}>?\nNo files will be deleted !",ServiceProvider.Settings.DefaultSession.Name),"Delete session",MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+        if (MessageBox.Show(string.Format(TranslationStrings.MsgDeleteSessionQuestion,ServiceProvider.Settings.DefaultSession.Name),"Delete session",MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
         {
           PhotoSession session = ServiceProvider.Settings.DefaultSession;
           ServiceProvider.Settings.DefaultSession = ServiceProvider.Settings.PhotoSessions[0];
@@ -548,7 +548,7 @@ namespace CameraControl
       }
       else
       {
-        MessageBox.Show("More that one sesion needed !");
+        MessageBox.Show(TranslationStrings.MsgLastSessionCantBeDeleted);
       }
     }
   }
