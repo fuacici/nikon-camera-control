@@ -125,6 +125,7 @@
     </Compile>
     <Compile Include="Layouts\LayoutTypeEnum.cs" />
     <Compile Include="Translation\TranslateExtension.cs" />
+    <Compile Include="Translation\TranslationLangDesc.cs" />
     <Compile Include="Translation\TranslationManager.cs" />
     <Compile Include="Translation\TranslationStrings.cs" />
     <Compile Include="windows\AboutWnd.xaml.cs">

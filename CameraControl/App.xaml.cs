@@ -72,7 +72,7 @@ namespace CameraControl
       ServiceProvider.WindowsManager.Add(new TagSelectorWnd());
       ServiceProvider.WindowsManager.Event += WindowsManager_Event;
       ServiceProvider.Trigger.Start();
-      TranslationManager.LoadLanguage(Thread.CurrentThread.CurrentCulture.Name);
+      TranslationManager.LoadLanguage(ServiceProvider.Settings.SelectedLanguage);
     }
 
     void WindowsManager_Event(string cmd, object o)

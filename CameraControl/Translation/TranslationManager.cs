@@ -4,6 +4,8 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Xml;
+using CameraControl.Core;
+using CameraControl.Core.Classes;
 
 namespace CameraControl.Translation
 {
@@ -13,10 +15,43 @@ namespace CameraControl.Translation
     private static readonly string _path = string.Empty;
     private static readonly DateTimeFormatInfo _info;
 
+    private static AsyncObservableCollection<TranslationLangDesc> _availableLangs;
+    public static AsyncObservableCollection<TranslationLangDesc> AvailableLangs
+    {
+      get
+      {
+        if (_availableLangs == null)
+          _availableLangs = new AsyncObservableCollection<TranslationLangDesc>();
+        return _availableLangs;
+      }
+      set { _availableLangs = value; }
+    }
 
     static TranslationManager()
     {
-      _path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);  
+      AvailableLangs = new AsyncObservableCollection<TranslationLangDesc>();
+      try
+      {
+        _path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        string[] dirs = Directory.GetDirectories(Path.Combine(_path, "Languages"));
+        foreach (string dir in dirs)
+        {
+          try
+          {
+            CultureInfo cult = CultureInfo.GetCultureInfo(Path.GetFileName(dir));
+            AvailableLangs.Add(new TranslationLangDesc() { Value = Path.GetFileName(dir), Name = cult.NativeName });
+          }
+          catch (Exception exception)
+          {
+            Log.Error("Error loading language", exception);
+          }
+        }
+      }
+      catch (Exception)
+      {
+        
+        
+      }
     }
 
     /// <summary>
