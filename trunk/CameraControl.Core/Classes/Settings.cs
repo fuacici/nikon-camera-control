@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -70,6 +71,17 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private string _selectedLanguage;
+    public string SelectedLanguage
+    {
+      get { return _selectedLanguage; }
+      set
+      {
+        _selectedLanguage = value;
+        NotifyPropertyChanged("SelectedLanguage");
+      }
+    }
+
     private bool _disableNativeDrivers;
     public bool DisableNativeDrivers
     {
@@ -80,7 +92,6 @@ namespace CameraControl.Core.Classes
         NotifyPropertyChanged("DisableNativeDrivers");
       }
     }
-
 
     private string _currentTheme;
     public string CurrentTheme
@@ -359,7 +370,8 @@ namespace CameraControl.Core.Classes
       LargeFocusStep = 500;
       Rotate = RotateFlipType.RotateNoneFlipNone;
       CameraProperties = new CameraPropertyEnumerator();
-      FullScreenColor = System.Windows.Media.Colors.Black;
+      FullScreenColor = Colors.Black;
+      SelectedLanguage = Thread.CurrentThread.CurrentCulture.Name;
     }
 
     public void Add(PhotoSession session)
