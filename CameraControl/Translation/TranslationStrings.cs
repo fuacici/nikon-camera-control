@@ -30,6 +30,36 @@
     public static string SessionDel = "Del";
 
     public static string MainWindowTitle = "NCC";
+    public static string SettingsWindowTitle = "Settings";
+
+    public static string ButtonOk = "Ok";
+    public static string ButtonCancel = "Cancel";
+
+    public static string ButtonLocateLogFile = "Locate log file";
+
+    public static string LabelInterfaceLanguage = "Interface language :";
+    public static string LabelDisableDriver = "Disable native drivers (not recomanded)";
+    public static string LabelTheme = "Theme :";
+    public static string LabelGeneral = "General";
+    public static string LabelPreview = "Preview";
+    public static string LabelPlaySound = "Play sound after photo taken";
+    public static string LabelAutoPreview = "Auto preview";
+    public static string LabelPreviewAfterCapture = "Preview image after capture in fullscreen";
+    public static string LabelPreviewTime = "Preview time in sec : ";
+    public static string LabelPreviewInLIveView = "Preview image after shot in live view";
+    public static string LabelLIveViewImageFreeze = "Live view image freeze in sec : ";
+    public static string LabelRotateImage = "Rotate image :";
+    public static string LabelDontLoadThumbs = "Don't load thumbnails";
+    public static string LabelFullscrenBack = "Fullscreen window background : ";
+    public static string LabelTriggers = "Triggers";
+    public static string LabelUseKeybordToTrigger = "Use keyboard to trigger take photo";
+    public static string LabelWebserver = "Webserver";
+    public static string LabelUseWebserver = "Use web server";
+    public static string LabelFocusAndLiveview = "Focus and Live view";
+    public static string LabelSmallFocusSstep = "Small focus step";
+    public static string LabelMediumFocusStep = "Medium focus step";
+    public static string LabelLargFocusStep = "Larg focus step";
+    public static string ReStartToolTip = "You need to restart the application for this changes to take affect";
 
     public static string MsgPhotoTransferBegin = "Photo transfer begin";
     public static string MsgPhotoTransferDone = "Photo transfer done";
@@ -38,7 +68,9 @@
     public static string MsgApplicationUpToDate = "Your application is up to date !";
     public static string MsgUseSessionEditorTags = "Use session editor to define tags !";
     public static string MsgLastSessionCantBeDeleted = "Last sesion can't be deleted";
-    public static string MsgDeleteSessionQuestion = "Do you want continue to deleting sesion {0} ?\nNo files will be deleted !";
+
+    public static string MsgDeleteSessionQuestion =
+      "Do you want continue to deleting sesion {0} ?\nNo files will be deleted !";
 
     public static string MenuFile = "_File";
     public static string MenuReScan = "Rescan connected cameras";
