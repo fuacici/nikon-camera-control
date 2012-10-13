@@ -31,9 +31,22 @@
 
     public static string MainWindowTitle = "NCC";
     public static string SettingsWindowTitle = "Settings";
+    public static string SessionWindowTitle = "Session [Add/Edit]";
+    public static string LiveViewWindowTitle = "Live view";
 
     public static string ButtonOk = "Ok";
     public static string ButtonCancel = "Cancel";
+    public static string ButtonAdd = "Add";
+    public static string ButtonDelete = "Delete";
+    public static string ButtonEdit = "Edit";
+    public static string ButtonAutoFocus = "_Auto Focus";
+    public static string ButtonCapture = "_Capture";
+    public static string ButtonRecordMovie = "Record movie";
+    public static string ButtonFreezeImage = "Freeze Image";
+    public static string ButtonStart = "Start";
+    public static string ButtonPreview = "Preview";
+    public static string ButtonStop = "Stop";
+
 
     public static string ButtonLocateLogFile = "Locate log file";
 
@@ -61,6 +74,26 @@
     public static string LabelLargFocusStep = "Larg focus step";
     public static string ReStartToolTip = "You need to restart the application for this changes to take affect";
 
+    public static string LabelSessonName = "Sesson name :";
+    public static string LabelFolder = "Folder :";
+    public static string LabelFileNameTemplate = "File Name Template :";
+    public static string LabelFileNameTemplateToolTip = "$N - Session name &#xa;$C - Counter &#xa;$E - Exposure comp &#xa;$X - Camera name&#xa;$D - Current date&#xa;$Tag1 - Selected tag 1&#xa;$Tag2 - Selected tag 2&#xa;$Tag3 - Selected tag 3&#xa;$Tag4 - Selected tag 4";
+    public static string LabelCounter = "Counter :";
+    public static string LabelUseOriginal = "Use original filename gave by the camera";
+    public static string LabelUseOriginalToolTip = "This option isn't works with WIA driver";
+    public static string LabelDontDownloadPhotos = "Don't download photos to PC";
+    public static string LabelAlowFolderChange = "Alow folder change using image browser";
+    public static string LabelTags = "Tags";
+
+    public static string LabelManualFocus = "Manual Focus";
+    public static string LabelGrid = "Grid";
+    public static string LabelLvZoomRation = "Lv zoom ration";
+    public static string LabelFocusStacking = "Focus Stacking";
+    public static string LabelNoOfPhots = "No. of phots";
+    public static string LabelFocusStep = "Focus step";
+    public static string LabelLuminosity = "Luminosity";
+    
+    
     public static string MsgPhotoTransferBegin = "Photo transfer begin";
     public static string MsgPhotoTransferDone = "Photo transfer done";
     public static string MsgPhotoTransferError = "Transfer error !\nMessage :{0}";
