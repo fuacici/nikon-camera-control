@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<strings>
+    <!-- A -->
+
+    <string Field="Mode">Mode</string> 
+    <string Field="Iso">_Iso</string> 
+    <string Field="ShutterSpeed">_Shutter speed</string> 
+    <string Field="Aperture">_Aperture</string> 
+    <string Field="WhiteBalance">_White Balance</string> 
+    <string Field="ExposureComp">_Exposure Comp.</string> 
+    <string Field="Compression">_Compression</string> 
+    <string Field="MeteringMode">_Metering Mode</string> 
+    <string Field="FocusMode">_Focus Mode</string> 
+    <string Field="Battery">Battery</string> 
+    <string Field="SDRam">SD_Ram</string> 
+    <string Field="SDRamToolTip">Capture images direct to PC without using card</string> 
+    <string Field="CapturePhotoToolTip">Capture photo</string> 
+    <string Field="CapturePhotoNoAfToolTip">Capture photo no auto focus</string> 
+    <string Field="BraketingToolTip">Braketing</string> 
+    <string Field="SettingsToolTip">Settings</string> 
+    <string Field="TimeLapseToolTip">Time lapse</string> 
+    <string Field="FullscreenToolTip">Fullscreen</string> 
+    <string Field="LiveViewToolTip">Live view</string> 
+    <string Field="BrowseSessionsToolTip">Browse sessions</string> 
+    <string Field="SelectTagsToolTip">Select Tags</string> 
+    <string Field="AboutToolTip">About</string> 
+    <string Field="Session">Session</string> 
+    <string Field="SessionAdd">Add</string> 
+    <string Field="SessionEdit">Edit</string> 
+    <string Field="SessionDel">Del</string> 
+
+    <string Field="MainWindowTitle">NCC - Translated</string> 
+    <string Field="SettingsWindowTitle">Settings</string> 
+    <string Field="SessionWindowTitle">Session [Add/Edit]</string> 
+    <string Field="LiveViewWindowTitle">Live view</string> 
+    <string Field="PresetEditWindowTitle">Preset Edit</string> 
+    <string Field="BraketingWindowTitle">Braketing</string> 
+    <string Field="EditTagWindowTitle">Tag [Add/Edit]</string> 
+    <string Field="MultipleCameraWindowTitle">Multiple camera support</string> 
+    <string Field="SavePresetWindowTitle">Save Preset</string> 
+    <string Field="TimeLapseWindowTitle">Time Lapse</string> 
+
+    <string Field="ButtonOk">Ok</string> 
+    <string Field="ButtonCancel">Cancel</string> 
+    <string Field="ButtonAdd">Add</string> 
+    <string Field="ButtonDelete">Delete</string> 
+    <string Field="ButtonEdit">Edit</string> 
+    <string Field="ButtonAutoFocus">_Auto Focus</string> 
+    <string Field="ButtonCapture">_Capture</string> 
+    <string Field="ButtonRecordMovie">Record movie</string> 
+    <string Field="ButtonFreezeImage">Freeze Image</string> 
+    <string Field="ButtonStart">Start</string> 
+    <string Field="ButtonPreview">Preview</string> 
+    <string Field="ButtonStop">Stop</string> 
+    <string Field="ButtonDeletePreset">Delete preset</string> 
+    <string Field="ButtonDeleteProperty">Delete property</string> 
+    <string Field="ButtonClose">Close</string> 
+    <string Field="ButtonSave">Save</string> 
+    <string Field="ButtonCapturePhotos">Capture photos</string> 
+    <string Field="ButtonStartTimeLapse">Start TimeLapse</string> 
+    <string Field="ButtonStopTimeLapse">Stop TimeLapse</string> 
+    <string Field="ButtonCreateMovie">Create movie</string> 
+    
+    <string Field="ButtonLocateLogFile">Locate log file</string> 
+
+    <string Field="LabelInterfaceLanguage">Interface language :</string> 
+    <string Field="LabelDisableDriver">Disable native drivers (not recomanded)</string> 
+    <string Field="LabelTheme">Theme :</string> 
+    <string Field="LabelGeneral">General</string> 
+    <string Field="LabelPreview">Preview</string> 
+    <string Field="LabelPlaySound">Play sound after photo taken</string> 
+    <string Field="LabelAutoPreview">Auto preview</string> 
+    <string Field="LabelPreviewAfterCapture">Preview image after capture in fullscreen</string> 
+    <string Field="LabelPreviewTime">Preview time in sec : </string> 
+    <string Field="LabelPreviewInLIveView">Preview image after shot in live view</string> 
+    <string Field="LabelLIveViewImageFreeze">Live view image freeze in sec : </string> 
+    <string Field="LabelRotateImage">Rotate image :</string> 
+    <string Field="LabelDontLoadThumbs">Don't load thumbnails</string> 
+    <string Field="LabelFullscrenBack">Fullscreen window background : </string> 
+    <string Field="LabelTriggers">Triggers</string> 
+    <string Field="LabelUseKeybordToTrigger">Use keyboard to trigger take photo</string> 
+    <string Field="LabelWebserver">Webserver</string> 
+    <string Field="LabelUseWebserver">Use web server</string> 
+    <string Field="LabelFocusAndLiveview">Focus and Live view</string> 
+    <string Field="LabelSmallFocusSstep">Small focus step</string> 
+    <string Field="LabelMediumFocusStep">Medium focus step</string> 
+    <string Field="LabelLargFocusStep">Larg focus step</string> 
+    <string Field="ReStartToolTip">You need to restart the application for this changes to take affect</string> 
+
+    <string Field="LabelSessonName">Sesson name :</string> 
+    <string Field="LabelFolder">Folder :</string> 
+    <string Field="LabelFileNameTemplate">File Name Template :</string> 
+    <string Field="LabelFileNameTemplateToolTip">$N - Session name &#xa;$C - Counter &#xa;$E - Exposure comp &#xa;$X - Camera name&#xa;$D - Current date&#xa;$Tag1 - Selected tag 1&#xa;$Tag2 - Selected tag 2&#xa;$Tag3 - Selected tag 3&#xa;$Tag4 - Selected tag 4</string> 
+    <string Field="LabelCounter">Counter :</string> 
+    <string Field="LabelUseOriginal">Use original filename gave by the camera</string> 
+    <string Field="LabelUseOriginalToolTip">This option isn't works with WIA driver</string> 
+    <string Field="LabelDontDownloadPhotos">Don't download photos to PC</string> 
+    <string Field="LabelAlowFolderChange">Alow folder change using image browser</string> 
+    <string Field="LabelTags">Tags</string> 
+
+    <string Field="LabelManualFocus">Manual Focus</string> 
+    <string Field="LabelGrid">Grid</string> 
+    <string Field="LabelLvZoomRation">Lv zoom ration</string> 
+    <string Field="LabelFocusStacking">Focus Stacking</string> 
+    <string Field="LabelNoOfPhots">No. of phots</string> 
+    <string Field="LabelFocusStep">Focus step</string> 
+    <string Field="LabelLuminosity">Luminosity</string> 
+
+    <string Field="LabelExposureBracketing">Exposure bracketing</string> 
+    <string Field="LabelExposureBracketingToolTip">Set camera to Aperture mode and turn off Auto ISO and Auto White Balance for most reliable results.</string> 
+    <string Field="LabelManualExposureBracketing">Manual Exposure bracketing</string> 
+    <string Field="LabelManualExposureBracketingToolTip">Set camera to Manual (M) mode and turn off Auto ISO and Auto White Balance for most reliable results.</string> 
+    <string Field="LabelPresetBracketing">Preset bracketing</string> 
+
+    <string Field="LabelTagDisplayValue">Display Value</string> 
+    <string Field="LabelTagValue">Value</string> 
+    <string Field="LabelTagIncludeInGroup1">Include in group 1</string> 
+    <string Field="LabelTagIncludeInGroup2">Include in group 2</string> 
+    <string Field="LabelTagIncludeInGroup3">Include in group 3</string> 
+    <string Field="LabelTagIncludeInGroup4">Include in group 4</string> 
+
+    <string Field="LabelDelay">Delay (msec)</string> 
+    <string Field="LabelNumberOfCaptures">Number of captures</string> 
+    <string Field="LabelWaitTime">Wait time (sec)</string> 
+    <string Field="LabelDisableAutofocus">Disable autofocus</string> 
+    <string Field="LabelConnectedCameras">Connected cameras</string> 
+
+    <string Field="LabelPresetName">Preset name:</string> 
+
+    <string Field="LabelTimeLapse">TimeLapse</string> 
+    <string Field="LabelSecondsBetweenShots">Seconds between shots</string> 
+    <string Field="LabelNumberOfPhotos">Number of photos</string> 
+    <string Field="LabelDontAutofocusOnEveryCapture">Don't autofocus on every capture</string> 
+    <string Field="LabelCaptureInterval">Capture interval (HH:MM:SS)</string> 
+    <string Field="LabelMovieLenght">Movie lenght (HH:MM:SS)</string> 
+    <string Field="LabelMovieSettings">Movie settings</string> 
+    <string Field="LabelVideoFormat">Video format</string> 
+    <string Field="LabelOutputFile">Output file</string> 
+    <string Field="LabelFps">Fps</string> 
+    <string Field="LabelFillImage">Fill image</string> 
+    <string Field="LabelCreateMovie">Create movie</string> 
+    <string Field="LabelAddVirtualMovingToVideo">Add virtual moving to video</string> 
+    <string Field="LabelMovingSurface">Moving surface (%):</string> 
+    <string Field="LabelMovingDirection">Moving direction:</string> 
+    <string Field="LabelMovingDirectionLeftToRight">Left to Right</string> 
+    <string Field="LabelMovingDirectionRightToLeft">Right to Left</string> 
+    <string Field="LabelMovingDirectionTopToBottom">Top to Bottom</string> 
+    <string Field="LabelMovingDirectionBottomToTop">Bottom to Top</string> 
+    <string Field="LabelMovingDirectionLeftTopToRightBottom">Left/Top to Right/Bottom</string> 
+    <string Field="LabelMovingDirectionRightBottomToLeftTop">Right/Bottom to Left/Top</string> 
+    <string Field="LabelImageAlignment">Image alignment:</string> 
+    <string Field="LabelImageAlignmentLeftTop">Left/Top</string> 
+    <string Field="LabelImageAlignmentCenter">Center</string> 
+    <string Field="LabelImageAlignmentRightBottom">Right/Bottom</string> 
+    <string Field="LabelVideoCodecProblem">Video codec problem</string> 
+    
+    <string Field="MsgPhotoTransferBegin">Photo transfer begin</string> 
+    <string Field="MsgPhotoTransferDone">Photo transfer done</string> 
+    <string Field="MsgPhotoTransferError">Transfer error !\nMessage :{0}</string> 
+    <string Field="MsgBulbModeNotSupported">Bulb mode not supported !</string> 
+    <string Field="MsgApplicationUpToDate">Your application is up to date !</string> 
+    <string Field="MsgUseSessionEditorTags">Use session editor to define tags !</string> 
+    <string Field="MsgLastSessionCantBeDeleted">Last sesion can't be deleted</string> 
+    <string Field="MsgStopTimeLapse">The time lapse not finished! Do you want to stop the time lapse ?</string> 
+    <string Field="MsgInstallXvidCodec">Xvid codec not instaled !\nDo you want to download and install it ? </string> 
+
+    <string Field="MsgDeleteSessionQuestion">Do you want continue to deleting sesion {0} ?\nNo files will be deleted !</string> 
+
+    <string Field="MsgBracketingDone">Bracketing done</string> 
+    <string Field="MsgActionInProgress">Action in progress {0}/{1}</string> 
+
+    <string Field="MenuFile">_File</string> 
+    <string Field="MenuReScan">Rescan connected cameras</string> 
+    <string Field="MenuConnectedCameras">Connected cameras</string> 
+    <string Field="MenuExit">Exit</string> 
+    <string Field="MenuView">_View</string> 
+    <string Field="MenuMultipleCamera">Multiple camera control</string> 
+    <string Field="MenuSelectedCameraProperty">Selected camera property</string> 
+    <string Field="MenuPresets">Presets</string> 
+    <string Field="MenuPresetsLoad">Load</string> 
+    <string Field="MenuPresetsSave">Save</string> 
+    <string Field="MenuPresetsEdit">Edit</string> 
+    <string Field="MenuHelp">_Help</string> 
+    <string Field="MenuHomePage">Home page</string> 
+    <string Field="MenuCheckForUpdate">Check for update</string> 
+    <string Field="MenuDonate">Donate</string> 
+    <string Field="MenuAbout">About</string> 
+    <string Field="MenuLayout">Layout</string> 
+    <string Field="MenuLayoutNormal">Normal</string> 
+    <string Field="MenuLayoutGridRight">Grid right</string> 
+    <string Field="MenuLayoutGrid">Grid</string> 
+
+    <string Field="MenuProperties">Properties</string> 
+    <string Field="MenuUseSelectedCameraPreset">Use selected camera preset</string> 
+	
+	
+</strings>
