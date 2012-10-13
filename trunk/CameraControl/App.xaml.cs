@@ -62,7 +62,7 @@ namespace CameraControl
       ServiceProvider.Settings = new Settings();
       ServiceProvider.Settings = ServiceProvider.Settings.Load();
       ServiceProvider.Settings.LoadSessionData();
-
+      TranslationManager.LoadLanguage(ServiceProvider.Settings.SelectedLanguage);
       ServiceProvider.WindowsManager = new WindowsManager();
       ServiceProvider.WindowsManager.Add(new FullScreenWnd());
       ServiceProvider.WindowsManager.Add(new LiveViewWnd());
@@ -72,7 +72,6 @@ namespace CameraControl
       ServiceProvider.WindowsManager.Add(new TagSelectorWnd());
       ServiceProvider.WindowsManager.Event += WindowsManager_Event;
       ServiceProvider.Trigger.Start();
-      TranslationManager.LoadLanguage(ServiceProvider.Settings.SelectedLanguage);
     }
 
     void WindowsManager_Event(string cmd, object o)
