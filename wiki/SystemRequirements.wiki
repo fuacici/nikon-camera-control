@@ -1,7 +1,0 @@
-#summary One-sentence summary of this page.
-#labels Featured
-
-= System Requirements =
-  * Windows 7 or Windows Vista or Windows XP
-  * .Net Framework 4 ( http://www.microsoft.com/download/en/details.aspx?id=17851 )
-  * For video encoding Xvid codec ( [http://www.xvid.org/] )
