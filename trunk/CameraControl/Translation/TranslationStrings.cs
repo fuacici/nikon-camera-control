@@ -37,6 +37,8 @@
     public static string BraketingWindowTitle = "Braketing";
     public static string EditTagWindowTitle = "Tag [Add/Edit]";
     public static string MultipleCameraWindowTitle = "Multiple camera support";
+    public static string SavePresetWindowTitle = "Save Preset";
+    public static string TimeLapseWindowTitle = "Time Lapse";
 
     public static string ButtonOk = "Ok";
     public static string ButtonCancel = "Cancel";
@@ -55,6 +57,9 @@
     public static string ButtonClose = "Close";
     public static string ButtonSave = "Save";
     public static string ButtonCapturePhotos = "Capture photos";
+    public static string ButtonStartTimeLapse = "Start TimeLapse";
+    public static string ButtonStopTimeLapse = "Stop TimeLapse";
+    public static string ButtonCreateMovie = "Create movie";
     
     public static string ButtonLocateLogFile = "Locate log file";
 
@@ -120,7 +125,35 @@
     public static string LabelDisableAutofocus = "Disable autofocus";
     public static string LabelConnectedCameras = "Connected cameras";
 
+    public static string LabelPresetName = "Preset name:";
 
+    public static string LabelTimeLapse = "TimeLapse";
+    public static string LabelSecondsBetweenShots = "Seconds between shots";
+    public static string LabelNumberOfPhotos = "Number of photos";
+    public static string LabelDontAutofocusOnEveryCapture = "Don't autofocus on every capture";
+    public static string LabelCaptureInterval = "Capture interval (HH:MM:SS)";
+    public static string LabelMovieLenght = "Movie lenght (HH:MM:SS)";
+    public static string LabelMovieSettings = "Movie settings";
+    public static string LabelVideoFormat = "Video format";
+    public static string LabelOutputFile = "Output file";
+    public static string LabelFps = "Fps";
+    public static string LabelFillImage = "Fill image";
+    public static string LabelCreateMovie = "Create movie";
+    public static string LabelAddVirtualMovingToVideo = "Add virtual moving to video";
+    public static string LabelMovingSurface = "Moving surface (%):";
+    public static string LabelMovingDirection = "Moving direction:";
+    public static string LabelMovingDirectionLeftToRight = "Left to Right";
+    public static string LabelMovingDirectionRightToLeft = "Right to Left";
+    public static string LabelMovingDirectionTopToBottom = "Top to Bottom";
+    public static string LabelMovingDirectionBottomToTop = "Bottom to Top";
+    public static string LabelMovingDirectionLeftTopToRightBottom = "Left/Top to Right/Bottom";
+    public static string LabelMovingDirectionRightBottomToLeftTop = "Right/Bottom to Left/Top";
+    public static string LabelImageAlignment = "Image alignment:";
+    public static string LabelImageAlignmentLeftTop = "Left/Top";
+    public static string LabelImageAlignmentCenter = "Center";
+    public static string LabelImageAlignmentRightBottom = "Right/Bottom";
+    public static string LabelVideoCodecProblem = "Video codec problem";
+    
     public static string MsgPhotoTransferBegin = "Photo transfer begin";
     public static string MsgPhotoTransferDone = "Photo transfer done";
     public static string MsgPhotoTransferError = "Transfer error !\nMessage :{0}";
@@ -128,6 +161,8 @@
     public static string MsgApplicationUpToDate = "Your application is up to date !";
     public static string MsgUseSessionEditorTags = "Use session editor to define tags !";
     public static string MsgLastSessionCantBeDeleted = "Last sesion can't be deleted";
+    public static string MsgStopTimeLapse = "The time lapse not finished! Do you want to stop the time lapse ?";
+    public static string MsgInstallXvidCodec = "Xvid codec not instaled !\nDo you want to download and install it ? ";
 
     public static string MsgDeleteSessionQuestion =
       "Do you want continue to deleting sesion {0} ?\nNo files will be deleted !";

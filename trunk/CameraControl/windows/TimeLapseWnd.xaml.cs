@@ -4,6 +4,7 @@ using System.Management;
 using System.Windows;
 using System.Windows.Forms;
 using CameraControl.Core;
+using CameraControl.Translation;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace CameraControl.windows
@@ -21,7 +22,7 @@ namespace CameraControl.windows
 
     void TimeLapse_TimeLapseDone(object sender, EventArgs e)
     {
-      Dispatcher.Invoke(new Action(delegate { btn_start.Content = "Start time lapse"; }));
+      Dispatcher.Invoke(new Action(delegate { btn_start.Content = TranslationStrings.ButtonStartTimeLapse; }));
     }
 
     private void btn_start_Click(object sender, RoutedEventArgs e)
@@ -29,11 +30,11 @@ namespace CameraControl.windows
       if (ServiceProvider.Settings.DefaultSession.TimeLapse.IsDisabled)
       {
         ServiceProvider.Settings.DefaultSession.TimeLapse.Start();
-        Dispatcher.Invoke(new Action(delegate { btn_start.Content = "Stop time lapse"; }));
+        Dispatcher.Invoke(new Action(delegate { btn_start.Content = TranslationStrings.ButtonStopTimeLapse; }));
       }
       else
       {
-        if (MessageBox.Show("The time lapse not finished! Do you want to stop the time lapse ?", "Time lapse", MessageBoxButtons.YesNo) ==
+        if (MessageBox.Show(TranslationStrings.MsgStopTimeLapse, TranslationStrings.LabelTimeLapse, MessageBoxButtons.YesNo) ==
             System.Windows.Forms.DialogResult.Yes)
         {
           ServiceProvider.Settings.DefaultSession.TimeLapse.Stop();
@@ -50,7 +51,7 @@ namespace CameraControl.windows
     {
       if(!CheckCodec())
       {
-        if(MessageBox.Show("Xvid codec not instaled !\nDo you want to download and install it ? ","Video codec problem",MessageBoxButtons.YesNo)==System.Windows.Forms.DialogResult.Yes)
+        if (MessageBox.Show(TranslationStrings.MsgInstallXvidCodec, TranslationStrings.LabelVideoCodecProblem, MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
         {
           System.Diagnostics.Process.Start("http://www.xvid.org/Downloads.15.0.html");
         }
@@ -98,7 +99,7 @@ namespace CameraControl.windows
     {
       if (!ServiceProvider.Settings.DefaultSession.TimeLapse.IsDisabled)
       {
-        if (MessageBox.Show("The time lapse not finished! Do you want to stop the time lapse ?", "Time lapse", MessageBoxButtons.YesNo) ==
+        if (MessageBox.Show(TranslationStrings.MsgStopTimeLapse, TranslationStrings.LabelTimeLapse, MessageBoxButtons.YesNo) ==
             System.Windows.Forms.DialogResult.Yes)
         {
           ServiceProvider.Settings.DefaultSession.TimeLapse.Stop();
