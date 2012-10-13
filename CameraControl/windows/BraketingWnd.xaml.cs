@@ -8,6 +8,7 @@ using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
+using CameraControl.Translation;
 
 namespace CameraControl.windows
 {
@@ -38,7 +39,7 @@ namespace CameraControl.windows
 
     void Braketing_BracketingDone(object sender, EventArgs e)
     {
-      Dispatcher.Invoke(new Action(delegate { lbl_status.Content = "Bracketing done"; }));
+      Dispatcher.Invoke(new Action(delegate { lbl_status.Content = TranslationStrings.MsgBracketingDone; }));
     }
 
     void Braketing_PhotoCaptured(object sender, EventArgs e)
@@ -59,14 +60,13 @@ namespace CameraControl.windows
       }
       Dispatcher.Invoke(new Action(delegate
                                      {
-                                       lbl_status.Content = "Action in progress " + count + "/" +
-                                                            _photoSession.Braketing.Index;
+                                       lbl_status.Content = string.Format(TranslationStrings.MsgActionInProgress, count, _photoSession.Braketing.Index);
                                      }));
     }
 
     void Braketing_IsBusyChanged(object sender, EventArgs e)
     {
-      Dispatcher.Invoke(new Action(delegate { btn_shot.Content = _photoSession.Braketing.IsBusy ? "Stop" : "Start"; }));
+      Dispatcher.Invoke(new Action(delegate { btn_shot.Content = _photoSession.Braketing.IsBusy ? TranslationStrings.ButtonStop : TranslationStrings.ButtonStart; }));
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
