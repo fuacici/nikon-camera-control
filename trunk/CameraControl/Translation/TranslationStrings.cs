@@ -33,6 +33,10 @@
     public static string SettingsWindowTitle = "Settings";
     public static string SessionWindowTitle = "Session [Add/Edit]";
     public static string LiveViewWindowTitle = "Live view";
+    public static string PresetEditWindowTitle = "Preset Edit";
+    public static string BraketingWindowTitle = "Braketing";
+    public static string EditTagWindowTitle = "Tag [Add/Edit]";
+    public static string MultipleCameraWindowTitle = "Multiple camera support";
 
     public static string ButtonOk = "Ok";
     public static string ButtonCancel = "Cancel";
@@ -46,8 +50,12 @@
     public static string ButtonStart = "Start";
     public static string ButtonPreview = "Preview";
     public static string ButtonStop = "Stop";
-
-
+    public static string ButtonDeletePreset = "Delete preset";
+    public static string ButtonDeleteProperty = "Delete property";
+    public static string ButtonClose = "Close";
+    public static string ButtonSave = "Save";
+    public static string ButtonCapturePhotos = "Capture photos";
+    
     public static string ButtonLocateLogFile = "Locate log file";
 
     public static string LabelInterfaceLanguage = "Interface language :";
@@ -92,8 +100,27 @@
     public static string LabelNoOfPhots = "No. of phots";
     public static string LabelFocusStep = "Focus step";
     public static string LabelLuminosity = "Luminosity";
-    
-    
+
+    public static string LabelExposureBracketing = "Exposure bracketing";
+    public static string LabelExposureBracketingToolTip = "Set camera to Aperture mode and turn off Auto ISO and Auto White Balance for most reliable results.";
+    public static string LabelManualExposureBracketing = "Manual Exposure bracketing";
+    public static string LabelManualExposureBracketingToolTip = "Set camera to Manual (M) mode and turn off Auto ISO and Auto White Balance for most reliable results.";
+    public static string LabelPresetBracketing = "Preset bracketing";
+
+    public static string LabelTagDisplayValue = "Display Value";
+    public static string LabelTagValue = "Value";
+    public static string LabelTagIncludeInGroup1 = "Include in group 1";
+    public static string LabelTagIncludeInGroup2 = "Include in group 2";
+    public static string LabelTagIncludeInGroup3 = "Include in group 3";
+    public static string LabelTagIncludeInGroup4 = "Include in group 4";
+
+    public static string LabelDelay = "Delay (msec)";
+    public static string LabelNumberOfCaptures = "Number of captures";
+    public static string LabelWaitTime = "Wait time (sec)";
+    public static string LabelDisableAutofocus = "Disable autofocus";
+    public static string LabelConnectedCameras = "Connected cameras";
+
+
     public static string MsgPhotoTransferBegin = "Photo transfer begin";
     public static string MsgPhotoTransferDone = "Photo transfer done";
     public static string MsgPhotoTransferError = "Transfer error !\nMessage :{0}";
@@ -104,6 +131,9 @@
 
     public static string MsgDeleteSessionQuestion =
       "Do you want continue to deleting sesion {0} ?\nNo files will be deleted !";
+
+    public static string MsgBracketingDone = "Bracketing done";
+    public static string MsgActionInProgress = "Action in progress {0}/{1}";
 
     public static string MenuFile = "_File";
     public static string MenuReScan = "Rescan connected cameras";
@@ -125,5 +155,8 @@
     public static string MenuLayoutNormal = "Normal";
     public static string MenuLayoutGridRight = "Grid right";
     public static string MenuLayoutGrid = "Grid";
+
+    public static string MenuProperties = "Properties";
+    public static string MenuUseSelectedCameraPreset = "Use selected camera preset";
   }
 }

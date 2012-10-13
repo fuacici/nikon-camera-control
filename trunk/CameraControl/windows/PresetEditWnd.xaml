@@ -1,10 +1,11 @@
 ﻿<Window x:Class="CameraControl.windows.PresetEditWnd"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:CameraControl="clr-namespace:CameraControl"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes" 
+        xmlns:T="clr-namespace:CameraControl.Translation"
         themes:ThemeManager.Theme="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CurrentTheme}"
         Background="{DynamicResource WindowBackgroundBrush}"
-        Title="Preset Edit" Height="355" Width="520" WindowStartupLocation="CenterScreen" xmlns:my="clr-namespace:CameraControl.windows"
+        Title="{T:TranslateExtension PresetEditWindowTitle}" Height="355" Width="520" WindowStartupLocation="CenterScreen" xmlns:my="clr-namespace:CameraControl.windows"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
@@ -31,7 +32,7 @@
                 </HierarchicalDataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Button Content="Delete preset" Grid.Column="1" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="0,14,0,0" Name="btn_del_preset" VerticalAlignment="Top" Width="110" Click="btn_del_preset_Click" />
-        <Button Content="Delete property" Grid.Column="3" Grid.Row="2" Height="23" Margin="0,14,1,0" Name="btn_del_prop" VerticalAlignment="Top" HorizontalAlignment="Right" Width="108" Click="btn_del_prop_Click" />
+        <Button Content="{T:TranslateExtension ButtonDeletePreset}" Grid.Column="1" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="0,14,0,0" Name="btn_del_preset" VerticalAlignment="Top" Width="110" Click="btn_del_preset_Click" />
+        <Button Content="{T:TranslateExtension ButtonDeleteProperty}" Grid.Column="3" Grid.Row="2" Height="23" Margin="0,14,1,0" Name="btn_del_prop" VerticalAlignment="Top" HorizontalAlignment="Right" Width="108" Click="btn_del_prop_Click" />
     </Grid>
 </Window>
