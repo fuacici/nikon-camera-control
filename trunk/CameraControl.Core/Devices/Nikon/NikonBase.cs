@@ -776,7 +776,7 @@ namespace CameraControl.Core.Devices.Nikon
         ErrorCodes.GetException(step > 0
                                   ? ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000001, (uint) step)
                                   : ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000002, (uint) -step));
-        DeviceReady();
+        //DeviceReady();
       }
     }
 
