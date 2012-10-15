@@ -20,5 +20,7 @@ namespace CameraControl.Core.Devices.Classes
     public byte[] ImageData { get; set; }
 
     public bool Focused { get; set; }
+
+    public int ImagePosition { get; set; }
   }
 }

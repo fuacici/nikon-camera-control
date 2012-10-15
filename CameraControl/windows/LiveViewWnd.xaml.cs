@@ -380,7 +380,7 @@ namespace CameraControl.windows
         return;
       _totalframes++;
       if ((DateTime.Now - _framestart).TotalSeconds > 0)
-        Fps = (int) (_totalframes/(DateTime.Now - _framestart).TotalSeconds);
+        Fps = (int)(_totalframes / (DateTime.Now - _framestart).TotalSeconds);
       oper_in_progress = true;
       try
       {
@@ -408,8 +408,8 @@ namespace CameraControl.windows
                                          if (LiveViewData != null && LiveViewData.ImageData != null)
                                          {
 
-                                           MemoryStream stream = new MemoryStream(LiveViewData.ImageData, 0,
-                                                                                  LiveViewData.ImageData.Length);
+                                           MemoryStream stream = new MemoryStream(LiveViewData.ImageData, LiveViewData.ImagePosition,
+                                                                                  LiveViewData.ImageData.Length - LiveViewData.ImagePosition);
 
                                            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(stream))
                                            {
@@ -438,7 +438,7 @@ namespace CameraControl.windows
                                        }
 
                                      }));
-      Dispatcher.Invoke(new Action(delegate
+      Dispatcher.BeginInvoke(new Action(delegate
                                      {
                                        DrawLines();
                                        ;

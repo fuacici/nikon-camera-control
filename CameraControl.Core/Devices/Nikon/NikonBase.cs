@@ -699,7 +699,7 @@ namespace CameraControl.Core.Devices.Nikon
       {
         try
         {
-          DeviceReady();
+          //DeviceReady();
           viewData.HaveFocusData = true;
 
           const int headerSize = 384;
@@ -709,10 +709,12 @@ namespace CameraControl.Core.Devices.Nikon
             return null;
           int cbBytesRead = result.Length;
           GetAditionalLIveViewData(viewData, result);
-          MemoryStream copy = new MemoryStream((int)cbBytesRead - headerSize);
-          copy.Write(result, headerSize, (int)cbBytesRead - headerSize);
-          copy.Close();
-          viewData.ImageData = copy.GetBuffer();
+          viewData.ImagePosition = 384;
+          //MemoryStream copy = new MemoryStream((int)cbBytesRead - headerSize);
+          //copy.Write(result, headerSize, (int)cbBytesRead - headerSize);
+          //copy.Close();
+          //viewData.ImageData = copy.GetBuffer();
+          viewData.ImageData = result;
         }
         finally
         {
