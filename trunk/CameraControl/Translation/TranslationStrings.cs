@@ -193,5 +193,8 @@
 
     public static string MenuProperties = "Properties";
     public static string MenuUseSelectedCameraPreset = "Use selected camera preset";
+
+    // add 15/10/2012
+    public static string LabelExternalViewerPath = "External viewer";
   }
 }
