@@ -334,6 +334,17 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private string _externalViewer;
+    public string ExternalViewer
+    {
+      get { return _externalViewer; }
+      set
+      {
+        _externalViewer = value;
+        NotifyPropertyChanged("ExternalViewer");
+      }
+    }
+
     public CameraPropertyEnumerator CameraProperties { get; set; }
     public string SelectedLayout { get; set; }
     public AsyncObservableCollection<CameraPreset> CameraPresets { get; set; }

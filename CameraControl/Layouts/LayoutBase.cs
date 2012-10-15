@@ -99,7 +99,14 @@ namespace CameraControl.Layouts
     {
       if (ServiceProvider.Settings.SelectedBitmap == null || ServiceProvider.Settings.SelectedBitmap.FileItem == null)
         return;
-      Process.Start(ServiceProvider.Settings.SelectedBitmap.FileItem.FileName);
+      if (!string.IsNullOrWhiteSpace(ServiceProvider.Settings.ExternalViewer) && File.Exists(ServiceProvider.Settings.ExternalViewer))
+      {
+        Process.Start(ServiceProvider.Settings.ExternalViewer, ServiceProvider.Settings.SelectedBitmap.FileItem.FileName);
+      }
+      else
+      {
+        Process.Start(ServiceProvider.Settings.SelectedBitmap.FileItem.FileName);        
+      }
     }
 
     void  DeleteItem(object o)

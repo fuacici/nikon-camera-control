@@ -82,5 +82,15 @@ namespace CameraControl.windows
       }
     }
 
+    private void btn_browse_file_Click(object sender, RoutedEventArgs e)
+    {
+      OpenFileDialog dialog = new OpenFileDialog();
+      dialog.FileName = ServiceProvider.Settings.ExternalViewer;
+      if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+      {
+        ServiceProvider.Settings.ExternalViewer = dialog.FileName;
+      }
+    }
+
   }
 }
