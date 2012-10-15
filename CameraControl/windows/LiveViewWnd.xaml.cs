@@ -640,8 +640,8 @@ namespace CameraControl.windows
                                            SelectedPortableDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
                                            Show();
                                            Activate();
-                                           Topmost = true;
-                                           Topmost = false;
+                                           //Topmost = true;
+                                           //Topmost = false;
                                            Focus();
                                            //ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTaked;
                                            StartLiveView();
