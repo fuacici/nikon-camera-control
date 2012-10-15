@@ -50,6 +50,7 @@ namespace CameraControl.Core.Devices.Nikon
     public const int CONST_PROP_LiveViewStatus = 0xD1A2;
     public const int CONST_PROP_ExposureIndicateStatus = 0xD1B1;
     public const int CONST_PROP_RecordingMedia = 0xD10B;
+    public const int CONST_PROP_NoiseReduction = 0xD06B;
 
     public const int CONST_Event_DevicePropChanged = 0x4006;
     public const int CONST_Event_StoreFull = 0x400A;
@@ -264,18 +265,26 @@ namespace CameraControl.Core.Devices.Nikon
       PropertyChanged += NikonBase_PropertyChanged;
       CaptureInSdRam = true;
       _timer.Start();
-      AdvancedProperties.Add(InitAutoIso());
-      AdvancedProperties.Add(InitFlash());
-      foreach (PropertyValue<long> value in AdvancedProperties)
-      {
-        ReadDeviceProperties(value.Code);        
-      }
+      AddAditionalProps();
       return true;
     }
 
-    private PropertyValue<long> InitAutoIso()
+    public virtual void AddAditionalProps()
     {
-      PropertyValue<long> res = new PropertyValue<long>() {Name = "Auto Iso", IsEnabled = true, Code = 0xD054};
+      AdvancedProperties.Add(InitOnOffProperty("Auto Iso", 0xD054));
+      AdvancedProperties.Add(InitFlash());
+      AdvancedProperties.Add(InitOnOffProperty("Long exp. NR", CONST_PROP_NoiseReduction));
+      AdvancedProperties.Add(InitNRHiIso());
+      AdvancedProperties.Add(InitExposureDelay());
+      foreach (PropertyValue<long> value in AdvancedProperties)
+      {
+        ReadDeviceProperties(value.Code);
+      }
+    }
+
+    protected virtual PropertyValue<long> InitOnOffProperty(string name, ushort code)
+    {
+      var res = new PropertyValue<long>() { Name = name, IsEnabled = true, Code = code };
       res.AddValues("OFF", 0);
       res.AddValues("ON", 1);
       res.ValueChanged += (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)val },
@@ -283,7 +292,7 @@ namespace CameraControl.Core.Devices.Nikon
       return res;
     }
 
-    private PropertyValue<long> InitFlash()
+    protected virtual PropertyValue<long> InitFlash()
     {
       PropertyValue<long> res = new PropertyValue<long>() { Name = "Flash", IsEnabled = true, Code = 0x500C };
       res.AddValues("Flash prohibited", 0x0002);
@@ -294,6 +303,26 @@ namespace CameraControl.Core.Devices.Nikon
       res.AddValues("Red-eye reduction slow synchronization", 0x8013);
       res.ValueChanged += (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
                                                             res.Code, -1);
+      return res;
+    }
+
+    protected virtual PropertyValue<long> InitNRHiIso()
+    {
+      PropertyValue<long> res = new PropertyValue<long>() {Name = "High ISO NR", IsEnabled = true, Code = 0xD070};
+      res.AddValues("Not performed", 0);
+      res.AddValues("Low", 1);
+      res.AddValues("Normal", 2);
+      res.AddValues("High", 3);
+      res.ValueChanged += (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, new[] {(byte) val},res.Code, -1);
+      return res;
+    }
+
+    protected virtual PropertyValue<long> InitExposureDelay()
+    {
+      PropertyValue<long> res = new PropertyValue<long>() { Name = "Exposure delay mode", IsEnabled = true, Code = 0xD06A };
+      res.AddValues("OFF", 0);
+      res.AddValues("ON", 1);
+      res.ValueChanged += (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)val }, res.Code, -1);
       return res;
     }
 

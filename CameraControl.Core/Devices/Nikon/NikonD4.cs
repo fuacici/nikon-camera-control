@@ -55,5 +55,17 @@ namespace CameraControl.Core.Devices.Nikon
     {
       StillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 0);
     }
+
+    protected override PropertyValue<long> InitExposureDelay()
+    {
+      PropertyValue<long> res = new PropertyValue<long>() { Name = "Exposure delay mode", IsEnabled = true, Code = 0xD06A };
+      res.AddValues("3 sec", 0);
+      res.AddValues("2 sec", 1);
+      res.AddValues("One sec", 1);
+      res.AddValues("OFF", 1);
+      res.ValueChanged += (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)val }, res.Code, -1);
+      return res;
+    }
+
   }
 }
