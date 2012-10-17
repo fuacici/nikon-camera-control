@@ -698,7 +698,7 @@ namespace CameraControl.Core.Devices.Nikon
     {
       lock (Locker)
       {
-        DeviceReady();
+        //DeviceReady();
         //check if the live view already is started if yes returning without doing anything
         MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetDevicePropValue, CONST_PROP_LiveViewStatus, -1);
         ErrorCodes.GetException(response.ErrorCode);
@@ -724,7 +724,7 @@ namespace CameraControl.Core.Devices.Nikon
     public override LiveViewData GetLiveViewImage()
     {
       LiveViewData viewData = new LiveViewData();
-      if (Monitor.TryEnter(Locker,100))
+      if (Monitor.TryEnter(Locker,10))
       {
         try
         {
@@ -803,11 +803,11 @@ namespace CameraControl.Core.Devices.Nikon
         return;
       lock (Locker)
       {
-        DeviceReady();
+        //DeviceReady();
         ErrorCodes.GetException(step > 0
                                   ? ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000001, (uint) step)
                                   : ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000002, (uint) -step));
-        //DeviceReady();
+        DeviceReady();
       }
     }
 

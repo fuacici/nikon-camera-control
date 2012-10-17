@@ -15,20 +15,20 @@ namespace CameraControl.Core.Devices.Nikon
       return res;
     }
 
-    public override void StartLiveView()
-    {
-      //SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)1 }, CONST_PROP_RecordingMedia, -1);
-      DeviceReady();
-      base.StartLiveView();
-    }
+    //public override void StartLiveView()
+    //{
+    //  //SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)1 }, CONST_PROP_RecordingMedia, -1);
+    //  //DeviceReady();
+    //  base.StartLiveView();
+    //}
 
-    public override void StopLiveView()
-    {
-      base.StopLiveView();
-      DeviceReady();
-      //SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)0 }, CONST_PROP_RecordingMedia, -1);
-      DeviceReady();
-    }
+    //public override void StopLiveView()
+    //{
+    //  base.StopLiveView();
+    //  DeviceReady();
+    //  //SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)0 }, CONST_PROP_RecordingMedia, -1);
+    //  DeviceReady();
+    //}
 
   }
 }
