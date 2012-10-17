@@ -383,6 +383,7 @@ namespace CameraControl.Core.Devices
     {
       IsChecked = true;
       AdvancedProperties=new AsyncObservableCollection<PropertyValue<long>>();
+      Capabilities = new List<CapabilityEnum>();
     }
 
   }

@@ -375,7 +375,8 @@ namespace CameraControl.Core.Devices.Others
         Log.Error(exception);
         IsConnected = false;
       }
-      HaveLiveView = false;
+      HaveLiveView = true;
+      Capabilities.Add(CapabilityEnum.LiveView);
       return true;
     }
 
@@ -631,7 +632,7 @@ namespace CameraControl.Core.Devices.Others
 
     public override void ReadDeviceProperties(int o)
     {
-      HaveLiveView = false;
+      HaveLiveView = true;
     }
 
     public override void TransferFile(object o, string filename)

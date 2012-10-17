@@ -47,7 +47,8 @@ namespace CameraControl.windows
     private bool preview = false;
     private int _totalframes = 0;
     private DateTime _framestart;
-
+    private Timer _smoottimer;
+    private int _smootstepdirection = 1;
 
 
     public LiveViewData LiveViewData { get; set; }
@@ -309,6 +310,18 @@ namespace CameraControl.windows
       Recording = false;
     }
 
+    void _smoottimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+    {
+      //_smoottimer.Stop();
+      if (_smootstepdirection == 0)
+        SetFocus(-25);
+      else
+      {
+        SetFocus(25);
+      }
+      //_smoottimer.Start();
+    }
+
     private void SelectedBitmap_BitmapLoaded(object sender)
     {
       if (ServiceProvider.Settings.PreviewLiveViewImage && IsVisible)
@@ -350,6 +363,12 @@ namespace CameraControl.windows
                             if (!FreezeImage)
                               GetLiveImage();
                           };
+      _smoottimer = new Timer(100);
+      _smoottimer.Elapsed += _smoottimer_Elapsed;
+      btn_smoot_fm.AddHandler(MouseLeftButtonDownEvent,new MouseButtonEventHandler(btn_smoot_fm_MouseLeftButtonDown));
+      btn_smoot_fm.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(btn_smoot_fm_MouseLeftButtonUp));
+      btn_smoot_fp.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(btn_smoot_fp_MouseLeftButtonDown));
+      btn_smoot_fp.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(btn_smoot_fp_MouseLeftButtonUp));
     }
 
     private void _freezeTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -659,6 +678,7 @@ namespace CameraControl.windows
                                            Hide();
                                            try
                                            {
+                                             _smoottimer.Stop();
                                              _timer.Stop();
                                              selectedPortableDevice.CaptureCompleted -= selectedPortableDevice_CaptureCompleted;
                                              ServiceProvider.Settings.SelectedBitmap.BitmapLoaded -= SelectedBitmap_BitmapLoaded;
@@ -678,6 +698,7 @@ namespace CameraControl.windows
         case WindowsCmdConsts.All_Close:
           Dispatcher.Invoke(new Action(delegate
                                          {
+                                           _smoottimer.Stop();
                                            Hide();
                                            Close();
                                          }));
@@ -753,6 +774,8 @@ namespace CameraControl.windows
       Console.WriteLine("Focus start");
       if (LockA)
       {
+        if (FocusCounter == 0 && step < 0)
+          return;
         if (FocusCounter + step < 0)
           step = -FocusCounter;
       }
@@ -761,19 +784,21 @@ namespace CameraControl.windows
         if (FocusCounter + step > FocusValue)
           step = FocusValue - FocusCounter;
       }
+      Console.WriteLine(step);
       try
       {
         _timer.Stop();
         selectedPortableDevice.StartLiveView();
         selectedPortableDevice.Focus(step);
-        _timer.Start();
         FocusCounter += step;
+        Console.WriteLine(FocusCounter);
       }
       catch (DeviceException exception)
       {
         Log.Error("Unable to focus", exception);
        StaticHelper.Instance.SystemMessage = exception.Message;
       }
+      _timer.Start();
       Console.WriteLine("Focus end");
     }
 
@@ -943,6 +968,48 @@ namespace CameraControl.windows
     private void ToggleButton_Checked(object sender, RoutedEventArgs e)
     {
 
+    }
+
+    private void btn_smoot_fm_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+
+    }
+
+    private void btn_smoot_fm_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+
+    }
+
+    private void btn_smoot_fp_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+      _smootstepdirection = 1;
+      _smoottimer.Start();
+    }
+
+    private void btn_smoot_fp_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+      _smoottimer.Stop();
+    }
+
+    private void btn_smoot_fm_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+      _smootstepdirection = 0;
+      _smoottimer.Start();
+    }
+
+    private void btn_smoot_fm_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+      _smoottimer.Stop();
+    }
+
+    private void btn_smoot_fm_MouseLeave(object sender, MouseEventArgs e)
+    {
+      _smoottimer.Stop();
+    }
+
+    private void btn_smoot_fm_Click(object sender, RoutedEventArgs e)
+    {
+      
     }
 
   }
