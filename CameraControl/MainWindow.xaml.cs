@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
@@ -13,6 +14,9 @@ using CameraControl.Core.Devices.Classes;
 using CameraControl.Layouts;
 using CameraControl.Translation;
 using CameraControl.windows;
+using MahApps.Metro;
+using MahApps.Metro.Controls;
+using Application = System.Windows.Application;
 using EditSession = CameraControl.windows.EditSession;
 using MessageBox = System.Windows.Forms.MessageBox;
 using Path = System.IO.Path;
@@ -22,7 +26,7 @@ namespace CameraControl
   /// <summary>
   /// Interaction logic for MainWindow.xaml
   /// </summary>
-  public partial class MainWindow : Window
+  public partial class MainWindow : MetroWindow
   {
 
     public PropertyWnd PropertyWnd { get; set; }
@@ -50,6 +54,7 @@ namespace CameraControl
       ServiceProvider.DeviceManager.CameraSelected += DeviceManager_CameraSelected;
 
       SetLayout(ServiceProvider.Settings.SelectedLayout);
+      ThemeManager.ChangeTheme(Application.Current, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
     }
 
     void Settings_SessionSelected(PhotoSession oldvalue, PhotoSession newvalue)

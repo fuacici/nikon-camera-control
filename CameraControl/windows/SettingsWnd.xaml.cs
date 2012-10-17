@@ -25,7 +25,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for SettingsWnd.xaml
   /// </summary>
-  public partial class SettingsWnd : Window
+  public partial class SettingsWnd 
   {
 
     public AsyncObservableCollection<RotateFlipType> RotateFlipTypesValues { get; set; }

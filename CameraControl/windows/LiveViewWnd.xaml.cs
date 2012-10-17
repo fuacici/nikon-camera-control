@@ -33,7 +33,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for LiveViewWnd.xaml
   /// </summary>
-  public partial class LiveViewWnd : Window, IWindow, INotifyPropertyChanged
+  public partial class LiveViewWnd : IWindow, INotifyPropertyChanged
   {
 
     private int _retries = 0;
