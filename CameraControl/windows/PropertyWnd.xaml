@@ -1,9 +1,8 @@
-﻿<Window x:Class="CameraControl.windows.PropertyWnd"
+﻿<ontrols:MetroWindow x:Class="CameraControl.windows.PropertyWnd"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
-        themes:ThemeManager.Theme="{Binding  Path=Settings.CurrentTheme}"
+                     xmlns:ontrols="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         Title="Image Propert" Height="378" Width="260" ShowInTaskbar="False" Topmost="True" WindowStyle="None" AllowsTransparency="True"   Background="Transparent" Closing="Window_Closing">
     <Window.DataContext>
         <Core:ServiceProvider/>
@@ -76,4 +75,4 @@
             </TabControl>
         </Grid>
     </Border>
-</Window>
+</ontrols:MetroWindow>

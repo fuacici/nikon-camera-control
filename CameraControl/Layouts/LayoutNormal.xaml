@@ -3,10 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
              xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
              xmlns:local="clr-namespace:CameraControl.Controls" xmlns:Layouts="clr-namespace:CameraControl.Layouts"
-             themes:ThemeManager.Theme="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CurrentTheme}"
              mc:Ignorable="d" 
              DataContext="{Binding RelativeSource={RelativeSource Self}}"                    
              d:DesignHeight="484" d:DesignWidth="689">
@@ -47,7 +45,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="345*" />
             <RowDefinition Height="20" />
-            <RowDefinition Height="135" />
+            <RowDefinition Height="155" />
         </Grid.RowDefinitions>
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <local:ZoomBorder  BorderThickness="1" CornerRadius="5" >

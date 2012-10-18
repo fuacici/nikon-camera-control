@@ -16,7 +16,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for PropertyWnd.xaml
   /// </summary>
-  public partial class PropertyWnd : Window
+  public partial class PropertyWnd 
   {
     public PropertyWnd()
     {

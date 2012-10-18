@@ -69,15 +69,7 @@
             </StackPanel>
             <StackPanel Margin="1">
                 <Label Content="{T:TranslateExtension Battery}"  />
-                <ProgressBar Minimum="0" Maximum="100" Height="20" Value="{Binding Path=SelectedCameraDevice.Battery}" ToolTip="{Binding Path=SelectedCameraDevice.Battery}" Style="{x:Null}">
-                    <ProgressBar.Foreground>
-                        <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
-                            <GradientStop Color="#FFDEDE17" Offset="0.541" />
-                            <GradientStop Color="#FF009600" Offset="0.988" />
-                            <GradientStop Color="#FF0DAD1D" Offset="0.023" />
-                        </LinearGradientBrush>
-                    </ProgressBar.Foreground>
-                </ProgressBar>
+                <ProgressBar Minimum="0" Maximum="100" Height="20" Value="{Binding Path=SelectedCameraDevice.Battery}" ToolTip="{Binding Path=SelectedCameraDevice.Battery}" />
             </StackPanel>
             <StackPanel Margin="1">
                 <CheckBox Content="{T:TranslateExtension SDRam}" IsChecked="{Binding Path=SelectedCameraDevice.CaptureInSdRam}" ToolTip="{T:TranslateExtension SDRamToolTip}" Name="chk_sdram"/>

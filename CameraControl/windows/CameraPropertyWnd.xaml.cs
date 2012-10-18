@@ -24,7 +24,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for CameraPropertyWnd.xaml
   /// </summary>
-  public partial class CameraPropertyWnd : Window, IWindow, INotifyPropertyChanged
+  public partial class CameraPropertyWnd : IWindow, INotifyPropertyChanged
   {
     private ICameraDevice _cameraDevice;
 
