@@ -23,7 +23,24 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-
+    <Controls:MetroWindow.WindowCommands>
+        <Controls:WindowCommands>
+            <Button Content="{T:TranslateExtension SettingsToolTip}" Name="btn_settings" Click="btn_settings_Click" />
+            <!--<Button>
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20" Height="20">
+                        <Rectangle.Resources>
+                            <SolidColorBrush x:Key="BlackBrush" Color="White" />
+                        </Rectangle.Resources>
+                        <Rectangle.Fill>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_cupcake}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <TextBlock Text="deploy cupcakes" />
+                </StackPanel>
+            </Button>-->
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.WindowCommands>
     <Window.DataContext>
         <Classes:Settings/>
     </Window.DataContext>
@@ -71,9 +88,6 @@
             <ToggleButton ToolTip="Image property" Height="50" Width="50" Name="button1"  Click="button1_Click" Margin="5">
                 <Image Margin="5" Source="/CameraControl;component/Images/Properties.png"/>
             </ToggleButton>
-            <Button ToolTip="{T:TranslateExtension SettingsToolTip}" Height="50" Name="button2" Width="50" Click="button2_Click" Margin="5" >
-                <Image Margin="5" Source="/CameraControl;component/Images/Settings.png" />
-            </Button>
             <Button ToolTip="{T:TranslateExtension TimeLapseToolTip}" Height="50" Name="but_timelapse" Width="50" Margin="5" Click="but_timelapse_Click">
                 <Image Margin="5" Source="/CameraControl;component/Images/Timelapse.png" />
             </Button>
