@@ -6,8 +6,13 @@
         xmlns:Classes="clr-namespace:CameraControl.Core.Classes;assembly=CameraControl.Core"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
         xmlns:T="clr-namespace:CameraControl.Translation"
-                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"                       
+                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"     
+                       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                       xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
         Closed="Window_Closed" Closing="Window_Closing" Icon="/CameraControl;component/Images/logo.png" WindowState="Maximized" VerticalContentAlignment="Center">
+    <i:Interaction.Behaviors>
+        <Behaviours:BorderlessWindowBehavior/>
+    </i:Interaction.Behaviors>
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -15,7 +20,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colours.xaml"/>-->
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml"/>
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml"/>-->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Menu.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
 
@@ -84,19 +90,19 @@
                     <Label Content="NoAf" HorizontalContentAlignment="Center" FontSize="14" />
                 </Grid>
             </Button>
-            <Button Content="[BR]" ToolTip="{T:TranslateExtension BraketingToolTip}" Width="50"  Height="50" Name="btn_br" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_br_Click" FontSize="15" />
-            <ToggleButton ToolTip="Image property" Height="50" Width="50" Name="button1"  Click="button1_Click" Margin="5">
+                <Button Content="[BR]" ToolTip="{T:TranslateExtension BraketingToolTip}" Width="50"  Height="50" Name="btn_br" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_br_Click" FontSize="15" Style="{DynamicResource MetroCircleButtonStyle}"/>
+                <ToggleButton ToolTip="Image property" Height="50" Width="50" Name="button1"  Click="button1_Click" Margin="5">
                 <Image Margin="5" Source="/CameraControl;component/Images/Properties.png"/>
             </ToggleButton>
-            <Button ToolTip="{T:TranslateExtension TimeLapseToolTip}" Height="50" Name="but_timelapse" Width="50" Margin="5" Click="but_timelapse_Click">
+                <Button ToolTip="{T:TranslateExtension TimeLapseToolTip}" Height="50" Name="but_timelapse" Width="50" Margin="5" Click="but_timelapse_Click" Style="{DynamicResource MetroCircleButtonStyle}">
                 <Image Margin="5" Source="/CameraControl;component/Images/Timelapse.png" />
             </Button>
-            <Button ToolTip="{T:TranslateExtension FullscreenToolTip}" Height="50" Name="but_fullscreen" Width="50" Margin="5" Click="but_fullscreen_Click">
+                <Button ToolTip="{T:TranslateExtension FullscreenToolTip}" Height="50" Name="but_fullscreen" Width="50" Margin="5" Click="but_fullscreen_Click" Style="{DynamicResource MetroCircleButtonStyle}">
                 <Image Margin="5" Source="/CameraControl;component/Images/Fullscreen.png" />
             </Button>
-            <Button Content="Lv" ToolTip="{T:TranslateExtension LiveViewToolTip}" Height="50" Name="btn_liveview" Width="50" Margin="5" Click="btn_liveview_Click" FontSize="15" />
-            <Button Content="B" ToolTip="{T:TranslateExtension BrowseSessionsToolTip}" Height="50" Name="btn_browse" Width="50" Margin="5"  FontSize="15" Click="btn_browse_Click" />
-            <Button Content="Tags" ToolTip="{T:TranslateExtension SelectTagsToolTip}" Height="50" Name="btn_Tags" Width="50" Margin="5"  FontSize="15" Click="btn_Tags_Click" />
+                <Button Content="Lv" ToolTip="{T:TranslateExtension LiveViewToolTip}" Height="50" Name="btn_liveview" Width="50" Margin="5" Click="btn_liveview_Click" FontSize="15" Style="{DynamicResource MetroCircleButtonStyle}"/>
+                <Button Content="B" ToolTip="{T:TranslateExtension BrowseSessionsToolTip}" Height="50" Name="btn_browse" Width="50" Margin="5"  FontSize="15" Click="btn_browse_Click" Style="{DynamicResource MetroCircleButtonStyle}"/>
+                <Button Content="Tags" ToolTip="{T:TranslateExtension SelectTagsToolTip}" Height="50" Name="btn_Tags" Width="50" Margin="5"  FontSize="15" Click="btn_Tags_Click" Style="{DynamicResource MetroCircleButtonStyle}"/>
             <StackPanel HorizontalAlignment="Right" IsEnabled="{Binding Path=DefaultSession.TimeLapse.IsDisabled}"></StackPanel>
             </WrapPanel>
         </Controls:MetroContentControl>
