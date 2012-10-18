@@ -297,12 +297,7 @@ namespace CameraControl
 
     private void button2_Click(object sender, RoutedEventArgs e)
     {
-      if (PropertyWnd != null && PropertyWnd.IsVisible)
-        PropertyWnd.Topmost = false;
-      SettingsWnd wnd = new SettingsWnd();
-      wnd.ShowDialog();
-      if (PropertyWnd != null && PropertyWnd.IsVisible)
-        PropertyWnd.Topmost = true;
+
     }
 
     private void Window_Closed(object sender, EventArgs e)
@@ -555,6 +550,16 @@ namespace CameraControl
       {
         MessageBox.Show(TranslationStrings.MsgLastSessionCantBeDeleted);
       }
+    }
+
+    private void btn_settings_Click(object sender, RoutedEventArgs e)
+    {
+      if (PropertyWnd != null && PropertyWnd.IsVisible)
+        PropertyWnd.Topmost = false;
+      SettingsWnd wnd = new SettingsWnd();
+      wnd.ShowDialog();
+      if (PropertyWnd != null && PropertyWnd.IsVisible)
+        PropertyWnd.Topmost = true;
     }
   }
 }

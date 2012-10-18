@@ -12,7 +12,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for TimeLapseWnd.xaml
   /// </summary>
-  public partial class TimeLapseWnd : Window
+  public partial class TimeLapseWnd 
   {
     public TimeLapseWnd()
     {

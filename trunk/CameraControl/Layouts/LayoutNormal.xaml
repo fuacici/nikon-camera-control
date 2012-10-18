@@ -6,7 +6,6 @@
              xmlns:themes="clr-namespace:WPF.Themes;assembly=WPF.Themes"
              xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
              xmlns:local="clr-namespace:CameraControl.Controls" xmlns:Layouts="clr-namespace:CameraControl.Layouts"
-             Background="{DynamicResource WindowBackgroundBrush}"
              themes:ThemeManager.Theme="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CurrentTheme}"
              mc:Ignorable="d" 
              DataContext="{Binding RelativeSource={RelativeSource Self}}"                    
@@ -68,7 +67,7 @@
         </StackPanel>
         <ProgressBar Grid.Row="1" Height="7" Margin="0,0,12,13" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="157" Value="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=TransferProgress}" ToolTip="File transfer progress"/>
         <StackPanel Grid.Row="2"  Name="ImagePanel">
-            <ListBox  Name="ImageLIstBox" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.Files}"  Background="{DynamicResource WindowBackgroundBrush}">
+            <ListBox  Name="ImageLIstBox" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.Files}">
                 <ListBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Actions" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.ActionManager}, Path=Actions}" >

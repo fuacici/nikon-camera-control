@@ -7,7 +7,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for AboutWnd.xaml
   /// </summary>
-  public partial class AboutWnd : Window
+  public partial class AboutWnd 
   {
     public AboutWnd()
     {
