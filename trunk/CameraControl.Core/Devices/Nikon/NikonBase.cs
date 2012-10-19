@@ -64,7 +64,7 @@ namespace CameraControl.Core.Devices.Nikon
     private Timer _timer = new Timer(1000/15);
 
    
-    private Dictionary<uint, string> _isoTable = new Dictionary<uint, string>()
+    protected  Dictionary<uint, string> _isoTable = new Dictionary<uint, string>()
                                                   {
                                                     {0x0064, "100"},
                                                     {0x007D, "125"},
@@ -90,7 +90,7 @@ namespace CameraControl.Core.Devices.Nikon
                                                     {0x3200, "Hi 1"},
                                                     {0x6400, "Hi 2"},
                                                   };
-    Dictionary<uint, string> _shutterTable = new Dictionary<uint, string>
+    protected Dictionary<uint, string> _shutterTable = new Dictionary<uint, string>
                                                {
                          {1, "1/6400"},
                          {2, "1/4000"},
@@ -155,7 +155,7 @@ namespace CameraControl.Core.Devices.Nikon
                          { 0xFFFFFFFF , "Bulb"},
                        };
     
-    Dictionary<int, string> _exposureModeTable = new Dictionary<int, string>()
+    protected Dictionary<int, string> _exposureModeTable = new Dictionary<int, string>()
                             {
                               {1, "M"},
                               {2, "P"},
@@ -172,7 +172,7 @@ namespace CameraControl.Core.Devices.Nikon
                               {0x8019, "[EffectMode] EFFECTS"},
                             };
 
-    Dictionary<uint, string> _wbTable = new Dictionary<uint, string>()
+   protected  Dictionary<uint, string> _wbTable = new Dictionary<uint, string>()
                   {
                     {2, "Auto"},
                     {4, "Daylight"},
