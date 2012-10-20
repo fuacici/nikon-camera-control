@@ -15,7 +15,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for BraketingWnd.xaml
   /// </summary>
-  public partial class BraketingWnd : Window
+  public partial class BraketingWnd 
   {
     private ICameraDevice _device;
     private PhotoSession _photoSession;
@@ -154,17 +154,17 @@ namespace CameraControl.windows
 
       if(_device.Mode.Value=="M")
       {
-        tab_exposure.IsEnabled = false;
-        tab_manual.IsEnabled = true;
+        tab_exposure.Visibility = Visibility.Visible;
+        tab_manual.Visibility = Visibility.Visible;
         tab_manual.IsSelected = true;
         _photoSession.Braketing.Mode = 1;
       }
       else
       {
         _photoSession.Braketing.Mode = 0;
-        tab_exposure.IsEnabled = true;
+        tab_exposure.Visibility = Visibility.Visible;
+        tab_manual.Visibility = Visibility.Collapsed;
         tab_exposure.IsSelected = true;
-        tab_manual.IsEnabled = false;
       }
       item_PropertyChanged(null, null);
     }

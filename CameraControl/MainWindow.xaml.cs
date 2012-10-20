@@ -54,7 +54,7 @@ namespace CameraControl
       ServiceProvider.DeviceManager.CameraSelected += DeviceManager_CameraSelected;
 
       SetLayout(ServiceProvider.Settings.SelectedLayout);
-      ThemeManager.ChangeTheme(Application.Current, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
+      //ThemeManager.ChangeTheme(this, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Light);
     }
 
     void Settings_SessionSelected(PhotoSession oldvalue, PhotoSession newvalue)

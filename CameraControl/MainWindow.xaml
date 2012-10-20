@@ -107,7 +107,7 @@
             </WrapPanel>
         </Controls:MetroContentControl>
         <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="12,6,131,14" Grid.Row="2" Grid.ColumnSpan="2" />
-        <Menu Grid.ColumnSpan="4" Name="menu1">
+        <Menu Grid.ColumnSpan="4" Name="menu1" Background="{StaticResource LightBackground}">
             <MenuItem Header="{T:TranslateExtension MenuFile}">
                 <MenuItem Header="{T:TranslateExtension MenuReScan}" Name="mnu_reconnect" Click="mnu_reconnect_Click" />
                 <MenuItem Header="{T:TranslateExtension MenuConnectedCameras}" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" >
