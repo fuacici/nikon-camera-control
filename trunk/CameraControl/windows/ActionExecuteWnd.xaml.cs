@@ -20,7 +20,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for ActionExecuteWnd.xaml
   /// </summary>
-  public partial class ActionExecuteWnd : Window
+  public partial class ActionExecuteWnd 
   {
     public IMenuAction MenuAction { get; set; }
 
