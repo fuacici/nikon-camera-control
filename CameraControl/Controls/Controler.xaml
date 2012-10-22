@@ -9,19 +9,17 @@
     <UserControl.DataContext>
         <Devices1:CameraDeviceManager/>
     </UserControl.DataContext>
-    <UserControl.Resources>
-        <Style TargetType="{x:Type ListBox}"  x:Key="Style1">
-            <!-- Swap out the default items panel with a WrapPanel so that
-           the images will be arranged with a different layout. -->
-            <Setter Property="ItemsPanel">
-                <Setter.Value>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Vertical"/>
-                    </ItemsPanelTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </UserControl.Resources>
+    <!--<UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>        
+    </UserControl.Resources>-->
     <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100" />
@@ -82,7 +80,7 @@
         </WrapPanel>
         <Expander Grid.Column="1"  Name="expander1" UseLayoutRounding="True" ExpandDirection="Right" IsExpanded="False" BorderThickness="0" Margin="0,0,0,3">
             <Grid>
-                <ListBox Name="listBox1" ItemsSource="{Binding Path=SelectedCameraDevice.AdvancedProperties}" Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Control, AncestorLevel=1}, Path=Background}">
+                <ListBox Name="listBox1" ItemsSource="{Binding Path=SelectedCameraDevice.AdvancedProperties}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="1" Width="100">
