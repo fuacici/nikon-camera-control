@@ -113,9 +113,7 @@ namespace CameraControl
       {
         StaticHelper.Instance.SystemMessage = TranslationStrings.MsgPhotoTransferBegin;
         Log.Debug("Photo transfer begin.");
-        PhotoSession session = eventArgs.CameraDevice.AttachedPhotoSession;
-        if (session == null)
-          session = ServiceProvider.Settings.DefaultSession;
+        PhotoSession session = eventArgs.CameraDevice.AttachedPhotoSession ?? ServiceProvider.Settings.DefaultSession;
         if ((session.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
         {
           eventArgs.CameraDevice.IsBusy = false;

@@ -7,7 +7,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
-                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" mc:Ignorable="d" d:DataContext="{d:DesignData }" Topmost="{Binding ElementName=chk_top,Path=IsChecked}">
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" mc:Ignorable="d" d:DataContext="{d:DesignData }" Topmost="{Binding ElementName=chk_top,Path=IsChecked}"
+                      ShowMinButton="False">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,7 +19,7 @@
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colours.xaml"/>-->
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml"/>-->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />-->
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -87,143 +88,167 @@
             <Label Canvas.Left="0" Canvas.Top="0" Content="REC" Height="41" Name="lbl_rec" FontSize="20" FontWeight="Bold" Foreground="Red" Width="52"></Label>
             <Label Content="{Binding Path=Fps, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Height="28" Width="36" Canvas.Left="494" Canvas.Top="6" />
         </Canvas>
-        <GroupBox  BorderThickness="0" Canvas.Left="350" Canvas.Top="503" Width="186" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Right" Height="97" VerticalAlignment="Bottom">
-        </GroupBox>
         <Button Content="{T:TranslateExtension ButtonAutoFocus}" Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="button1" VerticalAlignment="Top" Width="75" Click="button1_Click" />
         <Button Content="{T:TranslateExtension ButtonCapture}" Height="23" HorizontalAlignment="Left" Margin="119,12,0,0" Name="button2" VerticalAlignment="Top" Width="75" Click="button2_Click" />
-        <StackPanel Grid.Row="1" Grid.RowSpan="2" >
-            <StackPanel.ScrollOwner>
-                <ScrollViewer />
-            </StackPanel.ScrollOwner>
-            <Expander Header="{T:TranslateExtension LabelManualFocus}" IsEnabled="{Binding Path=IsFree, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" BorderThickness="1"  Margin="3"> 
-                <Expander.Content>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="15*" />
-                            <ColumnDefinition Width="15*" />
-                            <ColumnDefinition Width="15*" />
-                            <ColumnDefinition Width="15*" />
-                            <ColumnDefinition Width="15*" />
-                            <ColumnDefinition Width="15*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="35*" />
-                            <RowDefinition Height="35*" />
-                            <RowDefinition Height="35*" />
-                        </Grid.RowDefinitions>
-                        <Button Margin="1" Content="&lt;" Name="btn_focusm" FontWeight="Bold" Click="btn_focusm_Click" ToolTip="-10" Grid.Column="2" />
-                        <Button Margin="1" Content=">" Grid.Column="3" Name="btn_focusp" FontWeight="Bold" Click="btn_focusp_Click" ToolTip="10" />
-                        <Button Margin="1" Content="&lt;&lt;" Name="btn_focusmm" FontWeight="Bold" Click="btn_focusmm_Click" ToolTip="-100" Grid.Column="1" />
-                        <Button Margin="1" Content=">>" Grid.Column="4" Name="btn_focuspp" FontWeight="Bold" Click="btn_focuspp_Click" ToolTip="100"/>
-                        <Button Margin="1" Content="&lt;&lt;&lt;" Name="btn_focusmmm" FontWeight="Bold" Click="btn_focusmmm_Click" ToolTip="-500" />
-                        <Button Margin="1" Content=">>>" Name="btn_focusppp" FontWeight="Bold" Click="btn_focusppp_Click" ToolTip="500" Grid.Column="5" />
-                        <Label Content="{Binding Path=CounterMessage, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-                        <ToggleButton Grid.Column="0" Grid.Row="1">
-                            <Image/>
-                        </ToggleButton>
-                        <Button Margin="1" Content="|&lt;" Grid.Column="1" Grid.Row="1" Name="btn_movea" Click="btn_movea_Click" IsEnabled="{Binding Path=LockA, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}"/>
-                        <ToggleButton Margin="1" Grid.Column="0" Grid.Row="1" IsChecked="{Binding Path=LockA, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}">
-                            <ToggleButton.Resources>
-                                <Image x:Key="OnImage" Source="/CameraControl;component/Images/lock.png" />
-                                <Image x:Key="OffImage" Source="/CameraControl;component/Images/unlock.png" />
-                            </ToggleButton.Resources>
-                            <ToggleButton.Style>
-                                <Style TargetType="ToggleButton">
-                                    <Style.Triggers>
-                                        <Trigger Property="IsChecked" Value="True">
-                                            <Setter Property="Content" Value="{StaticResource OnImage}">
-                                            </Setter>
-                                        </Trigger>
-                                        <Trigger Property="IsChecked" Value="False">
-                                            <Setter Property="Content" Value="{StaticResource OffImage}">
-                                            </Setter>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ToggleButton.Style>
-                        </ToggleButton>
-                        <Button Margin="1" Content=">|" Grid.Column="4" Grid.Row="1" Name="btn_moveb" Click="btn_moveb_Click" IsEnabled="{Binding Path=LockB, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}"/>
-                        <ToggleButton Margin="1" Grid.Column="5" Grid.Row="1" IsChecked="{Binding Path=LockB, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" IsEnabled="{Binding Path=LockA, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}">
-                            <ToggleButton.Resources>
-                                <Image x:Key="OnImage" Source="/CameraControl;component/Images/lock.png" />
-                                <Image x:Key="OffImage" Source="/CameraControl;component/Images/unlock.png" />
-                            </ToggleButton.Resources>
-                            <ToggleButton.Style>
-                                <Style TargetType="ToggleButton">
-                                    <Style.Triggers>
-                                        <Trigger Property="IsChecked" Value="True">
-                                            <Setter Property="Content" Value="{StaticResource OnImage}">
-                                            </Setter>
-                                        </Trigger>
-                                        <Trigger Property="IsChecked" Value="False">
-                                            <Setter Property="Content" Value="{StaticResource OffImage}">
-                                            </Setter>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ToggleButton.Style>
-                        </ToggleButton>
-                        <Button Content="&lt;&lt;&lt;&lt;&lt;&lt;" Grid.ColumnSpan="3" Grid.Row="2" Name="btn_smoot_fm" Margin="1" />
-                        <Button Content=">>>>>>" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="2" Name="btn_smoot_fp" Margin="1" MouseLeftButtonDown="btn_smoot_fp_MouseLeftButtonDown" MouseLeftButtonUp="btn_smoot_fp_MouseLeftButtonUp" />
-                    </Grid>
-                </Expander.Content>
-            </Expander>
-            <Expander Header="{T:TranslateExtension LabelFocusStacking}" BorderThickness="1" Margin="3">
-                <Expander.Content>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="90*" />
-                        <ColumnDefinition Width="82*" />
-                    </Grid.ColumnDefinitions>
-                    <Button Content="{T:TranslateExtension ButtonStart}" Grid.Column="1" Height="23" Margin="6,11,8,0" Name="btn_takephoto" VerticalAlignment="Top" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Click="btn_takephoto_Click" />
-                    <Button Content="{T:TranslateExtension ButtonPreview}" Grid.Column="1" Height="23" Margin="6,53,8,0" Name="btn_preview" VerticalAlignment="Top" Click="btn_preview_Click" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}"/>
-                    <Button Content="{T:TranslateExtension ButtonStop}" Grid.Column="1" Height="23" HorizontalAlignment="Left" Margin="6,95,0,0" Name="btn_stop" VerticalAlignment="Top" Width="68" Click="btn_stop_Click" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsBusy}"/>
-                    <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="7,26,0,0" Name="int_photono" VerticalAlignment="Top" Width="81" Minimum="1" Maximum="36000" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=PhotoNo}"/>
-                    <Label Content="{T:TranslateExtension LabelNoOfPhots}" Height="28" HorizontalAlignment="Left" Margin="1,4,0,0" VerticalAlignment="Top" />
-                    <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="7,79,0,0" Name="int_step" VerticalAlignment="Top" Width="82" Minimum="1" Maximum="2024" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=FocusStep}" />
-                    <Label Content="{T:TranslateExtension LabelNoOfPhots}" Height="28" HorizontalAlignment="Left" Margin="7,52,0,0" Name="label2" VerticalAlignment="Top" />
-                    <Label Content="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=PhotoCount}" Height="28" HorizontalAlignment="Left" Margin="11,105,0,0" Name="label3" VerticalAlignment="Top" Width="75" />
-                </Grid>
-                </Expander.Content>
-            </Expander>
-            <Expander Header="{T:TranslateExtension LabelDisplay}" BorderThickness="1"  BorderBrush="Black" Margin="3">
-                <Expander.Content>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5" />
-                        <ColumnDefinition Width="88*" />
-                        <ColumnDefinition Width="5" />
-                        <ColumnDefinition Width="90*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="186*" />
-                    </Grid.RowDefinitions>
-                    <CheckBox Content="{T:TranslateExtension LabelGrid}" Name="chk_grid" IsChecked="True" Checked="chk_grid_Checked" Unchecked="chk_grid_Unchecked" Grid.Column="1" VerticalAlignment="Center"/>
-                    <ComboBox Name="cmb_zoom" IsEnabled="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" ItemsSource="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.Values, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" SelectedValue="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.Value, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="1" Grid.Column="3" />
-                    <Label Content="{T:TranslateExtension LabelLvZoomRation}" Name="label1" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" />
-                    <CheckBox Content="B&amp;W" Name="checkBox1" IsChecked="{Binding Path=BlackAndWhite, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" />
-                    <Slider Name="slider_transparent" Maximum="1" Value="0" Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="1" />
-                    <CheckBox Content="{T:TranslateExtension LabelStayOnTop}" Height="16" HorizontalAlignment="Left" Name="chk_top" VerticalAlignment="Top" Grid.Row="4" Grid.Column="1"/>
-                </Grid>
-                </Expander.Content>
-            </Expander>
-            <Expander Header="{T:TranslateExtension LabelLuminosity}" BorderThickness="1"  BorderBrush="Black"  Margin="3">
-                <Expander.Content>
-                    <Border BorderThickness="1" BorderBrush="Black" Background="White" Margin="4" Height="75">
-                        <Polygon Points="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=LuminanceHistogramPoints}" Stretch="Fill" Fill="Black" Opacity="0.8" />
-                    </Border>
-                </Expander.Content>
-            </Expander>
-        </StackPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.RowSpan="2">
+            <StackPanel  >
+                <StackPanel.ScrollOwner>
+                    <ScrollViewer />
+                </StackPanel.ScrollOwner>
+                <Expander Header="{T:TranslateExtension LabelManualFocus}" IsEnabled="{Binding Path=IsFree, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" BorderThickness="1"  Margin="3">
+                    <Expander.Content>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="15*" />
+                                <ColumnDefinition Width="15*" />
+                                <ColumnDefinition Width="15*" />
+                                <ColumnDefinition Width="15*" />
+                                <ColumnDefinition Width="15*" />
+                                <ColumnDefinition Width="15*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="35*" />
+                                <RowDefinition Height="35*" />
+                                <RowDefinition Height="35*" />
+                            </Grid.RowDefinitions>
+                            <Button Margin="1" Content="&lt;" Name="btn_focusm" FontWeight="Bold" Click="btn_focusm_Click" ToolTip="-10" Grid.Column="2" />
+                            <Button Margin="1" Content=">" Grid.Column="3" Name="btn_focusp" FontWeight="Bold" Click="btn_focusp_Click" ToolTip="10" />
+                            <Button Margin="1" Content="&lt;&lt;" Name="btn_focusmm" FontWeight="Bold" Click="btn_focusmm_Click" ToolTip="-100" Grid.Column="1" />
+                            <Button Margin="1" Content=">>" Grid.Column="4" Name="btn_focuspp" FontWeight="Bold" Click="btn_focuspp_Click" ToolTip="100"/>
+                            <Button Margin="1" Content="&lt;&lt;&lt;" Name="btn_focusmmm" FontWeight="Bold" Click="btn_focusmmm_Click" ToolTip="-500" />
+                            <Button Margin="1" Content=">>>" Name="btn_focusppp" FontWeight="Bold" Click="btn_focusppp_Click" ToolTip="500" Grid.Column="5" />
+                            <Label Content="{Binding Path=CounterMessage, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                            <ToggleButton Grid.Column="0" Grid.Row="1">
+                                <Image/>
+                            </ToggleButton>
+                            <Button Margin="1" Content="|&lt;" Grid.Column="1" Grid.Row="1" Name="btn_movea" Click="btn_movea_Click" IsEnabled="{Binding Path=LockA, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}"/>
+                            <ToggleButton Margin="1" Grid.Column="0" Grid.Row="1" IsChecked="{Binding Path=LockA, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}">
+                                <ToggleButton.Resources>
+                                    <Image x:Key="OnImage" Source="/CameraControl;component/Images/lock.png" />
+                                    <Image x:Key="OffImage" Source="/CameraControl;component/Images/unlock.png" />
+                                </ToggleButton.Resources>
+                                <ToggleButton.Style>
+                                    <Style TargetType="ToggleButton">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter Property="Content" Value="{StaticResource OnImage}">
+                                                </Setter>
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="False">
+                                                <Setter Property="Content" Value="{StaticResource OffImage}">
+                                                </Setter>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ToggleButton.Style>
+                            </ToggleButton>
+                            <Button Margin="1" Content=">|" Grid.Column="4" Grid.Row="1" Name="btn_moveb" Click="btn_moveb_Click" IsEnabled="{Binding Path=LockB, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}"/>
+                            <ToggleButton Margin="1" Grid.Column="5" Grid.Row="1" IsChecked="{Binding Path=LockB, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" IsEnabled="{Binding Path=LockA, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}">
+                                <ToggleButton.Resources>
+                                    <Image x:Key="OnImage" Source="/CameraControl;component/Images/lock.png" />
+                                    <Image x:Key="OffImage" Source="/CameraControl;component/Images/unlock.png" />
+                                </ToggleButton.Resources>
+                                <ToggleButton.Style>
+                                    <Style TargetType="ToggleButton">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter Property="Content" Value="{StaticResource OnImage}">
+                                                </Setter>
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="False">
+                                                <Setter Property="Content" Value="{StaticResource OffImage}">
+                                                </Setter>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ToggleButton.Style>
+                            </ToggleButton>
+                            <Button Content="&lt;&lt;&lt;&lt;&lt;&lt;" Grid.ColumnSpan="3" Grid.Row="2" Name="btn_smoot_fm" Margin="1" />
+                            <Button Content=">>>>>>" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="2" Name="btn_smoot_fp" Margin="1" MouseLeftButtonDown="btn_smoot_fp_MouseLeftButtonDown" MouseLeftButtonUp="btn_smoot_fp_MouseLeftButtonUp" />
+                        </Grid>
+                    </Expander.Content>
+                </Expander>
+                <Expander Header="{T:TranslateExtension LabelFocusStacking}" BorderThickness="1" Margin="3">
+                    <Expander.Content>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90*" />
+                                <ColumnDefinition Width="82*" />
+                            </Grid.ColumnDefinitions>
+                            <Button Content="{T:TranslateExtension ButtonStart}" Grid.Column="1" Height="23" Margin="6,11,8,0" Name="btn_takephoto" VerticalAlignment="Top" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Click="btn_takephoto_Click" />
+                            <Button Content="{T:TranslateExtension ButtonPreview}" Grid.Column="1" Height="23" Margin="6,53,8,0" Name="btn_preview" VerticalAlignment="Top" Click="btn_preview_Click" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}"/>
+                            <Button Content="{T:TranslateExtension ButtonStop}" Grid.Column="1" Height="23" HorizontalAlignment="Left" Margin="6,95,0,0" Name="btn_stop" VerticalAlignment="Top" Width="68" Click="btn_stop_Click" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsBusy}"/>
+                            <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="7,26,0,0" Name="int_photono" VerticalAlignment="Top" Width="81" Minimum="1" Maximum="36000" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=PhotoNo}"/>
+                            <Label Content="{T:TranslateExtension LabelNoOfPhots}" Height="28" HorizontalAlignment="Left" Margin="1,4,0,0" VerticalAlignment="Top" />
+                            <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="7,79,0,0" Name="int_step" VerticalAlignment="Top" Width="82" Minimum="1" Maximum="2024" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=FocusStep}" />
+                            <Label Content="{T:TranslateExtension LabelNoOfPhots}" Height="28" HorizontalAlignment="Left" Margin="7,52,0,0" Name="label2" VerticalAlignment="Top" />
+                            <Label Content="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=PhotoCount}" Height="28" HorizontalAlignment="Left" Margin="11,105,0,0" Name="label3" VerticalAlignment="Top" Width="75" />
+                        </Grid>
+                    </Expander.Content>
+                </Expander>
+                <Expander Header="{T:TranslateExtension LabelDisplay}" BorderThickness="1"  BorderBrush="Black" Margin="3">
+                    <Expander.Content>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="5" />
+                                <ColumnDefinition Width="88*" />
+                                <ColumnDefinition Width="5" />
+                                <ColumnDefinition Width="90*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="186*" />
+                            </Grid.RowDefinitions>
+                            <CheckBox Content="{T:TranslateExtension LabelGrid}" Name="chk_grid" IsChecked="True" Checked="chk_grid_Checked" Unchecked="chk_grid_Unchecked" Grid.Column="1" VerticalAlignment="Center"/>
+                            <ComboBox Name="cmb_zoom" IsEnabled="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" ItemsSource="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.Values, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" SelectedValue="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.Value, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="1" Grid.Column="3" />
+                            <Label Content="{T:TranslateExtension LabelLvZoomRation}" Name="label1" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" />
+                            <CheckBox Content="B&amp;W" Name="checkBox1" IsChecked="{Binding Path=BlackAndWhite, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" />
+                            <Slider Name="slider_transparent" Maximum="1" Value="0" Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="1" />
+                            <CheckBox Content="{T:TranslateExtension LabelStayOnTop}" Height="16" HorizontalAlignment="Left" Name="chk_top" VerticalAlignment="Top" Grid.Row="4" Grid.Column="1"/>
+                        </Grid>
+                    </Expander.Content>
+                </Expander>
+                <Expander Header="{T:TranslateExtension LabelLuminosity}" BorderThickness="1"  BorderBrush="Black"  Margin="3">
+                    <Expander.Content>
+                        <Border BorderThickness="1" BorderBrush="Black" Background="White" Margin="4" Height="75">
+                            <Polygon Points="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=LuminanceHistogramPoints}" Stretch="Fill" Fill="Black" Opacity="0.8" />
+                        </Border>
+                    </Expander.Content>
+                </Expander>
+                <Expander Header="{T:TranslateExtension LabelMotionDetection}" BorderThickness="1"  BorderBrush="Black"  Margin="3">
+                    <Expander.Content>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="5" />
+                                <ColumnDefinition Width="88*" />
+                                <ColumnDefinition Width="5" />
+                                <ColumnDefinition Width="90*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="186*" />
+                            </Grid.RowDefinitions>
+                            <CheckBox Content="{T:TranslateExtension LabelActivateMotionDetection}" Grid.Column="1" Name="chk_motiondetect" Grid.ColumnSpan="3" VerticalAlignment="Center"/>
+                            <CheckBox Content="{T:TranslateExtension LabelCaptureWhenMove}" Grid.Column="1" Grid.Row="1" Name="chk_tiggeronmotion" Grid.ColumnSpan="3" VerticalAlignment="Center"/>
+                            <Label Content="{T:TranslateExtension LabelThreshold}" Grid.Column="1" Grid.Row="2" />
+                            <xctk:IntegerUpDown Grid.Column="3" Grid.Row="2" Name="upd_threshold" Margin="3" Maximum="99" Minimum="1" Value="20"/>
+                        </Grid>
+                    </Expander.Content>
+                </Expander>
+            </StackPanel>
+        </ScrollViewer>
         <ToggleButton Content="{T:TranslateExtension ButtonFreezeImage}" Height="23" HorizontalAlignment="Left" Margin="12,83,0,0" VerticalAlignment="Top" Width="182" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=FreezeImage}" Checked="ToggleButton_Checked" />
-        <Button Height="29" HorizontalAlignment="Left" Margin="159,255,0,0" Name="button3" VerticalAlignment="Top" Width="33" Click="button3_Click" Grid.Row="2" Grid.RowSpan="2">
-            <Image Source="/CameraControl;component/Images/help.png"  />
-        </Button>
         <Button Content="{T:TranslateExtension ButtonRecordMovie}" Height="23" HorizontalAlignment="Left" Margin="12,51,0,0" Name="btn_record" VerticalAlignment="Top" Width="182" Click="btn_record_Click" />
+        <Button Height="29" Name="button3" Width="33" Click="button3_Click" Grid.Column="1" Margin="0,0,17,12" Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+            <Image Source="/CameraControl;component/Images/help.png" />
+        </Button>
     </Grid>
 </Controls:MetroWindow>

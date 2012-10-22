@@ -199,5 +199,9 @@
     public static string LabelStayOnTop = "Always on top";
     // add 22/10/2012
     public static string LabelDisplay = "Display";
+    public static string LabelMotionDetection = "Motion detection";
+    public static string LabelActivateMotionDetection = "Activate motion detection";
+    public static string LabelCaptureWhenMove = "Capture when motion detected";
+    public static string LabelThreshold = "Threshold (%)";
   }
 }
