@@ -197,5 +197,7 @@
     // add 15/10/2012
     public static string LabelExternalViewerPath = "External viewer";
     public static string LabelStayOnTop = "Always on top";
+    // add 22/10/2012
+    public static string LabelDisplay = "Display";
   }
 }

@@ -18,12 +18,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using AForge.Imaging;
 using AForge.Imaging.Filters;
+using AForge.Vision.Motion;
 using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
 using CameraControl.Core.Interfaces;
+using MahApps.Metro;
 using PortableDeviceLib;
 using MessageBox = System.Windows.Forms.MessageBox;
 using Timer = System.Timers.Timer;
@@ -49,7 +51,7 @@ namespace CameraControl.windows
     private DateTime _framestart;
     private Timer _smoottimer;
     private int _smootstepdirection = 1;
-
+    private MotionDetector detector;
 
     public LiveViewData LiveViewData { get; set; }
 
@@ -432,6 +434,7 @@ namespace CameraControl.windows
 
                                            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(stream))
                                            {
+                                             detector.ProcessFrame(bmp);
                                              ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
                                              this.LuminanceHistogramPoints =
                                                ConvertToPointCollection(hslStatistics.Luminance.Values);
@@ -668,8 +671,12 @@ namespace CameraControl.windows
                                            FreezeImage = false;
                                            btn_record.IsEnabled =
                                              SelectedPortableDevice.GetCapability(CapabilityEnum.RecordMovie);
+                                           ThemeManager.ChangeTheme(Application.Current, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
                                            selectedPortableDevice.CaptureCompleted += selectedPortableDevice_CaptureCompleted;
-                                           _timer.Start();
+                                           detector = new MotionDetector(
+                                             new SimpleBackgroundModelingDetector(),
+                                             new MotionAreaHighlighting());
+                                          _timer.Start();
                                          }));
           break;
         case WindowsCmdConsts.LiveViewWnd_Hide:

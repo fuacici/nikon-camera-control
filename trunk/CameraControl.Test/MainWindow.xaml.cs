@@ -27,7 +27,7 @@ namespace CameraControl.Test
 
     private void button1_Click(object sender, RoutedEventArgs e)
     {
-      focusControler1.Init();
+      
     }
   }
 }
