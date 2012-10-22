@@ -346,6 +346,7 @@ namespace CameraControl.windows
     public void Init()
     {
       InitializeComponent();
+      ThemeManager.ChangeTheme(Application.Current, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
       _timer.Stop();
       _timer.AutoReset = true;
       _timer.Elapsed += _timer_Elapsed;
@@ -434,7 +435,13 @@ namespace CameraControl.windows
 
                                            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(stream))
                                            {
-                                             detector.ProcessFrame(bmp);
+                                             if(chk_motiondetect.IsChecked==true)
+                                             {
+                                               if (detector.ProcessFrame(bmp) > ((float)upd_threshold.Value / 100) && chk_tiggeronmotion.IsChecked == true )
+                                               {
+                                                 selectedPortableDevice.CapturePhotoNoAf();
+                                               }
+                                             }
                                              ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
                                              this.LuminanceHistogramPoints =
                                                ConvertToPointCollection(hslStatistics.Luminance.Values);
@@ -671,7 +678,6 @@ namespace CameraControl.windows
                                            FreezeImage = false;
                                            btn_record.IsEnabled =
                                              SelectedPortableDevice.GetCapability(CapabilityEnum.RecordMovie);
-                                           ThemeManager.ChangeTheme(Application.Current, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
                                            selectedPortableDevice.CaptureCompleted += selectedPortableDevice_CaptureCompleted;
                                            detector = new MotionDetector(
                                              new SimpleBackgroundModelingDetector(),
