@@ -288,6 +288,14 @@ namespace CameraControl.Core.Devices.Classes
       res = res.Replace("$Tag2", SelectedTag1 != null ? SelectedTag2.Value.Trim() : "");
       res = res.Replace("$Tag3", SelectedTag1 != null ? SelectedTag3.Value.Trim() : "");
       res = res.Replace("$Tag4", SelectedTag1 != null ? SelectedTag4.Value.Trim() : "");
+      //prevent multiple \ if a tag is mepty 
+      while (res.Contains(@"\\"))
+      {
+        res = res.Replace(@"\\", @"\");
+      }
+      // if the file name start with \ the Path.Combine isn't work right 
+      if (res.StartsWith("\\"))
+        res = res.Substring(1);
       return res;
     }
 

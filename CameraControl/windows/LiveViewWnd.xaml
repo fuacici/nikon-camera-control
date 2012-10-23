@@ -95,7 +95,7 @@
                 <StackPanel.ScrollOwner>
                     <ScrollViewer />
                 </StackPanel.ScrollOwner>
-                <Expander Header="{T:TranslateExtension LabelManualFocus}" IsEnabled="{Binding Path=IsFree, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" BorderThickness="1"  Margin="3">
+                <Expander Header="{T:TranslateExtension LabelManualFocus}" IsEnabled="{Binding Path=IsFree, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" BorderThickness="1"  BorderBrush="Black" Margin="3">
                     <Expander.Content>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -168,7 +168,7 @@
                         </Grid>
                     </Expander.Content>
                 </Expander>
-                <Expander Header="{T:TranslateExtension LabelFocusStacking}" BorderThickness="1" Margin="3">
+                <Expander Header="{T:TranslateExtension LabelFocusStacking}" BorderThickness="1" BorderBrush="Black" Margin="3">
                     <Expander.Content>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -208,7 +208,7 @@
                             <Label Content="{T:TranslateExtension LabelLvZoomRation}" Name="label1" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" />
                             <CheckBox Content="B&amp;W" Name="checkBox1" IsChecked="{Binding Path=BlackAndWhite, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" />
                             <Slider Name="slider_transparent" Maximum="1" Value="0" Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="1" />
-                            <CheckBox Content="{T:TranslateExtension LabelStayOnTop}" Height="16" HorizontalAlignment="Left" Name="chk_top" VerticalAlignment="Top" Grid.Row="4" Grid.Column="1"/>
+                            <CheckBox Content="{T:TranslateExtension LabelStayOnTop}" Name="chk_top" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" />
                         </Grid>
                     </Expander.Content>
                 </Expander>
@@ -240,6 +240,9 @@
                             <CheckBox Content="{T:TranslateExtension LabelCaptureWhenMove}" Grid.Column="1" Grid.Row="1" Name="chk_tiggeronmotion" Grid.ColumnSpan="3" VerticalAlignment="Center"/>
                             <Label Content="{T:TranslateExtension LabelThreshold}" Grid.Column="1" Grid.Row="2" />
                             <xctk:IntegerUpDown Grid.Column="3" Grid.Row="2" Name="upd_threshold" Margin="3" Maximum="99" Minimum="1" Value="20"/>
+                            <Label Content="{T:TranslateExtension LabelWaitMoion}" Grid.Column="1" Grid.Row="3" />
+                            <xctk:IntegerUpDown Grid.Column="3" Grid.Row="3" Name="upd_movewait" Margin="3" Minimum="1" Maximum="3600" Value="10"/>
+                            <Label Grid.Column="3" Grid.Row="4" Name="lbl_motion" />
                         </Grid>
                     </Expander.Content>
                 </Expander>
