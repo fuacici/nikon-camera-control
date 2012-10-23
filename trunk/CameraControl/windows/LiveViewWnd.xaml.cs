@@ -46,12 +46,14 @@ namespace CameraControl.windows
     private Line _line21 = new Line();
     private Line _line22 = new Line();
     private BackgroundWorker _worker = new BackgroundWorker();
-    private bool preview = false;
+    private bool _preview = false;
     private int _totalframes = 0;
     private DateTime _framestart;
     private Timer _smoottimer;
     private int _smootstepdirection = 1;
-    private MotionDetector detector;
+    private MotionDetector _detector;
+    private DateTime _photoCapturedTime;
+
 
     public LiveViewData LiveViewData { get; set; }
 
@@ -433,13 +435,16 @@ namespace CameraControl.windows
                                            MemoryStream stream = new MemoryStream(LiveViewData.ImageData, LiveViewData.ImagePosition,
                                                                                   LiveViewData.ImageData.Length - LiveViewData.ImagePosition);
 
-                                           using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(stream))
+                                           using (var bmp = new System.Drawing.Bitmap(stream))
                                            {
                                              if(chk_motiondetect.IsChecked==true)
                                              {
-                                               if (detector.ProcessFrame(bmp) > ((float)upd_threshold.Value / 100) && chk_tiggeronmotion.IsChecked == true )
+                                               float movement = _detector.ProcessFrame(bmp);
+                                               lbl_motion.Content = Math.Round(movement*100,2); 
+                                               if (movement > ((float)upd_threshold.Value / 100) && chk_tiggeronmotion.IsChecked == true && (DateTime.Now - _photoCapturedTime).Seconds > upd_movewait.Value)
                                                {
                                                  selectedPortableDevice.CapturePhotoNoAf();
+                                                 _photoCapturedTime = DateTime.Now;
                                                }
                                              }
                                              ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
@@ -663,8 +668,9 @@ namespace CameraControl.windows
         case WindowsCmdConsts.LiveViewWnd_Show:
           Dispatcher.Invoke(new Action(delegate
                                          {
-                                           _freezeTimer.Interval = ServiceProvider.Settings.LiveViewFreezeTimeOut * 1000;
-                                           ServiceProvider.Settings.SelectedBitmap.BitmapLoaded += SelectedBitmap_BitmapLoaded;
+                                           _freezeTimer.Interval = ServiceProvider.Settings.LiveViewFreezeTimeOut*1000;
+                                           ServiceProvider.Settings.SelectedBitmap.BitmapLoaded +=
+                                             SelectedBitmap_BitmapLoaded;
                                            Recording = false;
                                            SelectedPortableDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
                                            Show();
@@ -678,11 +684,16 @@ namespace CameraControl.windows
                                            FreezeImage = false;
                                            btn_record.IsEnabled =
                                              SelectedPortableDevice.GetCapability(CapabilityEnum.RecordMovie);
-                                           selectedPortableDevice.CaptureCompleted += selectedPortableDevice_CaptureCompleted;
-                                           detector = new MotionDetector(
-                                             new SimpleBackgroundModelingDetector(),
+                                           selectedPortableDevice.CaptureCompleted +=
+                                             selectedPortableDevice_CaptureCompleted;
+                                           //_detector = new MotionDetector(
+                                           //  new SimpleBackgroundModelingDetector(),
+                                           //  new MotionAreaHighlighting());
+                                           _detector = new MotionDetector(
+                                             new SimpleBackgroundModelingDetector(true),
                                              new MotionAreaHighlighting());
-                                          _timer.Start();
+                                           _photoCapturedTime = DateTime.Now;
+                                           _timer.Start();
                                          }));
           break;
         case WindowsCmdConsts.LiveViewWnd_Hide:
@@ -873,7 +884,7 @@ namespace CameraControl.windows
           //ServiceProvider.DeviceManager.SelectedCameraDevice.Focus(FocusStep);
           if (PhotoCount <= PhotoNo)
           {
-            if (!preview)
+            if (!_preview)
             {
               Recording = false;
               //ServiceProvider.DeviceManager.SelectedCameraDevice.StopLiveView();
@@ -912,7 +923,7 @@ namespace CameraControl.windows
       GetLiveImage();
       PhotoCount = 0;
       IsBusy = true;
-      preview = true;
+      _preview = true;
       Thread thread = new Thread(TakePhoto);
       thread.Start();
     }
@@ -929,7 +940,7 @@ namespace CameraControl.windows
       GetLiveImage();
       PhotoCount = 0;
       IsBusy = true;
-      preview = false;
+      _preview = false;
       Thread thread = new Thread(TakePhoto);
       thread.Start();
     }
