@@ -126,6 +126,17 @@ namespace CameraControl.windows
       }
     }
 
+    private int _waitTime;
+    public int WaitTime
+    {
+      get { return _waitTime; }
+      set
+      {
+        _waitTime = value;
+        NotifyPropertyChanged("WaitTime");
+      }
+    }
+
     private int _focusStep;
 
     public int FocusStep
@@ -348,6 +359,7 @@ namespace CameraControl.windows
     public void Init()
     {
       InitializeComponent();
+      WaitTime = 1;
       ThemeManager.ChangeTheme(Application.Current, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
       _timer.Stop();
       _timer.AutoReset = true;
@@ -869,11 +881,11 @@ namespace CameraControl.windows
         {
           Log.Debug("LiveView: Stackphoto capture started");
           FreezeImage = true;
-          Thread.Sleep(300);
-          while (ServiceProvider.DeviceManager.SelectedCameraDevice.IsBusy)
-          {
-            Thread.Sleep(1);
-          }
+          Thread.Sleep(WaitTime*1000);
+          //while (ServiceProvider.DeviceManager.SelectedCameraDevice.IsBusy)
+          //{
+          //  Thread.Sleep(1);
+          //}
           StartLiveView();
           if (PhotoCount > 0)
           {
@@ -892,7 +904,7 @@ namespace CameraControl.windows
             }
             else
             {
-              Thread.Sleep(1000);
+              //Thread.Sleep(1000);
               TakePhoto();
             }
           }

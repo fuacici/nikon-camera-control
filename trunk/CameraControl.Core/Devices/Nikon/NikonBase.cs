@@ -371,7 +371,7 @@ namespace CameraControl.Core.Devices.Nikon
 
     private void InitOther()
     {
-      LiveViewImageZoomRatio = new PropertyValue<int>();
+      LiveViewImageZoomRatio = new PropertyValue<int> {Name = "LiveViewImageZoomRatio"};
       LiveViewImageZoomRatio.AddValues("All", 0);
       LiveViewImageZoomRatio.AddValues("25%", 1);
       LiveViewImageZoomRatio.AddValues("33%", 2);
@@ -396,6 +396,7 @@ namespace CameraControl.Core.Devices.Nikon
       lock (Locker)
       {
         IsoNumber = new PropertyValue<int>();
+        IsoNumber.Name = "IsoNumber";
         IsoNumber.ValueChanged += IsoNumber_ValueChanged;
         IsoNumber.Clear();
         try
@@ -422,6 +423,7 @@ namespace CameraControl.Core.Devices.Nikon
     private void InitShutterSpeed()
     {
       ShutterSpeed = new PropertyValue<long>();
+      ShutterSpeed.Name = "ShutterSpeed";
       ShutterSpeed.ValueChanged += ShutterSpeed_ValueChanged;
       ReInitShutterSpeed();
     }
@@ -466,6 +468,7 @@ namespace CameraControl.Core.Devices.Nikon
         DeviceReady();
         byte datasize = 2;
         Mode = new PropertyValue<uint>();
+        Mode.Name = "Mode";
         Mode.IsEnabled = false;
         Mode.ValueChanged += Mode_ValueChanged;
         byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureProgramMode);
@@ -517,6 +520,7 @@ namespace CameraControl.Core.Devices.Nikon
     private void InitFNumber()
     {
       FNumber = new PropertyValue<int> { IsEnabled = true };
+      FNumber.Name = "FNumber";
       FNumber.ValueChanged += FNumber_ValueChanged;
       ReInitFNumber();
     }
@@ -559,6 +563,7 @@ namespace CameraControl.Core.Devices.Nikon
         DeviceReady();
         byte datasize = 2;
         WhiteBalance = new PropertyValue<long>();
+        WhiteBalance.Name = "WhiteBalance";
         WhiteBalance.ValueChanged += WhiteBalance_ValueChanged;
         byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_WhiteBalance);
         int type = BitConverter.ToInt16(result, 2);
@@ -589,6 +594,7 @@ namespace CameraControl.Core.Devices.Nikon
         DeviceReady();
         byte datasize = 2;
         ExposureCompensation = new PropertyValue<int>();
+        ExposureCompensation.Name = "ExposureCompensation";
         ExposureCompensation.ValueChanged += ExposureCompensation_ValueChanged;
         byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureBiasCompensation);
         int type = BitConverter.ToInt16(result, 2);
@@ -617,6 +623,7 @@ namespace CameraControl.Core.Devices.Nikon
         DeviceReady();
         byte datasize = 1;
         CompressionSetting = new PropertyValue<int>();
+        CompressionSetting.Name = "CompressionSetting ";
         CompressionSetting.ValueChanged += CompressionSetting_ValueChanged;
         byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_CompressionSetting);
         int type = BitConverter.ToInt16(result, 2);
@@ -647,6 +654,7 @@ namespace CameraControl.Core.Devices.Nikon
         DeviceReady();
         byte datasize = 2;
         ExposureMeteringMode = new PropertyValue<int>();
+        ExposureMeteringMode.Name = "ExposureMeteringMode";
         ExposureMeteringMode.ValueChanged += ExposureMeteringMode_ValueChanged;
         byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureMeteringMode);
         int type = BitConverter.ToInt16(result, 2);
@@ -677,6 +685,7 @@ namespace CameraControl.Core.Devices.Nikon
         DeviceReady();
         byte datasize = 2;
         FocusMode = new PropertyValue<uint>();
+        FocusMode.Name = "FocusMode";
         FocusMode.IsEnabled = false;
         byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_FocusMode);
         int type = BitConverter.ToInt16(result, 2);
@@ -862,6 +871,7 @@ namespace CameraControl.Core.Devices.Nikon
         }
         finally
         {
+          IsBusy = false;
           if (val != null && val.Length > 0)
             SetProperty(CONST_CMD_SetDevicePropValue, new[] {oldval}, CONST_PROP_AFModeSelect, -1);
         }
@@ -1154,17 +1164,28 @@ namespace CameraControl.Core.Devices.Nikon
         {
           return;
         }
-        retry = false;
-        uint resp = StillImageDevice.ExecuteWriteData(code, data, param1, param2);
-        if (resp != 0 || resp != ErrorCodes.MTP_OK)
+        try
         {
-          //Console.WriteLine("Retry ...." + resp.ToString("X"));
-          if (resp == ErrorCodes.MTP_Device_Busy || resp == 0x800700AA)
+          retry = false;
+          uint resp = StillImageDevice.ExecuteWriteData(code, data, param1, param2);
+          if (resp != 0 || resp != ErrorCodes.MTP_OK)
           {
-            Thread.Sleep(100);
-            retry = true;
-            retrynum++;
+            //Console.WriteLine("Retry ...." + resp.ToString("X"));
+            if (resp == ErrorCodes.MTP_Device_Busy || resp == 0x800700AA)
+            {
+              Thread.Sleep(100);
+              retry = true;
+              retrynum++;
+            }
+            else
+            {
+              ErrorCodes.GetException(resp);
+            }
           }
+        }
+        catch (Exception exception)
+        {
+          Log.Error("Error set property :" + param1.ToString("X"), exception);
         }
       } while (retry);
     }

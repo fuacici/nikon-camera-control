@@ -41,8 +41,8 @@ namespace CameraControl.Core.Devices.Classes
       get { return _value; }
       set
       {
-        //if (_value != value)
-        //{
+        if (_value != value)
+        {
           _value = value;
           if(ValueChanged != null)
           {
@@ -52,7 +52,7 @@ namespace CameraControl.Core.Devices.Classes
                 ValueChanged(this, _value, keyValuePair.Value);
             }
           }
-        //}
+        }
         NotifyPropertyChanged("Value");
       }
     }
@@ -99,7 +99,7 @@ namespace CameraControl.Core.Devices.Classes
           return;
         }
       }
-      Console.WriteLine("Value not found");
+      Console.WriteLine(string.Format("Value not found for property {0}, value {1} ", Name, o));
     }
 
     public void SetValue()
