@@ -82,8 +82,8 @@
             <ColumnDefinition Width="200" />
             <ColumnDefinition Width="635*" />
         </Grid.ColumnDefinitions>
-        <Image Name="image1" Stretch="Uniform" Grid.Column="1" MouseDown="image1_MouseDown" Grid.RowSpan="3" />
         <Image Stretch="Uniform" Grid.Column="1" Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" Opacity="{Binding ElementName=slider_transparent,Path=Value}" Grid.RowSpan="3" />
+        <Image Name="image1" Stretch="Uniform" Grid.Column="1" MouseDown="image1_MouseDown" Grid.RowSpan="3" />        
         <Canvas Grid.Column="1" Name="canvas"   Background="{x:Null}" SizeChanged="canvas_SizeChanged" Grid.RowSpan="3">
             <Label Canvas.Left="0" Canvas.Top="0" Content="REC" Height="41" Name="lbl_rec" FontSize="20" FontWeight="Bold" Foreground="Red" Width="52"></Label>
             <Label Content="{Binding Path=Fps, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Height="28" Width="36" Canvas.Left="494" Canvas.Top="6" />
@@ -171,18 +171,28 @@
                 <Expander Header="{T:TranslateExtension LabelFocusStacking}" BorderThickness="1" BorderBrush="Black" Margin="3">
                     <Expander.Content>
                         <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="40" />
+                                <RowDefinition Height="38" />
+                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="90*" />
-                                <ColumnDefinition Width="82*" />
+                                <ColumnDefinition Width="86" />
+                                <ColumnDefinition Width="5" />
+                                <ColumnDefinition Width="86*" />
                             </Grid.ColumnDefinitions>
-                            <Button Content="{T:TranslateExtension ButtonStart}" Grid.Column="1" Height="23" Margin="6,11,8,0" Name="btn_takephoto" VerticalAlignment="Top" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Click="btn_takephoto_Click" />
-                            <Button Content="{T:TranslateExtension ButtonPreview}" Grid.Column="1" Height="23" Margin="6,53,8,0" Name="btn_preview" VerticalAlignment="Top" Click="btn_preview_Click" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}"/>
-                            <Button Content="{T:TranslateExtension ButtonStop}" Grid.Column="1" Height="23" HorizontalAlignment="Left" Margin="6,95,0,0" Name="btn_stop" VerticalAlignment="Top" Width="68" Click="btn_stop_Click" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsBusy}"/>
-                            <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="7,26,0,0" Name="int_photono" VerticalAlignment="Top" Width="81" Minimum="1" Maximum="36000" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=PhotoNo}"/>
-                            <Label Content="{T:TranslateExtension LabelNoOfPhots}" Height="28" HorizontalAlignment="Left" Margin="1,4,0,0" VerticalAlignment="Top" />
-                            <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="7,79,0,0" Name="int_step" VerticalAlignment="Top" Width="82" Minimum="1" Maximum="2024" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=FocusStep}" />
-                            <Label Content="{T:TranslateExtension LabelNoOfPhots}" Height="28" HorizontalAlignment="Left" Margin="7,52,0,0" Name="label2" VerticalAlignment="Top" />
-                            <Label Content="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=PhotoCount}" Height="28" HorizontalAlignment="Left" Margin="11,105,0,0" Name="label3" VerticalAlignment="Top" Width="75" />
+                            <Button Content="{T:TranslateExtension ButtonStart}" Name="btn_takephoto" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Click="btn_takephoto_Click" Grid.Row="3" Grid.ColumnSpan="2" Margin="5"/>
+                            <Button Content="{T:TranslateExtension ButtonPreview}" Grid.Column="2" Name="btn_preview" Click="btn_preview_Click" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Grid.Row="3" Margin="5"/>
+                            <Button Content="{T:TranslateExtension ButtonStop}" Grid.Column="2" Name="btn_stop" Click="btn_stop_Click" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsBusy}" Grid.Row="4" Margin="5"/>
+                            <xctk:IntegerUpDown Name="int_photono" Minimum="1" Maximum="36000" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=PhotoNo}" Grid.Column="2" Margin="3"/>
+                            <Label Content="{T:TranslateExtension LabelNoOfPhots}" />
+                            <xctk:IntegerUpDown Name="int_step" Minimum="1" Maximum="2024" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=FocusStep}" Grid.Row="1" Grid.Column="2" Margin="3"/>
+                            <Label Content="{T:TranslateExtension LabelFocusStep}" Grid.Row="1" />
+                            <Label Content="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=PhotoCount}" Height="28" HorizontalAlignment="Left" Margin="5,7,0,0" Name="label3" VerticalAlignment="Top" Width="75" Grid.Row="4" />
+                            <Label Content="{T:TranslateExtension LabelWaitTime}" Grid.Row="2" />
+                            <xctk:IntegerUpDown Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=WaitTime}" Grid.Column="2" Grid.Row="2" Name="int_wait" Margin="3" Maximum="60" Minimum="1" />
                         </Grid>
                     </Expander.Content>
                 </Expander>
