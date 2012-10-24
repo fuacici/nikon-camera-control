@@ -19,6 +19,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="Resources/Icons.xaml" />
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colours.xaml"/>-->
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml"/>-->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Menu.xaml"/>
@@ -71,7 +72,7 @@
         </Grid>
 
         <StackPanel Orientation="Vertical" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,179,0">
-             <StackPanel  Orientation="Horizontal">
+            <StackPanel  Orientation="Horizontal">
                 <Label Content="Model:" />
                 <Label Content="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.DeviceName}" />
             </StackPanel>
@@ -82,28 +83,37 @@
         <Controls:MetroContentControl Grid.ColumnSpan="4" Name="toolBar1" Grid.Row="1">
             <WrapPanel >
                 <Button ToolTip="{T:TranslateExtension CapturePhotoToolTip}"  Height="50" Name="button3" Click="button3_Click" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Style="{DynamicResource MetroCircleButtonStyle}">
-                <Image Margin="5" Source="/CameraControl;component/Images/Camera.png"/>
-            </Button>
-                <Button ToolTip="{T:TranslateExtension CapturePhotoNoAfToolTip}"  Height="50" Name="btn_capture_noaf" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_capture_noaf_Click" >
-                <Grid>
                     <Image Margin="5" Source="/CameraControl;component/Images/Camera.png"/>
-                    <Label Content="NoAf" HorizontalContentAlignment="Center" FontSize="14" />
-                </Grid>
-            </Button>
+                </Button>
+                <Button ToolTip="{T:TranslateExtension CapturePhotoNoAfToolTip}"  Height="50" Name="btn_capture_noaf" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_capture_noaf_Click" >
+                    <Grid>
+                        <Image Margin="5" Source="/CameraControl;component/Images/Camera.png"/>
+                        <Label Content="NoAf" HorizontalContentAlignment="Center" FontSize="14" />
+                    </Grid>
+                </Button>
                 <Button Content="[BR]" ToolTip="{T:TranslateExtension BraketingToolTip}" Width="50"  Height="50" Name="btn_br" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_br_Click" FontSize="15" Style="{DynamicResource MetroCircleButtonStyle}"/>
                 <ToggleButton ToolTip="Image property" Height="50" Width="50" Name="button1"  Click="button1_Click" Margin="5">
-                <Image Margin="5" Source="/CameraControl;component/Images/Properties.png"/>
-            </ToggleButton>
+                    <Image Margin="5" Source="/CameraControl;component/Images/Properties.png"/>
+                </ToggleButton>
                 <Button ToolTip="{T:TranslateExtension TimeLapseToolTip}" Height="50" Name="but_timelapse" Width="50" Margin="5" Click="but_timelapse_Click" Style="{DynamicResource MetroCircleButtonStyle}">
-                <Image Margin="5" Source="/CameraControl;component/Images/Timelapse.png" />
-            </Button>
+                    <Rectangle Width="20" Height="20">
+                        <Rectangle.Fill>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_movie_clapper}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Button>
                 <Button ToolTip="{T:TranslateExtension FullscreenToolTip}" Height="50" Name="but_fullscreen" Width="50" Margin="5" Click="but_fullscreen_Click" Style="{DynamicResource MetroCircleButtonStyle}">
-                <Image Margin="5" Source="/CameraControl;component/Images/Fullscreen.png" />
-            </Button>
+                    <Rectangle Width="20" Height="20">
+                        <Rectangle.Fill>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_new_window}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <!--<Image Margin="5" Source="/CameraControl;component/Images/Fullscreen.png" />-->
+                </Button>
                 <Button Content="Lv" ToolTip="{T:TranslateExtension LiveViewToolTip}" Height="50" Name="btn_liveview" Width="50" Margin="5" Click="btn_liveview_Click" FontSize="15" Style="{DynamicResource MetroCircleButtonStyle}"/>
                 <Button Content="B" ToolTip="{T:TranslateExtension BrowseSessionsToolTip}" Height="50" Name="btn_browse" Width="50" Margin="5"  FontSize="15" Click="btn_browse_Click" Style="{DynamicResource MetroCircleButtonStyle}"/>
                 <Button Content="Tags" ToolTip="{T:TranslateExtension SelectTagsToolTip}" Height="50" Name="btn_Tags" Width="50" Margin="5"  FontSize="15" Click="btn_Tags_Click" Style="{DynamicResource MetroCircleButtonStyle}"/>
-            <StackPanel HorizontalAlignment="Right" IsEnabled="{Binding Path=DefaultSession.TimeLapse.IsDisabled}"></StackPanel>
+                <StackPanel HorizontalAlignment="Right" IsEnabled="{Binding Path=DefaultSession.TimeLapse.IsDisabled}"></StackPanel>
             </WrapPanel>
         </Controls:MetroContentControl>
         <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="12,6,131,14" Grid.Row="2" Grid.ColumnSpan="2" />
@@ -147,7 +157,7 @@
             <MenuItem Header="{T:TranslateExtension MenuHelp}">
                 <MenuItem Header="{T:TranslateExtension MenuHomePage}" Click="MenuItem_Click" />
                 <MenuItem Header="{T:TranslateExtension MenuCheckForUpdate}" Name="mnu_update" Click="MenuItem_Click_1" />
-                <MenuItem Header="{T:TranslateExtension MenuDonate}" Name="mnu_donate" Click="mnu_donate_Click" />                
+                <MenuItem Header="{T:TranslateExtension MenuDonate}" Name="mnu_donate" Click="mnu_donate_Click" />
                 <Separator />
                 <MenuItem Header="{T:TranslateExtension MenuAbout}" Name="mnu_about" Click="btn_about_Click" />
             </MenuItem>
