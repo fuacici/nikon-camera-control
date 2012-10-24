@@ -8,7 +8,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for EditSession.xaml
   /// </summary>
-  public partial class EditSession : Window
+  public partial class EditSession
   {
     public PhotoSession Session { get; set; }
     public EditSession(PhotoSession session)

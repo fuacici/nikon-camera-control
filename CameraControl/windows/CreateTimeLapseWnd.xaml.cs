@@ -29,7 +29,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for CreateTimeLapseWnd.xaml
   /// </summary>
-  public partial class CreateTimeLapseWnd : Window
+  public partial class CreateTimeLapseWnd
   {
     private BackgroundWorker _backgroundWorker = new BackgroundWorker();
     private string _tempFolder = "";

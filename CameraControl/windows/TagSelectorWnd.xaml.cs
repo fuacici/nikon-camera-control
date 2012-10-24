@@ -21,7 +21,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for TagSelectorWnd.xaml
   /// </summary>
-  public partial class TagSelectorWnd : Window, IWindow, INotifyPropertyChanged
+  public partial class TagSelectorWnd : IWindow, INotifyPropertyChanged
   {
     private AsyncObservableCollection<TagItem> _tags1;
     public AsyncObservableCollection<TagItem> Tags1

@@ -24,7 +24,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for MultipleCameraWnd.xaml
   /// </summary>
-  public partial class MultipleCameraWnd : Window,IWindow
+  public partial class MultipleCameraWnd : IWindow
   {
     public bool DisbleAutofocus { get; set; }
     public int DelaySec { get; set; }

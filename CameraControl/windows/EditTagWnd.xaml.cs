@@ -17,7 +17,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for EditTagWnd.xaml
   /// </summary>
-  public partial class EditTagWnd : Window
+  public partial class EditTagWnd
   {
     private TagItem _tagItem;
     public EditTagWnd(TagItem item)

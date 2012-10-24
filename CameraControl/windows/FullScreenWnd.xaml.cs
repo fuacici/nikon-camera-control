@@ -20,7 +20,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for FullScreenWnd.xaml
   /// </summary>
-  public partial class FullScreenWnd : Window, IWindow
+  public partial class FullScreenWnd : IWindow
   {
     private Timer _timer = new Timer();
     public FullScreenWnd()
