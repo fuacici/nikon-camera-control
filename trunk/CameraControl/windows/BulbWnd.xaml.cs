@@ -20,7 +20,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for BulbWnd.xaml
   /// </summary>
-  public partial class BulbWnd : Window, INotifyPropertyChanged
+  public partial class BulbWnd : INotifyPropertyChanged
   {
     private Timer _captureTimer = new Timer(1000);
     private Timer _waitTimer = new Timer(1000);

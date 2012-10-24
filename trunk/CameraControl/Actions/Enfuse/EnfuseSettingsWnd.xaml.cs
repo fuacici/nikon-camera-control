@@ -16,7 +16,7 @@ namespace CameraControl.Actions.Enfuse
   /// <summary>
   /// Interaction logic for EnfuseSettingsWnd.xaml
   /// </summary>
-  public partial class EnfuseSettingsWnd : Window
+  public partial class EnfuseSettingsWnd
   {
     public EnfuseSettingsWnd()
     {

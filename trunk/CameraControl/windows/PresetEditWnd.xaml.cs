@@ -10,7 +10,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for PresetEditWnd.xaml
   /// </summary>
-  public partial class PresetEditWnd : Window, INotifyPropertyChanged
+  public partial class PresetEditWnd : INotifyPropertyChanged
   {
     private CameraPreset _selectedCameraPreset;
     public CameraPreset SelectedCameraPreset

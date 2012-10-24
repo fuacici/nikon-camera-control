@@ -6,7 +6,7 @@ namespace CameraControl.windows
   /// <summary>
   /// Interaction logic for SavePresetWnd.xaml
   /// </summary>
-  public partial class SavePresetWnd : Window
+  public partial class SavePresetWnd
   {
     public CameraPreset CameraPreset { get; set; }
 
