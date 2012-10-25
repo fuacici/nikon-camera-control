@@ -82,8 +82,8 @@
             <ColumnDefinition Width="200" />
             <ColumnDefinition Width="635*" />
         </Grid.ColumnDefinitions>
-        <Image Stretch="Uniform" Grid.Column="1" Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" Opacity="{Binding ElementName=slider_transparent,Path=Value}" Grid.RowSpan="3" Margin="0,0,0,100" />
-        <Image Name="image1" Stretch="Uniform" Grid.Column="1" MouseDown="image1_MouseDown" Grid.RowSpan="3" Margin="0,0,0,100" />        
+        <Image Stretch="Uniform" Grid.Column="1" Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}"  Grid.RowSpan="3" Margin="0,0,0,100" />
+        <Image Name="image1" Stretch="Uniform" Grid.Column="1" MouseDown="image1_MouseDown" Grid.RowSpan="3" Margin="0,0,0,100" Opacity="{Binding ElementName=slider_transparent,Path=Value}"/>        
         <Canvas Grid.Column="1" Name="canvas"   Background="{x:Null}" SizeChanged="canvas_SizeChanged" Grid.RowSpan="3" Margin="0,0,0,100">
             <Label Canvas.Left="0" Canvas.Top="0" Content="REC" Height="41" Name="lbl_rec" FontSize="20" FontWeight="Bold" Foreground="Red" Width="52"></Label>
             <Label Content="{Binding Path=Fps, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Height="28" Width="36" Canvas.Left="494" Canvas.Top="6" />
@@ -233,7 +233,7 @@
                             <ComboBox Name="cmb_zoom" IsEnabled="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" ItemsSource="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.Values, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" SelectedValue="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.Value, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="1" Grid.Column="3" />
                             <Label Content="{T:TranslateExtension LabelLvZoomRation}" Name="label1" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" />
                             <CheckBox Content="B&amp;W" Name="checkBox1" IsChecked="{Binding Path=BlackAndWhite, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" />
-                            <Slider Name="slider_transparent" Maximum="1" Value="0" Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="1" />
+                            <Slider Name="slider_transparent" Maximum="1" Value="1" Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="1" />
                             <CheckBox Content="{T:TranslateExtension LabelStayOnTop}" Name="chk_top" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" />
                         </Grid>
                     </Expander.Content>
@@ -260,15 +260,17 @@
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
                                 <RowDefinition Height="186*" />
                             </Grid.RowDefinitions>
                             <CheckBox Content="{T:TranslateExtension LabelActivateMotionDetection}" Grid.Column="1" Name="chk_motiondetect" Grid.ColumnSpan="3" VerticalAlignment="Center"/>
-                            <CheckBox Content="{T:TranslateExtension LabelCaptureWhenMove}" Grid.Column="1" Grid.Row="1" Name="chk_tiggeronmotion" Grid.ColumnSpan="3" VerticalAlignment="Center"/>
-                            <Label Content="{T:TranslateExtension LabelThreshold}" Grid.Column="1" Grid.Row="2" />
-                            <xctk:IntegerUpDown Grid.Column="3" Grid.Row="2" Name="upd_threshold" Margin="3" Maximum="99" Minimum="1" Value="20"/>
-                            <Label Content="{T:TranslateExtension LabelWaitMoion}" Grid.Column="1" Grid.Row="3" />
-                            <xctk:IntegerUpDown Grid.Column="3" Grid.Row="3" Name="upd_movewait" Margin="3" Minimum="1" Maximum="3600" Value="10"/>
-                            <Label Grid.Column="3" Grid.Row="4" Name="lbl_motion" />
+                            <CheckBox Content="{T:TranslateExtension LabelCaptureWhenMove}" Grid.Column="1" Grid.Row="2" Name="chk_tiggeronmotion" Grid.ColumnSpan="3" VerticalAlignment="Center"/>
+                            <Label Content="{T:TranslateExtension LabelThreshold}" Grid.Column="1" Grid.Row="3" />
+                            <xctk:IntegerUpDown Grid.Column="3" Grid.Row="3" Name="upd_threshold" Maximum="99" Minimum="1" Value="20" Margin="3"/>
+                            <Label Content="{T:TranslateExtension LabelWaitMoion}" Grid.Column="1" Grid.Row="4" />
+                            <xctk:IntegerUpDown Grid.Column="3" Grid.Row="4" Name="upd_movewait" Margin="3" Minimum="1" Maximum="3600" Value="10"/>
+                            <Label Grid.Column="3" Grid.Row="5" Name="lbl_motion" />
+                            <CheckBox Content="{T:TranslateExtension LabelAutofocusBeforeCapture}" Grid.Column="1" Grid.Row="1" Name="chk_autofocus" Grid.ColumnSpan="3" VerticalAlignment="Center"/>
                         </Grid>
                     </Expander.Content>
                 </Expander>

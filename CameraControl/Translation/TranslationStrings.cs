@@ -204,6 +204,7 @@
     public static string LabelCaptureWhenMove = "Capture when motion detected";
     public static string LabelThreshold = "Threshold (%)";
     public static string LabelWaitMoion = "Wait (sec)";
-
+    // add 25/10/2012
+    public static string LabelAutofocusBeforeCapture = "Autofocus before capture";
   }
 }

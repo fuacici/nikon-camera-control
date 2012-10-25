@@ -748,10 +748,6 @@ namespace CameraControl.Core.Devices.Nikon
           int cbBytesRead = result.Length;
           GetAditionalLIveViewData(viewData, result);
           viewData.ImagePosition = 384;
-          //MemoryStream copy = new MemoryStream((int)cbBytesRead - headerSize);
-          //copy.Write(result, headerSize, (int)cbBytesRead - headerSize);
-          //copy.Close();
-          //viewData.ImageData = copy.GetBuffer();
           viewData.ImageData = result;
         }
         finally
