@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using CameraControl.Core.Devices.Classes;
 
 namespace CameraControl.Core.Devices.Nikon
@@ -19,7 +15,7 @@ namespace CameraControl.Core.Devices.Nikon
           //DeviceReady();
           viewData.HaveFocusData = true;
 
-          const int headerSize = 376;
+          const int headerSize = 384;
 
           byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetLiveViewImage);
           if (result == null || result.Length <= headerSize)
