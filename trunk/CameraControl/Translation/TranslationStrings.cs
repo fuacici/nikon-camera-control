@@ -206,5 +206,7 @@
     public static string LabelWaitMoion = "Wait (sec)";
     // add 25/10/2012
     public static string LabelAutofocusBeforeCapture = "Autofocus before capture";
+    // add 26/10/2012
+    public static string LabelOpacity = "Opacity";
   }
 }

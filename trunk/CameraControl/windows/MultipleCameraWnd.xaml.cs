@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using CameraControl.Classes;
 using CameraControl.Core;
+using CameraControl.Core.Classes;
 using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
 using CameraControl.Core.Interfaces;
@@ -75,7 +76,7 @@ namespace CameraControl.windows
         case WindowsCmdConsts.MultipleCameraWnd_Hide:
           Hide();
           break;
-        case WindowsCmdConsts.All_Close:
+        case CmdConsts.All_Close:
           Dispatcher.Invoke(new Action(delegate
           {
             Hide();

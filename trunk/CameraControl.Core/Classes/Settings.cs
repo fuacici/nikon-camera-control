@@ -323,6 +323,17 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private int _focusMoveStep;
+    public int FocusMoveStep
+    {
+      get { return _focusMoveStep; }
+      set
+      {
+        _focusMoveStep = value;
+        NotifyPropertyChanged("FocusMoveStep");
+      }
+    }
+
     private bool _dontLoadThumbnails;
     public bool DontLoadThumbnails
     {
@@ -383,6 +394,7 @@ namespace CameraControl.Core.Classes
       CameraProperties = new CameraPropertyEnumerator();
       FullScreenColor = Colors.Black;
       SelectedLanguage = Thread.CurrentThread.CurrentCulture.Name;
+      FocusMoveStep = 50;
     }
 
     public void Add(PhotoSession session)
