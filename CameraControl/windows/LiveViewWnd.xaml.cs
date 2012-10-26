@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -28,6 +29,8 @@ using CameraControl.Core.Interfaces;
 using MahApps.Metro;
 using PortableDeviceLib;
 using MessageBox = System.Windows.Forms.MessageBox;
+using Point = System.Windows.Point;
+using Rectangle = System.Windows.Shapes.Rectangle;
 using Timer = System.Timers.Timer;
 
 namespace CameraControl.windows
@@ -395,7 +398,7 @@ namespace CameraControl.windows
 
     private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
     {
-      if (_retries > 100)
+      if (_retries > 1000)
       {
         _timer.Stop();
 
@@ -408,6 +411,43 @@ namespace CameraControl.windows
       }
       if (!_worker.IsBusy)
         _worker.RunWorkerAsync();
+    }
+
+    private void ProcessMotionDetection(Bitmap bmp)
+    {
+      float movement = _detector.ProcessFrame(bmp);
+      lbl_motion.Content = Math.Round(movement * 100, 2);
+      if (movement > ((float)upd_threshold.Value / 100) && chk_tiggeronmotion.IsChecked == true && (DateTime.Now - _photoCapturedTime).TotalSeconds> upd_movewait.Value)
+      {
+        if (chk_autofocus.IsChecked == true)
+        {
+          BlobCountingObjectsProcessing processing =
+            _detector.MotionProcessingAlgorithm as BlobCountingObjectsProcessing;
+          if (processing != null && processing.ObjectRectangles != null && processing.ObjectRectangles.Length > 0 && LiveViewData.ImageData != null)
+          {
+            System.Drawing.Rectangle rectangle = new System.Drawing.Rectangle();
+            int surface = 0;
+            foreach (System.Drawing.Rectangle objectRectangle in processing.ObjectRectangles)
+            {
+              if (surface < objectRectangle.Width*objectRectangle.Height)
+              {
+                surface = objectRectangle.Width*objectRectangle.Height;
+                rectangle = objectRectangle;
+              }
+            }
+            double xt = LiveViewData.ImageWidth/(double) bmp.Width;
+            double yt = LiveViewData.ImageHeight/(double) bmp.Height;
+            int posx = (int) ((rectangle.X + (rectangle.Width/2))*xt);
+            int posy = (int) ((rectangle.Y + (rectangle.Height/2))*yt);
+            selectedPortableDevice.Focus(posx, posy);
+          }
+          AutoFocus();
+        }
+        selectedPortableDevice.CapturePhotoNoAf();
+        _detector.Reset();
+        _photoCapturedTime = DateTime.Now;
+      }
+ 
     }
 
     private void GetLiveImage()
@@ -451,18 +491,7 @@ namespace CameraControl.windows
                                            {
                                              if (chk_motiondetect.IsChecked == true)
                                              {
-                                               float movement = _detector.ProcessFrame(bmp);
-                                               lbl_motion.Content = Math.Round(movement * 100, 2);
-                                               if (movement > ((float)upd_threshold.Value / 100) && chk_tiggeronmotion.IsChecked == true && (DateTime.Now - _photoCapturedTime).Seconds > upd_movewait.Value)
-                                               {
-                                                 _detector.Reset();
-                                                 if (chk_autofocus.IsChecked == true)
-                                                 {
-                                                   AutoFocus();
-                                                 }
-                                                 selectedPortableDevice.CapturePhotoNoAf();
-                                                 _photoCapturedTime = DateTime.Now;
-                                               }
+                                               ProcessMotionDetection(bmp);
                                              }
                                              ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
                                              this.LuminanceHistogramPoints =
@@ -718,8 +747,8 @@ namespace CameraControl.windows
                                            //  new SimpleBackgroundModelingDetector(),
                                            //  new MotionAreaHighlighting());
                                            _detector = new MotionDetector(
-                                             new SimpleBackgroundModelingDetector(true),
-                                             new MotionAreaHighlighting());
+                                             new SimpleBackgroundModelingDetector(true, true),
+                                             new BlobCountingObjectsProcessing(40, 40, true));
                                            _photoCapturedTime = DateTime.Now;
                                            _timer.Start();
                                          }));
@@ -1100,7 +1129,7 @@ namespace CameraControl.windows
       {
         e.Handled = true;        
       }
-      if ((DateTime.Now - _focusMoveTime).Milliseconds < 200)
+      if ((DateTime.Now - _focusMoveTime).TotalMilliseconds < 200)
         return;
       _focusMoveTime = DateTime.Now;
       if (e.Key == Key.Right)
