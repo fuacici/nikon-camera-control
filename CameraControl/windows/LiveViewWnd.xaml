@@ -8,7 +8,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" mc:Ignorable="d" d:DataContext="{d:DesignData }" Topmost="{Binding ElementName=chk_top,Path=IsChecked}"
-                      ShowMinButton="False">
+                      ShowMinButton="False" PreviewKeyDown="MetroWindow_PreviewKeyDown">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -227,14 +227,16 @@
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
                                 <RowDefinition Height="186*" />
                             </Grid.RowDefinitions>
                             <CheckBox Content="{T:TranslateExtension LabelGrid}" Name="chk_grid" IsChecked="True" Checked="chk_grid_Checked" Unchecked="chk_grid_Unchecked" Grid.Column="1" VerticalAlignment="Center"/>
                             <ComboBox Name="cmb_zoom" IsEnabled="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" ItemsSource="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.Values, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" SelectedValue="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.Value, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="1" Grid.Column="3" />
                             <Label Content="{T:TranslateExtension LabelLvZoomRation}" Name="label1" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" />
                             <CheckBox Content="B&amp;W" Name="checkBox1" IsChecked="{Binding Path=BlackAndWhite, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" />
-                            <Slider Name="slider_transparent" Maximum="1" Value="1" Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="1" />
-                            <CheckBox Content="{T:TranslateExtension LabelStayOnTop}" Name="chk_top" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" />
+                            <Slider Name="slider_transparent" Maximum="1" Value="1" Grid.Row="4" Grid.ColumnSpan="3" Grid.Column="1" />
+                            <CheckBox Content="{T:TranslateExtension LabelStayOnTop}" Name="chk_top" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" />
+                            <Label Content="{T:TranslateExtension LabelOpacity}" Grid.Column="1" Grid.Row="3" Name="label2" Grid.ColumnSpan="3" />
                         </Grid>
                     </Expander.Content>
                 </Expander>

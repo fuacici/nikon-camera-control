@@ -84,7 +84,7 @@ namespace CameraControl.windows
         case WindowsCmdConsts.CameraPropertyWnd_Hide:
           Hide();
           break;
-        case WindowsCmdConsts.All_Close:
+        case CmdConsts.All_Close:
           Dispatcher.Invoke(new Action(delegate
                                          {
                                            Hide();

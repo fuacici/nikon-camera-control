@@ -294,7 +294,7 @@ namespace CameraControl.Core.Devices.Nikon
 
     protected virtual PropertyValue<long> InitFlash()
     {
-      PropertyValue<long> res = new PropertyValue<long>() { Name = "Flash", IsEnabled = true, Code = 0x500C };
+      PropertyValue<long> res = new PropertyValue<long>() { Name = "Flash", IsEnabled = true, Code = 0x500C, SubType = typeof(UInt16)};
       res.AddValues("Flash prohibited", 0x0002);
       res.AddValues("Red-eye reduction", 0x0004);
       res.AddValues("Normal synchronization", 0x8010);
@@ -957,34 +957,34 @@ namespace CameraControl.Core.Devices.Nikon
               break;
             case CONST_PROP_ExposureIndex:
               IsoNumber.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
-                                                                   CONST_PROP_ExposureIndex));
+                                                                  CONST_PROP_ExposureIndex), false);
               break;
             case CONST_PROP_ExposureTime:
               ShutterSpeed.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
-                                                                      CONST_PROP_ExposureTime));
+                                                                      CONST_PROP_ExposureTime), false);
               break;
             case CONST_PROP_WhiteBalance:
               WhiteBalance.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
-                                                                      CONST_PROP_WhiteBalance));
+                                                                      CONST_PROP_WhiteBalance), false);
               break;
             case CONST_PROP_ExposureProgramMode:
               Mode.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
-                                                              CONST_PROP_ExposureProgramMode));
+                                                              CONST_PROP_ExposureProgramMode), false);
               break;
             case CONST_PROP_ExposureBiasCompensation:
               ExposureCompensation.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
-                                                                              CONST_PROP_ExposureBiasCompensation));
+                                                                              CONST_PROP_ExposureBiasCompensation), false);
               break;
             case CONST_PROP_CompressionSetting:
               CompressionSetting.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
-                                                                            CONST_PROP_CompressionSetting));
+                                                                            CONST_PROP_CompressionSetting), false);
               break;
             case CONST_PROP_ExposureMeteringMode:
               ExposureMeteringMode.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
-                                                                              CONST_PROP_ExposureMeteringMode));
+                                                                              CONST_PROP_ExposureMeteringMode), false);
               break;
             case CONST_PROP_FocusMode:
-              FocusMode.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_FocusMode));
+              FocusMode.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_FocusMode), false);
               break;
             case CONST_PROP_BatteryLevel:
               Battery = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_BatteryLevel, -1)[0];
@@ -1001,7 +1001,7 @@ namespace CameraControl.Core.Devices.Nikon
               foreach (PropertyValue<long> advancedProperty in AdvancedProperties)
               {
                 advancedProperty.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
-                                                                           advancedProperty.Code));
+                                                                           advancedProperty.Code), false);
               }
               break;
           }

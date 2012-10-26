@@ -53,7 +53,7 @@ namespace CameraControl.windows
     private int _smootstepdirection = 1;
     private MotionDetector _detector;
     private DateTime _photoCapturedTime;
-
+    private DateTime _focusMoveTime=DateTime.Now;
 
     public LiveViewData LiveViewData { get; set; }
 
@@ -696,7 +696,7 @@ namespace CameraControl.windows
         case WindowsCmdConsts.LiveViewWnd_Show:
           Dispatcher.Invoke(new Action(delegate
                                          {
-                                           _freezeTimer.Interval = ServiceProvider.Settings.LiveViewFreezeTimeOut * 1000;
+                                           _freezeTimer.Interval = ServiceProvider.Settings.LiveViewFreezeTimeOut*1000;
                                            ServiceProvider.Settings.SelectedBitmap.BitmapLoaded +=
                                              SelectedBitmap_BitmapLoaded;
                                            Recording = false;
@@ -732,8 +732,10 @@ namespace CameraControl.windows
                                            {
                                              _smoottimer.Stop();
                                              _timer.Stop();
-                                             selectedPortableDevice.CaptureCompleted -= selectedPortableDevice_CaptureCompleted;
-                                             ServiceProvider.Settings.SelectedBitmap.BitmapLoaded -= SelectedBitmap_BitmapLoaded;
+                                             selectedPortableDevice.CaptureCompleted -=
+                                               selectedPortableDevice_CaptureCompleted;
+                                             ServiceProvider.Settings.SelectedBitmap.BitmapLoaded -=
+                                               SelectedBitmap_BitmapLoaded;
                                              Thread.Sleep(100);
                                              SelectedPortableDevice.StopLiveView();
                                              Recording = false;
@@ -747,7 +749,7 @@ namespace CameraControl.windows
                                            //ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FocusStackingWnd_Hide);
                                          }));
           break;
-        case WindowsCmdConsts.All_Close:
+        case CmdConsts.All_Close:
           Dispatcher.Invoke(new Action(delegate
                                          {
                                            _smoottimer.Stop();
@@ -755,44 +757,72 @@ namespace CameraControl.windows
                                            Close();
                                          }));
           break;
-        case WindowsCmdConsts.LiveView_Zoom_All:
+        case CmdConsts.LiveView_Zoom_All:
           SelectedPortableDevice.LiveViewImageZoomRatio.SetValue(0);
           break;
-        case WindowsCmdConsts.LiveView_Zoom_25:
+        case CmdConsts.LiveView_Zoom_25:
           SelectedPortableDevice.LiveViewImageZoomRatio.SetValue(1);
           break;
-        case WindowsCmdConsts.LiveView_Zoom_33:
+        case CmdConsts.LiveView_Zoom_33:
           SelectedPortableDevice.LiveViewImageZoomRatio.SetValue(2);
           break;
-        case WindowsCmdConsts.LiveView_Zoom_50:
+        case CmdConsts.LiveView_Zoom_50:
           SelectedPortableDevice.LiveViewImageZoomRatio.SetValue(3);
           break;
-        case WindowsCmdConsts.LiveView_Zoom_66:
+        case CmdConsts.LiveView_Zoom_66:
           SelectedPortableDevice.LiveViewImageZoomRatio.SetValue(4);
           break;
-        case WindowsCmdConsts.LiveView_Zoom_100:
+        case CmdConsts.LiveView_Zoom_100:
           SelectedPortableDevice.LiveViewImageZoomRatio.SetValue(5);
           break;
-        case WindowsCmdConsts.LiveView_Focus_M:
+        case CmdConsts.LiveView_Focus_M:
           btn_focusm_Click(null, null);
           break;
-        case WindowsCmdConsts.LiveView_Focus_P:
+        case CmdConsts.LiveView_Focus_P:
           btn_focusp_Click(null, null);
           break;
-        case WindowsCmdConsts.LiveView_Focus_MM:
+        case CmdConsts.LiveView_Focus_MM:
           btn_focusmm_Click(null, null);
           break;
-        case WindowsCmdConsts.LiveView_Focus_PP:
+        case CmdConsts.LiveView_Focus_PP:
           btn_focuspp_Click(null, null);
           break;
-        case WindowsCmdConsts.LiveView_Focus_MMM:
+        case CmdConsts.LiveView_Focus_MMM:
           btn_focusmm_Click(null, null);
           break;
-        case WindowsCmdConsts.LiveView_Focus_PPP:
+        case CmdConsts.LiveView_Focus_PPP:
           btn_focuspp_Click(null, null);
           break;
-        case WindowsCmdConsts.LiveView_Focus:
+        case CmdConsts.LiveView_Focus:
           button1_Click(null, null);
+          break;
+        case CmdConsts.LiveView_Focus_Move_Right:
+          if (LiveViewData != null && LiveViewData.ImageData != null)
+          {
+            selectedPortableDevice.Focus(LiveViewData.FocusX + ServiceProvider.Settings.FocusMoveStep,
+                                         LiveViewData.FocusY);
+          }
+          break;
+        case CmdConsts.LiveView_Focus_Move_Left:
+          if (LiveViewData != null && LiveViewData.ImageData != null)
+          {
+            selectedPortableDevice.Focus(LiveViewData.FocusX - ServiceProvider.Settings.FocusMoveStep,
+                                         LiveViewData.FocusY);
+          }
+          break;
+        case CmdConsts.LiveView_Focus_Move_Up:
+          if (LiveViewData != null && LiveViewData.ImageData != null)
+          {
+            selectedPortableDevice.Focus(LiveViewData.FocusX,
+                                         LiveViewData.FocusY - ServiceProvider.Settings.FocusMoveStep);
+          }
+          break;
+        case CmdConsts.LiveView_Focus_Move_Down:
+          if (LiveViewData != null && LiveViewData.ImageData != null)
+          {
+            selectedPortableDevice.Focus(LiveViewData.FocusX,
+                                         LiveViewData.FocusY + ServiceProvider.Settings.FocusMoveStep);
+          }
           break;
       }
     }
@@ -1061,6 +1091,34 @@ namespace CameraControl.windows
 
     private void btn_smoot_fm_Click(object sender, RoutedEventArgs e)
     {
+
+    }
+
+    private void MetroWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Right || e.Key == Key.Left || e.Key == Key.Up || e.Key == Key.Down)
+      {
+        e.Handled = true;        
+      }
+      if ((DateTime.Now - _focusMoveTime).Milliseconds < 200)
+        return;
+      _focusMoveTime = DateTime.Now;
+      if (e.Key == Key.Right)
+      {
+        ServiceProvider.WindowsManager.ExecuteCommand(CmdConsts.LiveView_Focus_Move_Right);
+      }
+      if (e.Key == Key.Left)
+      {
+        ServiceProvider.WindowsManager.ExecuteCommand(CmdConsts.LiveView_Focus_Move_Left);
+      }
+      if (e.Key == Key.Up)
+      {
+        ServiceProvider.WindowsManager.ExecuteCommand(CmdConsts.LiveView_Focus_Move_Up);
+      }
+      if (e.Key == Key.Down)
+      {
+        ServiceProvider.WindowsManager.ExecuteCommand(CmdConsts.LiveView_Focus_Move_Down);
+      }
 
     }
 

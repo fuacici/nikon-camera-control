@@ -305,7 +305,7 @@ namespace CameraControl
         PropertyWnd.Hide();
         PropertyWnd.Close();
       }
-      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.All_Close);
+      ServiceProvider.WindowsManager.ExecuteCommand(CmdConsts.All_Close);
       //WiaManager.DisconnectCamera();
     }
 

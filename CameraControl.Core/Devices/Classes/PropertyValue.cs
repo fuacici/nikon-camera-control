@@ -12,6 +12,7 @@ namespace CameraControl.Core.Devices.Classes
     private Dictionary<string, T> _valuesDictionary;
     private AsyncObservableCollection<T> _numericValues = new AsyncObservableCollection<T>();
     private AsyncObservableCollection<string> _values = new AsyncObservableCollection<string>();
+    private bool _notifyValuChange = true;
 
     private ushort _code;
     public UInt16 Code
@@ -23,6 +24,8 @@ namespace CameraControl.Core.Devices.Classes
         NotifyPropertyChanged("Code");
       }
     }
+
+    public Type SubType { get; set; }
 
     private string _name;
     public string Name
@@ -36,6 +39,7 @@ namespace CameraControl.Core.Devices.Classes
     }
 
     private string _value;
+
     public string Value
     {
       get { return _value; }
@@ -44,7 +48,7 @@ namespace CameraControl.Core.Devices.Classes
         if (_value != value)
         {
           _value = value;
-          if(ValueChanged != null)
+          if (ValueChanged != null && _notifyValuChange)
           {
             foreach (KeyValuePair<string, T> keyValuePair in _valuesDictionary)
             {
@@ -120,6 +124,13 @@ namespace CameraControl.Core.Devices.Classes
       }
     }
 
+    public void SetValue(byte[] ba, bool notifyValuChange)
+    {
+      _notifyValuChange = notifyValuChange;
+      SetValue(ba);
+      _notifyValuChange = true;
+    }
+
     public void SetValue(byte[] ba)
     {
       if (ba == null || ba.Length < 1)
@@ -132,6 +143,12 @@ namespace CameraControl.Core.Devices.Classes
       if (typeof(T) == typeof(long) && ba.Length==1)
       {
         long val = ba[0];
+        SetValue((T)((object)val));
+        return;
+      }
+      if (typeof(T) == typeof(long) && ba.Length == 2 && SubType == typeof(UInt16))
+      {
+        long val = BitConverter.ToUInt16(ba, 0);
         SetValue((T)((object)val));
         return;
       }
