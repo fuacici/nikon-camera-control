@@ -1,13 +1,12 @@
 ﻿<Controls:MetroWindow x:Class="CameraControl.windows.MultipleCameraWnd"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-       
         xmlns:T="clr-namespace:CameraControl.Translation"
         Title="{T:TranslateExtension MultipleCameraWindowTitle}" Height="244" Width="586" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" Closing="Window_Closing" xmlns:my1="clr-namespace:CameraControl.windows"
-        xmlns:CoreWpf="clr-namespace:CameraControl.Core.Wpf;assembly=CameraControl.Core"
-        xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
+                      xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                      WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
+                      WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow"
+                      ShowMaxRestoreButton="False" ShowMinButton="False">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -22,6 +21,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter1" />
         </ResourceDictionary>
     </Window.Resources>
 
@@ -54,7 +54,7 @@
             <ListBox.ItemTemplate>
                 <HierarchicalDataTemplate>
                     <WrapPanel>
-                        <Rectangle Fill="Red" Width="10" Height="10" Visibility="{Binding Path=IsBusy, Converter={StaticResource BooleanToVisibilityConverter1}}"/>
+                        <Rectangle Fill="Red" Width="10" Height="10" Visibility="{Binding Path=IsBusy, Converter={StaticResource BooleanToVisibilityConverter1}, ConverterParameter=false}"/>
                         <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding IsChecked}" IsEnabled="{Binding IsConnected}"/>
                     </WrapPanel>
                 </HierarchicalDataTemplate>
