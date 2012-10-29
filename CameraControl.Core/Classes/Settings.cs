@@ -356,6 +356,29 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private int _motionBlockSize;
+    public int MotionBlockSize
+    {
+      get { return _motionBlockSize; }
+      set
+      {
+        _motionBlockSize = value;
+        NotifyPropertyChanged("MotionBlockSize");
+      }
+    }
+
+    private int _detectionType;
+    public int DetectionType
+    {
+      get { return _detectionType; }
+      set
+      {
+        _detectionType = value;
+        NotifyPropertyChanged("DetectionType");
+      }
+    }
+
+
     public CameraPropertyEnumerator CameraProperties { get; set; }
     public string SelectedLayout { get; set; }
     public AsyncObservableCollection<CameraPreset> CameraPresets { get; set; }
@@ -395,6 +418,7 @@ namespace CameraControl.Core.Classes
       FullScreenColor = Colors.Black;
       SelectedLanguage = Thread.CurrentThread.CurrentCulture.Name;
       FocusMoveStep = 50;
+      MotionBlockSize = 40;
     }
 
     public void Add(PhotoSession session)
