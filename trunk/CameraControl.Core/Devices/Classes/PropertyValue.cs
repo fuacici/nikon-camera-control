@@ -45,8 +45,8 @@ namespace CameraControl.Core.Devices.Classes
       get { return _value; }
       set
       {
-        if (_value != value)
-        {
+        //if (_value != value)
+        //{
           _value = value;
           if (ValueChanged != null && _notifyValuChange)
           {
@@ -56,7 +56,7 @@ namespace CameraControl.Core.Devices.Classes
                 ValueChanged(this, _value, keyValuePair.Value);
             }
           }
-        }
+        //}
         NotifyPropertyChanged("Value");
       }
     }
@@ -91,6 +91,13 @@ namespace CameraControl.Core.Devices.Classes
     {
       _valuesDictionary = new Dictionary<string, T>();
       IsEnabled = true;
+    }
+
+    public void SetValue(T o, bool notifyValuChange)
+    {
+      _notifyValuChange = notifyValuChange;
+      SetValue(o);
+      _notifyValuChange = true;
     }
 
     public void SetValue(T o)

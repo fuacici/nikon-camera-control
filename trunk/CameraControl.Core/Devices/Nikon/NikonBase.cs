@@ -519,13 +519,12 @@ namespace CameraControl.Core.Devices.Nikon
 
     private void InitFNumber()
     {
-      FNumber = new PropertyValue<int> { IsEnabled = true };
-      FNumber.Name = "FNumber";
+      FNumber = new PropertyValue<int> {IsEnabled = true, Name = "FNumber"};
       FNumber.ValueChanged += FNumber_ValueChanged;
-      ReInitFNumber();
+      ReInitFNumber(true);
     }
 
-    private void ReInitFNumber()
+    private void ReInitFNumber(bool trigervaluchange)
     {
       try
       {
@@ -534,16 +533,16 @@ namespace CameraControl.Core.Devices.Nikon
         const byte datasize = 2;
         byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_Fnumber);
         int type = BitConverter.ToInt16(result, 2);
-        byte formFlag = result[(2 * datasize) + 5];
+        byte formFlag = result[(2*datasize) + 5];
         UInt16 defval = BitConverter.ToUInt16(result, datasize + 5);
-        for (int i = 0; i < result.Length - ((2 * datasize) + 6 + 2); i += datasize)
+        for (int i = 0; i < result.Length - ((2*datasize) + 6 + 2); i += datasize)
         {
-          UInt16 val = BitConverter.ToUInt16(result, ((2 * datasize) + 6 + 2) + i);
+          UInt16 val = BitConverter.ToUInt16(result, ((2*datasize) + 6 + 2) + i);
           double d = val;
-          string s = "ƒ/" + (d / 100).ToString("0.0");
+          string s = "ƒ/" + (d/100).ToString("0.0");
           FNumber.AddValues(s, val);
         }
-        FNumber.SetValue(defval);
+        FNumber.SetValue(defval, trigervaluchange);
       }
       catch (Exception ex)
       {
@@ -953,7 +952,7 @@ namespace CameraControl.Core.Devices.Nikon
           {
             case CONST_PROP_Fnumber:
               //FNumber.SetValue(_stillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_Fnumber));
-              ReInitFNumber();
+              ReInitFNumber(false);
               break;
             case CONST_PROP_ExposureIndex:
               IsoNumber.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,

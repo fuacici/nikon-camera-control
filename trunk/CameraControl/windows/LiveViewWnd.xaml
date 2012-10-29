@@ -24,74 +24,31 @@
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-        <!--<ControlTemplate x:Key="toggleButtonTemplate1" TargetType="ToggleButton">
-            <Grid
-                        Width="20"
-                        Height="20"
-                        Background="Transparent">
-                <Image x:Name="ExpandImage"
-                                  Source="/CameraControl;component/Images/unlock.png"
-                                  HorizontalAlignment="Left" 
-                                  VerticalAlignment="Center" 
-                                  Margin="1,1,1,1" />
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsChecked"
-                     Value="True">
-                    <Setter Property="Source"
-                              TargetName="ExpandImage"
-                                  Value="/CameraControl;component/Images/lock.png"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-
-        <ControlTemplate x:Key="toggleButtonTemplate" TargetType="ToggleButton">
-            <Grid
-                        Width="20"
-                        Height="20"
-                        Background="Transparent">
-                <Image x:Name="ExpandImage"
-                                  Source="/CameraControl;component/Images/unlock.png"
-                                  HorizontalAlignment="Left" 
-                                  VerticalAlignment="Center" 
-                                  Margin="1,1,1,1" />
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsChecked"
-                     Value="True">
-                    <Setter Property="Source"
-                              TargetName="ExpandImage"
-                                  Value="/CameraControl;component/Images/lock.png"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <Style x:Key="toggleButtonStyle" TargetType="ToggleButton">
-            <Setter Property="Template" Value="{StaticResource toggleButtonTemplate}" />
-        </Style>
-        <Style x:Key="toggleButtonStyle1" TargetType="ToggleButton">
-            <Setter Property="Template" Value="{StaticResource toggleButtonTemplate1}" />
-        </Style>-->
     </Window.Resources>
+    <Controls:MetroWindow.WindowCommands>
+        <Controls:WindowCommands>
+            <Button Content="{T:TranslateExtension ButtonHelp}" Name="btn_help" Click="btn_help_Click" />
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.WindowCommands>
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="110*" />
-            <RowDefinition Height="117*" />
-            <RowDefinition Height="366*" />
+            <RowDefinition Height="224" />
+            <RowDefinition Height="390*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
             <ColumnDefinition Width="635*" />
         </Grid.ColumnDefinitions>
-        <Image Stretch="Uniform" Grid.Column="1" Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}"  Grid.RowSpan="3" Margin="0,0,0,100" />
-        <Image Name="image1" Stretch="Uniform" Grid.Column="1" MouseDown="image1_MouseDown" Grid.RowSpan="3" Margin="0,0,0,100" Opacity="{Binding ElementName=slider_transparent,Path=Value}"/>        
-        <Canvas Grid.Column="1" Name="canvas"   Background="{x:Null}" SizeChanged="canvas_SizeChanged" Grid.RowSpan="3" Margin="0,0,0,100">
+        <Image Stretch="Uniform" Grid.Column="1" Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}"  Grid.RowSpan="2" />
+        <Image Name="image1" Stretch="Uniform" Grid.Column="1" MouseDown="image1_MouseDown" Grid.RowSpan="2" Opacity="{Binding ElementName=slider_transparent,Path=Value}"/>        
+        <Canvas Grid.Column="1" Name="canvas"   Background="{x:Null}" SizeChanged="canvas_SizeChanged" Grid.RowSpan="2">
             <Label Canvas.Left="0" Canvas.Top="0" Content="REC" Height="41" Name="lbl_rec" FontSize="20" FontWeight="Bold" Foreground="Red" Width="52"></Label>
-            <Label Content="{Binding Path=Fps, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Height="28" Width="36" Canvas.Left="494" Canvas.Top="6" />
         </Canvas>
         <Button Content="{T:TranslateExtension ButtonAutoFocus}" Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="button1" VerticalAlignment="Top" Width="75" Click="button1_Click" />
         <Button Content="{T:TranslateExtension ButtonCapture}" Height="23" HorizontalAlignment="Left" Margin="119,12,0,0" Name="button2" VerticalAlignment="Top" Width="75" Click="button2_Click" />
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.RowSpan="2" Margin="0,0,0,100">
-            <StackPanel  >
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
+            <StackPanel>
                 <StackPanel.ScrollOwner>
                     <ScrollViewer />
                 </StackPanel.ScrollOwner>
@@ -198,6 +155,7 @@
                                 <ColumnDefinition Width="86" />
                                 <ColumnDefinition Width="5" />
                                 <ColumnDefinition Width="86*" />
+                                <ColumnDefinition Width="5" />
                             </Grid.ColumnDefinitions>
                             <Button Content="{T:TranslateExtension ButtonStart}" Name="btn_takephoto" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Click="btn_takephoto_Click" Grid.Row="3" Grid.ColumnSpan="2" Margin="5"/>
                             <Button Content="{T:TranslateExtension ButtonPreview}" Grid.Column="2" Name="btn_preview" Click="btn_preview_Click" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Grid.Row="3" Margin="5"/>
@@ -220,6 +178,7 @@
                                 <ColumnDefinition Width="88*" />
                                 <ColumnDefinition Width="5" />
                                 <ColumnDefinition Width="90*" />
+                                <ColumnDefinition Width="5"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
@@ -255,6 +214,7 @@
                                 <ColumnDefinition Width="88*" />
                                 <ColumnDefinition Width="5" />
                                 <ColumnDefinition Width="90*" />
+                                <ColumnDefinition Width="5" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
@@ -280,8 +240,9 @@
         </ScrollViewer>
         <ToggleButton Content="{T:TranslateExtension ButtonFreezeImage}" Height="23" HorizontalAlignment="Left" Margin="12,83,0,0" VerticalAlignment="Top" Width="182" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=FreezeImage}" Checked="ToggleButton_Checked" />
         <Button Content="{T:TranslateExtension ButtonRecordMovie}" Height="23" HorizontalAlignment="Left" Margin="12,51,0,0" Name="btn_record" VerticalAlignment="Top" Width="182" Click="btn_record_Click" />
-        <Button Height="29" Name="button3" Width="33" Click="button3_Click" Grid.Column="1" Margin="0,0,17,12" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <Image Source="/CameraControl;component/Images/help.png" />
-        </Button>
+        <Canvas Height="104" HorizontalAlignment="Left" Margin="32,114,0,0" Name="canvas_image" VerticalAlignment="Top" Width="130" Background="#FFC7C7C7" MouseDown="canvas_image_MouseDown">
+            <Rectangle Canvas.Left="0" Canvas.Top="0" Height="15" Name="small_focus_rect" Stroke="Red" Width="17" ClipToBounds="True" />
+        </Canvas>
+        <Label Content="{Binding Path=Fps, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Margin="164,114,9,93" />
     </Grid>
 </Controls:MetroWindow>
