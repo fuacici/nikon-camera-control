@@ -746,9 +746,25 @@ namespace CameraControl.windows
                                            //_detector = new MotionDetector(
                                            //  new SimpleBackgroundModelingDetector(),
                                            //  new MotionAreaHighlighting());
-                                           _detector = new MotionDetector(
-                                             new SimpleBackgroundModelingDetector(true, true),
-                                             new BlobCountingObjectsProcessing(40, 40, true));
+                                           //_detector = new MotionDetector(
+                                           //  new SimpleBackgroundModelingDetector(true, true),
+                                           //  new BlobCountingObjectsProcessing(40, 40, true));
+                                           if (ServiceProvider.Settings.DetectionType == 0)
+                                           {
+                                             _detector = new MotionDetector(
+                                               new TwoFramesDifferenceDetector(true),
+                                               new BlobCountingObjectsProcessing(
+                                                 ServiceProvider.Settings.MotionBlockSize,
+                                                 ServiceProvider.Settings.MotionBlockSize, true));
+                                           }
+                                           else
+                                           {
+                                             _detector = new MotionDetector(
+                                               new SimpleBackgroundModelingDetector(true, true),
+                                               new BlobCountingObjectsProcessing(
+                                                 ServiceProvider.Settings.MotionBlockSize,
+                                                 ServiceProvider.Settings.MotionBlockSize, true));
+                                           }
                                            _photoCapturedTime = DateTime.Now;
                                            _timer.Start();
                                          }));

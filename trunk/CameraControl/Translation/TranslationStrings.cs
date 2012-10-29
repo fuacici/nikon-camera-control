@@ -208,5 +208,10 @@
     public static string LabelAutofocusBeforeCapture = "Autofocus before capture";
     // add 26/10/2012
     public static string LabelOpacity = "Opacity";
+    // 29/10/2012
+    public static string LabelMotionDetectionType = "Motion detection type";
+    public static string LabelTwoFramesDifferenceDetector = "Two Frames Difference Detector";
+    public static string LabelSimpleBackgroundModelingDetector = "Simple Background Modeling Detector";
+    public static string LabelSmallestBlockSize = "Smallest block size";
   }
 }

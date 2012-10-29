@@ -14,8 +14,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/CameraControl;component/Styles/Wpf.Toolkit.Extended.xaml" />
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colours.xaml"/>-->
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml"/>-->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colours.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />-->
@@ -123,27 +123,31 @@
             <TabItem Header="{T:TranslateExtension LabelFocusAndLiveview}">
                 <Grid Margin="5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="168*" />
+                        <ColumnDefinition Width="170" />
+                        <ColumnDefinition Width="150*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="5" />
-                        <RowDefinition Height="25" />
-                        <RowDefinition Height="5" />
-                        <RowDefinition Height="25" />
-                        <RowDefinition Height="5" />
-                        <RowDefinition Height="25" />
-                        <RowDefinition Height="5" />
-                        <RowDefinition Height="25" />
-                        <RowDefinition Height="5" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
                         <RowDefinition Height="260*" />
                     </Grid.RowDefinitions>
                     <Label Content="{T:TranslateExtension LabelSmallFocusSstep}" Grid.Row="1" />
-                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="1" Minimum="1" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SmalFocusStep}" />
-                    <Label Content="{T:TranslateExtension LabelMediumFocusStep}" Grid.Row="3" Grid.RowSpan="2" />
-                    <Label Content="{T:TranslateExtension LabelLargFocusStep}" Grid.Row="5" Grid.RowSpan="2"  />
-                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="3" Minimum="1" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=MediumFocusStep}"/>
-                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="5" Minimum="1" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=LargeFocusStep}"/>
+                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="1" Minimum="1" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SmalFocusStep}" Margin="3" />
+                    <Label Content="{T:TranslateExtension LabelMediumFocusStep}" Grid.Row="2" Grid.RowSpan="2" />
+                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="2" Minimum="1" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=MediumFocusStep}" Margin="3"/>
+                    <Label Content="{T:TranslateExtension LabelLargFocusStep}" Grid.Row="3" />                    
+                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="3" Minimum="1" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=LargeFocusStep}" Margin="3"/>
+                    <Label Content="{T:TranslateExtension LabelMotionDetectionType}" Grid.Row="4" />
+                    <ComboBox Grid.Column="1" Grid.Row="4" Margin="3" ItemsSource="{Binding}" SelectedIndex="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DetectionType}">
+                        <ComboBoxItem Content="{T:TranslateExtension LabelTwoFramesDifferenceDetector}"/>
+                        <ComboBoxItem Content="{T:TranslateExtension LabelSimpleBackgroundModelingDetector}"/>
+                    </ComboBox>
+                    <Label Content="{T:TranslateExtension LabelSmallestBlockSize}" Grid.Row="5" />
+                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="5" Minimum="1" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=MotionBlockSize}" Margin="3"/>
                 </Grid>
             </TabItem>
         </TabControl>
