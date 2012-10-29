@@ -213,5 +213,6 @@
     public static string LabelTwoFramesDifferenceDetector = "Two Frames Difference Detector";
     public static string LabelSimpleBackgroundModelingDetector = "Simple Background Modeling Detector";
     public static string LabelSmallestBlockSize = "Smallest block size";
+    public static string ButtonHelp = "Help";
   }
 }

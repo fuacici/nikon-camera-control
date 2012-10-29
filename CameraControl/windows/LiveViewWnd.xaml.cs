@@ -534,6 +534,7 @@ namespace CameraControl.windows
           return;
         _focusrect.BeginInit();
         _focusrect.Visibility = LiveViewData.HaveFocusData ? Visibility.Visible : Visibility.Hidden;
+        _focusrect.Visibility = selectedPortableDevice.LiveViewImageZoomRatio.Value == "All" ? Visibility.Visible : Visibility.Hidden;
         double xt = image1.ActualWidth / LiveViewData.ImageWidth;
         double yt = image1.ActualHeight / LiveViewData.ImageHeight;
         _focusrect.Height = LiveViewData.FocusFrameXSize * xt;
@@ -554,11 +555,25 @@ namespace CameraControl.windows
         _focusrect.SetValue(Canvas.TopProperty, LiveViewData.FocusY * yt - (_focusrect.Width / 2) + yy);
         _focusrect.Stroke = new SolidColorBrush(LiveViewData.Focused ? Colors.Green : Colors.Red);
         _focusrect.EndInit();
+        SmallFocusScreen();
       }
       catch (Exception exception)
       {
-        Log.Error("Error drive helper lines", exception);
+        Log.Error("Error draw helper lines", exception);
       }
+    }
+
+    private void SmallFocusScreen()
+    {
+      double aspect = image1.ActualHeight/image1.ActualWidth;
+      canvas_image.Height = canvas_image.Width*aspect;
+      small_focus_rect.Visibility = LiveViewData.HaveFocusData ? Visibility.Visible : Visibility.Hidden;
+      double xt = canvas_image.ActualWidth/LiveViewData.ImageWidth;
+      double yt = canvas_image.ActualHeight/LiveViewData.ImageHeight;
+      small_focus_rect.Height = LiveViewData.FocusFrameXSize*xt;
+      small_focus_rect.Width = LiveViewData.FocusFrameYSize*yt;
+      small_focus_rect.SetValue(Canvas.LeftProperty, LiveViewData.FocusX*xt - (_focusrect.Height/2*xt));
+      small_focus_rect.SetValue(Canvas.TopProperty, LiveViewData.FocusY*yt - (_focusrect.Width/2*yt));
     }
 
     private void SetLinePos(Line line, int x1, int y1, int x2, int y2)
@@ -654,13 +669,13 @@ namespace CameraControl.windows
     private void image1_MouseDown(object sender, MouseButtonEventArgs e)
     {
       if (e.ButtonState == MouseButtonState.Pressed && e.ChangedButton == MouseButton.Left && LiveViewData != null &&
-          LiveViewData.HaveFocusData)
+          LiveViewData.HaveFocusData && selectedPortableDevice.LiveViewImageZoomRatio.Value == "All")
       {
-        Point _initialPoint = e.MouseDevice.GetPosition(image1);
+        Point initialPoint = e.MouseDevice.GetPosition(image1);
         double xt = LiveViewData.ImageWidth / image1.ActualWidth;
         double yt = LiveViewData.ImageHeight / image1.ActualHeight;
-        int posx = (int)(_initialPoint.X * xt);
-        int posy = (int)(_initialPoint.Y * yt);
+        int posx = (int)(initialPoint.X * xt);
+        int posy = (int)(initialPoint.Y * yt);
         selectedPortableDevice.Focus(posx, posy);
       }
     }
@@ -876,6 +891,8 @@ namespace CameraControl.windows
     {
       if (!IsVisible)
         return;
+      _detector.Reset();
+      _photoCapturedTime = DateTime.Now;
       if (PhotoCount <= PhotoNo && IsBusy)
       {
         Thread thread_photo = new Thread(TakePhoto);
@@ -1066,10 +1083,6 @@ namespace CameraControl.windows
       return points;
     }
 
-    private void button3_Click(object sender, RoutedEventArgs e)
-    {
-      HelpProvider.Run(HelpSections.FocusStacking);
-    }
 
     private void btn_record_Click(object sender, RoutedEventArgs e)
     {
@@ -1165,6 +1178,25 @@ namespace CameraControl.windows
         ServiceProvider.WindowsManager.ExecuteCommand(CmdConsts.LiveView_Focus_Move_Down);
       }
 
+    }
+
+    private void canvas_image_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+      if (e.ButtonState == MouseButtonState.Pressed && e.ChangedButton == MouseButton.Left && LiveViewData != null &&
+    LiveViewData.HaveFocusData)
+      {
+        Point initialPoint = e.MouseDevice.GetPosition(canvas_image);
+        double xt = LiveViewData.ImageWidth / canvas_image.ActualWidth;
+        double yt = LiveViewData.ImageHeight / canvas_image.ActualHeight;
+        int posx = (int)(initialPoint.X * xt);
+        int posy = (int)(initialPoint.Y * yt);
+        selectedPortableDevice.Focus(posx, posy);
+      }
+    }
+
+    private void btn_help_Click(object sender, RoutedEventArgs e)
+    {
+      HelpProvider.Run(HelpSections.FocusStacking);
     }
 
   }
