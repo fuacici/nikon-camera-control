@@ -559,5 +559,11 @@ namespace CameraControl
       if (PropertyWnd != null && PropertyWnd.IsVisible)
         PropertyWnd.Topmost = true;
     }
+
+    private void btn_menu_Click(object sender, RoutedEventArgs e)
+    {
+      Flyouts[0].IsOpen = !Flyouts[0].IsOpen;
+    }
+
   }
 }

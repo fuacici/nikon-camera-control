@@ -53,15 +53,13 @@ namespace CameraControl.Core.Classes
         NotifyPropertyChanged("DefaultSession");
       }
     }
-
-    [XmlIgnore]
-    private Visibility _imageLoading;
-    
+   
     [XmlIgnore]
     public ObservableCollection<VideoType> VideoTypes { get; set; }
 
+    private bool _imageLoading;
     [XmlIgnore]
-    public Visibility ImageLoading
+    public bool ImageLoading
     {
       get { return _imageLoading; }
       set
@@ -390,7 +388,7 @@ namespace CameraControl.Core.Classes
       CameraPresets = new AsyncObservableCollection<CameraPreset>();
       DefaultSession = new PhotoSession();
       PhotoSessions = new ObservableCollection<PhotoSession>();
-      ImageLoading = Visibility.Hidden;
+      ImageLoading = false;
       SelectedBitmap = new BitmapFile();
       CurrentTheme = "ExpressionDark";
       DisableNativeDrivers = false;

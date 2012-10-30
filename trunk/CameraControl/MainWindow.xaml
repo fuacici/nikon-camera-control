@@ -33,6 +33,8 @@
     <Controls:MetroWindow.WindowCommands>
         <Controls:WindowCommands>
             <Button Content="{T:TranslateExtension SettingsToolTip}" Name="btn_settings" Click="btn_settings_Click" />
+            <Button Content="Menu" Name="btn_menu" Click="btn_menu_Click" />
+            
             <!--<Button>
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20" Height="20">
@@ -51,6 +53,28 @@
     <Window.DataContext>
         <Classes:Settings/>
     </Window.DataContext>
+
+    <Controls:MetroWindow.Flyouts>
+
+        <Controls:Flyout Header="hiiiii" Position="Right">
+            <Button Content="hi" />
+        </Controls:Flyout>
+        <Controls:Flyout Header="Bakery" Background="#9f000000" Position="Right">
+            <StackPanel>
+                <Controls:Tile Title="My _Cupcakes" Count="23">
+                    <Controls:MetroImage Source="{StaticResource appbar_cupcake}" />
+                </Controls:Tile>
+            </StackPanel>
+        </Controls:Flyout>
+        <Controls:Flyout Header="Bakery" Background="#9f000000" Position="Right">
+            <StackPanel>
+                <Controls:Tile Title="My _Cupcakes" Count="23">
+                    <Controls:MetroImage Source="{StaticResource appbar_cupcake}" />
+                </Controls:Tile>
+            </StackPanel>
+        </Controls:Flyout>
+    </Controls:MetroWindow.Flyouts>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="136" />
@@ -174,5 +198,6 @@
                 <Button Content="{T:TranslateExtension SessionDel}" Grid.Column="3" Name="btn_del_Sesion" Margin="3" Click="btn_del_Sesion_Click" />
             </StackPanel>
         </StackPanel>
+        <Controls:ProgressRing IsActive="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsBusy}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="33,34,43,27" Grid.Row="4" />
     </Grid>
 </Controls:MetroWindow >

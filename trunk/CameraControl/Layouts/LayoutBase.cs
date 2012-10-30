@@ -189,9 +189,9 @@ namespace CameraControl.Layouts
       //FileItem fileItem = e.Argument as FileItem;
       //if (ServiceProvider.Settings.SelectedBitmap.FileItem.FileName != fileItem.FileName)
       //  return;
-      ServiceProvider.Settings.ImageLoading = Visibility.Visible;
+      ServiceProvider.Settings.ImageLoading = true;
       BitmapLoader.Instance.GetBitmap(ServiceProvider.Settings.SelectedBitmap);
-      ServiceProvider.Settings.ImageLoading = Visibility.Hidden;
+      ServiceProvider.Settings.ImageLoading = false;
     }
 
 
