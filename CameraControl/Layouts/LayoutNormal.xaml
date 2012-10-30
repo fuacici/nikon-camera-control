@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
              xmlns:local="clr-namespace:CameraControl.Controls" xmlns:Layouts="clr-namespace:CameraControl.Layouts"
-             mc:Ignorable="d" 
+                    xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" mc:Ignorable="d" 
              DataContext="{Binding RelativeSource={RelativeSource Self}}"                    
              d:DesignHeight="484" d:DesignWidth="689">
     <UserControl.Resources>
@@ -45,7 +45,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="345*" />
             <RowDefinition Height="20" />
-            <RowDefinition Height="155" />
+            <RowDefinition Height="145" />
         </Grid.RowDefinitions>
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <local:ZoomBorder  BorderThickness="1" CornerRadius="5" >
@@ -55,9 +55,8 @@
                     </Image.InputBindings>-->
                 </Image>
             </local:ZoomBorder>
+            <Controls:ProgressRing IsActive="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Grid>
-
-        <Label Content="Loading ..." Name="lbl_loading"  Margin="241,2,317,0" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading}" FontSize="25" FontWeight="ExtraBold"/>
         <StackPanel Grid.Row="1" Margin="0,0,190,0">
             <StackPanel  Orientation="Horizontal" Margin="10,0,0,0" HorizontalAlignment="Right">
                 <Label Content="{Binding Source={x:Static Member=Core:StaticHelper.Instance}, Path=SystemMessage}" FontWeight="Bold" HorizontalContentAlignment="Right" />

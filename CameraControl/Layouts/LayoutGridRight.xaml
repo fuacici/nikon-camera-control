@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:CameraControl.Controls"
              xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
              DataContext="{Binding RelativeSource={RelativeSource Self}}"                                        
-             xmlns:Layouts="clr-namespace:CameraControl.Layouts" mc:Ignorable="d" 
+             xmlns:Layouts="clr-namespace:CameraControl.Layouts"
+                    xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" mc:Ignorable="d" 
              d:DesignHeight="426" d:DesignWidth="652">
     <UserControl.Resources>
         <Style TargetType="{x:Type ListBox}">
@@ -59,7 +60,7 @@
                     </Image.InputBindings>-->
                 </Image>
             </local:ZoomBorder>
-            <Label Content="Loading ..." Name="lbl_loading" Margin="66,25,72,0" VerticalAlignment="Top" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading}" FontSize="25" FontWeight="ExtraBold" />
+            <Controls:ProgressRing IsActive="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="2" />
         <StackPanel Grid.Row="2" Margin="0,0,185,0" Grid.ColumnSpan="3">
