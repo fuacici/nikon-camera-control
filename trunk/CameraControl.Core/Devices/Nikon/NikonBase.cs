@@ -271,6 +271,8 @@ namespace CameraControl.Core.Devices.Nikon
 
     public virtual void AddAditionalProps()
     {
+      AdvancedProperties.Add(InitBurstNumber());
+      AdvancedProperties.Add(InitStillCaptureMode());
       AdvancedProperties.Add(InitOnOffProperty("Auto Iso", 0xD054));
       AdvancedProperties.Add(InitFlash());
       AdvancedProperties.Add(InitOnOffProperty("Long exp. NR", CONST_PROP_NoiseReduction));
@@ -305,6 +307,33 @@ namespace CameraControl.Core.Devices.Nikon
                                                             res.Code, -1);
       return res;
     }
+
+    protected virtual PropertyValue<long> InitStillCaptureMode()
+    {
+      PropertyValue<long> res = new PropertyValue<long>() { Name = "Still Capture Mode", IsEnabled = true, Code = 0x5013, SubType = typeof(UInt16) };
+      res.AddValues("Single shot (single-frame shooting)", 0x0001);
+      res.AddValues("Continuous shot (continuous shooting)", 0x0002);
+      res.AddValues("Self-timer", 0x8011);	
+      res.AddValues("Quick-response remote", 0x8014);	
+	    res.AddValues("2s delayed remote", 0x8015);
+      res.AddValues("Quiet shooting", 0x8016);	
+      res.ValueChanged += (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                                                            res.Code, -1);
+      return res;
+    }
+
+    protected virtual PropertyValue<long> InitBurstNumber()
+    {
+      PropertyValue<long> res = new PropertyValue<long>() { Name = "Burst Number", IsEnabled = true, Code = 0x5018, SubType = typeof(UInt16) };
+      for (int i = 1; i < 100; i++)
+      {
+        res.AddValues(i.ToString(),i);
+      }
+      res.ValueChanged += (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                                                            res.Code, -1);
+      return res;
+    }
+
 
     protected virtual PropertyValue<long> InitNRHiIso()
     {
