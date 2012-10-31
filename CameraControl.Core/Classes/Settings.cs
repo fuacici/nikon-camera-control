@@ -20,7 +20,7 @@ namespace CameraControl.Core.Classes
     private string AppName = "NikonCameraControl";
     private string ConfigFile = "";
    
-    [XmlIgnore]
+    //[XmlIgnore]
     //public WIAManager Manager { get; set; }
 
     private PhotoSession _defaultSession;
@@ -92,14 +92,16 @@ namespace CameraControl.Core.Classes
       }
     }
 
-    private string _currentTheme;
-    public string CurrentTheme
+    private int _currentThemeIndex;
+    public int CurrentThemeIndex
     {
-      get { return _currentTheme; }
+      get { return _currentThemeIndex; }
       set
       {
-        _currentTheme = value;
-        NotifyPropertyChanged("CurrentTheme");
+        _currentThemeIndex = value;
+        NotifyPropertyChanged("CurrentThemeIndex");
+        if (ServiceProvider.WindowsManager != null)
+          ServiceProvider.WindowsManager.ApplyTheme();
       }
     }
 
@@ -391,7 +393,7 @@ namespace CameraControl.Core.Classes
       PhotoSessions = new ObservableCollection<PhotoSession>();
       ImageLoading = false;
       SelectedBitmap = new BitmapFile();
-      CurrentTheme = "ExpressionDark";
+      CurrentThemeIndex = 0;
       DisableNativeDrivers = false;
       AutoPreview = true;
       VideoTypes = new ObservableCollection<VideoType>
@@ -574,7 +576,41 @@ namespace CameraControl.Core.Classes
 
     public void ApplyTheme(Window window)
     {
-      ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
+      switch (CurrentThemeIndex)
+      {
+        case 0:
+          ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
+          break;
+        case 1:
+          ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Green"), Theme.Dark);
+          break;
+        case 2:
+          ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Orange"), Theme.Dark);
+          break;
+        case 3:
+          ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Purple"), Theme.Dark);
+          break;
+        case 4:
+          ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Red"), Theme.Dark);
+          break;
+        case 5:
+          ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Light);
+          break;
+        case 6:
+          ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Green"), Theme.Light);
+          break;
+        case 7:
+          ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Orange"), Theme.Light);
+          break;
+        case 8:
+          ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Purple"), Theme.Light);
+          break;
+        case 9:
+          ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Red"), Theme.Light);
+          break;
+
+      }
+      
     }
 
     public delegate void SessionSelectedEventHandler(PhotoSession oldvalu, PhotoSession newvalue);

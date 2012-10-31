@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using CameraControl.Core.Interfaces;
 
 namespace CameraControl.Core.Classes
@@ -34,6 +35,22 @@ namespace CameraControl.Core.Classes
       }
       if (Event != null)
         Event(cmd, o);
+    }
+
+    public void ApplyTheme()
+    {
+      foreach (IWindow window in WindowsList)
+      {
+        Window win = window as Window;
+        if(win!=null)
+        {
+          ServiceProvider.Settings.ApplyTheme(win);
+        }
+      }
+      foreach (Window window in Application.Current.Windows)
+      {
+        ServiceProvider.Settings.ApplyTheme(window);        
+      }
     }
 
     public IWindow Get(Type t)
