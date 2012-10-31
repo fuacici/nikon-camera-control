@@ -194,17 +194,17 @@
     public static string MenuProperties = "Properties";
     public static string MenuUseSelectedCameraPreset = "Use selected camera preset";
 
-    // add 15/10/2012
+    // 15/10/2012
     public static string LabelExternalViewerPath = "External viewer";
     public static string LabelStayOnTop = "Always on top";
-    // add 22/10/2012
+    // 22/10/2012
     public static string LabelDisplay = "Display";
     public static string LabelMotionDetection = "Motion detection";
     public static string LabelActivateMotionDetection = "Activate motion detection";
     public static string LabelCaptureWhenMove = "Capture when motion detected";
     public static string LabelThreshold = "Threshold (%)";
     public static string LabelWaitMoion = "Wait (sec)";
-    // add 25/10/2012
+    // 25/10/2012
     public static string LabelAutofocusBeforeCapture = "Autofocus before capture";
     // add 26/10/2012
     public static string LabelOpacity = "Opacity";
@@ -214,5 +214,7 @@
     public static string LabelSimpleBackgroundModelingDetector = "Simple Background Modeling Detector";
     public static string LabelSmallestBlockSize = "Smallest block size";
     public static string ButtonHelp = "Help";
+    // 31/10/2012
+    public static string LabelMenu = "Menu";
   }
 }

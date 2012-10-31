@@ -56,8 +56,83 @@
 
     <Controls:MetroWindow.Flyouts>
 
-        <Controls:Flyout Header="hiiiii" Position="Right">
-            <Button Content="hi" />
+        <Controls:Flyout Header="{T:TranslateExtension LabelMenu}" Position="Right" Opacity="0.9">
+            <Menu  VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Menu.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </Menu.ItemsPanel>
+                <MenuItem Header="{T:TranslateExtension MenuFile}">
+                    <MenuItem.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </MenuItem.ItemsPanel>
+                    <MenuItem Header="{T:TranslateExtension MenuReScan}" Name="mnu_reconnect" Click="mnu_reconnect_Click" />
+                    <MenuItem Header="{T:TranslateExtension MenuConnectedCameras}" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" >
+                        <MenuItem.ItemTemplate>
+                            <DataTemplate>
+                                <MenuItem Header="{Binding Path=DisplayName}" 
+                                      Command="{Binding Path=SelectDeviceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" 
+                                      CommandParameter="{Binding}" IsEnabled="{Binding Path=IsConnected}" />
+                            </DataTemplate>
+                        </MenuItem.ItemTemplate>
+                    </MenuItem>
+                    <MenuItem Header="{T:TranslateExtension MenuExit}" Command="ApplicationCommands.Close"/>
+                </MenuItem>
+                <MenuItem Header="{T:TranslateExtension MenuView}">
+                    <MenuItem.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </MenuItem.ItemsPanel>
+                    <MenuItem Header="{T:TranslateExtension MenuMultipleCamera}" Click="MenuItem_Click_2"/>
+                    <Separator/>
+                    <MenuItem Header="{T:TranslateExtension MenuSelectedCameraProperty}" Click="MenuItem_Click_3" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}"/>
+                </MenuItem>
+                <MenuItem Header="{T:TranslateExtension MenuLayout}">
+                    <MenuItem.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </MenuItem.ItemsPanel>
+                    <MenuItem Header="{T:TranslateExtension MenuLayoutNormal}" Click="MenuItem_Click_6" />
+                    <MenuItem Header="{T:TranslateExtension MenuLayoutGridRight}" Click="MenuItem_Click_7" />
+                    <MenuItem Header="{T:TranslateExtension MenuLayoutGrid}" Click="MenuItem_Click_8" />
+                </MenuItem>
+                <MenuItem Header="{T:TranslateExtension MenuPresets}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}">
+                    <MenuItem.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </MenuItem.ItemsPanel>
+
+                    <MenuItem Header="{T:TranslateExtension MenuPresetsLoad}" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CameraPresets}" >
+                        <MenuItem.ItemTemplate>
+                            <DataTemplate>
+                                <MenuItem Header="{Binding Path=Name}" 
+                                      Command="{Binding Path=SelectPresetCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" 
+                                      CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </MenuItem.ItemTemplate>
+                    </MenuItem>
+                    <MenuItem Header="{T:TranslateExtension MenuPresetsSave}" Click="MenuItem_Click_4" />
+                    <MenuItem Header="{T:TranslateExtension MenuPresetsEdit}" Click="MenuItem_Click_5" />
+                </MenuItem>
+                <MenuItem Header="{T:TranslateExtension MenuHelp}">
+                    <MenuItem.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </MenuItem.ItemsPanel>
+                    <MenuItem Header="{T:TranslateExtension MenuHomePage}" Click="MenuItem_Click" />
+                    <MenuItem Header="{T:TranslateExtension MenuCheckForUpdate}" Name="mnu_update" Click="MenuItem_Click_1" />
+                    <MenuItem Header="{T:TranslateExtension MenuDonate}" Name="mnu_donate" Click="mnu_donate_Click" />
+                    <Separator />
+                    <MenuItem Header="{T:TranslateExtension MenuAbout}" Name="mnu_about" Click="btn_about_Click" />
+                </MenuItem>
+            </Menu>
         </Controls:Flyout>
         <Controls:Flyout Header="Bakery" Background="#9f000000" Position="Right">
             <StackPanel>
@@ -83,28 +158,25 @@
             <ColumnDefinition Width="294" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25" />
             <RowDefinition Height="65" />
             <RowDefinition Height="463*" />
-            <RowDefinition Height="35" />
-            <RowDefinition Height="121" />
+            <RowDefinition Height="54" />
+            <RowDefinition Height="102" />
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2" Grid.RowSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <DockPanel   Name="StackLayout" />
         </Grid>
 
-        <StackPanel Orientation="Vertical" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,179,0">
-            <StackPanel  Orientation="Horizontal">
+        <StackPanel Orientation="Vertical" Grid.Row="2">
                 <Label Content="Model:" />
                 <Label Content="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.DeviceName}" />
-            </StackPanel>
         </StackPanel>
 
 
 
-        <Controls:MetroContentControl Grid.ColumnSpan="4" Name="toolBar1" Grid.Row="1">
+        <Controls:MetroContentControl Grid.ColumnSpan="4" Name="toolBar1">
             <WrapPanel >
                 <Button ToolTip="{T:TranslateExtension CapturePhotoToolTip}"  Height="50" Name="button3" Click="button3_Click" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Style="{DynamicResource MetroCircleButtonStyle}">
                     <Image Margin="5" Source="/CameraControl;component/Images/Camera.png"/>
@@ -140,54 +212,9 @@
                 <StackPanel HorizontalAlignment="Right" IsEnabled="{Binding Path=DefaultSession.TimeLapse.IsDisabled}"></StackPanel>
             </WrapPanel>
         </Controls:MetroContentControl>
-        <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="12,6,131,14" Grid.Row="2" Grid.ColumnSpan="2" />
-        <Menu Grid.ColumnSpan="4" Name="menu1" Background="{StaticResource LightBackground}">
-            <MenuItem Header="{T:TranslateExtension MenuFile}">
-                <MenuItem Header="{T:TranslateExtension MenuReScan}" Name="mnu_reconnect" Click="mnu_reconnect_Click" />
-                <MenuItem Header="{T:TranslateExtension MenuConnectedCameras}" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" >
-                    <MenuItem.ItemTemplate>
-                        <DataTemplate>
-                            <MenuItem Header="{Binding Path=DisplayName}" 
-                                      Command="{Binding Path=SelectDeviceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" 
-                                      CommandParameter="{Binding}" IsEnabled="{Binding Path=IsConnected}" />
-                        </DataTemplate>
-                    </MenuItem.ItemTemplate>
-                </MenuItem>
-                <MenuItem Header="{T:TranslateExtension MenuExit}" Command="ApplicationCommands.Close"/>
-            </MenuItem>
-            <MenuItem Header="{T:TranslateExtension MenuView}">
-                <MenuItem Header="{T:TranslateExtension MenuMultipleCamera}" Click="MenuItem_Click_2"/>
-                <Separator/>
-                <MenuItem Header="{T:TranslateExtension MenuSelectedCameraProperty}" Click="MenuItem_Click_3" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}"/>
-            </MenuItem>
-            <MenuItem Header="{T:TranslateExtension MenuLayout}">
-                <MenuItem Header="{T:TranslateExtension MenuLayoutNormal}" Click="MenuItem_Click_6" />
-                <MenuItem Header="{T:TranslateExtension MenuLayoutGridRight}" Click="MenuItem_Click_7" />
-                <MenuItem Header="{T:TranslateExtension MenuLayoutGrid}" Click="MenuItem_Click_8" />
-            </MenuItem>
-            <MenuItem Header="{T:TranslateExtension MenuPresets}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}">
-                <MenuItem Header="{T:TranslateExtension MenuPresetsLoad}" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CameraPresets}" >
-                    <MenuItem.ItemTemplate>
-                        <DataTemplate>
-                            <MenuItem Header="{Binding Path=Name}" 
-                                      Command="{Binding Path=SelectPresetCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" 
-                                      CommandParameter="{Binding}"/>
-                        </DataTemplate>
-                    </MenuItem.ItemTemplate>
-                </MenuItem>
-                <MenuItem Header="{T:TranslateExtension MenuPresetsSave}" Click="MenuItem_Click_4" />
-                <MenuItem Header="{T:TranslateExtension MenuPresetsEdit}" Click="MenuItem_Click_5" />
-            </MenuItem>
-            <MenuItem Header="{T:TranslateExtension MenuHelp}">
-                <MenuItem Header="{T:TranslateExtension MenuHomePage}" Click="MenuItem_Click" />
-                <MenuItem Header="{T:TranslateExtension MenuCheckForUpdate}" Name="mnu_update" Click="MenuItem_Click_1" />
-                <MenuItem Header="{T:TranslateExtension MenuDonate}" Name="mnu_donate" Click="mnu_donate_Click" />
-                <Separator />
-                <MenuItem Header="{T:TranslateExtension MenuAbout}" Name="mnu_about" Click="btn_about_Click" />
-            </MenuItem>
-        </Menu>
-        <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,20,0" Grid.Row="1" HorizontalAlignment="Right" Width="214" Height="65"></StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Column="3"  Grid.Row="1">
+        <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Grid.Row="1" Grid.ColumnSpan="2" Margin="3"/>
+        <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,20,0" HorizontalAlignment="Right" Width="214" Height="65"></StackPanel>
+        <StackPanel Orientation="Vertical" Grid.Column="3">
             <StackPanel>
                 <Label Content="{T:TranslateExtension Session}" Margin="5,1,1,1" />
             </StackPanel>
@@ -198,6 +225,6 @@
                 <Button Content="{T:TranslateExtension SessionDel}" Grid.Column="3" Name="btn_del_Sesion" Margin="3" Click="btn_del_Sesion_Click" />
             </StackPanel>
         </StackPanel>
-        <Controls:ProgressRing IsActive="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsBusy}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="33,34,43,27" Grid.Row="4" />
+        <Controls:ProgressRing IsActive="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsBusy}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="33,34,43,27" Grid.Row="3" />
     </Grid>
 </Controls:MetroWindow >

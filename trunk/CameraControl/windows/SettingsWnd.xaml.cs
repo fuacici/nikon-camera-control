@@ -27,6 +27,7 @@ namespace CameraControl.windows
         cmb_keys.Items.Add(key);
       }
       RotateFlipTypesValues = new AsyncObservableCollection<RotateFlipType>(Enum.GetValues(typeof(RotateFlipType)).Cast<RotateFlipType>().Distinct());
+      ServiceProvider.Settings.ApplyTheme(this);
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
