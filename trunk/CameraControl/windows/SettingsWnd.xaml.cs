@@ -22,7 +22,7 @@ namespace CameraControl.windows
     public SettingsWnd()
     {
       InitializeComponent();
-      foreach (Key key in Enum.GetValues(typeof(System.Windows.Forms.Keys)))
+      foreach (Key key in Enum.GetValues(typeof(Keys)))
       {
         cmb_keys.Items.Add(key);
       }
