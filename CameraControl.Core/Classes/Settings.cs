@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml.Serialization;
 using CameraControl.Core.Devices.Classes;
+using MahApps.Metro;
 
 namespace CameraControl.Core.Classes
 {
@@ -569,6 +570,11 @@ namespace CameraControl.Core.Classes
       // Serialize the object, and close the TextWriter
       serializer.Serialize(writer, this);
       writer.Close();
+    }
+
+    public void ApplyTheme(Window window)
+    {
+      ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
     }
 
     public delegate void SessionSelectedEventHandler(PhotoSession oldvalu, PhotoSession newvalue);
