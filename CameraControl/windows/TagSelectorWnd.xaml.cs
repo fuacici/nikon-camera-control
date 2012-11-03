@@ -70,7 +70,8 @@ namespace CameraControl.windows
     public TagSelectorWnd()
     {
       InitializeComponent();
-      //LoadData();
+      //if (Tags1.Count == 0)
+      //  Tags1.Add(new TagItem() { DisplayValue = "(empty)" });
     }
 
 
