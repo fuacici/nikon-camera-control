@@ -5,7 +5,8 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
                        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                       Title="{T:TranslateExtension TimeLapseWindowTitle}" Height="359" Width="394" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" UseLayoutRounding="True" ShowActivated="True" Closed="Window_Closed" Closing="Window_Closing">
+                       Title="{T:TranslateExtension TimeLapseWindowTitle}" Height="359" Width="583" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" UseLayoutRounding="True" ShowActivated="True" Closed="Window_Closed" Closing="Window_Closing"
+                       ShowMaxRestoreButton="False" ShowMinButton="False">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -14,10 +15,10 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colours.xaml"/>-->
                 <ResourceDictionary Source="pack://application:,,,/CameraControl;component/Styles/Wpf.Toolkit.Extended.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml"/>
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml"/>-->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />-->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -26,7 +27,7 @@
             <RowDefinition Height="76*" />
             <RowDefinition Height="56*" />
         </Grid.RowDefinitions>
-        <TabControl Name="tabControl1" Grid.RowSpan="3">
+        <TabControl Name="tabControl1" Grid.RowSpan="2" TabStripPlacement="Left">
             <TabItem Header="{T:TranslateExtension LabelTimeLapse}" Name="tabItem1">
                 <Grid Height="280" Width="365">
                     <Grid.ColumnDefinitions>
@@ -54,9 +55,9 @@
                     <Label Content="{T:TranslateExtension LabelSecondsBetweenShots}" Name="label1" Grid.Row="1" Grid.Column="1"/>
                     <xctk:IntegerUpDown Minimum="0" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.NumberOfPhotos}" Grid.Row="2" Grid.Column="3" Margin="2"/>
                     <Label Content="{T:TranslateExtension LabelNumberOfPhotos}" Name="label2" Grid.Row="2" Grid.Column="1" />
-                    <Button Content="{T:TranslateExtension ButtonStartTimeLapse}" Margin="0,0,0,14" Name="btn_start" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="123" Click="btn_start_Click" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Grid.Row="10" Grid.Column="3" />
+                    <Button Content="{T:TranslateExtension ButtonStartTimeLapse}" Name="btn_start" Click="btn_start_Click" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Grid.Row="10" Grid.Column="2" Grid.ColumnSpan="2" Margin="3"/>
                     <CheckBox Content="{T:TranslateExtension LabelDontAutofocusOnEveryCapture}" ToolTip="This option work only if you use native drive, but isn't work for all cameras" Height="16" HorizontalAlignment="Left" Name="chk_noaf" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.NoAutofocus}" Grid.Row="5" Grid.Column="1" Width="199" Margin="2,0,0,0" />
-                    <Button Content="{T:TranslateExtension ButtonClose}" Height="23" HorizontalAlignment="Left"  Name="button2" VerticalAlignment="Bottom" Width="75" Click="button2_Click" Grid.Row="10" Grid.Column="1" Margin="2,0,0,14" />
+                    <Button Content="{T:TranslateExtension ButtonClose}" Height="45" HorizontalAlignment="Left"  Name="button2" VerticalAlignment="Bottom" Width="75" Click="button2_Click" Grid.Row="10" Grid.Column="1" Margin="3,3,3,3" />
                     <xctk:TimePicker Grid.Column="3" Grid.Row="3" TimeInterval="00:00:01" Background="White" UseLayoutRounding="True" Margin="2" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.TimePeriod}" Format="LongTime" />
                     <Label Content="{T:TranslateExtension LabelCaptureInterval}" Grid.Column="1" Grid.Row="3"/>
                     <xctk:TimePicker Grid.Column="3" Grid.Row="4" Margin="2" Background="White" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.MovieLength}" Format="LongTime" />
@@ -67,14 +68,23 @@
             </TabItem>
             <TabItem Header="{T:TranslateExtension LabelMovieSettings}" Name="tabItem2">
                 <Grid Width="362">
-                    <ComboBox Height="23" Name="comboBox1" Margin="6,40,8,224" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=VideoTypes}" SelectedValue="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.VideoType}"/>
-                    <Label Content="{T:TranslateExtension LabelVideoFormat}" Height="28" HorizontalAlignment="Left" Margin="6,6,0,0" Name="label3" VerticalAlignment="Top" />
-                    <TextBox Height="23" HorizontalAlignment="Left" Margin="6,126,0,0" Name="textBox1" VerticalAlignment="Top" Width="316" Text="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.OutputFIleName}"/>
-                    <Label Content="{T:TranslateExtension LabelOutputFile}" Height="28" HorizontalAlignment="Left" Margin="6,101,0,0" Name="label4" VerticalAlignment="Top" />
-                    <Button Content="..." Height="23" HorizontalAlignment="Left" Margin="328,125,0,0" Name="button3" VerticalAlignment="Top" Width="26" Click="button3_Click" />
-                    <Label Content="{T:TranslateExtension LabelFps}" Height="28" HorizontalAlignment="Left" Margin="14,75,0,0" Name="label5" VerticalAlignment="Top" />
-                    <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="48,75,0,0" Name="integerUpDown3" VerticalAlignment="Top" Width="75" Minimum="5" Maximum="60" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.Fps}" />
-                    <CheckBox Content="{T:TranslateExtension LabelFillImage}" Height="16" HorizontalAlignment="Left" Margin="286,79,0,0" Name="checkBox1" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.FillImage}"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10*" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="147*" />
+                    </Grid.RowDefinitions>
+                    <ComboBox Name="comboBox1" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=VideoTypes}" SelectedValue="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.VideoType}" Grid.Row="2" Margin="3"/>
+                    <Label Content="{T:TranslateExtension LabelVideoFormat}" Height="28" HorizontalAlignment="Left" Margin="6,0,0,0" Name="label3" VerticalAlignment="Top" Grid.Row="1" />
+                    <TextBox Name="textBox1" Text="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.OutputFIleName}" Grid.Row="5" Margin="2,2,38,2" />
+                    <Label Content="{T:TranslateExtension LabelOutputFile}" Height="28" HorizontalAlignment="Left" Margin="6,24,0,0" Name="label4" VerticalAlignment="Top" Grid.Row="3" Grid.RowSpan="2" />
+                    <Button Content="..." Height="23" HorizontalAlignment="Left" Margin="330,5,0,0" Name="button3" VerticalAlignment="Top" Width="26" Click="button3_Click" Grid.Row="5" />
+                    <Label Content="{T:TranslateExtension LabelFps}" Height="28" HorizontalAlignment="Left" Margin="6,0,0,0" Name="label5" VerticalAlignment="Top" Grid.Row="3" />
+                    <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="40,2,2,2" Name="integerUpDown3" VerticalAlignment="Top" Width="75" Minimum="5" Maximum="60" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.Fps}" Grid.Row="3" />
+                    <CheckBox Content="{T:TranslateExtension LabelFillImage}" Height="24" HorizontalAlignment="Left" Margin="286,7,0,0" Name="checkBox1" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.FillImage}" Grid.Row="3" Grid.RowSpan="2" />
                 </Grid>
             </TabItem>
             <TabItem Header="{T:TranslateExtension LabelCreateMovie}" Name="tabItem3">
@@ -83,8 +93,8 @@
                         <RowDefinition Height="182*" />
                         <RowDefinition Height="38*" />
                     </Grid.RowDefinitions>
-                    <Button Content="{T:TranslateExtension ButtonCreateMovie}" Height="23" Name="button1" Width="140" Click="button1_Click" Margin="96,8,126,6" Grid.Row="1" />
-                    <GroupBox Header="" Height="170" HorizontalAlignment="Left" Margin="6,6,0,0" Name="groupBox1" VerticalAlignment="Top" Width="347">
+                    <Button Content="{T:TranslateExtension ButtonCreateMovie}" Name="button1" Width="140" Click="button1_Click" Margin="110,10,110,10" Grid.Row="1" />
+                    <Expander Header="" Height="170" HorizontalAlignment="Left" Margin="6,6,0,0" Name="groupBox1" VerticalAlignment="Top" Width="347" IsExpanded="True">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
@@ -116,7 +126,7 @@
                                 <ComboBoxItem Content="{T:TranslateExtension LabelImageAlignmentRightBottom}" />
                             </ComboBox>
                         </Grid>
-                    </GroupBox>
+                    </Expander>
                 </Grid>
             </TabItem>
 

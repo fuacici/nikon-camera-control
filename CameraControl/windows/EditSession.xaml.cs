@@ -1,5 +1,6 @@
 using System.Windows;
 using CameraControl.Classes;
+using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Devices.Classes;
 
@@ -17,6 +18,7 @@ namespace CameraControl.windows
       Session.BeginEdit();
       InitializeComponent();
       DataContext = Session;
+      ServiceProvider.Settings.ApplyTheme(this);
     }
 
     private void btn_browse_Click(object sender, RoutedEventArgs e)

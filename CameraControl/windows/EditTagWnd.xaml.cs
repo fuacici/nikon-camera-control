@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using CameraControl.Core;
 using CameraControl.Core.Classes;
 
 namespace CameraControl.windows
@@ -26,6 +27,7 @@ namespace CameraControl.windows
       InitializeComponent();
       _tagItem.BeginEdit();
       DataContext = _tagItem;
+      ServiceProvider.Settings.ApplyTheme(this);
     }
 
     private void btn_save_Click(object sender, RoutedEventArgs e)
