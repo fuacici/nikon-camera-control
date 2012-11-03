@@ -85,6 +85,7 @@ namespace CameraControl.windows
       WaitTime = 0;
       _captureTimer.Elapsed += _captureTimer_Elapsed;
       _waitTimer.Elapsed += _waitTimer_Elapsed;
+      ServiceProvider.Settings.ApplyTheme(this);
     }
 
     void _waitTimer_Elapsed(object sender, ElapsedEventArgs e)

@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using CameraControl.Classes;
+using CameraControl.Core;
 using CameraControl.Core.Classes;
 
 namespace CameraControl.windows
@@ -13,6 +14,7 @@ namespace CameraControl.windows
     {
       InitializeComponent();
       Title = "About " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+      ServiceProvider.Settings.ApplyTheme(this);
     }
 
     private void button2_Click(object sender, RoutedEventArgs e)

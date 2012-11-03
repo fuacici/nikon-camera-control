@@ -18,6 +18,7 @@ namespace CameraControl.windows
     {
       InitializeComponent();
       ServiceProvider.Settings.DefaultSession.TimeLapse.TimeLapseDone += TimeLapse_TimeLapseDone;
+      ServiceProvider.Settings.ApplyTheme(this);
     }
 
     void TimeLapse_TimeLapseDone(object sender, EventArgs e)

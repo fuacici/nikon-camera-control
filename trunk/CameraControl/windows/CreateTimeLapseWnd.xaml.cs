@@ -54,6 +54,7 @@ namespace CameraControl.windows
       _basedir = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
       _virtualdubdir = Path.Combine(_basedir, "VirtualDub", "VirtualDub.exe");
       btn_paly.Visibility=Visibility.Hidden;
+      ServiceProvider.Settings.ApplyTheme(this);
     }
 
     void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

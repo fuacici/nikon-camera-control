@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using CameraControl.Classes;
+using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
 
@@ -31,6 +32,7 @@ namespace CameraControl.windows
       MenuAction.ActionDone += MenuAction_ActionDone;
       InitializeComponent();
       Title = "Execute action : " + MenuAction.Title;
+      ServiceProvider.Settings.ApplyTheme(this);
     }
 
     void MenuAction_ActionDone(object sender, EventArgs e)
