@@ -565,5 +565,10 @@ namespace CameraControl
       Flyouts[0].IsOpen = !Flyouts[0].IsOpen;
     }
 
+    private void mnu_forum_Click(object sender, RoutedEventArgs e)
+    {
+      PhotoUtils.Run("http://www.digicamcontrol.com/forum/", "");
+    }
+
   }
 }

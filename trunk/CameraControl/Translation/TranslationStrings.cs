@@ -216,5 +216,7 @@
     public static string ButtonHelp = "Help";
     // 31/10/2012
     public static string LabelMenu = "Menu";
+    // 03/11/2012
+    public static string MenuForum = "Forum";
   }
 }

@@ -17,7 +17,7 @@ namespace CameraControl.Core.Classes
 {
   public class Settings: BaseFieldClass
   {
-    private string AppName = "NikonCameraControl";
+    private string AppName = "digiCamControl";
     private string ConfigFile = "";
    
     //[XmlIgnore]

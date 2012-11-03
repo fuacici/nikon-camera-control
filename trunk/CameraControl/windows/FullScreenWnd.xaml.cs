@@ -116,5 +116,14 @@ namespace CameraControl.windows
     }
 
     #endregion
+
+    private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (IsVisible)
+      {
+        e.Cancel = true;
+        ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_Hide);
+      }
+    }
   }
 }

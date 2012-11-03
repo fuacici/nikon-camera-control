@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Controls="clr-namespace:CameraControl.Controls"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
                        xmlns:Controls1="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        Title="FullScreenWnd" Height="460" Width="472" WindowState="Maximized" WindowStyle="None" KeyDown="image1_KeyDown" MouseDown="image1_MouseDown">
+        Title="FullScreenWnd" Height="460" Width="472" WindowState="Maximized" WindowStyle="None" KeyDown="image1_KeyDown" MouseDown="image1_MouseDown" Closing="MetroWindow_Closing">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
