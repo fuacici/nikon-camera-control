@@ -41,7 +41,7 @@ namespace CameraControl.Core.Classes
 
     public void GetBitmap(BitmapFile bitmapFile)
     {
-      if(_isworking)
+      if (_isworking)
       {
         _nextfile = bitmapFile;
         return;
@@ -49,7 +49,7 @@ namespace CameraControl.Core.Classes
       _nextfile = null;
       _isworking = true;
       _currentfile = bitmapFile;
-
+      _currentfile.RawCodecNeeded = false;
       if (!File.Exists(_currentfile.FileItem.FileName))
       {
         Log.Error("File not found " + _currentfile.FileItem.FileName);
@@ -64,7 +64,8 @@ namespace CameraControl.Core.Classes
           if (_currentfile.FileItem.IsRaw)
           {
             Log.Debug("Loading raw file.");
-            BitmapDecoder bmpDec = BitmapDecoder.Create(new Uri(_currentfile.FileItem.FileName), BitmapCreateOptions.None,
+            BitmapDecoder bmpDec = BitmapDecoder.Create(new Uri(_currentfile.FileItem.FileName),
+                                                        BitmapCreateOptions.None,
                                                         BitmapCacheOption.OnLoad);
 
             _currentfile.DisplayImage = bmpDec.Frames.Single();
@@ -73,7 +74,7 @@ namespace CameraControl.Core.Classes
           else
           {
             Log.Debug("Loading bitmap file.");
-            Bitmap image = (Bitmap)Image.FromFile(_currentfile.FileItem.FileName);
+            Bitmap image = (Bitmap) Image.FromFile(_currentfile.FileItem.FileName);
             var exif = new EXIFextractor(ref image, "n");
             if (exif["Orientation"] != null)
             {
@@ -92,6 +93,10 @@ namespace CameraControl.Core.Classes
             image.Dispose();
             Log.Debug("Loading bitmap file done.");
           }
+        }
+        catch (FileFormatException)
+        {
+          _currentfile.RawCodecNeeded = true;
         }
         catch (Exception exception)
         {
