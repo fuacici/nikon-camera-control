@@ -34,7 +34,7 @@ namespace CameraControl.windows
       _photoSession.Braketing.IsBusyChanged += Braketing_IsBusyChanged;
       _photoSession.Braketing.PhotoCaptured += Braketing_PhotoCaptured;
       _photoSession.Braketing.BracketingDone += Braketing_BracketingDone;
-
+      ServiceProvider.Settings.ApplyTheme(this);
     }
 
     void Braketing_BracketingDone(object sender, EventArgs e)
