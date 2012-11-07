@@ -218,5 +218,7 @@
     public static string LabelMenu = "Menu";
     // 03/11/2012
     public static string MenuForum = "Forum";
+    // 07/11/2012
+    public static string ButtonGetRawCodec = "Get raw codec";
   }
 }

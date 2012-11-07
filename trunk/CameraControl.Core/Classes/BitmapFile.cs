@@ -126,6 +126,18 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private bool _rawCodecNeeded;
+    public bool RawCodecNeeded
+    {
+      get { return _rawCodecNeeded; }
+      set
+      {
+        _rawCodecNeeded = value;
+        NotifyPropertyChanged("RawCodecNeeded");
+      }
+    }
+
+
     public AsyncObservableCollection<DictionaryItem> Metadata { get; set; }
 
     public BitmapImage GetBitmap()
@@ -328,6 +340,7 @@ Tag (hex)	Tag (dec)	IFD	Key	Type	Tag description
     public BitmapFile()
     {
       IsLoaded = false;
+      RawCodecNeeded = false;
       Metadata = new AsyncObservableCollection<DictionaryItem>();
       Metadata.Add(new DictionaryItem() {Name = "Exposure mode"});
       Metadata.Add(new DictionaryItem() {Name = "Exposure program"});
