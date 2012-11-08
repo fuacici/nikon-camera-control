@@ -1249,6 +1249,10 @@ namespace CameraControl.Core.Devices.Nikon
               return "LabelCardProtected";
             if (PhotoUtils.GetBit(resp, 12))
               return "LabelDuringEnlargedDisplayLiveView";
+            if (PhotoUtils.GetBit(resp, 13))
+              return "LabelWrongLiveViewType";
+            if (PhotoUtils.GetBit(resp, 14))
+              return "LabelNotInApplicationMode";
           }
           return "";
           break;

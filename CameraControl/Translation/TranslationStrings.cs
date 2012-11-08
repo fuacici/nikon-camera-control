@@ -232,6 +232,8 @@
     public static string LabelRecordInProgres = "During movie file recording";
     public static string LabelCardProtected = "Card protected";
     public static string LabelDuringEnlargedDisplayLiveView = "During enlarged display of Live view";
+    public static string LabelWrongLiveViewType = "The set live view selector is the live view photography.";
+    public static string LabelNotInApplicationMode = "The camera is not in the application mode.";
    
   }
 }
