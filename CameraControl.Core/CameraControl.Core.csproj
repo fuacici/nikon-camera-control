@@ -112,6 +112,7 @@
     <Compile Include="Devices\BaseMTPCamera.cs" />
     <Compile Include="Devices\CameraDeviceManager.cs" />
     <Compile Include="Devices\Canon\Canon400D.cs" />
+    <Compile Include="Devices\Classes\OperationEnum.cs" />
     <Compile Include="Devices\Classes\PhotoSession.cs" />
     <Compile Include="Devices\Nikon\NikonBase.cs" />
     <Compile Include="Devices\Nikon\NikonD300.cs" />

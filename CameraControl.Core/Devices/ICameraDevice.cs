@@ -46,7 +46,7 @@ namespace CameraControl.Core.Devices
     void CapturePhoto();
     void StartRecordMovie();
     void StopRecordMovie();
-
+    string GetProhibitionCondition(OperationEnum operationEnum);
     /// <summary>
     /// Support only if capability Bulb is specified
     /// </summary>
@@ -57,7 +57,7 @@ namespace CameraControl.Core.Devices
     void LockCamera();
     void UnLockCamera();
     void Close();
-    //void ReadDeviceProperties(int prop);
+
     void TransferFile(object o, string filename);
 
     event PhotoCapturedEventHandler PhotoCaptured;

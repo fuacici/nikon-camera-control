@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Timers;
+using CameraControl.Core.Classes;
 using CameraControl.Core.Devices.Classes;
 using PortableDeviceLib;
 using PortableDeviceLib.Model;
@@ -1214,8 +1215,49 @@ namespace CameraControl.Core.Devices.Nikon
       } while (retry);
     }
 
-    //public override event PhotoCapturedEventHandler PhotoCaptured;
-    //public override event EventHandler CaptureCompleted;
-
+    public override string GetProhibitionCondition(OperationEnum operationEnum)
+    {
+      switch (operationEnum)
+      {
+        case OperationEnum.Capture:
+          return "";
+          break;
+        case OperationEnum.RecordMovie:
+          MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetDevicePropValue, 0xD0A4, -1);
+          if (response.Data != null && response.Data.Length > 0)
+          {
+            Int32 resp = BitConverter.ToInt32(response.Data, 0);
+            if (resp == 0)
+              return string.Empty;
+            if (PhotoUtils.GetBit(resp, 0))
+              return "LabelNoCardInserted";
+            if (PhotoUtils.GetBit(resp, 1))
+              return "LabelCardError";
+            if (PhotoUtils.GetBit(resp, 2))
+              return "LabelCardNotFormatted";
+            if (PhotoUtils.GetBit(resp, 3))
+              return "LabelNoFreeAreaInCard";
+            if (PhotoUtils.GetBit(resp, 7))
+              return "LabelCardBufferNotEmpty";
+            if (PhotoUtils.GetBit(resp, 8))
+              return "LabelPcBufferNotEmpty";
+            if (PhotoUtils.GetBit(resp, 9))
+              return "LabelBufferNotEmpty";
+            if (PhotoUtils.GetBit(resp,10))
+              return "LabelRecordInProgres";
+            if (PhotoUtils.GetBit(resp, 11))
+              return "LabelCardProtected";
+            if (PhotoUtils.GetBit(resp, 12))
+              return "LabelDuringEnlargedDisplayLiveView";
+          }
+          return "";
+          break;
+        case OperationEnum.Focus:
+          return "";
+          break;
+        default:
+          throw new ArgumentOutOfRangeException("operationEnum");
+      }
+    }
   }
 }

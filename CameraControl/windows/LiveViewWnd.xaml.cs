@@ -26,6 +26,7 @@ using CameraControl.Core.Classes;
 using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
 using CameraControl.Core.Interfaces;
+using CameraControl.Translation;
 using MahApps.Metro;
 using PortableDeviceLib;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -1094,7 +1095,16 @@ namespace CameraControl.windows
         }
         else
         {
-          SelectedPortableDevice.StartRecordMovie();
+          string resp = SelectedPortableDevice.GetProhibitionCondition(OperationEnum.RecordMovie);
+          if (string.IsNullOrEmpty(resp))
+          {
+            SelectedPortableDevice.StartRecordMovie();
+          }
+          else
+          {
+            MessageBox.Show( TranslationStrings.LabelErrorRecordMovie+"\n"+TranslationManager.GetTranslation(resp));
+            return;
+          }
         }
         Recording = !Recording;
       }
