@@ -41,7 +41,7 @@
             <ColumnDefinition Width="635*" />
         </Grid.ColumnDefinitions>
         <Image Stretch="Uniform" Grid.Column="1" Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}"  Grid.RowSpan="2" />
-        <Image Name="image1" Stretch="Uniform" Grid.Column="1" MouseDown="image1_MouseDown" Grid.RowSpan="2" Opacity="{Binding ElementName=slider_transparent,Path=Value}"/>        
+        <Image Name="image1" Stretch="Uniform" Grid.Column="1" MouseDown="image1_MouseDown" Grid.RowSpan="2" Opacity="{Binding ElementName=slider_transparent,Path=Value}"/>
         <Canvas Grid.Column="1" Name="canvas"   Background="{x:Null}" SizeChanged="canvas_SizeChanged" Grid.RowSpan="2">
             <Label Canvas.Left="0" Canvas.Top="0" Content="REC" Height="41" Name="lbl_rec" FontSize="20" FontWeight="Bold" Foreground="Red" Width="52"></Label>
         </Canvas>
@@ -243,6 +243,6 @@
         <Canvas Height="104" HorizontalAlignment="Left" Margin="32,114,0,0" Name="canvas_image" VerticalAlignment="Top" Width="130" Background="#FFC7C7C7" MouseDown="canvas_image_MouseDown">
             <Rectangle Canvas.Left="0" Canvas.Top="0" Height="15" Name="small_focus_rect" Stroke="Red" Width="17" ClipToBounds="True" />
         </Canvas>
-        <Label Content="{Binding Path=Fps, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Margin="164,114,9,93" />
+        <Label Content="{Binding Path=Fps, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Margin="164,114,9,72" />
     </Grid>
 </Controls:MetroWindow>

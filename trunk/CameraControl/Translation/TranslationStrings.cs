@@ -220,5 +220,18 @@
     public static string MenuForum = "Forum";
     // 07/11/2012
     public static string ButtonGetRawCodec = "Get raw codec";
+    // 08/11/2012
+    public static string LabelErrorRecordMovie = "Error start movie recording";
+    public static string LabelNoCardInserted = "No card inserted";
+    public static string LabelCardError = "Card Error";
+    public static string LabelCardNotFormatted = "Card not formatted";
+    public static string LabelNoFreeAreaInCard = "No free area in the card";
+    public static string LabelCardBufferNotEmpty = "There is data whose recording destination is a card in the buffer.";
+    public static string LabelPcBufferNotEmpty = "There is data whose recording destination is the PC in the buffer.";
+    public static string LabelBufferNotEmpty = "There is movie data in the buffer. ";
+    public static string LabelRecordInProgres = "During movie file recording";
+    public static string LabelCardProtected = "Card protected";
+    public static string LabelDuringEnlargedDisplayLiveView = "During enlarged display of Live view";
+   
   }
 }

@@ -1,8 +1,10 @@
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Media;
 using System.Net;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 using FreeImageAPI;
@@ -79,7 +81,7 @@ namespace CameraControl.Core.Classes
         // ConvertToType(dib, FREE_IMAGE_TYPE.FIT_BITMAP, false);
         FIBITMAP resized = FreeImage.Rescale(bmp, (int) dw, (int) dh, FREE_IMAGE_FILTER.FILTER_CATMULLROM);
         FIBITMAP final = FreeImage.EnlargeCanvas<RGBQUAD>(resized, difw/2, difh/2, difw - (difw/2), difh - (difh/2),
-                                                          new RGBQUAD(System.Drawing.Color.Black),
+                                                          new RGBQUAD(Color.Black),
                                                           FREE_IMAGE_COLOR_OPTIONS.FICO_RGB);
         FreeImage.SaveEx(final, newfile);
         FreeImage.UnloadEx(ref final);
@@ -92,7 +94,7 @@ namespace CameraControl.Core.Classes
         {
           FIBITMAP resized = FreeImage.Rescale(dib, (int) dw, (int) dh, FREE_IMAGE_FILTER.FILTER_CATMULLROM);
           FIBITMAP final = FreeImage.EnlargeCanvas<RGBQUAD>(resized, difw/2, difh/2, difw - (difw/2), difh - (difh/2),
-                                                            new RGBQUAD(System.Drawing.Color.Black),
+                                                            new RGBQUAD(Color.Black),
                                                             FREE_IMAGE_COLOR_OPTIONS.FICO_RGB);
           FreeImage.SaveEx(final, newfile);
           FreeImage.UnloadEx(ref final);
@@ -130,11 +132,11 @@ namespace CameraControl.Core.Classes
         if (selectSingleNode != null)
           url = selectSingleNode.InnerText;
         Version v_ver = new Version(ver);
-        if (v_ver > System.Reflection.Assembly.GetExecutingAssembly().GetName().Version)
+        if (v_ver > Assembly.GetExecutingAssembly().GetName().Version)
         {
           if (
             MessageBox.Show("New version of application released.\nDo you want to download?", "Update",
-                            MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+                            MessageBoxButtons.YesNo) == DialogResult.Yes)
           {
             Process.Start(url);
             return true;
@@ -174,7 +176,7 @@ namespace CameraControl.Core.Classes
     {
       try
       {
-        string basedir = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+        string basedir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         if (basedir != null)
         {
           var mplayer = new SoundPlayer(Path.Combine(basedir, "Data", "takephoto.wav"));
@@ -189,8 +191,12 @@ namespace CameraControl.Core.Classes
 
     public static void Donate()
     {
-      PhotoUtils.Run("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BXZSLNNAJGZZJ"); 
+      Run("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BXZSLNNAJGZZJ"); 
     }
 
+    public static bool GetBit(Int32 b, int bitNumber)
+    {
+      return (b & (1 << bitNumber)) != 0;
+    }
   }
 }

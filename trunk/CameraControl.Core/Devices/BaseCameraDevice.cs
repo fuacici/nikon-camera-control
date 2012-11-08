@@ -312,6 +312,11 @@ namespace CameraControl.Core.Devices
       
     }
 
+    public virtual string GetProhibitionCondition(OperationEnum operationEnum)
+    {
+      return "";
+    }
+
     public virtual void EndBulbMode()
     {
       

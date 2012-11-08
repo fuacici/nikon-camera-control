@@ -117,5 +117,12 @@ namespace CameraControl.Translation
       }
       return TranslatedStrings.Count;
     }
+
+    static public string GetTranslation(string key)
+    {
+      if (Strings.ContainsKey(key))
+        return Strings[key];
+      return key;
+    }
   }
 }
