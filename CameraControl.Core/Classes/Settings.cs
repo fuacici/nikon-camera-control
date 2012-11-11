@@ -391,11 +391,8 @@ namespace CameraControl.Core.Classes
       CameraPresets = new AsyncObservableCollection<CameraPreset>();
       DefaultSession = new PhotoSession();
       PhotoSessions = new ObservableCollection<PhotoSession>();
-      ImageLoading = false;
       SelectedBitmap = new BitmapFile();
-      CurrentThemeIndex = 0;
-      DisableNativeDrivers = false;
-      AutoPreview = true;
+      ImageLoading = false;
       VideoTypes = new ObservableCollection<VideoType>
                      {
                        new VideoType("HD 1080 16:9", 1920, 1080),
@@ -403,6 +400,16 @@ namespace CameraControl.Core.Classes
                        new VideoType("HD 720 16:9", 1280, 720),
                        new VideoType("Super VGA 4:3", 800, 600),
                      };
+      CameraProperties = new CameraPropertyEnumerator();
+      ResetSettings();
+    }
+
+
+    public void ResetSettings()
+    {
+      DisableNativeDrivers = false;
+      AutoPreview = true;
+      CurrentThemeIndex = 0;
       LastUpdateCheckDate = DateTime.MinValue;
       UseTriggerKey = false;
       UseWebserver = false;
@@ -415,7 +422,6 @@ namespace CameraControl.Core.Classes
       MediumFocusStep = 100;
       LargeFocusStep = 500;
       Rotate = RotateFlipType.RotateNoneFlipNone;
-      CameraProperties = new CameraPropertyEnumerator();
       FullScreenColor = Colors.Black;
       SelectedLanguage = Thread.CurrentThread.CurrentCulture.Name;
       FocusMoveStep = 50;

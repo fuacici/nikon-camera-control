@@ -8,6 +8,7 @@ namespace CameraControl.Classes
 {
   public enum HelpSections
   {
+    MainMenu,
     FocusStacking,
     Bracketig
   }
@@ -20,6 +21,7 @@ namespace CameraControl.Classes
     {
       _helpData = new Dictionary<HelpSections, string>
                     {
+                      {HelpSections.MainMenu, "http://www.digicamcontrol.com/wiki/index.php/User_guide"},
                       {HelpSections.Bracketig, "http://nccsoftware.blogspot.ro/2012/07/how-to-exposure-blending.html"},
                       {HelpSections.FocusStacking, "http://nccsoftware.blogspot.ro/2012/06/how-to-focus-stacking.html"}
                     };

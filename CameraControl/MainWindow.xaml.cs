@@ -18,6 +18,7 @@ using MahApps.Metro;
 using MahApps.Metro.Controls;
 using Application = System.Windows.Application;
 using EditSession = CameraControl.windows.EditSession;
+using HelpProvider = CameraControl.Classes.HelpProvider;
 using MessageBox = System.Windows.Forms.MessageBox;
 using Path = System.IO.Path;
 
@@ -422,10 +423,6 @@ namespace CameraControl
       wnd.ShowDialog();
     }
 
-    private void mnu_donate_Click(object sender, RoutedEventArgs e)
-    {
-      PhotoUtils.Donate();
-    }
 
     private void btn_browse_Click(object sender, RoutedEventArgs e)
     {
@@ -563,6 +560,7 @@ namespace CameraControl
     private void btn_menu_Click(object sender, RoutedEventArgs e)
     {
       Flyouts[0].IsOpen = !Flyouts[0].IsOpen;
+      Flyouts[1].IsOpen = !Flyouts[1].IsOpen;
     }
 
     private void mnu_forum_Click(object sender, RoutedEventArgs e)
@@ -573,6 +571,16 @@ namespace CameraControl
     private void btn_getRaw_Click(object sender, RoutedEventArgs e)
     {
       PhotoUtils.Run("http://www.microsoft.com/en-us/download/details.aspx?id=26829", "");
+    }
+
+    private void btn_donate_Click(object sender, RoutedEventArgs e)
+    {
+      PhotoUtils.Donate();
+    }
+
+    private void btn_help_Click(object sender, RoutedEventArgs e)
+    {
+      HelpProvider.Run(HelpSections.MainMenu);
     }
 
   }

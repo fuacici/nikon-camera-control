@@ -82,5 +82,10 @@ namespace CameraControl.windows
       }
     }
 
+    private void btn_reset_Click(object sender, RoutedEventArgs e)
+    {
+      ServiceProvider.Settings.ResetSettings();
+    }
+
   }
 }
