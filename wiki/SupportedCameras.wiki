@@ -1,5 +1,5 @@
 #summary Confirmed working/not working cameras
-#labels Featured
+#labels Deprecated
 
 = Supported Cameras  =
 ||Model||Control||Live view||Raw support||Bulb mode||Driver||
