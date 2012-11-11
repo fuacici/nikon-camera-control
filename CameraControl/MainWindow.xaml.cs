@@ -294,11 +294,6 @@ namespace CameraControl
       button1.IsChecked = !button1.IsChecked;
     }
 
-    private void button2_Click(object sender, RoutedEventArgs e)
-    {
-
-    }
-
     private void Window_Closed(object sender, EventArgs e)
     {
       if (PropertyWnd != null)
@@ -365,7 +360,7 @@ namespace CameraControl
 
     private void MenuItem_Click(object sender, RoutedEventArgs e)
     {
-      PhotoUtils.Run("http://nccsoftware.blogspot.com/", "");
+      PhotoUtils.Run("http://www.digicamcontrol.com/", "");
     }
 
     private void MenuItem_Click_1(object sender, RoutedEventArgs e)

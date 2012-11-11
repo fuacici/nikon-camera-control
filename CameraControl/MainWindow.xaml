@@ -22,7 +22,7 @@
                 <ResourceDictionary Source="Resources/Icons.xaml" />
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colours.xaml"/>-->
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml"/>-->
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Menu.xaml"/>
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Menu.xaml"/>-->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
 
@@ -72,15 +72,6 @@
                         </ItemsPanelTemplate>
                     </MenuItem.ItemsPanel>
                     <MenuItem Header="{T:TranslateExtension MenuReScan}" Name="mnu_reconnect" Click="mnu_reconnect_Click" />
-                    <MenuItem Header="{T:TranslateExtension MenuConnectedCameras}" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" >
-                        <MenuItem.ItemTemplate>
-                            <DataTemplate>
-                                <MenuItem Header="{Binding Path=DisplayName}" 
-                                      Command="{Binding Path=SelectDeviceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" 
-                                      CommandParameter="{Binding}" IsEnabled="{Binding Path=IsConnected}" />
-                            </DataTemplate>
-                        </MenuItem.ItemTemplate>
-                    </MenuItem>
                     <MenuItem Header="{T:TranslateExtension MenuExit}" Command="ApplicationCommands.Close"/>
                 </MenuItem>
                 <MenuItem Header="{T:TranslateExtension MenuView}">
@@ -136,11 +127,17 @@
                 </MenuItem>
             </Menu>
         </Controls:Flyout>
-        <Controls:Flyout Header="Bakery" Background="#9f000000" Position="Left" Opacity="0.9">
-            <StackPanel>
-                <Controls:Tile Title="My _Cupcakes" Count="23">
-                    <Controls:MetroImage Source="{StaticResource appbar_cupcake}" />
-                </Controls:Tile>
+        <Controls:Flyout Header="{T:TranslateExtension MenuConnectedCameras}" Background="#9f000000" Position="Left" Opacity="0.9">
+            <StackPanel Width="200">
+                <ListBox ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" SelectedItem="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice}" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Label Content="{Binding Path=DeviceName}" ToolTip="{Binding Path=DisplayName}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </StackPanel>
         </Controls:Flyout>
         <Controls:Flyout Header="Bakery" Background="#9f000000" Position="Right">
