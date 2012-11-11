@@ -193,5 +193,46 @@
     <string Field="MenuProperties">Properties</string> 
     <string Field="MenuUseSelectedCameraPreset">Use selected camera preset</string> 
 	
+	<!-- 15/10/2012 -->
+     <string Field="LabelExternalViewerPath">External viewer</string>
+     <string Field="LabelStayOnTop">Always on top</string>
+    <!-- 22/10/2012 -->
+     <string Field="LabelDisplay">Display</string>
+     <string Field="LabelMotionDetection">Motion detection</string>
+     <string Field="LabelActivateMotionDetection">Activate motion detection</string>
+     <string Field="LabelCaptureWhenMove">Capture when motion detected</string>
+     <string Field="LabelThreshold">Threshold (%)</string>
+     <string Field="LabelWaitMoion">Wait (sec)</string>
+    <!-- 25/10/2012 -->
+     <string Field="LabelAutofocusBeforeCapture">Autofocus before capture</string>
+    <!-- 26/10/2012 -->
+     <string Field="LabelOpacity">Opacity</string>
+    <!-- 29/10/2012 -->
+     <string Field="LabelMotionDetectionType">Motion detection type</string>
+     <string Field="LabelTwoFramesDifferenceDetector">Two Frames Difference Detector</string>
+     <string Field="LabelSimpleBackgroundModelingDetector">Simple Background Modeling Detector</string>
+     <string Field="LabelSmallestBlockSize">Smallest block size</string>
+     <string Field="ButtonHelp">Help</string>
+    <!-- 31/10/2012 -->
+     <string Field="LabelMenu">Menu</string>
+    <!-- 03/11/2012 -->
+     <string Field="MenuForum">Forum</string>
+    <!-- 07/11/2012 -->
+     <string Field="ButtonGetRawCodec">Get raw codec</string>
+    <!-- 08/11/2012 -->
+     <string Field="LabelErrorRecordMovie">Error start movie recording</string>
+     <string Field="LabelNoCardInserted">No card inserted</string>
+     <string Field="LabelCardError">Card Error</string>
+     <string Field="LabelCardNotFormatted">Card not formatted</string>
+     <string Field="LabelNoFreeAreaInCard">No free area in the card</string>
+     <string Field="LabelCardBufferNotEmpty">There is data whose recording destination is a card in the buffer.</string>
+     <string Field="LabelPcBufferNotEmpty">There is data whose recording destination is the PC in the buffer.</string>
+     <string Field="LabelBufferNotEmpty">There is movie data in the buffer. </string>
+     <string Field="LabelRecordInProgres">During movie file recording</string>
+     <string Field="LabelCardProtected">Card protected</string>
+     <string Field="LabelDuringEnlargedDisplayLiveView">During enlarged display of Live view</string>
+     <string Field="LabelWrongLiveViewType">The set live view selector is the live view photography.</string>
+     <string Field="LabelNotInApplicationMode">The camera is not in the application mode.</string>
+     <string Field="ButtonResetSettings">Reset settings</string>
 	
 </strings>
