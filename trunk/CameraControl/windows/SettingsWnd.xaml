@@ -4,7 +4,7 @@
         Title="{T:TranslateExtension SettingsWindowTitle}" Height="468" Width="610" Loaded="Window_Loaded" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:windows="clr-namespace:CameraControl.windows"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
-        xmlns:T="clr-namespace:CameraControl.Translation"
+        xmlns:T="clr-namespace:CameraControl.Translation" ShowMaxRestoreButton="False" ShowMinButton="False"
                        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
     <Window.Resources>
         <ResourceDictionary>
@@ -69,6 +69,7 @@
                     <Label Content="{T:TranslateExtension LabelExternalViewerPath}" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3" />
                     <TextBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="5" Margin="0,3,38,3" Text="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ExternalViewer}"/>
                     <Button Content="..." Grid.Column="3" Grid.Row="5" Height="23" HorizontalAlignment="Right" Margin="0,0,2,0" Name="btn_browse_file" VerticalAlignment="Top" Width="28" Click="btn_browse_file_Click" />
+                    <Button Content="{T:TranslateExtension ButtonResetSettings}" Grid.Column="3" Grid.Row="8" Name="btn_reset" Click="btn_reset_Click" />
                 </Grid>
             </TabItem>
             <TabItem Header="{T:TranslateExtension LabelPreview}">

@@ -34,8 +34,9 @@
     <Controls:MetroWindow.WindowCommands>
         <Controls:WindowCommands>
             <Button Content="{T:TranslateExtension SettingsToolTip}" Name="btn_settings" Click="btn_settings_Click" />
-            <Button Content="Menu" Name="btn_menu" Click="btn_menu_Click" />
-            
+            <Button Content="{T:TranslateExtension LabelMenu}" Name="btn_menu" Click="btn_menu_Click" />
+            <Button Content="{T:TranslateExtension ButtonHelp}" Name="btn_help" Click="btn_help_Click" />
+            <Button Content="{T:TranslateExtension MenuDonate}" Name="btn_donate" Click="btn_donate_Click" />
             <!--<Button>
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20" Height="20">
@@ -57,7 +58,7 @@
 
     <Controls:MetroWindow.Flyouts>
 
-        <Controls:Flyout Header="{T:TranslateExtension LabelMenu}" Position="Right" Opacity="0.9">
+        <Controls:Flyout Header="{T:TranslateExtension LabelMenu}" Position="Right" Opacity="0.9" IsOpen="False">
             <Menu  VerticalAlignment="Top" HorizontalAlignment="Left">
                 <Menu.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -129,14 +130,13 @@
                     </MenuItem.ItemsPanel>
                     <MenuItem Header="{T:TranslateExtension MenuHomePage}" Click="MenuItem_Click" />
                     <MenuItem Header="{T:TranslateExtension MenuCheckForUpdate}" Name="mnu_update" Click="MenuItem_Click_1" />
-                    <MenuItem Header="{T:TranslateExtension MenuDonate}" Name="mnu_donate" Click="mnu_donate_Click" />
                     <MenuItem Header="{T:TranslateExtension MenuForum}" Name="mnu_forum" Click="mnu_forum_Click" />
                     <Separator />
                     <MenuItem Header="{T:TranslateExtension MenuAbout}" Name="mnu_about" Click="btn_about_Click" />
                 </MenuItem>
             </Menu>
         </Controls:Flyout>
-        <Controls:Flyout Header="Bakery" Background="#9f000000" Position="Right">
+        <Controls:Flyout Header="Bakery" Background="#9f000000" Position="Left" Opacity="0.9">
             <StackPanel>
                 <Controls:Tile Title="My _Cupcakes" Count="23">
                     <Controls:MetroImage Source="{StaticResource appbar_cupcake}" />
@@ -215,7 +215,6 @@
             </WrapPanel>
         </Controls:MetroContentControl>
         <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Grid.Row="1" Grid.ColumnSpan="2" Margin="3"/>
-        <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,20,0" HorizontalAlignment="Right" Width="214" Height="65"></StackPanel>
         <StackPanel Orientation="Vertical" Grid.Column="3">
             <StackPanel>
                 <Label Content="{T:TranslateExtension Session}" Margin="5,1,1,1" />
