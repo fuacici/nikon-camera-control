@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Devices;
 
@@ -196,6 +197,11 @@ namespace CameraControl.windows
       }
       _captureTimer.Stop();
       _waitTimer.Stop();
+    }
+
+    private void btn_help_Click(object sender, RoutedEventArgs e)
+    {
+      HelpProvider.Run(HelpSections.Bulb);
     }
 
   }

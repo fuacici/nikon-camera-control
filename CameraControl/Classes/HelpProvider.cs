@@ -10,7 +10,13 @@ namespace CameraControl.Classes
   {
     MainMenu,
     FocusStacking,
-    Bracketig
+    Bracketig,
+    Settings,
+    TimeLapse,
+    LiveView,
+    Session,
+    Bulb,
+    MultipleCamera
   }
 
   public class HelpProvider
@@ -22,8 +28,14 @@ namespace CameraControl.Classes
       _helpData = new Dictionary<HelpSections, string>
                     {
                       {HelpSections.MainMenu, "http://www.digicamcontrol.com/wiki/index.php/User_guide"},
-                      {HelpSections.Bracketig, "http://nccsoftware.blogspot.ro/2012/07/how-to-exposure-blending.html"},
-                      {HelpSections.FocusStacking, "http://nccsoftware.blogspot.ro/2012/06/how-to-focus-stacking.html"}
+                      {HelpSections.Bracketig, "http://www.digicamcontrol.com/wiki/index.php/Interface#Bracketing"},
+                      {HelpSections.FocusStacking, "http://nccsoftware.blogspot.ro/2012/06/how-to-focus-stacking.html"},
+                      {HelpSections.Settings, "http://www.digicamcontrol.com/wiki/index.php/Configuration"},
+                      {HelpSections.TimeLapse, "http://www.digicamcontrol.com/wiki/index.php/Interface#Time_lapse"},
+                      {HelpSections.LiveView, "http://www.digicamcontrol.com/wiki/index.php/Interface#Live_view"},
+                      {HelpSections.Session, "http://www.digicamcontrol.com/wiki/index.php/Configuration#Session"},
+                      {HelpSections.Bulb, "http://www.digicamcontrol.com/wiki/index.php/Interface#Bulb_mode"},
+                      {HelpSections.MultipleCamera, "http://www.digicamcontrol.com/wiki/index.php/Interface#Multiple_camera_support"},
                     };
     }
 

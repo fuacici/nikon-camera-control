@@ -5,9 +5,11 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using CameraControl.Classes;
 using CameraControl.Core.Classes;
 using Path = System.IO.Path;
 using CameraControl.Core;
+using HelpProvider = CameraControl.Classes.HelpProvider;
 
 namespace CameraControl.windows
 {
@@ -85,6 +87,11 @@ namespace CameraControl.windows
     private void btn_reset_Click(object sender, RoutedEventArgs e)
     {
       ServiceProvider.Settings.ResetSettings();
+    }
+
+    private void btn_help_Click(object sender, RoutedEventArgs e)
+    {
+      HelpProvider.Run(HelpSections.Settings);
     }
 
   }
