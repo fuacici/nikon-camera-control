@@ -3,8 +3,10 @@ using System.Linq;
 using System.Management;
 using System.Windows;
 using System.Windows.Forms;
+using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Translation;
+using HelpProvider = CameraControl.Classes.HelpProvider;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace CameraControl.windows
@@ -110,6 +112,11 @@ namespace CameraControl.windows
           e.Cancel = true;
         }
       }
+    }
+
+    private void btn_help_Click(object sender, RoutedEventArgs e)
+    {
+      HelpProvider.Run(HelpSections.TimeLapse);
     }
   }
 }

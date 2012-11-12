@@ -78,6 +78,11 @@ namespace CameraControl.windows
       }
     }
 
+    private void btn_help_Click(object sender, RoutedEventArgs e)
+    {
+      HelpProvider.Run(HelpSections.Session);
+    }
+
 
   }
 }
