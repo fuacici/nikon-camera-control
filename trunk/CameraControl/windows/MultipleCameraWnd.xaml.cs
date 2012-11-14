@@ -38,6 +38,8 @@ namespace CameraControl.windows
 
     public MultipleCameraWnd()
     {
+      NumOfPhotos = 1;
+
       InitializeComponent();
       _timer.Elapsed += new ElapsedEventHandler(_timer_Elapsed);
     }

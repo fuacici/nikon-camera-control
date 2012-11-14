@@ -195,7 +195,7 @@
     public static string MenuUseSelectedCameraPreset = "Use selected camera preset";
 
     // 15/10/2012
-    public static string LabelExternalViewerPath = "External viewer";
+    public static string LabelExternalViewerPath = "Context menu external viewer";
     public static string LabelStayOnTop = "Always on top";
     // 22/10/2012
     public static string LabelDisplay = "Display";
@@ -235,5 +235,9 @@
     public static string LabelWrongLiveViewType = "The set live view selector is the live view photography.";
     public static string LabelNotInApplicationMode = "The camera is not in the application mode.";
     public static string ButtonResetSettings = "Reset settings";
+    // 14/11/2012
+    public static string LabelUseExternalViewer = "Use external viewer";
+    public static string LabelExternalPreViewerPath = "External viewer path";
+    public static string LabelExternalPreViewerArgs = "External viewer arguments";
   }
 }
