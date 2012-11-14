@@ -362,8 +362,10 @@ namespace CameraControl.windows
 
     public void Init()
     {
+      WaitTime = 2;
+      PhotoNo = 2;
+      FocusStep = 2;
       InitializeComponent();
-      WaitTime = 1;
       ThemeManager.ChangeTheme(Application.Current, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
       _timer.Stop();
       _timer.AutoReset = true;

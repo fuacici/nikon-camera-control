@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -144,7 +145,7 @@ namespace CameraControl
         eventArgs.CameraDevice.TransferFile(eventArgs.EventArgs, fileName);
         Log.Debug("Transfer done :" + fileName);
         //select the new file only when the multiple camera support isn't used to prevent high CPU usage on raw files
-        if (ServiceProvider.Settings.AutoPreview && !ServiceProvider.WindowsManager.Get(typeof(MultipleCameraWnd)).IsVisible)
+        if (ServiceProvider.Settings.AutoPreview && !ServiceProvider.WindowsManager.Get(typeof(MultipleCameraWnd)).IsVisible && !ServiceProvider.Settings.UseExternalViewer)
         {
           ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Select_Image, session.AddFile(fileName));
         }
@@ -156,8 +157,14 @@ namespace CameraControl
         StaticHelper.Instance.SystemMessage = TranslationStrings.MsgPhotoTransferDone;
         eventArgs.CameraDevice.IsBusy = false;
         //show fullscreen only when the multiple camera support isn't used
-        if (ServiceProvider.Settings.Preview && !ServiceProvider.WindowsManager.Get(typeof(MultipleCameraWnd)).IsVisible)
+        if (ServiceProvider.Settings.Preview && !ServiceProvider.WindowsManager.Get(typeof(MultipleCameraWnd)).IsVisible && !ServiceProvider.Settings.UseExternalViewer)
           ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_ShowTimed);
+        if(ServiceProvider.Settings.UseExternalViewer && File.Exists(ServiceProvider.Settings.ExternalViewerPath))
+        {
+          string arg = ServiceProvider.Settings.ExternalViewerArgs;
+          arg = arg.Contains("%1") ? arg.Replace("%1", fileName) : arg + " " + fileName;
+          PhotoUtils.Run(ServiceProvider.Settings.ExternalViewerPath, arg, ProcessWindowStyle.Normal);
+        }
         if (ServiceProvider.Settings.PlaySound)
         {
           PhotoUtils.PlayCaptureSound();

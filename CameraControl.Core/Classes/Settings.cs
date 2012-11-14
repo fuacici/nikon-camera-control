@@ -379,6 +379,38 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private bool _useExternalViewer;
+    public bool UseExternalViewer
+    {
+      get { return _useExternalViewer; }
+      set
+      {
+        _useExternalViewer = value;
+        NotifyPropertyChanged("UseExternalViewer");
+      }
+    }
+
+    private string _externalViewerPath;
+    public string ExternalViewerPath
+    {
+      get { return _externalViewerPath; }
+      set
+      {
+        _externalViewerPath = value;
+        NotifyPropertyChanged("ExternalViewerPath");
+      }
+    }
+
+    private string _externalViewerArgs;
+    public string ExternalViewerArgs
+    {
+      get { return _externalViewerArgs; }
+      set
+      {
+        _externalViewerArgs = value;
+        NotifyPropertyChanged("ExternalViewerArgs");
+      }
+    }
 
     public CameraPropertyEnumerator CameraProperties { get; set; }
     public string SelectedLayout { get; set; }
@@ -426,6 +458,8 @@ namespace CameraControl.Core.Classes
       SelectedLanguage = Thread.CurrentThread.CurrentCulture.Name;
       FocusMoveStep = 50;
       MotionBlockSize = 40;
+      UseExternalViewer = false;
+      ExternalViewerArgs = string.Empty;
     }
 
     public void Add(PhotoSession session)

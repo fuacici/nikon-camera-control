@@ -94,5 +94,15 @@ namespace CameraControl.windows
       HelpProvider.Run(HelpSections.Settings);
     }
 
+    private void button4_Click(object sender, RoutedEventArgs e)
+    {
+      OpenFileDialog dialog = new OpenFileDialog();
+      dialog.FileName = ServiceProvider.Settings.ExternalViewerPath;
+      if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+      {
+        ServiceProvider.Settings.ExternalViewerPath = dialog.FileName;
+      }
+    }
+
   }
 }

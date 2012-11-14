@@ -32,15 +32,20 @@ namespace CameraControl.Core.Classes
 
     public static bool Run(string exe)
     {
-      return Run(exe, "");
+      return Run(exe, "",ProcessWindowStyle.Minimized);
     }
 
     public static bool Run(string exe, string param)
     {
+      return Run(exe, param, ProcessWindowStyle.Minimized);
+    }
+
+    public static bool Run(string exe, string param, ProcessWindowStyle processWindowStyle)
+    {
       try
       {
         ProcessStartInfo startInfo = new ProcessStartInfo(exe);
-        startInfo.WindowStyle = ProcessWindowStyle.Minimized;
+        startInfo.WindowStyle = processWindowStyle;
         startInfo.Arguments = param;
         Process process = Process.Start(startInfo);
         //process.WaitForExit();

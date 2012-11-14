@@ -194,7 +194,7 @@
     <string Field="MenuUseSelectedCameraPreset">Use selected camera preset</string> 
 	
 	<!-- 15/10/2012 -->
-     <string Field="LabelExternalViewerPath">External viewer</string>
+     <string Field="LabelExternalViewerPath">Context menu external viewer</string>
      <string Field="LabelStayOnTop">Always on top</string>
     <!-- 22/10/2012 -->
      <string Field="LabelDisplay">Display</string>

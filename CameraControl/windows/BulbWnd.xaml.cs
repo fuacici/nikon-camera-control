@@ -78,12 +78,12 @@ namespace CameraControl.windows
 
     public BulbWnd()
     {
-      InitializeComponent();
       CameraDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
       NoAutofocus = true;
       CaptureTime = 60;
       NumOfPhotos = 1;
       WaitTime = 0;
+      InitializeComponent();
       _captureTimer.Elapsed += _captureTimer_Elapsed;
       _waitTimer.Elapsed += _waitTimer_Elapsed;
       ServiceProvider.Settings.ApplyTheme(this);
