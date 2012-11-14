@@ -12,6 +12,7 @@ using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
 using Microsoft.VisualBasic.FileIO;
+using Xceed.Wpf.Toolkit.Core.Input;
 using Clipboard = System.Windows.Clipboard;
 using MessageBox = System.Windows.Forms.MessageBox;
 using UserControl = System.Windows.Controls.UserControl;
