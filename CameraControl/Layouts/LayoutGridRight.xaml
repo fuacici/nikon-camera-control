@@ -7,7 +7,8 @@
              xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
              DataContext="{Binding RelativeSource={RelativeSource Self}}"                                        
              xmlns:Layouts="clr-namespace:CameraControl.Layouts"
-                    xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" mc:Ignorable="d" 
+                    xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" mc:Ignorable="d" 
              d:DesignHeight="426" d:DesignWidth="652">
     <UserControl.Resources>
         <Style TargetType="{x:Type ListBox}">
@@ -53,13 +54,28 @@
             <RowDefinition Height="25" />
         </Grid.RowDefinitions>
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.RowSpan="2">
-            <local:ZoomBorder  BorderThickness="1" CornerRadius="5" >
+            <!--<xctk:MagnifierManager.Magnifier>
+                <xctk:Magnifier Radius="100" ZoomFactor=".4"/>
+            </xctk:MagnifierManager.Magnifier>-->
+            <!--<local:ZoomBorder  BorderThickness="1" CornerRadius="5" >-->
+            <xctk:Zoombox x:Name="zoombox"
+                    ViewStackIndex="0"
+                    Grid.Column="1"
+                    Margin="20"
+                    Focusable="True"
+                    IsTabStop="True"
+                          >
+                <xctk:Zoombox.ViewStack>
+                    <xctk:ZoomboxView>Fit</xctk:ZoomboxView>
+                </xctk:Zoombox.ViewStack>
+
                 <Image Name="image1" Stretch="Uniform"  Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}"  >
                     <!--<Image.InputBindings>
                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=ImageDoubleClickCommand}" />
                     </Image.InputBindings>-->
                 </Image>
-            </local:ZoomBorder>
+            </xctk:Zoombox>
+            <!--</local:ZoomBorder>-->
             <Controls:ProgressRing IsActive="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="2" />
