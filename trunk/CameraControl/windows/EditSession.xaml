@@ -51,7 +51,7 @@
                         <TextBox Text="{Binding Path=FileNameTemplate}" Width="200" ToolTip="{T:TranslateExtension LabelFileNameTemplateToolTip}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="{T:TranslateExtension LabelFileNameTemplate}" Width="120" />
+                        <Label Content="{T:TranslateExtension LabelCounter}" Width="120" />
                         <xctk:IntegerUpDown Value="{Binding Path=Counter}" Width="200" Minimum="0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">

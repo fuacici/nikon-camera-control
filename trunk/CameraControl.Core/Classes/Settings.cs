@@ -31,11 +31,16 @@ namespace CameraControl.Core.Classes
       get { return _defaultSession; }
       set
       {
-        if (SessionSelected != null)
-          SessionSelected(_defaultSession, value);
+        PhotoSession oldvalue = _defaultSession;
         _defaultSession = value;
-        LoadData(_defaultSession);
         NotifyPropertyChanged("DefaultSession");
+        Thread thread = new Thread(new ThreadStart(delegate
+                                                     {
+                                                       if (SessionSelected != null)
+                                                         SessionSelected(oldvalue, value);
+                                                       LoadData(_defaultSession);
+                                                     }));
+        thread.Start();
       }
     }
 
@@ -474,8 +479,10 @@ namespace CameraControl.Core.Classes
     /// <param name="session"></param>
     public void LoadData(PhotoSession session)
     {
+      FileItem[] fileItems=new FileItem[session.Files.Count];
       if (session == null)
         return;
+      session.Files.CopyTo(fileItems, 0);
       //session.Files.Clear();
       if(!Directory.Exists(session.Folder))
       {
@@ -496,7 +503,7 @@ namespace CameraControl.Core.Classes
       {
         session.Files.Remove(removedItem);
       }
-      session.Files = new AsyncObservableCollection<FileItem>(session.Files.OrderBy(x => x.FileDate));
+      //session.Files = new AsyncObservableCollection<FileItem>(session.Files.OrderBy(x => x.FileDate));
     }
 
     public void Save(PhotoSession session)
