@@ -23,13 +23,16 @@ namespace CameraControl.Core.Classes
     void _worker_DoWork(object sender, DoWorkEventArgs e)
     {
       IQueueItem item;
-      while (Queue.TryTake(out item))
+      while (true)
       {
+        item = Queue.Take();
         try
         {
-          Thread.Sleep(70);
           if (!item.Execute(this))
+          {
             break;
+          }
+          //Thread.Sleep(170);
         }
         catch (Exception exception)
         {
