@@ -86,7 +86,7 @@
         </StackPanel>
         <ProgressBar Grid.Row="2" Height="7" Margin="0,0,12,12" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="157" Value="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=TransferProgress}" ToolTip="File transfer progress" Grid.Column="2" />
 
-        <ListBox  Name="ImageLIstBox" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.Files}"  Grid.Column="2" Grid.Row="1" BorderThickness="0">
+        <ListBox  Name="ImageLIstBox" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.Files, IsAsync=True}"  Grid.Column="2" Grid.Row="1" BorderThickness="0">
             <ListBox.InputBindings>
                 <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=ImageDoubleClickCommand}" />
             </ListBox.InputBindings>

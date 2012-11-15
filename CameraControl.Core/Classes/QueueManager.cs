@@ -32,7 +32,7 @@ namespace CameraControl.Core.Classes
           {
             break;
           }
-          //Thread.Sleep(170);
+          //Thread.Sleep(10);
         }
         catch (Exception exception)
         {
