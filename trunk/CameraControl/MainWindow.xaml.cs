@@ -70,6 +70,8 @@ namespace CameraControl
 
     void DeviceManager_CameraSelected(ICameraDevice oldcameraDevice, ICameraDevice newcameraDevice)
     {
+      if(newcameraDevice==null)
+        return;
       // load session data only if not sessiom attached to the selected camera
       if (newcameraDevice.AttachedPhotoSession == null)
       {
