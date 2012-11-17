@@ -61,8 +61,11 @@
       <HintPath>..\refs\Interop.WIA.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\refs\log4net.dll</HintPath>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\packages\DotNetZip.1.9.1.8\lib\net20\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro, Version=0.9.0.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.0.10.0.0\lib\net40\MahApps.Metro.dll</HintPath>
@@ -130,6 +133,8 @@
     <Compile Include="Devices\Nikon\NikonD90.cs" />
     <Compile Include="Devices\Others\NotConnectedCameraDevice.cs" />
     <Compile Include="Devices\Others\WiaCameraDevice.cs" />
+    <Compile Include="Interfaces\IExportPlugin.cs" />
+    <Compile Include="Interfaces\IPlugin.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Classes\ActionEventArgs.cs" />
     <Compile Include="Classes\ActionManager.cs" />
