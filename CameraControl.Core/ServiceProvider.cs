@@ -15,6 +15,7 @@ namespace CameraControl.Core
     public static WindowsManager WindowsManager { get; set; }
     public static ActionManager ActionManager { get; set; }
     public static QueueManager QueueManager { get; set; }
+    public static PluginManager PluginManager { get; set; }
 
     public static void Configure()
     {
@@ -25,6 +26,7 @@ namespace CameraControl.Core
       QueueManager = new QueueManager();
       Log.Debug("Application starting");
       Log.Debug("Application verison :" + System.Reflection.Assembly.GetEntryAssembly().GetName().Version);
+      PluginManager = new PluginManager();
     }
   }
 }

@@ -9,7 +9,7 @@ namespace CameraControl.Core
 
   public static class Log
   {
-    private static readonly log4net.ILog _log = log4net.LogManager.GetLogger("NCC");
+    private static readonly log4net.ILog _log = log4net.LogManager.GetLogger("DCC");
     
     public static void Configure(string appfolder)
     {
