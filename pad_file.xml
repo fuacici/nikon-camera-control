@@ -5,7 +5,7 @@
 		<MASTER_PAD_EDITOR>PADGen 3.1.1.50 http://www.padgen.org</MASTER_PAD_EDITOR>
 		<MASTER_PAD_INFO>Portable Application Description, or PAD for short, is a data set that is used by shareware authors to disseminate information to anyone interested in their software products. To find out more go to http://pad.asp-software.org</MASTER_PAD_INFO>
 	</MASTER_PAD_VERSION_INFO>
-	<Company_Info>
+	<COMPANY_INFO>
 		<Company_Name>Duka Istvan</Company_Name>
 		<Address_1 />
 		<Address_2 />
@@ -14,14 +14,14 @@
 		<Zip_Postal_Code />
 		<Country />
 		<Company_WebSite_URL>http://www.digicamcontrol.com/</Company_WebSite_URL>
-		<Contact_Info>
+		<CONTACT_INFO>
 			<Author_First_Name>Duka</Author_First_Name>
 			<Author_Last_Name>Istvan</Author_Last_Name>
-			<Author_Email />
-			<Contact_First_Name />
-			<Contact_Last_Name />
-			<Contact_Email />
-		</Contact_Info>
+			<AUTHOR_EMAIL />
+			<CONTACT_FIRST_NAME />
+			<CONTACT_LAST_NAME />
+			<CONTACT_EMAIL />
+		</CONTACT_INFO>
 		<Support_Info>
 			<Sales_Email />
 			<Support_Email />
@@ -31,7 +31,7 @@
 			<General_Phone />
 			<Fax_Phone />
 		</Support_Info>
-	</Company_Info>
+	</COMPANY_INFO>
 	<Program_Info>
 		<Program_Name>digiCamControl</Program_Name>
 		<Program_Version> 0.9.335</Program_Version>
