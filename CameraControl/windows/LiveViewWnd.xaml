@@ -7,7 +7,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
-                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" mc:Ignorable="d" d:DataContext="{d:DesignData }" Topmost="{Binding ElementName=chk_top,Path=IsChecked}"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:local="clr-namespace:CameraControl.Controls" mc:Ignorable="d" d:DataContext="{d:DesignData }" Topmost="{Binding ElementName=chk_top,Path=IsChecked}"
                       ShowMinButton="False" PreviewKeyDown="MetroWindow_PreviewKeyDown">
     <Window.Resources>
         <ResourceDictionary>
@@ -168,6 +169,11 @@
                             <Label Content="{T:TranslateExtension LabelWaitTime}" Grid.Row="2" />
                             <xctk:IntegerUpDown Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=WaitTime}" Grid.Column="2" Grid.Row="2" Name="int_wait" Margin="3" Maximum="60" Minimum="1" />
                         </Grid>
+                    </Expander.Content>
+                </Expander>
+                <Expander Header="{T:TranslateExtension LabelControl}" IsEnabled="{Binding Path=IsFree, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" BorderThickness="1"  BorderBrush="Black" Margin="3">
+                    <Expander.Content>
+                        <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}}" Margin="3"/>
                     </Expander.Content>
                 </Expander>
                 <Expander Header="{T:TranslateExtension LabelDisplay}" BorderThickness="1"  BorderBrush="Black" Margin="3">
