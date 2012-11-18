@@ -1257,6 +1257,7 @@ namespace CameraControl.Core.Devices.Nikon
           return "";
           break;
         case OperationEnum.Focus:
+          // check if not Single AF servo
           return "";
           break;
         default:

@@ -239,5 +239,7 @@
     public static string LabelUseExternalViewer = "Use external viewer";
     public static string LabelExternalPreViewerPath = "External viewer path";
     public static string LabelExternalPreViewerArgs = "External viewer arguments";
+    // 18/11/2012
+    public static string LabelControl = "Control";
   }
 }

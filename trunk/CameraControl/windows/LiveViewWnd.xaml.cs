@@ -301,11 +301,6 @@ namespace CameraControl.windows
 
     private bool oper_in_progress = false;
 
-    /// <summary>
-    /// Gets the <see cref="PortableDevice"/> connected
-    /// </summary>
-    public ObservableCollection<PortableDevice> PortableDevices { get; private set; }
-
     public ICameraDevice SelectedPortableDevice
     {
       get { return this.selectedPortableDevice; }
@@ -314,7 +309,7 @@ namespace CameraControl.windows
         if (this.selectedPortableDevice != value)
         {
           this.selectedPortableDevice = value;
-          NotifyPropertyChanged("selectedPortableDevice");
+          NotifyPropertyChanged("SelectedPortableDevice");
         }
       }
     }
@@ -759,7 +754,7 @@ namespace CameraControl.windows
                                            FreezeImage = false;
                                            btn_record.IsEnabled =
                                              SelectedPortableDevice.GetCapability(CapabilityEnum.RecordMovie);
-                                           selectedPortableDevice.CaptureCompleted +=
+                                           SelectedPortableDevice.CaptureCompleted +=
                                              selectedPortableDevice_CaptureCompleted;
                                            //_detector = new MotionDetector(
                                            //  new SimpleBackgroundModelingDetector(),
