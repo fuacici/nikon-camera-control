@@ -143,6 +143,7 @@
     <Compile Include="StillImageDevice.cs" />
     <Compile Include="Tree.cs" />
     <Compile Include="TreeNode.cs" />
+    <Compile Include="WinApi.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />

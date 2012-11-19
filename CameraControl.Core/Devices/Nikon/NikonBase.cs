@@ -1045,24 +1045,40 @@ namespace CameraControl.Core.Devices.Nikon
     {
       lock (Locker)
       {
+        //DeviceReady();
+        //PortableDeviceEventArgs deviceEventArgs = o as PortableDeviceEventArgs;
+        //if (deviceEventArgs != null)
+        //{
+        //  //_stillImageDevice.SaveFile(deviceEventArgs.EventType.DeviceObject, filename);
+        //  byte[] result = StillImageDevice.ExecuteReadBigData(CONST_CMD_GetObject,
+        //                                                       (int) deviceEventArgs.EventType.ObjectHandle, -1,
+        //                                                       (total, current) =>
+        //                                                         {
+        //                                                           double i = (double) current/total;
+        //                                                           ServiceProvider.DeviceManager.TransferProgress =
+        //                                                             Convert.ToUInt32(i*100);
+
+        //                                                         });
+        //  using (BinaryWriter writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
+        //  {
+        //    writer.Write(result);
+        //  }
+        //}
+
         DeviceReady();
         PortableDeviceEventArgs deviceEventArgs = o as PortableDeviceEventArgs;
         if (deviceEventArgs != null)
         {
           //_stillImageDevice.SaveFile(deviceEventArgs.EventType.DeviceObject, filename);
-          byte[] result = StillImageDevice.ExecuteReadBigData(CONST_CMD_GetObject,
-                                                               (int) deviceEventArgs.EventType.ObjectHandle, -1,
+          StillImageDevice.ExecuteReadBigDataWriteToFile(CONST_CMD_GetObject,
+                                                               (int)deviceEventArgs.EventType.ObjectHandle, -1,
                                                                (total, current) =>
-                                                                 {
-                                                                   double i = (double) current/total;
-                                                                   ServiceProvider.DeviceManager.TransferProgress =
-                                                                     Convert.ToUInt32(i*100);
+                                                               {
+                                                                 double i = (double)current / total;
+                                                                 ServiceProvider.DeviceManager.TransferProgress =
+                                                                   Convert.ToUInt32(i * 100);
 
-                                                                 });
-          using (BinaryWriter writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
-          {
-            writer.Write(result);
-          }
+                                                               },filename);
         }
       }
     }
