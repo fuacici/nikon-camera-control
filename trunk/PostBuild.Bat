@@ -2,8 +2,12 @@ REM %1 = Solution Directory
 REM %2 = $(ConfigurationName) Debug/Release
 
 rem copy commandline utility
-copy %1\CameraControlCmd\Bin\%2\CameraControlCmd.exe %1\CameraControl\Bin\%2\ /Y
+copy %1CameraControlCmd\Bin\%2\CameraControlCmd.exe %1CameraControl\Bin\%2\ /Y
 
 rem Copy additional Files
-xcopy %1\CameraControl.Application %1\CameraControl\Bin\%2\ /Y /E /R /I /D
-Pause
+xcopy %1CameraControl.Application %1CameraControl\Bin\%2\ /Y /E /R /I /D
+
+rem Copy additional Files
+copy %1CameraControl.Plugins\Bin\%2\CameraControl.Plugins.* %1CameraControl\Bin\%2\Plugins\ /Y 
+
+pause

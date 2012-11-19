@@ -129,7 +129,9 @@
             </Menu>
             <StackPanel Orientation="Vertical">
                     <Expander Header="Export">
-                        
+                        <ListBox ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.PluginManager}, Path=ExportPlugins}">
+                            
+                        </ListBox>
                     </Expander>
                 </StackPanel>
            </StackPanel>

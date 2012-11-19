@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
@@ -72,6 +74,7 @@ namespace CameraControl
       ServiceProvider.WindowsManager.Add(new TagSelectorWnd());
       ServiceProvider.WindowsManager.Event += WindowsManager_Event;
       ServiceProvider.Trigger.Start();
+      ServiceProvider.PluginManager.LoadPlugins(Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Plugins"));
     }
 
     void WindowsManager_Event(string cmd, object o)

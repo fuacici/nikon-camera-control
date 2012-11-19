@@ -3,5 +3,6 @@
   public interface IExportPlugin
   {
     bool Execute();
+    string Title { get; set; }
   }
 }
