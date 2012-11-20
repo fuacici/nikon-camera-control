@@ -12,6 +12,7 @@ using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
+using CameraControl.Core.Interfaces;
 using CameraControl.Layouts;
 using CameraControl.Translation;
 using CameraControl.windows;
@@ -40,6 +41,7 @@ namespace CameraControl
       CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (sender, args) => this.Close()));
       SelectDeviceCommand = new RelayCommand<ICameraDevice>(SelectCamera);
       SelectPresetCommand = new RelayCommand<CameraPreset>(SelectPreset);
+      ExecuteExportPluginCommand = new RelayCommand<IExportPlugin>(ExecuteExportPlugin);
       WiaManager = new WIAManager();
       //ServiceProvider.Settings.Manager = WiaManager;
       ServiceProvider.DeviceManager.PhotoCaptured += DeviceManager_PhotoCaptured;
@@ -57,6 +59,11 @@ namespace CameraControl
 
       SetLayout(ServiceProvider.Settings.SelectedLayout);
       ServiceProvider.Settings.ApplyTheme(this);
+    }
+
+    private void ExecuteExportPlugin(IExportPlugin obj)
+    {
+      obj.Execute();
     }
 
     void Settings_SessionSelected(PhotoSession oldvalue, PhotoSession newvalue)
@@ -190,6 +197,12 @@ namespace CameraControl
     }
 
     public RelayCommand<CameraPreset> SelectPresetCommand
+    {
+      get;
+      private set;
+    }
+
+    public RelayCommand<IExportPlugin> ExecuteExportPluginCommand
     {
       get;
       private set;

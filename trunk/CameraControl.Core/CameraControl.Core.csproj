@@ -190,6 +190,9 @@
     <Compile Include="StaticHelper.cs" />
     <Compile Include="Wpf\BooleanToVisibilityConverter.cs" />
     <Compile Include="Wpf\HeaderToImageConverter.cs" />
+    <Compile Include="Wpf\ProgressWindow.xaml.cs">
+      <DependentUpon>ProgressWindow.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PortableDeviceLib\PortableDeviceLib.csproj">
@@ -203,6 +206,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\ProgressWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
