@@ -14,6 +14,7 @@ namespace CameraControl.Plugins
 
     public bool Register()
     {
+      ServiceProvider.PluginManager.ExportPlugins.Add(new ExportToZip());
       ServiceProvider.PluginManager.ExportPlugins.Add(new ExportToFolder());
       return true;
     }

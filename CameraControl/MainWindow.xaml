@@ -128,9 +128,15 @@
                 </MenuItem>
             </Menu>
             <StackPanel Orientation="Vertical">
-                    <Expander Header="Export">
+                    <Expander Header="{T:TranslateExtension LabelExport}" IsExpanded="True">
                         <ListBox ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.PluginManager}, Path=ExportPlugins}">
-                            
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <Button Content="{Binding Path=Title}" Command="{Binding Path=ExecuteExportPluginCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding}" Margin="4"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
                         </ListBox>
                     </Expander>
                 </StackPanel>
