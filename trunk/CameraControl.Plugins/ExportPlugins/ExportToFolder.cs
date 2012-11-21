@@ -64,7 +64,7 @@ namespace CameraControl.Plugins.ExportPlugins
             Log.Error("ErrorCopy file", exception);
           }
         }
-        Thread.Sleep(100);
+        //Thread.Sleep(100);
         i++;
       }
       dlg.Hide();
