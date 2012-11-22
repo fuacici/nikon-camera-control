@@ -1,4 +1,6 @@
 using CameraControl.Core.Devices.Classes;
+using CameraControl.Devices;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.Core.Devices.Others
 {

@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using CameraControl.Core.Classes;
-using CameraControl.Devices.Classes;
 
-namespace CameraControl.Core.Devices.Classes
+namespace CameraControl.Devices.Classes
 {
   public class PropertyValue<T> : BaseFieldClass 
   {

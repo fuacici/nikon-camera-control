@@ -1,4 +1,4 @@
-﻿namespace CameraControl.Core.Devices.Classes
+namespace CameraControl.Devices.Classes
 {
   public enum OperationEnum
   {

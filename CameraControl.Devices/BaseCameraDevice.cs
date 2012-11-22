@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using CameraControl.Core.Classes;
-using CameraControl.Core.Devices.Classes;
 using CameraControl.Devices.Classes;
 
-namespace CameraControl.Core.Devices
+namespace CameraControl.Devices
 {
   public class BaseCameraDevice:BaseFieldClass, ICameraDevice
   {
@@ -158,8 +156,8 @@ namespace CameraControl.Core.Devices
       }
     }
 
-    private PhotoSession _attachedPhotoSession;
-    public virtual PhotoSession AttachedPhotoSession
+    private object _attachedPhotoSession;
+    public virtual object AttachedPhotoSession
     {
       get { return _attachedPhotoSession; }
       set

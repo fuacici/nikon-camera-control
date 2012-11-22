@@ -5,6 +5,7 @@ using CameraControl.Core.Devices.Canon;
 using CameraControl.Core.Devices.Classes;
 using CameraControl.Core.Devices.Nikon;
 using CameraControl.Core.Devices.Others;
+using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using PortableDeviceLib;
 using WIA;

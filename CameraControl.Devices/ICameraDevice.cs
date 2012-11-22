@@ -1,9 +1,7 @@
 using System;
-using CameraControl.Core.Classes;
-using CameraControl.Core.Devices.Classes;
 using CameraControl.Devices.Classes;
 
-namespace CameraControl.Core.Devices
+namespace CameraControl.Devices
 {
   public interface ICameraDevice
   {
@@ -25,7 +23,7 @@ namespace CameraControl.Core.Devices
     PropertyValue<uint> FocusMode { get; set; }
     bool IsConnected { get; set; }
     bool IsChecked { get; set; }
-    PhotoSession AttachedPhotoSession { get; set; }
+    object AttachedPhotoSession { get; set; }
     string DeviceName { get; set; }
     string Manufacturer { get; set; }
     string SerialNumber { get; set; }

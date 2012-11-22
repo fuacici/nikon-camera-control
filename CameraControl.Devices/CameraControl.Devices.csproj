@@ -64,15 +64,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseCameraDevice.cs" />
+    <Compile Include="BaseMTPCamera.cs" />
     <Compile Include="Classes\AsyncObservableCollection.cs" />
     <Compile Include="Classes\BaseFieldClass.cs" />
     <Compile Include="Classes\CapabilityEnum.cs" />
     <Compile Include="Classes\Conts.cs" />
+    <Compile Include="Classes\DeviceDescriptor.cs" />
     <Compile Include="Classes\DeviceException.cs" />
     <Compile Include="Classes\DeviceObject.cs" />
     <Compile Include="Classes\ErrorCodes.cs" />
     <Compile Include="Classes\LiveViewData.cs" />
+    <Compile Include="Classes\OperationEnum.cs" />
+    <Compile Include="Classes\PhotoCapturedEventArgs.cs" />
+    <Compile Include="Classes\PropertyValue.cs" />
+    <Compile Include="ICameraDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PortableDeviceLib\PortableDeviceLib.csproj">
+      <Project>{E9F048C1-C6A0-4CCD-BE57-4E76A7F8B32D}</Project>
+      <Name>PortableDeviceLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

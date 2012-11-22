@@ -16,6 +16,7 @@ using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Devices;
 using CameraControl.Core.Interfaces;
+using CameraControl.Devices;
 
 namespace CameraControl.windows
 {

@@ -131,11 +131,8 @@
     <Compile Include="Classes\TriggerClass.cs" />
     <Compile Include="Classes\WebServer.cs" />
     <Compile Include="Classes\WIAManager.cs" />
-    <Compile Include="Devices\BaseCameraDevice.cs" />
-    <Compile Include="Devices\BaseMTPCamera.cs" />
     <Compile Include="Devices\CameraDeviceManager.cs" />
     <Compile Include="Devices\Canon\Canon400D.cs" />
-    <Compile Include="Devices\Classes\OperationEnum.cs" />
     <Compile Include="Devices\Classes\PhotoSession.cs" />
     <Compile Include="Devices\Nikon\NikonBase.cs" />
     <Compile Include="Devices\Nikon\NikonD300.cs" />
@@ -167,11 +164,7 @@
     <Compile Include="Classes\VideoType.cs" />
     <Compile Include="Classes\WindowsManager.cs" />
     <Compile Include="Devices\Classes\CameraPreset.cs" />
-    <Compile Include="Devices\Classes\DeviceDescriptor.cs" />
     <Compile Include="Devices\Classes\DeviceDescriptorEnumerator.cs" />
-    <Compile Include="Devices\Classes\PhotoCapturedEventArgs.cs" />
-    <Compile Include="Devices\Classes\PropertyValue.cs" />
-    <Compile Include="Devices\ICameraDevice.cs" />
     <Compile Include="Exif\EXIFextractor.cs" />
     <Compile Include="Exif\translation.cs" />
     <Compile Include="Interfaces\IMenuAction.cs" />
