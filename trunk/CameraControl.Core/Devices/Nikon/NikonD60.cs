@@ -5,7 +5,7 @@ using CameraControl.Devices.Classes;
 
 namespace CameraControl.Core.Devices.Nikon
 {
-  class NikonD60:NikonBase
+  public class NikonD60:NikonBase
   {
 
     protected Dictionary<int, string> _csTable = new Dictionary<int, string>()

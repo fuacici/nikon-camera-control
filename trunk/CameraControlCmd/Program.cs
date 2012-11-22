@@ -9,6 +9,8 @@ using CameraControl.Core.Classes;
 using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
 using CameraControl.Core.Interfaces;
+using CameraControl.Devices;
+using CameraControl.Devices.Classes;
 using CameraControlCmd.Classes;
 
 namespace CameraControlCmd
@@ -178,7 +180,7 @@ namespace CameraControlCmd
       manager.ConnectToCamera();
       ServiceProvider.DeviceManager.PhotoCaptured += DeviceManager_PhotoCaptured;
       if (ServiceProvider.DeviceManager.SelectedCameraDevice.AttachedPhotoSession != null)
-        ServiceProvider.Settings.DefaultSession =
+        ServiceProvider.Settings.DefaultSession =(PhotoSession)
           ServiceProvider.DeviceManager.SelectedCameraDevice.AttachedPhotoSession;
       foreach (ICameraDevice cameraDevice in ServiceProvider.DeviceManager.ConnectedDevices)
       {

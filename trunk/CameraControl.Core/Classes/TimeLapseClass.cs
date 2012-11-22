@@ -4,6 +4,7 @@ using System.Timers;
 using System.Xml.Serialization;
 using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
+using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using Timer = System.Timers.Timer;
 

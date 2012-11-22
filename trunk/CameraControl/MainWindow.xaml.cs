@@ -13,6 +13,7 @@ using CameraControl.Core.Classes;
 using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
 using CameraControl.Core.Interfaces;
+using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using CameraControl.Layouts;
 using CameraControl.Translation;
@@ -87,7 +88,7 @@ namespace CameraControl
         newcameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
       }
       if (newcameraDevice.AttachedPhotoSession != null)
-        ServiceProvider.Settings.DefaultSession = newcameraDevice.AttachedPhotoSession;
+        ServiceProvider.Settings.DefaultSession = (PhotoSession)newcameraDevice.AttachedPhotoSession;
       Dispatcher.Invoke(
         new Action(
           delegate
@@ -125,7 +126,7 @@ namespace CameraControl
       {
         StaticHelper.Instance.SystemMessage = TranslationStrings.MsgPhotoTransferBegin;
         Log.Debug("Photo transfer begin.");
-        PhotoSession session = eventArgs.CameraDevice.AttachedPhotoSession ?? ServiceProvider.Settings.DefaultSession;
+        PhotoSession session =(PhotoSession) eventArgs.CameraDevice.AttachedPhotoSession ?? ServiceProvider.Settings.DefaultSession;
         if ((session.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
         {
           eventArgs.CameraDevice.IsBusy = false;
