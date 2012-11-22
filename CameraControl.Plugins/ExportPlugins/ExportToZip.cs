@@ -9,6 +9,7 @@ using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
 using CameraControl.Core.Wpf;
+using CameraControl.Devices.Classes;
 using Ionic.Zip;
 
 namespace CameraControl.Plugins.ExportPlugins

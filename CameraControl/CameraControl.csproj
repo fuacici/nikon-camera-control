@@ -177,6 +177,9 @@
     <Compile Include="windows\CreateTimeLapseWnd.xaml.cs">
       <DependentUpon>CreateTimeLapseWnd.xaml</DependentUpon>
     </Compile>
+    <Compile Include="windows\DownloadPhotosWnd.xaml.cs">
+      <DependentUpon>DownloadPhotosWnd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="windows\EditSession.xaml.cs">
       <DependentUpon>EditSession.xaml</DependentUpon>
     </Compile>
@@ -290,6 +293,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="windows\DownloadPhotosWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="windows\EditSession.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -381,6 +388,10 @@
     <ProjectReference Include="..\CameraControl.Core\CameraControl.Core.csproj">
       <Project>{741A8DDA-4604-4CF4-8DAA-1F98A2767896}</Project>
       <Name>CameraControl.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CameraControl.Devices\CameraControl.Devices.csproj">
+      <Project>{E8572D8B-C987-4D20-BD88-1F8925A64A82}</Project>
+      <Name>CameraControl.Devices</Name>
     </ProjectReference>
     <ProjectReference Include="..\PortableDeviceLib\PortableDeviceLib.csproj">
       <Project>{E9F048C1-C6A0-4CCD-BE57-4E76A7F8B32D}</Project>

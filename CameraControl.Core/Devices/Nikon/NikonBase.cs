@@ -7,6 +7,7 @@ using System.Threading;
 using System.Timers;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Devices.Classes;
+using CameraControl.Devices.Classes;
 using PortableDeviceLib;
 using PortableDeviceLib.Model;
 using Timer = System.Timers.Timer;

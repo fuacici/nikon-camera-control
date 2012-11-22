@@ -13,6 +13,7 @@ using CameraControl.Core.Classes;
 using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
 using CameraControl.Core.Interfaces;
+using CameraControl.Devices.Classes;
 using CameraControl.Layouts;
 using CameraControl.Translation;
 using CameraControl.windows;
@@ -598,6 +599,11 @@ namespace CameraControl
     private void btn_help_Click(object sender, RoutedEventArgs e)
     {
       HelpProvider.Run(HelpSections.MainMenu);
+    }
+
+    private void but_download_Click(object sender, RoutedEventArgs e)
+    {
+      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.DownloadPhotosWnd_Show,ServiceProvider.DeviceManager.SelectedCameraDevice);
     }
 
   }

@@ -5,6 +5,7 @@ using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 using CameraControl.Core.Classes.Queue;
 using CameraControl.Core.Exif.EXIF;
+using CameraControl.Devices.Classes;
 using FreeImageAPI;
 
 namespace CameraControl.Core.Classes

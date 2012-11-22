@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using CameraControl.Core.Devices.Classes;
+using CameraControl.Devices.Classes;
 using PortableDeviceLib;
 
 namespace CameraControl.Core.Devices.Canon

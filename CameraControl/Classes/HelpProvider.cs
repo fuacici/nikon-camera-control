@@ -16,7 +16,8 @@ namespace CameraControl.Classes
     LiveView,
     Session,
     Bulb,
-    MultipleCamera
+    MultipleCamera,
+    DownloadPhotos
   }
 
   public class HelpProvider
@@ -36,6 +37,7 @@ namespace CameraControl.Classes
                       {HelpSections.Session, "http://www.digicamcontrol.com/wiki/index.php/Configuration#Session"},
                       {HelpSections.Bulb, "http://www.digicamcontrol.com/wiki/index.php/Interface#Bulb_mode"},
                       {HelpSections.MultipleCamera, "http://www.digicamcontrol.com/wiki/index.php/Interface#Multiple_camera_support"},
+                      {HelpSections.DownloadPhotos, "http://www.digicamcontrol.com/wiki/index.php/Interface#Download_photos"},
                     };
     }
 

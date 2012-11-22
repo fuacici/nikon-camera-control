@@ -1,4 +1,5 @@
 using CameraControl.Core.Devices.Classes;
+using CameraControl.Devices.Classes;
 using PortableDeviceLib;
 
 namespace CameraControl.Core.Devices.Nikon

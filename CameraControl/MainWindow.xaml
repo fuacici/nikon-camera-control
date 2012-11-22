@@ -201,6 +201,14 @@
                         <Label Content="NoAf" HorizontalContentAlignment="Center" FontSize="14" />
                     </Grid>
                 </Button>
+                <Button ToolTip="{T:TranslateExtension TimeLapseToolTip}" Height="50" Name="but_download" Width="50" Margin="5" Style="{DynamicResource MetroCircleButtonStyle}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Click="but_download_Click">
+                    <Rectangle Width="20" Height="20">
+                        <Rectangle.Fill>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_download}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Button>
+
                 <Button Content="[BR]" ToolTip="{T:TranslateExtension BraketingToolTip}" Width="50"  Height="50" Name="btn_br" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_br_Click" FontSize="15" Style="{DynamicResource MetroCircleButtonStyle}"/>
                 <ToggleButton ToolTip="Image property" Height="50" Width="50" Name="button1"  Click="button1_Click" Margin="5">
                     <Image Margin="5" Source="/CameraControl;component/Images/Properties.png"/>

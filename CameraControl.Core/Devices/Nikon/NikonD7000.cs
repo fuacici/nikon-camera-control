@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CameraControl.Core.Devices.Classes;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.Core.Devices.Nikon
 {

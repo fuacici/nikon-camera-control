@@ -9,6 +9,7 @@ using System.Windows.Input;
 using CameraControl.Classes;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
+using CameraControl.Devices.Classes;
 using CameraControl.windows;
 using CameraControl.Core;
 

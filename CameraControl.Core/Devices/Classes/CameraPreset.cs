@@ -1,6 +1,7 @@
 using System.IO;
 using System.Xml.Serialization;
 using CameraControl.Core.Classes;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.Core.Devices.Classes
 {

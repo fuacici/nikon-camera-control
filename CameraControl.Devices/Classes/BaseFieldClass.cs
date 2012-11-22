@@ -3,7 +3,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace CameraControl.Core.Classes
+namespace CameraControl.Devices.Classes
 {
   public class BaseFieldClass : INotifyPropertyChanged
   {

@@ -7,6 +7,8 @@ namespace CameraControl.Classes
 {
   class WindowsCmdConsts
   {
+    public const string DownloadPhotosWnd_Show = "DownloadPhotosWnd_Show";
+    public const string DownloadPhotosWnd_Hide = "DownloadPhotosWnd_Hide";
     public const string TagSelectorWnd_Show = "TagSelectorWnd_Show";
     public const string TagSelectorWnd_Hide = "TagSelectorWnd_Hide";
     public const string BrowseWnd_Show = "BrowseWnd_Show";

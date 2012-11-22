@@ -1,4 +1,5 @@
 using CameraControl.Core.Interfaces;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.Core.Classes
 {

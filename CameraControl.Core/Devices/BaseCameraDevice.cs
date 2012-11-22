@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Devices.Classes;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.Core.Devices
 {
@@ -380,6 +381,16 @@ namespace CameraControl.Core.Devices
         _advancedProperties = value;
         NotifyPropertyChanged("AdvancedProperties");        
       }
+    }
+
+    public virtual AsyncObservableCollection<DeviceObject> GetObjects(object storageId)
+    {
+      throw new NotImplementedException();
+    }
+
+    public virtual bool DeleteObject(DeviceObject deviceObject)
+    {
+      throw new NotImplementedException();
     }
 
     #endregion
