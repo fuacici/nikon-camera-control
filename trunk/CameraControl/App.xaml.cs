@@ -15,6 +15,7 @@ using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
+using CameraControl.Devices.Classes;
 using CameraControl.Translation;
 using CameraControl.windows;
 
@@ -72,6 +73,7 @@ namespace CameraControl
       ServiceProvider.WindowsManager.Add(new CameraPropertyWnd());
       ServiceProvider.WindowsManager.Add(new BrowseWnd());
       ServiceProvider.WindowsManager.Add(new TagSelectorWnd());
+      ServiceProvider.WindowsManager.Add(new DownloadPhotosWnd());
       ServiceProvider.WindowsManager.Event += WindowsManager_Event;
       ServiceProvider.Trigger.Start();
       ServiceProvider.PluginManager.LoadPlugins(Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Plugins"));

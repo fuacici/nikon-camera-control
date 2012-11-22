@@ -1,4 +1,6 @@
-﻿namespace CameraControl.Core.Classes
+﻿using CameraControl.Devices.Classes;
+
+namespace CameraControl.Core.Classes
 {
   public class TagItem:BaseFieldClass
   {

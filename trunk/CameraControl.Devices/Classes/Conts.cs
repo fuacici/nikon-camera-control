@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace CameraControl.Core.Devices.Classes
+namespace CameraControl.Devices.Classes
 {
   public class Conts
   {

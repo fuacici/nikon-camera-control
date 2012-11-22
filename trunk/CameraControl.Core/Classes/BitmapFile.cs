@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using AForge.Imaging;
 using CameraControl.Core.Exif.EXIF;
+using CameraControl.Devices.Classes;
 using FreeImageAPI;
 using FreeImageAPI.Metadata;
 using Image = System.Drawing.Image;

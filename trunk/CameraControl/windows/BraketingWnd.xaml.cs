@@ -8,6 +8,7 @@ using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Devices;
 using CameraControl.Core.Devices.Classes;
+using CameraControl.Devices.Classes;
 using CameraControl.Translation;
 
 namespace CameraControl.windows

@@ -1,3 +1,5 @@
+using CameraControl.Devices.Classes;
+
 namespace CameraControl.Core.Classes
 {
   public class DictionaryItem : BaseFieldClass

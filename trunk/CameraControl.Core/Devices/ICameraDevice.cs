@@ -1,6 +1,7 @@
 using System;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Devices.Classes;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.Core.Devices
 {
@@ -65,5 +66,7 @@ namespace CameraControl.Core.Devices
 
     AsyncObservableCollection<PropertyValue<long>> AdvancedProperties { get; set; }
     
+    AsyncObservableCollection<DeviceObject> GetObjects(object storageId);
+    bool DeleteObject(DeviceObject deviceObject);
   }
 }

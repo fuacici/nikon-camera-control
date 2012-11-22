@@ -243,5 +243,7 @@
     public static string LabelControl = "Control";
     // 20/11/2012
     public static string LabelExport = "Export";
+    // 21/11/2012
+    public static string LabelDownload = "Download";
   }
 }

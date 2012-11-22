@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace CameraControl.Core.Devices.Classes
+namespace CameraControl.Devices.Classes
 {
   [Serializable]
   public class DeviceException : Exception

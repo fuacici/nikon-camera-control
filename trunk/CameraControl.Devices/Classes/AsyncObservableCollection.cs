@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Threading;
 
-namespace CameraControl.Core.Classes
+namespace CameraControl.Devices.Classes
 {
   public class AsyncObservableCollection<T> : ObservableCollection<T>
   {
