@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using CameraControl.Classes;
 using CameraControl.Core.Classes;
+using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using Path = System.IO.Path;
 using CameraControl.Core;

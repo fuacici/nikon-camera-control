@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
+using CameraControl.Devices;
 using Microsoft.VisualBasic.FileIO;
 using System.Windows.Controls;
 using Clipboard = System.Windows.Clipboard;

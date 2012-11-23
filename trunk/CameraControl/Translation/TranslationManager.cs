@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Xml;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
+using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 
 namespace CameraControl.Translation

@@ -71,21 +71,29 @@
     <Compile Include="Classes\CapabilityEnum.cs" />
     <Compile Include="Classes\Conts.cs" />
     <Compile Include="Classes\DeviceDescriptor.cs" />
+    <Compile Include="Classes\DeviceDescriptorEnumerator.cs" />
     <Compile Include="Classes\DeviceException.cs" />
     <Compile Include="Classes\DeviceObject.cs" />
     <Compile Include="Classes\ErrorCodes.cs" />
     <Compile Include="Classes\LiveViewData.cs" />
+    <Compile Include="Classes\LogEventArgs.cs" />
     <Compile Include="Classes\OperationEnum.cs" />
     <Compile Include="Classes\PhotoCapturedEventArgs.cs" />
     <Compile Include="Classes\PropertyValue.cs" />
     <Compile Include="ICameraDevice.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="Others\NotConnectedCameraDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StaticHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PortableDeviceLib\PortableDeviceLib.csproj">
       <Project>{E9F048C1-C6A0-4CCD-BE57-4E76A7F8B32D}</Project>
       <Name>PortableDeviceLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Nikon\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

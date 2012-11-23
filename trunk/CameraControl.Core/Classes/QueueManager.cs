@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Threading;
 using CameraControl.Core.Interfaces;
+using CameraControl.Devices;
 
 namespace CameraControl.Core.Classes
 {

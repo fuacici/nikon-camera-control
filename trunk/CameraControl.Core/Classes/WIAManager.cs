@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Threading;
 using CameraControl.Core.Devices.Classes;
+using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using WIA;
 

@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
+using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 
 namespace CameraControl.Core

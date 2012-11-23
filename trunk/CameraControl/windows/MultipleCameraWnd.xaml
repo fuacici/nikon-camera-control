@@ -5,6 +5,7 @@
         Title="{T:TranslateExtension MultipleCameraWindowTitle}" Height="244" Width="586" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" Closing="Window_Closing" xmlns:my1="clr-namespace:CameraControl.windows"
                       xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:Devices="clr-namespace:CameraControl.Devices;assembly=CameraControl.Devices"
                       WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow"
                       ShowMaxRestoreButton="False" ShowMinButton="False">
     <Window.Resources>
@@ -41,7 +42,7 @@
         <Button Content="{T:TranslateExtension ButtonCapturePhotos}" Height="54" HorizontalAlignment="Left" Margin="17,22,0,0" Name="btn_shot" VerticalAlignment="Top" Width="154" Click="btn_shot_Click" Grid.RowSpan="2" />
         <xctk:IntegerUpDown Margin="191,22,0,0" Name="int_wait" VerticalAlignment="Top" ToolTip="Wait beetven cameras shots in seconds " Minimum="0" Maximum="1000000" Value="{Binding Path=DelaySec, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:MultipleCameraWnd, AncestorLevel=1}}" HorizontalAlignment="Left" Width="124" Grid.RowSpan="2" />
         <Label Content="{T:TranslateExtension LabelDelay}" ToolTip="Delay between camera shouts" HorizontalAlignment="Left" Margin="191,2,0,0" Name="label1" Height="28" VerticalAlignment="Top" />
-        <Label Content="{Binding Source={x:Static Member=Core:StaticHelper.Instance}, Path=SystemMessage}" Margin="17,0,0,12" Name="lbl_message" Height="28" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="298" Grid.Row="1" />
+        <Label Content="{Binding Source={x:Static Member=Devices:StaticHelper.Instance}, Path=SystemMessage}" Margin="17,0,0,12" Name="lbl_message" Height="28" VerticalAlignment="Bottom" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="298" Grid.Row="1" />
         <CheckBox Content="{T:TranslateExtension LabelDisableAutofocus}" Height="16" HorizontalAlignment="Left" Margin="18,96,0,0" Name="chk_noautofocus" VerticalAlignment="Top" IsChecked="{Binding Path=DisbleAutofocus, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:MultipleCameraWnd, AncestorLevel=1}}" Grid.Row="1" />
         <xctk:IntegerUpDown Margin="191,38,0,0" Name="integerUpDown1" VerticalAlignment="Top" Value="{Binding Path=NumOfPhotos, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:MultipleCameraWnd, AncestorLevel=1}}" ShowButtonSpinner="True" Maximum="10000" Minimum="1" HorizontalAlignment="Left" Grid.Row="1" />
         <Label Content="{T:TranslateExtension LabelNumberOfCaptures}" Height="28" HorizontalAlignment="Left" Margin="191,18,0,0" Name="label2" VerticalAlignment="Top" Grid.Row="1" />

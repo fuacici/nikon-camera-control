@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using CameraControl.Devices;
 
 // origin: http://www.codeproject.com/Articles/1505/Create-your-own-Web-Server-using-C
 namespace CameraControl.Core.Classes
