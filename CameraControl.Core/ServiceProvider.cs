@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Reflection;
 using CameraControl.Core.Classes;
-using CameraControl.Core.Devices;
 using CameraControl.Devices;
 using log4net;
 using log4net.Appender;
@@ -57,16 +56,23 @@ namespace CameraControl.Core
       if (!isConfigured)
       {
         // Setup RollingFileAppender
-        log4net.Appender.RollingFileAppender fileAppender = new log4net.Appender.RollingFileAppender();
-        fileAppender.Layout = new log4net.Layout.PatternLayout("%d [%t]%-5p %c [%x] - %m%n");
-        fileAppender.MaximumFileSize = "1000KB";
-        fileAppender.MaxSizeRollBackups = 5;
-        fileAppender.RollingStyle = RollingFileAppender.RollingMode.Size;
-        fileAppender.AppendToFile = true;
-        fileAppender.File = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                                         appfolder, "Log",
-                                         "app.log");
-        fileAppender.Name = "XXXRollingFileAppender";
+        var fileAppender = new RollingFileAppender
+                                                              {
+                                                                Layout =
+                                                                  new log4net.Layout.PatternLayout(
+                                                                  "%d [%t]%-5p %c [%x] - %m%n"),
+                                                                MaximumFileSize = "1000KB",
+                                                                MaxSizeRollBackups = 5,
+                                                                RollingStyle = RollingFileAppender.RollingMode.Size,
+                                                                AppendToFile = true,
+                                                                File =
+                                                                  Path.Combine(
+                                                                    Environment.GetFolderPath(
+                                                                      Environment.SpecialFolder.CommonApplicationData),
+                                                                    appfolder, "Log",
+                                                                    "app.log"),
+                                                                Name = "XXXRollingFileAppender"
+                                                              };
         fileAppender.ActivateOptions(); // IMPORTANT, creates the file
         BasicConfigurator.Configure(fileAppender);
 #if DEBUG

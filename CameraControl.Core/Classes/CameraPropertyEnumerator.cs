@@ -1,4 +1,3 @@
-using CameraControl.Core.Devices;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 

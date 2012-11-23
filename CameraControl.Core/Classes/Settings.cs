@@ -10,7 +10,6 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml.Serialization;
-using CameraControl.Core.Devices.Classes;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using MahApps.Metro;

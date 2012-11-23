@@ -118,11 +118,13 @@
     <Compile Include="Classes\BitmapFile.cs" />
     <Compile Include="Classes\BitmapLoader.cs" />
     <Compile Include="Classes\BraketingClass.cs" />
+    <Compile Include="Classes\CameraPreset.cs" />
     <Compile Include="Classes\CameraProperty.cs" />
     <Compile Include="Classes\CameraPropertyEnumerator.cs" />
     <Compile Include="Classes\CmdConsts.cs" />
     <Compile Include="Classes\FileItem.cs" />
     <Compile Include="Classes\Imaging.cs" />
+    <Compile Include="Classes\PhotoSession.cs" />
     <Compile Include="Classes\PhotoUtils.cs" />
     <Compile Include="Classes\Queue\QueueItemFileItem.cs" />
     <Compile Include="Classes\Settings.cs" />
@@ -130,24 +132,6 @@
     <Compile Include="Classes\TimeLapseClass.cs" />
     <Compile Include="Classes\TriggerClass.cs" />
     <Compile Include="Classes\WebServer.cs" />
-    <Compile Include="Classes\WIAManager.cs" />
-    <Compile Include="Devices\CameraDeviceManager.cs" />
-    <Compile Include="Devices\Canon\Canon400D.cs" />
-    <Compile Include="Devices\Classes\PhotoSession.cs" />
-    <Compile Include="Devices\Nikon\NikonBase.cs" />
-    <Compile Include="Devices\Nikon\NikonD300.cs" />
-    <Compile Include="Devices\Nikon\NikonD3200.cs" />
-    <Compile Include="Devices\Nikon\NikonD3X.cs" />
-    <Compile Include="Devices\Nikon\NikonD4.cs" />
-    <Compile Include="Devices\Nikon\NikonD40.cs" />
-    <Compile Include="Devices\Nikon\NikonD5100.cs" />
-    <Compile Include="Devices\Nikon\NikonD60.cs" />
-    <Compile Include="Devices\Nikon\NikonD600.cs" />
-    <Compile Include="Devices\Nikon\NikonD700.cs" />
-    <Compile Include="Devices\Nikon\NikonD7000.cs" />
-    <Compile Include="Devices\Nikon\NikonD80.cs" />
-    <Compile Include="Devices\Nikon\NikonD800.cs" />
-    <Compile Include="Devices\Nikon\NikonD90.cs" />
     <Compile Include="Interfaces\IExportPlugin.cs" />
     <Compile Include="Interfaces\IPlugin.cs" />
     <Compile Include="Classes\ActionEventArgs.cs" />
@@ -160,7 +144,6 @@
     <Compile Include="Classes\ValuePair.cs" />
     <Compile Include="Classes\VideoType.cs" />
     <Compile Include="Classes\WindowsManager.cs" />
-    <Compile Include="Devices\Classes\CameraPreset.cs" />
     <Compile Include="Exif\EXIFextractor.cs" />
     <Compile Include="Exif\translation.cs" />
     <Compile Include="Interfaces\IMenuAction.cs" />
@@ -202,9 +185,7 @@
   <ItemGroup>
     <Content Include="Resources\Entypo-license.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Devices\Others\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

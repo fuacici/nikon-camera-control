@@ -15,8 +15,6 @@ using System.Windows.Shapes;
 using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
-using CameraControl.Core.Devices;
-using CameraControl.Core.Devices.Classes;
 using CameraControl.Core.Interfaces;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
