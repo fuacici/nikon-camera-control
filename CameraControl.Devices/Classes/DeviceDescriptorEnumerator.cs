@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using CameraControl.Devices.Classes;
 
-namespace CameraControl.Core.Devices.Classes
+namespace CameraControl.Devices.Classes
 {
   public class DeviceDescriptorEnumerator
   {

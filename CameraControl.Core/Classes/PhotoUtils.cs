@@ -7,6 +7,7 @@ using System.Net;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
+using CameraControl.Devices;
 using FreeImageAPI;
 
 namespace CameraControl.Core.Classes
@@ -156,27 +157,6 @@ namespace CameraControl.Core.Classes
       return false;
     }
 
-    /// <summary>
-    /// Return serial number component from a pnp id string
-    /// </summary>
-    /// <param name="pnpstring"></param>
-    /// <returns></returns>
-    public static string GetSerial(string pnpstring)
-    {
-      if (pnpstring == null)
-        return "";
-      string ret = "";
-      if(pnpstring.Contains("#"))
-      {
-        string[] s = pnpstring.Split('#');
-        if(s.Length>2)
-        {
-          ret = s[2];
-        }
-      }
-      return ret;
-    }
-
     public static void PlayCaptureSound()
     {
       try
@@ -197,11 +177,6 @@ namespace CameraControl.Core.Classes
     public static void Donate()
     {
       Run("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6JQGZE8R2NLEY"); 
-    }
-
-    public static bool GetBit(Int32 b, int bitNumber)
-    {
-      return (b & (1 << bitNumber)) != 0;
     }
   }
 }

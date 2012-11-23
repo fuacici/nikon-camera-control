@@ -7,6 +7,7 @@ using CameraControl.Core.Devices.Nikon;
 using CameraControl.Core.Devices.Others;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
+using CameraControl.Devices.Others;
 using PortableDeviceLib;
 using WIA;
 
@@ -139,12 +140,12 @@ namespace CameraControl.Core.Devices
 
         foreach (var deviceId in PortableDeviceCollection.Instance.DeviceIds)
         {
-          if (PhotoUtils.GetSerial(deviceId) == cameraDevice.SerialNumber &&
+          if (StaticHelper.GetSerial(deviceId) == cameraDevice.SerialNumber &&
               DeviceClass.ContainsKey(cameraDevice.DeviceName.ToUpper())) 
           {
             descriptor.WpdId = deviceId;
             cameraDevice = (ICameraDevice) Activator.CreateInstance(DeviceClass[cameraDevice.DeviceName]);
-            cameraDevice.SerialNumber = PhotoUtils.GetSerial(deviceId);
+            cameraDevice.SerialNumber = StaticHelper.GetSerial(deviceId);
             cameraDevice.Init(descriptor);
             break;
           }
@@ -193,7 +194,7 @@ namespace CameraControl.Core.Devices
           ICameraDevice cameraDevice;
           DeviceDescriptor descriptor = new DeviceDescriptor {WpdId = portableDevice.DeviceId};
           cameraDevice = (ICameraDevice)Activator.CreateInstance(DeviceClass[portableDevice.Model]);
-          cameraDevice.SerialNumber = PhotoUtils.GetSerial(portableDevice.DeviceId);
+          cameraDevice.SerialNumber = StaticHelper.GetSerial(portableDevice.DeviceId);
           cameraDevice.Init(descriptor);
           descriptor.CameraDevice = cameraDevice;
           _deviceEnumerator.Add(descriptor);

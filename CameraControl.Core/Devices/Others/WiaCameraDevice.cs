@@ -184,7 +184,7 @@ namespace CameraControl.Core.Devices.Others
         Device = deviceDescriptor.WiaDevice;
         DeviceName = Device.Properties["Description"].get_Value();
         Manufacturer = Device.Properties["Manufacturer"].get_Value();
-        SerialNumber = PhotoUtils.GetSerial(Device.Properties["PnP ID String"].get_Value());
+        SerialNumber = StaticHelper.GetSerial(Device.Properties["PnP ID String"].get_Value());
       }
       catch (Exception ex)
       {

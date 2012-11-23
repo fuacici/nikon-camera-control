@@ -1247,29 +1247,29 @@ namespace CameraControl.Core.Devices.Nikon
             Int32 resp = BitConverter.ToInt32(response.Data, 0);
             if (resp == 0)
               return string.Empty;
-            if (PhotoUtils.GetBit(resp, 0))
+            if (StaticHelper.GetBit(resp, 0))
               return "LabelNoCardInserted";
-            if (PhotoUtils.GetBit(resp, 1))
+            if (StaticHelper.GetBit(resp, 1))
               return "LabelCardError";
-            if (PhotoUtils.GetBit(resp, 2))
+            if (StaticHelper.GetBit(resp, 2))
               return "LabelCardNotFormatted";
-            if (PhotoUtils.GetBit(resp, 3))
+            if (StaticHelper.GetBit(resp, 3))
               return "LabelNoFreeAreaInCard";
-            if (PhotoUtils.GetBit(resp, 7))
+            if (StaticHelper.GetBit(resp, 7))
               return "LabelCardBufferNotEmpty";
-            if (PhotoUtils.GetBit(resp, 8))
+            if (StaticHelper.GetBit(resp, 8))
               return "LabelPcBufferNotEmpty";
-            if (PhotoUtils.GetBit(resp, 9))
+            if (StaticHelper.GetBit(resp, 9))
               return "LabelBufferNotEmpty";
-            if (PhotoUtils.GetBit(resp,10))
+            if (StaticHelper.GetBit(resp,10))
               return "LabelRecordInProgres";
-            if (PhotoUtils.GetBit(resp, 11))
+            if (StaticHelper.GetBit(resp, 11))
               return "LabelCardProtected";
-            if (PhotoUtils.GetBit(resp, 12))
+            if (StaticHelper.GetBit(resp, 12))
               return "LabelDuringEnlargedDisplayLiveView";
-            if (PhotoUtils.GetBit(resp, 13))
+            if (StaticHelper.GetBit(resp, 13))
               return "LabelWrongLiveViewType";
-            if (PhotoUtils.GetBit(resp, 14))
+            if (StaticHelper.GetBit(resp, 14))
               return "LabelNotInApplicationMode";
           }
           return "";
