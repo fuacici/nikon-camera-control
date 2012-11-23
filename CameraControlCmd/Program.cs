@@ -174,10 +174,10 @@ namespace CameraControlCmd
       ServiceProvider.Settings = ServiceProvider.Settings.Load();
       ServiceProvider.Settings.LoadSessionData();
       ServiceProvider.WindowsManager = new WindowsManager();
-      WIAManager manager = new WIAManager();
+      //WIAManager manager = new WIAManager();
       StaticHelper.Instance.PropertyChanged += Instance_PropertyChanged;
       ServiceProvider.DeviceManager.CameraConnected += DeviceManagerCameraConnected;
-      manager.ConnectToCamera();
+      ServiceProvider.DeviceManager.ConnectToCamera();
       ServiceProvider.DeviceManager.PhotoCaptured += DeviceManager_PhotoCaptured;
       if (ServiceProvider.DeviceManager.SelectedCameraDevice.AttachedPhotoSession != null)
         ServiceProvider.Settings.DefaultSession =(PhotoSession)

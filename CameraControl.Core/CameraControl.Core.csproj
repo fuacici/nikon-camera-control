@@ -148,7 +148,6 @@
     <Compile Include="Devices\Nikon\NikonD80.cs" />
     <Compile Include="Devices\Nikon\NikonD800.cs" />
     <Compile Include="Devices\Nikon\NikonD90.cs" />
-    <Compile Include="Devices\Others\WiaCameraDevice.cs" />
     <Compile Include="Interfaces\IExportPlugin.cs" />
     <Compile Include="Interfaces\IPlugin.cs" />
     <Compile Include="Classes\ActionEventArgs.cs" />
@@ -202,6 +201,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Entypo-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Devices\Others\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
