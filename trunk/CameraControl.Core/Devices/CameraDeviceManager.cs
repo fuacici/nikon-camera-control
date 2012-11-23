@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Devices.Canon;
 using CameraControl.Core.Devices.Classes;
 using CameraControl.Core.Devices.Nikon;
-using CameraControl.Core.Devices.Others;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using CameraControl.Devices.Others;
@@ -86,13 +86,17 @@ namespace CameraControl.Core.Devices
                         // for mtp simulator
                         //{"Test Camera ", typeof (NikonBase)},
                       };
-      
+
       SelectedCameraDevice = new NotConnectedCameraDevice();
       ConnectedDevices = new AsyncObservableCollection<ICameraDevice>();
       _deviceEnumerator = new DeviceDescriptorEnumerator();
+      WiaDeviceManager = new DeviceManager();
+      WiaDeviceManager.RegisterEvent(Conts.wiaEventDeviceConnected, "*");
+      WiaDeviceManager.RegisterEvent(Conts.wiaEventDeviceDisconnected, "*");
+      WiaDeviceManager.OnEvent += DeviceManager_OnEvent;
     }
 
-    public ICameraDevice GetWiaIDevice(WIAManager manager, IDeviceInfo devInfo)
+    public ICameraDevice GetWiaIDevice(IDeviceInfo devInfo)
     {
       if (_deviceEnumerator.GetByWiaId(devInfo.DeviceID) != null)
         return _deviceEnumerator.GetByWiaId(devInfo.DeviceID).CameraDevice;
@@ -116,55 +120,6 @@ namespace CameraControl.Core.Devices
       Log.Debug("Manufacturer :" + cameraDevice.Manufacturer);
 
       return SelectedCameraDevice; 
-    }
-
-    [Obsolete]
-    public ICameraDevice GetIDevice(WIAManager manager, IDeviceInfo devInfo)
-    {
-      // already the camera is connected
-      if (_deviceEnumerator.GetByWiaId(devInfo.DeviceID) != null)
-        return _deviceEnumerator.GetByWiaId(devInfo.DeviceID).CameraDevice;
-
-      DeviceDescriptor descriptor = new DeviceDescriptor {WiaDeviceInfo = devInfo, WiaId = devInfo.DeviceID};
-
-      ICameraDevice cameraDevice = new WiaCameraDevice();
-      cameraDevice.Init(descriptor);
-
-      if (!ServiceProvider.Settings.DisableNativeDrivers)
-      {
-        if (PortableDeviceCollection.Instance == null)
-        {
-          PortableDeviceCollection.CreateInstance(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
-          PortableDeviceCollection.Instance.AutoConnectToPortableDevice = false;
-        }
-
-        foreach (var deviceId in PortableDeviceCollection.Instance.DeviceIds)
-        {
-          if (StaticHelper.GetSerial(deviceId) == cameraDevice.SerialNumber &&
-              DeviceClass.ContainsKey(cameraDevice.DeviceName.ToUpper())) 
-          {
-            descriptor.WpdId = deviceId;
-            cameraDevice = (ICameraDevice) Activator.CreateInstance(DeviceClass[cameraDevice.DeviceName]);
-            cameraDevice.SerialNumber = StaticHelper.GetSerial(deviceId);
-            cameraDevice.Init(descriptor);
-            break;
-          }
-        }
-      }
-
-      descriptor.CameraDevice = cameraDevice;
-      _deviceEnumerator.Add(descriptor);
-      ConnectedDevices.Add(cameraDevice);
-      SelectedCameraDevice = cameraDevice;
-      cameraDevice.PhotoCaptured += cameraDevice_PhotoCaptured;
-      //ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
-     StaticHelper.Instance.SystemMessage = "New Camera is connected ! Driver :" + cameraDevice.DeviceName;
-      Log.Debug("===========Camera is connected==============");
-      Log.Debug("Driver :" + cameraDevice.GetType().Name);
-      Log.Debug("Name :" + cameraDevice.DeviceName);
-      Log.Debug("Manufacturer :" + cameraDevice.Manufacturer);
-
-      return SelectedCameraDevice;
     }
 
     void cameraDevice_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
@@ -258,6 +213,84 @@ namespace CameraControl.Core.Devices
       }
     }
 
+
+        public DeviceManager WiaDeviceManager { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value for disabling native drivers.
+    /// </summary>
+    /// <value>
+    /// <c>true</c> all devices are loaded like WIA devices <c>false</c> If native driver are available for connected model the will be loaded that driver else will be loaded WIA driver.
+    /// </value>
+    public bool DisableNativeDrivers { get; set; }
+
+
+    private void DeviceManager_OnEvent(string eventId, string deviceId, string itemId)
+    {
+      if (eventId == Conts.wiaEventDeviceConnected)
+      {
+        ConnectToCamera();
+      }
+      else if (eventId == Conts.wiaEventDeviceDisconnected)
+      {
+        DisconnectCamera(deviceId);
+      }
+    }
+
+
+    public bool ConnectToCamera()
+    {
+      return ConnectToCamera(true);
+    }
+
+    public bool ConnectToCamera(bool retry)
+    {
+      if (!DisableNativeDrivers)
+      {
+        ConnectDevices();
+      }
+      else
+      {
+        Log.Debug("Native drivers are disabled !!!!");
+      }
+      bool ret = false;
+      int retries = 0;
+      foreach (IDeviceInfo devInfo in new DeviceManager().DeviceInfos)
+      {
+        // Look for CameraDeviceType devices
+        string model = devInfo.Properties["Name"].get_Value();
+        if (devInfo.Type == WiaDeviceType.CameraDeviceType && (!DeviceClass.ContainsKey(model) || DisableNativeDrivers))
+        {
+          do
+          {
+            try
+            {
+              GetWiaIDevice(devInfo);
+              retries = 4;
+            }
+            catch (Exception exception)
+            {
+              Log.Error("Unable to connect to the camera", exception);
+              retries++;
+              if (retries < 3)
+              {
+                Log.Debug("Retrying");
+               StaticHelper.Instance.SystemMessage = "Unable to connect to the camera. Retrying";
+              }
+              else
+              {
+               StaticHelper.Instance.SystemMessage =
+                  "Unable to connect to the camera. Please reconnect your camera !";
+              }
+              Thread.Sleep(1000);
+            }
+          } while (retries < 3);
+          ret = true;
+        }
+      }
+      return ret;
+    }
+    
     public event PhotoCapturedEventHandler PhotoCaptured;
     
     public delegate void CameraConnectedEventHandler(ICameraDevice  cameraDevice);
@@ -268,3 +301,4 @@ namespace CameraControl.Core.Devices
     public event CameraSelectedEventHandler CameraSelected;
   }
 }
+

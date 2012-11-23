@@ -36,7 +36,7 @@ namespace CameraControl
 
     public PropertyWnd PropertyWnd { get; set; }
 
-    public WIAManager WiaManager { get; set; }
+    //public WIAManager WiaManager { get; set; }
 
     public MainWindow()
     {
@@ -44,7 +44,7 @@ namespace CameraControl
       SelectDeviceCommand = new RelayCommand<ICameraDevice>(SelectCamera);
       SelectPresetCommand = new RelayCommand<CameraPreset>(SelectPreset);
       ExecuteExportPluginCommand = new RelayCommand<IExportPlugin>(ExecuteExportPlugin);
-      WiaManager = new WIAManager();
+      //WiaManager = new WIAManager();
       //ServiceProvider.Settings.Manager = WiaManager;
       ServiceProvider.DeviceManager.PhotoCaptured += DeviceManager_PhotoCaptured;
       InitializeComponent();
@@ -222,7 +222,8 @@ namespace CameraControl
     
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      WiaManager.ConnectToCamera();
+      ServiceProvider.DeviceManager.DisableNativeDrivers = ServiceProvider.Settings.DisableNativeDrivers;
+      ServiceProvider.DeviceManager.ConnectToCamera();
     }
 
 
@@ -406,7 +407,8 @@ namespace CameraControl
 
     private void mnu_reconnect_Click(object sender, RoutedEventArgs e)
     {
-      WiaManager.ConnectToCamera();
+      ServiceProvider.DeviceManager.DisableNativeDrivers = ServiceProvider.Settings.DisableNativeDrivers;
+      ServiceProvider.DeviceManager.ConnectToCamera();
     }
 
     private void MenuItem_Click_3(object sender, RoutedEventArgs e)

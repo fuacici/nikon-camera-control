@@ -2,13 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
-using CameraControl.Core.Classes;
-using CameraControl.Core.Devices.Classes;
-using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using WIA;
 
-namespace CameraControl.Core.Devices.Others
+namespace CameraControl.Devices.Others
 {
   public class WiaCameraDevice : BaseCameraDevice
   {
@@ -195,7 +192,7 @@ namespace CameraControl.Core.Devices.Others
       {
         try
         {
-          Property apertureProperty = Device.Properties[WIAManager.CONST_PROP_F_Number];
+          Property apertureProperty = Device.Properties[Conts.CONST_PROP_F_Number];
           if (apertureProperty != null)
           {
             foreach (var subTypeValue in apertureProperty.SubTypeValues)
@@ -215,7 +212,7 @@ namespace CameraControl.Core.Devices.Others
 
         try
         {
-          Property isoProperty = Device.Properties[WIAManager.CONST_PROP_ISO_Number];
+          Property isoProperty = Device.Properties[Conts.CONST_PROP_ISO_Number];
           if (isoProperty != null)
           {
             foreach (var subTypeValue in isoProperty.SubTypeValues)
@@ -233,7 +230,7 @@ namespace CameraControl.Core.Devices.Others
 
         try
         {
-          Property shutterProperty = Device.Properties[WIAManager.CONST_PROP_Exposure_Time];
+          Property shutterProperty = Device.Properties[Conts.CONST_PROP_Exposure_Time];
           if (shutterProperty != null)
           {
             foreach (int subTypeValue in shutterProperty.SubTypeValues)
@@ -251,7 +248,7 @@ namespace CameraControl.Core.Devices.Others
 
         try
         {
-          Property wbProperty = Device.Properties[WIAManager.CONST_PROP_WhiteBalance];
+          Property wbProperty = Device.Properties[Conts.CONST_PROP_WhiteBalance];
           if (wbProperty != null)
           {
             foreach (var subTypeValue in wbProperty.SubTypeValues)
@@ -269,7 +266,7 @@ namespace CameraControl.Core.Devices.Others
 
         try
         {
-          Property modeProperty = Device.Properties[WIAManager.CONST_PROP_ExposureMode];
+          Property modeProperty = Device.Properties[Conts.CONST_PROP_ExposureMode];
           if (modeProperty != null)
           {
             foreach (var subTypeValue in modeProperty.SubTypeValues)
@@ -288,7 +285,7 @@ namespace CameraControl.Core.Devices.Others
 
         try
         {
-          Property ecProperty = Device.Properties[WIAManager.CONST_PROP_ExposureCompensation];
+          Property ecProperty = Device.Properties[Conts.CONST_PROP_ExposureCompensation];
           if (ecProperty != null)
           {
             foreach (var subTypeValue in ecProperty.SubTypeValues)
@@ -309,7 +306,7 @@ namespace CameraControl.Core.Devices.Others
 
         try
         {
-          Property csProperty = Device.Properties[WIAManager.CONST_PROP_CompressionSetting];
+          Property csProperty = Device.Properties[Conts.CONST_PROP_CompressionSetting];
           if (csProperty != null)
           {
             foreach (var subTypeValue in csProperty.SubTypeValues)
@@ -327,7 +324,7 @@ namespace CameraControl.Core.Devices.Others
 
         try
         {
-          Property emmProperty = Device.Properties[WIAManager.CONST_PROP_ExposureMeteringMode];
+          Property emmProperty = Device.Properties[Conts.CONST_PROP_ExposureMeteringMode];
           if (emmProperty != null)
           {
             foreach (var subTypeValue in emmProperty.SubTypeValues)
@@ -345,7 +342,7 @@ namespace CameraControl.Core.Devices.Others
 
         try
         {
-          Property fmProperty = Device.Properties[WIAManager.CONST_PROP_FocusMode];
+          Property fmProperty = Device.Properties[Conts.CONST_PROP_FocusMode];
           if (fmProperty != null)
           {
             foreach (int subTypeValue in fmProperty.SubTypeValues)
@@ -364,7 +361,7 @@ namespace CameraControl.Core.Devices.Others
 
         try
         {
-          Battery = Device.Properties[WIAManager.CONST_PROP_BatteryStatus].get_Value();
+          Battery = Device.Properties[Conts.CONST_PROP_BatteryStatus].get_Value();
         }
         catch (COMException)
         {
@@ -428,7 +425,7 @@ namespace CameraControl.Core.Devices.Others
       {
         try
         {
-          Device.Properties[WIAManager.CONST_PROP_ExposureMeteringMode].set_Value(val);
+          Device.Properties[Conts.CONST_PROP_ExposureMeteringMode].set_Value(val);
         }
         catch (Exception)
         {
@@ -443,7 +440,7 @@ namespace CameraControl.Core.Devices.Others
       {
         try
         {
-          Device.Properties[WIAManager.CONST_PROP_CompressionSetting].set_Value(val);
+          Device.Properties[Conts.CONST_PROP_CompressionSetting].set_Value(val);
         }
         catch (Exception)
         {
@@ -458,7 +455,7 @@ namespace CameraControl.Core.Devices.Others
       {
         try
         {
-          Device.Properties[WIAManager.CONST_PROP_ExposureCompensation].set_Value(val);
+          Device.Properties[Conts.CONST_PROP_ExposureCompensation].set_Value(val);
         }
         catch (Exception)
         {
@@ -494,7 +491,7 @@ namespace CameraControl.Core.Devices.Others
             FNumber.IsEnabled = false;
             break;
         }
-        Device.Properties[WIAManager.CONST_PROP_ExposureMode].set_Value(val);
+        Device.Properties[Conts.CONST_PROP_ExposureMode].set_Value(val);
       }
     }
 
@@ -504,7 +501,7 @@ namespace CameraControl.Core.Devices.Others
       {
         try
         {
-          Device.Properties[WIAManager.CONST_PROP_WhiteBalance].set_Value(val);
+          Device.Properties[Conts.CONST_PROP_WhiteBalance].set_Value(val);
         }
         catch (Exception)
         {
@@ -519,7 +516,7 @@ namespace CameraControl.Core.Devices.Others
       {
         try
         {
-          Device.Properties[WIAManager.CONST_PROP_Exposure_Time].set_Value(val);
+          Device.Properties[Conts.CONST_PROP_Exposure_Time].set_Value(val);
         }
         catch (Exception)
         {
@@ -534,7 +531,7 @@ namespace CameraControl.Core.Devices.Others
       {
         try
         {
-          Device.Properties[WIAManager.CONST_PROP_ISO_Number].set_Value(val);
+          Device.Properties[Conts.CONST_PROP_ISO_Number].set_Value(val);
         }
         catch (Exception)
         {
@@ -549,7 +546,7 @@ namespace CameraControl.Core.Devices.Others
       {
         try
         {
-          Device.Properties[WIAManager.CONST_PROP_F_Number].set_Value(val);
+          Device.Properties[Conts.CONST_PROP_F_Number].set_Value(val);
         }
         catch (Exception)
         {
