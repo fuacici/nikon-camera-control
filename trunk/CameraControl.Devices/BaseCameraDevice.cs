@@ -8,7 +8,7 @@ namespace CameraControl.Devices
   {
     #region Implementation of ICameraDevice
     protected List<CapabilityEnum> Capabilities = new List<CapabilityEnum>();
-    protected object Locker = new object(); // object used to lock multi hreaded mothods 
+    protected object Locker = new object(); // object used to lock multi threaded methods 
 
     private bool _haveLiveView;
 
@@ -250,6 +250,17 @@ namespace CameraControl.Devices
       }
     }
 
+    private uint _transferProgress;
+    public uint TransferProgress
+    {
+      get { return _transferProgress; }
+      set
+      {
+        _transferProgress = value;
+        NotifyPropertyChanged("TransferProgress");
+      }
+    }
+
     public virtual bool GetCapability(CapabilityEnum capabilityEnum)
     {
       return Capabilities.Contains(capabilityEnum);
@@ -367,8 +378,17 @@ namespace CameraControl.Devices
       }
     }
 
+    public void OnCameraDisconnected(object sender, DisconnectCameraEventArgs eventHandler)
+    {
+      if(CameraDisconnected!=null)
+      {
+        CameraDisconnected(sender, eventHandler);
+      }
+    }
+
     public virtual event PhotoCapturedEventHandler PhotoCaptured;
     public virtual event EventHandler CaptureCompleted;
+    public virtual event CameraDisconnectedEventHandler CameraDisconnected;
 
     private AsyncObservableCollection<PropertyValue<long>> _advancedProperties;
     public AsyncObservableCollection<PropertyValue<long>> AdvancedProperties
@@ -396,7 +416,7 @@ namespace CameraControl.Devices
     public BaseCameraDevice()
     {
       IsChecked = true;
-      AdvancedProperties=new AsyncObservableCollection<PropertyValue<long>>();
+      AdvancedProperties = new AsyncObservableCollection<PropertyValue<long>>();
       Capabilities = new List<CapabilityEnum>();
     }
 

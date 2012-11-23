@@ -66,6 +66,8 @@
   <ItemGroup>
     <Compile Include="BaseCameraDevice.cs" />
     <Compile Include="BaseMTPCamera.cs" />
+    <Compile Include="CameraDeviceManager.cs" />
+    <Compile Include="Canon\Canon400D.cs" />
     <Compile Include="Classes\AsyncObservableCollection.cs" />
     <Compile Include="Classes\BaseFieldClass.cs" />
     <Compile Include="Classes\CapabilityEnum.cs" />
@@ -74,6 +76,7 @@
     <Compile Include="Classes\DeviceDescriptorEnumerator.cs" />
     <Compile Include="Classes\DeviceException.cs" />
     <Compile Include="Classes\DeviceObject.cs" />
+    <Compile Include="Classes\DisconnectCameraEventArgs.cs" />
     <Compile Include="Classes\ErrorCodes.cs" />
     <Compile Include="Classes\LiveViewData.cs" />
     <Compile Include="Classes\LogEventArgs.cs" />
@@ -82,6 +85,20 @@
     <Compile Include="Classes\PropertyValue.cs" />
     <Compile Include="ICameraDevice.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="Nikon\NikonBase.cs" />
+    <Compile Include="Nikon\NikonD300.cs" />
+    <Compile Include="Nikon\NikonD3200.cs" />
+    <Compile Include="Nikon\NikonD3X.cs" />
+    <Compile Include="Nikon\NikonD4.cs" />
+    <Compile Include="Nikon\NikonD40.cs" />
+    <Compile Include="Nikon\NikonD5100.cs" />
+    <Compile Include="Nikon\NikonD60.cs" />
+    <Compile Include="Nikon\NikonD600.cs" />
+    <Compile Include="Nikon\NikonD700.cs" />
+    <Compile Include="Nikon\NikonD7000.cs" />
+    <Compile Include="Nikon\NikonD80.cs" />
+    <Compile Include="Nikon\NikonD800.cs" />
+    <Compile Include="Nikon\NikonD90.cs" />
     <Compile Include="Others\NotConnectedCameraDevice.cs" />
     <Compile Include="Others\WiaCameraDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -93,9 +110,7 @@
       <Name>PortableDeviceLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Nikon\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

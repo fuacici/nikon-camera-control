@@ -7,7 +7,7 @@ namespace CameraControl.Devices
   {
     /// <summary>
     /// If false the camera is ready to take next capture
-    /// Should set to false by the user code
+    /// Should be handled by the user code
     /// </summary>
     bool IsBusy { get; set; }
     bool HaveLiveView { get; set; }
@@ -30,6 +30,7 @@ namespace CameraControl.Devices
     string DisplayName { get; set; }
     int	ExposureStatus { get; set; }
     bool GetCapability(CapabilityEnum capabilityEnum);
+    uint TransferProgress { get; set; }
 
     int Battery { get; set; }
     PropertyValue<int> LiveViewImageZoomRatio { get; set; }
@@ -61,6 +62,7 @@ namespace CameraControl.Devices
 
     event PhotoCapturedEventHandler PhotoCaptured;
     event EventHandler CaptureCompleted;
+    event CameraDisconnectedEventHandler CameraDisconnected;
 
     AsyncObservableCollection<PropertyValue<long>> AdvancedProperties { get; set; }
     

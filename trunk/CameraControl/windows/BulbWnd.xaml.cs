@@ -4,7 +4,6 @@ using System.Timers;
 using System.Windows;
 using CameraControl.Classes;
 using CameraControl.Core;
-using CameraControl.Core.Devices;
 using CameraControl.Devices;
 
 namespace CameraControl.windows
