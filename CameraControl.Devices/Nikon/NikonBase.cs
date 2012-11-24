@@ -27,6 +27,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_CMD_SetDevicePropValue = 0x1016;
     public const int CONST_CMD_GetEvent = 0x90C7;
     public const int CONST_CMD_GetDevicePropDesc = 0x1014;
+    public const int CONST_CMD_GetObjectHandles = 0x1007;
     public const int CONST_CMD_DeviceReady = 0x90C8;
     public const int CONST_CMD_GetObjectInfo = 0x1008;
     public const int CONST_CMD_GetObject = 0x1009;
@@ -1135,8 +1136,8 @@ namespace CameraControl.Devices.Nikon
             case CONST_Event_ObsoleteEvent:
               break;
             default:
-              //Console.WriteLine("Unknow event code " + eventCode.ToString("X"));
-              Log.Debug("Unknow event code :" + eventCode.ToString("X") + "|" +
+              //Console.WriteLine("Unknown event code " + eventCode.ToString("X"));
+              Log.Debug("Unknown event code :" + eventCode.ToString("X") + "|" +
                                         longeventParam.ToString("X"));
               break;
           }
@@ -1257,6 +1258,18 @@ namespace CameraControl.Devices.Nikon
         default:
           throw new ArgumentOutOfRangeException("operationEnum");
       }
+    }
+
+    public override AsyncObservableCollection<DeviceObject> GetObjects(object storageId)
+    {
+      MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetObjectHandles, 0xFFFFFFFF);
+      if (response.Data == null)
+      {
+        Log.Debug("Get event error :" + response.ErrorCode.ToString("X"));
+        ErrorCodes.GetException(response.ErrorCode);
+      }
+
+      return base.GetObjects(storageId);
     }
   }
 }

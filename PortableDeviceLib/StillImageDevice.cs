@@ -541,6 +541,56 @@ namespace PortableDeviceLib
 
     public MTPDataResponse ExecuteReadDataEx(int code, int param1, int param2)
     {
+      IPortableDevicePropVariantCollection propVariant =
+        (IPortableDevicePropVariantCollection) new PortableDeviceTypesLib.PortableDevicePropVariantCollection();
+
+      tag_inner_PROPVARIANT vparam1 = new tag_inner_PROPVARIANT();
+      tag_inner_PROPVARIANT vparam2 = new tag_inner_PROPVARIANT();
+      if (param1 > -1)
+      {
+        UintToPropVariant((uint) param1, out vparam1);
+        propVariant.Add(ref vparam1);
+      }
+      if (param2 > -1)
+      {
+        UintToPropVariant((uint) param2, out vparam2);
+        propVariant.Add(ref vparam2);
+      }
+      return ExecuteReadData(code, propVariant);
+    }
+
+    public MTPDataResponse ExecuteReadDataEx(int code, uint param1, uint param2)
+    {
+      IPortableDevicePropVariantCollection propVariant =
+        (IPortableDevicePropVariantCollection) new PortableDeviceTypesLib.PortableDevicePropVariantCollection();
+
+      tag_inner_PROPVARIANT vparam1;
+      tag_inner_PROPVARIANT vparam2;
+     
+      UintToPropVariant(param1, out vparam1);
+      propVariant.Add(ref vparam1);
+
+      UintToPropVariant(param2, out vparam2);
+      propVariant.Add(ref vparam2);
+
+      return ExecuteReadData(code, propVariant);
+    }
+
+    public MTPDataResponse ExecuteReadDataEx(int code, uint param1)
+    {
+      IPortableDevicePropVariantCollection propVariant =
+        (IPortableDevicePropVariantCollection)new PortableDeviceTypesLib.PortableDevicePropVariantCollection();
+
+      tag_inner_PROPVARIANT vparam1;
+
+      UintToPropVariant(param1, out vparam1);
+      propVariant.Add(ref vparam1);
+
+      return ExecuteReadData(code, propVariant);
+    }
+
+    private MTPDataResponse ExecuteReadData(int code, IPortableDevicePropVariantCollection propVariant)
+    {
       MTPDataResponse resp = new MTPDataResponse();
 
       // source: http://msdn.microsoft.com/en-us/library/windows/desktop/ff384843(v=vs.85).aspx
@@ -551,8 +601,6 @@ namespace PortableDeviceLib
       IPortableDeviceValues commandValues = (IPortableDeviceValues)new PortableDeviceTypesLib.PortableDeviceValuesClass();
       IPortableDeviceValues pParameters = (IPortableDeviceValues)new PortableDeviceTypesLib.PortableDeviceValues();
 
-      IPortableDevicePropVariantCollection propVariant =
-        (IPortableDevicePropVariantCollection)new PortableDeviceTypesLib.PortableDevicePropVariantCollection();
       IPortableDeviceValues pResults;
 
       //commandValues.SetGuidValue(ref PortableDevicePKeys.WPD_PROPERTY_COMMON_COMMAND_CATEGORY, ref command.fmtid);
@@ -563,18 +611,7 @@ namespace PortableDeviceLib
       commandValues.SetBufferValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_DATA, ref imgdate[0], (uint)imgdate.Length);
 
 
-      tag_inner_PROPVARIANT vparam1 = new tag_inner_PROPVARIANT();
-      tag_inner_PROPVARIANT vparam2 = new tag_inner_PROPVARIANT();
-      if (param1 > -1)
-      {
-        UintToPropVariant((uint)param1, out vparam1);
-        propVariant.Add(ref vparam1);
-      }
-      if (param2 > -1)
-      {
-        UintToPropVariant((uint)param2, out vparam2);
-        propVariant.Add(ref vparam2);
-      }
+
       commandValues.SetIPortableDevicePropVariantCollectionValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPERATION_PARAMS, propVariant);
       commandValues.SetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPERATION_CODE, (uint) code);
 
@@ -594,11 +631,6 @@ namespace PortableDeviceLib
       catch (Exception ex)
       {
       }
-      //string pwszContext = string.Empty;
-      //pResults.GetStringValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_CONTEXT, out pwszContext);
-      //uint cbReportedDataSize = 0;
-      //pResults.GetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_TRANSFER_TOTAL_DATA_SIZE, out cbReportedDataSize);
-
 
       uint tmpBufferSize = 0;
       uint tmpTransferSize = 0;

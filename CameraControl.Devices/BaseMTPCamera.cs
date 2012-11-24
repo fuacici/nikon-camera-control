@@ -105,6 +105,31 @@ namespace CameraControl.Devices
       return res;
     }
 
+    public MTPDataResponse ExecuteReadDataEx(int code, uint param1)
+    {
+      int loop = 0;
+      int counter = 0;
+      WaitForReady();
+      DeviceIsBusy = true;
+      MTPDataResponse res = new MTPDataResponse();
+      bool allok;
+      do
+      {
+        allok = true;
+        if ((res.ErrorCode == ErrorCodes.MTP_Device_Busy || res.ErrorCode == PortableDeviceErrorCodes.ERROR_BUSY) &&
+            counter < loop)
+        {
+          Thread.Sleep(CONST_READY_TIME);
+          counter++;
+          allok = false;
+        }
+        res = StillImageDevice.ExecuteReadDataEx(code, param1);
+      } while (!allok);
+      DeviceIsBusy = false;
+      return res;
+    }
+
+
     protected void WaitForReady()
     {
       //while (DeviceIsBusy)
