@@ -10,6 +10,13 @@ using FreeImageAPI;
 
 namespace CameraControl.Core.Classes
 {
+
+  public enum FileItemType
+  {
+    File,
+    CameraObject
+  }
+
   public class FileItem:BaseFieldClass
   {
 
@@ -73,15 +80,47 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private DeviceObject _deviceObject;
+    [XmlIgnore]
+    public DeviceObject DeviceObject
+    {
+      get { return _deviceObject; }
+      set
+      {
+        _deviceObject = value;
+        NotifyPropertyChanged("DeviceObject");
+      }
+    }
+
+    private FileItemType _itemType;
+    [XmlIgnore]
+    public FileItemType ItemType
+    {
+      get { return _itemType; }
+      set
+      {
+        _itemType = value;
+        NotifyPropertyChanged("ItemType");
+      }
+    }
+
     public FileItem()
     {
       
     }
 
+    public FileItem(DeviceObject deviceObject)
+    {
+      DeviceObject = deviceObject;
+      ItemType=FileItemType.CameraObject;
+    }
+
+
     public FileItem(string file)
     {
       FileName = file;
       Name = Path.GetFileName(file);
+      ItemType = FileItemType.File;
     }
 
     private BitmapSource _thumbnail;

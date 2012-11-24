@@ -16,6 +16,7 @@ using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
 using CameraControl.Devices;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.windows
 {
@@ -35,9 +36,21 @@ namespace CameraControl.windows
       }
     }
 
+    private AsyncObservableCollection<FileItem> _items;
+    public AsyncObservableCollection<FileItem> Items
+    {
+      get { return _items; }
+      set
+      {
+        _items = value;
+        NotifyPropertyChanged("Items");
+      }
+    }
+
     public DownloadPhotosWnd()
     {
       InitializeComponent();
+      Items = new AsyncObservableCollection<FileItem>();
     }
 
     private void btn_help_Click(object sender, RoutedEventArgs e)
@@ -74,6 +87,7 @@ namespace CameraControl.windows
                                            Topmost = true;
                                            Topmost = false;
                                            Focus();
+                                           PopulateImageList();
                                          }));
           break;
         case WindowsCmdConsts.DownloadPhotosWnd_Hide:
@@ -99,5 +113,16 @@ namespace CameraControl.windows
         ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.DownloadPhotosWnd_Hide);
       }
     }
+
+    private void PopulateImageList()
+    {
+      Items.Clear();
+      var images = CameraDevice.GetObjects(null);
+      foreach (DeviceObject deviceObject in images)
+      {
+        
+      }
+    }
+
   }
 }
