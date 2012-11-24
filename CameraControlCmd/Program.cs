@@ -237,7 +237,7 @@ namespace CameraControlCmd
           fileName = Path.Combine(ServiceProvider.Settings.DefaultSession.Folder, eventArgs.FileName);
           if (File.Exists(fileName))
             fileName =
-              PhotoUtils.GetUniqueFilename(
+              StaticHelper.GetUniqueFilename(
                 Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_", 0,
                 Path.GetExtension(fileName));
         }

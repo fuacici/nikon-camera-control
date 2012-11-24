@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using CameraControl.Devices.Canon;
 using CameraControl.Devices.Classes;
+using CameraControl.Devices.Nikon;
 using CameraControl.Devices.Others;
 using PortableDeviceLib;
 using WIA;
@@ -42,31 +44,31 @@ namespace CameraControl.Devices
     {
       DeviceClass = new Dictionary<string, Type>
                       {
-                        //{"D200", typeof (NikonD40)},
-                        //{"D3S", typeof (NikonD90)},
-                        //{"D3X", typeof (NikonD3X)},
-                        //{"D300", typeof (NikonD300)},
-                        //{"D300s", typeof (NikonD300)},
-                        //{"D300S", typeof (NikonD300)},
-                        //{"D3200", typeof (NikonD3200)},
-                        //{"D4", typeof (NikonD4)},
-                        //{"D40", typeof (NikonD40)},
-                        //{"D50", typeof (NikonD40)},
-                        //{"D5100", typeof (NikonD5100)},
-                        //{"D5000", typeof (NikonD90)},
-                        //{"D60", typeof (NikonD60)},
-                        //{"D600", typeof (NikonD600)},
-                        //{"D70", typeof (NikonD40)},
-                        //{"D70s", typeof (NikonD40)},
-                        //{"D700", typeof (NikonD700)},
-                        //{"D7000", typeof (NikonD7000)},
-                        //{"D80", typeof (NikonD80)},
-                        //{"D800", typeof (NikonD800)},
-                        //{"D800E", typeof (NikonD800)},
-                        //{"D800e", typeof (NikonD800)},
-                        //{"D90", typeof (NikonD90)},
-                        //{"Canon EOS DIGITAL REBEL XTi", typeof (Canon400D)},
-                        //{"Canon EOS 400D DIGITAL", typeof (Canon400D)},
+                        {"D200", typeof (NikonD40)},
+                        {"D3S", typeof (NikonD90)},
+                        {"D3X", typeof (NikonD3X)},
+                        {"D300", typeof (NikonD300)},
+                        {"D300s", typeof (NikonD300)},
+                        {"D300S", typeof (NikonD300)},
+                        {"D3200", typeof (NikonD3200)},
+                        {"D4", typeof (NikonD4)},
+                        {"D40", typeof (NikonD40)},
+                        {"D50", typeof (NikonD40)},
+                        {"D5100", typeof (NikonD5100)},
+                        {"D5000", typeof (NikonD90)},
+                        {"D60", typeof (NikonD60)},
+                        {"D600", typeof (NikonD600)},
+                        {"D70", typeof (NikonD40)},
+                        {"D70s", typeof (NikonD40)},
+                        {"D700", typeof (NikonD700)},
+                        {"D7000", typeof (NikonD7000)},
+                        {"D80", typeof (NikonD80)},
+                        {"D800", typeof (NikonD800)},
+                        {"D800E", typeof (NikonD800)},
+                        {"D800e", typeof (NikonD800)},
+                        {"D90", typeof (NikonD90)},
+                        {"Canon EOS DIGITAL REBEL XTi", typeof (Canon400D)},
+                        {"Canon EOS 400D DIGITAL", typeof (Canon400D)},
                         // for mtp simulator
                         //{"Test Camera ", typeof (NikonBase)},
                       };

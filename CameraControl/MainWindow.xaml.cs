@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
@@ -16,9 +15,7 @@ using CameraControl.Devices.Classes;
 using CameraControl.Layouts;
 using CameraControl.Translation;
 using CameraControl.windows;
-using MahApps.Metro;
 using MahApps.Metro.Controls;
-using Application = System.Windows.Application;
 using EditSession = CameraControl.windows.EditSession;
 using HelpProvider = CameraControl.Classes.HelpProvider;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -79,7 +76,7 @@ namespace CameraControl
     {
       if(newcameraDevice==null)
         return;
-      // load session data only if not sessiom attached to the selected camera
+      // load session data only if not session attached to the selected camera
       if (newcameraDevice.AttachedPhotoSession == null)
       {
         CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(newcameraDevice);
@@ -142,7 +139,7 @@ namespace CameraControl
           fileName = Path.Combine(session.Folder, eventArgs.FileName);
           if (File.Exists(fileName))
             fileName =
-              PhotoUtils.GetUniqueFilename(
+              StaticHelper.GetUniqueFilename(
                 Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_", 0,
                 Path.GetExtension(fileName));
         }

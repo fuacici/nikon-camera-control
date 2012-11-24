@@ -110,15 +110,7 @@ namespace CameraControl.Core.Classes
       }
     }
 
-    public static string GetUniqueFilename(string prefix, int counter, string sufix)
-    {
-      string file = prefix  + counter + sufix;
-      if (File.Exists(file))
-      {
-        return GetUniqueFilename(prefix, counter + 1, sufix);
-      }
-      return file;
-    }
+
 
     public static bool CheckForUpdate()
     {
