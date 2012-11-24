@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using CameraControl.Devices.Classes;
 
 namespace CameraControl.Devices
@@ -59,5 +60,23 @@ namespace CameraControl.Devices
       }
       return ret;
     }
+
+    /// <summary>
+    /// Generate a unique file name 
+    /// </summary>
+    /// <param name="prefix">First part of file name including full path</param>
+    /// <param name="counter">The counter.</param>
+    /// <param name="sufix">The last part of file name most cases the file extension.</param>
+    /// <returns></returns>
+    public static string GetUniqueFilename(string prefix, int counter, string sufix)
+    {
+      string file = prefix + counter + sufix;
+      if (File.Exists(file))
+      {
+        return GetUniqueFilename(prefix, counter + 1, sufix);
+      }
+      return file;
+    }
+
   }
 }

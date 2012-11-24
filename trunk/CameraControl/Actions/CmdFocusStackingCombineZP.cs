@@ -104,7 +104,7 @@ namespace CameraControl.Actions
         OnProgressChange("This may take few minutes");
         _resulfile = Path.Combine(_tempdir, Path.GetFileName(_files[0].FileName) + _files.Count + "_enfuse.tif");
         _resulfile =
-          PhotoUtils.GetUniqueFilename(
+          StaticHelper.GetUniqueFilename(
             Path.GetDirectoryName(_files[0].FileName) + "\\" +
             Path.GetFileNameWithoutExtension(_files[0].FileName) + "_enfuse", 0, ".jpg");
         //_resulfile = Path.Combine(_tempdir, Path.GetFileName(_resulfile));
