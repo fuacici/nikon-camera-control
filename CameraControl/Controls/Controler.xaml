@@ -22,9 +22,11 @@
     </UserControl.Resources>-->
     <Grid >
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="115" />
             <ColumnDefinition Width="43*" />
         </Grid.ColumnDefinitions>
+        <ScrollViewer VerticalScrollBarVisibility="Visible" >
+            
         <WrapPanel  HorizontalAlignment="Left"  Name="wrapPanel1" VerticalAlignment="Top" ItemWidth="100">
             <StackPanel>
                 <my:ExposureStatusControl x:Name="exposureStatusControl1" ExposureStatus="{Binding Path=SelectedCameraDevice.ExposureStatus, Mode=TwoWay}" />
@@ -78,6 +80,7 @@
                 </Button>
             </StackPanel>
         </WrapPanel>
+        </ScrollViewer>
         <Expander Grid.Column="1"  Name="expander1" UseLayoutRounding="True" ExpandDirection="Right" IsExpanded="False" BorderThickness="0" Margin="0,0,0,3">
             <Grid>
                 <ListBox Name="listBox1" ItemsSource="{Binding Path=SelectedCameraDevice.AdvancedProperties}">
