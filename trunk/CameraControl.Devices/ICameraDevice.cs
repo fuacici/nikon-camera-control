@@ -68,5 +68,6 @@ namespace CameraControl.Devices
     
     AsyncObservableCollection<DeviceObject> GetObjects(object storageId);
     bool DeleteObject(DeviceObject deviceObject);
+
   }
 }

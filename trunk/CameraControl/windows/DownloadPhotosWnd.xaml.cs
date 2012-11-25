@@ -82,6 +82,8 @@ namespace CameraControl.windows
           Dispatcher.Invoke(new Action(delegate
                                          {
                                            CameraDevice = param as ICameraDevice;
+                                           if (param == null)
+                                             return;
                                            Show();
                                            Activate();
                                            Topmost = true;
@@ -120,7 +122,7 @@ namespace CameraControl.windows
       var images = CameraDevice.GetObjects(null);
       foreach (DeviceObject deviceObject in images)
       {
-        
+        Items.Add(new FileItem(deviceObject));
       }
     }
 

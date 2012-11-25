@@ -13,7 +13,8 @@ namespace CameraControl.Core.Classes.Queue
     {
       try
       {
-        FileItem.GetExtendedThumb();
+        if (FileItem.ItemType == FileItemType.File)
+          FileItem.GetExtendedThumb();
       }
       catch (Exception e)
       {

@@ -31,6 +31,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_CMD_DeviceReady = 0x90C8;
     public const int CONST_CMD_GetObjectInfo = 0x1008;
     public const int CONST_CMD_GetObject = 0x1009;
+    public const int CONST_CMD_GetThumb = 0x100A;
     public const int CONST_CMD_ChangeCameraMode = 0x90C2;
     public const int CONST_CMD_StartMovieRecInCard = 0x920A;
     public const int CONST_CMD_EndMovieRec = 0x920B;
@@ -431,13 +432,11 @@ namespace CameraControl.Devices.Nikon
         try
         {
           DeviceReady();
-          byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureIndex);
-          int type = BitConverter.ToInt16(result, 2);
-          byte formFlag = result[9];
-          UInt16 defval = BitConverter.ToUInt16(result, 7);
-          for (int i = 0; i < result.Length - 12; i += 2)
+          MTPDataResponse result = ExecuteReadDataEx(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureIndex);
+          UInt16 defval = BitConverter.ToUInt16(result.Data, 7);
+          for (int i = 0; i < result.Data.Length - 12; i += 2)
           {
-            UInt16 val = BitConverter.ToUInt16(result, 12 + i);
+            UInt16 val = BitConverter.ToUInt16(result.Data, 12 + i);
             IsoNumber.AddValues(_isoTable.ContainsKey(val) ? _isoTable[val] : val.ToString(), val);
           }
           IsoNumber.SetValue(defval);
@@ -684,13 +683,11 @@ namespace CameraControl.Devices.Nikon
         ExposureMeteringMode = new PropertyValue<int>();
         ExposureMeteringMode.Name = "ExposureMeteringMode";
         ExposureMeteringMode.ValueChanged += ExposureMeteringMode_ValueChanged;
-        byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureMeteringMode);
-        int type = BitConverter.ToInt16(result, 2);
-        byte formFlag = result[(2 * datasize) + 5];
-        UInt16 defval = BitConverter.ToUInt16(result, datasize + 5);
-        for (int i = 0; i < result.Length - ((2 * datasize) + 6 + 2); i += datasize)
+        MTPDataResponse result = ExecuteReadDataEx(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureMeteringMode);
+        UInt16 defval = BitConverter.ToUInt16(result.Data, datasize + 5);
+        for (int i = 0; i < result.Data.Length - ((2 * datasize) + 6 + 2); i += datasize)
         {
-          UInt16 val = BitConverter.ToUInt16(result, ((2 * datasize) + 6 + 2) + i);
+          UInt16 val = BitConverter.ToUInt16(result.Data, ((2 * datasize) + 6 + 2) + i);
           ExposureMeteringMode.AddValues(_emmTable.ContainsKey(val) ? _emmTable[val] : val.ToString(), val);
         }
         ExposureMeteringMode.SetValue(defval);
@@ -715,13 +712,13 @@ namespace CameraControl.Devices.Nikon
         FocusMode = new PropertyValue<uint>();
         FocusMode.Name = "FocusMode";
         FocusMode.IsEnabled = false;
-        byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_FocusMode);
-        int type = BitConverter.ToInt16(result, 2);
-        byte formFlag = result[(2 * datasize) + 5];
-        UInt16 defval = BitConverter.ToUInt16(result, datasize + 5);
-        for (int i = 0; i < result.Length - ((2 * datasize) + 6 + 2); i += datasize)
+        MTPDataResponse result = ExecuteReadDataEx(CONST_CMD_GetDevicePropDesc, CONST_PROP_FocusMode);
+        int type = BitConverter.ToInt16(result.Data, 2);
+        byte formFlag = result.Data[(2 * datasize) + 5];
+        UInt16 defval = BitConverter.ToUInt16(result.Data, datasize + 5);
+        for (int i = 0; i < result.Data.Length - ((2 * datasize) + 6 + 2); i += datasize)
         {
-          UInt16 val = BitConverter.ToUInt16(result, ((2 * datasize) + 6 + 2) + i);
+          UInt16 val = BitConverter.ToUInt16(result.Data, ((2 * datasize) + 6 + 2) + i);
           FocusMode.AddValues(_fmTable.ContainsKey(val) ? _fmTable[val] : val.ToString(), val);
         }
         FocusMode.SetValue(defval);
@@ -1262,14 +1259,37 @@ namespace CameraControl.Devices.Nikon
 
     public override AsyncObservableCollection<DeviceObject> GetObjects(object storageId)
     {
+      DeviceReady();
+      AsyncObservableCollection<DeviceObject> res=new AsyncObservableCollection<DeviceObject>();
       MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetObjectHandles, 0xFFFFFFFF);
       if (response.Data == null)
       {
-        Log.Debug("Get event error :" + response.ErrorCode.ToString("X"));
+        Log.Debug("Get object error :" + response.ErrorCode.ToString("X"));
         ErrorCodes.GetException(response.ErrorCode);
+        return res;
       }
-
-      return base.GetObjects(storageId);
+      int objCount = BitConverter.ToInt32(response.Data, 0);
+      for (int i = 0; i < objCount; i++)
+      {
+        DeviceObject deviceObject=new DeviceObject();
+        uint handle = BitConverter.ToUInt32(response.Data, 4 * i + 4);
+        deviceObject.Handle = handle;
+        MTPDataResponse objectdata = ExecuteReadDataEx(CONST_CMD_GetObjectInfo, handle);
+        if (objectdata.Data != null)
+        {
+          uint objFormat = BitConverter.ToUInt16(objectdata.Data, 4);
+          if (objFormat == 0x3000 || objFormat == 0x3801)
+          {
+            deviceObject.FileName = Encoding.Unicode.GetString(objectdata.Data, 53, 12*2);
+            if (deviceObject.FileName.Contains("\0"))
+              deviceObject.FileName = deviceObject.FileName.Split('\0')[0];
+            MTPDataResponse thumbdata = ExecuteReadDataEx(CONST_CMD_GetThumb, handle);
+            deviceObject.ThumbData = thumbdata.Data;
+            res.Add(deviceObject);
+          }
+        }
+      }
+      return res;
     }
   }
 }
