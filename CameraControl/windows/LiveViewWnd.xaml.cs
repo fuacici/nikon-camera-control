@@ -743,6 +743,7 @@ namespace CameraControl.windows
                                              SelectedBitmap_BitmapLoaded;
                                            Recording = false;
                                            SelectedPortableDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
+                                           selectedPortableDevice.CameraDisconnected += selectedPortableDevice_CameraDisconnected;
                                            Show();
                                            Activate();
                                            //Topmost = true;
@@ -790,6 +791,7 @@ namespace CameraControl.windows
                                            {
                                              _smoottimer.Stop();
                                              _timer.Stop();
+                                             selectedPortableDevice.CameraDisconnected -= selectedPortableDevice_CameraDisconnected;
                                              selectedPortableDevice.CaptureCompleted -=
                                                selectedPortableDevice_CaptureCompleted;
                                              ServiceProvider.Settings.SelectedBitmap.BitmapLoaded -=
@@ -883,6 +885,11 @@ namespace CameraControl.windows
           }
           break;
       }
+    }
+
+    void selectedPortableDevice_CameraDisconnected(object sender, DisconnectCameraEventArgs eventArgs)
+    {
+      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide);
     }
 
     void selectedPortableDevice_CaptureCompleted(object sender, EventArgs e)
