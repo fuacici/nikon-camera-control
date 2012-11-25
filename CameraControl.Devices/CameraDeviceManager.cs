@@ -111,7 +111,7 @@ namespace CameraControl.Devices
 
     void cameraDevice_CameraDisconnected(object sender, DisconnectCameraEventArgs e)
     {
-      if (string.IsNullOrEmpty(e.WiaId))
+      if (!string.IsNullOrEmpty(e.WiaId))
       {
         DisconnectCamera(e.WiaId);
       }
@@ -188,8 +188,8 @@ namespace CameraControl.Devices
             SelectedCameraDevice = new NotConnectedCameraDevice();
           }
         }
-        descriptor.CameraDevice.Close();
         _deviceEnumerator.Remove(descriptor);
+        descriptor.CameraDevice.Close();
       }
     }
 
@@ -212,6 +212,7 @@ namespace CameraControl.Devices
         }
         descriptor.CameraDevice.Close();
         _deviceEnumerator.Remove(descriptor);
+        _deviceEnumerator.RemoveDisconnected();
       }
     }
 

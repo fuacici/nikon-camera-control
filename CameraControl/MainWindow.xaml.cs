@@ -16,6 +16,7 @@ using CameraControl.Layouts;
 using CameraControl.Translation;
 using CameraControl.windows;
 using MahApps.Metro.Controls;
+using PortableDeviceLib;
 using EditSession = CameraControl.windows.EditSession;
 using HelpProvider = CameraControl.Classes.HelpProvider;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -148,7 +149,7 @@ namespace CameraControl
           Directory.CreateDirectory(Path.GetDirectoryName(fileName));
         }
         Log.Debug("Transfer started :" + fileName);
-        eventArgs.CameraDevice.TransferFile(eventArgs.EventArgs, fileName);
+        eventArgs.CameraDevice.TransferFile(((PortableDeviceEventArgs)eventArgs.EventArgs).EventType.ObjectHandle, fileName);
         Log.Debug("Transfer done :" + fileName);
         //select the new file only when the multiple camera support isn't used to prevent high CPU usage on raw files
         if (ServiceProvider.Settings.AutoPreview && !ServiceProvider.WindowsManager.Get(typeof(MultipleCameraWnd)).IsVisible && !ServiceProvider.Settings.UseExternalViewer)

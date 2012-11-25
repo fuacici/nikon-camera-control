@@ -10,6 +10,7 @@ using CameraControl.Core.Interfaces;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using CameraControlCmd.Classes;
+using PortableDeviceLib;
 
 namespace CameraControlCmd
 {
@@ -246,7 +247,7 @@ namespace CameraControlCmd
           Directory.CreateDirectory(Path.GetDirectoryName(fileName));
         }
         Console.WriteLine("Transfer started :" + fileName);
-        eventArgs.CameraDevice.TransferFile(eventArgs.EventArgs, fileName);
+        eventArgs.CameraDevice.TransferFile(((PortableDeviceEventArgs)eventArgs.EventArgs).EventType.ObjectHandle, fileName);
         Console.WriteLine("Transfer done :" + fileName);
         ServiceProvider.Settings.DefaultSession.AddFile(fileName);
         ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);

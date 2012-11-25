@@ -6,9 +6,6 @@
              d:DesignHeight="593" d:DesignWidth="235" BorderBrush="{x:Null}" BorderThickness="1" xmlns:my="clr-namespace:CameraControl.Controls"
              xmlns:T="clr-namespace:CameraControl.Translation"
              xmlns:Devices="clr-namespace:CameraControl.Devices;assembly=CameraControl.Devices">
-    <UserControl.DataContext>
-        <Devices:CameraDeviceManager/>
-    </UserControl.DataContext>
     <!--<UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

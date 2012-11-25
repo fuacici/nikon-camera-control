@@ -64,7 +64,7 @@
     public static string ButtonLocateLogFile = "Locate log file";
 
     public static string LabelInterfaceLanguage = "Interface language :";
-    public static string LabelDisableDriver = "Disable native drivers (not recomanded)";
+    public static string LabelDisableDriver = "Disable native drivers (not recommended)";
     public static string LabelTheme = "Theme :";
     public static string LabelGeneral = "General";
     public static string LabelPreview = "Preview";
@@ -87,7 +87,7 @@
     public static string LabelLargFocusStep = "Larg focus step";
     public static string ReStartToolTip = "You need to restart the application for this changes to take affect";
 
-    public static string LabelSessonName = "Sesson name :";
+    public static string LabelSessonName = "Session name :";
     public static string LabelFolder = "Folder :";
     public static string LabelFileNameTemplate = "File Name Template :";
     public static string LabelFileNameTemplateToolTip = "$N - Session name &#xa;$C - Counter &#xa;$E - Exposure comp &#xa;$X - Camera name&#xa;$D - Current date&#xa;$Tag1 - Selected tag 1&#xa;$Tag2 - Selected tag 2&#xa;$Tag3 - Selected tag 3&#xa;$Tag4 - Selected tag 4";
@@ -102,7 +102,7 @@
     public static string LabelGrid = "Grid";
     public static string LabelLvZoomRation = "Lv zoom ration";
     public static string LabelFocusStacking = "Focus Stacking";
-    public static string LabelNoOfPhots = "No. of phots";
+    public static string LabelNoOfPhots = "No. of photos";
     public static string LabelFocusStep = "Focus step";
     public static string LabelLuminosity = "Luminosity";
 
@@ -132,7 +132,7 @@
     public static string LabelNumberOfPhotos = "Number of photos";
     public static string LabelDontAutofocusOnEveryCapture = "Don't autofocus on every capture";
     public static string LabelCaptureInterval = "Capture interval (HH:MM:SS)";
-    public static string LabelMovieLenght = "Movie lenght (HH:MM:SS)";
+    public static string LabelMovieLenght = "Movie length (HH:MM:SS)";
     public static string LabelMovieSettings = "Movie settings";
     public static string LabelVideoFormat = "Video format";
     public static string LabelOutputFile = "Output file";
@@ -160,12 +160,12 @@
     public static string MsgBulbModeNotSupported = "Bulb mode not supported !";
     public static string MsgApplicationUpToDate = "Your application is up to date !";
     public static string MsgUseSessionEditorTags = "Use session editor to define tags !";
-    public static string MsgLastSessionCantBeDeleted = "Last sesion can't be deleted";
+    public static string MsgLastSessionCantBeDeleted = "Last session can't be deleted";
     public static string MsgStopTimeLapse = "The time lapse not finished! Do you want to stop the time lapse ?";
-    public static string MsgInstallXvidCodec = "Xvid codec not instaled !\nDo you want to download and install it ? ";
+    public static string MsgInstallXvidCodec = "Xvid codec not installed !\nDo you want to download and install it ? ";
 
     public static string MsgDeleteSessionQuestion =
-      "Do you want continue to deleting sesion {0} ?\nNo files will be deleted !";
+      "Do you want continue to deleting session {0} ?\nNo files will be deleted !";
 
     public static string MsgBracketingDone = "Bracketing done";
     public static string MsgActionInProgress = "Action in progress {0}/{1}";
@@ -245,5 +245,9 @@
     public static string LabelExport = "Export";
     // 21/11/2012
     public static string LabelDownload = "Download";
+    // 25/11/2012
+    public static string DownloadWindowTitle = "Download photos";
+    public static string LabelDeleteFilesAfterTransfer = "Delete files after transfer";
+    public static string LabelAskForDelete = "Transferred files will be deleted.\nDo you want to continue ?";
   }
 }

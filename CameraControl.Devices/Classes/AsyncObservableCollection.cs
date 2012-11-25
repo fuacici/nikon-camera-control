@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -36,7 +37,14 @@ namespace CameraControl.Devices.Classes
     private void RaiseCollectionChanged(object param)
     {
       // We are in the creator thread, call the base implementation directly
-      base.OnCollectionChanged((NotifyCollectionChangedEventArgs)param);
+      try
+      {
+        base.OnCollectionChanged((NotifyCollectionChangedEventArgs)param);
+      }
+      catch (Exception)
+      {
+      }
+
     }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
