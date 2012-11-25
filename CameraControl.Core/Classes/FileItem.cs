@@ -5,6 +5,7 @@ using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 using CameraControl.Core.Classes.Queue;
 using CameraControl.Core.Exif.EXIF;
+using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using FreeImageAPI;
 
@@ -112,7 +113,26 @@ namespace CameraControl.Core.Classes
     public FileItem(DeviceObject deviceObject)
     {
       DeviceObject = deviceObject;
-      ItemType=FileItemType.CameraObject;
+      ItemType = FileItemType.CameraObject;
+      FileName = deviceObject.FileName;
+      if (deviceObject.ThumbData != null)
+      {
+        try
+        {
+          MemoryStream stream = new MemoryStream(deviceObject.ThumbData, 0, deviceObject.ThumbData.Length);
+
+          using (var bmp = new Bitmap(stream))
+          {
+            Thumbnail = BitmapSourceConvert.ToBitmapSource(bmp);
+          }
+          stream.Close();
+        }
+        catch (Exception exception)
+        {
+          Log.Error("Error loading device thumb ", exception);
+          throw;
+        }
+      }
     }
 
 

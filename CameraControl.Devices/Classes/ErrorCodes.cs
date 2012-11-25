@@ -59,7 +59,7 @@ namespace CameraControl.Devices.Classes
           case MTP_Store_Read_Only:
             throw new DeviceException("Storage is read only.", code);
           case MTP_Not_LiveView:
-            throw new DeviceException("Not in liveview.", code);
+            throw new DeviceException("Not in live view.", code);
           case MTP_Invalid_Parameter:
             throw new DeviceException("Invalid parameter. Coding error !", code);
           case MTP_Parameter_Not_Supported:

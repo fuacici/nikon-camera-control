@@ -11,7 +11,7 @@ namespace CameraControl.Devices
     protected const int AppMinorVersionNumber = 0;
 
 
-    private const int CONST_READY_TIME = 1;
+    private const int CONST_READY_TIME = 2;
     private const int CONST_LOOP_TIME = 100;
 
     protected StillImageDevice StillImageDevice = null;
