@@ -12,7 +12,7 @@ namespace CameraControl.Devices
 
 
     private const int CONST_READY_TIME = 2;
-    private const int CONST_LOOP_TIME = 100;
+    private const int CONST_LOOP_TIME = 1000;
 
     protected StillImageDevice StillImageDevice = null;
     protected bool DeviceIsBusy = false;
@@ -107,7 +107,6 @@ namespace CameraControl.Devices
 
     public MTPDataResponse ExecuteReadDataEx(int code, uint param1)
     {
-      int loop = 0;
       int counter = 0;
       WaitForReady();
       DeviceIsBusy = true;
@@ -117,7 +116,7 @@ namespace CameraControl.Devices
       {
         allok = true;
         if ((res.ErrorCode == ErrorCodes.MTP_Device_Busy || res.ErrorCode == PortableDeviceErrorCodes.ERROR_BUSY) &&
-            counter < loop)
+            counter < CONST_LOOP_TIME)
         {
           Thread.Sleep(CONST_READY_TIME);
           counter++;

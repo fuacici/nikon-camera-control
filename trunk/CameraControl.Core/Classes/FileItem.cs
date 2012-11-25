@@ -115,6 +115,7 @@ namespace CameraControl.Core.Classes
       DeviceObject = deviceObject;
       ItemType = FileItemType.CameraObject;
       FileName = deviceObject.FileName;
+      IsChecked = true;
       if (deviceObject.ThumbData != null)
       {
         try

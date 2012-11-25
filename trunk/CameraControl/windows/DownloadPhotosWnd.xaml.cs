@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -15,8 +18,13 @@ using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
+using CameraControl.Core.Wpf;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
+using CameraControl.Translation;
+using HelpProvider = CameraControl.Classes.HelpProvider;
+using MessageBox = System.Windows.Forms.MessageBox;
+using Path = System.IO.Path;
 
 namespace CameraControl.windows
 {
@@ -25,6 +33,8 @@ namespace CameraControl.windows
   /// </summary>
   public partial class DownloadPhotosWnd : INotifyPropertyChanged, IWindow
   {
+    private ProgressWindow dlg = new ProgressWindow();
+
     private ICameraDevice _cameraDevice;
     public ICameraDevice CameraDevice
     {
@@ -81,6 +91,8 @@ namespace CameraControl.windows
         case WindowsCmdConsts.DownloadPhotosWnd_Show:
           Dispatcher.Invoke(new Action(delegate
                                          {
+                                           if (dlg.IsVisible)
+                                             return;
                                            CameraDevice = param as ICameraDevice;
                                            if (param == null)
                                              return;
@@ -126,5 +138,44 @@ namespace CameraControl.windows
       }
     }
 
+    private void btn_download_Click(object sender, RoutedEventArgs e)
+    {
+      if (chk_delete.IsChecked == true && MessageBox.Show(TranslationStrings.LabelAskForDelete, "", MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes)
+        return;
+      dlg.Show();
+      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.DownloadPhotosWnd_Hide);
+      Thread thread = new Thread(TransferFiles); 
+      thread.Start();
+    }
+
+    void TransferFiles()
+    {
+      AsyncObservableCollection<FileItem> itemstoExport = new AsyncObservableCollection<FileItem>(Items.Where(x => x.IsChecked));
+      dlg.MaxValue = itemstoExport.Count;
+      dlg.Progress = 0;
+      int i = 0;
+      PhotoSession session = (PhotoSession)CameraDevice.AttachedPhotoSession ?? ServiceProvider.Settings.DefaultSession;
+      foreach (FileItem fileItem in itemstoExport)
+      {
+        dlg.Label = fileItem.FileName;
+        dlg.ImageSource = fileItem.Thumbnail;
+        string fileName = Path.Combine(session.Folder, fileItem.FileName);
+        if (File.Exists(fileName))
+          fileName =
+            StaticHelper.GetUniqueFilename(
+              Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_", 0,
+              Path.GetExtension(fileName));
+        CameraDevice.TransferFile(fileItem.DeviceObject.Handle, fileName);
+        // double check if file was transferred
+        if(File.Exists(fileName))
+        {
+          CameraDevice.DeleteObject(fileItem.DeviceObject);
+        }
+        session.AddFile(fileName);
+        i++;
+        dlg.Progress = i;
+      }
+      dlg.Hide();
+    }
   }
 }

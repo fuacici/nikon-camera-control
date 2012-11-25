@@ -32,6 +32,7 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_CMD_GetObjectInfo = 0x1008;
     public const int CONST_CMD_GetObject = 0x1009;
     public const int CONST_CMD_GetThumb = 0x100A;
+    public const int CONST_CMD_DeleteObject = 0x100B;
     public const int CONST_CMD_ChangeCameraMode = 0x90C2;
     public const int CONST_CMD_StartMovieRecInCard = 0x920A;
     public const int CONST_CMD_EndMovieRec = 0x920B;
@@ -623,13 +624,11 @@ namespace CameraControl.Devices.Nikon
         ExposureCompensation = new PropertyValue<int>();
         ExposureCompensation.Name = "ExposureCompensation";
         ExposureCompensation.ValueChanged += ExposureCompensation_ValueChanged;
-        byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureBiasCompensation);
-        int type = BitConverter.ToInt16(result, 2);
-        byte formFlag = result[(2*datasize) + 5];
-        Int16 defval = BitConverter.ToInt16(result, datasize + 5);
-        for (int i = 0; i < result.Length - ((2*datasize) + 6 + 2); i += datasize)
+        MTPDataResponse result = ExecuteReadDataEx(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureBiasCompensation);
+        Int16 defval = BitConverter.ToInt16(result.Data, datasize + 5);
+        for (int i = 0; i < result.Data.Length - ((2*datasize) + 6 + 2); i += datasize)
         {
-          Int16 val = BitConverter.ToInt16(result, ((2*datasize) + 6 + 2) + i);
+          Int16 val = BitConverter.ToInt16(result.Data, ((2*datasize) + 6 + 2) + i);
           decimal d = val;
           string s = Decimal.Round(d/1000, 1).ToString();
           if (d > 0)
@@ -915,14 +914,14 @@ namespace CameraControl.Devices.Nikon
       {
         try
         {
-          DeviceReady();
+          //DeviceReady();
           _timer.Stop();
           StillImageDevice.Disconnect();
           HaveLiveView = false;
         }
         catch (Exception exception)
         {
-          Log.Error("Close camera",exception);
+          Log.Error("Close camera error",exception);
         }
       }
     }
@@ -1042,12 +1041,12 @@ namespace CameraControl.Devices.Nikon
       lock (Locker)
       {
         DeviceReady();
-        PortableDeviceEventArgs deviceEventArgs = o as PortableDeviceEventArgs;
-        if (deviceEventArgs != null)
-        {
+        //PortableDeviceEventArgs deviceEventArgs = o as PortableDeviceEventArgs;
+        //if (deviceEventArgs != null)
+        //{
           //_stillImageDevice.SaveFile(deviceEventArgs.EventType.DeviceObject, filename);
           StillImageDevice.ExecuteReadBigDataWriteToFile(CONST_CMD_GetObject,
-                                                               (int)deviceEventArgs.EventType.ObjectHandle, -1,
+                                                               Convert.ToInt32(o), -1,
                                                                (total, current) =>
                                                                {
                                                                  double i = (double)current / total;
@@ -1055,7 +1054,7 @@ namespace CameraControl.Devices.Nikon
                                                                    Convert.ToUInt32(i * 100);
 
                                                                },filename);
-        }
+        //}
       }
     }
 
@@ -1291,5 +1290,13 @@ namespace CameraControl.Devices.Nikon
       }
       return res;
     }
+
+    public override bool DeleteObject(DeviceObject deviceObject)
+    {
+      uint res=ExecuteWithNoData(CONST_CMD_DeleteObject,(uint)deviceObject.Handle);
+      return res == 0 || res == ErrorCodes.MTP_OK;
+    }
+
+
   }
 }
