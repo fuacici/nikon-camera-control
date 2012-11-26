@@ -63,14 +63,6 @@ namespace CameraControl.windows
       switch (cmd)
       {
         case WindowsCmdConsts.CameraPropertyWnd_Show:
-          Dispatcher.Invoke(new Action(delegate
-                                         {
-                                           Show();
-                                           Activate();
-                                           Topmost = true;
-                                           Topmost = false;
-                                           Focus();
-                                         }));
           PhotoSessionNames.Clear();
           PhotoSessionNames.Add("(None)");
           foreach (PhotoSession photoSession in ServiceProvider.Settings.PhotoSessions)
@@ -78,8 +70,18 @@ namespace CameraControl.windows
             PhotoSessionNames.Add(photoSession.Name);
           }
           _cameraDevice = param as ICameraDevice;
+          if (_cameraDevice == null)
+            return;
           CameraProperty = ServiceProvider.Settings.CameraProperties.Get(_cameraDevice);
           CameraProperty.BeginEdit();
+          Dispatcher.Invoke(new Action(delegate
+          {
+            Show();
+            Activate();
+            Topmost = true;
+            Topmost = false;
+            Focus();
+          }));
           break;
         case WindowsCmdConsts.CameraPropertyWnd_Hide:
           Hide();
