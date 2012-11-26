@@ -352,6 +352,7 @@ Tag (hex)	Tag (dec)	IFD	Key	Type	Tag description
       Metadata.Add(new DictionaryItem() {Name = "ISO speed rating"});
       Metadata.Add(new DictionaryItem() {Name = "Metering mode"});
       Metadata.Add(new DictionaryItem() {Name = "White balance"});
+      Metadata.Add(new DictionaryItem() {Name = "Exposure bias"});
     }
   }
 }

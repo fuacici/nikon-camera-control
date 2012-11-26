@@ -149,7 +149,7 @@ namespace CameraControl
           Directory.CreateDirectory(Path.GetDirectoryName(fileName));
         }
         Log.Debug("Transfer started :" + fileName);
-        eventArgs.CameraDevice.TransferFile(((PortableDeviceEventArgs)eventArgs.EventArgs).EventType.ObjectHandle, fileName);
+        eventArgs.CameraDevice.TransferFile(eventArgs.Handle, fileName);
         Log.Debug("Transfer done :" + fileName);
         //select the new file only when the multiple camera support isn't used to prevent high CPU usage on raw files
         if (ServiceProvider.Settings.AutoPreview && !ServiceProvider.WindowsManager.Get(typeof(MultipleCameraWnd)).IsVisible && !ServiceProvider.Settings.UseExternalViewer)

@@ -30,5 +30,7 @@ namespace CameraControl.Devices.Classes
 
     public ICameraDevice CameraDevice { get; set; }
     public string FileName { get; set; }
+    public object Handle { get; set; }
+
   }
 }

@@ -124,6 +124,7 @@ namespace CameraControl.Devices.Classes
       {
         if (keyValuePair.Key == o)
         {
+          _notifyValuChange = true;
           Value = keyValuePair.Key;
           return;
         }
