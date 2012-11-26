@@ -249,5 +249,8 @@
     public static string DownloadWindowTitle = "Download photos";
     public static string LabelDeleteFilesAfterTransfer = "Delete files after transfer";
     public static string LabelAskForDelete = "Transferred files will be deleted.\nDo you want to continue ?";
+    // 26/11/2012
+    public static string LabelErrorSetFocusPos = "Error set focus position";
+    public static string LabelErrorUnableFocus = "Unable focus";
   }
 }

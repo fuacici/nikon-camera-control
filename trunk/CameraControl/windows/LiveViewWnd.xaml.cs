@@ -801,6 +801,7 @@ namespace CameraControl.windows
                                              Recording = false;
                                              LockA = false;
                                              LockB = false;
+                                             LiveViewData = null;
                                            }
                                            catch (Exception exception)
                                            {
@@ -859,32 +860,41 @@ namespace CameraControl.windows
         case CmdConsts.LiveView_Focus_Move_Right:
           if (LiveViewData != null && LiveViewData.ImageData != null)
           {
-            selectedPortableDevice.Focus(LiveViewData.FocusX + ServiceProvider.Settings.FocusMoveStep,
-                                         LiveViewData.FocusY);
+            SetFocusPos(LiveViewData.FocusX + ServiceProvider.Settings.FocusMoveStep, LiveViewData.FocusY);
           }
           break;
         case CmdConsts.LiveView_Focus_Move_Left:
           if (LiveViewData != null && LiveViewData.ImageData != null)
           {
-            selectedPortableDevice.Focus(LiveViewData.FocusX - ServiceProvider.Settings.FocusMoveStep,
-                                         LiveViewData.FocusY);
+            SetFocusPos(LiveViewData.FocusX - ServiceProvider.Settings.FocusMoveStep, LiveViewData.FocusY);
           }
           break;
         case CmdConsts.LiveView_Focus_Move_Up:
           if (LiveViewData != null && LiveViewData.ImageData != null)
           {
-            selectedPortableDevice.Focus(LiveViewData.FocusX,
-                                         LiveViewData.FocusY - ServiceProvider.Settings.FocusMoveStep);
+            SetFocusPos(LiveViewData.FocusX, LiveViewData.FocusY - ServiceProvider.Settings.FocusMoveStep);
           }
           break;
         case CmdConsts.LiveView_Focus_Move_Down:
           if (LiveViewData != null && LiveViewData.ImageData != null)
           {
-            selectedPortableDevice.Focus(LiveViewData.FocusX,
-                                         LiveViewData.FocusY + ServiceProvider.Settings.FocusMoveStep);
+            SetFocusPos(LiveViewData.FocusX, LiveViewData.FocusY + ServiceProvider.Settings.FocusMoveStep);
           }
           break;
       }
+    }
+
+    private void SetFocusPos(int x, int y)
+    {
+      try
+      {
+        selectedPortableDevice.Focus(x,y);
+      }
+      catch (Exception exception)
+      {
+        Log.Error("Error set focus pos :",exception);
+        StaticHelper.Instance.SystemMessage = TranslationStrings.LabelErrorSetFocusPos;
+      }  
     }
 
     void selectedPortableDevice_CameraDisconnected(object sender, DisconnectCameraEventArgs eventArgs)
@@ -945,7 +955,12 @@ namespace CameraControl.windows
       catch (DeviceException exception)
       {
         Log.Error("Unable to focus", exception);
-        StaticHelper.Instance.SystemMessage = exception.Message;
+        StaticHelper.Instance.SystemMessage = TranslationStrings.LabelErrorUnableFocus;
+      }
+      catch (Exception exception)
+      {
+        Log.Error("Unable to focus", exception);
+        StaticHelper.Instance.SystemMessage = TranslationStrings.LabelErrorUnableFocus;
       }
       _timer.Start();
       Console.WriteLine("Focus end");

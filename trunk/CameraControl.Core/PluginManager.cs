@@ -56,46 +56,48 @@ namespace CameraControl.Core
         {
           Log.Error(string.Format(" {0} has a bad image format", pluginFile));
         }
-        if (pluginAssembly != null)
+        catch (Exception exception)
         {
-          try
+          Log.Error("Error loading plugin :", exception);
+        }
+        if (pluginAssembly == null) continue;
+        try
+        {
+          Type[] exportedTypes = pluginAssembly.GetExportedTypes();
+          foreach (var exportedType in exportedTypes)
           {
-            Type[] exportedTypes = pluginAssembly.GetExportedTypes();
-            foreach (var exportedType in exportedTypes)
+            if (exportedType.IsAbstract)
+              continue;
+            object pluginObject = null;
+            try
             {
-              if (exportedType.IsAbstract)
-                continue;
-              object pluginObject = null;
+              pluginObject = Activator.CreateInstance(exportedType); 
+            }
+            catch (Exception exception)
+            {
+              Log.Error("Error loading type " + exportedType.FullName, exception);
+            }
+            if(pluginObject!=null)
+            {
+              var plugin = pluginObject as IPlugin;
               try
               {
-                pluginObject = Activator.CreateInstance(exportedType); 
+                if(plugin !=null)
+                {
+                  plugin.Register();
+                  Plugins.Add(plugin);
+                }
               }
               catch (Exception exception)
               {
-                Log.Error("Error loading type " + exportedType.FullName, exception);
-              }
-              if(pluginObject!=null)
-              {
-                var plugin = pluginObject as IPlugin;
-                try
-                {
-                  if(plugin !=null)
-                  {
-                    plugin.Register();
-                    Plugins.Add(plugin);
-                  }
-                }
-                catch (Exception exception)
-                {
-                  Log.Error("Error registering plugiin.", exception);
-                }
+                Log.Error("Error registering plugiin.", exception);
               }
             }
           }
-          catch (Exception exception)
-          {
-            Log.Error("Error loading plugin  ", exception);
-          }
+        }
+        catch (Exception exception)
+        {
+          Log.Error("Error loading plugin  ", exception);
         }
       }
     }
