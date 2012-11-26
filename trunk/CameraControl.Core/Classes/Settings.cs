@@ -475,7 +475,7 @@ namespace CameraControl.Core.Classes
     }
 
     /// <summary>
-    /// Load files atached to a session
+    /// Load files attached to a session
     /// </summary>
     /// <param name="session"></param>
     public void LoadData(PhotoSession session)

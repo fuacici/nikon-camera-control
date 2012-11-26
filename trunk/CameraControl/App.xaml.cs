@@ -123,7 +123,8 @@ namespace CameraControl
         if (MessageBox.Show(errorMessage, "Application Error", MessageBoxButton.YesNo, MessageBoxImage.Error) ==
             MessageBoxResult.No)
         {
-          Application.Current.Shutdown();
+          if (Application.Current != null)
+            Application.Current.Shutdown();
         }
       }
     }

@@ -50,10 +50,21 @@ namespace CameraControl.Core.Classes
         {
           if(!Directory.Exists(value))
           {
-            Directory.CreateDirectory(value);
+            try
+            {
+              Directory.CreateDirectory(value);
+            }
+            catch (Exception exception)
+            {
+              string folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), Name);
+              if (value != folder)
+                value = folder;
+              Log.Error("Error creating session folder", exception);
+            }
           }
           _systemWatcher.Path = value;
           _systemWatcher.EnableRaisingEvents = true;
+          _systemWatcher.IncludeSubdirectories = true;
         }
         _folder = value;
         NotifyPropertyChanged("Folder");
