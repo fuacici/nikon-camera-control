@@ -32,16 +32,19 @@ namespace CameraControl.Core.Classes
       get { return _defaultSession; }
       set
       {
-        PhotoSession oldvalue = _defaultSession;
-        _defaultSession = value;
-        NotifyPropertyChanged("DefaultSession");
-        Thread thread = new Thread(new ThreadStart(delegate
-                                                     {
-                                                       if (SessionSelected != null)
-                                                         SessionSelected(oldvalue, value);
-                                                       LoadData(_defaultSession);
-                                                     }));
-        thread.Start();
+          if (value != null)
+          {
+              PhotoSession oldvalue = _defaultSession;
+              _defaultSession = value;
+              NotifyPropertyChanged("DefaultSession");
+              Thread thread = new Thread(new ThreadStart(delegate
+                                                           {
+                                                               if (SessionSelected != null)
+                                                                   SessionSelected(oldvalue, value);
+                                                               LoadData(_defaultSession);
+                                                           }));
+              thread.Start();
+          }
       }
     }
 
