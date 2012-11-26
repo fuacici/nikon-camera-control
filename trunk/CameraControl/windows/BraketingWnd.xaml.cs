@@ -212,11 +212,6 @@ namespace CameraControl.windows
       _photoSession.Braketing.Stop();
     }
 
-    private void button3_Click(object sender, RoutedEventArgs e)
-    {
-      HelpProvider.Run(HelpSections.Bracketig);
-    }
-
     private void TabControl_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
       if(e.AddedItems[0]==tab_exposure)

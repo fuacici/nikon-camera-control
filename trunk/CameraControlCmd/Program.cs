@@ -247,7 +247,7 @@ namespace CameraControlCmd
           Directory.CreateDirectory(Path.GetDirectoryName(fileName));
         }
         Console.WriteLine("Transfer started :" + fileName);
-        eventArgs.CameraDevice.TransferFile(((PortableDeviceEventArgs)eventArgs.EventArgs).EventType.ObjectHandle, fileName);
+        eventArgs.CameraDevice.TransferFile(eventArgs.Handle, fileName);
         Console.WriteLine("Transfer done :" + fileName);
         ServiceProvider.Settings.DefaultSession.AddFile(fileName);
         ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);

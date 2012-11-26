@@ -51,7 +51,7 @@ Lens focal length
 ISO speed rating
 Metering mode
 White balance
-
+Exposure bias
 
 Icon source : http://iconleak.com/
 

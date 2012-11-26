@@ -635,7 +635,7 @@ namespace CameraControl.Devices.Nikon
             s = "+" + s;
           ExposureCompensation.AddValues(s, val);
         }
-        ExposureCompensation.SetValue(defval);
+        ExposureCompensation.SetValue(defval, false);
       }
       catch (Exception ex)
       {
@@ -660,7 +660,7 @@ namespace CameraControl.Devices.Nikon
           byte val = result[((2*datasize) + 6 + 2) + i];
           CompressionSetting.AddValues(_csTable.ContainsKey(val) ? _csTable[val] : val.ToString(), val);
         }
-        CompressionSetting.SetValue(defval);
+        CompressionSetting.SetValue(defval, false);
       }
       catch (Exception ex)
       {
@@ -993,7 +993,7 @@ namespace CameraControl.Devices.Nikon
               break;
             case CONST_PROP_ExposureProgramMode:
               Mode.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
-                                                              CONST_PROP_ExposureProgramMode), false);
+                                                              CONST_PROP_ExposureProgramMode), true);
               break;
             case CONST_PROP_ExposureBiasCompensation:
               ExposureCompensation.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
@@ -1118,7 +1118,8 @@ namespace CameraControl.Devices.Nikon
                   WiaImageItem = null,
                   EventArgs = new PortableDeviceEventArgs(new PortableDeviceEventType() { ObjectHandle = (uint)longeventParam }),
                   CameraDevice = this,
-                  FileName = filename
+                  FileName = filename,
+                  Handle = (uint)longeventParam
                 };
                 OnPhotoCapture(this, args);
               }

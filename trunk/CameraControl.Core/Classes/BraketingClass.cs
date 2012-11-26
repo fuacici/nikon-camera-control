@@ -91,7 +91,9 @@ namespace CameraControl.Core.Classes
             try
             {
               _defec = _cameraDevice.ExposureCompensation.Value;
+              Thread.Sleep(100);
               _cameraDevice.ExposureCompensation.SetValue(ExposureValues[Index]);
+              Thread.Sleep(100);
               _cameraDevice.CapturePhoto();
               Index++;
             }
@@ -110,7 +112,9 @@ namespace CameraControl.Core.Classes
             try
             {
               _defec = _cameraDevice.ShutterSpeed.Value;
+              Thread.Sleep(100);
               _cameraDevice.ShutterSpeed.SetValue(ShutterValues[Index]);
+              Thread.Sleep(100);
               _cameraDevice.CapturePhoto();
               Index++;
             }
@@ -129,9 +133,11 @@ namespace CameraControl.Core.Classes
             try
             {
               _cameraPreset.Get(_cameraDevice);
+              Thread.Sleep(100);
               CameraPreset preset = ServiceProvider.Settings.GetPreset(PresetValues[Index]);
               if (preset != null)
                 preset.Set(_cameraDevice);
+              Thread.Sleep(100);
               _cameraDevice.CapturePhoto();
               Index++;
             }
@@ -150,6 +156,16 @@ namespace CameraControl.Core.Classes
     {
       if (!IsBusy)
         return;
+      Thread thread = new Thread(EventNextPhoto);
+      thread.Start();
+    }
+
+    private void EventNextPhoto()
+    {
+      while (_cameraDevice.IsBusy)
+      {
+
+      }
       if (PhotoCaptured != null)
         PhotoCaptured(this, new EventArgs());
       switch (Mode)
@@ -158,8 +174,7 @@ namespace CameraControl.Core.Classes
           {
             if (Index < ExposureValues.Count)
             {
-              Thread thread = new Thread(CaptureNextPhoto);
-              thread.Start();
+              CaptureNextPhoto();
             }
             else
             {
@@ -171,8 +186,7 @@ namespace CameraControl.Core.Classes
           {
             if (Index < ShutterValues.Count)
             {
-              Thread thread = new Thread(CaptureNextPhoto);
-              thread.Start();
+              CaptureNextPhoto();
             }
             else
             {
@@ -184,8 +198,7 @@ namespace CameraControl.Core.Classes
           {
             if (Index < PresetValues.Count)
             {
-              Thread thread = new Thread(CaptureNextPhoto);
-              thread.Start();
+              CaptureNextPhoto();
             }
             else
             {

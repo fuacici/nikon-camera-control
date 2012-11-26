@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Threading;
 using CameraControl.Actions;
 using CameraControl.Actions.Enfuse;
+using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
@@ -77,6 +78,10 @@ namespace CameraControl
     void WindowsManager_Event(string cmd, object o)
     {
       Log.Debug("Window command received :" + cmd);
+      if (cmd == CmdConsts.All_Close)
+      {
+        Application.Current.Shutdown();
+      }
     }
 
 

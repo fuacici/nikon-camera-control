@@ -389,7 +389,8 @@ namespace CameraControl.Devices.Others
                                         {
                                           EventArgs = imageFile,
                                           CameraDevice = this,
-                                          FileName = "00000." + imageFile.FileExtension
+                                          FileName = "00000." + imageFile.FileExtension,
+                                          Handle = imageFile
                                         };
         PhotoCaptured(this, args);
       }
