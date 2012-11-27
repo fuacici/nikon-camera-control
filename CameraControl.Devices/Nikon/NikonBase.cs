@@ -1084,6 +1084,8 @@ namespace CameraControl.Devices.Nikon
 
     private void getEvent()
     {
+      //if (IsBusy)
+      //  return;
       DeviceReady();
       MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetEvent);
 

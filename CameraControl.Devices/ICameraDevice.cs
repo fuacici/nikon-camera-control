@@ -11,6 +11,12 @@ namespace CameraControl.Devices
     /// </summary>
     bool IsBusy { get; set; }
     bool HaveLiveView { get; set; }
+    /// <summary>
+    /// Gets or sets a value indicating whether photos captured are captured in SDRam.
+    /// </summary>
+    /// <value>
+    ///   <c>true</c> if true photos are captured in SDRam; otherwise, <c>false</c> photos will be recorded in card.
+    /// </value>
     bool CaptureInSdRam { get; set; }
     PropertyValue<int> FNumber { get; set; }
     PropertyValue<int> IsoNumber { get; set; }
@@ -29,6 +35,12 @@ namespace CameraControl.Devices
     string SerialNumber { get; set; }
     string DisplayName { get; set; }
     int	ExposureStatus { get; set; }
+    
+    /// <summary>
+    /// Check is a capability is supported
+    /// </summary>
+    /// <param name="capabilityEnum">The capability enum.</param>
+    /// <returns><c>true</c> if capability supported</returns>
     bool GetCapability(CapabilityEnum capabilityEnum);
     uint TransferProgress { get; set; }
 
@@ -65,7 +77,12 @@ namespace CameraControl.Devices
     event CameraDisconnectedEventHandler CameraDisconnected;
 
     AsyncObservableCollection<PropertyValue<long>> AdvancedProperties { get; set; }
-    
+
+    /// <summary>
+    /// Gets files stored in card.
+    /// </summary>
+    /// <param name="storageId">The storage id.</param>
+    /// <returns></returns>
     AsyncObservableCollection<DeviceObject> GetObjects(object storageId);
     bool DeleteObject(DeviceObject deviceObject);
 

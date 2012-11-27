@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using CameraControl.Devices.Canon;
 using CameraControl.Devices.Classes;
@@ -18,9 +20,23 @@ namespace CameraControl.Devices
     private DeviceDescriptorEnumerator _deviceEnumerator;
 
 
+    /// <summary>
+    /// Gets or sets the natively supported model dictionary.
+    /// This property is used to fine the right driver for connected camera, 
+    /// if model not found in this dictionary generic wia driver will used.
+    /// </summary>
+    /// <value>
+    /// The device class.
+    /// </value>
     public Dictionary<string, Type> DeviceClass { get; set; }
 
     private ICameraDevice _selectedCameraDevice;
+    /// <summary>
+    /// Gets or sets the default selected camera device. When new camera connected this property set automatically to new device
+    /// </summary>
+    /// <value>
+    /// The selected camera device.
+    /// </value>
     public ICameraDevice SelectedCameraDevice
     {
       get { return _selectedCameraDevice; }
@@ -67,6 +83,7 @@ namespace CameraControl.Devices
                         {"D800E", typeof (NikonD800)},
                         {"D800e", typeof (NikonD800)},
                         {"D90", typeof (NikonD90)},
+                        {"D.*", typeof (NikonBase)},
                         {"Canon EOS DIGITAL REBEL XTi", typeof (Canon400D)},
                         {"Canon EOS 400D DIGITAL", typeof (Canon400D)},
                         // for mtp simulator
@@ -82,8 +99,9 @@ namespace CameraControl.Devices
       WiaDeviceManager.OnEvent += DeviceManager_OnEvent;
     }
 
-    public ICameraDevice GetWiaIDevice(IDeviceInfo devInfo)
+    private ICameraDevice GetWiaIDevice(IDeviceInfo devInfo)
     {
+      // if camera already is connected do nothing
       if (_deviceEnumerator.GetByWiaId(devInfo.DeviceID) != null)
         return _deviceEnumerator.GetByWiaId(devInfo.DeviceID).CameraDevice;
       _deviceEnumerator.RemoveDisconnected();
@@ -111,14 +129,21 @@ namespace CameraControl.Devices
 
     void cameraDevice_CameraDisconnected(object sender, DisconnectCameraEventArgs e)
     {
-      if (!string.IsNullOrEmpty(e.WiaId))
-      {
-        DisconnectCamera(e.WiaId);
-      }
-      else
+      if (e.StillImageDevice != null)
       {
         DisconnectCamera(e.StillImageDevice);
       }
+      OnCameraDisconnected((ICameraDevice)sender);
+    }
+
+    /// <summary>
+    /// Raise CameraDisconnected event.
+    /// </summary>
+    /// <param name="cameraDevice">The camera device.</param>
+    public void OnCameraDisconnected(ICameraDevice cameraDevice)
+    {
+      if (CameraDisconnected != null)
+        CameraDisconnected(cameraDevice);
     }
 
     void cameraDevice_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
@@ -127,7 +152,7 @@ namespace CameraControl.Devices
         PhotoCaptured(sender, eventArgs);
     }
 
-    public void ConnectDevices()
+    private void ConnectDevices()
     {
       if (PortableDeviceCollection.Instance == null)
       {
@@ -143,11 +168,11 @@ namespace CameraControl.Devices
         if (!portableDevice.DeviceId.StartsWith("\\\\?\\usb") && !portableDevice.DeviceId.StartsWith("\\\\?\\comp"))
           continue;
         portableDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
-        if (_deviceEnumerator.GetByWpdId(portableDevice.DeviceId) == null && DeviceClass.ContainsKey(portableDevice.Model))
+        if (_deviceEnumerator.GetByWpdId(portableDevice.DeviceId) == null && GetNativeDriver(portableDevice.Model)!=null)
         {
           ICameraDevice cameraDevice;
           DeviceDescriptor descriptor = new DeviceDescriptor { WpdId = portableDevice.DeviceId };
-          cameraDevice = (ICameraDevice)Activator.CreateInstance(DeviceClass[portableDevice.Model]);
+          cameraDevice = (ICameraDevice)Activator.CreateInstance(GetNativeDriver(portableDevice.Model));
           cameraDevice.SerialNumber = StaticHelper.GetSerial(portableDevice.DeviceId);
           cameraDevice.Init(descriptor);
           descriptor.CameraDevice = cameraDevice;
@@ -167,8 +192,17 @@ namespace CameraControl.Devices
       }
     }
 
+    /// <summary>
+    /// Gets the native driver.
+    /// </summary>
+    /// <param name="model">The model name.</param>
+    /// <returns>If the model not supported return null else the driver type</returns>
+    private Type GetNativeDriver(string model)
+    {
+      return (from keyValuePair in DeviceClass let regex = new Regex(keyValuePair.Key) where regex.IsMatch(model) select keyValuePair.Value).FirstOrDefault();
+    }
 
-    public void DisconnectCamera(string wiaId)
+    private void DisconnectCamera(string wiaId)
     {
       DeviceDescriptor descriptor = _deviceEnumerator.GetByWiaId(wiaId);
       if (descriptor != null)
@@ -190,10 +224,16 @@ namespace CameraControl.Devices
         }
         _deviceEnumerator.Remove(descriptor);
         descriptor.CameraDevice.Close();
+        var wiaCameraDevice = descriptor.CameraDevice as WiaCameraDevice;
+        if (wiaCameraDevice != null)
+        {
+          OnCameraDisconnected(wiaCameraDevice);
+        }
+        PortableDeviceCollection.Instance.RefreshDevices();
       }
     }
 
-    public void DisconnectCamera(StillImageDevice device)
+    private void DisconnectCamera(StillImageDevice device)
     {
       DeviceDescriptor descriptor = _deviceEnumerator.GetByWpdId(device.DeviceId);
       if (descriptor != null)
@@ -217,7 +257,7 @@ namespace CameraControl.Devices
     }
 
 
-    public DeviceManager WiaDeviceManager { get; set; }
+    private DeviceManager WiaDeviceManager { get; set; }
 
     /// <summary>
     /// Gets or sets a value for disabling native drivers.
@@ -241,6 +281,10 @@ namespace CameraControl.Devices
     }
 
 
+    /// <summary>
+    /// Populate the ConnectedDevices list with connected cameras. This method will be called automatically every time new devices will be connected 
+    /// </summary>
+    /// <returns></returns>
     public bool ConnectToCamera()
     {
       return ConnectToCamera(true);
@@ -262,7 +306,7 @@ namespace CameraControl.Devices
       {
         // Look for CameraDeviceType devices
         string model = devInfo.Properties["Name"].get_Value();
-        if (devInfo.Type == WiaDeviceType.CameraDeviceType && (!DeviceClass.ContainsKey(model) || DisableNativeDrivers))
+        if (devInfo.Type == WiaDeviceType.CameraDeviceType && (GetNativeDriver(model)==null || DisableNativeDrivers))
         {
           do
           {
@@ -297,10 +341,21 @@ namespace CameraControl.Devices
     public event PhotoCapturedEventHandler PhotoCaptured;
 
     public delegate void CameraConnectedEventHandler(ICameraDevice cameraDevice);
+    /// <summary>
+    /// Occurs when a new camera is connected.
+    /// </summary>
     public event CameraConnectedEventHandler CameraConnected;
+
+    /// <summary>
+    /// Occurs when a camera disconnected.
+    /// </summary>
+    public event CameraConnectedEventHandler CameraDisconnected;
 
     public delegate void CameraSelectedEventHandler(ICameraDevice oldcameraDevice, ICameraDevice newcameraDevice);
 
+    /// <summary>
+    /// Occurs when SelectedCameraDevice property changed.
+    /// </summary>
     public event CameraSelectedEventHandler CameraSelected;
   }
 }

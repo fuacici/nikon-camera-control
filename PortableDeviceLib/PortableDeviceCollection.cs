@@ -175,15 +175,23 @@ namespace PortableDeviceLib
 
         public void RefreshDevices()
         {
-            this.deviceManager.RefreshDeviceList();
-            uint _countDevices = 1;
-            this.deviceManager.GetDevices(null, ref _countDevices);
-            string[] devicesIds = new string[_countDevices];
-            this.deviceManager.GetDevices(devicesIds, ref _countDevices);
-            this.countDevices = _countDevices;
+          this.deviceManager.RefreshDeviceList();
+          uint _countDevices = 1;
+          this.deviceManager.GetDevices(null, ref _countDevices);
+          string[] devicesIds = new string[_countDevices];
+          this.deviceManager.GetDevices(devicesIds, ref _countDevices);
+          this.countDevices = _countDevices;
+          List<string> removedDevices =
+            (from portableDevice in portableDevices
+             where devicesIds.Contains(portableDevice.Key)
+             select portableDevice.Key).ToList();
+          foreach (string removedDevice in removedDevices)
+          {
+            RemoveDevice(removedDevice);
+          }
         }
 
-        private string[] InternalGetDeviceIds()
+      private string[] InternalGetDeviceIds()
         {
             RefreshDevices();
             if (this.countDevices <= 0)

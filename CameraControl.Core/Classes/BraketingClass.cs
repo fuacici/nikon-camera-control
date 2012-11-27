@@ -164,7 +164,7 @@ namespace CameraControl.Core.Classes
     {
       while (_cameraDevice.IsBusy)
       {
-
+        Thread.Sleep(1);
       }
       if (PhotoCaptured != null)
         PhotoCaptured(this, new EventArgs());
