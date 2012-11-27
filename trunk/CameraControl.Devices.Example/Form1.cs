@@ -24,22 +24,30 @@ namespace CameraControl.Devices.Example
       DeviceManager.CameraSelected += DeviceManager_CameraSelected;
       DeviceManager.CameraConnected += DeviceManager_CameraConnected;
       DeviceManager.PhotoCaptured += DeviceManager_PhotoCaptured;
+      DeviceManager.CameraDisconnected += DeviceManager_CameraDisconnected;
       FolderForPhotos = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Test");
       InitializeComponent();
     }
 
-
     private void RefreshDisplay()
     {
-      cmb_cameras.BeginUpdate();
-      cmb_cameras.Items.Clear();
-      foreach (ICameraDevice cameraDevice in DeviceManager.ConnectedDevices)
+      MethodInvoker method = delegate
       {
-        cmb_cameras.Items.Add(cameraDevice);
-      }
-      cmb_cameras.DisplayMember = "DeviceName";
-      cmb_cameras.SelectedItem = DeviceManager.SelectedCameraDevice;
-      cmb_cameras.EndUpdate();
+        cmb_cameras.BeginUpdate();
+        cmb_cameras.Items.Clear();
+        foreach (ICameraDevice cameraDevice in DeviceManager.ConnectedDevices)
+        {
+          cmb_cameras.Items.Add(cameraDevice);
+        }
+        cmb_cameras.DisplayMember = "DeviceName";
+        cmb_cameras.SelectedItem = DeviceManager.SelectedCameraDevice;
+        cmb_cameras.EndUpdate();
+      };
+
+      if (InvokeRequired)
+        BeginInvoke(method);
+      else
+        method.Invoke();
     }
 
     private void PhotoCaptured(object o)
@@ -57,13 +65,14 @@ namespace CameraControl.Devices.Example
             StaticHelper.GetUniqueFilename(
               Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_", 0,
               Path.GetExtension(fileName));
+
         // check the folder of filename, if not found create it
         if (!Directory.Exists(Path.GetDirectoryName(fileName)))
         {
           Directory.CreateDirectory(Path.GetDirectoryName(fileName));
         }
-        eventArgs.CameraDevice.TransferFile(eventArgs.EventArgs, fileName);
-        // the IsBusy isn't used in code but can be useful to check if camera is in a capture process or not 
+        eventArgs.CameraDevice.TransferFile(eventArgs.Handle, fileName);
+        // the IsBusy may used internally, if file transfer is done should set to false  
         eventArgs.CameraDevice.IsBusy = false;
         img_photo.ImageLocation = fileName;
       }
@@ -74,6 +83,10 @@ namespace CameraControl.Devices.Example
       }
     }
 
+    void DeviceManager_CameraDisconnected(ICameraDevice cameraDevice)
+    {
+      RefreshDisplay();
+    }
 
     void DeviceManager_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
     {
@@ -99,7 +112,15 @@ namespace CameraControl.Devices.Example
 
     private void btn_capture_Click(object sender, EventArgs e)
     {
-      DeviceManager.SelectedCameraDevice.CapturePhoto();
+      try
+      {
+        DeviceManager.SelectedCameraDevice.CapturePhoto();
+      }
+      catch (DeviceException exception)
+      {
+        MessageBox.Show("Error occurred :"+exception.Message); 
+      }
+
     }
 
     private void cmb_cameras_SelectedIndexChanged(object sender, EventArgs e)
