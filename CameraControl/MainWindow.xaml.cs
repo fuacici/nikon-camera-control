@@ -103,8 +103,9 @@ namespace CameraControl
 
     void DeviceManager_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
     {
-      Thread thread = new Thread(PhotoCaptured);
-      thread.Start(eventArgs);
+      //Thread thread = new Thread(PhotoCaptured);
+      //thread.Start(eventArgs);
+      PhotoCaptured(eventArgs);
     }
 
     private void CheckForUpdate()
@@ -160,7 +161,7 @@ namespace CameraControl
         {
           session.AddFile(fileName);
         }
-        ServiceProvider.Settings.Save(session);
+        //ServiceProvider.Settings.Save(session);
         StaticHelper.Instance.SystemMessage = TranslationStrings.MsgPhotoTransferDone;
         eventArgs.CameraDevice.IsBusy = false;
         //show fullscreen only when the multiple camera support isn't used

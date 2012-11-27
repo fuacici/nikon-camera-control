@@ -227,7 +227,8 @@ namespace CameraControl.Devices.Nikon
       {
         lock (Locker)
         {
-          getEvent();
+          Thread thread = new Thread(getEvent);
+          thread.Start();
         }
       }
       catch (Exception)
@@ -235,7 +236,7 @@ namespace CameraControl.Devices.Nikon
         
         
       }
-      _timer.Start();
+      //_timer.Start();
     }
 
 
@@ -266,8 +267,8 @@ namespace CameraControl.Devices.Nikon
       IsConnected = true;
       PropertyChanged += NikonBase_PropertyChanged;
       CaptureInSdRam = true;
-      _timer.Start();
       AddAditionalProps();
+      _timer.Start();
       return true;
     }
 
@@ -377,7 +378,8 @@ namespace CameraControl.Devices.Nikon
       }
       else
       {
-        getEvent();
+        Thread thread = new Thread(getEvent);
+        thread.Start();
       }
     }
 
@@ -756,6 +758,7 @@ namespace CameraControl.Devices.Nikon
 
     public override LiveViewData GetLiveViewImage()
     {
+      _timer.Stop();
       LiveViewData viewData = new LiveViewData();
       if (Monitor.TryEnter(Locker,10))
       {
@@ -768,7 +771,10 @@ namespace CameraControl.Devices.Nikon
 
           byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetLiveViewImage);
           if (result == null || result.Length <= headerSize)
+          {
+            _timer.Start();
             return null;
+          }
           int cbBytesRead = result.Length;
           GetAditionalLIveViewData(viewData, result);
           viewData.ImagePosition = 384;
@@ -779,6 +785,7 @@ namespace CameraControl.Devices.Nikon
           Monitor.Exit(Locker);
         }
       }
+      _timer.Start();
       return viewData;
     }
 
@@ -1045,6 +1052,7 @@ namespace CameraControl.Devices.Nikon
         //if (deviceEventArgs != null)
         //{
           //_stillImageDevice.SaveFile(deviceEventArgs.EventType.DeviceObject, filename);
+        _timer.Stop();
           StillImageDevice.ExecuteReadBigDataWriteToFile(CONST_CMD_GetObject,
                                                                Convert.ToInt32(o), -1,
                                                                (total, current) =>
@@ -1054,6 +1062,7 @@ namespace CameraControl.Devices.Nikon
                                                                    Convert.ToUInt32(i * 100);
 
                                                                },filename);
+        _timer.Start();
         //}
       }
     }
@@ -1084,63 +1093,84 @@ namespace CameraControl.Devices.Nikon
 
     private void getEvent()
     {
-      //if (IsBusy)
-      //  return;
-      DeviceReady();
-      MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetEvent);
+      try
+      {
+        //if (IsBusy)
+        //  return;
+        DeviceReady();
+        MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetEvent);
 
-      if (response.Data == null)
-      {
-        Log.Debug("Get event error :" + response.ErrorCode.ToString("X"));
-        return;
-      }
-      int eventCount = BitConverter.ToInt16(response.Data, 0);
-      if (eventCount > 0)
-      {
-        for (int i = 0; i < eventCount; i++)
+        if (response.Data == null)
         {
-          DeviceReady();
-          uint eventCode = BitConverter.ToUInt16(response.Data, 6 * i + 2);
-          ushort eventParam = BitConverter.ToUInt16(response.Data, 6 * i + 4);
-          int longeventParam = BitConverter.ToInt32(response.Data, 6 * i + 4);
-          switch (eventCode)
+          Log.Debug("Get event error :" + response.ErrorCode.ToString("X"));
+          return;
+        }
+        int eventCount = BitConverter.ToInt16(response.Data, 0);
+        if (eventCount > 0)
+        {
+          for (int i = 0; i < eventCount; i++)
           {
-            case CONST_Event_DevicePropChanged:
-              ReadDeviceProperties(eventParam);
-              break;
-            case CONST_Event_ObjectAddedInSdram:
-            case CONST_Event_ObjectAdded:
-              {
-                byte[] objectdata = StillImageDevice.ExecuteReadData(CONST_CMD_GetObjectInfo, longeventParam);
-                string filename = Encoding.Unicode.GetString(objectdata, 53, 12*2);
-                if (filename.Contains("\0"))
-                  filename = filename.Split('\0')[0];
-                PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
+            //DeviceReady();
+            uint eventCode = BitConverter.ToUInt16(response.Data, 6*i + 2);
+            ushort eventParam = BitConverter.ToUInt16(response.Data, 6*i + 4);
+            int longeventParam = BitConverter.ToInt32(response.Data, 6*i + 4);
+            switch (eventCode)
+            {
+              case CONST_Event_DevicePropChanged:
+                ReadDeviceProperties(eventParam);
+                break;
+              case CONST_Event_ObjectAddedInSdram:
+              case CONST_Event_ObjectAdded:
                 {
-                  WiaImageItem = null,
-                  EventArgs = new PortableDeviceEventArgs(new PortableDeviceEventType() { ObjectHandle = (uint)longeventParam }),
-                  CameraDevice = this,
-                  FileName = filename,
-                  Handle = (uint)longeventParam
-                };
-                OnPhotoCapture(this, args);
-              }
-              break;
-            case CONST_Event_CaptureComplete:
-            case CONST_Event_CaptureCompleteRecInSdram:
-              {
-                OnCaptureCompleted(this, new EventArgs());
-              }
-              break;
-            case CONST_Event_ObsoleteEvent:
-              break;
-            default:
-              //Console.WriteLine("Unknown event code " + eventCode.ToString("X"));
-              Log.Debug("Unknown event code :" + eventCode.ToString("X") + "|" +
-                                        longeventParam.ToString("X"));
-              break;
+                  MTPDataResponse objectdata = ExecuteReadDataEx(CONST_CMD_GetObjectInfo, (uint) longeventParam);
+                  string filename = "DSC_0000.JPG";
+                  if (objectdata.Data != null)
+                  {
+                    filename = Encoding.Unicode.GetString(objectdata.Data, 53, 12*2);
+                    if (filename.Contains("\0"))
+                      filename = filename.Split('\0')[0];
+                  }
+                  else
+                  {
+                    Log.Error("Error getting file name");
+                  }
+                  PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
+                                                  {
+                                                    WiaImageItem = null,
+                                                    EventArgs =
+                                                      new PortableDeviceEventArgs(new PortableDeviceEventType()
+                                                                                    {
+                                                                                      ObjectHandle =
+                                                                                        (uint) longeventParam
+                                                                                    }),
+                                                    CameraDevice = this,
+                                                    FileName = filename,
+                                                    Handle = (uint) longeventParam
+                                                  };
+                  OnPhotoCapture(this, args);
+                }
+                break;
+              case CONST_Event_CaptureComplete:
+              case CONST_Event_CaptureCompleteRecInSdram:
+                {
+                  OnCaptureCompleted(this, new EventArgs());
+                }
+                break;
+              case CONST_Event_ObsoleteEvent:
+                break;
+              default:
+                //Console.WriteLine("Unknown event code " + eventCode.ToString("X"));
+                Log.Debug("Unknown event code :" + eventCode.ToString("X") + "|" +
+                          longeventParam.ToString("X"));
+                break;
+            }
           }
         }
+
+      }
+      finally
+      {
+        _timer.Start();
       }
     }
 
@@ -1174,6 +1204,7 @@ namespace CameraControl.Devices.Nikon
 
     protected void SetProperty(int code, byte[] data, int param1, int param2)
     {
+      _timer.Stop();
       bool retry = false;
       int retrynum = 0;
       DeviceReady();
@@ -1207,6 +1238,7 @@ namespace CameraControl.Devices.Nikon
           Log.Error("Error set property :" + param1.ToString("X"), exception);
         }
       } while (retry);
+      _timer.Start();
     }
 
     public override string GetProhibitionCondition(OperationEnum operationEnum)

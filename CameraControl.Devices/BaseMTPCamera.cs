@@ -11,8 +11,8 @@ namespace CameraControl.Devices
     protected const int AppMinorVersionNumber = 0;
 
 
-    private const int CONST_READY_TIME = 2;
-    private const int CONST_LOOP_TIME = 1000;
+    private const int CONST_READY_TIME = 1;
+    private const int CONST_LOOP_TIME = 100;
 
     protected StillImageDevice StillImageDevice = null;
     protected bool DeviceIsBusy = false;
@@ -92,6 +92,7 @@ namespace CameraControl.Devices
       do
       {
         allok = true;
+        res = StillImageDevice.ExecuteReadDataEx(code, param1, param2);
         if ((res.ErrorCode == ErrorCodes.MTP_Device_Busy || res.ErrorCode == PortableDeviceErrorCodes.ERROR_BUSY) &&
             counter < loop)
         {
@@ -99,7 +100,6 @@ namespace CameraControl.Devices
           counter++;
           allok = false;
         }
-        res = StillImageDevice.ExecuteReadDataEx(code, param1, param2);
       } while (!allok);
       DeviceIsBusy = false;
       return res;
@@ -114,6 +114,7 @@ namespace CameraControl.Devices
       bool allok;
       do
       {
+        res = StillImageDevice.ExecuteReadDataEx(code, param1);
         allok = true;
         if ((res.ErrorCode == ErrorCodes.MTP_Device_Busy || res.ErrorCode == PortableDeviceErrorCodes.ERROR_BUSY) &&
             counter < CONST_LOOP_TIME)
@@ -122,7 +123,6 @@ namespace CameraControl.Devices
           counter++;
           allok = false;
         }
-        res = StillImageDevice.ExecuteReadDataEx(code, param1);
       } while (!allok);
       DeviceIsBusy = false;
       return res;
