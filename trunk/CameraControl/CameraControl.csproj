@@ -74,6 +74,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\refs\FreeImageNET.dll</HintPath>
     </Reference>
+    <Reference Include="Gma.QrCodeNet.Encoding">
+      <HintPath>..\refs\Gma.QrCodeNet.Encoding.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\DotNetZip.1.9.1.8\lib\net20\Ionic.Zip.dll</HintPath>
     </Reference>
