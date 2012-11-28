@@ -80,6 +80,7 @@ namespace CameraControl
       Log.Debug("Window command received :" + cmd);
       if (cmd == CmdConsts.All_Close)
       {
+        ServiceProvider.DeviceManager.CloseAll();
         Application.Current.Shutdown();
       }
     }

@@ -207,7 +207,7 @@ namespace PortableDeviceLib
           // check if the device is busy, and after 100 ms seconds try again 
           if (((uint)pValue) == PortableDeviceErrorCodes.ERROR_BUSY)
           {
-            Thread.Sleep(100);
+            Thread.Sleep(50);
             return ExecuteReadBigData(code, param1, param2, callback);
           }
         }
@@ -299,10 +299,13 @@ namespace PortableDeviceLib
 
         IntPtr tmpPtr = new IntPtr(Marshal.ReadInt64(ptr));
 
-        for (int i = 0; i < cbBytesRead; i++)
-        {
-          res[offset + i] = Marshal.ReadByte(tmpPtr, i);
-        }
+        Marshal.Copy(tmpPtr, res, (int)offset, (int)cbBytesRead);
+
+        //for (int i = 0; i < cbBytesRead; i++)
+        //{
+        //  res[offset + i] = Marshal.ReadByte(tmpPtr, i);
+        //}
+
         Marshal.FreeHGlobal(tmpPtr);
         pinnedArray.Free();
 

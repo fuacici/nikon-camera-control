@@ -1,19 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
@@ -33,6 +24,7 @@ namespace CameraControl.windows
   /// </summary>
   public partial class DownloadPhotosWnd : INotifyPropertyChanged, IWindow
   {
+    private bool delete;
     private ProgressWindow dlg = new ProgressWindow();
 
     private ICameraDevice _cameraDevice;
@@ -131,10 +123,18 @@ namespace CameraControl.windows
     private void PopulateImageList()
     {
       Items.Clear();
-      var images = CameraDevice.GetObjects(null);
-      foreach (DeviceObject deviceObject in images)
+      try
       {
-        Items.Add(new FileItem(deviceObject));
+        var images = CameraDevice.GetObjects(null);
+        foreach (DeviceObject deviceObject in images)
+        {
+          Items.Add(new FileItem(deviceObject));
+        }
+      }
+      catch (Exception exception)
+      {
+        MessageBox.Show(TranslationStrings.LabelErrorLoadingFileList);
+        Log.Error("Error loading file list", exception);
       }
     }
 
@@ -143,6 +143,7 @@ namespace CameraControl.windows
       if (chk_delete.IsChecked == true && MessageBox.Show(TranslationStrings.LabelAskForDelete, "", MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes)
         return;
       dlg.Show();
+      delete = chk_delete.IsChecked == true;
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.DownloadPhotosWnd_Hide);
       Thread thread = new Thread(TransferFiles); 
       thread.Start();
@@ -150,6 +151,8 @@ namespace CameraControl.windows
 
     void TransferFiles()
     {
+      DateTime starttime = DateTime.Now;
+      long totalbytes = 0;
       AsyncObservableCollection<FileItem> itemstoExport = new AsyncObservableCollection<FileItem>(Items.Where(x => x.IsChecked));
       dlg.MaxValue = itemstoExport.Count;
       dlg.Progress = 0;
@@ -167,15 +170,19 @@ namespace CameraControl.windows
               Path.GetExtension(fileName));
         CameraDevice.TransferFile(fileItem.DeviceObject.Handle, fileName);
         // double check if file was transferred
-        if(File.Exists(fileName))
+        if (File.Exists(fileName) && delete)
         {
           CameraDevice.DeleteObject(fileItem.DeviceObject);
         }
+        totalbytes += new FileInfo(fileName).Length;
         session.AddFile(fileName);
         i++;
         dlg.Progress = i;
       }
       dlg.Hide();
+      double transfersec = (DateTime.Now - starttime).TotalSeconds;
+      Log.Debug(string.Format("[BENCHMARK]Total byte transferred ;{0}\nTotal seconds :{1}\nSpeed : {2} Mbyte/sec ", totalbytes,
+                                    transfersec, (totalbytes/transfersec/1024/1024).ToString("0000.00")));
     }
   }
 }

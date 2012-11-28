@@ -338,6 +338,14 @@ namespace CameraControl.Devices
       return ret;
     }
 
+    public void CloseAll()
+    {
+      foreach (ICameraDevice connectedDevice in ConnectedDevices.Where(connectedDevice => connectedDevice.IsConnected))
+      {
+        connectedDevice.Close();
+      }
+    }
+
     public event PhotoCapturedEventHandler PhotoCaptured;
 
     public delegate void CameraConnectedEventHandler(ICameraDevice cameraDevice);
