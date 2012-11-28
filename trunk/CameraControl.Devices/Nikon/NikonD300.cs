@@ -3,14 +3,15 @@ using PortableDeviceLib;
 
 namespace CameraControl.Devices.Nikon
 {
-  
   public class NikonD300 : NikonD3X
   {
+    public const int CONST_PROP_LiveViewMode = 0xD1A0;
 
     public override void StartLiveView()
     {
       if (!CaptureInSdRam)
         SetProperty(CONST_CMD_SetDevicePropValue, new[] {(byte) 1}, CONST_PROP_RecordingMedia, -1);
+      SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)1 }, CONST_PROP_LiveViewMode, -1);
       base.StartLiveView();
     }
 

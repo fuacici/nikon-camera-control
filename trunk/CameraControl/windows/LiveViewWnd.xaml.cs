@@ -57,7 +57,7 @@ namespace CameraControl.windows
     private int _smootstepdirection = 1;
     private MotionDetector _detector;
     private DateTime _photoCapturedTime;
-    private DateTime _focusMoveTime=DateTime.Now;
+    private DateTime _focusMoveTime = DateTime.Now;
 
     public LiveViewData LiveViewData { get; set; }
 
@@ -77,6 +77,7 @@ namespace CameraControl.windows
     }
 
     private int _fps;
+
     public int Fps
     {
       get { return _fps; }
@@ -89,6 +90,7 @@ namespace CameraControl.windows
 
 
     private bool _blackAndWhite;
+
     public bool BlackAndWhite
     {
       get { return _blackAndWhite; }
@@ -131,6 +133,7 @@ namespace CameraControl.windows
     }
 
     private int _waitTime;
+
     public int WaitTime
     {
       get { return _waitTime; }
@@ -150,7 +153,7 @@ namespace CameraControl.windows
       {
         _focusStep = value;
         NotifyPropertyChanged("FocusStep");
-        PhotoNo = FocusValue / FocusStep;
+        PhotoNo = FocusValue/FocusStep;
       }
     }
 
@@ -209,7 +212,7 @@ namespace CameraControl.windows
       set
       {
         _focusValue = value;
-        PhotoNo = FocusValue / FocusStep;
+        PhotoNo = FocusValue/FocusStep;
         NotifyPropertyChanged("FocusValue");
         NotifyPropertyChanged("CounterMessage");
       }
@@ -269,6 +272,7 @@ namespace CameraControl.windows
     }
 
     private bool _recording;
+
     public bool Recording
     {
       get { return _recording; }
@@ -296,7 +300,7 @@ namespace CameraControl.windows
     }
 
 
-    private Timer _timer = new Timer(1000 / 20);
+    private Timer _timer = new Timer(1000/20);
     private Timer _freezeTimer = new Timer();
 
     private bool oper_in_progress = false;
@@ -324,7 +328,7 @@ namespace CameraControl.windows
       Recording = false;
     }
 
-    void _smoottimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+    private void _smoottimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
     {
       //_smoottimer.Stop();
       if (_smootstepdirection == 0)
@@ -414,14 +418,16 @@ namespace CameraControl.windows
     private void ProcessMotionDetection(Bitmap bmp)
     {
       float movement = _detector.ProcessFrame(bmp);
-      lbl_motion.Content = Math.Round(movement * 100, 2);
-      if (movement > ((float)upd_threshold.Value / 100) && chk_tiggeronmotion.IsChecked == true && (DateTime.Now - _photoCapturedTime).TotalSeconds> upd_movewait.Value)
+      lbl_motion.Content = Math.Round(movement*100, 2);
+      if (movement > ((float) upd_threshold.Value/100) && chk_tiggeronmotion.IsChecked == true &&
+          (DateTime.Now - _photoCapturedTime).TotalSeconds > upd_movewait.Value)
       {
         if (chk_autofocus.IsChecked == true)
         {
           BlobCountingObjectsProcessing processing =
             _detector.MotionProcessingAlgorithm as BlobCountingObjectsProcessing;
-          if (processing != null && processing.ObjectRectangles != null && processing.ObjectRectangles.Length > 0 && LiveViewData.ImageData != null)
+          if (processing != null && processing.ObjectRectangles != null && processing.ObjectRectangles.Length > 0 &&
+              LiveViewData.ImageData != null)
           {
             System.Drawing.Rectangle rectangle = new System.Drawing.Rectangle();
             int surface = 0;
@@ -445,7 +451,7 @@ namespace CameraControl.windows
         _detector.Reset();
         _photoCapturedTime = DateTime.Now;
       }
- 
+
     }
 
     private void GetLiveImage()
@@ -454,7 +460,7 @@ namespace CameraControl.windows
         return;
       _totalframes++;
       if ((DateTime.Now - _framestart).TotalSeconds > 0)
-        Fps = (int)(_totalframes / (DateTime.Now - _framestart).TotalSeconds);
+        Fps = (int) (_totalframes/(DateTime.Now - _framestart).TotalSeconds);
       oper_in_progress = true;
       try
       {
@@ -482,8 +488,10 @@ namespace CameraControl.windows
                                          if (LiveViewData != null && LiveViewData.ImageData != null)
                                          {
 
-                                           MemoryStream stream = new MemoryStream(LiveViewData.ImageData, LiveViewData.ImagePosition,
-                                                                                  LiveViewData.ImageData.Length - LiveViewData.ImagePosition);
+                                           MemoryStream stream = new MemoryStream(LiveViewData.ImageData,
+                                                                                  LiveViewData.ImagePosition,
+                                                                                  LiveViewData.ImageData.Length -
+                                                                                  LiveViewData.ImagePosition);
 
                                            using (var bmp = new System.Drawing.Bitmap(stream))
                                            {
@@ -516,10 +524,10 @@ namespace CameraControl.windows
 
                                      }));
       Dispatcher.BeginInvoke(new Action(delegate
-                                     {
-                                       DrawLines();
-                                       ;
-                                     }));
+                                          {
+                                            DrawLines();
+                                            ;
+                                          }));
       _retries = 0;
       oper_in_progress = false;
     }
@@ -532,25 +540,27 @@ namespace CameraControl.windows
           return;
         _focusrect.BeginInit();
         _focusrect.Visibility = LiveViewData.HaveFocusData ? Visibility.Visible : Visibility.Hidden;
-        _focusrect.Visibility = selectedPortableDevice.LiveViewImageZoomRatio.Value == "All" ? Visibility.Visible : Visibility.Hidden;
-        double xt = image1.ActualWidth / LiveViewData.ImageWidth;
-        double yt = image1.ActualHeight / LiveViewData.ImageHeight;
-        _focusrect.Height = LiveViewData.FocusFrameXSize * xt;
-        _focusrect.Width = LiveViewData.FocusFrameYSize * yt;
-        double xx = (canvas.ActualWidth - image1.ActualWidth) / 2;
-        double yy = (canvas.ActualHeight - image1.ActualHeight) / 2;
-        SetLinePos(_line11, (int)(xx + image1.ActualWidth / 3), (int)yy, (int)(xx + image1.ActualWidth / 3),
-                   (int)(yy + image1.ActualHeight));
-        SetLinePos(_line12, (int)(xx + (image1.ActualWidth / 3) * 2), (int)yy, (int)(xx + (image1.ActualWidth / 3) * 2),
-                   (int)(yy + image1.ActualHeight));
+        _focusrect.Visibility = selectedPortableDevice.LiveViewImageZoomRatio.Value == "All"
+                                  ? Visibility.Visible
+                                  : Visibility.Hidden;
+        double xt = image1.ActualWidth/LiveViewData.ImageWidth;
+        double yt = image1.ActualHeight/LiveViewData.ImageHeight;
+        _focusrect.Height = LiveViewData.FocusFrameXSize*xt;
+        _focusrect.Width = LiveViewData.FocusFrameYSize*yt;
+        double xx = (canvas.ActualWidth - image1.ActualWidth)/2;
+        double yy = (canvas.ActualHeight - image1.ActualHeight)/2;
+        SetLinePos(_line11, (int) (xx + image1.ActualWidth/3), (int) yy, (int) (xx + image1.ActualWidth/3),
+                   (int) (yy + image1.ActualHeight));
+        SetLinePos(_line12, (int) (xx + (image1.ActualWidth/3)*2), (int) yy, (int) (xx + (image1.ActualWidth/3)*2),
+                   (int) (yy + image1.ActualHeight));
 
-        SetLinePos(_line21, (int)xx, (int)(yy + (image1.ActualHeight / 3)), (int)(xx + image1.ActualWidth),
-                   (int)(yy + image1.ActualHeight / 3));
-        SetLinePos(_line22, (int)xx, (int)(yy + (image1.ActualHeight / 3) * 2), (int)(xx + image1.ActualWidth),
-                   (int)(yy + (image1.ActualHeight / 3) * 2));
+        SetLinePos(_line21, (int) xx, (int) (yy + (image1.ActualHeight/3)), (int) (xx + image1.ActualWidth),
+                   (int) (yy + image1.ActualHeight/3));
+        SetLinePos(_line22, (int) xx, (int) (yy + (image1.ActualHeight/3)*2), (int) (xx + image1.ActualWidth),
+                   (int) (yy + (image1.ActualHeight/3)*2));
 
-        _focusrect.SetValue(Canvas.LeftProperty, LiveViewData.FocusX * xt - (_focusrect.Height / 2) + xx);
-        _focusrect.SetValue(Canvas.TopProperty, LiveViewData.FocusY * yt - (_focusrect.Width / 2) + yy);
+        _focusrect.SetValue(Canvas.LeftProperty, LiveViewData.FocusX*xt - (_focusrect.Height/2) + xx);
+        _focusrect.SetValue(Canvas.TopProperty, LiveViewData.FocusY*yt - (_focusrect.Width/2) + yy);
         _focusrect.Stroke = new SolidColorBrush(LiveViewData.Focused ? Colors.Green : Colors.Red);
         _focusrect.EndInit();
         SmallFocusScreen();
@@ -670,10 +680,10 @@ namespace CameraControl.windows
           LiveViewData.HaveFocusData && selectedPortableDevice.LiveViewImageZoomRatio.Value == "All")
       {
         Point initialPoint = e.MouseDevice.GetPosition(image1);
-        double xt = LiveViewData.ImageWidth / image1.ActualWidth;
-        double yt = LiveViewData.ImageHeight / image1.ActualHeight;
-        int posx = (int)(initialPoint.X * xt);
-        int posy = (int)(initialPoint.Y * yt);
+        double xt = LiveViewData.ImageWidth/image1.ActualWidth;
+        double yt = LiveViewData.ImageHeight/image1.ActualHeight;
+        int posx = (int) (initialPoint.X*xt);
+        int posy = (int) (initialPoint.Y*yt);
         selectedPortableDevice.Focus(posx, posy);
       }
     }
@@ -743,7 +753,8 @@ namespace CameraControl.windows
                                              SelectedBitmap_BitmapLoaded;
                                            Recording = false;
                                            SelectedPortableDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
-                                           selectedPortableDevice.CameraDisconnected += selectedPortableDevice_CameraDisconnected;
+                                           selectedPortableDevice.CameraDisconnected +=
+                                             selectedPortableDevice_CameraDisconnected;
                                            Show();
                                            Activate();
                                            //Topmost = true;
@@ -791,7 +802,8 @@ namespace CameraControl.windows
                                            {
                                              _smoottimer.Stop();
                                              _timer.Stop();
-                                             selectedPortableDevice.CameraDisconnected -= selectedPortableDevice_CameraDisconnected;
+                                             selectedPortableDevice.CameraDisconnected -=
+                                               selectedPortableDevice_CameraDisconnected;
                                              selectedPortableDevice.CaptureCompleted -=
                                                selectedPortableDevice_CaptureCompleted;
                                              ServiceProvider.Settings.SelectedBitmap.BitmapLoaded -=
@@ -888,21 +900,21 @@ namespace CameraControl.windows
     {
       try
       {
-        selectedPortableDevice.Focus(x,y);
+        selectedPortableDevice.Focus(x, y);
       }
       catch (Exception exception)
       {
-        Log.Error("Error set focus pos :",exception);
+        Log.Error("Error set focus pos :", exception);
         StaticHelper.Instance.SystemMessage = TranslationStrings.LabelErrorSetFocusPos;
-      }  
+      }
     }
 
-    void selectedPortableDevice_CameraDisconnected(object sender, DisconnectCameraEventArgs eventArgs)
+    private void selectedPortableDevice_CameraDisconnected(object sender, DisconnectCameraEventArgs eventArgs)
     {
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide);
     }
 
-    void selectedPortableDevice_CaptureCompleted(object sender, EventArgs e)
+    private void selectedPortableDevice_CaptureCompleted(object sender, EventArgs e)
     {
       if (!IsVisible)
         return;
@@ -918,11 +930,11 @@ namespace CameraControl.windows
         IsBusy = false;
       }
       Thread thread = new Thread(new ThreadStart(delegate
-      {
-        Thread.Sleep(300);
-        StartLiveView();
-        _timer.Start();
-      }));
+                                                   {
+                                                     Thread.Sleep(300);
+                                                     StartLiveView();
+                                                     _timer.Start();
+                                                   }));
       thread.Start();
     }
 
@@ -1009,7 +1021,7 @@ namespace CameraControl.windows
         {
           Log.Debug("LiveView: Stackphoto capture started");
           FreezeImage = true;
-          Thread.Sleep(WaitTime * 1000);
+          Thread.Sleep(WaitTime*1000);
           //while (ServiceProvider.DeviceManager.SelectedCameraDevice.IsBusy)
           //{
           //  Thread.Sleep(1);
@@ -1121,7 +1133,7 @@ namespace CameraControl.windows
           }
           else
           {
-            MessageBox.Show( TranslationStrings.LabelErrorRecordMovie+"\n"+TranslationManager.GetTranslation(resp));
+            MessageBox.Show(TranslationStrings.LabelErrorRecordMovie + "\n" + TranslationManager.GetTranslation(resp));
             return;
           }
         }
@@ -1185,7 +1197,7 @@ namespace CameraControl.windows
     {
       if (e.Key == Key.Right || e.Key == Key.Left || e.Key == Key.Up || e.Key == Key.Down)
       {
-        e.Handled = true;        
+        e.Handled = true;
       }
       if ((DateTime.Now - _focusMoveTime).TotalMilliseconds < 200)
         return;
@@ -1212,14 +1224,14 @@ namespace CameraControl.windows
     private void canvas_image_MouseDown(object sender, MouseButtonEventArgs e)
     {
       if (e.ButtonState == MouseButtonState.Pressed && e.ChangedButton == MouseButton.Left && LiveViewData != null &&
-    LiveViewData.HaveFocusData)
+          LiveViewData.HaveFocusData)
       {
         Point initialPoint = e.MouseDevice.GetPosition(canvas_image);
-        double xt = LiveViewData.ImageWidth / canvas_image.ActualWidth;
-        double yt = LiveViewData.ImageHeight / canvas_image.ActualHeight;
-        int posx = (int)(initialPoint.X * xt);
-        int posy = (int)(initialPoint.Y * yt);
-        selectedPortableDevice.Focus(posx, posy);
+        double xt = LiveViewData.ImageWidth/canvas_image.ActualWidth;
+        double yt = LiveViewData.ImageHeight/canvas_image.ActualHeight;
+        int posx = (int) (initialPoint.X*xt);
+        int posy = (int) (initialPoint.Y*yt);
+        SetFocusPos(posx, posy);
       }
     }
 
