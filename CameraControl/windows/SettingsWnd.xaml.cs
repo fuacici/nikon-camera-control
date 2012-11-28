@@ -32,6 +32,7 @@ namespace CameraControl.windows
       }
       RotateFlipTypesValues = new AsyncObservableCollection<RotateFlipType>(Enum.GetValues(typeof(RotateFlipType)).Cast<RotateFlipType>().Distinct());
       ServiceProvider.Settings.ApplyTheme(this);
+      qrcode.Text = ServiceProvider.Settings.Webaddress;
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)

@@ -11,14 +11,12 @@ namespace CameraControl.Devices.Nikon
     {
       if (!CaptureInSdRam)
         SetProperty(CONST_CMD_SetDevicePropValue, new[] {(byte) 1}, CONST_PROP_RecordingMedia, -1);
-      DeviceReady();
       base.StartLiveView();
     }
 
     public override void StopLiveView()
     {
       base.StopLiveView();
-      DeviceReady();
       if (!CaptureInSdRam)
         SetProperty(CONST_CMD_SetDevicePropValue, new[] {(byte) 0}, CONST_PROP_RecordingMedia, -1);
       DeviceReady();

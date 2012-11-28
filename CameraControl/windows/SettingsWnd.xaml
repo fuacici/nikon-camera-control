@@ -5,7 +5,7 @@
         xmlns:windows="clr-namespace:CameraControl.windows"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
         xmlns:T="clr-namespace:CameraControl.Translation" ShowMaxRestoreButton="False" ShowMinButton="False"
-                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
+                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" xmlns:my="clr-namespace:Gma.QrCodeNet.Encoding.Windows.WPF;assembly=Gma.QrCodeNet.Encoding">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -125,10 +125,6 @@
             </TabItem>
             <TabItem Header="{T:TranslateExtension LabelTriggers}">
                 <Grid >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="129*" />
-                        <RowDefinition Height="101*" />
-                    </Grid.RowDefinitions>
                     <GroupBox Header="Keyboard" Height="125" Margin="0,-4,0,0" Name="groupBox1" VerticalAlignment="Top">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -141,10 +137,11 @@
                             <ComboBox Height="23" HorizontalAlignment="Left" Margin="10,58,0,0" Name="cmb_keys" VerticalAlignment="Top" Width="111" SelectedItem="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=TriggerKey}" IsEnabled="{Binding ElementName=chk_usekey, Path=IsChecked}"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Grid.Row="1" Header="{T:TranslateExtension LabelWebserver}">
+                    <GroupBox Header="{T:TranslateExtension LabelWebserver}" Margin="-1,123,1,6">
                         <Grid ToolTip="{T:TranslateExtension ReStartToolTip}">
                             <CheckBox Content="{T:TranslateExtension LabelUseWebserver}" Height="16" HorizontalAlignment="Left" Margin="10,14,0,0" Name="checkBox1" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=UseWebserver}"/>
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="6,49,0,0" Name="textBox1" VerticalAlignment="Top" Width="290" IsReadOnly="True" Text="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=Webaddress, Mode=OneTime}"/>
+                            <my:QrCodeImgControl Height="145" HorizontalAlignment="Left" Margin="6,81,0,0" Stretch="Uniform" VerticalAlignment="Top" Width="143" Name="qrcode"/>
                         </Grid>
                     </GroupBox>
                 </Grid>
