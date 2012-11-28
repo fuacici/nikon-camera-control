@@ -252,5 +252,7 @@
     // 26/11/2012
     public static string LabelErrorSetFocusPos = "Error set focus position";
     public static string LabelErrorUnableFocus = "Unable focus";
+    // 28/11/2012
+    public static string LabelErrorLoadingFileList = "Error loading file list";
   }
 }

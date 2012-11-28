@@ -150,8 +150,11 @@ namespace CameraControl
           Directory.CreateDirectory(Path.GetDirectoryName(fileName));
         }
         Log.Debug("Transfer started :" + fileName);
+        DateTime startTIme = DateTime.Now;
         eventArgs.CameraDevice.TransferFile(eventArgs.Handle, fileName);
         Log.Debug("Transfer done :" + fileName);
+        Log.Debug("[BENCHMARK]Speed :"+ (new FileInfo(fileName).Length/(DateTime.Now-startTIme).TotalSeconds/1024/1024).ToString("0000.00"));
+        Log.Debug("[BENCHMARK]Transfer time :" + ((DateTime.Now - startTIme).TotalSeconds).ToString("0000.000"));
         //select the new file only when the multiple camera support isn't used to prevent high CPU usage on raw files
         if (ServiceProvider.Settings.AutoPreview && !ServiceProvider.WindowsManager.Get(typeof(MultipleCameraWnd)).IsVisible && !ServiceProvider.Settings.UseExternalViewer)
         {

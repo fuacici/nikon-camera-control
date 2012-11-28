@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -362,7 +363,8 @@ namespace CameraControl.Devices.Nikon
     {
       if (e.PropertyName == "CaptureInSdRam")
       {
-        SetProperty(CONST_CMD_SetDevicePropValue, CaptureInSdRam ? new[] { (byte)1 } : new[] { (byte)0 }, CONST_PROP_RecordingMedia, -1);        
+        SetProperty(CONST_CMD_SetDevicePropValue, CaptureInSdRam ? new[] { (byte)1 } : new[] { (byte)0 }, CONST_PROP_RecordingMedia, -1);
+        ReadDeviceProperties(CONST_PROP_RecordingMedia);
       }
     }
 
@@ -921,7 +923,7 @@ namespace CameraControl.Devices.Nikon
       {
         try
         {
-          //DeviceReady();
+          DeviceReady();
           _timer.Stop();
           StillImageDevice.Disconnect();
           HaveLiveView = false;
@@ -1047,13 +1049,8 @@ namespace CameraControl.Devices.Nikon
     {
       lock (Locker)
       {
-        DeviceReady();
-        //PortableDeviceEventArgs deviceEventArgs = o as PortableDeviceEventArgs;
-        //if (deviceEventArgs != null)
-        //{
-          //_stillImageDevice.SaveFile(deviceEventArgs.EventType.DeviceObject, filename);
         _timer.Stop();
-          StillImageDevice.ExecuteReadBigDataWriteToFile(CONST_CMD_GetObject,
+          byte[] result = StillImageDevice.ExecuteReadBigData(CONST_CMD_GetObject,
                                                                Convert.ToInt32(o), -1,
                                                                (total, current) =>
                                                                {
@@ -1061,9 +1058,28 @@ namespace CameraControl.Devices.Nikon
                                                                  TransferProgress =
                                                                    Convert.ToUInt32(i * 100);
 
-                                                               },filename);
+                                                               });
+          using (BinaryWriter writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
+          {
+            writer.Write(result);
+          }
         _timer.Start();
+//=================== direct file write
+        //DeviceReady();
+        //_timer.Stop();
+        //  StillImageDevice.ExecuteReadBigDataWriteToFile(CONST_CMD_GetObject,
+        //                                                       Convert.ToInt32(o), -1,
+        //                                                       (total, current) =>
+        //                                                       {
+        //                                                         double i = (double)current / total;
+        //                                                         TransferProgress =
+        //                                                           Convert.ToUInt32(i * 100);
+
+        //                                                       },filename);
+        //_timer.Start();
         //}
+
+//==================================================================
       }
     }
 
@@ -1204,10 +1220,11 @@ namespace CameraControl.Devices.Nikon
 
     protected void SetProperty(int code, byte[] data, int param1, int param2)
     {
+      bool timerstate = _timer.Enabled;
       _timer.Stop();
       bool retry = false;
       int retrynum = 0;
-      DeviceReady();
+      //DeviceReady();
       do
       {
         if (retrynum > 5)
@@ -1238,7 +1255,8 @@ namespace CameraControl.Devices.Nikon
           Log.Error("Error set property :" + param1.ToString("X"), exception);
         }
       } while (retry);
-      _timer.Start();
+      if (timerstate)
+        _timer.Start();
     }
 
     public override string GetProhibitionCondition(OperationEnum operationEnum)
@@ -1312,7 +1330,7 @@ namespace CameraControl.Devices.Nikon
         if (objectdata.Data != null)
         {
           uint objFormat = BitConverter.ToUInt16(objectdata.Data, 4);
-          if (objFormat == 0x3000 || objFormat == 0x3801)
+          if (objFormat == 0x3000 || objFormat == 0x3801 || objFormat == 0x3800)
           {
             deviceObject.FileName = Encoding.Unicode.GetString(objectdata.Data, 53, 12*2);
             if (deviceObject.FileName.Contains("\0"))
