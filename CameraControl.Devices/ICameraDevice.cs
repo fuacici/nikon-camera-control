@@ -10,6 +10,9 @@ namespace CameraControl.Devices
     /// Should be handled by the user code
     /// </summary>
     bool IsBusy { get; set; }
+    /// <summary>
+    /// This property will be removed, replaced by GetCapability
+    /// </summary>
     bool HaveLiveView { get; set; }
     /// <summary>
     /// Gets or sets a value indicating whether photos captured are captured in SDRam.
@@ -18,6 +21,7 @@ namespace CameraControl.Devices
     ///   <c>true</c> if true photos are captured in SDRam; otherwise, <c>false</c> photos will be recorded in card.
     /// </value>
     bool CaptureInSdRam { get; set; }
+
     PropertyValue<int> FNumber { get; set; }
     PropertyValue<int> IsoNumber { get; set; }
     PropertyValue<long> ShutterSpeed { get; set; }
@@ -27,8 +31,22 @@ namespace CameraControl.Devices
     PropertyValue<int> CompressionSetting { get; set; }
     PropertyValue<int> ExposureMeteringMode { get; set; }
     PropertyValue<uint> FocusMode { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the camera is connected.
+    /// </summary>
+    /// <value>
+    /// <c>true</c> if this instance is connected; otherwise, <c>false</c>.
+    /// </value>
     bool IsConnected { get; set; }
     bool IsChecked { get; set; }
+
+    /// <summary>
+    /// Gets or sets the attached abject to the camera .
+    /// </summary>
+    /// <value>
+    /// The attached photo session.
+    /// </value>
     object AttachedPhotoSession { get; set; }
     string DeviceName { get; set; }
     string Manufacturer { get; set; }
@@ -63,7 +81,9 @@ namespace CameraControl.Devices
     /// Support only if capability Bulb is specified
     /// </summary>
     void EndBulbMode();
-
+    /// <summary>
+    /// Support only if capability Bulb is specified
+    /// </summary>
     void StartBulbMode();
 
     void LockCamera();
@@ -72,10 +92,26 @@ namespace CameraControl.Devices
 
     void TransferFile(object o, string filename);
 
+    /// <summary>
+    /// Occurs when photo captured.
+    /// </summary>
     event PhotoCapturedEventHandler PhotoCaptured;
+
+    /// <summary>
+    /// Occurs when all capture images done.
+    /// </summary>
     event EventHandler CaptureCompleted;
+    /// <summary>
+    /// Occurs when [camera disconnected].
+    /// </summary>
     event CameraDisconnectedEventHandler CameraDisconnected;
 
+    /// <summary>
+    /// Gets or sets the arbitrary number of advanced properties.
+    /// </summary>
+    /// <value>
+    /// The advanced properties.
+    /// </value>
     AsyncObservableCollection<PropertyValue<long>> AdvancedProperties { get; set; }
 
     /// <summary>

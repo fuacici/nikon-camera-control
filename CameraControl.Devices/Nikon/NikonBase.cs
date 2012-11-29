@@ -64,6 +64,9 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_Event_ObsoleteEvent = 0xC104;
 
 
+    /// <summary>
+    /// The timer for get periodically the event list
+    /// </summary>
     private Timer _timer = new Timer(1000/15);
 
    
