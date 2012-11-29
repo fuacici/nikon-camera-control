@@ -41,6 +41,8 @@ namespace CameraControl.Devices.Example
         }
         cmb_cameras.DisplayMember = "DeviceName";
         cmb_cameras.SelectedItem = DeviceManager.SelectedCameraDevice;
+        // check if camera support live view
+        btn_liveview.Enabled = DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.LiveView);
         cmb_cameras.EndUpdate();
       };
 
@@ -126,6 +128,12 @@ namespace CameraControl.Devices.Example
     private void cmb_cameras_SelectedIndexChanged(object sender, EventArgs e)
     {
       DeviceManager.SelectedCameraDevice = (ICameraDevice)cmb_cameras.SelectedItem;
+    }
+
+    private void btn_liveview_Click(object sender, EventArgs e)
+    {
+      LiveViewForm form = new LiveViewForm(DeviceManager.SelectedCameraDevice);
+      form.ShowDialog();
     }
 
 

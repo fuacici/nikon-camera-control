@@ -35,6 +35,7 @@
       this.groupBox1 = new System.Windows.Forms.GroupBox();
       this.btn_capture = new System.Windows.Forms.Button();
       this.img_photo = new System.Windows.Forms.PictureBox();
+      this.btn_liveview = new System.Windows.Forms.Button();
       ((System.ComponentModel.ISupportInitialize)(this.cameraDeviceManagerBindingSource)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.connectedDevicesBindingSource)).BeginInit();
       this.groupBox1.SuspendLayout();
@@ -58,6 +59,7 @@
       // 
       // groupBox1
       // 
+      this.groupBox1.Controls.Add(this.btn_liveview);
       this.groupBox1.Controls.Add(this.btn_capture);
       this.groupBox1.Location = new System.Drawing.Point(12, 50);
       this.groupBox1.Name = "groupBox1";
@@ -85,6 +87,16 @@
       this.img_photo.TabIndex = 2;
       this.img_photo.TabStop = false;
       // 
+      // btn_liveview
+      // 
+      this.btn_liveview.Location = new System.Drawing.Point(16, 58);
+      this.btn_liveview.Name = "btn_liveview";
+      this.btn_liveview.Size = new System.Drawing.Size(75, 23);
+      this.btn_liveview.TabIndex = 3;
+      this.btn_liveview.Text = "Live view";
+      this.btn_liveview.UseVisualStyleBackColor = true;
+      this.btn_liveview.Click += new System.EventHandler(this.btn_liveview_Click);
+      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -110,6 +122,7 @@
     private System.Windows.Forms.GroupBox groupBox1;
     private System.Windows.Forms.Button btn_capture;
     private System.Windows.Forms.PictureBox img_photo;
+    private System.Windows.Forms.Button btn_liveview;
   }
 }
 
