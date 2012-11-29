@@ -9,7 +9,7 @@ namespace CameraControl.Core.Classes
 {
   public class PhotoSession : BaseFieldClass
   {
-
+    private object _locker = new object();
     private string _lastFilename = null;
 
     [XmlIgnore]
@@ -270,20 +270,23 @@ namespace CameraControl.Core.Classes
 
     public string GetNextFileName(string ext, ICameraDevice device)
     {
-      if (string.IsNullOrEmpty(ext))
-        ext = ".nef";
-      if (!string.IsNullOrEmpty(_lastFilename) && RawExtensions.Contains(ext.ToLower()) && !RawExtensions.Contains(Path.GetExtension(_lastFilename).ToLower()))
+      lock (_locker)
       {
-        string rawfile =Path.Combine(Path.GetDirectoryName(_lastFilename) ,Path.GetFileNameWithoutExtension(_lastFilename) + (!ext.StartsWith(".") ? "." : "") + ext);
-        if (!File.Exists(rawfile))
-          return rawfile;
+        if (string.IsNullOrEmpty(ext))
+          ext = ".nef";
+        if (!string.IsNullOrEmpty(_lastFilename) && RawExtensions.Contains(ext.ToLower()) && !RawExtensions.Contains(Path.GetExtension(_lastFilename).ToLower()))
+        {
+          string rawfile = Path.Combine(Path.GetDirectoryName(_lastFilename), Path.GetFileNameWithoutExtension(_lastFilename) + (!ext.StartsWith(".") ? "." : "") + ext);
+          if (!File.Exists(rawfile))
+            return rawfile;
+        }
+        Counter++;
+        string fileName = Path.Combine(Folder, FormatFileName(device) + (!ext.StartsWith(".") ? "." : "") + ext);
+        if (File.Exists(fileName))
+          return GetNextFileName(ext, device);
+        _lastFilename = fileName;
+        return fileName;
       }
-      Counter++;        
-      string fileName = Path.Combine(Folder, FormatFileName(device) + (!ext.StartsWith(".") ? "." : "") + ext);
-      if (File.Exists(fileName))
-        return GetNextFileName(ext, device);
-      _lastFilename = fileName;
-      return fileName;
     }
 
     private string FormatFileName(ICameraDevice device)
