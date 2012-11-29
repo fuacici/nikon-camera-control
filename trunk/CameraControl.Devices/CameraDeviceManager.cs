@@ -193,13 +193,20 @@ namespace CameraControl.Devices
     }
 
     /// <summary>
-    /// Gets the native driver.
+    /// Gets the native driver based on camera model.
     /// </summary>
     /// <param name="model">The model name.</param>
     /// <returns>If the model not supported return null else the driver type</returns>
     private Type GetNativeDriver(string model)
     {
-      return (from keyValuePair in DeviceClass let regex = new Regex(keyValuePair.Key) where regex.IsMatch(model) select keyValuePair.Value).FirstOrDefault();
+      // first check if driver exist with same driver name
+      if (DeviceClass.ContainsKey(model))
+        return DeviceClass[model];
+      // in driver not found will check with regex name
+      return (from keyValuePair in DeviceClass
+              let regex = new Regex(keyValuePair.Key)
+              where regex.IsMatch(model)
+              select keyValuePair.Value).FirstOrDefault();
     }
 
     private void DisconnectCamera(string wiaId)
