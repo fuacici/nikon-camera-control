@@ -121,14 +121,15 @@ namespace CameraControl
         return;
       try
       {
+        CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(eventArgs.CameraDevice);
         StaticHelper.Instance.SystemMessage = TranslationStrings.MsgPhotoTransferBegin;
-        Log.Debug("Photo transfer begin.");
         PhotoSession session =(PhotoSession) eventArgs.CameraDevice.AttachedPhotoSession ?? ServiceProvider.Settings.DefaultSession;
-        if ((session.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
+        if ((property.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
         {
           eventArgs.CameraDevice.IsBusy = false;
           return;
         }
+        Log.Debug("Photo transfer begin.");
         string fileName = "";
         if (!session.UseOriginalFilename || eventArgs.CameraDevice.CaptureInSdRam)
         {

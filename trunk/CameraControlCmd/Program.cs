@@ -224,7 +224,8 @@ namespace CameraControlCmd
         PhotoCapturedEventArgs eventArgs = o as PhotoCapturedEventArgs;
         if (eventArgs == null)
           return;
-        if ((ServiceProvider.Settings.DefaultSession.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
+        CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(eventArgs.CameraDevice);
+        if ((property.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
           return;
         string fileName = "";
         if (!ServiceProvider.Settings.DefaultSession.UseOriginalFilename || eventArgs.CameraDevice.CaptureInSdRam)

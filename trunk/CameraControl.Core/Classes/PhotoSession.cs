@@ -140,17 +140,6 @@ namespace CameraControl.Core.Classes
       }
     }
 
-    private bool _noDownload;
-    public bool NoDownload
-    {
-      get { return _noDownload; }
-      set
-      {
-        _noDownload = value;
-        NotifyPropertyChanged("NoDownload");
-      }
-    }
-
     private AsyncObservableCollection<TagItem> _tags;
     public AsyncObservableCollection<TagItem> Tags
     {

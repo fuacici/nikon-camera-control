@@ -41,6 +41,21 @@ namespace CameraControl.Core.Classes
     [XmlIgnore]
     public PhotoSession PhotoSession { get; set; }
 
+    private bool _noDownload;
+    public bool NoDownload
+    {
+      get { return _noDownload; }
+      set
+      {
+        _noDownload = value;
+        NotifyPropertyChanged("NoDownload");
+      }
+    }
+
+    public CameraProperty()
+    {
+      NoDownload = false;
+    }
 
   }
 }
