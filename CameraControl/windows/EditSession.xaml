@@ -58,9 +58,6 @@
                         <CheckBox Content="{T:TranslateExtension LabelUseOriginal}" ToolTip="{T:TranslateExtension LabelUseOriginalToolTip}" IsChecked="{Binding Path=UseOriginalFilename}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Content="{T:TranslateExtension LabelDontDownloadPhotos}" ToolTip="" IsChecked="{Binding Path=NoDownload}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
                         <CheckBox Content="{T:TranslateExtension LabelAlowFolderChange}" ToolTip="" IsChecked="{Binding Path=AlowFolderChange}"/>
                     </StackPanel>
                 </StackPanel>
