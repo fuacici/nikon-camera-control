@@ -72,6 +72,10 @@ namespace CameraControl.Devices.Nikon
     /// </summary>
     private Timer _timer = new Timer(1000/15);
 
+    /// <summary>
+    /// Variable to check if event processing is in progress 
+    /// </summary>
+    private bool _eventIsbusy = false;
    
     protected  Dictionary<uint, string> _isoTable = new Dictionary<uint, string>()
                                                   {
@@ -1055,23 +1059,34 @@ namespace CameraControl.Devices.Nikon
     {
       lock (Locker)
       {
+        MTPDataResponse result = new MTPDataResponse();
         _timer.Stop();
-          byte[] result = StillImageDevice.ExecuteReadBigData(CONST_CMD_GetObject,
-                                                               Convert.ToInt32(o), -1,
-                                                               (total, current) =>
-                                                               {
-                                                                 double i = (double)current / total;
-                                                                 TransferProgress =
-                                                                   Convert.ToUInt32(i * 100);
+        do
+        {
+          result = StillImageDevice.ExecuteReadBigData(CONST_CMD_GetObject,
+                                                       Convert.ToInt32(o), -1,
+                                                       (total, current) =>
+                                                         {
+                                                           double i = (double) current/total;
+                                                           TransferProgress =
+                                                             Convert.ToUInt32(i*100);
 
-                                                               });
-          using (BinaryWriter writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
+                                                         });
+          if (result.Data != null)
           {
-            writer.Write(result);
+            using (BinaryWriter writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
+            {
+              writer.Write(result.Data);
+            }
           }
+          else
+          {
+            Log.Error("Transfer error code retrying " + result.ErrorCode.ToString("X"));
+          }
+        } while (result.Data == null);
         _timer.Start();
         TransferProgress = 0;
-//=================== direct file write
+        //=================== direct file write
         //DeviceReady();
         //_timer.Stop();
         //  StillImageDevice.ExecuteReadBigDataWriteToFile(CONST_CMD_GetObject,
@@ -1086,7 +1101,7 @@ namespace CameraControl.Devices.Nikon
         //_timer.Start();
         //}
 
-//==================================================================
+        //==================================================================
       }
     }
 
@@ -1118,8 +1133,9 @@ namespace CameraControl.Devices.Nikon
     {
       try
       {
-        //if (IsBusy)
-        //  return;
+        if(_eventIsbusy)
+          return;
+        _eventIsbusy = true;
         DeviceReady();
         MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetEvent);
 
@@ -1197,6 +1213,7 @@ namespace CameraControl.Devices.Nikon
       }
       finally
       {
+        _eventIsbusy = false;
         _timer.Start();
       }
     }
