@@ -158,8 +158,9 @@ namespace PortableDeviceLib
       return 0;
     }
 
-    public byte[] ExecuteReadBigData(int code, int param1, int param2,TransferCallback callback)
+    public MTPDataResponse ExecuteReadBigData(int code, int param1, int param2,TransferCallback callback)
     {
+      MTPDataResponse res = new MTPDataResponse();
       // source: http://msdn.microsoft.com/en-us/library/windows/desktop/ff384843(v=vs.85).aspx
       // and view-source:http://www.experts-exchange.com/Programming/Languages/C_Sharp/Q_26860397.html
       // error codes http://msdn.microsoft.com/en-us/library/windows/desktop/dd319335(v=vs.85).aspx
@@ -243,10 +244,11 @@ namespace PortableDeviceLib
         }
       }
 
+
       pParameters.Clear();
       pResults.Clear();
       uint offset = 0;
-      byte[] res = new byte[(int)tmpBufferSize];
+      res.Data = new byte[(int)tmpBufferSize];
       bool cont = true;
 
       do
@@ -281,7 +283,10 @@ namespace PortableDeviceLib
           int pValue = 0;
           pResults.GetErrorValue(PortableDevicePKeys.WPD_PROPERTY_COMMON_HRESULT, out pValue);
           if (pValue != 0)
-            return null;
+          {
+            res.ErrorCode = (uint)pValue;
+            return res;
+          }
         }
         catch (Exception ex)
         {
@@ -303,7 +308,7 @@ namespace PortableDeviceLib
 
         for (int i = 0; i < cbBytesRead; i++)
         {
-          res[offset + i] = Marshal.ReadByte(tmpPtr, i);
+          res.Data[offset + i] = Marshal.ReadByte(tmpPtr, i);
         }
 
         Marshal.FreeHGlobal(tmpPtr);

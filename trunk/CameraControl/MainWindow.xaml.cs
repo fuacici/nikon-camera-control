@@ -114,8 +114,6 @@ namespace CameraControl
 
     void DeviceManager_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
     {
-      //Thread thread = new Thread(PhotoCaptured);
-      //thread.Start(eventArgs);
       PhotoCaptured(eventArgs);
     }
 
@@ -132,6 +130,7 @@ namespace CameraControl
         return;
       try
       {
+        eventArgs.CameraDevice.IsBusy = true;
         CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(eventArgs.CameraDevice);
         StaticHelper.Instance.SystemMessage = TranslationStrings.MsgPhotoTransferBegin;
         PhotoSession session =(PhotoSession) eventArgs.CameraDevice.AttachedPhotoSession ?? ServiceProvider.Settings.DefaultSession;
