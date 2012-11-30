@@ -616,5 +616,14 @@ namespace CameraControl
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.DownloadPhotosWnd_Show,ServiceProvider.DeviceManager.SelectedCameraDevice);
     }
 
+    private void MetroWindow_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+    {
+      if(e.Key==Key.Escape)
+      {
+        Flyouts[0].IsOpen = false;
+        Flyouts[1].IsOpen = false;
+      }
+    }
+
   }
 }
