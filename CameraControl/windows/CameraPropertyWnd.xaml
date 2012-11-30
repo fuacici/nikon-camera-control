@@ -45,6 +45,5 @@
         <Label Content="Default session" Margin="2,2,0,2" Grid.Row="2" Name="label3" Grid.Column="1" />
         <ComboBox Grid.Column="2" Grid.Row="2" Name="comboBox1" ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}, Path=PhotoSessionNames}" SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}, Path=CameraProperty.PhotoSessionName}" Margin="3"/>
         <Button Content="Indentify" Grid.Column="2" Grid.Row="5" Name="btn_identify" Click="btn_identify_Click" />
-        <CheckBox Content="{T:TranslateExtension LabelDontDownloadPhotos}" ToolTip="" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}, Path=CameraProperty.NoDownload}" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Margin="3"/>
     </Grid>
 </ontrols:MetroWindow>
