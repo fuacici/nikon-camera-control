@@ -38,6 +38,11 @@ namespace CameraControl
     {
       CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (sender, args) => this.Close()));
       SelectDeviceCommand = new RelayCommand<ICameraDevice>(SelectCamera);
+      
+      DevicePropertyCommand =
+        new RelayCommand<ICameraDevice>(
+          x => ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.CameraPropertyWnd_Show, x));
+
       SelectPresetCommand = new RelayCommand<CameraPreset>(SelectPreset);
       ExecuteExportPluginCommand = new RelayCommand<IExportPlugin>(ExecuteExportPlugin);
       //WiaManager = new WIAManager();
@@ -204,6 +209,13 @@ namespace CameraControl
       get;
       private set;
     }
+
+    public RelayCommand<ICameraDevice> DevicePropertyCommand
+    {
+      get;
+      private set;
+    }
+
 
     public RelayCommand<CameraPreset> SelectPresetCommand
     {
@@ -407,21 +419,10 @@ namespace CameraControl
       }
     }
 
-    private void MenuItem_Click_2(object sender, RoutedEventArgs e)
-    {
-      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.MultipleCameraWnd_Show);
-    }
-
     private void mnu_reconnect_Click(object sender, RoutedEventArgs e)
     {
       ServiceProvider.DeviceManager.DisableNativeDrivers = ServiceProvider.Settings.DisableNativeDrivers;
       ServiceProvider.DeviceManager.ConnectToCamera();
-    }
-
-    private void MenuItem_Click_3(object sender, RoutedEventArgs e)
-    {
-      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.CameraPropertyWnd_Show,
-                                                    ServiceProvider.DeviceManager.SelectedCameraDevice);
     }
 
     private void MenuItem_Click_4(object sender, RoutedEventArgs e)
@@ -623,6 +624,11 @@ namespace CameraControl
         Flyouts[0].IsOpen = false;
         Flyouts[1].IsOpen = false;
       }
+    }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.MultipleCameraWnd_Show);
     }
 
   }

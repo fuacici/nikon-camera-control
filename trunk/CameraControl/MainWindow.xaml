@@ -75,16 +75,6 @@
                     <MenuItem Header="{T:TranslateExtension MenuReScan}" Name="mnu_reconnect" Click="mnu_reconnect_Click" />
                     <MenuItem Header="{T:TranslateExtension MenuExit}" Command="ApplicationCommands.Close"/>
                 </MenuItem>
-                <MenuItem Header="{T:TranslateExtension MenuView}">
-                    <MenuItem.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </MenuItem.ItemsPanel>
-                    <MenuItem Header="{T:TranslateExtension MenuMultipleCamera}" Click="MenuItem_Click_2"/>
-                    <Separator/>
-                    <MenuItem Header="{T:TranslateExtension MenuSelectedCameraProperty}" Click="MenuItem_Click_3" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}"/>
-                </MenuItem>
                 <MenuItem Header="{T:TranslateExtension MenuLayout}">
                     <MenuItem.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -144,13 +134,28 @@
         </Controls:Flyout>
         <Controls:Flyout Header="{T:TranslateExtension MenuConnectedCameras}" Background="#9f000000" Position="Left" Opacity="0.9">
             <StackPanel Width="200">
+                <Button Content="{T:TranslateExtension MenuMultipleCamera}" Click="Button_Click" Margin="3"/>
                 <ListBox ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" SelectedItem="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice}" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
+                            <Border BorderThickness="1" CornerRadius="10" BorderBrush="Black" Margin="3" Width="190">
                             <StackPanel Orientation="Vertical">
-                                <Label Content="{Binding Path=DeviceName}" ToolTip="{Binding Path=DisplayName}"/>
+                                <Line />
+                                <StackPanel Orientation="Horizontal">
+                                    <Rectangle Fill="Red" Width="10" Height="10" Visibility="{Binding Path=IsBusy, Converter={StaticResource BooleanToVisibilityConverter1}, ConverterParameter=false}"/>
+                                    <Label Content="{Binding Path=DeviceName}" ToolTip="{Binding Path=DisplayName}"/>
+                                </StackPanel>
                                 <Label Content="{Binding Path=DisplayName}" ToolTip="{Binding Path=DisplayName}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Height="23" Width="25" Command="{Binding Path=DevicePropertyCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding}">
+                                        <Button.Content>
+                                            <Image Source="/CameraControl;component/Images/Properties.png" />
+                                        </Button.Content>
+                                    </Button>
+                                    <ProgressBar Value="{Binding Path=TransferProgress}" Width="150" Margin="3" Style="{x:Null}"/>
+                                </StackPanel>
                             </StackPanel>
+                            </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

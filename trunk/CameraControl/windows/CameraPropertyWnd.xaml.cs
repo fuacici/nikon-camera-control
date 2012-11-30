@@ -69,7 +69,7 @@ namespace CameraControl.windows
             Show();
             Activate();
             Topmost = true;
-            Topmost = false;
+            //Topmost = false;
             Focus();
           }));
           break;

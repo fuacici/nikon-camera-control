@@ -1070,6 +1070,7 @@ namespace CameraControl.Devices.Nikon
             writer.Write(result);
           }
         _timer.Start();
+        TransferProgress = 0;
 //=================== direct file write
         //DeviceReady();
         //_timer.Stop();
