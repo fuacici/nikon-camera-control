@@ -16,7 +16,7 @@
     public static string SDRamToolTip = "Capture images direct to PC without using card";
     public static string CapturePhotoToolTip = "Capture photo";
     public static string CapturePhotoNoAfToolTip = "Capture photo no auto focus";
-    public static string BraketingToolTip = "Braketing";
+    public static string BraketingToolTip = "Bracketing";
     public static string SettingsToolTip = "Settings";
     public static string TimeLapseToolTip = "Time lapse";
     public static string FullscreenToolTip = "Fullscreen";
@@ -34,7 +34,7 @@
     public static string SessionWindowTitle = "Session [Add/Edit]";
     public static string LiveViewWindowTitle = "Live view";
     public static string PresetEditWindowTitle = "Preset Edit";
-    public static string BraketingWindowTitle = "Braketing";
+    public static string BraketingWindowTitle = "Bracketing";
     public static string EditTagWindowTitle = "Tag [Add/Edit]";
     public static string MultipleCameraWindowTitle = "Multiple camera support";
     public static string SavePresetWindowTitle = "Save Preset";
@@ -76,7 +76,7 @@
     public static string LabelLIveViewImageFreeze = "Live view image freeze in sec : ";
     public static string LabelRotateImage = "Rotate image :";
     public static string LabelDontLoadThumbs = "Don't load thumbnails";
-    public static string LabelFullscrenBack = "Fullscreen window background : ";
+    public static string LabelFullscrenBack = "Full screen window background : ";
     public static string LabelTriggers = "Triggers";
     public static string LabelUseKeybordToTrigger = "Use keyboard to trigger take photo";
     public static string LabelWebserver = "Webserver";
@@ -84,7 +84,7 @@
     public static string LabelFocusAndLiveview = "Focus and Live view";
     public static string LabelSmallFocusSstep = "Small focus step";
     public static string LabelMediumFocusStep = "Medium focus step";
-    public static string LabelLargFocusStep = "Larg focus step";
+    public static string LabelLargFocusStep = "Large focus step";
     public static string ReStartToolTip = "You need to restart the application for this changes to take affect";
 
     public static string LabelSessonName = "Session name :";
@@ -95,7 +95,7 @@
     public static string LabelUseOriginal = "Use original filename gave by the camera";
     public static string LabelUseOriginalToolTip = "This option isn't works with WIA driver";
     public static string LabelDontDownloadPhotos = "Don't download photos to PC";
-    public static string LabelAlowFolderChange = "Alow folder change using image browser";
+    public static string LabelAlowFolderChange = "Allow folder change using image browser";
     public static string LabelTags = "Tags";
 
     public static string LabelManualFocus = "Manual Focus";
@@ -254,5 +254,10 @@
     public static string LabelErrorUnableFocus = "Unable focus";
     // 28/11/2012
     public static string LabelErrorLoadingFileList = "Error loading file list";
+    // 30/11/2012
+    public static string LabelTransfer = "Transfer";
+    public static string LabelTransferItem1 = "1.Save to PC only";
+    public static string LabelTransferItem2 = "2.Save to camera only";
+    public static string LabelTransferItem3 = "3.Save to PC and camera";
   }
 }

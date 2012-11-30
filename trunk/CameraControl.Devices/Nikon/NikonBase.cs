@@ -12,6 +12,9 @@ using Timer = System.Timers.Timer;
 
 namespace CameraControl.Devices.Nikon
 {
+  /// <summary>
+  /// Base Nikon driver
+  /// </summary>
   public class NikonBase : BaseMTPCamera
   {
     public const int CONST_CMD_AfDrive = 0x90C1;
@@ -1130,9 +1133,9 @@ namespace CameraControl.Devices.Nikon
           for (int i = 0; i < eventCount; i++)
           {
             //DeviceReady();
-            uint eventCode = BitConverter.ToUInt16(response.Data, 6*i + 2);
-            ushort eventParam = BitConverter.ToUInt16(response.Data, 6*i + 4);
-            int longeventParam = BitConverter.ToInt32(response.Data, 6*i + 4);
+            uint eventCode = BitConverter.ToUInt16(response.Data, 6 * i + 2);
+            ushort eventParam = BitConverter.ToUInt16(response.Data, 6 * i + 4);
+            int longeventParam = BitConverter.ToInt32(response.Data, 6 * i + 4);
             switch (eventCode)
             {
               case CONST_Event_DevicePropChanged:
@@ -1141,11 +1144,11 @@ namespace CameraControl.Devices.Nikon
               case CONST_Event_ObjectAddedInSdram:
               case CONST_Event_ObjectAdded:
                 {
-                  MTPDataResponse objectdata = ExecuteReadDataEx(CONST_CMD_GetObjectInfo, (uint) longeventParam);
+                  MTPDataResponse objectdata = ExecuteReadDataEx(CONST_CMD_GetObjectInfo, (uint)longeventParam);
                   string filename = "DSC_0000.JPG";
                   if (objectdata.Data != null)
                   {
-                    filename = Encoding.Unicode.GetString(objectdata.Data, 53, 12*2);
+                    filename = Encoding.Unicode.GetString(objectdata.Data, 53, 12 * 2);
                     if (filename.Contains("\0"))
                       filename = filename.Split('\0')[0];
                   }
@@ -1160,11 +1163,11 @@ namespace CameraControl.Devices.Nikon
                                                       new PortableDeviceEventArgs(new PortableDeviceEventType()
                                                                                     {
                                                                                       ObjectHandle =
-                                                                                        (uint) longeventParam
+                                                                                        (uint)longeventParam
                                                                                     }),
                                                     CameraDevice = this,
                                                     FileName = filename,
-                                                    Handle = (uint) longeventParam
+                                                    Handle = (uint)longeventParam
                                                   };
                   OnPhotoCapture(this, args);
                 }
@@ -1186,6 +1189,10 @@ namespace CameraControl.Devices.Nikon
           }
         }
 
+      }
+      catch (Exception exception)
+      {
+        Log.Error("Event exception ", exception);
       }
       finally
       {

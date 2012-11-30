@@ -52,9 +52,22 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private bool _captureInSdRam;
+    public bool CaptureInSdRam
+    {
+      get { return _captureInSdRam; }
+      set
+      {
+        _captureInSdRam = value;
+        NotifyPropertyChanged("CaptureInSdRam");
+      }
+    }
+
+
     public CameraProperty()
     {
       NoDownload = false;
+      CaptureInSdRam = true;
     }
 
   }

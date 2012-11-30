@@ -77,20 +77,26 @@ namespace CameraControl
     {
       if(newcameraDevice==null)
         return;
+      CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(newcameraDevice);
       // load session data only if not session attached to the selected camera
       if (newcameraDevice.AttachedPhotoSession == null)
       {
-        CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(newcameraDevice);
         newcameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
       }
       if (newcameraDevice.AttachedPhotoSession != null)
         ServiceProvider.Settings.DefaultSession = (PhotoSession)newcameraDevice.AttachedPhotoSession;
+      
+      if (newcameraDevice.GetCapability(CapabilityEnum.CaptureInRam))
+        newcameraDevice.CaptureInSdRam = property.CaptureInSdRam;
+      
       Dispatcher.Invoke(
         new Action(
           delegate
             {
               btn_capture_noaf.IsEnabled = newcameraDevice.GetCapability(CapabilityEnum.CaptureNoAf);
               btn_liveview.IsEnabled = newcameraDevice.GetCapability(CapabilityEnum.LiveView);
+              Flyouts[0].IsOpen = false;
+              Flyouts[1].IsOpen = false;
             }));
     }
 
