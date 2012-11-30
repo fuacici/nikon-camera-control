@@ -147,8 +147,9 @@
                 <ListBox ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" SelectedItem="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice}" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel>
+                            <StackPanel Orientation="Vertical">
                                 <Label Content="{Binding Path=DeviceName}" ToolTip="{Binding Path=DisplayName}"/>
+                                <Label Content="{Binding Path=DisplayName}" ToolTip="{Binding Path=DisplayName}"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

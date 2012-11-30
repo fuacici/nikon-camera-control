@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using CameraControl.Actions;
@@ -81,7 +82,8 @@ namespace CameraControl
       if (cmd == CmdConsts.All_Close)
       {
         ServiceProvider.DeviceManager.CloseAll();
-        Application.Current.Shutdown();
+        Thread.Sleep(1000);
+        Current.Shutdown();
       }
     }
 
