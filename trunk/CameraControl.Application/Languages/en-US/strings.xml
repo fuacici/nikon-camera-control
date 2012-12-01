@@ -234,5 +234,28 @@
      <string Field="LabelWrongLiveViewType">The set live view selector is the live view photography.</string>
      <string Field="LabelNotInApplicationMode">The camera is not in the application mode.</string>
      <string Field="ButtonResetSettings">Reset settings</string>
-	
+    <!-- 14/11/2012 -->
+    <string Field="LabelUseExternalViewer">Use external viewer</string>
+    <string Field="LabelExternalPreViewerPath">External viewer path</string>
+    <string Field="LabelExternalPreViewerArgs">External viewer arguments</string>
+    <!-- 18/11/2012 -->
+    <string Field="LabelControl">Control</string>
+    <!-- 20/11/2012 -->
+    <string Field="LabelExport">Export</string>
+    <!-- 21/11/2012 -->
+    <string Field="LabelDownload">Download</string>
+    <!-- 25/11/2012 -->
+    <string Field="DownloadWindowTitle">Download photos</string>
+    <string Field="LabelDeleteFilesAfterTransfer">Delete files after transfer</string>
+    <string Field="LabelAskForDelete">Transferred files will be deleted.\nDo you want to continue ?</string>
+    <!-- 26/11/2012 -->
+    <string Field="LabelErrorSetFocusPos">Error set focus position</string>
+    <string Field="LabelErrorUnableFocus">Unable focus</string>
+    <!-- 28/11/2012 -->
+    <string Field="LabelErrorLoadingFileList">Error loading file list</string>
+    <!-- 30/11/2012 -->
+    <string Field="LabelTransfer">Transfer</string>
+    <string Field="LabelTransferItem1">1.Save to PC only</string>
+    <string Field="LabelTransferItem2">2.Save to camera only</string>
+    <string Field="LabelTransferItem3">3.Save to PC and camera</string>	
 </strings>
