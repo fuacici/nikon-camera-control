@@ -365,7 +365,7 @@ namespace CameraControl.windows
       PhotoNo = 2;
       FocusStep = 2;
       InitializeComponent();
-      ThemeManager.ChangeTheme(Application.Current, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
+      //ThemeManager.ChangeTheme(Application.Current, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
       _timer.Stop();
       _timer.AutoReset = true;
       _timer.Elapsed += _timer_Elapsed;
@@ -400,7 +400,7 @@ namespace CameraControl.windows
 
     private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
     {
-      if (_retries > 1000)
+      if (_retries > 100)
       {
         _timer.Stop();
 
@@ -612,16 +612,10 @@ namespace CameraControl.windows
       {
         selectedPortableDevice.AutoFocus();
       }
-      catch (DeviceException exception)
+      catch( Exception exception)
       {
         Log.Error("Unable to autofocus", exception);
         StaticHelper.Instance.SystemMessage = exception.Message;
-      }
-      catch (COMException comException)
-      {
-        Log.Error("Unable to autofocus unhadled error", comException);
-        StaticHelper.Instance.SystemMessage = comException.Message;
-
       }
       FocusCounter = 0;
       _timer.Start();
@@ -636,7 +630,6 @@ namespace CameraControl.windows
     {
       Log.Debug("LiveView: Capture started");
       _timer.Stop();
-      Thread.Sleep(100);
       try
       {
         //selectedPortableDevice.StopLiveView();
@@ -679,12 +672,20 @@ namespace CameraControl.windows
       if (e.ButtonState == MouseButtonState.Pressed && e.ChangedButton == MouseButton.Left && LiveViewData != null &&
           LiveViewData.HaveFocusData && selectedPortableDevice.LiveViewImageZoomRatio.Value == "All")
       {
-        Point initialPoint = e.MouseDevice.GetPosition(image1);
-        double xt = LiveViewData.ImageWidth/image1.ActualWidth;
-        double yt = LiveViewData.ImageHeight/image1.ActualHeight;
-        int posx = (int) (initialPoint.X*xt);
-        int posy = (int) (initialPoint.Y*yt);
-        selectedPortableDevice.Focus(posx, posy);
+        try
+        {
+          Point initialPoint = e.MouseDevice.GetPosition(image1);
+          double xt = LiveViewData.ImageWidth / image1.ActualWidth;
+          double yt = LiveViewData.ImageHeight / image1.ActualHeight;
+          int posx = (int)(initialPoint.X * xt);
+          int posy = (int)(initialPoint.Y * yt);
+          selectedPortableDevice.Focus(posx, posy);
+        }
+        catch (Exception exception)
+        {
+          Log.Error("Focus Error",exception);
+          StaticHelper.Instance.SystemMessage = "Focus error: " + exception.Message;
+        }
       }
     }
 
@@ -768,12 +769,7 @@ namespace CameraControl.windows
                                              SelectedPortableDevice.GetCapability(CapabilityEnum.RecordMovie);
                                            SelectedPortableDevice.CaptureCompleted +=
                                              selectedPortableDevice_CaptureCompleted;
-                                           //_detector = new MotionDetector(
-                                           //  new SimpleBackgroundModelingDetector(),
-                                           //  new MotionAreaHighlighting());
-                                           //_detector = new MotionDetector(
-                                           //  new SimpleBackgroundModelingDetector(true, true),
-                                           //  new BlobCountingObjectsProcessing(40, 40, true));
+
                                            if (ServiceProvider.Settings.DetectionType == 0)
                                            {
                                              _detector = new MotionDetector(
@@ -928,14 +924,15 @@ namespace CameraControl.windows
       else
       {
         IsBusy = false;
+        _timer.Start();
+        Thread thread = new Thread(new ThreadStart(delegate
+        {
+          Thread.Sleep(300);
+          StartLiveView();
+          _timer.Start();
+        }));
+        thread.Start();
       }
-      Thread thread = new Thread(new ThreadStart(delegate
-                                                   {
-                                                     Thread.Sleep(300);
-                                                     StartLiveView();
-                                                     _timer.Start();
-                                                   }));
-      thread.Start();
     }
 
     #endregion
@@ -974,7 +971,8 @@ namespace CameraControl.windows
         Log.Error("Unable to focus", exception);
         StaticHelper.Instance.SystemMessage = TranslationStrings.LabelErrorUnableFocus;
       }
-      _timer.Start();
+      if (!IsBusy)
+        _timer.Start();
       Console.WriteLine("Focus end");
     }
 
@@ -1019,9 +1017,8 @@ namespace CameraControl.windows
       {
         if (IsBusy)
         {
-          Log.Debug("LiveView: Stackphoto capture started");
-          FreezeImage = true;
-          Thread.Sleep(WaitTime*1000);
+          Log.Debug("LiveView: Stack photo capture started");
+          //FreezeImage = true;
           //while (ServiceProvider.DeviceManager.SelectedCameraDevice.IsBusy)
           //{
           //  Thread.Sleep(1);
@@ -1029,30 +1026,31 @@ namespace CameraControl.windows
           StartLiveView();
           if (PhotoCount > 0)
           {
+            Thread.Sleep(400);
             SetFocus(FocusStep);
           }
           PhotoCount++;
           GetLiveImage();
+          Thread.Sleep(WaitTime * 1000);
           //ServiceProvider.DeviceManager.SelectedCameraDevice.Focus(FocusStep);
           if (PhotoCount <= PhotoNo)
           {
             if (!_preview)
             {
               Recording = false;
-              //ServiceProvider.DeviceManager.SelectedCameraDevice.StopLiveView();
-              ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhotoNoAf();
+              SelectedPortableDevice.CapturePhotoNoAf();
             }
             else
             {
-              //Thread.Sleep(1000);
               TakePhoto();
             }
           }
           else
           {
-            ServiceProvider.DeviceManager.SelectedCameraDevice.StartLiveView();
+            StartLiveView();
             FreezeImage = false;
             IsBusy = false;
+            _timer.Start();
           }
         }
         else
@@ -1071,7 +1069,7 @@ namespace CameraControl.windows
     private void btn_preview_Click(object sender, RoutedEventArgs e)
     {
       SetFocus(-FocusCounter);
-      FreezeImage = true;
+      //FreezeImage = true;
       GetLiveImage();
       PhotoCount = 0;
       IsBusy = true;
@@ -1083,12 +1081,13 @@ namespace CameraControl.windows
     private void btn_stop_Click(object sender, RoutedEventArgs e)
     {
       IsBusy = false;
+      _timer.Start();
     }
 
     private void btn_takephoto_Click(object sender, RoutedEventArgs e)
     {
       SetFocus(-FocusCounter);
-      FreezeImage = true;
+      //FreezeImage = true;
       GetLiveImage();
       PhotoCount = 0;
       IsBusy = true;

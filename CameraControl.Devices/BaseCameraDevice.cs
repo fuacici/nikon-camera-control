@@ -386,9 +386,9 @@ namespace CameraControl.Devices
       }
     }
 
-    public virtual event PhotoCapturedEventHandler PhotoCaptured;
-    public virtual event EventHandler CaptureCompleted;
-    public virtual event CameraDisconnectedEventHandler CameraDisconnected;
+    public  event PhotoCapturedEventHandler PhotoCaptured;
+    public  event EventHandler CaptureCompleted;
+    public  event CameraDisconnectedEventHandler CameraDisconnected;
 
     private AsyncObservableCollection<PropertyValue<long>> _advancedProperties;
     public AsyncObservableCollection<PropertyValue<long>> AdvancedProperties

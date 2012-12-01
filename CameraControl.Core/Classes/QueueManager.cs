@@ -54,7 +54,7 @@ namespace CameraControl.Core.Classes
     public void Add(IQueueItem item)
     {
       Queue.Add(item);
-      if(!_worker.IsBusy)
+      if (!_worker.IsBusy)
         _worker.RunWorkerAsync();
     }
 

@@ -801,33 +801,6 @@ namespace CameraControl.Devices.Nikon
       return viewData;
     }
 
-    public override void CapturePhoto()
-    {
-      Monitor.Enter(Locker);
-      try
-      {
-        IsBusy = true;
-        DeviceReady();
-        ErrorCodes.GetException(CaptureInSdRam
-                                  ? ExecuteWithNoData(CONST_CMD_AfAndCaptureRecInSdram)
-                                  : ExecuteWithNoData(CONST_CMD_InitiateCapture));
-      }
-      catch (COMException comException)
-      {
-        IsBusy = false;
-        ErrorCodes.GetException(comException);
-      }
-      catch
-      {
-        IsBusy = false;
-        throw;
-      }
-      finally
-      {
-        Monitor.Exit(Locker);
-      }
-    }
-
     protected virtual void GetAditionalLIveViewData(LiveViewData viewData, byte[] result)
     {
       viewData.LiveViewImageWidth = ToInt16(result, 0);
@@ -868,6 +841,33 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
+    public override void CapturePhoto()
+    {
+      Monitor.Enter(Locker);
+      try
+      {
+        IsBusy = true;
+        DeviceReady();
+        ErrorCodes.GetException(CaptureInSdRam
+                                  ? ExecuteWithNoData(CONST_CMD_AfAndCaptureRecInSdram)
+                                  : ExecuteWithNoData(CONST_CMD_InitiateCapture));
+      }
+      catch (COMException comException)
+      {
+        IsBusy = false;
+        ErrorCodes.GetException(comException);
+      }
+      catch
+      {
+        IsBusy = false;
+        throw;
+      }
+      finally
+      {
+        Monitor.Exit(Locker);
+      }
+    }
+
     public override void CapturePhotoNoAf()
     {
       lock (Locker)
@@ -885,14 +885,12 @@ namespace CameraControl.Devices.Nikon
           {
             if (CaptureInSdRam)
             {
-              DeviceReady();
               ErrorCodes.GetException(ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF));
               return;
             }
             StopLiveView();
           }
 
-          DeviceReady();
           val = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect, -1);
           if (val != null && val.Length > 0)
             oldval = val[0];
@@ -901,7 +899,7 @@ namespace CameraControl.Devices.Nikon
           ErrorCodes.GetException(CaptureInSdRam
                                     ? ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInSdram, 0xFFFFFFFF)
                                     : ExecuteWithNoData(CONST_CMD_InitiateCapture));
-          DeviceReady();
+          //DeviceReady();
         }
         catch
         {
@@ -910,7 +908,7 @@ namespace CameraControl.Devices.Nikon
         }
         finally
         {
-          IsBusy = false;
+          //IsBusy = false;
           if (val != null && val.Length > 0)
             SetProperty(CONST_CMD_SetDevicePropValue, new[] {oldval}, CONST_PROP_AFModeSelect, -1);
         }
@@ -922,7 +920,7 @@ namespace CameraControl.Devices.Nikon
     {
       lock (Locker)
       {
-        DeviceReady();
+        //DeviceReady();
         ErrorCodes.GetException(ExecuteWithNoData(CONST_CMD_ChangeAfArea, (uint) x, (uint) y));
       }
     }
@@ -933,10 +931,9 @@ namespace CameraControl.Devices.Nikon
       {
         try
         {
-          DeviceReady();
           _timer.Stop();
-          StillImageDevice.Disconnect();
           HaveLiveView = false;
+          StillImageDevice.Disconnect();
         }
         catch (Exception exception)
         {
@@ -1133,10 +1130,10 @@ namespace CameraControl.Devices.Nikon
     {
       try
       {
-        if(_eventIsbusy)
+        if (_eventIsbusy)
           return;
         _eventIsbusy = true;
-        DeviceReady();
+        //DeviceReady();
         MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetEvent);
 
         if (response.Data == null)
@@ -1147,75 +1144,83 @@ namespace CameraControl.Devices.Nikon
         int eventCount = BitConverter.ToInt16(response.Data, 0);
         if (eventCount > 0)
         {
+          Console.WriteLine("Event queue length "+eventCount);
           for (int i = 0; i < eventCount; i++)
           {
-            //DeviceReady();
-            uint eventCode = BitConverter.ToUInt16(response.Data, 6 * i + 2);
-            ushort eventParam = BitConverter.ToUInt16(response.Data, 6 * i + 4);
-            int longeventParam = BitConverter.ToInt32(response.Data, 6 * i + 4);
-            switch (eventCode)
+            Console.WriteLine("Event processed " + i);
+            try
             {
-              case CONST_Event_DevicePropChanged:
-                ReadDeviceProperties(eventParam);
-                break;
-              case CONST_Event_ObjectAddedInSdram:
-              case CONST_Event_ObjectAdded:
-                {
-                  MTPDataResponse objectdata = ExecuteReadDataEx(CONST_CMD_GetObjectInfo, (uint)longeventParam);
-                  string filename = "DSC_0000.JPG";
-                  if (objectdata.Data != null)
+              uint eventCode = BitConverter.ToUInt16(response.Data, 6*i + 2);
+              ushort eventParam = BitConverter.ToUInt16(response.Data, 6*i + 4);
+              int longeventParam = BitConverter.ToInt32(response.Data, 6*i + 4);
+              switch (eventCode)
+              {
+                case CONST_Event_DevicePropChanged:
+                  ReadDeviceProperties(eventParam);
+                  break;
+                case CONST_Event_ObjectAddedInSdram:
+                case CONST_Event_ObjectAdded:
                   {
-                    filename = Encoding.Unicode.GetString(objectdata.Data, 53, 12 * 2);
-                    if (filename.Contains("\0"))
-                      filename = filename.Split('\0')[0];
+                    MTPDataResponse objectdata = ExecuteReadDataEx(CONST_CMD_GetObjectInfo, (uint) longeventParam);
+                    string filename = "DSC_0000.JPG";
+                    if (objectdata.Data != null)
+                    {
+                      filename = Encoding.Unicode.GetString(objectdata.Data, 53, 12*2);
+                      if (filename.Contains("\0"))
+                        filename = filename.Split('\0')[0];
+                    }
+                    else
+                    {
+                      Log.Error("Error getting file name");
+                    }
+                    PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
+                                                    {
+                                                      WiaImageItem = null,
+                                                      EventArgs =
+                                                        new PortableDeviceEventArgs(new PortableDeviceEventType()
+                                                                                      {
+                                                                                        ObjectHandle =
+                                                                                          (uint) longeventParam
+                                                                                      }),
+                                                      CameraDevice = this,
+                                                      FileName = filename,
+                                                      Handle = (uint) longeventParam
+                                                    };
+                    OnPhotoCapture(this, args);
                   }
-                  else
+                  break;
+                case CONST_Event_CaptureComplete:
+                case CONST_Event_CaptureCompleteRecInSdram:
                   {
-                    Log.Error("Error getting file name");
+                    OnCaptureCompleted(this, new EventArgs());
                   }
-                  PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
-                                                  {
-                                                    WiaImageItem = null,
-                                                    EventArgs =
-                                                      new PortableDeviceEventArgs(new PortableDeviceEventType()
-                                                                                    {
-                                                                                      ObjectHandle =
-                                                                                        (uint)longeventParam
-                                                                                    }),
-                                                    CameraDevice = this,
-                                                    FileName = filename,
-                                                    Handle = (uint)longeventParam
-                                                  };
-                  OnPhotoCapture(this, args);
-                }
-                break;
-              case CONST_Event_CaptureComplete:
-              case CONST_Event_CaptureCompleteRecInSdram:
-                {
-                  OnCaptureCompleted(this, new EventArgs());
-                }
-                break;
-              case CONST_Event_ObsoleteEvent:
-                break;
-              default:
-                //Console.WriteLine("Unknown event code " + eventCode.ToString("X"));
-                Log.Debug("Unknown event code :" + eventCode.ToString("X") + "|" +
-                          longeventParam.ToString("X"));
-                break;
+                  break;
+                case CONST_Event_ObsoleteEvent:
+                  break;
+                default:
+                  //Console.WriteLine("Unknown event code " + eventCode.ToString("X"));
+                  Log.Debug("Unknown event code :" + eventCode.ToString("X") + "|" +
+                            longeventParam.ToString("X"));
+                  break;
+              }
+            }
+            catch (Exception exception)
+            {
+              Log.Error("Event queue processing error ", exception);
             }
           }
         }
-
+      }
+      catch (InvalidComObjectException)
+      {
+        return;
       }
       catch (Exception exception)
       {
-        Log.Error("Event exception ", exception);
+        //Log.Error("Event exception ", exception);
       }
-      finally
-      {
-        _eventIsbusy = false;
-        _timer.Start();
-      }
+      _eventIsbusy = false;
+      _timer.Start();
     }
 
     public void DeviceReady()
