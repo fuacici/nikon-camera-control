@@ -381,8 +381,6 @@ namespace CameraControl.Devices.Others
 
     void DeviceManager_OnEvent(string eventId, string deviceId, string itemId)
     {
-      if (PhotoCaptured != null)
-      {
         Item tem = Device.GetItem(itemId);
         ImageFile imageFile = (ImageFile)tem.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
         PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
@@ -392,9 +390,8 @@ namespace CameraControl.Devices.Others
                                           FileName = "00000." + imageFile.FileExtension,
                                           Handle = imageFile
                                         };
-        PhotoCaptured(this, args);
-      }
-      OnCaptureCompleted(this, new EventArgs());
+        OnPhotoCapture(this, args);
+        OnCaptureCompleted(this, new EventArgs());
     }
 
     public WiaCameraDevice()
@@ -644,7 +641,7 @@ namespace CameraControl.Devices.Others
       }
     }
 
-    public override event PhotoCapturedEventHandler PhotoCaptured;
+    //public override event PhotoCapturedEventHandler PhotoCaptured;
 
     #endregion
   }
