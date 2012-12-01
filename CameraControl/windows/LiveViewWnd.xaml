@@ -137,8 +137,7 @@
                                     </Style>
                                 </ToggleButton.Style>
                             </ToggleButton>
-                            <Button Content="&lt;&lt;&lt;&lt;&lt;&lt;" Grid.ColumnSpan="3" Grid.Row="2" Name="btn_smoot_fm" Margin="1" />
-                            <Button Content=">>>>>>" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="2" Name="btn_smoot_fp" Margin="1" MouseLeftButtonDown="btn_smoot_fp_MouseLeftButtonDown" MouseLeftButtonUp="btn_smoot_fp_MouseLeftButtonUp" />
+                            <Slider Name="focus_slider" Grid.ColumnSpan="6" Grid.Row="2" Maximum="{Binding Path=FocusValue, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" IsEnabled="{Binding Path=LockB, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" ValueChanged="Slider_ValueChanged" AutoToolTipPlacement="BottomRight" TickFrequency="10" />
                         </Grid>
                     </Expander.Content>
                 </Expander>
@@ -248,7 +247,7 @@
         <Button Content="{T:TranslateExtension ButtonRecordMovie}" Height="23" HorizontalAlignment="Left" Margin="12,51,0,0" Name="btn_record" VerticalAlignment="Top" Width="182" Click="btn_record_Click" />
         <Canvas Height="104" HorizontalAlignment="Left" Margin="32,114,0,0" Name="canvas_image" VerticalAlignment="Top" Width="130" Background="#FFC7C7C7" MouseDown="canvas_image_MouseDown">
             <Rectangle Canvas.Left="0" Canvas.Top="0" Height="15" Name="small_focus_rect" Stroke="Red" Width="17" ClipToBounds="True" />
-            <Controls:ProgressRing IsActive="{Binding Path=SelectedPortableDevice.IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Height="78" Width="81" Canvas.Left="21" Canvas.Top="20" />
+            <!--<Controls:ProgressRing IsActive="{Binding Path=SelectedPortableDevice.IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Height="78" Width="81" Canvas.Left="21" Canvas.Top="20" />-->
         </Canvas>
         <Label Content="{Binding Path=Fps, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Margin="164,114,9,72" />
     </Grid>

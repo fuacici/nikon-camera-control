@@ -58,6 +58,7 @@ namespace CameraControl.windows
     private MotionDetector _detector;
     private DateTime _photoCapturedTime;
     private DateTime _focusMoveTime = DateTime.Now;
+    private bool _sliderfocus = false;
 
     public LiveViewData LiveViewData { get; set; }
 
@@ -153,7 +154,7 @@ namespace CameraControl.windows
       {
         _focusStep = value;
         NotifyPropertyChanged("FocusStep");
-        PhotoNo = FocusValue/FocusStep;
+        PhotoNo = Convert.ToInt32(Decimal.Round((decimal)FocusValue/FocusStep, MidpointRounding.AwayFromZero));
       }
     }
 
@@ -387,10 +388,6 @@ namespace CameraControl.windows
                           };
       _smoottimer = new Timer(100);
       _smoottimer.Elapsed += _smoottimer_Elapsed;
-      btn_smoot_fm.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(btn_smoot_fm_MouseLeftButtonDown));
-      btn_smoot_fm.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(btn_smoot_fm_MouseLeftButtonUp));
-      btn_smoot_fp.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(btn_smoot_fp_MouseLeftButtonDown));
-      btn_smoot_fp.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(btn_smoot_fp_MouseLeftButtonUp));
     }
 
     private void _freezeTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -641,7 +638,7 @@ namespace CameraControl.windows
       catch (DeviceException exception)
       {
         StaticHelper.Instance.SystemMessage = exception.Message;
-        Log.Error("Unable to take pictore with no af", exception);
+        Log.Error("Unable to take picture with no af", exception);
       }
       //_timer.Start();
     }
@@ -971,6 +968,8 @@ namespace CameraControl.windows
         Log.Error("Unable to focus", exception);
         StaticHelper.Instance.SystemMessage = TranslationStrings.LabelErrorUnableFocus;
       }
+      if (LockB)
+        focus_slider.Value = FocusCounter;
       if (!IsBusy)
         _timer.Start();
       Console.WriteLine("Focus end");
@@ -1237,6 +1236,13 @@ namespace CameraControl.windows
     private void btn_help_Click(object sender, RoutedEventArgs e)
     {
       HelpProvider.Run(HelpSections.LiveView);
+    }
+
+    private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+      if(Math.Abs(FocusCounter - e.NewValue) == 0)
+        return;
+       //SetFocus((int) (e.NewValue-e.OldValue));
     }
 
   }
