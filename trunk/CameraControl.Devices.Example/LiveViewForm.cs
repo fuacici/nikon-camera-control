@@ -6,8 +6,10 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using CameraControl.Devices.Classes;
+using Timer = System.Windows.Forms.Timer;
 
 namespace CameraControl.Devices.Example
 {
@@ -22,7 +24,22 @@ namespace CameraControl.Devices.Example
       _liveViewTimer.Interval = 1000/15;
       _liveViewTimer.Tick += _liveViewTimer_Tick;
       CameraDevice = cameraDevice;
+      CameraDevice.CameraDisconnected += CameraDevice_CameraDisconnected;
       InitializeComponent();
+    }
+
+    void CameraDevice_CameraDisconnected(object sender, DisconnectCameraEventArgs eventArgs)
+    {
+      MethodInvoker method = delegate
+      {
+        _liveViewTimer.Stop();
+        Thread.Sleep(100);
+        Close();
+      };
+      if (InvokeRequired)
+        BeginInvoke(method);
+      else
+        method.Invoke();
     }
 
     void _liveViewTimer_Tick(object sender, EventArgs e)
