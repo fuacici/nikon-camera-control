@@ -81,7 +81,7 @@ namespace CameraControl.Devices.Classes
       switch ((uint)exception.ErrorCode)
       {
         case WIA_ERROR_BUSY:
-          throw new DeviceException("Device is bussy. Error code :WIA_ERROR_BUSY", exception, (uint)exception.ErrorCode);
+          throw new DeviceException("Device is busy. Error code :WIA_ERROR_BUSY", exception, (uint)exception.ErrorCode);
         case WIA_ERROR_DEVICE_COMMUNICATION:
           throw new DeviceException("Device communication error. Error code :WIA_ERROR_DEVICE_COMMUNICATION", exception, (uint)exception.ErrorCode);
         case WIA_ERROR_DEVICE_LOCKED:
@@ -101,7 +101,7 @@ namespace CameraControl.Devices.Classes
         case WIA_ERROR_UNABLE_TO_FOCUS:
           throw new DeviceException("Unable to focus. Error code :WIA_ERROR_UNABLE_TO_FOCUS", exception, WIA_ERROR_UNABLE_TO_FOCUS, (uint)exception.ErrorCode);
         default:
-          throw new DeviceException("Unknow error. Error code:" + (uint)exception.ErrorCode, exception, (uint)exception.ErrorCode);
+          throw new DeviceException("Unknown error. Error code:" + (uint)exception.ErrorCode, exception, (uint)exception.ErrorCode);
       }
 
     }

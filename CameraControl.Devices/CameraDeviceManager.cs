@@ -308,12 +308,13 @@ namespace CameraControl.Devices
         Log.Debug("Native drivers are disabled !!!!");
       }
       bool ret = false;
+      bool noDriversDetected = ConnectedDevices.Count == 0;
       int retries = 0;
       foreach (IDeviceInfo devInfo in new DeviceManager().DeviceInfos)
       {
         // Look for CameraDeviceType devices
         string model = devInfo.Properties["Name"].get_Value();
-        if (devInfo.Type == WiaDeviceType.CameraDeviceType && (GetNativeDriver(model)==null || DisableNativeDrivers))
+        if (devInfo.Type == WiaDeviceType.CameraDeviceType && (GetNativeDriver(model) == null || DisableNativeDrivers || noDriversDetected))
         {
           do
           {

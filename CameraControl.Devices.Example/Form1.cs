@@ -27,6 +27,21 @@ namespace CameraControl.Devices.Example
       DeviceManager.CameraDisconnected += DeviceManager_CameraDisconnected;
       FolderForPhotos = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Test");
       InitializeComponent();
+      Log.LogError += Log_LogDebug;
+    }
+
+    void Log_LogDebug(LogEventArgs e)
+    {
+      MethodInvoker method = delegate
+                               {
+                                 textBox1.AppendText((string)e.Message);
+                                 if (e.Exception != null)
+                                   textBox1.AppendText((string) e.Exception.StackTrace);
+                               };
+      if (InvokeRequired)
+        BeginInvoke(method);
+      else
+        method.Invoke();
     }
 
     private void RefreshDisplay()
@@ -104,6 +119,14 @@ namespace CameraControl.Devices.Example
 
     void DeviceManager_CameraSelected(ICameraDevice oldcameraDevice, ICameraDevice newcameraDevice)
     {
+      MethodInvoker method = delegate
+      {
+        btn_liveview.Enabled = newcameraDevice.GetCapability(CapabilityEnum.LiveView);
+      };
+      if (InvokeRequired)
+        BeginInvoke(method);
+      else
+        method.Invoke();
     }
 
     private void Form1_Load(object sender, EventArgs e)
