@@ -27,16 +27,10 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_CMD_InitiateCaptureRecInSdram = 0x90C0;
     public const int CONST_CMD_ChangeAfArea = 0x9205;
     public const int CONST_CMD_MfDrive = 0x9204;
-    public const int CONST_CMD_GetDevicePropValue = 0x1015;
-    public const int CONST_CMD_SetDevicePropValue = 0x1016;
+    
     public const int CONST_CMD_GetEvent = 0x90C7;
-    public const int CONST_CMD_GetDevicePropDesc = 0x1014;
-    public const int CONST_CMD_GetObjectHandles = 0x1007;
+
     public const int CONST_CMD_DeviceReady = 0x90C8;
-    public const int CONST_CMD_GetObjectInfo = 0x1008;
-    public const int CONST_CMD_GetObject = 0x1009;
-    public const int CONST_CMD_GetThumb = 0x100A;
-    public const int CONST_CMD_DeleteObject = 0x100B;
     public const int CONST_CMD_ChangeCameraMode = 0x90C2;
     public const int CONST_CMD_StartMovieRecInCard = 0x920A;
     public const int CONST_CMD_EndMovieRec = 0x920B;
@@ -66,11 +60,6 @@ namespace CameraControl.Devices.Nikon
     public const int CONST_Event_ObjectAddedInSdram = 0xC101;
     public const int CONST_Event_ObsoleteEvent = 0xC104;
 
-
-    /// <summary>
-    /// The timer for get periodically the event list
-    /// </summary>
-    private Timer _timer = new Timer(1000/15);
 
     /// <summary>
     /// Variable to check if event processing is in progress 
@@ -498,6 +487,7 @@ namespace CameraControl.Devices.Nikon
         }
       }
     }
+
     void ShutterSpeed_ValueChanged(object sender, string key, long val)
     {
       SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
@@ -1251,46 +1241,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    protected void SetProperty(int code, byte[] data, int param1, int param2)
-    {
-      bool timerstate = _timer.Enabled;
-      _timer.Stop();
-      bool retry = false;
-      int retrynum = 0;
-      //DeviceReady();
-      do
-      {
-        if (retrynum > 5)
-        {
-          return;
-        }
-        try
-        {
-          retry = false;
-          uint resp = StillImageDevice.ExecuteWriteData(code, data, param1, param2);
-          if (resp != 0 || resp != ErrorCodes.MTP_OK)
-          {
-            //Console.WriteLine("Retry ...." + resp.ToString("X"));
-            if (resp == ErrorCodes.MTP_Device_Busy || resp == 0x800700AA)
-            {
-              Thread.Sleep(100);
-              retry = true;
-              retrynum++;
-            }
-            else
-            {
-              ErrorCodes.GetException(resp);
-            }
-          }
-        }
-        catch (Exception exception)
-        {
-          Log.Error("Error set property :" + param1.ToString("X"), exception);
-        }
-      } while (retry);
-      if (timerstate)
-        _timer.Start();
-    }
+
 
     public override string GetProhibitionCondition(OperationEnum operationEnum)
     {

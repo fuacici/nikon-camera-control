@@ -22,16 +22,16 @@ namespace CameraControl.Devices.Nikon
     public override void StartBulbMode()
     {
       DeviceReady();
-      StillImageDevice.ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 1);
+      ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 1);
       SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt16) 0x0001),
                   CONST_PROP_ExposureProgramMode, -1);
-      SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt32)0xFFFFFFFF),
+      SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(0xFFFFFFFF),
                   CONST_PROP_ExposureTime, -1);
 
       ErrorCodes.GetException(CaptureInSdRam
-                                ? StillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF,
+                                ? ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF,
                                                                       0x0001)
-                                : StillImageDevice.ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF,
+                                : ExecuteWithNoData(CONST_CMD_InitiateCaptureRecInMedia, 0xFFFFFFFF,
                                                                       0x0000));
     }
 
