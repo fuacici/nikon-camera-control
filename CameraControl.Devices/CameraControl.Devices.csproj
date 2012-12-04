@@ -67,7 +67,7 @@
     <Compile Include="BaseCameraDevice.cs" />
     <Compile Include="BaseMTPCamera.cs" />
     <Compile Include="CameraDeviceManager.cs" />
-    <Compile Include="Canon\Canon400D.cs" />
+    <Compile Include="Canon\CanonBase.cs" />
     <Compile Include="Classes\AsyncObservableCollection.cs" />
     <Compile Include="Classes\BaseFieldClass.cs" />
     <Compile Include="Classes\CapabilityEnum.cs" />

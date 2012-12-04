@@ -548,21 +548,28 @@ namespace CameraControl.Core.Classes
     public Settings Load()
     {
       Settings settings = new Settings();
-      if (!Directory.Exists(Path.GetDirectoryName(ConfigFile)))
+      try
       {
-        Directory.CreateDirectory(Path.GetDirectoryName(ConfigFile));
+        if (!Directory.Exists(Path.GetDirectoryName(ConfigFile)))
+        {
+          Directory.CreateDirectory(Path.GetDirectoryName(ConfigFile));
+        }
+        if (File.Exists(ConfigFile))
+        {
+          XmlSerializer mySerializer =
+            new XmlSerializer(typeof(Settings));
+          FileStream myFileStream = new FileStream(ConfigFile, FileMode.Open);
+          settings = (Settings)mySerializer.Deserialize(myFileStream);
+          myFileStream.Close();
+        }
+        else
+        {
+          settings.Save();
+        }
       }
-      if (File.Exists(ConfigFile))
+      catch (Exception exception)
       {
-        XmlSerializer mySerializer =
-          new XmlSerializer(typeof (Settings));
-        FileStream myFileStream = new FileStream(ConfigFile, FileMode.Open);
-        settings = (Settings) mySerializer.Deserialize(myFileStream);
-        myFileStream.Close();
-      }
-      else
-      {
-        settings.Save();
+        Log.Error("Error loading config file ", exception);
       }
       return settings;
     }

@@ -23,15 +23,18 @@ namespace CameraControl
   /// </summary>
   public partial class App
   {
-    private void Application_Exit(object sender, ExitEventArgs e)
-    {
-      ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
-      ServiceProvider.Settings.Save();
-      if (ServiceProvider.Trigger != null)
+      private void Application_Exit(object sender, ExitEventArgs e)
       {
-        ServiceProvider.Trigger.Stop();
+          if (ServiceProvider.Settings != null)
+          {
+              ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
+              ServiceProvider.Settings.Save();
+              if (ServiceProvider.Trigger != null)
+              {
+                  ServiceProvider.Trigger.Stop();
+              }
+          }
       }
-    }
 
     private void Application_Startup(object sender, StartupEventArgs e)
     {

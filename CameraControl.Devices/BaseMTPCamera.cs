@@ -1,6 +1,8 @@
+using System;
 using System.Threading;
 using CameraControl.Devices.Classes;
 using PortableDeviceLib;
+using Timer = System.Timers.Timer;
 
 namespace CameraControl.Devices
 {
@@ -10,12 +12,27 @@ namespace CameraControl.Devices
     protected const int AppMajorVersionNumber = 1;
     protected const int AppMinorVersionNumber = 0;
 
+    // common MTP commands
+    public const int CONST_CMD_GetDevicePropValue = 0x1015;
+    public const int CONST_CMD_SetDevicePropValue = 0x1016;
+    public const int CONST_CMD_GetDevicePropDesc = 0x1014;
+    public const int CONST_CMD_GetObject = 0x1009;
+    public const int CONST_CMD_GetObjectHandles = 0x1007;
+    public const int CONST_CMD_GetObjectInfo = 0x1008;
+    public const int CONST_CMD_GetThumb = 0x100A;
+    public const int CONST_CMD_DeleteObject = 0x100B;
+
 
     private const int CONST_READY_TIME = 1;
     private const int CONST_LOOP_TIME = 100;
 
     protected StillImageDevice StillImageDevice = null;
     protected bool DeviceIsBusy = false;
+    /// <summary>
+    /// The timer for get periodically the event list
+    /// </summary>
+    protected Timer _timer = new Timer(1000 / 15);
+
 
 
     public MTPDataResponse ExecuteReadDataEx(int code)
@@ -137,5 +154,45 @@ namespace CameraControl.Devices
       //}
     }
 
+    protected void SetProperty(int code, byte[] data, int param1, int param2)
+    {
+      bool timerstate = _timer.Enabled;
+      _timer.Stop();
+      bool retry = false;
+      int retrynum = 0;
+      //DeviceReady();
+      do
+      {
+        if (retrynum > 5)
+        {
+          return;
+        }
+        try
+        {
+          retry = false;
+          uint resp = StillImageDevice.ExecuteWriteData(code, data, param1, param2);
+          if (resp != 0 || resp != ErrorCodes.MTP_OK)
+          {
+            //Console.WriteLine("Retry ...." + resp.ToString("X"));
+            if (resp == ErrorCodes.MTP_Device_Busy || resp == 0x800700AA)
+            {
+              Thread.Sleep(100);
+              retry = true;
+              retrynum++;
+            }
+            else
+            {
+              ErrorCodes.GetException(resp);
+            }
+          }
+        }
+        catch (Exception exception)
+        {
+          Log.Error("Error set property :" + param1.ToString("X"), exception);
+        }
+      } while (retry);
+      if (timerstate)
+        _timer.Start();
+    }
   }
 }

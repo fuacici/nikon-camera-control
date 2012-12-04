@@ -84,8 +84,10 @@ namespace CameraControl.Devices
                         {"D800e", typeof (NikonD800)},
                         {"D90", typeof (NikonD90)},
                         {"D.*", typeof (NikonBase)},
-                        {"Canon EOS DIGITAL REBEL XTi", typeof (Canon400D)},
-                        {"Canon EOS 400D DIGITAL", typeof (Canon400D)},
+                        {"Canon EOS DIGITAL REBEL XTi", typeof (CanonBase)},
+                        {"Canon EOS 400D DIGITAL", typeof (CanonBase)},
+                        {"Canon EOS 60D", typeof (CanonBase)},
+                        {"Canon EOS.*", typeof (CanonBase)},
                         // for mtp simulator
                         //{"Test Camera ", typeof (NikonBase)},
                       };
