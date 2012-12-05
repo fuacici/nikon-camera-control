@@ -25,6 +25,8 @@ namespace CameraControl.Devices.Example
       DeviceManager.CameraConnected += DeviceManager_CameraConnected;
       DeviceManager.PhotoCaptured += DeviceManager_PhotoCaptured;
       DeviceManager.CameraDisconnected += DeviceManager_CameraDisconnected;
+      // For experimental Canon driver support- just for capture nothing else 
+      DeviceManager.UseExperimentalDrivers = true;
       FolderForPhotos = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Test");
       InitializeComponent();
       Log.LogError += Log_LogDebug;
@@ -37,6 +39,7 @@ namespace CameraControl.Devices.Example
                                  textBox1.AppendText((string)e.Message);
                                  if (e.Exception != null)
                                    textBox1.AppendText((string) e.Exception.StackTrace);
+                                 textBox1.AppendText(Environment.NewLine);
                                };
       if (InvokeRequired)
         BeginInvoke(method);

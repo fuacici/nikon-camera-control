@@ -188,7 +188,7 @@ namespace CameraControl.Devices
         }
         catch (Exception exception)
         {
-          Log.Error("Error set property :" + param1.ToString("X"), exception);
+          Log.Debug("Error set property :" + param1.ToString("X"), exception);
         }
       } while (retry);
       if (timerstate)

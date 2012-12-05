@@ -185,7 +185,7 @@ namespace CameraControl.Devices.Others
       }
       catch (Exception ex)
       {
-        Log.Error(ex);
+        Log.Debug("Init error",ex);
       }
       IsConnected = true;
       try
