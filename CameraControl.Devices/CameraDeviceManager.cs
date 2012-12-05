@@ -19,6 +19,14 @@ namespace CameraControl.Devices
     private const int AppMinorVersionNumber = 0;
     private DeviceDescriptorEnumerator _deviceEnumerator;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether use experimental drivers.
+    /// Experimental drivers isn't tested and may not implement all camera possibilities 
+    /// </summary>
+    /// <value>
+    /// <c>true</c> if [use experimental drivers]; otherwise, <c>false</c>.
+    /// </value>
+    public bool UseExperimentalDrivers { get; set; }
 
     /// <summary>
     /// Gets or sets the natively supported model dictionary.
@@ -55,8 +63,7 @@ namespace CameraControl.Devices
 
     public AsyncObservableCollection<ICameraDevice> ConnectedDevices { get; set; }
 
-
-    public CameraDeviceManager()
+    private void PopulateDeviceClass()
     {
       DeviceClass = new Dictionary<string, Type>
                       {
@@ -84,14 +91,18 @@ namespace CameraControl.Devices
                         {"D800e", typeof (NikonD800)},
                         {"D90", typeof (NikonD90)},
                         {"D.*", typeof (NikonBase)},
-                        {"Canon EOS DIGITAL REBEL XTi", typeof (CanonBase)},
-                        {"Canon EOS 400D DIGITAL", typeof (CanonBase)},
-                        {"Canon EOS 60D", typeof (CanonBase)},
-                        {"Canon EOS.*", typeof (CanonBase)},
                         // for mtp simulator
-                        //{"Test Camera ", typeof (NikonBase)},
+                       //{"Test Camera ", typeof (NikonBase)},
                       };
+      if(UseExperimentalDrivers)
+      {
+        DeviceClass.Add("Canon EOS.*", typeof(CanonBase));
+      }
 
+    }
+
+    public CameraDeviceManager()
+    {
       SelectedCameraDevice = new NotConnectedCameraDevice();
       ConnectedDevices = new AsyncObservableCollection<ICameraDevice>();
       _deviceEnumerator = new DeviceDescriptorEnumerator();
@@ -301,6 +312,9 @@ namespace CameraControl.Devices
 
     public bool ConnectToCamera(bool retry)
     {
+      if (DeviceClass == null || DeviceClass.Count == 0)
+        PopulateDeviceClass();
+
       if (!DisableNativeDrivers)
       {
         ConnectDevices();

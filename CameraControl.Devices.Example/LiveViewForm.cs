@@ -73,14 +73,35 @@ namespace CameraControl.Devices.Example
 
     private void btn_start_Click(object sender, EventArgs e)
     {
-      CameraDevice.StartLiveView();
-      _liveViewTimer.Start();
+      try
+      {
+        CameraDevice.StartLiveView();
+        _liveViewTimer.Start();
+      }
+      catch (Exception exception)
+      {
+        MessageBox.Show(exception.Message);
+      }
     }
 
     private void btn_stop_Click(object sender, EventArgs e)
     {
-      _liveViewTimer.Start();
-      CameraDevice.StopLiveView();
+      try
+      {
+        _liveViewTimer.Stop();
+        // wait for last get live view image
+        Thread.Sleep(500);
+        CameraDevice.StopLiveView();
+      }
+      catch (Exception exception)
+      {
+        MessageBox.Show(exception.Message);
+      }
+    }
+
+    private void LiveViewForm_FormClosing(object sender, FormClosingEventArgs e)
+    {
+      btn_stop_Click(null, null);
     }
   }
 }

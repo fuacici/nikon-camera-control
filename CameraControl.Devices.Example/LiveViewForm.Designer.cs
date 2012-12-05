@@ -73,6 +73,7 @@
       this.Controls.Add(this.pictureBox1);
       this.Name = "LiveViewForm";
       this.Text = "LiveViewForm";
+      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LiveViewForm_FormClosing);
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
       this.ResumeLayout(false);
 
