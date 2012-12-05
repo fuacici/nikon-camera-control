@@ -43,6 +43,8 @@ namespace CameraControl.Core
 
     public void LoadPlugins(string pluginFolder)
     {
+      if (!Directory.Exists(pluginFolder))
+        return;
       string[] files = Directory.GetFiles(pluginFolder, "*.dll");
       foreach (var pluginFile in files)
       {
