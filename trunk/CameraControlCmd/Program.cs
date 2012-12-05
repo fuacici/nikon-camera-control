@@ -21,7 +21,7 @@ namespace CameraControlCmd
     private static InputArguments _arguments;
     static void Main(string[] args)
     {
-      Console.WriteLine("NCC command line utility");
+      Console.WriteLine("digiCamControl command line utility");
       Console.WriteLine();
       _arguments = new InputArguments(args,"/");
       if (!args.Any() || _arguments.Contains("help"))
