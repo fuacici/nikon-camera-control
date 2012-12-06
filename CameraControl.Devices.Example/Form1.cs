@@ -26,7 +26,8 @@ namespace CameraControl.Devices.Example
       DeviceManager.PhotoCaptured += DeviceManager_PhotoCaptured;
       DeviceManager.CameraDisconnected += DeviceManager_CameraDisconnected;
       // For experimental Canon driver support- just for capture nothing else 
-      DeviceManager.UseExperimentalDrivers = true;
+      DeviceManager.UseExperimentalDrivers = false;
+      DeviceManager.DisableNativeDrivers = true;
       FolderForPhotos = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Test");
       InitializeComponent();
       Log.LogError += Log_LogDebug;

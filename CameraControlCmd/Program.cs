@@ -162,7 +162,7 @@ namespace CameraControlCmd
       Console.WriteLine(" /folder path              - set the photo save folder" );
       Console.WriteLine(" /filename filename        - set the photo save file name template");
       Console.WriteLine(" /counter number           - set the photo initial counter");
-      Console.WriteLine(" /wait                     - after done wait for keypress ");
+      Console.WriteLine(" /wait                     - after done wait for a keypress ");
     }
 
     private static void InitApplication()
