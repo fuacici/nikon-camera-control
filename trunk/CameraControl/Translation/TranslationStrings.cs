@@ -259,5 +259,7 @@
     public static string LabelTransferItem1 = "1.Save to PC only";
     public static string LabelTransferItem2 = "2.Save to camera only";
     public static string LabelTransferItem3 = "3.Save to PC and camera";
+    // 05/12/2012
+    public static string MsgDisabledDrivers = "Native drivers are disabled ! Do you want to enable it ?";
   }
 }

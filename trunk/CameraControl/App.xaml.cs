@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using CameraControl.Actions;
 using CameraControl.Actions.Enfuse;
@@ -15,6 +16,8 @@ using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using CameraControl.Translation;
 using CameraControl.windows;
+using Application = System.Windows.Application;
+using MessageBox = System.Windows.MessageBox;
 
 namespace CameraControl
 {
@@ -64,6 +67,8 @@ namespace CameraControl
                                                 };
       ServiceProvider.Settings = new Settings();
       ServiceProvider.Settings = ServiceProvider.Settings.Load();
+      if (ServiceProvider.Settings.DisableNativeDrivers && System.Windows.Forms.MessageBox.Show(TranslationStrings.MsgDisabledDrivers, "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+        ServiceProvider.Settings.DisableNativeDrivers = false;
       ServiceProvider.Settings.LoadSessionData();
       TranslationManager.LoadLanguage(ServiceProvider.Settings.SelectedLanguage);
       ServiceProvider.WindowsManager = new WindowsManager();
@@ -77,6 +82,9 @@ namespace CameraControl
       ServiceProvider.WindowsManager.Event += WindowsManager_Event;
       ServiceProvider.Trigger.Start();
       ServiceProvider.PluginManager.LoadPlugins(Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Plugins"));
+      
+      MainWindow mainView = new MainWindow();
+      mainView.Show();
     }
 
     void WindowsManager_Event(string cmd, object o)
