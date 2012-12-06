@@ -121,21 +121,27 @@ namespace CameraControl.Devices
       DeviceDescriptor descriptor = new DeviceDescriptor { WiaDeviceInfo = devInfo, WiaId = devInfo.DeviceID };
 
       ICameraDevice cameraDevice = new WiaCameraDevice();
-      cameraDevice.Init(descriptor);
+      bool isConnected = cameraDevice.Init(descriptor);
+
       descriptor.CameraDevice = cameraDevice;
       _deviceEnumerator.Add(descriptor);
       ConnectedDevices.Add(cameraDevice);
-      SelectedCameraDevice = cameraDevice;
-      cameraDevice.PhotoCaptured += cameraDevice_PhotoCaptured;
-      cameraDevice.CameraDisconnected += cameraDevice_CameraDisconnected;
+
+      if (isConnected)
+      {
+          SelectedCameraDevice = cameraDevice;
+          cameraDevice.PhotoCaptured += cameraDevice_PhotoCaptured;
+          cameraDevice.CameraDisconnected += cameraDevice_CameraDisconnected;
+
+          if (CameraConnected != null)
+              CameraConnected(cameraDevice);
+          StaticHelper.Instance.SystemMessage = "New Camera is connected ! Driver :" + cameraDevice.DeviceName;
+          Log.Debug("===========Camera is connected==============");
+          Log.Debug("Driver :" + cameraDevice.GetType().Name);
+          Log.Debug("Name :" + cameraDevice.DeviceName);
+          Log.Debug("Manufacturer :" + cameraDevice.Manufacturer);
+      }
       //ServiceProvider.DeviceManager.SelectedCameraDevice.ReadDeviceProperties(0);
-      if (CameraConnected != null)
-        CameraConnected(cameraDevice);
-      StaticHelper.Instance.SystemMessage = "New Camera is connected ! Driver :" + cameraDevice.DeviceName;
-      Log.Debug("===========Camera is connected==============");
-      Log.Debug("Driver :" + cameraDevice.GetType().Name);
-      Log.Debug("Name :" + cameraDevice.DeviceName);
-      Log.Debug("Manufacturer :" + cameraDevice.Manufacturer);
 
       return SelectedCameraDevice;
     }
@@ -194,8 +200,10 @@ namespace CameraControl.Devices
           SelectedCameraDevice = cameraDevice;
           cameraDevice.PhotoCaptured += cameraDevice_PhotoCaptured;
           cameraDevice.CameraDisconnected += cameraDevice_CameraDisconnected;
+
           if (CameraConnected != null)
             CameraConnected(cameraDevice);
+           
           StaticHelper.Instance.SystemMessage = "New Camera is connected ! Driver :" + cameraDevice.DeviceName;
           Log.Debug("===========Camera is connected==============");
           Log.Debug("Driver :" + cameraDevice.GetType().Name);
@@ -328,12 +336,14 @@ namespace CameraControl.Devices
       int retries = 0;
       foreach (IDeviceInfo devInfo in new DeviceManager().DeviceInfos)
       {
+          Log.Debug("i am here");
         // Look for CameraDeviceType devices
         string model = devInfo.Properties["Name"].get_Value();
-        if (devInfo.Type == WiaDeviceType.CameraDeviceType && (GetNativeDriver(model) == null || DisableNativeDrivers || noDriversDetected))
+        if (devInfo.Type == WiaDeviceType.CameraDeviceType && ( DisableNativeDrivers || noDriversDetected))
         {
           do
           {
+            Log.Debug("Wia Camera Found: " + model);
             try
             {
               GetWiaIDevice(devInfo);

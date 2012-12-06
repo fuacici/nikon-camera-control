@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using CameraControl.Devices.Classes;
 using WIA;
+using System.Runtime.InteropServices;
 
 namespace CameraControl.Devices.Others
 {
@@ -159,13 +160,7 @@ namespace CameraControl.Devices.Others
       //the device not connected
       try
       {
-        if (deviceDescriptor.WiaDevice == null)
-        {
-          Thread.Sleep(500);
-          deviceDescriptor.WiaDevice = deviceDescriptor.WiaDeviceInfo.Connect();
-          deviceDescriptor.CameraDevice = this;
-          Thread.Sleep(250);
-        }
+          ConnectToWiaDevice(deviceDescriptor);
       }
       catch (Exception exception)
       {
@@ -377,6 +372,35 @@ namespace CameraControl.Devices.Others
       HaveLiveView = true;
       Capabilities.Add(CapabilityEnum.LiveView);
       return true;
+    }
+
+    private void ConnectToWiaDevice(DeviceDescriptor deviceDescriptor, int retries_left = 6)
+    {
+        if (deviceDescriptor.WiaDevice == null)
+        {
+            Thread.Sleep(500);
+            try
+            {
+                deviceDescriptor.WiaDevice = deviceDescriptor.WiaDeviceInfo.Connect();
+                deviceDescriptor.CameraDevice = this;
+                Thread.Sleep(250);
+            }
+            catch (COMException e)
+            {
+                if ((uint)e.ErrorCode == ErrorCodes.WIA_ERROR_BUSY && retries_left > 0)
+                {
+                    int retry_in_secs = 2 * (7 - retries_left) ;
+                    Thread.Sleep(1000 * retry_in_secs);
+                    Log.Debug("Connection to wia failed, Retrying to connect in " + retry_in_secs + " seconds");
+                    ConnectToWiaDevice(deviceDescriptor, retries_left - 1);
+                }
+                else
+                {
+                    Log.Error("Could not connect to wia device.", e);
+                    throw e;
+                }
+            }
+        }
     }
 
     void DeviceManager_OnEvent(string eventId, string deviceId, string itemId)
