@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -16,7 +15,6 @@ using CameraControl.Layouts;
 using CameraControl.Translation;
 using CameraControl.windows;
 using MahApps.Metro.Controls;
-using PortableDeviceLib;
 using EditSession = CameraControl.windows.EditSession;
 using HelpProvider = CameraControl.Classes.HelpProvider;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -345,7 +343,6 @@ namespace CameraControl
         PropertyWnd.Close();
       }
       ServiceProvider.WindowsManager.ExecuteCommand(CmdConsts.All_Close);
-      //WiaManager.DisconnectCamera();
     }
 
     private void but_timelapse_Click(object sender, RoutedEventArgs e)
@@ -360,19 +357,7 @@ namespace CameraControl
 
     private void Window_Closing(object sender, CancelEventArgs e)
     {
-      //if (!ServiceProvider.Settings.DefaultSession.TimeLapse.IsDisabled)
-      //{
-      //  if (
-      //    MessageBox.Show("A time lapse photo session runnig !\n Do you want to stop it and exit from application ?",
-      //                    "Closing", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
-      //  {
-      //    e.Cancel = true;
-      //  }
-      //  else
-      //  {
-      //    ServiceProvider.Settings.DefaultSession.TimeLapse.Stop();
-      //  }
-      //}
+
     }
 
     private void but_fullscreen_Click(object sender, RoutedEventArgs e)
