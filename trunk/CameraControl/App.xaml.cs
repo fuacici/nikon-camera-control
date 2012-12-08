@@ -52,51 +52,10 @@ namespace CameraControl
       {
         System.Windows.Forms.MessageBox.Show("Wia 2.0 not installed");
       }
-      InitApplication();
+      //InitApplication();
     }
 
-    private void InitApplication()
-    {
-      ServiceProvider.Configure();
-      ServiceProvider.ActionManager.Actions = new AsyncObservableCollection<IMenuAction>
-                                                {
-                                                  new CmdFocusStackingCombineZP(),
-                                                  new CmdEnfuse(),
-                                                  new CmdToJpg(),
-                                                  new CmdExpJpg()
-                                                };
-      ServiceProvider.Settings = new Settings();
-      ServiceProvider.Settings = ServiceProvider.Settings.Load();
-      if (ServiceProvider.Settings.DisableNativeDrivers && System.Windows.Forms.MessageBox.Show(TranslationStrings.MsgDisabledDrivers, "", MessageBoxButtons.YesNo) == DialogResult.Yes)
-        ServiceProvider.Settings.DisableNativeDrivers = false;
-      ServiceProvider.Settings.LoadSessionData();
-      TranslationManager.LoadLanguage(ServiceProvider.Settings.SelectedLanguage);
-      ServiceProvider.WindowsManager = new WindowsManager();
-      ServiceProvider.WindowsManager.Add(new FullScreenWnd());
-      ServiceProvider.WindowsManager.Add(new LiveViewWnd());
-      ServiceProvider.WindowsManager.Add(new MultipleCameraWnd());
-      ServiceProvider.WindowsManager.Add(new CameraPropertyWnd());
-      ServiceProvider.WindowsManager.Add(new BrowseWnd());
-      ServiceProvider.WindowsManager.Add(new TagSelectorWnd());
-      ServiceProvider.WindowsManager.Add(new DownloadPhotosWnd());
-      ServiceProvider.WindowsManager.Event += WindowsManager_Event;
-      ServiceProvider.Trigger.Start();
-      ServiceProvider.PluginManager.LoadPlugins(Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Plugins"));
-      
-      MainWindow mainView = new MainWindow();
-      mainView.Show();
-    }
 
-    void WindowsManager_Event(string cmd, object o)
-    {
-      Log.Debug("Window command received :" + cmd);
-      if (cmd == CmdConsts.All_Close)
-      {
-        ServiceProvider.DeviceManager.CloseAll();
-        Thread.Sleep(1000);
-        Current.Shutdown();
-      }
-    }
 
 
     private void AppDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
@@ -147,5 +106,6 @@ namespace CameraControl
         }
       }
     }
+
   }
 }
