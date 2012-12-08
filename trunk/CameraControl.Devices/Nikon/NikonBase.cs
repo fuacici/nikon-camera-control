@@ -281,6 +281,7 @@ namespace CameraControl.Devices.Nikon
       AdvancedProperties.Add(InitOnOffProperty("Long exp. NR", CONST_PROP_NoiseReduction));
       AdvancedProperties.Add(InitNRHiIso());
       AdvancedProperties.Add(InitExposureDelay());
+      AdvancedProperties.Add(InitLock());
       foreach (PropertyValue<long> value in AdvancedProperties)
       {
         ReadDeviceProperties(value.Code);
@@ -294,6 +295,26 @@ namespace CameraControl.Devices.Nikon
       res.AddValues("ON", 1);
       res.ValueChanged += (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)val },
                                                             res.Code, -1);
+      return res;
+    }
+
+    protected virtual PropertyValue<long> InitLock()
+    {
+      var res = new PropertyValue<long>() {Name = "Lock", IsEnabled = true};
+      res.AddValues("OFF", 0);
+      res.AddValues("ON", 1);
+      res.Value = "OFF";
+      res.ValueChanged += delegate(object sender, string key, long val)
+                            {
+                              if (key == "OFF")
+                              {
+                                UnLockCamera();
+                              }
+                              else
+                              {
+                                LockCamera();
+                              }
+                            };
       return res;
     }
 
@@ -548,6 +569,8 @@ namespace CameraControl.Devices.Nikon
           FNumber.IsEnabled = false;
           break;
       }
+      SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                                         CONST_PROP_ExposureProgramMode, -1);
     }
 
     private void InitFNumber()
@@ -1095,10 +1118,12 @@ namespace CameraControl.Devices.Nikon
     public override void LockCamera()
     {
       ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 1);
+      Mode.IsEnabled = true;
     }
 
     public override void UnLockCamera()
     {
+      Mode.IsEnabled = false;
       ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 0);
     }
 
