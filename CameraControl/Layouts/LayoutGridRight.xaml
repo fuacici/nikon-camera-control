@@ -9,7 +9,8 @@
              xmlns:Layouts="clr-namespace:CameraControl.Layouts"
                     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-                    xmlns:Devices="clr-namespace:CameraControl.Devices;assembly=CameraControl.Devices" mc:Ignorable="d" 
+                    xmlns:Devices="clr-namespace:CameraControl.Devices;assembly=CameraControl.Devices"
+                    xmlns:lb="clr-namespace:CameraControl.Core.Wpf;assembly=CameraControl.Core" mc:Ignorable="d" 
              d:DesignHeight="426" d:DesignWidth="652">
     <UserControl.Resources>
         <Style TargetType="{x:Type ListBox}">

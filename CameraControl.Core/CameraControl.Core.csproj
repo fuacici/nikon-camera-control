@@ -154,6 +154,7 @@
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="Wpf\BooleanToVisibilityConverter.cs" />
     <Compile Include="Wpf\HeaderToImageConverter.cs" />
+    <Compile Include="Wpf\ListBoxBehavior.cs" />
     <Compile Include="Wpf\ProgressWindow.xaml.cs">
       <DependentUpon>ProgressWindow.xaml</DependentUpon>
     </Compile>

@@ -232,7 +232,11 @@ namespace CameraControl.Layouts
             if (fileItem != null)
               Dispatcher.Invoke(
                 new Action(
-                  delegate { ImageLIst.SelectedValue = fileItem; }));
+                  delegate
+                    {
+                      ImageLIst.SelectedValue = fileItem;
+                      ImageLIst.ScrollIntoView(fileItem);
+                    }));
             break;
         }
       }));
