@@ -155,6 +155,9 @@
       <DependentUpon>LayoutNormal.xaml</DependentUpon>
     </Compile>
     <Compile Include="Layouts\LayoutTypeEnum.cs" />
+    <Compile Include="StartUpWindow.xaml.cs">
+      <DependentUpon>StartUpWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Translation\TranslateExtension.cs" />
     <Compile Include="Translation\TranslationLangDesc.cs" />
     <Compile Include="Translation\TranslationManager.cs" />
@@ -263,6 +266,10 @@
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="StartUpWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\Wpf.Toolkit.Extended.xaml">
       <SubType>Designer</SubType>
@@ -426,9 +433,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\help.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <SplashScreen Include="SplashScreen.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
