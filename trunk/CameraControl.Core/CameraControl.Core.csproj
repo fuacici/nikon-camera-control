@@ -122,6 +122,7 @@
     <Compile Include="Classes\CameraProperty.cs" />
     <Compile Include="Classes\CameraPropertyEnumerator.cs" />
     <Compile Include="Classes\CmdConsts.cs" />
+    <Compile Include="Classes\Exiv2Helper.cs" />
     <Compile Include="Classes\FileItem.cs" />
     <Compile Include="Classes\Imaging.cs" />
     <Compile Include="Classes\PhotoSession.cs" />
