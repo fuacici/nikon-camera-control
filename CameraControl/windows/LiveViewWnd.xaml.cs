@@ -509,6 +509,12 @@ namespace CameraControl.windows
                                                image1.Source = BitmapSourceConvert.ToBitmapSource(bmp);
                                              }
                                            }
+                                           if (SelectedPortableDevice.LiveViewImageZoomRatio.Value == "All")
+                                           {
+                                             ImageBrush ib = new ImageBrush();
+                                             ib.ImageSource = image1.Source;
+                                             canvas_image.Background = ib;
+                                           }
                                            stream.Close();
                                          }
                                        }
