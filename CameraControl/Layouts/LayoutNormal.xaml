@@ -63,9 +63,8 @@
                 <xctk:Zoombox.ViewStack>
                     <xctk:ZoomboxView>Fit</xctk:ZoomboxView>
                 </xctk:Zoombox.ViewStack>
-                <!--<local:ZoomBorder  BorderThickness="1" CornerRadius="5" >-->
-            
-                <Image Name="image1" Stretch="Uniform" Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" >
+
+                    <Image Name="image1" Stretch="Uniform" Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" >
                     <Image.InputBindings>
                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=ImageDoubleClickCommand}" />
                     </Image.InputBindings>
