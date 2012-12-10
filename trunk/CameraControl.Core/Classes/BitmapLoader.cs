@@ -156,6 +156,13 @@ namespace CameraControl.Core.Classes
       {
         file.Metadata.Add(new DictionaryItem() { Name = exiv2Data.Value.Tag, Value = exiv2Data.Value.Value });
       }
+      
+      WriteableBitmap writeableBitmap = new WriteableBitmap(BitmapFactory.ConvertToPbgra32Format(file.DisplayImage));
+      writeableBitmap.GetBitmapContext(ReadWriteMode.ReadWrite);
+      writeableBitmap.FillRectangle(12,12,1000,1000,Colors.Aqua);
+      writeableBitmap.Unlock();
+      writeableBitmap.Freeze();
+      file.DisplayImage = writeableBitmap;
       ////Exiv2Net.Image image = new Exiv2Net.Image(FileItem.FileName);
       ////foreach (KeyValuePair<string, Exiv2Net.Value> i in image)
       ////{
