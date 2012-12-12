@@ -1,5 +1,8 @@
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -34,6 +37,39 @@ namespace CameraControl.Core.Classes
       DeleteObject(ptr); //release the HBitmap
       bs.Freeze();
       return bs;
+    }
+
+    public static WriteableBitmap CreateWriteableBitmapFromBitmap(Bitmap bitmap)
+    {
+      if (bitmap == null)
+        throw new ArgumentNullException("bitmap");
+
+      using (MemoryStream memoryStream = new MemoryStream())
+      {
+        try
+        {
+          // You need to specify the image format to fill the stream. 
+          // I'm assuming it is PNG
+          bitmap.Save(memoryStream, ImageFormat.Png);
+          memoryStream.Seek(0, SeekOrigin.Begin);
+
+          BitmapDecoder bitmapDecoder = BitmapDecoder.Create(
+            memoryStream,
+            BitmapCreateOptions.PreservePixelFormat,
+            BitmapCacheOption.OnLoad);
+
+          // This will disconnect the stream from the image completely...
+          WriteableBitmap writable =
+            new WriteableBitmap(BitmapFactory.ConvertToPbgra32Format(bitmapDecoder.Frames.Single()));
+          writable.Freeze();
+
+          return writable;
+        }
+        catch (Exception)
+        {
+          return null;
+        }
+      }
     }
 
   }

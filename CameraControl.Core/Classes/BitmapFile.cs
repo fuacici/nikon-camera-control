@@ -49,8 +49,8 @@ namespace CameraControl.Core.Classes
       }
     }
 
-    private BitmapSource _displayImage;
-    public BitmapSource DisplayImage
+    private WriteableBitmap _displayImage;
+    public WriteableBitmap DisplayImage
     {
       get { return _displayImage; }
       set
@@ -156,8 +156,8 @@ namespace CameraControl.Core.Classes
         if (FileItem.IsRaw)
         {
           BitmapDecoder bmpDec = BitmapDecoder.Create(new Uri(FileItem.FileName), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
-      
-          DisplayImage = bmpDec.Frames.Single();
+
+          DisplayImage = new WriteableBitmap(bmpDec.Frames.Single()); 
         }
         else
         {
@@ -176,7 +176,7 @@ namespace CameraControl.Core.Classes
               image.RotateFlip(ServiceProvider.Settings.Rotate);
             }
           }
-          DisplayImage = BitmapSourceConvert.ToBitmapSource(image);
+          DisplayImage = BitmapSourceConvert.CreateWriteableBitmapFromBitmap(image);
           image.Dispose();
           Thread threadPhoto = new Thread(GetAdditionalData);
           threadPhoto.Start();
@@ -294,7 +294,7 @@ Tag (hex)	Tag (dec)	IFD	Key	Type	Tag description
       FileItem = item;
       IsLoaded = false;
       if (DisplayImage == null)
-        DisplayImage = FileItem.Thumbnail;
+        DisplayImage = new WriteableBitmap(FileItem.Thumbnail);
     }
 
     private PointCollection ConvertToPointCollection(int[] values)
