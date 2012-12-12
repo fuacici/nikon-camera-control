@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using AForge.Imaging;
@@ -12,6 +13,7 @@ using CameraControl.Core.Exif.EXIF;
 using CameraControl.Devices;
 using FreeImageAPI;
 using FreeImageAPI.Metadata;
+using Color = System.Windows.Media.Color;
 using Image = System.Drawing.Image;
 
 namespace CameraControl.Core.Classes
@@ -69,29 +71,43 @@ namespace CameraControl.Core.Classes
                                                         BitmapCreateOptions.None,
                                                         BitmapCacheOption.OnLoad);
 
-            _currentfile.DisplayImage = bmpDec.Frames.Single();
+            WriteableBitmap writeableBitmap = BitmapFactory.ConvertToPbgra32Format(bmpDec.Frames.Single());
+            writeableBitmap.Freeze();
+            _currentfile.DisplayImage = writeableBitmap;
             Log.Debug("Loading raw file done.");
           }
           else
           {
-            Log.Debug("Loading bitmap file.");
-            Bitmap image = (Bitmap) Image.FromFile(_currentfile.FileItem.FileName);
-            var exif = new EXIFextractor(ref image, "n");
-            if (exif["Orientation"] != null)
-            {
-              RotateFlipType flip = EXIFextractorEnumerator.OrientationToFlipType(exif["Orientation"].ToString());
+            //Log.Debug("Loading bitmap file.");
+            //Bitmap image = (Bitmap) Image.FromFile(_currentfile.FileItem.FileName);
+            //var exif = new EXIFextractor(ref image, "n");
+            //if (exif["Orientation"] != null)
+            //{
+            //  RotateFlipType flip = EXIFextractorEnumerator.OrientationToFlipType(exif["Orientation"].ToString());
 
-              if (flip != RotateFlipType.RotateNoneFlipNone) // don't flip of orientation is correct
-              {
-                image.RotateFlip(flip);
-              }
-              if (ServiceProvider.Settings.Rotate != RotateFlipType.RotateNoneFlipNone)
-              {
-                image.RotateFlip(ServiceProvider.Settings.Rotate);
-              }
-            }
-            _currentfile.DisplayImage = BitmapSourceConvert.ToBitmapSource(image);
-            image.Dispose();
+            //  if (flip != RotateFlipType.RotateNoneFlipNone) // don't flip of orientation is correct
+            //  {
+            //    image.RotateFlip(flip);
+            //  }
+            //  if (ServiceProvider.Settings.Rotate != RotateFlipType.RotateNoneFlipNone)
+            //  {
+            //    image.RotateFlip(ServiceProvider.Settings.Rotate);
+            //  }
+            //}
+
+            BitmapImage bi = new BitmapImage();
+            // BitmapImage.UriSource must be in a BeginInit/EndInit block.
+            bi.BeginInit();
+            //bi.DecodePixelHeight = 2000;
+            bi.CacheOption=BitmapCacheOption.OnLoad;
+            bi.UriSource = new Uri(_currentfile.FileItem.FileName);
+            bi.EndInit();
+            bi.Freeze();
+            WriteableBitmap writeableBitmap = BitmapFactory.ConvertToPbgra32Format(bi);
+            writeableBitmap.Freeze();
+            _currentfile.DisplayImage = writeableBitmap;
+            
+            
             Log.Debug("Loading bitmap file done.");
           }
         }
@@ -147,6 +163,14 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    void DrawRect(WriteableBitmap bmp, int x1, int y1, int x2, int y2,  Color color,int line)
+    {
+      for (int i = 0; i < line; i++)
+      {
+        bmp.DrawRectangle(x1-i,y1-i,x2-i,y2-i,color);
+      } 
+    }
+
     public void GetMetadata(BitmapFile file)
     {
       Exiv2Helper exiv2Helper=new Exiv2Helper();
@@ -156,13 +180,19 @@ namespace CameraControl.Core.Classes
       {
         file.Metadata.Add(new DictionaryItem() { Name = exiv2Data.Value.Tag, Value = exiv2Data.Value.Value });
       }
-      
-      WriteableBitmap writeableBitmap = new WriteableBitmap(BitmapFactory.ConvertToPbgra32Format(file.DisplayImage));
-      writeableBitmap.GetBitmapContext(ReadWriteMode.ReadWrite);
-      writeableBitmap.FillRectangle(12,12,1000,1000,Colors.Aqua);
+
+      WriteableBitmap writeableBitmap = file.DisplayImage.Clone();
+      writeableBitmap.Lock();
+      foreach (Rect focuspoint in exiv2Helper.Focuspoints)
+      {
+        DrawRect(writeableBitmap,(int)focuspoint.X, (int)focuspoint.Y, (int)(focuspoint.X + focuspoint.Width),
+                                      (int) (focuspoint.Y + focuspoint.Height), Colors.Aqua,5);
+      }
       writeableBitmap.Unlock();
       writeableBitmap.Freeze();
       file.DisplayImage = writeableBitmap;
+
+
       ////Exiv2Net.Image image = new Exiv2Net.Image(FileItem.FileName);
       ////foreach (KeyValuePair<string, Exiv2Net.Value> i in image)
       ////{
