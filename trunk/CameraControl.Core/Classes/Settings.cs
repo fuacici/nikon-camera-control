@@ -36,12 +36,12 @@ namespace CameraControl.Core.Classes
           {
               PhotoSession oldvalue = _defaultSession;
               _defaultSession = value;
-              NotifyPropertyChanged("DefaultSession");
               Thread thread = new Thread(new ThreadStart(delegate
                                                            {
                                                                if (SessionSelected != null)
                                                                    SessionSelected(oldvalue, value);
                                                                LoadData(_defaultSession);
+                                                               NotifyPropertyChanged("DefaultSession");
                                                            }));
               thread.Start();
           }
@@ -225,6 +225,17 @@ namespace CameraControl.Core.Classes
       {
         _playSound = value;
         NotifyPropertyChanged("PlaySound");
+      }
+    }
+
+    private bool _showFocusPoints;
+    public bool ShowFocusPoints
+    {
+      get { return _showFocusPoints; }
+      set
+      {
+        _showFocusPoints = value;
+        NotifyPropertyChanged("ShowFocusPoints");
       }
     }
 
@@ -469,6 +480,7 @@ namespace CameraControl.Core.Classes
       MotionBlockSize = 40;
       UseExternalViewer = false;
       ExternalViewerArgs = string.Empty;
+      ShowFocusPoints = true;
     }
 
     public void Add(PhotoSession session)

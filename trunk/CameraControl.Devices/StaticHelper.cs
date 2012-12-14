@@ -45,6 +45,10 @@ namespace CameraControl.Devices
       return (b & (1 << bitNumber)) != 0;
     }
 
+    public static bool GetBit(long b, int bitNumber)
+    {
+      return (b & (1 << bitNumber)) != 0;
+    }
     /// <summary>
     /// Return serial number component from a pnp id string
     /// </summary>

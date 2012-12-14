@@ -261,5 +261,7 @@
     public static string LabelTransferItem3 = "3.Save to PC and camera";
     // 05/12/2012
     public static string MsgDisabledDrivers = "Native drivers are disabled ! Do you want to enable it ?";
+    // 14/12/2012
+    public static string LabelShowFocusPoints = "Show focus points";
   }
 }

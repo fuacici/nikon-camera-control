@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -43,6 +44,7 @@ namespace CameraControl.Core.Classes
     public Dictionary<string, Exiv2Data> Tags { get; set; }
     public List<Rect> Focuspoints { get; set; }
     public Dictionary<string, FocusPointDefinition> FocusPoints11 { get; set; }
+    public Dictionary<string, FocusPointDefinition> FocusPoints51 { get; set; }
     public int Width;
     public int Height;
 
@@ -64,6 +66,60 @@ namespace CameraControl.Core.Classes
                           {"10", new FocusPointDefinition(){FocusPointType = FocusPointType.HRectangle,XRat =  0.67, YRat = 0.62}},
                           {"11", new FocusPointDefinition(){FocusPointType = FocusPointType.HRectangle,XRat =  0.80, YRat = 0.50}},
                         };
+      FocusPoints51=new Dictionary<string, FocusPointDefinition>()
+                      {
+                        {"1", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.50, YRat =  0.50}},
+                        {"2", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.50, YRat =  0.42}},
+                        {"3", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.50, YRat =  0.35}},
+                        {"4", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.50, YRat =  0.59}},
+                        {"5", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.50, YRat =  0.65}},
+                        {"6", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.56, YRat =  0.50}},
+                        {"7", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.56, YRat =  0.42}},
+                        {"8", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.56, YRat =  0.35}},
+                        {"9", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.56, YRat =  0.59}},
+                        {"10", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.56, YRat =  0.65}},
+                        {"11", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.45, YRat =  0.50}},
+                        {"12", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.45, YRat =  0.42}},
+                        {"13", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.45, YRat =  0.35}},
+                        {"14", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.45, YRat =  0.59}},
+                        {"15", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.45, YRat =  0.65}},
+                        {"16", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.61, YRat =  0.50}},
+                        {"17", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.61, YRat =  0.44}},
+                        {"18", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.61, YRat =  0.38}},
+                        {"19", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.61, YRat =  0.57}},
+                        {"20", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.61, YRat =  0.44}},
+                        {"21", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.65, YRat =  0.50}},
+                        {"22", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.65, YRat =  0.44}},
+                        {"23", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.65, YRat =  0.38}},
+                        {"24", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.65, YRat =  0.57}},
+                        {"25", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.65, YRat =  0.44}},
+                        {"26", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.70, YRat =  0.50}},
+                        {"27", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.70, YRat =  0.44}},
+                        {"28", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.70, YRat =  0.38}},
+                        {"29", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.70, YRat =  0.57}},
+                        {"30", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.70, YRat =  0.44}},
+                        {"31", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.75, YRat =  0.50}},
+                        {"32", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.75, YRat =  0.44}},
+                        {"33", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.75, YRat =  0.57}},
+                        {"34", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.39, YRat =  0.50}},
+                        {"35", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.39, YRat =  0.44}},
+                        {"36", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.39, YRat =  0.38}},
+                        {"37", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.39, YRat =  0.57}},
+                        {"38", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.39, YRat =  0.44}},
+                        {"39", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.35, YRat =  0.50}},
+                        {"40", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.35, YRat =  0.44}},
+                        {"41", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.35, YRat =  0.38}},
+                        {"42", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.35, YRat =  0.57}},
+                        {"43", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.35, YRat =  0.44}},
+                        {"44", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.3, YRat =  0.50}},
+                        {"45", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.3, YRat =  0.44}},
+                        {"46", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.3, YRat =  0.38}},
+                        {"47", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.3, YRat =  0.57}},
+                        {"48", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.3, YRat =  0.44}},
+                        {"49", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.25, YRat =  0.50}},
+                        {"50", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.25, YRat =  0.44}},
+                        {"51", new FocusPointDefinition(){FocusPointType = FocusPointType.Square,XRat =  0.25, YRat =  0.57}},
+                      };
     }
 
     public void Load(string filename)
@@ -104,14 +160,36 @@ namespace CameraControl.Core.Classes
       {
         if (Tags["Exif.NikonAf2.AFPointsUsed"].Value.Contains(" "))
         {
-          byte focuspoints = 0;
-          if (byte.TryParse(Tags["Exif.NikonAf2.AFPointsUsed"].Value.Split(' ')[0], out focuspoints))
+          string[] strbytes = Tags["Exif.NikonAf2.AFPointsUsed"].Value.Split(' ');
+          byte[] bytes = new byte[8];
+          for (int i = 0; i < strbytes.Length; i++)
           {
-            for (var i = 1; i < 12; i++)
-            {
-              if (StaticHelper.GetBit(focuspoints,i-1))
-                Focuspoints.Add(ToRect(Width, Height, FocusPoints11[i.ToString()]));
-            }
+            byte.TryParse(strbytes[i], out bytes[i]);
+          }
+          Int64 focuspoints = BitConverter.ToInt64(bytes, 0);
+          for (var i = 1; i < 12; i++)
+          {
+            if (StaticHelper.GetBit(focuspoints, i - 1))
+              Focuspoints.Add(ToRect(Width, Height, FocusPoints11[i.ToString()]));
+          }
+        }
+      }
+      if (Tags["Exif.NikonAf2.PhaseDetectAF"].Value == "On (51-point)")
+      {
+        if (Tags["Exif.NikonAf2.AFPointsUsed"].Value.Contains(" "))
+        {
+          string[] strbytes = Tags["Exif.NikonAf2.AFPointsUsed"].Value.Split(' ');
+          byte[] bytes = new byte[8];
+          for (int i = 0; i < strbytes.Length; i++)
+          {
+            byte.TryParse(strbytes[i], out bytes[i]);
+          }
+          BitArray bitArray=new BitArray(bytes);
+          long focuspoints = BitConverter.ToInt64(bytes, 0);
+          for (var i = 1; i < 52; i++)
+          {
+            if (bitArray.Get(i-1))
+              Focuspoints.Add(ToRect(Width, Height, FocusPoints51[i.ToString()]));
           }
         }
       }

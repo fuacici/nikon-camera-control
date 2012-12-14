@@ -181,17 +181,19 @@ namespace CameraControl.Core.Classes
         file.Metadata.Add(new DictionaryItem() { Name = exiv2Data.Value.Tag, Value = exiv2Data.Value.Value });
       }
 
-      WriteableBitmap writeableBitmap = file.DisplayImage.Clone();
-      writeableBitmap.Lock();
-      foreach (Rect focuspoint in exiv2Helper.Focuspoints)
+      if (ServiceProvider.Settings.ShowFocusPoints)
       {
-        DrawRect(writeableBitmap,(int)focuspoint.X, (int)focuspoint.Y, (int)(focuspoint.X + focuspoint.Width),
-                                      (int) (focuspoint.Y + focuspoint.Height), Colors.Aqua,5);
+        WriteableBitmap writeableBitmap = file.DisplayImage.Clone();
+        writeableBitmap.Lock();
+        foreach (Rect focuspoint in exiv2Helper.Focuspoints)
+        {
+          DrawRect(writeableBitmap, (int) focuspoint.X, (int) focuspoint.Y, (int) (focuspoint.X + focuspoint.Width),
+                   (int) (focuspoint.Y + focuspoint.Height), Colors.Aqua, 5);
+        }
+        writeableBitmap.Unlock();
+        writeableBitmap.Freeze();
+        file.DisplayImage = writeableBitmap;
       }
-      writeableBitmap.Unlock();
-      writeableBitmap.Freeze();
-      file.DisplayImage = writeableBitmap;
-
 
       ////Exiv2Net.Image image = new Exiv2Net.Image(FileItem.FileName);
       ////foreach (KeyValuePair<string, Exiv2Net.Value> i in image)
