@@ -32,19 +32,20 @@ namespace CameraControl.Core.Classes
       get { return _defaultSession; }
       set
       {
-          if (value != null)
-          {
-              PhotoSession oldvalue = _defaultSession;
-              _defaultSession = value;
-              Thread thread = new Thread(new ThreadStart(delegate
-                                                           {
-                                                               if (SessionSelected != null)
-                                                                   SessionSelected(oldvalue, value);
-                                                               LoadData(_defaultSession);
-                                                               NotifyPropertyChanged("DefaultSession");
-                                                           }));
-              thread.Start();
-          }
+        if (value != null)
+        {
+          PhotoSession oldvalue = _defaultSession;
+          _defaultSession = value;
+          DefaultSessionName = _defaultSession.Name;
+          var thread = new Thread(new ThreadStart(delegate
+                                                       {
+                                                         if (SessionSelected != null)
+                                                           SessionSelected(oldvalue, value);
+                                                         LoadData(_defaultSession);
+                                                         NotifyPropertyChanged("DefaultSession");
+                                                       }));
+          thread.Start();
+        }
       }
     }
 
@@ -236,6 +237,17 @@ namespace CameraControl.Core.Classes
       {
         _showFocusPoints = value;
         NotifyPropertyChanged("ShowFocusPoints");
+      }
+    }
+
+    private string _defaultSessionName;
+    public string DefaultSessionName
+    {
+      get { return _defaultSessionName; }
+      set
+      {
+        _defaultSessionName = value;
+        NotifyPropertyChanged("DefaultSessionName");
       }
     }
 
@@ -495,9 +507,9 @@ namespace CameraControl.Core.Classes
     /// <param name="session"></param>
     public void LoadData(PhotoSession session)
     {
-      FileItem[] fileItems=new FileItem[session.Files.Count];
       if (session == null)
         return;
+      FileItem[] fileItems = new FileItem[session.Files.Count];
       session.Files.CopyTo(fileItems, 0);
       //session.Files.Clear();
       if(!Directory.Exists(session.Folder))
@@ -625,7 +637,7 @@ namespace CameraControl.Core.Classes
       }
       if (PhotoSessions.Count > 0)
       {
-        DefaultSession = PhotoSessions[0];
+        DefaultSession = GetSession(DefaultSessionName) ?? PhotoSessions[0];
       }
       if (PhotoSessions.Count == 0)
       {

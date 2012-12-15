@@ -37,6 +37,16 @@ namespace CameraControl
     public StartUpWindow()
     {
       InitializeComponent();
+      string procName = Process.GetCurrentProcess().ProcessName;
+      // get the list of all processes by that name
+
+      Process[] processes = Process.GetProcessesByName(procName);
+
+      if (processes.Length > 1)
+      {
+        MessageBox.Show("Application already running");
+        Close();
+      }
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -63,6 +73,7 @@ namespace CameraControl
         ServiceProvider.Settings.DisableNativeDrivers = false;
       ServiceProvider.Settings.LoadSessionData();
       TranslationManager.LoadLanguage(ServiceProvider.Settings.SelectedLanguage);
+
       ServiceProvider.WindowsManager = new WindowsManager();
       ServiceProvider.WindowsManager.Add(new FullScreenWnd());
       ServiceProvider.WindowsManager.Add(new LiveViewWnd());
@@ -73,30 +84,23 @@ namespace CameraControl
       ServiceProvider.WindowsManager.Add(new DownloadPhotosWnd());
       ServiceProvider.WindowsManager.Event += WindowsManager_Event;
       ServiceProvider.Trigger.Start();
-      ServiceProvider.PluginManager.LoadPlugins(System.IO.Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Plugins"));
+      ServiceProvider.PluginManager.LoadPlugins(Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Plugins"));
+      // event handlers
+      ServiceProvider.Settings.SessionSelected += Settings_SessionSelected;
+      ServiceProvider.DeviceManager.CameraConnected += DeviceManager_CameraConnected;
+      ServiceProvider.DeviceManager.CameraSelected += DeviceManager_CameraSelected;
+      //-------------------
+      ServiceProvider.DeviceManager.DisableNativeDrivers = ServiceProvider.Settings.DisableNativeDrivers;
+      ServiceProvider.DeviceManager.ConnectToCamera();
+      Thread.Sleep(500);
       StartApplication();
       Dispatcher.Invoke(new Action(Hide));
     }
 
     private void StartApplication()
     {
-      string procName = Process.GetCurrentProcess().ProcessName;
-      // get the list of all processes by that name
-
-      Process[] processes = Process.GetProcessesByName(procName);
-
-      if (processes.Length > 1)
-      {
-        MessageBox.Show("Application already running");
-        ServiceProvider.WindowsManager.ExecuteCommand(CmdConsts.All_Close);
-        return;
-      }
-      else
-      {
         MainWindow mainView = new MainWindow();
         mainView.Show();
-
-      }
     }
 
     void WindowsManager_Event(string cmd, object o)
@@ -109,5 +113,41 @@ namespace CameraControl
         Application.Current.Shutdown();
       }
     }
+
+    #region eventhandlers
+    void Settings_SessionSelected(PhotoSession oldvalue, PhotoSession newvalue)
+    {
+      if (oldvalue != null)
+        ServiceProvider.Settings.Save(oldvalue);
+      ServiceProvider.QueueManager.Clear();
+      if (ServiceProvider.DeviceManager.SelectedCameraDevice != null)
+        ServiceProvider.DeviceManager.SelectedCameraDevice.AttachedPhotoSession = newvalue;
+    }
+
+    void DeviceManager_CameraSelected(ICameraDevice oldcameraDevice, ICameraDevice newcameraDevice)
+    {
+      if (newcameraDevice == null)
+        return;
+      CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(newcameraDevice);
+      // load session data only if not session attached to the selected camera
+      if (newcameraDevice.AttachedPhotoSession == null)
+      {
+        newcameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
+      }
+      if (newcameraDevice.AttachedPhotoSession != null)
+        ServiceProvider.Settings.DefaultSession = (PhotoSession)newcameraDevice.AttachedPhotoSession;
+
+      if (newcameraDevice.GetCapability(CapabilityEnum.CaptureInRam))
+        newcameraDevice.CaptureInSdRam = property.CaptureInSdRam;
+    }
+
+    void DeviceManager_CameraConnected(ICameraDevice cameraDevice)
+    {
+      CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(cameraDevice);
+      cameraDevice.DisplayName = property.DeviceName;
+      cameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
+    }
+
+    #endregion
   }
 }
