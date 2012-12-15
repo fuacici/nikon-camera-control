@@ -9,7 +9,7 @@
                        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"     
                        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                        xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
-        Closed="Window_Closed" Closing="Window_Closing" Icon="/CameraControl;component/Images/logo.png" WindowState="Maximized" VerticalContentAlignment="Center" PreviewKeyDown="MetroWindow_PreviewKeyDown">
+        Closed="Window_Closed" Closing="Window_Closing" Icon="/CameraControl;component/Images/logo.png" WindowState="Maximized" VerticalContentAlignment="Center" PreviewKeyDown="MetroWindow_PreviewKeyDown" Loaded="MetroWindow_Loaded">
     <i:Interaction.Behaviors>
         <Behaviours:BorderlessWindowBehavior/>
     </i:Interaction.Behaviors>

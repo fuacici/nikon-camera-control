@@ -5,6 +5,7 @@ using System.Text;
 using CameraControl.Core;
 using CameraControl.Core.Interfaces;
 using CameraControl.Plugins.ExportPlugins;
+using CameraControl.Plugins.MainWindowPlugins;
 
 namespace CameraControl.Plugins
 {
@@ -14,8 +15,16 @@ namespace CameraControl.Plugins
 
     public bool Register()
     {
-      ServiceProvider.PluginManager.ExportPlugins.Add(new ExportToZip());
-      ServiceProvider.PluginManager.ExportPlugins.Add(new ExportToFolder());
+      try
+      {
+        ServiceProvider.PluginManager.ExportPlugins.Add(new ExportToZip());
+        ServiceProvider.PluginManager.ExportPlugins.Add(new ExportToFolder());
+        ServiceProvider.PluginManager.MainWindowPlugins.Add(new SimpleMainWindow());
+      }
+      catch (Exception exception)
+      {
+       
+      }
       return true;
     }
 

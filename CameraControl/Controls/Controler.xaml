@@ -71,9 +71,6 @@
                 <StackPanel Margin="1">
                     <Label Content="{T:TranslateExtension LabelTransfer}"  />
                     <ComboBox Name="cmb_transfer" SelectionChanged="cmb_transfer_SelectionChanged" ToolTip="{Binding ElementName=cmb_transfer, Path=SelectedItem}">
-                        <ComboBoxItem Content="{T:TranslateExtension LabelTransferItem1}" />
-                        <ComboBoxItem Content="{T:TranslateExtension LabelTransferItem2}" />
-                        <ComboBoxItem Content="{T:TranslateExtension LabelTransferItem3}" />
                     </ComboBox>
                 </StackPanel>
                 <StackPanel Margin="1">

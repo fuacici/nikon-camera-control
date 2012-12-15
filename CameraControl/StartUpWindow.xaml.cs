@@ -34,6 +34,7 @@ namespace CameraControl
   /// </summary>
   public partial class StartUpWindow : Window
   {
+    private IMainWindowPlugin _basemainwindow;
     public StartUpWindow()
     {
       InitializeComponent();
@@ -85,6 +86,8 @@ namespace CameraControl
       ServiceProvider.WindowsManager.Event += WindowsManager_Event;
       ServiceProvider.Trigger.Start();
       ServiceProvider.PluginManager.LoadPlugins(Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Plugins"));
+      _basemainwindow = new MainWindow();
+      ServiceProvider.PluginManager.MainWindowPlugins.Add(_basemainwindow);
       // event handlers
       ServiceProvider.Settings.SessionSelected += Settings_SessionSelected;
       ServiceProvider.DeviceManager.CameraConnected += DeviceManager_CameraConnected;
@@ -99,8 +102,18 @@ namespace CameraControl
 
     private void StartApplication()
     {
-        MainWindow mainView = new MainWindow();
-        mainView.Show();
+      if (ServiceProvider.Settings.SelectedMainForm != _basemainwindow.DisplayName)
+      {
+        SelectorWnd wnd = new SelectorWnd();
+        wnd.ShowDialog();
+      }
+      IMainWindowPlugin mainWindowPlugin = _basemainwindow;
+      foreach (IMainWindowPlugin windowPlugin in ServiceProvider.PluginManager.MainWindowPlugins)
+      {
+        if (windowPlugin.DisplayName == ServiceProvider.Settings.SelectedMainForm)
+          mainWindowPlugin = windowPlugin;
+      }
+      mainWindowPlugin.Show();
     }
 
     void WindowsManager_Event(string cmd, object o)

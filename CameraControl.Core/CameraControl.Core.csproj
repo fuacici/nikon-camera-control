@@ -137,6 +137,7 @@
     <Compile Include="Classes\TriggerClass.cs" />
     <Compile Include="Classes\WebServer.cs" />
     <Compile Include="Interfaces\IExportPlugin.cs" />
+    <Compile Include="Interfaces\IMainWindowPlugin.cs" />
     <Compile Include="Interfaces\IPlugin.cs" />
     <Compile Include="Classes\ActionEventArgs.cs" />
     <Compile Include="Classes\ActionManager.cs" />

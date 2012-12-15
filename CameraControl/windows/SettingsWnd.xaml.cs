@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using CameraControl.Classes;
 using CameraControl.Core.Classes;
+using CameraControl.Core.Interfaces;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using Path = System.IO.Path;
@@ -33,6 +34,10 @@ namespace CameraControl.windows
       RotateFlipTypesValues = new AsyncObservableCollection<RotateFlipType>(Enum.GetValues(typeof(RotateFlipType)).Cast<RotateFlipType>().Distinct());
       ServiceProvider.Settings.ApplyTheme(this);
       qrcode.Text = ServiceProvider.Settings.Webaddress;
+      foreach (IMainWindowPlugin mainWindowPlugin in ServiceProvider.PluginManager.MainWindowPlugins)
+      {
+        cmb_mainwindow.Items.Add(mainWindowPlugin.DisplayName);
+      }
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)

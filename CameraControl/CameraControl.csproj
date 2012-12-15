@@ -210,6 +210,9 @@
     <Compile Include="windows\SavePresetWnd.xaml.cs">
       <DependentUpon>SavePresetWnd.xaml</DependentUpon>
     </Compile>
+    <Compile Include="windows\SelectorWnd.xaml.cs">
+      <DependentUpon>SelectorWnd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="windows\SettingsWnd.xaml.cs">
       <DependentUpon>SettingsWnd.xaml</DependentUpon>
     </Compile>
@@ -336,6 +339,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="windows\SavePresetWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="windows\SelectorWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -22,6 +22,7 @@ namespace CameraControl.Controls
       CameraDeviceManager cameraDeviceManager = DataContext as CameraDeviceManager;
       if (ServiceProvider.DeviceManager != null)
         ServiceProvider.DeviceManager.PropertyChanged += DeviceManager_PropertyChanged;
+      RefreshItems();
     }
 
     private void DeviceManager_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -36,6 +37,8 @@ namespace CameraControl.Controls
 
     private void RefreshItems()
     {
+      if(ServiceProvider.Settings==null)
+        return;
       CameraProperty property =
         ServiceProvider.Settings.CameraProperties.Get(ServiceProvider.DeviceManager.SelectedCameraDevice);
       cmb_transfer.Items.Clear();
@@ -55,10 +58,7 @@ namespace CameraControl.Controls
       {
         cmb_transfer.Items.Add(TranslationStrings.LabelTransferItem2);
         cmb_transfer.Items.Add(TranslationStrings.LabelTransferItem3);
-        if (property.NoDownload)
-          cmb_transfer.SelectedItem = TranslationStrings.LabelTransferItem2;
-        else
-          cmb_transfer.SelectedItem = TranslationStrings.LabelTransferItem3;
+        cmb_transfer.SelectedItem = property.NoDownload ? TranslationStrings.LabelTransferItem2 : TranslationStrings.LabelTransferItem3;
       }
 
     }
