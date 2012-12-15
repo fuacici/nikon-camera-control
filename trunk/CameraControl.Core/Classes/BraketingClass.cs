@@ -7,7 +7,7 @@ namespace CameraControl.Core.Classes
 {
   public class BraketingClass : BaseFieldClass
   {
-    public int Index = 0;
+    public int Index;
     private string _defec = "0";
     private CameraPreset _cameraPreset = new CameraPreset();
     private ICameraDevice _cameraDevice = null;

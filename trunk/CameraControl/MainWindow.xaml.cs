@@ -54,44 +54,13 @@ namespace CameraControl
         ServiceProvider.Settings.Save();
         CheckForUpdate();
       }
-      ServiceProvider.Settings.SessionSelected += Settings_SessionSelected;
-      ServiceProvider.DeviceManager.CameraConnected += DeviceManager_CameraConnected;
       ServiceProvider.DeviceManager.CameraSelected += DeviceManager_CameraSelected;
-
       SetLayout(ServiceProvider.Settings.SelectedLayout);
       ServiceProvider.Settings.ApplyTheme(this);
     }
 
-    private void ExecuteExportPlugin(IExportPlugin obj)
-    {
-      obj.Execute();
-    }
-
-    void Settings_SessionSelected(PhotoSession oldvalue, PhotoSession newvalue)
-    {
-      if (oldvalue != null)
-        ServiceProvider.Settings.Save(oldvalue);
-      ServiceProvider.QueueManager.Clear();
-      if (ServiceProvider.DeviceManager.SelectedCameraDevice != null)
-        ServiceProvider.DeviceManager.SelectedCameraDevice.AttachedPhotoSession = newvalue;
-    }
-
     void DeviceManager_CameraSelected(ICameraDevice oldcameraDevice, ICameraDevice newcameraDevice)
     {
-      if(newcameraDevice==null)
-        return;
-      CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(newcameraDevice);
-      // load session data only if not session attached to the selected camera
-      if (newcameraDevice.AttachedPhotoSession == null)
-      {
-        newcameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
-      }
-      if (newcameraDevice.AttachedPhotoSession != null)
-        ServiceProvider.Settings.DefaultSession = (PhotoSession)newcameraDevice.AttachedPhotoSession;
-      
-      if (newcameraDevice.GetCapability(CapabilityEnum.CaptureInRam))
-        newcameraDevice.CaptureInSdRam = property.CaptureInSdRam;
-      
       Dispatcher.Invoke(
         new Action(
           delegate
@@ -103,12 +72,11 @@ namespace CameraControl
             }));
     }
 
-    void DeviceManager_CameraConnected(ICameraDevice cameraDevice)
+    private void ExecuteExportPlugin(IExportPlugin obj)
     {
-      CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(cameraDevice);
-      cameraDevice.DisplayName = property.DeviceName;
-      cameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
+      obj.Execute();
     }
+
 
     void DeviceManager_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
     {
@@ -236,13 +204,6 @@ namespace CameraControl
       preset.Set(ServiceProvider.DeviceManager.SelectedCameraDevice);
     }
     
-    private void Window_Loaded(object sender, RoutedEventArgs e)
-    {
-      ServiceProvider.DeviceManager.DisableNativeDrivers = ServiceProvider.Settings.DisableNativeDrivers;
-      ServiceProvider.DeviceManager.ConnectToCamera();
-    }
-
-
     private void button3_Click(object sender, RoutedEventArgs e)
     {
       Log.Debug("Main window capture started");
