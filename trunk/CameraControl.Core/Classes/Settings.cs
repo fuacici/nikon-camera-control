@@ -444,6 +444,17 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private string _selectedMainForm;
+    public string SelectedMainForm
+    {
+      get { return _selectedMainForm; }
+      set
+      {
+        _selectedMainForm = value;
+        NotifyPropertyChanged("SelectedMainForm");
+      }
+    }
+
     public CameraPropertyEnumerator CameraProperties { get; set; }
     public string SelectedLayout { get; set; }
     public AsyncObservableCollection<CameraPreset> CameraPresets { get; set; }

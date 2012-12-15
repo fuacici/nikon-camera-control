@@ -25,18 +25,28 @@ namespace CameraControl
   /// <summary>
   /// Interaction logic for MainWindow.xaml
   /// </summary>
-  public partial class MainWindow : MetroWindow
+  public partial class MainWindow : MetroWindow, IMainWindowPlugin
   {
 
     public PropertyWnd PropertyWnd { get; set; }
+    public string DisplayName { get; set; }
 
     //public WIAManager WiaManager { get; set; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MainWindow" /> class.
+    /// </summary>
     public MainWindow()
     {
-      CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (sender, args) => this.Close()));
+      DisplayName = "Default";
+      InitializeComponent();
+    }
+
+    private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+      CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (sender1, args) => this.Close()));
       SelectDeviceCommand = new RelayCommand<ICameraDevice>(SelectCamera);
-      
+
       DevicePropertyCommand =
         new RelayCommand<ICameraDevice>(
           x => ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.CameraPropertyWnd_Show, x));
@@ -46,7 +56,7 @@ namespace CameraControl
       //WiaManager = new WIAManager();
       //ServiceProvider.Settings.Manager = WiaManager;
       ServiceProvider.DeviceManager.PhotoCaptured += DeviceManager_PhotoCaptured;
-      InitializeComponent();
+
       DataContext = ServiceProvider.Settings;
       if ((DateTime.Now - ServiceProvider.Settings.LastUpdateCheckDate).TotalDays > 7)
       {

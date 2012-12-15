@@ -35,10 +35,22 @@ namespace CameraControl.Core
       }
     }
 
+    private AsyncObservableCollection<IMainWindowPlugin> _mainWindowPlugins;
+    public AsyncObservableCollection<IMainWindowPlugin> MainWindowPlugins
+    {
+      get { return _mainWindowPlugins; }
+      set
+      {
+        _mainWindowPlugins = value;
+        NotifyPropertyChanged("MainWindowPlugins");
+      }
+    }
+
     public PluginManager()
     {
       Plugins = new AsyncObservableCollection<IPlugin>();
-      ExportPlugins=new AsyncObservableCollection<IExportPlugin>();
+      ExportPlugins = new AsyncObservableCollection<IExportPlugin>();
+      MainWindowPlugins = new AsyncObservableCollection<IMainWindowPlugin>();
     }
 
     public void LoadPlugins(string pluginFolder)

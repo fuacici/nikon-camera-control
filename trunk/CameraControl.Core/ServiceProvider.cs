@@ -18,13 +18,13 @@ namespace CameraControl.Core
 
 
     public static Settings Settings { get; set; }
-    public static readonly ILog log = LogManager.GetLogger("digiCamControl");
     public static CameraDeviceManager DeviceManager { get; set; }
     public static TriggerClass Trigger { get; set; }
     public static WindowsManager WindowsManager { get; set; }
     public static ActionManager ActionManager { get; set; }
     public static QueueManager QueueManager { get; set; }
     public static PluginManager PluginManager { get; set; }
+
 
     public static void Configure()
     {
@@ -35,8 +35,8 @@ namespace CameraControl.Core
       Trigger = new TriggerClass();
       ActionManager = new ActionManager();
       QueueManager = new QueueManager();
-      Log.Debug("Application starting");
-      Log.Debug("Application verison :" + Assembly.GetEntryAssembly().GetName().Version);
+      Log.Debug("--------------------------------===========================Application starting===========================--------------------------------");
+      Log.Debug("Application version : " + Assembly.GetEntryAssembly().GetName().Version);
       PluginManager = new PluginManager();
     }
 

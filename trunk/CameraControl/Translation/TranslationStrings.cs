@@ -263,5 +263,8 @@
     public static string MsgDisabledDrivers = "Native drivers are disabled ! Do you want to enable it ?";
     // 14/12/2012
     public static string LabelShowFocusPoints = "Show focus points";
+    public static string LabelMainWindow = "Main window";
+    public static string LabelSelect = "Select";
+    public static string TimeSelectWindowTitle = "Select window";
   }
 }
