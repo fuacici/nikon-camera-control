@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows;
-using System.Windows.Forms;
 using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
@@ -14,7 +13,7 @@ using Microsoft.VisualBasic.FileIO;
 using System.Windows.Controls;
 using Clipboard = System.Windows.Clipboard;
 using ListBox = System.Windows.Controls.ListBox;
-using MessageBox = System.Windows.Forms.MessageBox;
+using MessageBox = System.Windows.MessageBox;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace CameraControl.Layouts
@@ -129,8 +128,8 @@ namespace CameraControl.Layouts
           return;
 
         if (
-          MessageBox.Show("Do you really want to delete selected file(s) ?", "Delete file", MessageBoxButtons.YesNo) ==
-          System.Windows.Forms.DialogResult.Yes)
+          MessageBox.Show("Do you really want to delete selected file(s) ?", "Delete file",MessageBoxButton.YesNo) ==
+          MessageBoxResult.Yes)
         {
           foreach (FileItem fileItem in filestodelete)
           {
@@ -200,6 +199,7 @@ namespace CameraControl.Layouts
     {
       if (e.PropertyName == "DefaultSession")
       {
+        Thread.Sleep(1000);
         Dispatcher.Invoke(new Action(delegate
                                        {
                                          ImageLIst.SelectedIndex = 0;
