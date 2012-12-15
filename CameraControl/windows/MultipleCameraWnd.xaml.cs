@@ -18,6 +18,7 @@ using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
 using CameraControl.Devices;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.windows
 {
@@ -125,7 +126,8 @@ namespace CameraControl.windows
                                                                {
                                                                  try
                                                                  {
-                                                                   if (DisbleAutofocus)
+                                                                   if (DisbleAutofocus &&
+                                                                       device.GetCapability(CapabilityEnum.CaptureNoAf))
                                                                    {
                                                                      device.CapturePhotoNoAf();
                                                                    }

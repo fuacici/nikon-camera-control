@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Devices;
+using CameraControl.Devices.Classes;
 using CameraControl.Translation;
 using HelpProvider = CameraControl.Classes.HelpProvider;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -22,6 +23,7 @@ namespace CameraControl.windows
       InitializeComponent();
       ServiceProvider.Settings.DefaultSession.TimeLapse.TimeLapseDone += TimeLapse_TimeLapseDone;
       ServiceProvider.Settings.ApplyTheme(this);
+      chk_noaf.IsEnabled = ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.CaptureNoAf);
     }
 
     void TimeLapse_TimeLapseDone(object sender, EventArgs e)

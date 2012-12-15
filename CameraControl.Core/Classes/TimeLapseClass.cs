@@ -285,7 +285,7 @@ namespace CameraControl.Core.Classes
       try
       {
         WaitForReady(ServiceProvider.DeviceManager.SelectedCameraDevice);
-        if (NoAutofocus)
+        if (NoAutofocus && ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.CaptureNoAf))
           ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhotoNoAf();
         else
           ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
