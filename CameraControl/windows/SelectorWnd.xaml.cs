@@ -27,6 +27,7 @@ namespace CameraControl.windows
       {
         lst_windows.Items.Add(mainWindowPlugin.DisplayName);
       }
+      btn_select.Focus();
     }
 
     private void btn_select_Click(object sender, RoutedEventArgs e)
