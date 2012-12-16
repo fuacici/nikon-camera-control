@@ -118,7 +118,12 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="3">
                         <Label Content="{T:TranslateExtension LabelRotateImage}"/>
-                        <ComboBox ItemsSource="{Binding Path=RotateFlipTypesValues, RelativeSource={RelativeSource FindAncestor, AncestorType=windows:SettingsWnd, AncestorLevel=1}}" SelectedItem="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=Rotate}" />
+                        <ComboBox SelectedIndex="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=RotateIndex}">
+                            <ComboBoxItem Content="{T:TranslateExtension LabelRotateNone}" />
+                            <ComboBoxItem Content="{T:TranslateExtension LabelRotate90}" />
+                            <ComboBoxItem Content="{T:TranslateExtension LabelRotate180}" />
+                            <ComboBoxItem Content="{T:TranslateExtension LabelRotate270}" />
+                        </ComboBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="3">
                         <CheckBox Content="{T:TranslateExtension LabelDontLoadThumbs}" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DontLoadThumbnails}"/>

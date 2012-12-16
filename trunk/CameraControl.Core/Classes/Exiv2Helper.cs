@@ -122,7 +122,7 @@ namespace CameraControl.Core.Classes
                       };
     }
 
-    public void Load(string filename)
+    public void Load(string filename, int relWidth, int relHeight)
     {
       var startInfo = new ProcessStartInfo(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Tools", "exiv2.exe"))
       {
@@ -144,15 +144,17 @@ namespace CameraControl.Core.Classes
         int.TryParse(Tags["Exif.Photo.PixelXDimension"].Value, out Width);
         int.TryParse(Tags["Exif.Photo.PixelYDimension"].Value, out Height);
       }
+      double dw = (double) relWidth/Width;
+      double dh = (double) relHeight/Height;
       Focuspoints = new List<Rect>();
       if (Tags.ContainsKey("Exif.NikonAf2.ContrastDetectAF"))
       {
         if (Tags["Exif.NikonAf2.ContrastDetectAF"].Value == "On")
         {
-          int x = ToSize(Tags["Exif.NikonAf2.AFAreaXPosition"].Value);
-          int y = ToSize(Tags["Exif.NikonAf2.AFAreaYPosition"].Value);
-          int w = ToSize(Tags["Exif.NikonAf2.AFAreaWidth"].Value);
-          int h = ToSize(Tags["Exif.NikonAf2.AFAreaHeight"].Value);
+          int x = (int) (ToSize(Tags["Exif.NikonAf2.AFAreaXPosition"].Value)*dw);
+          int y = (int) (ToSize(Tags["Exif.NikonAf2.AFAreaYPosition"].Value)*dh);
+          int w = (int) (ToSize(Tags["Exif.NikonAf2.AFAreaWidth"].Value)*dw);
+          int h = (int) (ToSize(Tags["Exif.NikonAf2.AFAreaHeight"].Value)*dh);
           Focuspoints.Add(new Rect(x - (w/2), y - (h/2), w, h));
         }
       }
@@ -170,7 +172,7 @@ namespace CameraControl.Core.Classes
           for (var i = 1; i < 12; i++)
           {
             if (StaticHelper.GetBit(focuspoints, i - 1))
-              Focuspoints.Add(ToRect(Width, Height, FocusPoints11[i.ToString()]));
+              Focuspoints.Add(ToRect(relWidth, relHeight, FocusPoints11[i.ToString()], dw, dh));
           }
         }
       }
@@ -185,11 +187,10 @@ namespace CameraControl.Core.Classes
             byte.TryParse(strbytes[i], out bytes[i]);
           }
           BitArray bitArray=new BitArray(bytes);
-          long focuspoints = BitConverter.ToInt64(bytes, 0);
           for (var i = 1; i < 52; i++)
           {
-            if (bitArray.Get(i-1))
-              Focuspoints.Add(ToRect(Width, Height, FocusPoints51[i.ToString()]));
+            if (bitArray.Get(i - 1))
+              Focuspoints.Add(ToRect(relWidth, relHeight, FocusPoints51[i.ToString()], dw, dh));
           }
         }
       }
@@ -216,18 +217,18 @@ namespace CameraControl.Core.Classes
       return 0;
     }
 
-    private Rect ToRect(int w,int h, FocusPointDefinition definition )
+    private Rect ToRect(int w,int h, FocusPointDefinition definition, double dw,double dh )
     {
       switch (definition.FocusPointType)
       {
         case FocusPointType.Square:
-          return new Rect(w*definition.XRat - 150, h*definition.YRat - 100, 300, 200);
+          return new Rect(w*definition.XRat - (150*dw), h*definition.YRat - (100*dh), 300*dw, 200*dh);
           break;
         case FocusPointType.VRectangle:
-          return new Rect(w * definition.XRat - 150, h * definition.YRat - 50, 300, 100);
+          return new Rect(w*definition.XRat - (150*dw), h*definition.YRat - (50*dh), 300*dw, 100*dh);
           break;
         case FocusPointType.HRectangle:
-          return new Rect(w * definition.XRat - 50, h * definition.YRat - 150, 100, 300);
+          return new Rect(w*definition.XRat - (50*dw), h*definition.YRat - (150*dh), 100*dw, 300*dh);
           break;
         default:
           throw new ArgumentOutOfRangeException();

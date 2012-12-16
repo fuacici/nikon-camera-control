@@ -312,14 +312,14 @@ namespace CameraControl.Core.Classes
       }
     }
 
-    private RotateFlipType _rotate;
-    public RotateFlipType Rotate
+    private int _rotateIndex;
+    public int RotateIndex
     {
-      get { return _rotate; }
+      get { return _rotateIndex; }
       set
       {
-        _rotate = value;
-        NotifyPropertyChanged("AutoPreview");
+        _rotateIndex = value;
+        NotifyPropertyChanged("RotateIndex");
       }
     }
 
@@ -496,7 +496,7 @@ namespace CameraControl.Core.Classes
       SmalFocusStep = 10;
       MediumFocusStep = 100;
       LargeFocusStep = 500;
-      Rotate = RotateFlipType.RotateNoneFlipNone;
+      RotateIndex = 0;
       FullScreenColor = Colors.Black;
       SelectedLanguage = Thread.CurrentThread.CurrentCulture.Name;
       FocusMoveStep = 50;

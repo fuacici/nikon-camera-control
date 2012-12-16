@@ -168,7 +168,7 @@ namespace CameraControl.Core.Classes
 
     public static void Donate()
     {
-      Run("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6JQGZE8R2NLEY"); 
+      Run("http://www.digicamcontrol.com/donate/"); 
     }
   }
 }
