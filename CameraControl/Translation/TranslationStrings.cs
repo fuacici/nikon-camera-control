@@ -266,5 +266,10 @@
     public static string LabelMainWindow = "Main window";
     public static string LabelSelect = "Select";
     public static string TimeSelectWindowTitle = "Select window";
+    // 16/12/2012
+    public static string LabelRotateNone = "None";
+    public static string LabelRotate90 = "Rotate 90";
+    public static string LabelRotate180 = "Rotate 180";
+    public static string LabelRotate270 = "Rotate 270";
   }
 }

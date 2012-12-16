@@ -139,148 +139,138 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private string _infoLabel;
+    public string InfoLabel
+    {
+      get { return _infoLabel; }
+      set
+      {
+        _infoLabel = value;
+        NotifyPropertyChanged("InfoLabel");
+      }
+    }
 
     public AsyncObservableCollection<DictionaryItem> Metadata { get; set; }
 
-    public BitmapImage GetBitmap()
-    {
-      if(!File.Exists(FileItem.FileName))
-      {
-        Log.Error("File not found " + FileItem.FileName);
-        StaticHelper.Instance.SystemMessage = "File not found " + FileItem.FileName;
-      }
-      BitmapImage res = null;
-      //Metadata.Clear();
-      try
-      {
-        if (FileItem.IsRaw)
-        {
-          BitmapDecoder bmpDec = BitmapDecoder.Create(new Uri(FileItem.FileName), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+    //public BitmapImage GetBitmap()
+    //{
+    //  if(!File.Exists(FileItem.FileName))
+    //  {
+    //    Log.Error("File not found " + FileItem.FileName);
+    //    StaticHelper.Instance.SystemMessage = "File not found " + FileItem.FileName;
+    //  }
+    //  BitmapImage res = null;
+    //  //Metadata.Clear();
+    //  try
+    //  {
+    //    if (FileItem.IsRaw)
+    //    {
+    //      BitmapDecoder bmpDec = BitmapDecoder.Create(new Uri(FileItem.FileName), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
 
-          DisplayImage = new WriteableBitmap(bmpDec.Frames.Single()); 
-        }
-        else
-        {
-          Bitmap image = (Bitmap) Image.FromFile(FileItem.FileName);
-          var exif = new EXIFextractor(ref image, "n");
-          if (exif["Orientation"] != null)
-          {
-            RotateFlipType flip = EXIFextractorEnumerator.OrientationToFlipType(exif["Orientation"].ToString());
+    //      DisplayImage = new WriteableBitmap(bmpDec.Frames.Single()); 
+    //    }
+    //    else
+    //    {
+    //      Bitmap image = (Bitmap) Image.FromFile(FileItem.FileName);
+    //      var exif = new EXIFextractor(ref image, "n");
+    //      if (exif["Orientation"] != null)
+    //      {
+    //        RotateFlipType flip = EXIFextractorEnumerator.OrientationToFlipType(exif["Orientation"].ToString());
 
-            if (flip != RotateFlipType.RotateNoneFlipNone)  // don't flip of orientation is correct
-            {
-              image.RotateFlip(flip);
-            }
-            if (ServiceProvider.Settings.Rotate != RotateFlipType.RotateNoneFlipNone)
-            {
-              image.RotateFlip(ServiceProvider.Settings.Rotate);
-            }
-          }
-          DisplayImage = BitmapSourceConvert.CreateWriteableBitmapFromBitmap(image);
-          image.Dispose();
-          Thread threadPhoto = new Thread(GetAdditionalData);
-          threadPhoto.Start();
-        }
-      }
-      catch (Exception exception)
-      {
-        Log.Error(exception);
-      }
-      if (BitmapLoaded != null)
-        BitmapLoaded(this);
-      return res;
-    }
+    //        if (flip != RotateFlipType.RotateNoneFlipNone)  // don't flip of orientation is correct
+    //        {
+    //          image.RotateFlip(flip);
+    //        }
+    //        if (ServiceProvider.Settings.Rotate != RotateFlipType.RotateNoneFlipNone)
+    //        {
+    //          image.RotateFlip(ServiceProvider.Settings.Rotate);
+    //        }
+    //      }
+    //      DisplayImage = BitmapSourceConvert.CreateWriteableBitmapFromBitmap(image);
+    //      image.Dispose();
+    //      Thread threadPhoto = new Thread(GetAdditionalData);
+    //      threadPhoto.Start();
+    //    }
+    //  }
+    //  catch (Exception exception)
+    //  {
+    //    Log.Error(exception);
+    //  }
+    //  if (BitmapLoaded != null)
+    //    BitmapLoaded(this);
+    //  return res;
+    //}
 
-    private void GetAdditionalData()
-    {
-      try
-      {
-        using (Bitmap bmp = new Bitmap(FileItem.FileName))
-        {
-          // Luminance
-          ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
-          this.LuminanceHistogramPoints = ConvertToPointCollection(hslStatistics.Luminance.Values);
-          // RGB
-          ImageStatistics rgbStatistics = new ImageStatistics(bmp);
-          this.RedColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Red.Values);
-          this.GreenColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Green.Values);
-          this.BlueColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Blue.Values);
-        }
-        GetMetadata();
-      }
-      catch (Exception ex)
-      {
-        Log.Error(ex);
-      }
-    }
+    //private void GetAdditionalData()
+    //{
+    //  try
+    //  {
+    //    using (Bitmap bmp = new Bitmap(FileItem.FileName))
+    //    {
+    //      // Luminance
+    //      ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
+    //      this.LuminanceHistogramPoints = ConvertToPointCollection(hslStatistics.Luminance.Values);
+    //      // RGB
+    //      ImageStatistics rgbStatistics = new ImageStatistics(bmp);
+    //      this.RedColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Red.Values);
+    //      this.GreenColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Green.Values);
+    //      this.BlueColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Blue.Values);
+    //    }
+    //    GetMetadata();
+    //  }
+    //  catch (Exception ex)
+    //  {
+    //    Log.Error(ex);
+    //  }
+    //}
 
-    public void GetMetadata()
-    {
-      //Exiv2Net.Image image = new Exiv2Net.Image(FileItem.FileName);
-      //foreach (KeyValuePair<string, Exiv2Net.Value> i in image)
-      //{
-      //  Console.WriteLine(i);
-      //}
-      using (FreeImageBitmap bitmap = new FreeImageBitmap(FileItem.FileName))
-      {
-        foreach (MetadataModel metadataModel in bitmap.Metadata)
-        {
-          foreach (MetadataTag metadataTag in metadataModel)
-          {
-            AddMetadataItem(metadataTag);
-            if(metadataTag.Key=="AFInfo2")
-            {
-              byte[] b=metadataTag.Value as byte[];
-              string hex =BitConverter.ToString(b);
-              //b = b.Reverse().ToArray();
+    //public void GetMetadata()
+    //{
+    //  //Exiv2Net.Image image = new Exiv2Net.Image(FileItem.FileName);
+    //  //foreach (KeyValuePair<string, Exiv2Net.Value> i in image)
+    //  //{
+    //  //  Console.WriteLine(i);
+    //  //}
+    //  using (FreeImageBitmap bitmap = new FreeImageBitmap(FileItem.FileName))
+    //  {
+    //    foreach (MetadataModel metadataModel in bitmap.Metadata)
+    //    {
+    //      foreach (MetadataTag metadataTag in metadataModel)
+    //      {
+    //        AddMetadataItem(metadataTag);
+    //        if(metadataTag.Key=="AFInfo2")
+    //        {
+    //          byte[] b=metadataTag.Value as byte[];
+    //          string hex =BitConverter.ToString(b);
+    //          //b = b.Reverse().ToArray();
 
-              ushort i6=BitConverter.ToUInt16(b, 6);
-            }
-            //i += metadataTag.Length;
-            //if (!string.IsNullOrEmpty(metadataTag.Description))
-            //  Metadata.Add(new DictionaryItem { Name = metadataTag.Description, Value = metadataTag.ToString() });
-          }
-        }
-        //Enumerable.OrderBy(Metadata, dict => dict.Name);
-      }
-    }
+    //          ushort i6=BitConverter.ToUInt16(b, 6);
+    //        }
+    //        //i += metadataTag.Length;
+    //        //if (!string.IsNullOrEmpty(metadataTag.Description))
+    //        //  Metadata.Add(new DictionaryItem { Name = metadataTag.Description, Value = metadataTag.ToString() });
+    //      }
+    //    }
+    //    //Enumerable.OrderBy(Metadata, dict => dict.Name);
+    //  }
+    //}
 
-    /*
-http://www.exiv2.org/tags-nikon.html
+//*
 
-Click on a column header to sort the table.
-
-Tag (hex)	Tag (dec)	IFD	Key	Type	Tag description
-
-0x0000	0	NikonAf2	Exif.NikonAf2.Version	Undefined	Version
-0x0004	4	NikonAf2	Exif.NikonAf2.ContrastDetectAF	Byte	Contrast detect AF
-0x0005	5	NikonAf2	Exif.NikonAf2.AFAreaMode	Byte	AF area mode
-0x0006	6	NikonAf2	Exif.NikonAf2.PhaseDetectAF	Byte	Phase detect AF
-0x0007	7	NikonAf2	Exif.NikonAf2.PrimaryAFPoint	Byte	Primary AF point
-0x0008	8	NikonAf2	Exif.NikonAf2.AFPointsUsed	Byte	AF points used
-0x0010	16	NikonAf2	Exif.NikonAf2.AFImageWidth	Short	AF image width
-0x0012	18	NikonAf2	Exif.NikonAf2.AFImageHeight	Short	AF image height
-0x0014	20	NikonAf2	Exif.NikonAf2.AFAreaXPosition	Short	AF area x position
-0x0016	22	NikonAf2	Exif.NikonAf2.AFAreaYPosition	Short	AF area y position
-0x0018	24	NikonAf2	Exif.NikonAf2.AFAreaWidth	Short	AF area width
-0x001a	26	NikonAf2	Exif.NikonAf2.AFAreaHeight	Short	AF area height
-0x001c	28	NikonAf2	Exif.NikonAf2.ContrastDetectAFInFocus	Short	Contrast detect AF in focus
-     * 
-*/
-    public void AddMetadataItem(MetadataTag tag )
-    {
-      if (string.IsNullOrEmpty(tag.Description))
-        return;
-      foreach (DictionaryItem dictionaryItem in Metadata)
-      {
-        if (dictionaryItem.Name == tag.Description.Trim())
-        {
-          dictionaryItem.Value = tag.ToString();
-          return;
-        }
-      }
-      Metadata.Add(new DictionaryItem { Name = tag.Description.Trim(), Value = tag.ToString()});
-    }
+//    public void AddMetadataItem(MetadataTag tag )
+//    {
+//      if (string.IsNullOrEmpty(tag.Description))
+//        return;
+//      foreach (DictionaryItem dictionaryItem in Metadata)
+//      {
+//        if (dictionaryItem.Name == tag.Description.Trim())
+//        {
+//          dictionaryItem.Value = tag.ToString();
+//          return;
+//        }
+//      }
+//      Metadata.Add(new DictionaryItem { Name = tag.Description.Trim(), Value = tag.ToString()});
+//    }
 
     public void OnBitmapLoaded()
     {
@@ -297,47 +287,47 @@ Tag (hex)	Tag (dec)	IFD	Key	Type	Tag description
         DisplayImage = new WriteableBitmap(FileItem.Thumbnail);
     }
 
-    private PointCollection ConvertToPointCollection(int[] values)
-    {
-      //if (this.PerformHistogramSmoothing)
-      //{
-      values = SmoothHistogram(values);
-      //}
+    //private PointCollection ConvertToPointCollection(int[] values)
+    //{
+    //  //if (this.PerformHistogramSmoothing)
+    //  //{
+    //  values = SmoothHistogram(values);
+    //  //}
 
-      int max = values.Max();
+    //  int max = values.Max();
 
-      PointCollection points = new PointCollection();
-      // first point (lower-left corner)
-      points.Add(new System.Windows.Point(0, max));
-      // middle points
-      for (int i = 0; i < values.Length; i++)
-      {
-        points.Add(new System.Windows.Point(i, max - values[i]));
-      }
-      // last point (lower-right corner)
-      points.Add(new System.Windows.Point(values.Length - 1, max));
-      points.Freeze();
-      return points;
-    }
+    //  PointCollection points = new PointCollection();
+    //  // first point (lower-left corner)
+    //  points.Add(new System.Windows.Point(0, max));
+    //  // middle points
+    //  for (int i = 0; i < values.Length; i++)
+    //  {
+    //    points.Add(new System.Windows.Point(i, max - values[i]));
+    //  }
+    //  // last point (lower-right corner)
+    //  points.Add(new System.Windows.Point(values.Length - 1, max));
+    //  points.Freeze();
+    //  return points;
+    //}
 
-    private int[] SmoothHistogram(int[] originalValues)
-    {
-      int[] smoothedValues = new int[originalValues.Length];
+    //private int[] SmoothHistogram(int[] originalValues)
+    //{
+    //  int[] smoothedValues = new int[originalValues.Length];
 
-      double[] mask = new double[] { 0.25, 0.5, 0.25 };
+    //  double[] mask = new double[] { 0.25, 0.5, 0.25 };
 
-      for (int bin = 1; bin < originalValues.Length - 1; bin++)
-      {
-        double smoothedValue = 0;
-        for (int i = 0; i < mask.Length; i++)
-        {
-          smoothedValue += originalValues[bin - 1 + i] * mask[i];
-        }
-        smoothedValues[bin] = (int)smoothedValue;
-      }
+    //  for (int bin = 1; bin < originalValues.Length - 1; bin++)
+    //  {
+    //    double smoothedValue = 0;
+    //    for (int i = 0; i < mask.Length; i++)
+    //    {
+    //      smoothedValue += originalValues[bin - 1 + i] * mask[i];
+    //    }
+    //    smoothedValues[bin] = (int)smoothedValue;
+    //  }
 
-      return smoothedValues;
-    }
+    //  return smoothedValues;
+    //}
 
     public BitmapFile()
     {

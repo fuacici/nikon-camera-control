@@ -69,11 +69,14 @@ namespace CameraControl.Core.Classes
             Log.Debug("Loading raw file.");
             BitmapDecoder bmpDec = BitmapDecoder.Create(new Uri(_currentfile.FileItem.FileName),
                                                         BitmapCreateOptions.None,
-                                                        BitmapCacheOption.OnLoad);
-
+                                                        BitmapCacheOption.Default);
+          
             WriteableBitmap writeableBitmap = BitmapFactory.ConvertToPbgra32Format(bmpDec.Frames.Single());
-            writeableBitmap.Freeze();
-            _currentfile.DisplayImage = writeableBitmap;
+            double dw = 2000/writeableBitmap.Width;
+            writeableBitmap = writeableBitmap.Resize((int) (writeableBitmap.PixelWidth*dw),
+                                                     (int) (writeableBitmap.PixelHeight*dw),
+                                                     WriteableBitmapExtensions.Interpolation.Bilinear);
+            GetMetadata(_currentfile, writeableBitmap); 
             Log.Debug("Loading raw file done.");
           }
           else
@@ -98,16 +101,15 @@ namespace CameraControl.Core.Classes
             BitmapImage bi = new BitmapImage();
             // BitmapImage.UriSource must be in a BeginInit/EndInit block.
             bi.BeginInit();
-            //bi.DecodePixelHeight = 2000;
-            bi.CacheOption=BitmapCacheOption.OnLoad;
+            bi.DecodePixelWidth = 2000;
+            //bi.CacheOption = BitmapCacheOption.OnLoad;
             bi.UriSource = new Uri(_currentfile.FileItem.FileName);
             bi.EndInit();
-            bi.Freeze();
+            //bi.Freeze();
             WriteableBitmap writeableBitmap = BitmapFactory.ConvertToPbgra32Format(bi);
-            writeableBitmap.Freeze();
-            _currentfile.DisplayImage = writeableBitmap;
-            
-            
+            GetMetadata(_currentfile,writeableBitmap);
+            //writeableBitmap.Freeze();
+            //_currentfile.DisplayImage = writeableBitmap;
             Log.Debug("Loading bitmap file done.");
           }
         }
@@ -141,7 +143,6 @@ namespace CameraControl.Core.Classes
       BitmapFile file = o as BitmapFile;
       try
       {
-        GetMetadata(file);
         if (!file.FileItem.IsRaw)
         {
           using (Bitmap bmp = new Bitmap(file.FileItem.FileName))
@@ -171,65 +172,57 @@ namespace CameraControl.Core.Classes
       } 
     }
 
-    public void GetMetadata(BitmapFile file)
+    public void GetMetadata(BitmapFile file,WriteableBitmap writeableBitmap)
     {
       Exiv2Helper exiv2Helper=new Exiv2Helper();
-      exiv2Helper.Load(file.FileItem.FileName);
+      exiv2Helper.Load(file.FileItem.FileName, writeableBitmap.PixelWidth, writeableBitmap.PixelHeight);
       file.Metadata.Clear();
       foreach (var exiv2Data in exiv2Helper.Tags)
       {
         file.Metadata.Add(new DictionaryItem() { Name = exiv2Data.Value.Tag, Value = exiv2Data.Value.Value });
       }
-
       if (ServiceProvider.Settings.ShowFocusPoints)
       {
-        WriteableBitmap writeableBitmap = file.DisplayImage.Clone();
         writeableBitmap.Lock();
         foreach (Rect focuspoint in exiv2Helper.Focuspoints)
         {
           DrawRect(writeableBitmap, (int) focuspoint.X, (int) focuspoint.Y, (int) (focuspoint.X + focuspoint.Width),
-                   (int) (focuspoint.Y + focuspoint.Height), Colors.Aqua, 5);
+                   (int) (focuspoint.Y + focuspoint.Height), Colors.Aqua, 7);
         }
         writeableBitmap.Unlock();
-        writeableBitmap.Freeze();
-        file.DisplayImage = writeableBitmap;
       }
 
-      ////Exiv2Net.Image image = new Exiv2Net.Image(FileItem.FileName);
-      ////foreach (KeyValuePair<string, Exiv2Net.Value> i in image)
-      ////{
-      ////  Console.WriteLine(i);
-      ////}
-      //using (FreeImageBitmap bitmap = new FreeImageBitmap(file.FileItem.FileName))
-      //{
-      //  int shutterCount = 0;
-      //  int serialNumber = 0;
-      //  byte[] b = null;
-      //  foreach (MetadataModel metadataModel in bitmap.Metadata)
-      //  {
-      //    foreach (MetadataTag metadataTag in metadataModel)
-      //    {
-      //      AddMetadataItem(metadataTag, file);
-      //      if (metadataTag.ID == 0x1d)
-      //        //serialNumber = Convert.ToInt32(metadataTag.ToString());
-      //        serialNumber = 6319062;
-      //      if (metadataTag.ID == 0xa7)
-      //        shutterCount = Convert.ToInt32(metadataTag.ToString());
+      if (ServiceProvider.Settings.RotateIndex != 0)
+      {
+        switch (ServiceProvider.Settings.RotateIndex)
+        {
+          case 1:
+            writeableBitmap = writeableBitmap.Rotate(90);
+            break;
+          case 2:
+            writeableBitmap = writeableBitmap.Rotate(180);
+            break;
+          case 3:
+            writeableBitmap = writeableBitmap.Rotate(270);
+            break;
+        }
+      }
 
-      //      if (metadataTag.Key == "AFInfo2")
-      //      {
-      //        b = metadataTag.Value as byte[];
+      writeableBitmap.Freeze();
+      file.DisplayImage = writeableBitmap;
+      file.InfoLabel = Path.GetFileName(file.FileItem.FileName);
+      file.InfoLabel += String.Format(" | {0}x{1}",exiv2Helper.Width,exiv2Helper.Height);
+      if (exiv2Helper.Tags.ContainsKey("Exif.Photo.ExposureTime"))
+        file.InfoLabel += " | E " + exiv2Helper.Tags["Exif.Photo.ExposureTime"].Value;
+      if (exiv2Helper.Tags.ContainsKey("Exif.Photo.FNumber"))
+        file.InfoLabel += " | " + exiv2Helper.Tags["Exif.Photo.FNumber"].Value;
+      if (exiv2Helper.Tags.ContainsKey("Exif.Photo.ISOSpeedRatings"))
+        file.InfoLabel += " | ISO " + exiv2Helper.Tags["Exif.Photo.ISOSpeedRatings"].Value;
+      if (exiv2Helper.Tags.ContainsKey("Exif.Photo.ExposureBiasValue"))
+        file.InfoLabel += " | " + exiv2Helper.Tags["Exif.Photo.ExposureBiasValue"].Value;
+      if (exiv2Helper.Tags.ContainsKey("Exif.Photo.FocalLength"))
+        file.InfoLabel += " | " + exiv2Helper.Tags["Exif.Photo.FocalLength"].Value;
 
-      //        ushort i6 = BitConverter.ToUInt16(b, 6);
-      //      }
-      //      //i += metadataTag.Length;
-      //      //if (!string.IsNullOrEmpty(metadataTag.Description))
-      //      //  Metadata.Add(new DictionaryItem { Name = metadataTag.Description, Value = metadataTag.ToString() });
-      //    }
-      //  }
-      //  //Enumerable.OrderBy(Metadata, dict => dict.Name);
-      //  byte[] res = DecriptNikonData(b, shutterCount, serialNumber);
-      //}
     }
 
     public void AddMetadataItem(MetadataTag tag, BitmapFile bitmapFile)
