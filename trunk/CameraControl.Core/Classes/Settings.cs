@@ -455,6 +455,17 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private bool _lowMemoryUsage;
+    public bool LowMemoryUsage
+    {
+      get { return _lowMemoryUsage; }
+      set
+      {
+        _lowMemoryUsage = value;
+        NotifyPropertyChanged("LowMemoryUsage");
+      }
+    }
+
     public CameraPropertyEnumerator CameraProperties { get; set; }
     public string SelectedLayout { get; set; }
     public AsyncObservableCollection<CameraPreset> CameraPresets { get; set; }
@@ -504,6 +515,7 @@ namespace CameraControl.Core.Classes
       UseExternalViewer = false;
       ExternalViewerArgs = string.Empty;
       ShowFocusPoints = true;
+      LowMemoryUsage = true;
     }
 
     public void Add(PhotoSession session)

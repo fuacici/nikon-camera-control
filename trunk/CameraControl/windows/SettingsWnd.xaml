@@ -101,6 +101,9 @@
                     <StackPanel Orientation="Horizontal" Margin="3">
                         <CheckBox Content="{T:TranslateExtension LabelShowFocusPoints}"  IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ShowFocusPoints}" />
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <CheckBox Content="{T:TranslateExtension LabelLowMemoryUsage}"  IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=LowMemoryUsage}" />
+                    </StackPanel>
 
                     <StackPanel Margin="3">
                         <CheckBox Content="{T:TranslateExtension LabelPreviewAfterCapture}" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=Preview}"/>

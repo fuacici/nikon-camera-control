@@ -271,5 +271,6 @@
     public static string LabelRotate90 = "Rotate 90";
     public static string LabelRotate180 = "Rotate 180";
     public static string LabelRotate270 = "Rotate 270";
+    public static string LabelLowMemoryUsage = "Low memory usage";
   }
 }

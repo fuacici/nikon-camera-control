@@ -72,10 +72,13 @@ namespace CameraControl.Core.Classes
                                                         BitmapCacheOption.Default);
           
             WriteableBitmap writeableBitmap = BitmapFactory.ConvertToPbgra32Format(bmpDec.Frames.Single());
-            double dw = 2000/writeableBitmap.Width;
-            writeableBitmap = writeableBitmap.Resize((int) (writeableBitmap.PixelWidth*dw),
-                                                     (int) (writeableBitmap.PixelHeight*dw),
-                                                     WriteableBitmapExtensions.Interpolation.Bilinear);
+            if (ServiceProvider.Settings.LowMemoryUsage)
+            {
+              double dw = 2000/writeableBitmap.Width;
+              writeableBitmap = writeableBitmap.Resize((int) (writeableBitmap.PixelWidth*dw),
+                                                       (int) (writeableBitmap.PixelHeight*dw),
+                                                       WriteableBitmapExtensions.Interpolation.Bilinear);
+            }
             GetMetadata(_currentfile, writeableBitmap); 
             Log.Debug("Loading raw file done.");
           }
@@ -101,15 +104,14 @@ namespace CameraControl.Core.Classes
             BitmapImage bi = new BitmapImage();
             // BitmapImage.UriSource must be in a BeginInit/EndInit block.
             bi.BeginInit();
-            bi.DecodePixelWidth = 2000;
-            //bi.CacheOption = BitmapCacheOption.OnLoad;
+            
+            if (ServiceProvider.Settings.LowMemoryUsage)
+              bi.DecodePixelWidth = 2000;
+
             bi.UriSource = new Uri(_currentfile.FileItem.FileName);
             bi.EndInit();
-            //bi.Freeze();
             WriteableBitmap writeableBitmap = BitmapFactory.ConvertToPbgra32Format(bi);
             GetMetadata(_currentfile,writeableBitmap);
-            //writeableBitmap.Freeze();
-            //_currentfile.DisplayImage = writeableBitmap;
             Log.Debug("Loading bitmap file done.");
           }
         }
@@ -190,6 +192,18 @@ namespace CameraControl.Core.Classes
                    (int) (focuspoint.Y + focuspoint.Height), Colors.Aqua, 7);
         }
         writeableBitmap.Unlock();
+      }
+
+      if (exiv2Helper.Tags.ContainsKey("Exif.Image.Orientation"))
+      {
+        if (exiv2Helper.Tags["Exif.Image.Orientation"].Value == "bottom, right")
+          writeableBitmap = writeableBitmap.Rotate(180);
+
+        if (exiv2Helper.Tags["Exif.Image.Orientation"].Value == "right, top")
+          writeableBitmap = writeableBitmap.Rotate(90);
+
+        if (exiv2Helper.Tags["Exif.Image.Orientation"].Value == "left, bottom")
+          writeableBitmap = writeableBitmap.Rotate(270);
       }
 
       if (ServiceProvider.Settings.RotateIndex != 0)
