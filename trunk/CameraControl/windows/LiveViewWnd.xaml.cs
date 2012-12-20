@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 //using System.Threading;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using AForge.Imaging;
 using AForge.Imaging.Filters;
@@ -27,9 +20,6 @@ using CameraControl.Core.Interfaces;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using CameraControl.Translation;
-using MahApps.Metro;
-using PortableDeviceLib;
-using MessageBox = System.Windows.Forms.MessageBox;
 using Point = System.Windows.Point;
 using Rectangle = System.Windows.Shapes.Rectangle;
 using Timer = System.Timers.Timer;
@@ -53,12 +43,11 @@ namespace CameraControl.windows
     private bool _preview = false;
     private int _totalframes = 0;
     private DateTime _framestart;
-    private Timer _smoottimer;
-    private int _smootstepdirection = 1;
     private MotionDetector _detector;
     private DateTime _photoCapturedTime;
     private DateTime _focusMoveTime = DateTime.Now;
-    private bool _sliderfocus = false;
+    private bool _focusIProgress = false;
+
 
     public LiveViewData LiveViewData { get; set; }
 
@@ -238,6 +227,10 @@ namespace CameraControl.windows
           FocusValue = FocusValue - FocusCounter;
           FocusCounter = 0;
         }
+        if(!_lockA)
+        {
+          LockB = false;
+        }
         NotifyPropertyChanged("LockA");
         NotifyPropertyChanged("CounterMessage");
       }
@@ -252,7 +245,10 @@ namespace CameraControl.windows
       {
         _lockB = value;
         if (_lockB)
+        {
           FocusValue = FocusCounter;
+          focus_slider.Value = FocusCounter;
+        }
         NotifyPropertyChanged("LockB");
         NotifyPropertyChanged("CounterMessage");
       }
@@ -329,18 +325,6 @@ namespace CameraControl.windows
       Recording = false;
     }
 
-    private void _smoottimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-    {
-      //_smoottimer.Stop();
-      if (_smootstepdirection == 0)
-        SetFocus(-25);
-      else
-      {
-        SetFocus(25);
-      }
-      //_smoottimer.Start();
-    }
-
     private void SelectedBitmap_BitmapLoaded(object sender)
     {
       if (ServiceProvider.Settings.PreviewLiveViewImage && IsVisible)
@@ -386,8 +370,6 @@ namespace CameraControl.windows
                             if (!FreezeImage)
                               GetLiveImage();
                           };
-      _smoottimer = new Timer(100);
-      _smoottimer.Elapsed += _smoottimer_Elapsed;
     }
 
     private void _freezeTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -799,7 +781,6 @@ namespace CameraControl.windows
                                            Hide();
                                            try
                                            {
-                                             _smoottimer.Stop();
                                              _timer.Stop();
                                              selectedPortableDevice.CameraDisconnected -=
                                                selectedPortableDevice_CameraDisconnected;
@@ -824,7 +805,6 @@ namespace CameraControl.windows
         case CmdConsts.All_Close:
           Dispatcher.Invoke(new Action(delegate
                                          {
-                                           _smoottimer.Stop();
                                            Hide();
                                            Close();
                                          }));
@@ -942,6 +922,9 @@ namespace CameraControl.windows
 
     private void SetFocus(int step)
     {
+      if (_focusIProgress)
+        return;
+      _focusIProgress = true;
       Console.WriteLine("Focus start");
       if (LockA)
       {
@@ -979,6 +962,7 @@ namespace CameraControl.windows
       if (!IsBusy)
         _timer.Start();
       Console.WriteLine("Focus end");
+      _focusIProgress = false;
     }
 
     private void Window_Closing(object sender, CancelEventArgs e)
@@ -1155,47 +1139,6 @@ namespace CameraControl.windows
 
     }
 
-    private void btn_smoot_fm_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-
-    }
-
-    private void btn_smoot_fm_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-    {
-
-    }
-
-    private void btn_smoot_fp_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      _smootstepdirection = 1;
-      _smoottimer.Start();
-    }
-
-    private void btn_smoot_fp_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-    {
-      _smoottimer.Stop();
-    }
-
-    private void btn_smoot_fm_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      _smootstepdirection = 0;
-      _smoottimer.Start();
-    }
-
-    private void btn_smoot_fm_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-    {
-      _smoottimer.Stop();
-    }
-
-    private void btn_smoot_fm_MouseLeave(object sender, MouseEventArgs e)
-    {
-      _smoottimer.Stop();
-    }
-
-    private void btn_smoot_fm_Click(object sender, RoutedEventArgs e)
-    {
-
-    }
 
     private void MetroWindow_PreviewKeyDown(object sender, KeyEventArgs e)
     {
@@ -1248,7 +1191,7 @@ namespace CameraControl.windows
     {
       if(Math.Abs(FocusCounter - e.NewValue) == 0)
         return;
-       //SetFocus((int) (e.NewValue-e.OldValue));
+      SetFocus((int)(e.NewValue - e.OldValue));
     }
 
   }
