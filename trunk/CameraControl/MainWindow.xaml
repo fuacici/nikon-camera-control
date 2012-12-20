@@ -144,7 +144,8 @@
                                             <Image Source="/CameraControl;component/Images/Properties.png" />
                                         </Button.Content>
                                     </Button>
-                                    <ProgressBar Value="{Binding Path=TransferProgress}" Width="150" Margin="3" Style="{x:Null}"/>
+                                        <Button  Height="23" Width="25" Content="Lv" Command="{Binding Path=ShowLiveViewCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding}"/>
+                                        <ProgressBar Value="{Binding Path=TransferProgress}" Width="125" Margin="3" Style="{x:Null}"/>
                                 </StackPanel>
                             </StackPanel>
                             </Border>
@@ -226,7 +227,7 @@
                     </Rectangle>
                     <!--<Image Margin="5" Source="/CameraControl;component/Images/Fullscreen.png" />-->
                 </Button>
-                <Button Content="Lv" ToolTip="{T:TranslateExtension LiveViewToolTip}" Height="50" Name="btn_liveview" Width="50" Margin="5" Click="btn_liveview_Click" FontSize="15" Style="{DynamicResource MetroCircleButtonStyle}"/>
+                <Button Content="Lv" ToolTip="{T:TranslateExtension LiveViewToolTip}" Height="50" Name="btn_liveview" Width="50" Margin="5" Command="{Binding Path=ShowLiveViewCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice}" FontSize="15" Style="{DynamicResource MetroCircleButtonStyle}"/>
                 <Button Content="B" ToolTip="{T:TranslateExtension BrowseSessionsToolTip}" Height="50" Name="btn_browse" Width="50" Margin="5"  FontSize="15" Click="btn_browse_Click" Style="{DynamicResource MetroCircleButtonStyle}"/>
                 <Button Content="Tags" ToolTip="{T:TranslateExtension SelectTagsToolTip}" Height="50" Name="btn_Tags" Width="50" Margin="5"  FontSize="15" Click="btn_Tags_Click" Style="{DynamicResource MetroCircleButtonStyle}"/>
                 <StackPanel HorizontalAlignment="Right" IsEnabled="{Binding Path=DefaultSession.TimeLapse.IsDisabled}"></StackPanel>
