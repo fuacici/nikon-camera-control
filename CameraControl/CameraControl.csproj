@@ -195,6 +195,7 @@
     <Compile Include="windows\FullScreenWnd.xaml.cs">
       <DependentUpon>FullScreenWnd.xaml</DependentUpon>
     </Compile>
+    <Compile Include="windows\LiveViewManager.cs" />
     <Compile Include="windows\LiveViewWnd.xaml.cs">
       <DependentUpon>LiveViewWnd.xaml</DependentUpon>
     </Compile>

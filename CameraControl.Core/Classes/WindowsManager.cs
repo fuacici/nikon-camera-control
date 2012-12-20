@@ -8,6 +8,7 @@ namespace CameraControl.Core.Classes
 {
   public class WindowsManager
   {
+
     public delegate void EventEventHandler(string cmd, object o);
     public virtual event EventEventHandler Event;
 

@@ -77,7 +77,7 @@ namespace CameraControl
 
       ServiceProvider.WindowsManager = new WindowsManager();
       ServiceProvider.WindowsManager.Add(new FullScreenWnd());
-      ServiceProvider.WindowsManager.Add(new LiveViewWnd());
+      ServiceProvider.WindowsManager.Add(new LiveViewManager());
       ServiceProvider.WindowsManager.Add(new MultipleCameraWnd());
       ServiceProvider.WindowsManager.Add(new CameraPropertyWnd());
       ServiceProvider.WindowsManager.Add(new BrowseWnd());

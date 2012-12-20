@@ -491,6 +491,8 @@ namespace CameraControl.Devices.Nikon
           byte datasize = 4;
           ShutterSpeed.Clear();
           byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureTime);
+          if (result == null)
+            return;
           int type = BitConverter.ToInt16(result, 2);
           byte formFlag = result[(2 * datasize) + 5];
           UInt32 defval = BitConverter.ToUInt32(result, datasize + 5);

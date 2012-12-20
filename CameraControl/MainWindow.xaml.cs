@@ -39,20 +39,21 @@ namespace CameraControl
     public MainWindow()
     {
       DisplayName = "Default";
-      InitializeComponent();
-    }
-
-    private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
-    {
       CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (sender1, args) => this.Close()));
       SelectDeviceCommand = new RelayCommand<ICameraDevice>(SelectCamera);
 
       DevicePropertyCommand =
         new RelayCommand<ICameraDevice>(
           x => ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.CameraPropertyWnd_Show, x));
+      ShowLiveViewCommand = new RelayCommand<ICameraDevice>(device => ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Show, device),device=>device.GetCapability(CapabilityEnum.LiveView));
 
       SelectPresetCommand = new RelayCommand<CameraPreset>(SelectPreset);
       ExecuteExportPluginCommand = new RelayCommand<IExportPlugin>(ExecuteExportPlugin);
+      InitializeComponent();
+    }
+
+    private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
+    {
       //WiaManager = new WIAManager();
       //ServiceProvider.Settings.Manager = WiaManager;
       ServiceProvider.DeviceManager.PhotoCaptured += DeviceManager_PhotoCaptured;
@@ -69,14 +70,27 @@ namespace CameraControl
       ServiceProvider.Settings.ApplyTheme(this);
     }
 
+    void ShowLiveView(ICameraDevice device)
+    {
+      
+    }
+
     void DeviceManager_CameraSelected(ICameraDevice oldcameraDevice, ICameraDevice newcameraDevice)
     {
       Dispatcher.Invoke(
         new Action(
           delegate
             {
-              btn_capture_noaf.IsEnabled = newcameraDevice.GetCapability(CapabilityEnum.CaptureNoAf);
-              btn_liveview.IsEnabled = newcameraDevice.GetCapability(CapabilityEnum.LiveView);
+              if (newcameraDevice != null)
+              {
+                btn_capture_noaf.IsEnabled = newcameraDevice.GetCapability(CapabilityEnum.CaptureNoAf);
+                btn_liveview.IsEnabled = newcameraDevice.GetCapability(CapabilityEnum.LiveView);
+              }
+              else
+              {
+                btn_capture_noaf.IsEnabled = false;
+                btn_liveview.IsEnabled = false;
+              }
               Flyouts[0].IsOpen = false;
               Flyouts[1].IsOpen = false;
             }));
@@ -199,6 +213,12 @@ namespace CameraControl
     }
 
     public RelayCommand<IExportPlugin> ExecuteExportPluginCommand
+    {
+      get;
+      private set;
+    }
+
+    public RelayCommand<ICameraDevice> ShowLiveViewCommand
     {
       get;
       private set;
@@ -338,7 +358,6 @@ namespace CameraControl
 
     private void btn_liveview_Click(object sender, RoutedEventArgs e)
     {
-      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Show);
     }
 
     private void btn_about_Click(object sender, RoutedEventArgs e)

@@ -734,6 +734,13 @@ namespace CameraControl.windows
         case WindowsCmdConsts.LiveViewWnd_Show:
           Dispatcher.Invoke(new Action(delegate
                                          {
+                                           ICameraDevice cameraparam = param as ICameraDevice;
+                                           if (cameraparam == SelectedPortableDevice && IsVisible)
+                                           {
+                                             Activate();
+                                             Focus();
+                                             return;
+                                           }
                                            _freezeTimer.Interval = ServiceProvider.Settings.LiveViewFreezeTimeOut*1000;
                                            ServiceProvider.Settings.SelectedBitmap.BitmapLoaded +=
                                              SelectedBitmap_BitmapLoaded;
@@ -890,7 +897,7 @@ namespace CameraControl.windows
 
     private void selectedPortableDevice_CameraDisconnected(object sender, DisconnectCameraEventArgs eventArgs)
     {
-      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide);
+      ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide, SelectedPortableDevice);
     }
 
     private void selectedPortableDevice_CaptureCompleted(object sender, EventArgs e)
@@ -970,7 +977,7 @@ namespace CameraControl.windows
       if (IsVisible)
       {
         e.Cancel = true;
-        ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide);
+        ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide, SelectedPortableDevice);
       }
     }
 
@@ -1039,6 +1046,7 @@ namespace CameraControl.windows
             StartLiveView();
             FreezeImage = false;
             IsBusy = false;
+            PhotoCount = 0;
             _timer.Start();
           }
         }
