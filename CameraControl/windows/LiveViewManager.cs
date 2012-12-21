@@ -43,7 +43,15 @@ namespace CameraControl.windows
             liveViewWnd.Value.ExecuteCommand(cmd, param);
           }
           break;
-      }
+          default:
+          foreach (var liveViewWnd in _register)
+          {
+            if (cmd.StartsWith("LiveView"))
+            liveViewWnd.Value.ExecuteCommand(cmd, param);
+          }
+          break;
+     }
+
     }
 
     public bool IsVisible { get; private set; }

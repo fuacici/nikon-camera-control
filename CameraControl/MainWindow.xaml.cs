@@ -70,11 +70,6 @@ namespace CameraControl
       ServiceProvider.Settings.ApplyTheme(this);
     }
 
-    void ShowLiveView(ICameraDevice device)
-    {
-      
-    }
-
     void DeviceManager_CameraSelected(ICameraDevice oldcameraDevice, ICameraDevice newcameraDevice)
     {
       Dispatcher.Invoke(
@@ -84,12 +79,10 @@ namespace CameraControl
               if (newcameraDevice != null)
               {
                 btn_capture_noaf.IsEnabled = newcameraDevice.GetCapability(CapabilityEnum.CaptureNoAf);
-                btn_liveview.IsEnabled = newcameraDevice.GetCapability(CapabilityEnum.LiveView);
               }
               else
               {
                 btn_capture_noaf.IsEnabled = false;
-                btn_liveview.IsEnabled = false;
               }
               Flyouts[0].IsOpen = false;
               Flyouts[1].IsOpen = false;
