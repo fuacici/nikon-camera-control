@@ -745,9 +745,11 @@ namespace CameraControl.windows
                                            ServiceProvider.Settings.SelectedBitmap.BitmapLoaded +=
                                              SelectedBitmap_BitmapLoaded;
                                            Recording = false;
-                                           SelectedPortableDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
-                                           selectedPortableDevice.CameraDisconnected +=
+                                           SelectedPortableDevice = cameraparam;
+                                           SelectedPortableDevice.CameraDisconnected +=
                                              selectedPortableDevice_CameraDisconnected;
+                                           CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(SelectedPortableDevice);
+                                           Title = TranslationStrings.LiveViewWindowTitle + " - " + property.DeviceName;
                                            Show();
                                            Activate();
                                            //Topmost = true;

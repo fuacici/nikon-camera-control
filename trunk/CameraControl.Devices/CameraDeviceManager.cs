@@ -336,7 +336,6 @@ namespace CameraControl.Devices
       int retries = 0;
       foreach (IDeviceInfo devInfo in new DeviceManager().DeviceInfos)
       {
-          Log.Debug("i am here");
         // Look for CameraDeviceType devices
         string model = devInfo.Properties["Name"].get_Value();
         if (devInfo.Type == WiaDeviceType.CameraDeviceType && ( DisableNativeDrivers || noDriversDetected))

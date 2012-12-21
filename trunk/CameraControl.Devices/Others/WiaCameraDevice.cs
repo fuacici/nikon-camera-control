@@ -144,10 +144,10 @@ namespace CameraControl.Devices.Others
     }
 
 
-    public override bool GetCapability(CapabilityEnum capabilityEnum)
-    {
-      return false;
-    }
+    //public override bool GetCapability(CapabilityEnum capabilityEnum)
+    //{
+    //  return false;
+    //}
 
 
     private Device Device { get; set; }
