@@ -17,7 +17,8 @@ using CameraControl.windows;
 using MahApps.Metro.Controls;
 using EditSession = CameraControl.windows.EditSession;
 using HelpProvider = CameraControl.Classes.HelpProvider;
-using MessageBox = System.Windows.Forms.MessageBox;
+using MessageBox = System.Windows.MessageBox;
+//using MessageBox = System.Windows.Forms.MessageBox;
 using Path = System.IO.Path;
 
 namespace CameraControl
@@ -528,7 +529,7 @@ namespace CameraControl
     {
       if(ServiceProvider.Settings.PhotoSessions.Count>1)
       {
-        if (MessageBox.Show(string.Format(TranslationStrings.MsgDeleteSessionQuestion,ServiceProvider.Settings.DefaultSession.Name),"Delete session",MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+        if (MessageBox.Show(string.Format(TranslationStrings.MsgDeleteSessionQuestion,ServiceProvider.Settings.DefaultSession.Name),"Delete session",MessageBoxButton.YesNo) == MessageBoxResult.Yes)
         {
           PhotoSession session = ServiceProvider.Settings.DefaultSession;
           ServiceProvider.Settings.DefaultSession = ServiceProvider.Settings.PhotoSessions[0];

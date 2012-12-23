@@ -616,12 +616,26 @@ namespace CameraControl.windows
     {
       Log.Debug("LiveView: Capture started");
       _timer.Stop();
+      Thread.Sleep(300);
       try
       {
+        if (SelectedPortableDevice.ShutterSpeed.Value == "Bulb")
+        {
+          if (SelectedPortableDevice.GetCapability(CapabilityEnum.Bulb))
+          {
+            BulbWnd wnd = new BulbWnd(SelectedPortableDevice);
+            wnd.ShowDialog();
+            return;
+          }
+          else
+          {
+            StaticHelper.Instance.SystemMessage = TranslationStrings.MsgBulbModeNotSupported;
+            MessageBox.Show(TranslationStrings.MsgBulbModeNotSupported);
+            return;
+          }
+        }
         //selectedPortableDevice.StopLiveView();
-        Log.Debug("LiveView: LiveViewStoped");
-        Thread.Sleep(300);
-        selectedPortableDevice.CapturePhotoNoAf();
+        SelectedPortableDevice.CapturePhotoNoAf();
         Log.Debug("LiveView: Capture Initialization Done");
       }
       catch (DeviceException exception)
@@ -651,6 +665,7 @@ namespace CameraControl.windows
             Thread.Sleep(1000);
             SelectedPortableDevice.StartLiveView();
           }
+          throw;
         }
         oper_in_progress = false;
         _retries = 0;
@@ -659,7 +674,7 @@ namespace CameraControl.windows
       catch (Exception exception)
       {
         Log.Error("Unable to start liveview !", exception);
-        StaticHelper.Instance.SystemMessage = "Unable to start liveview !";
+        StaticHelper.Instance.SystemMessage = "Unable to start liveview ! "+exception.Message;
         //MessageBox.Show("Unable to start liveview !");
         //ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide);
       }

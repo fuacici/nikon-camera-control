@@ -4,7 +4,7 @@
         Title="Bulb" Height="227" Width="441" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:my="clr-namespace:CameraControl.windows"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                      xmlns:T="clr-namespace:CameraControl.Translation" Closed="Window_Closed">
+                      xmlns:T="clr-namespace:CameraControl.Translation" Closed="Window_Closed" Topmost="True">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -31,8 +31,8 @@
             <RowDefinition Height="114*" />
             <RowDefinition Height="29*" />
         </Grid.RowDefinitions>
-        <Button Content="Start Capture" Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="btn_start" VerticalAlignment="Top" Width="75" Click="btn_start_Click" />
-        <Button Content="Stop Capture" Height="23" HorizontalAlignment="Right" Margin="0,12,12,0" Name="btn_stop" VerticalAlignment="Top" Width="75" Click="btn_stop_Click" />
+        <Button Content="Start Capture" Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="btn_start" VerticalAlignment="Top" Width="98" Click="btn_start_Click" />
+        <Button Content="Stop Capture" Height="23" HorizontalAlignment="Right" Margin="0,12,12,0" Name="btn_stop" VerticalAlignment="Top" Width="98" Click="btn_stop_Click" />
         <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="225,15,0,0" Name="upd_time" VerticalAlignment="Top" Width="78" Minimum="30" Maximum="6000" Value="{Binding Path=CaptureTime, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" />
         <Label Content="Capture time (sec)" Height="28" HorizontalAlignment="Left" Margin="116,12,0,0" Name="label1" VerticalAlignment="Top" />
         <Label Content="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SystemMessage}" Name="lbl_status" Grid.Row="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
