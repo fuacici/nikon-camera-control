@@ -158,7 +158,7 @@ namespace CameraControl.Core.Classes
           Focuspoints.Add(new Rect(x - (w/2), y - (h/2), w, h));
         }
       }
-      if (Tags["Exif.NikonAf2.PhaseDetectAF"].Value == "On (11-point)")
+      if (Tags.ContainsKey("Exif.NikonAf2.PhaseDetectAF") && Tags["Exif.NikonAf2.PhaseDetectAF"].Value == "On (11-point)")
       {
         if (Tags["Exif.NikonAf2.AFPointsUsed"].Value.Contains(" "))
         {
@@ -176,7 +176,7 @@ namespace CameraControl.Core.Classes
           }
         }
       }
-      if (Tags["Exif.NikonAf2.PhaseDetectAF"].Value == "On (51-point)")
+      if (Tags.ContainsKey("Exif.NikonAf2.PhaseDetectAF") && Tags["Exif.NikonAf2.PhaseDetectAF"].Value == "On (51-point)")
       {
         if (Tags["Exif.NikonAf2.AFPointsUsed"].Value.Contains(" "))
         {
