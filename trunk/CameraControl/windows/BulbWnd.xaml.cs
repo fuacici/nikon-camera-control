@@ -69,6 +69,18 @@ namespace CameraControl.windows
     public BulbWnd()
     {
       CameraDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
+      Init();
+    }
+
+    public BulbWnd(ICameraDevice device)
+    {
+      CameraDevice = device;
+      Init();
+    }
+
+
+    private void Init()
+    {
       NoAutofocus = true;
       CaptureTime = 60;
       NumOfPhotos = 1;

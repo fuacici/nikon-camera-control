@@ -12,6 +12,7 @@ namespace CameraControl.Devices.Nikon
       Capabilities.Add(CapabilityEnum.RecordMovie);
       Capabilities.Add(CapabilityEnum.CaptureInRam);
       Capabilities.Add(CapabilityEnum.CaptureNoAf);
+      //Capabilities.Add(CapabilityEnum.Bulb);
       return res;
     }
 
