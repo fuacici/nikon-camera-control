@@ -34,7 +34,7 @@
 	</COMPANY_INFO>
 	<Program_Info>
 		<Program_Name>digiCamControl</Program_Name>
-		<Program_Version> 0.9.335</Program_Version>
+		<Program_Version> 0.9.409</Program_Version>
 		<Program_Release_Month>11</Program_Release_Month>
 		<Program_Release_Day>1</Program_Release_Day>
 		<Program_Release_Year>2012</Program_Release_Year>
@@ -99,7 +99,7 @@ Manage multiple profiles
 			<Application_XML_File_URL />
 		</Application_URLs>
 		<Download_URLs>
-			<Primary_Download_URL>http://nikon-camera-control.googlecode.com/files/digiCamControlsetup_0.9.335.exe</Primary_Download_URL>
+			<Primary_Download_URL>http://nikon-camera-control.googlecode.com/files/digiCamControlsetup_0.9.409.exe</Primary_Download_URL>
 			<Secondary_Download_URL />
 			<Additional_Download_URL_1 />
 			<Additional_Download_URL_2 />
