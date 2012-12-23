@@ -639,7 +639,19 @@ namespace CameraControl.windows
         _totalframes = 0;
         _framestart = DateTime.Now;
         Log.Debug("LiveView: Liveview started");
-        SelectedPortableDevice.StartLiveView();
+        try
+        {
+          SelectedPortableDevice.StartLiveView();
+        }
+        catch (DeviceException deviceException)
+        {
+          if (deviceException.ErrorCode == ErrorCodes.ERROR_BUSY ||
+              deviceException.ErrorCode == ErrorCodes.MTP_Device_Busy)
+          {
+            Thread.Sleep(1000);
+            SelectedPortableDevice.StartLiveView();
+          }
+        }
         oper_in_progress = false;
         _retries = 0;
         Log.Debug("LiveView: Liveview start done");
@@ -647,6 +659,7 @@ namespace CameraControl.windows
       catch (Exception exception)
       {
         Log.Error("Unable to start liveview !", exception);
+        StaticHelper.Instance.SystemMessage = "Unable to start liveview !";
         //MessageBox.Show("Unable to start liveview !");
         //ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide);
       }

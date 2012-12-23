@@ -22,6 +22,8 @@ namespace CameraControl.Devices.Nikon
     public override void StartBulbMode()
     {
       DeviceReady();
+      ExecuteWithNoData(CONST_CMD_EndLiveView);
+      DeviceReady();
       ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 1);
       SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt16) 0x0001),
                   CONST_PROP_ExposureProgramMode, -1);
