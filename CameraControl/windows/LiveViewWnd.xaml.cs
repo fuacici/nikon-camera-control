@@ -996,7 +996,7 @@ namespace CameraControl.windows
         StaticHelper.Instance.SystemMessage = TranslationStrings.LabelErrorUnableFocus;
       }
       if (LockB)
-        focus_slider.Value = FocusCounter;
+        Dispatcher.Invoke(new Action(delegate { focus_slider.Value = FocusCounter; }));
       if (!IsBusy)
         _timer.Start();
       Console.WriteLine("Focus end");

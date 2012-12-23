@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         Title="ActionExecuteWnd" Height="207" Width="532" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen"
-                      ShowMaxRestoreButton="False" ShowMinButton="False" ShowCloseButton="False">
+                      ShowMaxRestoreButton="False" ShowMinButton="False" ShowCloseButton="True">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
