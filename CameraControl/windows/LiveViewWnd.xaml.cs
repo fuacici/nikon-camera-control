@@ -323,6 +323,7 @@ namespace CameraControl.windows
       FocusStep = 75;
       FreezeImage = false;
       Recording = false;
+      chk_top.IsChecked = true;
     }
 
     private void SelectedBitmap_BitmapLoaded(object sender)
