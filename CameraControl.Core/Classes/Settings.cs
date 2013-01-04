@@ -656,7 +656,14 @@ namespace CameraControl.Core.Classes
       string[] sesions = Directory.GetFiles(sesionFolder, "*.xml");
       foreach (string sesion in sesions)
       {
-        Add(Load(sesion));
+        try
+        {
+          Add(Load(sesion));
+        }
+        catch (Exception e)
+        {
+          Log.Error("Error loading session :" + sesion, e);
+        }
       }
       if (PhotoSessions.Count > 0)
       {

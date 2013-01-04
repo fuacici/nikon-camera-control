@@ -35,7 +35,10 @@ namespace CameraControl.Core.Classes
       set
       {
         _numberOfPhotos = value;
-        _timePeriod = new DateTime().AddSeconds(Period*NumberOfPhotos);
+        // prevent argument error
+        if (_numberOfPhotos > 1000000 || _numberOfPhotos < 0)
+          _numberOfPhotos = 100;
+        _timePeriod = new DateTime().AddSeconds(Period*_numberOfPhotos);
         if (Fps > 0)
         {
           _movieLength = new DateTime().AddSeconds(_numberOfPhotos/_fps);
@@ -74,8 +77,12 @@ namespace CameraControl.Core.Classes
       set
       {
         _timePeriod = value;
-        _numberOfPhotos = (int) ((_timePeriod.Ticks/TimeSpan.TicksPerSecond)/Period);
-        NotifyPropertyChanged("TimePeriod");
+        if ((_timePeriod.Ticks / TimeSpan.TicksPerSecond) > 1)
+        {
+          double dd = (_timePeriod.Ticks/TimeSpan.TicksPerSecond);
+          _numberOfPhotos = (int) ((_timePeriod.Ticks/TimeSpan.TicksPerSecond)/Period);
+          NotifyPropertyChanged("TimePeriod");
+        }
         NotifyPropertyChanged("NumberOfPhotos");
       }
     }
@@ -115,9 +122,9 @@ namespace CameraControl.Core.Classes
       set
       {
         _fps = value;
-        if (_fps > 0)
+        if (_fps > 0 && _numberOfPhotos > 0)
         {
-          _movieLength = new DateTime().AddSeconds(_numberOfPhotos / _fps);
+          _movieLength = new DateTime().AddSeconds(_numberOfPhotos/_fps);
           NotifyPropertyChanged("MovieLength");
         }
 

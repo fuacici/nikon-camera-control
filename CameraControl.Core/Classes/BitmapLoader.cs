@@ -70,7 +70,9 @@ namespace CameraControl.Core.Classes
             BitmapDecoder bmpDec = BitmapDecoder.Create(new Uri(_currentfile.FileItem.FileName),
                                                         BitmapCreateOptions.None,
                                                         BitmapCacheOption.Default);
-          
+            WriteableBitmap bitmap= new WriteableBitmap(bmpDec.Thumbnail); 
+            bitmap.Freeze();
+            bitmapFile.DisplayImage = bitmap;
             WriteableBitmap writeableBitmap = BitmapFactory.ConvertToPbgra32Format(bmpDec.Frames.Single());
             if (ServiceProvider.Settings.LowMemoryUsage)
             {
@@ -118,6 +120,8 @@ namespace CameraControl.Core.Classes
         catch (FileFormatException)
         {
           _currentfile.RawCodecNeeded = true;
+          Log.Debug("Raw codec not installed or unknown file format");
+          StaticHelper.Instance.SystemMessage = "Raw codec not installed or unknown file format";
         }
         catch (Exception exception)
         {

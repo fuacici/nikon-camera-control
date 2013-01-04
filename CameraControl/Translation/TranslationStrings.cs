@@ -272,5 +272,7 @@
     public static string LabelRotate180 = "Rotate 180";
     public static string LabelRotate270 = "Rotate 270";
     public static string LabelLowMemoryUsage = "Low memory usage";
+    // 04/01/2013
+    public static string LabelRawCodecNotInstalled = "Raw codec not installed or unknown file format";
   }
 }

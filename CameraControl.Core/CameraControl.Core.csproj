@@ -158,7 +158,6 @@
     <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceProvider.cs" />
-    <Compile Include="Wpf\BooleanToVisibilityConverter.cs" />
     <Compile Include="Wpf\HeaderToImageConverter.cs" />
     <Compile Include="Wpf\ListBoxBehavior.cs" />
     <Compile Include="Wpf\ProgressWindow.xaml.cs">
