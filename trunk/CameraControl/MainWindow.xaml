@@ -9,7 +9,7 @@
                        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"     
                        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                        xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
-        Closed="Window_Closed" Closing="Window_Closing" Icon="/CameraControl;component/Images/logo.png" WindowState="Maximized" VerticalContentAlignment="Center" PreviewKeyDown="MetroWindow_PreviewKeyDown" Loaded="MetroWindow_Loaded">
+        Closed="Window_Closed" Closing="Window_Closing" Icon="/CameraControl;component/Images/logo.png" WindowState="Maximized" VerticalContentAlignment="Center" PreviewKeyDown="MetroWindow_PreviewKeyDown" Loaded="MetroWindow_Loaded" Name="Window">
     <i:Interaction.Behaviors>
         <Behaviours:BorderlessWindowBehavior/>
     </i:Interaction.Behaviors>
@@ -125,41 +125,51 @@
            </StackPanel>
         </Controls:Flyout>
         <Controls:Flyout Header="{T:TranslateExtension MenuConnectedCameras}" Background="#9f000000" Position="Left" Opacity="0.9">
-            <StackPanel Width="200">
+            <Grid Width="210" Height="{Binding ElementName=Window,Path=Height}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="70" />                    
+                </Grid.RowDefinitions>
+
                 <Button Content="{T:TranslateExtension MenuMultipleCamera}" Click="Button_Click" Margin="3"/>
-                <ListBox ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" SelectedItem="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice}" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Border BorderThickness="1" CornerRadius="10" BorderBrush="Black" Margin="3" Width="190">
-                            <StackPanel Orientation="Vertical">
-                                <Line />
-                                <StackPanel Orientation="Horizontal">
-                                    <Rectangle Fill="Red" Width="10" Height="10" Visibility="{Binding Path=IsBusy, Converter={StaticResource BooleanToVisibilityConverter1}, ConverterParameter=false}"/>
-                                    <Label Content="{Binding Path=DeviceName}" ToolTip="{Binding Path=DisplayName}"/>
-                                </StackPanel>
-                                <TextBox Text="{Binding Path=DisplayName}" ToolTip="{Binding Path=DisplayName}"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Height="23" Width="25" Command="{Binding Path=DevicePropertyCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding}">
-                                        <Button.Content>
-                                            <Image Source="/CameraControl;component/Images/Properties.png" />
-                                        </Button.Content>
-                                    </Button>
-                                        <Button  Height="23" Width="25" Content="Lv" Command="{Binding Path=ShowLiveViewCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding}"/>
-                                        <ProgressBar Value="{Binding Path=TransferProgress}" Width="125" Margin="3" Style="{x:Null}"/>
-                                </StackPanel>
-                            </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </StackPanel>
-        </Controls:Flyout>
-        <Controls:Flyout Header="Bakery" Background="#9f000000" Position="Right">
-            <StackPanel>
-                <Controls:Tile Title="My _Cupcakes" Count="23">
-                    <Controls:MetroImage Source="{StaticResource appbar_cupcake}" />
-                </Controls:Tile>
-            </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="0" Grid.Row="1">
+                    <StackPanel >
+                        <StackPanel.ScrollOwner>
+                            <ScrollViewer />
+                        </StackPanel.ScrollOwner>
+
+                        <ListBox ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" SelectedItem="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice}" ScrollViewer.HorizontalScrollBarVisibility="Hidden" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderThickness="1" CornerRadius="10" BorderBrush="Black" Margin="3" Width="185" Padding="5">
+                                    <StackPanel Orientation="Vertical">
+                                        <Line />
+                                        <StackPanel Orientation="Horizontal">
+                                            <Rectangle Fill="Red" Width="10" Height="10" Visibility="{Binding Path=IsBusy, Converter={StaticResource BooleanToVisibilityConverter1}, ConverterParameter=false}"/>
+                                            <Label Content="{Binding Path=DeviceName}" ToolTip="{Binding Path=DisplayName}"/>
+                                        </StackPanel>
+                                        <TextBox Text="{Binding Path=DisplayName}" ToolTip="{Binding Path=DisplayName}"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Height="23" Width="25" Command="{Binding Path=DevicePropertyCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding}">
+                                                <Button.Content>
+                                                    <Image Source="/CameraControl;component/Images/Properties.png" />
+                                                </Button.Content>
+                                            </Button>
+                                            <Button  Height="23" Width="25" Content="Lv" Command="{Binding Path=ShowLiveViewCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding}"/>
+                                            <ProgressBar Value="{Binding Path=TransferProgress}" Width="125" Margin="3" Style="{x:Null}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    </StackPanel>
+                </ScrollViewer>
+                <StackPanel Height="70" Grid.Row="2">
+                        
+                    </StackPanel>
+                </Grid>
         </Controls:Flyout>
     </Controls:MetroWindow.Flyouts>
 
