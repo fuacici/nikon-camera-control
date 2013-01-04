@@ -137,7 +137,7 @@
                                     <Rectangle Fill="Red" Width="10" Height="10" Visibility="{Binding Path=IsBusy, Converter={StaticResource BooleanToVisibilityConverter1}, ConverterParameter=false}"/>
                                     <Label Content="{Binding Path=DeviceName}" ToolTip="{Binding Path=DisplayName}"/>
                                 </StackPanel>
-                                <Label Content="{Binding Path=DisplayName}" ToolTip="{Binding Path=DisplayName}"/>
+                                <TextBox Text="{Binding Path=DisplayName}" ToolTip="{Binding Path=DisplayName}"/>
                                 <StackPanel Orientation="Horizontal">
                                     <Button Height="23" Width="25" Command="{Binding Path=DevicePropertyCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding}">
                                         <Button.Content>
@@ -178,8 +178,10 @@
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <DockPanel   Name="StackLayout" />
+        <Grid Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ShowGridLines="False">
+            <DockPanel   Name="StackLayout">
+            </DockPanel>
+            <!--<Controls:ProgressRing IsActive="True" Height="184" Width="214" IsLarge="False" />-->
         </Grid>
 
         <StackPanel Orientation="Vertical" Grid.Row="2">
@@ -245,7 +247,7 @@
                 <Button Content="{T:TranslateExtension SessionDel}" Grid.Column="3" Name="btn_del_Sesion" Margin="3" Click="btn_del_Sesion_Click" />
             </StackPanel>
         </StackPanel>
-        <Controls:ProgressRing IsActive="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsBusy}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,24,30,0" Grid.Row="3" Height="78" Width="81" />
+        <!--<Controls:ProgressRing IsActive="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsBusy}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,24,30,0" Grid.Row="3" Height="78" Width="81" />-->
         <Button Content="{T:TranslateExtension ButtonGetRawCodec}" Grid.Row="3" Height="23" Name="btn_getRaw" VerticalAlignment="Top" Click="btn_getRaw_Click"  Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.RawCodecNeeded, Converter={StaticResource BooleanToVisibilityConverter1}, ConverterParameter=false}"/>
     </Grid>
 </Controls:MetroWindow >

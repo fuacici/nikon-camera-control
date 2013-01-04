@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using CameraControl.Core.Classes;
 using CameraControl.Devices;
+using CameraControl.Devices.Classes;
 using log4net;
 using log4net.Appender;
 using log4net.Config;
@@ -10,7 +11,7 @@ using log4net.Layout;
 
 namespace CameraControl.Core
 {
-  public class ServiceProvider
+  public class ServiceProvider : BaseFieldClass
   {
     private static readonly ILog _log = LogManager.GetLogger("DCC");
 
@@ -18,6 +19,7 @@ namespace CameraControl.Core
 
 
     public static Settings Settings { get; set; }
+
     public static CameraDeviceManager DeviceManager { get; set; }
     public static TriggerClass Trigger { get; set; }
     public static WindowsManager WindowsManager { get; set; }

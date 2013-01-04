@@ -42,6 +42,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+      <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -72,7 +73,8 @@
                 </Image>
             </xctk:Zoombox>
             <!--</local:ZoomBorder>-->
-            <Controls:ProgressRing IsActive="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Controls:ProgressRing IsActive="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading, Mode=TwoWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <ProgressBar Height="20" Margin="150,0,150,0" Name="progressBar1" VerticalAlignment="Bottom" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false}" IsIndeterminate="True" Opacity="0.5" />
         </Grid>
         <StackPanel Grid.Row="1" Margin="0,0,190,0">
             <StackPanel  Orientation="Horizontal" Margin="10,0,0,0" HorizontalAlignment="Right">

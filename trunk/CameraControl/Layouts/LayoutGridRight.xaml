@@ -42,6 +42,7 @@
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"   Value="Disabled"  />
         </Style>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter1" />
+      <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
 
     <Grid>
@@ -77,8 +78,7 @@
                     </Image.InputBindings>-->
                 </Image>
             </xctk:Zoombox>
-            <!--</local:ZoomBorder>-->
-            <Controls:ProgressRing IsActive="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <ProgressBar Height="20" Margin="150,0,150,0" Name="progressBar1" VerticalAlignment="Bottom" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false}" IsIndeterminate="True" Opacity="0.5" />
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="2" />
         <StackPanel Grid.Row="2" Margin="0,0,185,0" Grid.ColumnSpan="3">
