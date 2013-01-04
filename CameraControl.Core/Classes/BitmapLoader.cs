@@ -70,9 +70,12 @@ namespace CameraControl.Core.Classes
             BitmapDecoder bmpDec = BitmapDecoder.Create(new Uri(_currentfile.FileItem.FileName),
                                                         BitmapCreateOptions.None,
                                                         BitmapCacheOption.Default);
-            WriteableBitmap bitmap= new WriteableBitmap(bmpDec.Thumbnail); 
-            bitmap.Freeze();
-            bitmapFile.DisplayImage = bitmap;
+            if (bmpDec.Thumbnail != null)
+            {
+              WriteableBitmap bitmap = new WriteableBitmap(bmpDec.Thumbnail);
+              bitmap.Freeze();
+              bitmapFile.DisplayImage = bitmap;
+            }
             WriteableBitmap writeableBitmap = BitmapFactory.ConvertToPbgra32Format(bmpDec.Frames.Single());
             if (ServiceProvider.Settings.LowMemoryUsage)
             {
