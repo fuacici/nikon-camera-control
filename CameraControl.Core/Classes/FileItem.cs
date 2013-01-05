@@ -169,41 +169,50 @@ namespace CameraControl.Core.Classes
     {
       try
       {
-        if (FreeImage.GetFileType(FileName, 0) != FREE_IMAGE_FORMAT.FIF_UNKNOWN)
+        //FIBITMAP dib = new FIBITMAP();
+        if (IsRaw)
         {
-
-          FIBITMAP dib = new FIBITMAP();
-          if (FreeImage.GetFileType(FileName, 0) == FREE_IMAGE_FORMAT.FIF_RAW)
+          try
           {
-            dib = FreeImage.LoadEx(FileName, FREE_IMAGE_LOAD_FLAGS.RAW_PREVIEW);
-            FIBITMAP bit = FreeImage.MakeThumbnail(dib, 255, true);
-            Thumbnail = BitmapSourceConvert.ToBitmapSource(FreeImage.GetBitmap(bit));
-            FreeImage.UnloadEx(ref dib);
+            BitmapDecoder bmpDec = BitmapDecoder.Create(new Uri(FileName),
+                                                        BitmapCreateOptions.None,
+                                                        BitmapCacheOption.Default);
+            if (bmpDec.Thumbnail != null)
+            {
+              WriteableBitmap bitmap = new WriteableBitmap(bmpDec.Thumbnail);
+              bitmap.Freeze();
+              Thumbnail = bitmap;
+            }
           }
-          else
+          catch (Exception)
           {
-            Image.GetThumbnailImageAbort myCallback = ThumbnailCallback;
-            Stream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite); // or any stream
-            Image tempImage = Image.FromStream(fs, true, false);
 
-            //var exif = new EXIFextractor(ref tempImage, "n");
-            //if (exif["Orientation"] != null)
-            //{
-            //  RotateFlipType flip = EXIFextractorEnumerator.OrientationToFlipType(exif["Orientation"].ToString());
-
-            //  if (flip != RotateFlipType.RotateNoneFlipNone) // don't flip of orientation is correct
-            //  {
-            //    tempImage.RotateFlip(flip);
-            //  }
-            //}
-            //Thumbnail =
-            //  BitmapSourceConvert.ToBitmapSource((Bitmap) tempImage.GetThumbnailImage(160, 120, myCallback, IntPtr.Zero));
-            Thumbnail =
-              BitmapSourceConvert.ToBitmapSource(
-                (Bitmap) tempImage.GetThumbnailImage(160, 120, myCallback, IntPtr.Zero));
-            tempImage.Dispose();
-            fs.Close();
           }
+
+        }
+        else
+        {
+          Image.GetThumbnailImageAbort myCallback = ThumbnailCallback;
+          Stream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite); // or any stream
+          Image tempImage = Image.FromStream(fs, true, false);
+
+          //var exif = new EXIFextractor(ref tempImage, "n");
+          //if (exif["Orientation"] != null)
+          //{
+          //  RotateFlipType flip = EXIFextractorEnumerator.OrientationToFlipType(exif["Orientation"].ToString());
+
+          //  if (flip != RotateFlipType.RotateNoneFlipNone) // don't flip of orientation is correct
+          //  {
+          //    tempImage.RotateFlip(flip);
+          //  }
+          //}
+          //Thumbnail =
+          //  BitmapSourceConvert.ToBitmapSource((Bitmap) tempImage.GetThumbnailImage(160, 120, myCallback, IntPtr.Zero));
+          Thumbnail =
+            BitmapSourceConvert.ToBitmapSource(
+              (Bitmap) tempImage.GetThumbnailImage(160, 120, myCallback, IntPtr.Zero));
+          tempImage.Dispose();
+          fs.Close();
         }
       }
       catch (Exception)

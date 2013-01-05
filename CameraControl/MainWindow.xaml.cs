@@ -46,7 +46,7 @@ namespace CameraControl
       DevicePropertyCommand =
         new RelayCommand<ICameraDevice>(
           x => ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.CameraPropertyWnd_Show, x));
-      ShowLiveViewCommand = new RelayCommand<ICameraDevice>(device => ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Show, device),device=>device.GetCapability(CapabilityEnum.LiveView));
+      ShowLiveViewCommand = new RelayCommand<ICameraDevice>(device => ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Show, device),device=>(device!=null && device.GetCapability(CapabilityEnum.LiveView)));
 
       SelectPresetCommand = new RelayCommand<CameraPreset>(SelectPreset);
       ExecuteExportPluginCommand = new RelayCommand<IExportPlugin>(ExecuteExportPlugin);

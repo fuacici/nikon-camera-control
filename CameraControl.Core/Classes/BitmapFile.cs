@@ -1,18 +1,6 @@
-using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Threading;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using AForge.Imaging;
-using CameraControl.Core.Exif.EXIF;
-using CameraControl.Devices;
 using CameraControl.Devices.Classes;
-using FreeImageAPI;
-using FreeImageAPI.Metadata;
-using Image = System.Drawing.Image;
 
 namespace CameraControl.Core.Classes
 {

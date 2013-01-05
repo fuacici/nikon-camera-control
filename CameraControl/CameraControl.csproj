@@ -132,6 +132,9 @@
     </Compile>
     <Compile Include="Classes\HelpProvider.cs" />
     <Compile Include="Classes\WindowsCmdConsts.cs" />
+    <Compile Include="Controls\CameraItem.xaml.cs">
+      <DependentUpon>CameraItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Controler.xaml.cs">
       <DependentUpon>Controler.xaml</DependentUpon>
     </Compile>
@@ -225,6 +228,10 @@
       <DependentUpon>TimeLapseWnd.xaml</DependentUpon>
     </Compile>
     <Page Include="Actions\Enfuse\EnfuseSettingsWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CameraItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

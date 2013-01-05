@@ -1071,19 +1071,20 @@ namespace CameraControl.Devices.Nikon
     {
       lock (Locker)
       {
-        MTPDataResponse result = new MTPDataResponse();
         _timer.Stop();
+        MTPDataResponse result = new MTPDataResponse();
+        //=================== managed file write
         do
         {
           result = StillImageDevice.ExecuteReadBigData(CONST_CMD_GetObject,
                                                        Convert.ToInt32(o), -1,
                                                        (total, current) =>
-                                                         {
-                                                           double i = (double) current/total;
-                                                           TransferProgress =
-                                                             Convert.ToUInt32(i*100);
+                                                       {
+                                                         double i = (double)current / total;
+                                                         TransferProgress =
+                                                           Convert.ToUInt32(i * 100);
 
-                                                         });
+                                                       });
           if (result.Data != null)
           {
             using (BinaryWriter writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
@@ -1096,24 +1097,21 @@ namespace CameraControl.Devices.Nikon
             Log.Error("Transfer error code retrying " + result.ErrorCode.ToString("X"));
           }
         } while (result.Data == null);
-        _timer.Start();
-        TransferProgress = 0;
+        //==================================================================
         //=================== direct file write
-        //DeviceReady();
-        //_timer.Stop();
-        //  StillImageDevice.ExecuteReadBigDataWriteToFile(CONST_CMD_GetObject,
-        //                                                       Convert.ToInt32(o), -1,
-        //                                                       (total, current) =>
-        //                                                       {
-        //                                                         double i = (double)current / total;
-        //                                                         TransferProgress =
-        //                                                           Convert.ToUInt32(i * 100);
+        //StillImageDevice.ExecuteReadBigDataWriteToFile(CONST_CMD_GetObject,
+        //                                                     Convert.ToInt32(o), -1,
+        //                                                     (total, current) =>
+        //                                                     {
+        //                                                       double i = (double)current / total;
+        //                                                       TransferProgress =
+        //                                                         Convert.ToUInt32(i * 100);
 
-        //                                                       },filename);
-        //_timer.Start();
-        //}
+        //                                                     }, filename);
 
         //==================================================================
+        _timer.Start();
+        TransferProgress = 0;
       }
     }
 

@@ -220,6 +220,8 @@ namespace CameraControl.Devices
     /// <returns>If the model not supported return null else the driver type</returns>
     private Type GetNativeDriver(string model)
     {
+      if (String.IsNullOrEmpty(model))
+        return null;
       // first check if driver exist with same driver name
       if (DeviceClass.ContainsKey(model))
         return DeviceClass[model];
@@ -338,7 +340,7 @@ namespace CameraControl.Devices
       {
         // Look for CameraDeviceType devices
         string model = devInfo.Properties["Name"].get_Value();
-        if (devInfo.Type == WiaDeviceType.CameraDeviceType && ( DisableNativeDrivers || noDriversDetected))
+        if (devInfo.Type == WiaDeviceType.CameraDeviceType && (GetNativeDriver(model) == null || DisableNativeDrivers || noDriversDetected))
         {
           do
           {
