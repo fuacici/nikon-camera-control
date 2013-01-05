@@ -86,6 +86,7 @@ namespace CameraControl.windows
                                            if (dlg.IsVisible)
                                              return;
                                            CameraDevice = param as ICameraDevice;
+                                           Title = TranslationStrings.DownloadWindowTitle + "-" + ServiceProvider.Settings.CameraProperties.Get(CameraDevice).DeviceName;
                                            if (param == null)
                                              return;
                                            Show();

@@ -74,6 +74,7 @@ namespace CameraControl
               btn_capture_noaf.IsEnabled = newcameraDevice != null && newcameraDevice.GetCapability(CapabilityEnum.CaptureNoAf);
               Flyouts[0].IsOpen = false;
               Flyouts[1].IsOpen = false;
+              Title = "digiCamControl - " + ServiceProvider.Settings.CameraProperties.Get(newcameraDevice).DeviceName;
             }));
     }
 
