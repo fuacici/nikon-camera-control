@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using AForge.Imaging;
-using CameraControl.Core.Exif.EXIF;
 using CameraControl.Devices;
-using FreeImageAPI;
-using FreeImageAPI.Metadata;
 using Color = System.Windows.Media.Color;
-using Image = System.Drawing.Image;
 
 namespace CameraControl.Core.Classes
 {
@@ -246,20 +240,20 @@ namespace CameraControl.Core.Classes
 
     }
 
-    public void AddMetadataItem(MetadataTag tag, BitmapFile bitmapFile)
-    {
-      if (string.IsNullOrEmpty(tag.Description))
-        return;
-      foreach (DictionaryItem dictionaryItem in bitmapFile.Metadata)
-      {
-        if (dictionaryItem.Name == tag.Description.Trim())
-        {
-          dictionaryItem.Value = tag.ToString();
-          return;
-        }
-      }
-      bitmapFile.Metadata.Add(new DictionaryItem {Name = tag.Description.Trim(), Value = tag.ToString()});
-    }
+    //public void AddMetadataItem(MetadataTag tag, BitmapFile bitmapFile)
+    //{
+    //  if (string.IsNullOrEmpty(tag.Description))
+    //    return;
+    //  foreach (DictionaryItem dictionaryItem in bitmapFile.Metadata)
+    //  {
+    //    if (dictionaryItem.Name == tag.Description.Trim())
+    //    {
+    //      dictionaryItem.Value = tag.ToString();
+    //      return;
+    //    }
+    //  }
+    //  bitmapFile.Metadata.Add(new DictionaryItem {Name = tag.Description.Trim(), Value = tag.ToString()});
+    //}
 
     private PointCollection ConvertToPointCollection(int[] values)
     {

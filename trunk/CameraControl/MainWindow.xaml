@@ -142,25 +142,7 @@
                         <ListBox ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" SelectedItem="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice}" ScrollViewer.HorizontalScrollBarVisibility="Hidden" >
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Border BorderThickness="1" CornerRadius="10" BorderBrush="Black" Margin="3" Width="185" Padding="5">
-                                    <StackPanel Orientation="Vertical">
-                                        <Line />
-                                        <StackPanel Orientation="Horizontal">
-                                            <Rectangle Fill="Red" Width="10" Height="10" Visibility="{Binding Path=IsBusy, Converter={StaticResource BooleanToVisibilityConverter1}, ConverterParameter=false}"/>
-                                            <Label Content="{Binding Path=DeviceName}" ToolTip="{Binding Path=DisplayName}"/>
-                                        </StackPanel>
-                                        <TextBox Text="{Binding Path=DisplayName}" ToolTip="{Binding Path=DisplayName}"/>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button Height="23" Width="25" Command="{Binding Path=DevicePropertyCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding}">
-                                                <Button.Content>
-                                                    <Image Source="/CameraControl;component/Images/Properties.png" />
-                                                </Button.Content>
-                                            </Button>
-                                            <Button  Height="23" Width="25" Content="Lv" Command="{Binding Path=ShowLiveViewCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding}"/>
-                                            <ProgressBar Value="{Binding Path=TransferProgress}" Width="125" Margin="3" Style="{x:Null}"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </Border>
+                                    <local:CameraItem CameraDevice="{Binding Path=.}"/>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
