@@ -70,8 +70,8 @@ namespace CameraControl.windows
           {
             Show();
             Activate();
-            Topmost = true;
-            Topmost = false;
+            //Topmost = true;
+            //Topmost = false;
             Focus();
           }));
           break;
@@ -204,6 +204,15 @@ namespace CameraControl.windows
     private void btn_help_Click(object sender, RoutedEventArgs e)
     {
       HelpProvider.Run(HelpSections.MultipleCamera);
+    }
+
+    private void btn_resetCounters_Click(object sender, RoutedEventArgs e)
+    {
+      foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices)
+      {
+        CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(connectedDevice);
+        property.Counter = 0;
+      }
     }
 
   }

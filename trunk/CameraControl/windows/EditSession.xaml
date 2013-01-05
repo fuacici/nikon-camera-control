@@ -60,6 +60,9 @@
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Content="{T:TranslateExtension LabelAlowFolderChange}" ToolTip="" IsChecked="{Binding Path=AlowFolderChange}"/>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Content="{T:TranslateExtension LabelUseCameraCounter}" ToolTip="" IsChecked="{Binding Path=UseCameraCounter}"/>
+                    </StackPanel>
                 </StackPanel>
             </TabItem>
             <TabItem Header="{T:TranslateExtension LabelTags}">

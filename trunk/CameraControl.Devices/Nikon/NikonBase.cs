@@ -571,8 +571,9 @@ namespace CameraControl.Devices.Nikon
           FNumber.IsEnabled = false;
           break;
       }
-      SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
-                                         CONST_PROP_ExposureProgramMode, -1);
+      if (Mode.IsEnabled)
+        SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                    CONST_PROP_ExposureProgramMode, -1);
     }
 
     private void InitFNumber()
@@ -1076,16 +1077,25 @@ namespace CameraControl.Devices.Nikon
         //=================== managed file write
         do
         {
-          result = StillImageDevice.ExecuteReadBigData(CONST_CMD_GetObject,
-                                                       Convert.ToInt32(o), -1,
-                                                       (total, current) =>
-                                                       {
-                                                         double i = (double)current / total;
-                                                         TransferProgress =
-                                                           Convert.ToUInt32(i * 100);
+          try
+          {
+            result = StillImageDevice.ExecuteReadBigData(CONST_CMD_GetObject,
+                                                         Convert.ToInt32(o), -1,
+                                                         (total, current) =>
+                                                         {
+                                                           double i = (double)current / total;
+                                                           TransferProgress =
+                                                             Convert.ToUInt32(i * 100);
 
-                                                       });
-          if (result.Data != null)
+                                                         });
+
+          }
+            // if not enough memory for transfer catch it and wait and try again
+          catch (OutOfMemoryException)
+          {
+            
+          }
+          if (result!=null && result.Data != null)
           {
             using (BinaryWriter writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
             {
@@ -1095,7 +1105,9 @@ namespace CameraControl.Devices.Nikon
           else
           {
             Log.Error("Transfer error code retrying " + result.ErrorCode.ToString("X"));
+            Thread.Sleep(500);
           }
+          //TODO: prevent infinite loop
         } while (result.Data == null);
         //==================================================================
         //=================== direct file write
