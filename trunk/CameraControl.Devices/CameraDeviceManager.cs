@@ -90,6 +90,8 @@ namespace CameraControl.Devices
                         {"D800E", typeof (NikonD800)},
                         {"D800e", typeof (NikonD800)},
                         {"D90", typeof (NikonD90)},
+                        {"MTP Sim", typeof (BaseMTPCamera)},
+                        
                         //{"D.*", typeof (NikonBase)},
                         // for mtp simulator
                        //{"Test Camera ", typeof (NikonBase)},
