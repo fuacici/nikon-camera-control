@@ -14,6 +14,8 @@ namespace CameraControl.Core.Classes
 
     public CameraProperty Get(ICameraDevice device)
     {
+      if (device == null)
+        return new CameraProperty();
       foreach (CameraProperty cameraProperty in Items)
       {
         if (cameraProperty.SerialNumber == device.SerialNumber)
