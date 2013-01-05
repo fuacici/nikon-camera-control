@@ -1068,65 +1068,6 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public override void TransferFile(object o, string filename)
-    {
-      lock (Locker)
-      {
-        _timer.Stop();
-        MTPDataResponse result = new MTPDataResponse();
-        //=================== managed file write
-        do
-        {
-          try
-          {
-            result = StillImageDevice.ExecuteReadBigData(CONST_CMD_GetObject,
-                                                         Convert.ToInt32(o), -1,
-                                                         (total, current) =>
-                                                         {
-                                                           double i = (double)current / total;
-                                                           TransferProgress =
-                                                             Convert.ToUInt32(i * 100);
-
-                                                         });
-
-          }
-            // if not enough memory for transfer catch it and wait and try again
-          catch (OutOfMemoryException)
-          {
-            
-          }
-          if (result!=null && result.Data != null)
-          {
-            using (BinaryWriter writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
-            {
-              writer.Write(result.Data);
-            }
-          }
-          else
-          {
-            Log.Error("Transfer error code retrying " + result.ErrorCode.ToString("X"));
-            Thread.Sleep(500);
-          }
-          //TODO: prevent infinite loop
-        } while (result.Data == null);
-        //==================================================================
-        //=================== direct file write
-        //StillImageDevice.ExecuteReadBigDataWriteToFile(CONST_CMD_GetObject,
-        //                                                     Convert.ToInt32(o), -1,
-        //                                                     (total, current) =>
-        //                                                     {
-        //                                                       double i = (double)current / total;
-        //                                                       TransferProgress =
-        //                                                         Convert.ToUInt32(i * 100);
-
-        //                                                     }, filename);
-
-        //==================================================================
-        _timer.Start();
-        TransferProgress = 0;
-      }
-    }
-
     public override void LockCamera()
     {
       ExecuteWithNoData(CONST_CMD_ChangeCameraMode, 1);
@@ -1333,44 +1274,8 @@ namespace CameraControl.Devices.Nikon
     public override AsyncObservableCollection<DeviceObject> GetObjects(object storageId)
     {
       DeviceReady();
-      AsyncObservableCollection<DeviceObject> res=new AsyncObservableCollection<DeviceObject>();
-      MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetObjectHandles, 0xFFFFFFFF);
-      if (response.Data == null)
-      {
-        Log.Debug("Get object error :" + response.ErrorCode.ToString("X"));
-        ErrorCodes.GetException(response.ErrorCode);
-        return res;
-      }
-      int objCount = BitConverter.ToInt32(response.Data, 0);
-      for (int i = 0; i < objCount; i++)
-      {
-        DeviceObject deviceObject=new DeviceObject();
-        uint handle = BitConverter.ToUInt32(response.Data, 4 * i + 4);
-        deviceObject.Handle = handle;
-        MTPDataResponse objectdata = ExecuteReadDataEx(CONST_CMD_GetObjectInfo, handle);
-        if (objectdata.Data != null)
-        {
-          uint objFormat = BitConverter.ToUInt16(objectdata.Data, 4);
-          if (objFormat == 0x3000 || objFormat == 0x3801 || objFormat == 0x3800)
-          {
-            deviceObject.FileName = Encoding.Unicode.GetString(objectdata.Data, 53, 12*2);
-            if (deviceObject.FileName.Contains("\0"))
-              deviceObject.FileName = deviceObject.FileName.Split('\0')[0];
-            MTPDataResponse thumbdata = ExecuteReadDataEx(CONST_CMD_GetThumb, handle);
-            deviceObject.ThumbData = thumbdata.Data;
-            res.Add(deviceObject);
-          }
-        }
-      }
-      return res;
+      return base.GetObjects(storageId);
     }
-
-    public override bool DeleteObject(DeviceObject deviceObject)
-    {
-      uint res=ExecuteWithNoData(CONST_CMD_DeleteObject,(uint)deviceObject.Handle);
-      return res == 0 || res == ErrorCodes.MTP_OK;
-    }
-
 
   }
 }

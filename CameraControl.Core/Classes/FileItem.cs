@@ -131,7 +131,6 @@ namespace CameraControl.Core.Classes
         catch (Exception exception)
         {
           Log.Error("Error loading device thumb ", exception);
-          throw;
         }
       }
     }
