@@ -193,6 +193,19 @@ namespace CameraControl.Core.Classes
       }
     }
 
+
+    private bool _useCameraCounter;
+    public bool UseCameraCounter
+    {
+      get { return _useCameraCounter; }
+      set
+      {
+        _useCameraCounter = value;
+        NotifyPropertyChanged("UseCameraCounter");
+      }
+    }
+
+
     public string ConfigFile { get; set; }
     private FileSystemWatcher _systemWatcher;
 
@@ -216,6 +229,7 @@ namespace CameraControl.Core.Classes
       UseOriginalFilename = false;
       AlowFolderChange = false;
       Tags = new AsyncObservableCollection<TagItem>();
+      UseCameraCounter = false;
     }
 
     void _systemWatcher_Created(object sender, FileSystemEventArgs e)
@@ -267,7 +281,8 @@ namespace CameraControl.Core.Classes
           if (!File.Exists(rawfile))
             return rawfile;
         }
-        Counter++;
+        if (!UseCameraCounter)
+          Counter++;
         string fileName = Path.Combine(Folder, FormatFileName(device) + (!ext.StartsWith(".") ? "." : "") + ext);
         if (File.Exists(fileName))
           return GetNextFileName(ext, device);
@@ -278,14 +293,23 @@ namespace CameraControl.Core.Classes
 
     private string FormatFileName(ICameraDevice device)
     {
+      CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(device);
       string res = FileNameTemplate;
       if (!res.Contains("$C"))
         res += "$C";
-      res = res.Replace("$C", Counter.ToString("00000"));
+      if (UseCameraCounter)
+      {
+        property.Counter++;
+        res = res.Replace("$C", property.Counter.ToString("00000"));
+      }
+      else
+      {
+        res = res.Replace("$C", Counter.ToString("00000"));
+      }
       res = res.Replace("$N", Name.Trim());
       res = res.Replace("$E", device.ExposureCompensation.Value!="0" ? device.ExposureCompensation.Value : "");
       res = res.Replace("$D", DateTime.Now.ToString("yyyy-MM-dd"));
-      res = res.Replace("$X", device.DisplayName.Replace(":","_"));
+      res = res.Replace("$X", property.DeviceName.Replace(":", "_").Replace("?", "_").Replace("*", "_"));
       res = res.Replace("$Tag1", SelectedTag1 != null ? SelectedTag1.Value.Trim() : "");
       res = res.Replace("$Tag2", SelectedTag1 != null ? SelectedTag2.Value.Trim() : "");
       res = res.Replace("$Tag3", SelectedTag1 != null ? SelectedTag3.Value.Trim() : "");

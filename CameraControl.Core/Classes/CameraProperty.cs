@@ -63,11 +63,23 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private int _counter;
+    public int Counter
+    {
+      get { return _counter; }
+      set
+      {
+        _counter = value;
+        NotifyPropertyChanged("Counter");
+      }
+    }
+
 
     public CameraProperty()
     {
       NoDownload = false;
       CaptureInSdRam = true;
+      Counter = 0;
     }
 
   }

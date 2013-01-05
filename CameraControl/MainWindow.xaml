@@ -6,6 +6,7 @@
         xmlns:Classes="clr-namespace:CameraControl.Core.Classes;assembly=CameraControl.Core"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
         xmlns:T="clr-namespace:CameraControl.Translation"
+                       xmlns:myClasess="clr-namespace:CameraControl.Classes"
                        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"     
                        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                        xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
@@ -221,7 +222,7 @@
                     </Rectangle>
                     <!--<Image Margin="5" Source="/CameraControl;component/Images/Fullscreen.png" />-->
                 </Button>
-                <Button Content="Lv" ToolTip="{T:TranslateExtension LiveViewToolTip}" Height="50" Name="btn_liveview" Width="50" Margin="5" Command="{Binding Path=ShowLiveViewCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice}" FontSize="15" Style="{DynamicResource MetroCircleButtonStyle}"/>
+                <Button Content="Lv" ToolTip="{T:TranslateExtension LiveViewToolTip}" Height="50" Name="btn_liveview" Width="50" Margin="5" Command="{Binding Source={x:Static Member=myClasess:WpfCommands.ShowLiveViewCommand}}" CommandParameter="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice}" FontSize="15" Style="{DynamicResource MetroCircleButtonStyle}"/>
                 <Button Content="B" ToolTip="{T:TranslateExtension BrowseSessionsToolTip}" Height="50" Name="btn_browse" Width="50" Margin="5"  FontSize="15" Click="btn_browse_Click" Style="{DynamicResource MetroCircleButtonStyle}"/>
                 <Button Content="Tags" ToolTip="{T:TranslateExtension SelectTagsToolTip}" Height="50" Name="btn_Tags" Width="50" Margin="5"  FontSize="15" Click="btn_Tags_Click" Style="{DynamicResource MetroCircleButtonStyle}"/>
                 <StackPanel HorizontalAlignment="Right" IsEnabled="{Binding Path=DefaultSession.TimeLapse.IsDisabled}"></StackPanel>

@@ -215,8 +215,9 @@ namespace CameraControl.Core.Classes
           fs.Close();
         }
       }
-      catch (Exception)
+      catch (Exception exception)
       {
+        Log.Debug("Unable load thumbnail: "+FileName,exception);
       }
     }
 

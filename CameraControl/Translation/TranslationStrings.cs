@@ -274,5 +274,8 @@
     public static string LabelLowMemoryUsage = "Low memory usage";
     // 04/01/2013
     public static string LabelRawCodecNotInstalled = "Raw codec not installed or unknown file format";
+    // 05/01/2013
+    public static string LabelUseCameraCounter = "Use camera counter instead of generic counter";
+    public static string LabelResetCounters = "Reset counters";
   }
 }

@@ -41,12 +41,6 @@ namespace CameraControl
     {
       DisplayName = "Default";
       CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (sender1, args) => this.Close()));
-      SelectDeviceCommand = new RelayCommand<ICameraDevice>(SelectCamera);
-
-      DevicePropertyCommand =
-        new RelayCommand<ICameraDevice>(
-          x => ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.CameraPropertyWnd_Show, x));
-      ShowLiveViewCommand = new RelayCommand<ICameraDevice>(device => ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Show, device),device=>(device!=null && device.GetCapability(CapabilityEnum.LiveView)));
 
       SelectPresetCommand = new RelayCommand<CameraPreset>(SelectPreset);
       ExecuteExportPluginCommand = new RelayCommand<IExportPlugin>(ExecuteExportPlugin);
@@ -77,14 +71,7 @@ namespace CameraControl
         new Action(
           delegate
             {
-              if (newcameraDevice != null)
-              {
-                btn_capture_noaf.IsEnabled = newcameraDevice.GetCapability(CapabilityEnum.CaptureNoAf);
-              }
-              else
-              {
-                btn_capture_noaf.IsEnabled = false;
-              }
+              btn_capture_noaf.IsEnabled = newcameraDevice != null && newcameraDevice.GetCapability(CapabilityEnum.CaptureNoAf);
               Flyouts[0].IsOpen = false;
               Flyouts[1].IsOpen = false;
             }));
@@ -184,22 +171,6 @@ namespace CameraControl
       }
     }
 
-    /// <summary>
-    /// Gets the command for selecting a device
-    /// </summary>
-    public RelayCommand<ICameraDevice> SelectDeviceCommand
-    {
-      get;
-      private set;
-    }
-
-    public RelayCommand<ICameraDevice> DevicePropertyCommand
-    {
-      get;
-      private set;
-    }
-
-
     public RelayCommand<CameraPreset> SelectPresetCommand
     {
       get;
@@ -210,17 +181,6 @@ namespace CameraControl
     {
       get;
       private set;
-    }
-
-    public RelayCommand<ICameraDevice> ShowLiveViewCommand
-    {
-      get;
-      private set;
-    }
-
-    private void SelectCamera(ICameraDevice cameraDevice)
-    {
-      ServiceProvider.DeviceManager.SelectedCameraDevice = cameraDevice;
     }
 
     private void SelectPreset(CameraPreset preset)
