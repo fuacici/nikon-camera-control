@@ -490,13 +490,21 @@ namespace CameraControl
     {
       if(ServiceProvider.Settings.PhotoSessions.Count>1)
       {
-        if (MessageBox.Show(string.Format(TranslationStrings.MsgDeleteSessionQuestion,ServiceProvider.Settings.DefaultSession.Name),"Delete session",MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+        try
         {
-          PhotoSession session = ServiceProvider.Settings.DefaultSession;
-          ServiceProvider.Settings.DefaultSession = ServiceProvider.Settings.PhotoSessions[0];
-          File.Delete(session.ConfigFile);
-          ServiceProvider.Settings.PhotoSessions.Remove(session);
-          ServiceProvider.Settings.Save();
+          if (MessageBox.Show(string.Format(TranslationStrings.MsgDeleteSessionQuestion, ServiceProvider.Settings.DefaultSession.Name), "Delete session", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+          {
+            PhotoSession session = ServiceProvider.Settings.DefaultSession;
+            File.Delete(session.ConfigFile);
+            ServiceProvider.Settings.DefaultSession = ServiceProvider.Settings.PhotoSessions[0];
+            ServiceProvider.Settings.PhotoSessions.Remove(session);
+            ServiceProvider.Settings.Save();
+          }
+        }
+        catch (Exception exception)
+        {
+          Log.Error("Unable to remove session",exception);
+          MessageBox.Show(TranslationStrings.LabelUnabletoDeleteSession + exception.Message);
         }
       }
       else
