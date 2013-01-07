@@ -652,21 +652,30 @@ namespace CameraControl.windows
       {
         _totalframes = 0;
         _framestart = DateTime.Now;
+        bool retry = false;
         Log.Debug("LiveView: Liveview started");
-        try
+        do
         {
-          SelectedPortableDevice.StartLiveView();
-        }
-        catch (DeviceException deviceException)
-        {
-          if (deviceException.ErrorCode == ErrorCodes.ERROR_BUSY ||
-              deviceException.ErrorCode == ErrorCodes.MTP_Device_Busy)
+          try
           {
-            Thread.Sleep(1000);
             SelectedPortableDevice.StartLiveView();
           }
-          throw;
-        }
+          catch (DeviceException deviceException)
+          {
+            if (deviceException.ErrorCode == ErrorCodes.ERROR_BUSY ||
+                deviceException.ErrorCode == ErrorCodes.MTP_Device_Busy)
+            {
+              Thread.Sleep(500);
+              Log.Debug("Retry live view");
+              retry = true;
+            }
+            else
+            {
+              throw;              
+            }
+          }
+ 
+        } while (retry);
         oper_in_progress = false;
         _retries = 0;
         Log.Debug("LiveView: Liveview start done");
