@@ -277,5 +277,8 @@
     // 05/01/2013
     public static string LabelUseCameraCounter = "Use camera counter instead of generic counter";
     public static string LabelResetCounters = "Reset counters";
+    // 07/01/2013
+    public static string LabelUnabletoDeleteSession = "Unable to delete session";
+
   }
 }
