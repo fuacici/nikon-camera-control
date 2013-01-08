@@ -559,15 +559,24 @@ namespace CameraControl.Core.Classes
 
     public void Save(PhotoSession session)
     {
-      string filename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,
-                                     "Sessions", session.Name + ".xml");
-      XmlSerializer serializer = new XmlSerializer(typeof(PhotoSession));
-      // Create a FileStream to write with.
+      if (session == null)
+        return;
+      try
+      {
+        string filename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,
+                                       "Sessions", session.Name + ".xml");
+        XmlSerializer serializer = new XmlSerializer(typeof(PhotoSession));
+        // Create a FileStream to write with.
 
-      Stream writer = new FileStream(filename, FileMode.Create);
-      // Serialize the object, and close the TextWriter
-      serializer.Serialize(writer, session);
-      writer.Close();
+        Stream writer = new FileStream(filename, FileMode.Create);
+        // Serialize the object, and close the TextWriter
+        serializer.Serialize(writer, session);
+        writer.Close();
+      }
+      catch (Exception exception)
+      {
+        Log.Error("Unable to save session " + session.Name, exception);
+      }
     }
 
     public PhotoSession Load(string filename)

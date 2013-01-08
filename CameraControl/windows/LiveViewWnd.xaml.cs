@@ -653,6 +653,7 @@ namespace CameraControl.windows
         _totalframes = 0;
         _framestart = DateTime.Now;
         bool retry = false;
+        int retryNum = 0;
         Log.Debug("LiveView: Liveview started");
         do
         {
@@ -668,14 +669,15 @@ namespace CameraControl.windows
               Thread.Sleep(500);
               Log.Debug("Retry live view");
               retry = true;
+              retryNum++;
             }
             else
             {
-              throw;              
+              throw;
             }
           }
- 
-        } while (retry);
+
+        } while (retry && retryNum < 5);
         oper_in_progress = false;
         _retries = 0;
         Log.Debug("LiveView: Liveview start done");
