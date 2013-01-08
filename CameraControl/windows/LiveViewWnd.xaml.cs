@@ -438,13 +438,13 @@ namespace CameraControl.windows
     {
       if (oper_in_progress)
         return;
+      oper_in_progress = true;
       _totalframes++;
       if ((DateTime.Now - _framestart).TotalSeconds > 0)
         Fps = (int) (_totalframes/(DateTime.Now - _framestart).TotalSeconds);
-      oper_in_progress = true;
       try
       {
-        LiveViewData = SelectedPortableDevice.GetLiveViewImage();
+        LiveViewData = LiveViewManager.GetLiveViewImage(SelectedPortableDevice);
       }
       catch (Exception)
       {
@@ -659,7 +659,7 @@ namespace CameraControl.windows
         {
           try
           {
-            SelectedPortableDevice.StartLiveView();
+            LiveViewManager.StartLiveView(SelectedPortableDevice);
           }
           catch (DeviceException deviceException)
           {
@@ -667,7 +667,7 @@ namespace CameraControl.windows
                 deviceException.ErrorCode == ErrorCodes.MTP_Device_Busy)
             {
               Thread.Sleep(500);
-              Log.Debug("Retry live view");
+              Log.Debug("Retry live view :" + deviceException.ErrorCode.ToString("X"));
               retry = true;
               retryNum++;
             }
@@ -796,6 +796,7 @@ namespace CameraControl.windows
                                            //Topmost = false;
                                            Focus();
                                            //ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTaked;
+                                           Thread.Sleep(500);
                                            StartLiveView();
                                            Thread.Sleep(500);
                                            FreezeImage = false;

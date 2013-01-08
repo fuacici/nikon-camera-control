@@ -764,7 +764,7 @@ namespace CameraControl.Devices.Nikon
         //DeviceReady();
         //check if the live view already is started if yes returning without doing anything
         MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetDevicePropValue, CONST_PROP_LiveViewStatus, -1);
-        ErrorCodes.GetException(response.ErrorCode);
+        //ErrorCodes.GetException(response.ErrorCode);
         if (response.Data != null && response.Data.Length > 0 && response.Data[0] > 0)
           return;
         DeviceReady();
