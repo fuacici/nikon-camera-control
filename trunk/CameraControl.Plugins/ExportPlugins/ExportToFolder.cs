@@ -25,6 +25,7 @@ namespace CameraControl.Plugins.ExportPlugins
     {
       if (dlg.IsVisible)
         return true;
+      MessageBox.Show("All existing files will be overwritten !");
       FolderBrowserDialog dialog = new FolderBrowserDialog();
       if (dialog.ShowDialog() == DialogResult.OK)
       {
@@ -59,7 +60,7 @@ namespace CameraControl.Plugins.ExportPlugins
         {
           try
           {
-            File.Copy(fileItem.FileName, Path.Combine(destfolder, Path.GetFileName(fileItem.FileName)));
+            File.Copy(fileItem.FileName, Path.Combine(destfolder, Path.GetFileName(fileItem.FileName)),true);
           }
           catch (Exception exception)
           {
