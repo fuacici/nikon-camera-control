@@ -6,11 +6,15 @@ using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
+using CameraControl.Devices;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.windows
 {
   public class LiveViewManager : IWindow
   {
+    private static object _locker = new object();
+
     #region Implementation of IWindow
 
     private Dictionary<object, LiveViewWnd> _register;
@@ -57,5 +61,30 @@ namespace CameraControl.windows
     public bool IsVisible { get; private set; }
 
     #endregion
+
+    public static void StartLiveView(ICameraDevice device)
+    {
+      lock (_locker)
+      {
+        device.StartLiveView();
+      }
+    }
+
+    public static void StopLiveView(ICameraDevice device)
+    {
+      lock (_locker)
+      {
+        device.StopLiveView();
+      }
+    }
+
+    public static LiveViewData GetLiveViewImage(ICameraDevice device)
+    {
+      lock (_locker)
+      {
+        return device.GetLiveViewImage();
+      }
+    }
+
   }
 }
