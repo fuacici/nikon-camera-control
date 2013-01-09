@@ -243,7 +243,7 @@ namespace CameraControl.Actions.Enfuse
             //string param = " -o " + _resulfile + " --exposure-weight=0 --saturation-weight=0 --contrast-weight=1 --hard-mask --contrast-window-size=9 " + _filenames[0] + "????.tif";
         ProcessStartInfo startInfo = new ProcessStartInfo(_pathtoenfuse);
         startInfo.WindowStyle = ProcessWindowStyle.Minimized;
-        startInfo.Arguments = stringBuilder.ToString();
+        startInfo.Arguments = stringBuilder.ToString().Replace(",",".");
         Process process = Process.Start(startInfo);
         process.WaitForExit();
         if (File.Exists(_resulfile))

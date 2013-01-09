@@ -17,7 +17,7 @@
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colours.xaml"/>-->
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml"/>-->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -81,7 +81,7 @@ weight relative to the others will make well-exposed pixels contribute more to
 the final output.
                     </GroupBox.ToolTip>
                     <Grid Height="157">
-                        <Slider Orientation="Vertical" Margin="26,6,31,46" Maximum="100" Value="{Binding Path=EnfuseExp}"/>
+                        <Slider Orientation="Vertical" Margin="26,6,31,46" Maximum="100" Value="{Binding Path=EnfuseExp}" Style="{x:Null}"/>
                         <TextBox Height="23" Margin="26,117,19,0" VerticalAlignment="Top" Text="{Binding Path=EnfuseExp}"/>
                     </Grid>
                 </GroupBox>
@@ -90,7 +90,7 @@ the final output.
                         Sets the relative WEIGHT of high local-contrast pixels.
                     </GroupBox.ToolTip>
                     <Grid Height="157">
-                        <Slider Orientation="Vertical" Margin="26,6,31,46" Maximum="100" Value="{Binding Path=EnfuseCont}"/>
+                        <Slider Orientation="Vertical" Margin="26,6,31,46" Maximum="100" Value="{Binding Path=EnfuseCont}" Style="{x:Null}"/>
                         <TextBox Height="23" Margin="26,117,19,0" VerticalAlignment="Top" Text="{Binding Path=EnfuseCont}"/>
                     </Grid>
                 </GroupBox>
@@ -100,7 +100,7 @@ the final output.
 makes pixels with high saturation contribute more to the final output.
                     </GroupBox.ToolTip>
                     <Grid Height="157">
-                        <Slider Orientation="Vertical" Margin="26,6,31,46" Maximum="100" Value="{Binding Path=EnfuseSat}"/>
+                        <Slider Orientation="Vertical" Margin="26,6,31,46" Maximum="100" Value="{Binding Path=EnfuseSat}" Style="{x:Null}"/>
                         <TextBox Height="23" Margin="26,117,19,0" VerticalAlignment="Top" Text="{Binding Path=EnfuseSat}"/>
                     </Grid>
                 </GroupBox>
@@ -109,7 +109,7 @@ makes pixels with high saturation contribute more to the final output.
                         Sets the relative WEIGHT of high local entropy pixels.
                     </GroupBox.ToolTip>
                     <Grid Height="157">
-                        <Slider Orientation="Vertical" Margin="26,6,31,46" Maximum="100" Value="{Binding Path=EnfuseEnt}"/>
+                        <Slider Orientation="Vertical" Margin="26,6,31,46" Maximum="100" Value="{Binding Path=EnfuseEnt}" Style="{x:Null}"/>
                         <TextBox Height="23" Margin="26,117,19,0" VerticalAlignment="Top" Text="{Binding Path=EnfuseEnt}"/>
                     </Grid>
                 </GroupBox>
@@ -118,7 +118,7 @@ makes pixels with high saturation contribute more to the final output.
                         Standard deviation STD-DEV of the Gaussian exposure weight curve.
                     </GroupBox.ToolTip>
                     <Grid Height="157">
-                        <Slider Orientation="Vertical" Margin="26,6,31,46" Maximum="100" Value="{Binding Path=EnfuseSigma}"/>
+                        <Slider Orientation="Vertical" Margin="26,6,31,46" Maximum="100" Value="{Binding Path=EnfuseSigma}" Style="{x:Null}"/>
                         <TextBox Height="23" Margin="26,117,19,0" VerticalAlignment="Top" Text="{Binding Path=EnfuseSigma}"/>
                     </Grid>
                 </GroupBox>
