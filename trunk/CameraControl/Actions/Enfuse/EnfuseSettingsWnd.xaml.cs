@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using CameraControl.Core;
 
 namespace CameraControl.Actions.Enfuse
 {
@@ -21,6 +22,7 @@ namespace CameraControl.Actions.Enfuse
     public EnfuseSettingsWnd()
     {
       InitializeComponent();
+      ServiceProvider.Settings.ApplyTheme(this);
     }
 
     private void btn_enfuse_Click(object sender, RoutedEventArgs e)

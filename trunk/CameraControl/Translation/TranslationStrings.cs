@@ -279,6 +279,10 @@
     public static string LabelResetCounters = "Reset counters";
     // 07/01/2013
     public static string LabelUnabletoDeleteSession = "Unable to delete session";
+    // 12/01/2013
+    public static string LabelWaitingForDevice = "Waiting for device to be ready";
+    public static string LabelAdvanced = "Advanced";
+    public static string LabelUseParellelTransfer = "Use parallel file transfer";
 
   }
 }

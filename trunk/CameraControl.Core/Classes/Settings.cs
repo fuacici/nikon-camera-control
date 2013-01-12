@@ -466,6 +466,17 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private bool _useParallelTransfer;
+    public bool UseParallelTransfer
+    {
+      get { return _useParallelTransfer; }
+      set
+      {
+        _useParallelTransfer = value;
+        NotifyPropertyChanged("UseParallelTransfer");
+      }
+    }
+
     public CameraPropertyEnumerator CameraProperties { get; set; }
     public string SelectedLayout { get; set; }
     public AsyncObservableCollection<CameraPreset> CameraPresets { get; set; }
@@ -516,6 +527,7 @@ namespace CameraControl.Core.Classes
       ExternalViewerArgs = string.Empty;
       ShowFocusPoints = true;
       LowMemoryUsage = true;
+      UseParallelTransfer = false;
     }
 
     public void Add(PhotoSession session)

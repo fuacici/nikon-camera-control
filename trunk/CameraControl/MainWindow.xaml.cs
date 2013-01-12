@@ -86,7 +86,17 @@ namespace CameraControl
 
     void DeviceManager_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
     {
-      PhotoCaptured(eventArgs);
+      if (ServiceProvider.Settings.UseParallelTransfer)
+      {
+        PhotoCaptured(eventArgs);
+      }
+      else
+      {
+        lock (_locker)
+        {
+          PhotoCaptured(eventArgs);
+        }
+      }
     }
 
     private void CheckForUpdate()
@@ -97,88 +107,86 @@ namespace CameraControl
 
     void PhotoCaptured(object o)
     {
-      lock (_locker)
+      PhotoCapturedEventArgs eventArgs = o as PhotoCapturedEventArgs;
+      if (eventArgs == null)
+        return;
+      try
       {
-        PhotoCapturedEventArgs eventArgs = o as PhotoCapturedEventArgs;
-        if (eventArgs == null)
+        Log.Debug("Photo transfer begin.");
+        eventArgs.CameraDevice.IsBusy = true;
+        CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(eventArgs.CameraDevice);
+        StaticHelper.Instance.SystemMessage = TranslationStrings.MsgPhotoTransferBegin;
+        PhotoSession session = (PhotoSession) eventArgs.CameraDevice.AttachedPhotoSession ??
+                               ServiceProvider.Settings.DefaultSession;
+        if ((property.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
+        {
+          eventArgs.CameraDevice.IsBusy = false;
           return;
-        try
-        {
-          eventArgs.CameraDevice.IsBusy = true;
-          CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(eventArgs.CameraDevice);
-          StaticHelper.Instance.SystemMessage = TranslationStrings.MsgPhotoTransferBegin;
-          PhotoSession session = (PhotoSession) eventArgs.CameraDevice.AttachedPhotoSession ??
-                                 ServiceProvider.Settings.DefaultSession;
-          if ((property.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
-          {
-            eventArgs.CameraDevice.IsBusy = false;
-            return;
-          }
-          Log.Debug("Photo transfer begin.");
-          string fileName = "";
-          if (!session.UseOriginalFilename || eventArgs.CameraDevice.CaptureInSdRam)
-          {
-            fileName =
-              session.GetNextFileName(Path.GetExtension(eventArgs.FileName),
-                                      eventArgs.CameraDevice);
-          }
-          else
-          {
-            fileName = Path.Combine(session.Folder, eventArgs.FileName);
-            if (File.Exists(fileName))
-              fileName =
-                StaticHelper.GetUniqueFilename(
-                  Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_", 0,
-                  Path.GetExtension(fileName));
-          }
-          if (!Directory.Exists(Path.GetDirectoryName(fileName)))
-          {
-            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-          }
-          Log.Debug("Transfer started :" + fileName);
-          DateTime startTIme = DateTime.Now;
-          eventArgs.CameraDevice.TransferFile(eventArgs.Handle, fileName);
-          Log.Debug("Transfer done :" + fileName);
-          Log.Debug("[BENCHMARK]Speed :" +
-                    (new FileInfo(fileName).Length/(DateTime.Now - startTIme).TotalSeconds/1024/1024).ToString("0000.00"));
-          Log.Debug("[BENCHMARK]Transfer time :" + ((DateTime.Now - startTIme).TotalSeconds).ToString("0000.000"));
-          //select the new file only when the multiple camera support isn't used to prevent high CPU usage on raw files
-          if (ServiceProvider.Settings.AutoPreview &&
-              !ServiceProvider.WindowsManager.Get(typeof (MultipleCameraWnd)).IsVisible &&
-              !ServiceProvider.Settings.UseExternalViewer)
-          {
-            ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Select_Image, session.AddFile(fileName));
-          }
-          else
-          {
-            session.AddFile(fileName);
-          }
-          //ServiceProvider.Settings.Save(session);
-          StaticHelper.Instance.SystemMessage = TranslationStrings.MsgPhotoTransferDone;
-          eventArgs.CameraDevice.IsBusy = false;
-          //show fullscreen only when the multiple camera support isn't used
-          if (ServiceProvider.Settings.Preview &&
-              !ServiceProvider.WindowsManager.Get(typeof (MultipleCameraWnd)).IsVisible &&
-              !ServiceProvider.Settings.UseExternalViewer)
-            ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_ShowTimed);
-          if (ServiceProvider.Settings.UseExternalViewer && File.Exists(ServiceProvider.Settings.ExternalViewerPath))
-          {
-            string arg = ServiceProvider.Settings.ExternalViewerArgs;
-            arg = arg.Contains("%1") ? arg.Replace("%1", fileName) : arg + " " + fileName;
-            PhotoUtils.Run(ServiceProvider.Settings.ExternalViewerPath, arg, ProcessWindowStyle.Normal);
-          }
-          if (ServiceProvider.Settings.PlaySound)
-          {
-            PhotoUtils.PlayCaptureSound();
-          }
         }
-        catch (Exception ex)
+        string fileName = "";
+        if (!session.UseOriginalFilename || eventArgs.CameraDevice.CaptureInSdRam)
         {
-          eventArgs.CameraDevice.IsBusy = false;
-          StaticHelper.Instance.SystemMessage = string.Format(TranslationStrings.MsgPhotoTransferError, ex.Message);
-          Log.Error("Transfer error !", ex);
+          fileName =
+            session.GetNextFileName(Path.GetExtension(eventArgs.FileName),
+                                    eventArgs.CameraDevice);
+        }
+        else
+        {
+          fileName = Path.Combine(session.Folder, eventArgs.FileName);
+          if (File.Exists(fileName))
+            fileName =
+              StaticHelper.GetUniqueFilename(
+                Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_", 0,
+                Path.GetExtension(fileName));
+        }
+        if (!Directory.Exists(Path.GetDirectoryName(fileName)))
+        {
+          Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+        }
+        Log.Debug("Transfer started :" + fileName);
+        DateTime startTIme = DateTime.Now;
+        eventArgs.CameraDevice.TransferFile(eventArgs.Handle, fileName);
+        Log.Debug("Transfer done :" + fileName);
+        Log.Debug("[BENCHMARK]Speed :" +
+                  (new FileInfo(fileName).Length/(DateTime.Now - startTIme).TotalSeconds/1024/1024).ToString("0000.00"));
+        Log.Debug("[BENCHMARK]Transfer time :" + ((DateTime.Now - startTIme).TotalSeconds).ToString("0000.000"));
+        //select the new file only when the multiple camera support isn't used to prevent high CPU usage on raw files
+        if (ServiceProvider.Settings.AutoPreview &&
+            !ServiceProvider.WindowsManager.Get(typeof (MultipleCameraWnd)).IsVisible &&
+            !ServiceProvider.Settings.UseExternalViewer)
+        {
+          ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Select_Image, session.AddFile(fileName));
+        }
+        else
+        {
+          session.AddFile(fileName);
+        }
+        //ServiceProvider.Settings.Save(session);
+        StaticHelper.Instance.SystemMessage = TranslationStrings.MsgPhotoTransferDone;
+        eventArgs.CameraDevice.IsBusy = false;
+        //show fullscreen only when the multiple camera support isn't used
+        if (ServiceProvider.Settings.Preview &&
+            !ServiceProvider.WindowsManager.Get(typeof (MultipleCameraWnd)).IsVisible &&
+            !ServiceProvider.Settings.UseExternalViewer)
+          ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_ShowTimed);
+        if (ServiceProvider.Settings.UseExternalViewer && File.Exists(ServiceProvider.Settings.ExternalViewerPath))
+        {
+          string arg = ServiceProvider.Settings.ExternalViewerArgs;
+          arg = arg.Contains("%1") ? arg.Replace("%1", fileName) : arg + " " + fileName;
+          PhotoUtils.Run(ServiceProvider.Settings.ExternalViewerPath, arg, ProcessWindowStyle.Normal);
+        }
+        if (ServiceProvider.Settings.PlaySound)
+        {
+          PhotoUtils.PlayCaptureSound();
         }
       }
+      catch (Exception ex)
+      {
+        eventArgs.CameraDevice.IsBusy = false;
+        StaticHelper.Instance.SystemMessage = string.Format(TranslationStrings.MsgPhotoTransferError, ex.Message);
+        Log.Error("Transfer error !", ex);
+      }
+      Log.Debug("Photo transfer done.");
     }
 
     public RelayCommand<CameraPreset> SelectPresetCommand
