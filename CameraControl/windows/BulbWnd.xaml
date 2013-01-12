@@ -4,7 +4,8 @@
         Title="Bulb" Height="227" Width="441" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:my="clr-namespace:CameraControl.windows"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                      xmlns:T="clr-namespace:CameraControl.Translation" Closed="Window_Closed" Topmost="True">
+                      xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
+                      Closed="Window_Closed" Topmost="True">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

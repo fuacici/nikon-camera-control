@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace CameraControl.Classes
+namespace CameraControl.Core.Classes
 {
-  class WindowsCmdConsts
+  public class WindowsCmdConsts
   {
     public const string DownloadPhotosWnd_Show = "DownloadPhotosWnd_Show";
     public const string DownloadPhotosWnd_Hide = "DownloadPhotosWnd_Hide";

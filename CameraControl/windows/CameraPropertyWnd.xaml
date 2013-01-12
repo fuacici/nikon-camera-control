@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Camera Property" Height="332" Width="331" Closing="Window_Closing" WindowStartupLocation="CenterScreen" xmlns:my="clr-namespace:CameraControl.windows"
                      xmlns:ontrols="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                     xmlns:T="clr-namespace:CameraControl.Translation"
-                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" WindowStyle="ToolWindow" UseLayoutRounding="False">
+                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+                     xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
+                     WindowStyle="ToolWindow" UseLayoutRounding="False">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

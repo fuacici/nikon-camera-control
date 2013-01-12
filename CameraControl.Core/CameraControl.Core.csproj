@@ -137,6 +137,7 @@
     <Compile Include="Classes\TimeLapseClass.cs" />
     <Compile Include="Classes\TriggerClass.cs" />
     <Compile Include="Classes\WebServer.cs" />
+    <Compile Include="Classes\WindowsCmdConsts.cs" />
     <Compile Include="Interfaces\IExportPlugin.cs" />
     <Compile Include="Interfaces\IMainWindowPlugin.cs" />
     <Compile Include="Interfaces\IPlugin.cs" />
@@ -158,6 +159,10 @@
     <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceProvider.cs" />
+    <Compile Include="Translation\TranslateExtension.cs" />
+    <Compile Include="Translation\TranslationLangDesc.cs" />
+    <Compile Include="Translation\TranslationManager.cs" />
+    <Compile Include="Translation\TranslationStrings.cs" />
     <Compile Include="Wpf\HeaderToImageConverter.cs" />
     <Compile Include="Wpf\ListBoxBehavior.cs" />
     <Compile Include="Wpf\ProgressWindow.xaml.cs">

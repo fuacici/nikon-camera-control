@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Forms;
-using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
@@ -13,19 +14,34 @@ using CameraControl.Core.Translation;
 using CameraControl.Core.Wpf;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
-using HelpProvider = CameraControl.Classes.HelpProvider;
+using MahApps.Metro.Controls;
 using MessageBox = System.Windows.Forms.MessageBox;
-using Path = System.IO.Path;
+//using CameraControl.Classes;
+//using CameraControl.Translation;
+//using HelpProvider = CameraControl.Classes.HelpProvider;
 
-namespace CameraControl.windows
+namespace FBFX.Plugin.Windows
 {
+  public class DownloadableItems
+  {
+    public AsyncObservableCollection<FileItem> Items { get; set; }
+    public ICameraDevice Device { get; set; }
+
+    public DownloadableItems()
+    {
+      Items = new AsyncObservableCollection<FileItem>();
+    }
+  }
+
   /// <summary>
   /// Interaction logic for DownloadPhotosWnd.xaml
   /// </summary>
-  public partial class DownloadPhotosWnd : INotifyPropertyChanged, IWindow
+  public partial class FBFXDownloadPhotosWnd : INotifyPropertyChanged, IWindow
   {
     private bool delete;
     private ProgressWindow dlg = new ProgressWindow();
+
+    public ObservableCollection<DownloadableItems> Groups { get; set; }
 
     private ICameraDevice _cameraDevice;
     public ICameraDevice CameraDevice
@@ -49,15 +65,16 @@ namespace CameraControl.windows
       }
     }
 
-    public DownloadPhotosWnd()
+    public FBFXDownloadPhotosWnd()
     {
-      InitializeComponent();
+      Groups = new ObservableCollection<DownloadableItems>();
       Items = new AsyncObservableCollection<FileItem>();
+      InitializeComponent();
     }
 
     private void btn_help_Click(object sender, RoutedEventArgs e)
     {
-      HelpProvider.Run(HelpSections.DownloadPhotos);
+      //HelpProvider.Run(HelpSections.DownloadPhotos);
     }
 
     #region Implementation of INotifyPropertyChanged
@@ -124,19 +141,31 @@ namespace CameraControl.windows
     private void PopulateImageList()
     {
       Items.Clear();
-      try
+      foreach (ICameraDevice cameraDevice in ServiceProvider.DeviceManager.ConnectedDevices)
       {
-        var images = CameraDevice.GetObjects(null);
-        foreach (DeviceObject deviceObject in images)
+        try
         {
-          Items.Add(new FileItem(deviceObject, CameraDevice));
+          var images = cameraDevice.GetObjects(null);
+          foreach (DeviceObject deviceObject in images)
+          {
+            Items.Add(new FileItem(deviceObject, cameraDevice));
+          }
+        }
+        catch (Exception exception)
+        {
+          StaticHelper.Instance.SystemMessage = TranslationStrings.LabelErrorLoadingFileList;
+          Log.Error("Error loading file list", exception);
         }
       }
-      catch (Exception exception)
+      CollectionView myView;
+      myView = (CollectionView)CollectionViewSource.GetDefaultView(Items);
+      if (myView.CanGroup == true)
       {
-        MessageBox.Show(TranslationStrings.LabelErrorLoadingFileList);
-        Log.Error("Error loading file list", exception);
+        PropertyGroupDescription groupDescription
+            = new PropertyGroupDescription("Device");
+        myView.GroupDescriptions.Add(groupDescription);
       }
+      lst_items.ItemsSource = myView;
     }
 
     private void btn_download_Click(object sender, RoutedEventArgs e)
@@ -169,11 +198,11 @@ namespace CameraControl.windows
             StaticHelper.GetUniqueFilename(
               Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_", 0,
               Path.GetExtension(fileName));
-        CameraDevice.TransferFile(fileItem.DeviceObject.Handle, fileName);
+        fileItem.Device.TransferFile(fileItem.DeviceObject.Handle, fileName);
         // double check if file was transferred
         if (File.Exists(fileName) && delete)
         {
-          CameraDevice.DeleteObject(fileItem.DeviceObject);
+          fileItem.Device.DeleteObject(fileItem.DeviceObject);
         }
         totalbytes += new FileInfo(fileName).Length;
         session.AddFile(fileName);

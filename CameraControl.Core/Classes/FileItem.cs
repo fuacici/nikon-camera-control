@@ -93,6 +93,18 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private ICameraDevice _device;
+    [XmlIgnore]
+    public ICameraDevice Device
+    {
+      get { return _device; }
+      set
+      {
+        _device = value;
+        NotifyPropertyChanged("Device");
+      }
+    }
+
     private FileItemType _itemType;
     [XmlIgnore]
     public FileItemType ItemType
@@ -110,8 +122,9 @@ namespace CameraControl.Core.Classes
       
     }
 
-    public FileItem(DeviceObject deviceObject)
+    public FileItem(DeviceObject deviceObject, ICameraDevice device)
     {
+      Device = device;
       DeviceObject = deviceObject;
       ItemType = FileItemType.CameraObject;
       FileName = deviceObject.FileName;
