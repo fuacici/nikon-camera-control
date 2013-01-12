@@ -58,5 +58,18 @@ namespace CameraControl.Core.Classes
     {
       return WindowsList.FirstOrDefault(window => window.GetType() == t);
     }
+
+    public void Remove(string type)
+    {
+      IWindow windowToRemove = null;
+      foreach (IWindow window in WindowsList.Where(window => window.GetType().ToString() == type))
+      {
+        windowToRemove = window;
+      }
+      if (windowToRemove != null)
+        WindowsList.Remove(windowToRemove);
+    }
+
+
   }
 }

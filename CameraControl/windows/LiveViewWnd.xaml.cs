@@ -648,6 +648,12 @@ namespace CameraControl.windows
 
     private void StartLiveView()
     {
+      Thread thread = new Thread(StartLiveViewThread);
+      thread.Start();
+    }
+
+    private void StartLiveViewThread()
+    {
       try
       {
         _totalframes = 0;
@@ -663,10 +669,13 @@ namespace CameraControl.windows
           }
           catch (DeviceException deviceException)
           {
+            Dispatcher.Invoke(new Action(delegate { grid_wait.Visibility = Visibility.Visible; }));
             if (deviceException.ErrorCode == ErrorCodes.ERROR_BUSY ||
                 deviceException.ErrorCode == ErrorCodes.MTP_Device_Busy)
             {
               Thread.Sleep(500);
+              if (!IsVisible)
+                break;
               Log.Debug("Retry live view :" + deviceException.ErrorCode.ToString("X"));
               retry = true;
               retryNum++;
@@ -677,18 +686,23 @@ namespace CameraControl.windows
             }
           }
 
-        } while (retry && retryNum < 5);
-        oper_in_progress = false;
-        _retries = 0;
-        Log.Debug("LiveView: Liveview start done");
+        } while (retry && retryNum < 35);
+        if(IsVisible)
+        {
+          _timer.Start();
+          oper_in_progress = false;
+          _retries = 0;
+          Log.Debug("LiveView: Liveview start done");
+        }
       }
       catch (Exception exception)
       {
         Log.Error("Unable to start liveview !", exception);
-        StaticHelper.Instance.SystemMessage = "Unable to start liveview ! "+exception.Message;
+        StaticHelper.Instance.SystemMessage = "Unable to start liveview ! " + exception.Message;
         //MessageBox.Show("Unable to start liveview !");
         //ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide);
       }
+      Dispatcher.Invoke(new Action(delegate { grid_wait.Visibility = Visibility.Hidden; }));
       Dispatcher.Invoke(new Action(delegate { image1.Visibility = Visibility.Visible; }));
     }
 
@@ -796,9 +810,9 @@ namespace CameraControl.windows
                                            //Topmost = false;
                                            Focus();
                                            //ServiceProvider.Settings.Manager.PhotoTakenDone += Manager_PhotoTaked;
-                                           Thread.Sleep(500);
+                                           //Thread.Sleep(500);
                                            StartLiveView();
-                                           Thread.Sleep(500);
+                                           //Thread.Sleep(500);
                                            FreezeImage = false;
                                            btn_record.IsEnabled =
                                              SelectedPortableDevice.GetCapability(CapabilityEnum.RecordMovie);
@@ -958,13 +972,7 @@ namespace CameraControl.windows
       {
         IsBusy = false;
         _timer.Start();
-        Thread thread = new Thread(new ThreadStart(delegate
-        {
-          Thread.Sleep(300);
-          StartLiveView();
-          _timer.Start();
-        }));
-        thread.Start();
+        StartLiveView();
       }
     }
 
@@ -1063,6 +1071,7 @@ namespace CameraControl.windows
           //  Thread.Sleep(1);
           //}
           StartLiveView();
+          Thread.Sleep(500);
           if (PhotoCount > 0)
           {
             Thread.Sleep(400);
@@ -1245,5 +1254,11 @@ namespace CameraControl.windows
       SetFocus((int)(e.NewValue - e.OldValue));
     }
 
+    private void slider_transparent_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+      Dispatcher.Invoke(slider_transparent.Value == 1
+                          ? new Action(delegate { img_preview.Visibility = Visibility.Hidden; })
+                          : new Action(delegate { img_preview.Visibility = Visibility.Visible; }));
+    }
   }
 }

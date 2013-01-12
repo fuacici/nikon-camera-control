@@ -10,5 +10,5 @@ xcopy %1CameraControl.Application\*.* %1CameraControl\Bin\%2\ /Y
 rem Copy additional Files
 MD %1CameraControl\Bin\%2\Plugins
 copy %1CameraControl.Plugins\Bin\%2\CameraControl.Plugins.* %1CameraControl\Bin\%2\Plugins\ /Y 
-
+copy %1FBFX.Plugin\Bin\%2\FBFX.Plugin.* %1CameraControl\Bin\%2\Plugins\ /Y 
 pause
