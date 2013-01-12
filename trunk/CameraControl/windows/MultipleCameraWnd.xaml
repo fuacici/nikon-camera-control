@@ -1,12 +1,12 @@
 ﻿<Controls:MetroWindow x:Class="CameraControl.windows.MultipleCameraWnd"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:T="clr-namespace:CameraControl.Translation"
-        Title="{T:TranslateExtension MultipleCameraWindowTitle}" Height="408" Width="838" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" Closing="Window_Closing" xmlns:my1="clr-namespace:CameraControl.windows"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="{T:TranslateExtension MultipleCameraWindowTitle}" Height="408" Width="838" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" Closing="Window_Closing" xmlns:my1="clr-namespace:CameraControl.windows"
                       xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:Devices="clr-namespace:CameraControl.Devices;assembly=CameraControl.Devices"
-                      xmlns:local="clr-namespace:CameraControl.Controls" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow"
+                      xmlns:local="clr-namespace:CameraControl.Controls"
+                      xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
+                      WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow"
                       ShowMaxRestoreButton="False" ShowMinButton="False" Topmost="True">
     <Window.Resources>
         <ResourceDictionary>

@@ -1,10 +1,9 @@
 ﻿<Controls:MetroWindow  x:Class="CameraControl.windows.TimeLapseWnd"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:T="clr-namespace:CameraControl.Translation"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
                        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                       xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
                        Title="{T:TranslateExtension TimeLapseWindowTitle}" Height="359" Width="583" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" UseLayoutRounding="True" ShowActivated="True" Closed="Window_Closed" Closing="Window_Closing"
                        ShowMaxRestoreButton="False" ShowMinButton="False">
     <Window.Resources>

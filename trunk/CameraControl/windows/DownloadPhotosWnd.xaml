@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                      xmlns:T="clr-namespace:CameraControl.Translation" Title="{T:TranslateExtension DownloadWindowTitle}" Height="349" Width="377" Closing="MetroWindow_Closing" xmlns:my="clr-namespace:CameraControl.windows">
+                      Title="{T:TranslateExtension DownloadWindowTitle}" Height="349" Width="377" Closing="MetroWindow_Closing" xmlns:my="clr-namespace:CameraControl.windows"
+                      xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

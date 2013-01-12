@@ -4,9 +4,9 @@ using System.Windows.Controls;
 using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
+using CameraControl.Core.Translation;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
-using CameraControl.Translation;
 
 namespace CameraControl.Controls
 {

@@ -5,9 +5,9 @@ using System.Windows;
 using System.Windows.Forms;
 using CameraControl.Classes;
 using CameraControl.Core;
+using CameraControl.Core.Translation;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
-using CameraControl.Translation;
 using HelpProvider = CameraControl.Classes.HelpProvider;
 using MessageBox = System.Windows.Forms.MessageBox;
 

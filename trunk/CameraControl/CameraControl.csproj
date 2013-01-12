@@ -55,7 +55,7 @@
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AForge, Version=2.2.4.0, Culture=neutral, PublicKeyToken=c1db6ff4eaa06aeb, processorArchitecture=MSIL">
@@ -133,7 +133,6 @@
       <DependentUpon>EnfuseSettingsWnd.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\HelpProvider.cs" />
-    <Compile Include="Classes\WindowsCmdConsts.cs" />
     <Compile Include="Classes\WpfCommands.cs" />
     <Compile Include="Controls\CameraItem.xaml.cs">
       <DependentUpon>CameraItem.xaml</DependentUpon>
@@ -165,10 +164,6 @@
     <Compile Include="StartUpWindow.xaml.cs">
       <DependentUpon>StartUpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Translation\TranslateExtension.cs" />
-    <Compile Include="Translation\TranslationLangDesc.cs" />
-    <Compile Include="Translation\TranslationManager.cs" />
-    <Compile Include="Translation\TranslationStrings.cs" />
     <Compile Include="windows\AboutWnd.xaml.cs">
       <DependentUpon>AboutWnd.xaml</DependentUpon>
     </Compile>

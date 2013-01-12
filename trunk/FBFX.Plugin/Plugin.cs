@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using CameraControl.Core;
 using CameraControl.Core.Interfaces;
+using FBFX.Plugin.Windows;
 
 namespace FBFX.Plugin
 {
@@ -16,6 +17,7 @@ namespace FBFX.Plugin
       try
       {
         ServiceProvider.WindowsManager.Remove("CameraControl.windows.DownloadPhotosWnd");
+        ServiceProvider.WindowsManager.Add(new FBFXDownloadPhotosWnd());
       }
       catch (Exception)
       {
