@@ -22,16 +22,6 @@ using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace FBFX.Plugin.Windows
 {
-  public class DownloadableItems
-  {
-    public AsyncObservableCollection<FileItem> Items { get; set; }
-    public ICameraDevice Device { get; set; }
-
-    public DownloadableItems()
-    {
-      Items = new AsyncObservableCollection<FileItem>();
-    }
-  }
 
   /// <summary>
   /// Interaction logic for DownloadPhotosWnd.xaml
@@ -40,6 +30,7 @@ namespace FBFX.Plugin.Windows
   {
     private bool delete;
     private ProgressWindow dlg = new ProgressWindow();
+   
 
     public ObservableCollection<DownloadableItems> Groups { get; set; }
 
@@ -103,7 +94,9 @@ namespace FBFX.Plugin.Windows
                                            if (dlg.IsVisible)
                                              return;
                                            CameraDevice = param as ICameraDevice;
-                                           Title = TranslationStrings.DownloadWindowTitle + "-" + ServiceProvider.Settings.CameraProperties.Get(CameraDevice).DeviceName;
+                                           Title = TranslationStrings.DownloadWindowTitle + "-" +
+                                                   ServiceProvider.Settings.CameraProperties.Get(CameraDevice).
+                                                     DeviceName;
                                            if (param == null)
                                              return;
                                            Show();
@@ -111,7 +104,9 @@ namespace FBFX.Plugin.Windows
                                            Topmost = true;
                                            Topmost = false;
                                            Focus();
-                                           PopulateImageList();
+                                           dlg.Show();
+                                           Thread thread = new Thread(PopulateImageList);
+                                           thread.Start();
                                          }));
           break;
         case WindowsCmdConsts.DownloadPhotosWnd_Hide:
@@ -143,6 +138,9 @@ namespace FBFX.Plugin.Windows
       Items.Clear();
       foreach (ICameraDevice cameraDevice in ServiceProvider.DeviceManager.ConnectedDevices)
       {
+        CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(cameraDevice);
+        cameraDevice.DisplayName = property.DeviceName;
+        dlg.Label = cameraDevice.DisplayName;
         try
         {
           var images = cameraDevice.GetObjects(null);
@@ -165,7 +163,8 @@ namespace FBFX.Plugin.Windows
             = new PropertyGroupDescription("Device");
         myView.GroupDescriptions.Add(groupDescription);
       }
-      lst_items.ItemsSource = myView;
+      Dispatcher.Invoke(new Action(() => lst_items.ItemsSource = myView));
+      dlg.Hide();
     }
 
     private void btn_download_Click(object sender, RoutedEventArgs e)
@@ -214,5 +213,64 @@ namespace FBFX.Plugin.Windows
       Log.Debug(string.Format("[BENCHMARK]Total byte transferred ;{0}\nTotal seconds :{1}\nSpeed : {2} Mbyte/sec ", totalbytes,
                                     transfersec, (totalbytes/transfersec/1024/1024).ToString("0000.00")));
     }
+
+    private void btn_all_Click(object sender, RoutedEventArgs e)
+    {
+      foreach (FileItem fileItem in Items)
+      {
+        fileItem.IsChecked = true;
+      }
+    }
+
+    private void btn_none_Click(object sender, RoutedEventArgs e)
+    {
+      foreach (FileItem fileItem in Items)
+      {
+        fileItem.IsChecked = true;
+      }
+    }
+
+    private void btn_invert_Click(object sender, RoutedEventArgs e)
+    {
+      foreach (FileItem fileItem in Items)
+      {
+        fileItem.IsChecked = !fileItem.IsChecked;
+      }
+
+    }
+
+    private void btn_select_Click(object sender, RoutedEventArgs e)
+    {
+      int selectedidx = 0;
+      if (int.TryParse(txt_indx.Text, out selectedidx))
+      {
+        foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices)
+        {
+          int index = 1;
+          foreach (FileItem fileItem in Items)
+          {
+            if (fileItem.Device == connectedDevice)
+            {
+              if (index == selectedidx)
+                fileItem.IsChecked = !fileItem.IsChecked;
+              index++;
+            }
+          }
+        }
+      }
+    }
   }
+
+  public class DownloadableItems
+  {
+    public AsyncObservableCollection<FileItem> Items { get; set; }
+    public ICameraDevice Device { get; set; }
+
+    public DownloadableItems()
+    {
+      Items = new AsyncObservableCollection<FileItem>();
+    }
+  }
+
 }
+
