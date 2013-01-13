@@ -420,5 +420,10 @@ namespace CameraControl.Devices
       Capabilities = new List<CapabilityEnum>();
     }
 
+    public override string ToString()
+    {
+      return DisplayName;
+    }
+
   }
 }
