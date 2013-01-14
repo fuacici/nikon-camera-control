@@ -31,7 +31,13 @@ namespace CameraControl.Core.Classes
     private int _numberOfPhotos;
     public int NumberOfPhotos
     {
-      get { return _numberOfPhotos; }
+      get
+      {
+        if (_numberOfPhotos < 1)
+          _numberOfPhotos = 0;
+        return
+          _numberOfPhotos;
+      }
       set
       {
         _numberOfPhotos = value;
