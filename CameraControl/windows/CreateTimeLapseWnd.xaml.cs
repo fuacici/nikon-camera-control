@@ -45,7 +45,7 @@ namespace CameraControl.windows
       _backgroundWorker.DoWork += _backgroundWorker_DoWork;
       _backgroundWorker.RunWorkerCompleted += _backgroundWorker_RunWorkerCompleted;
       _backgroundWorker.WorkerSupportsCancellation = true;
-      _tempFolder = Path.Combine(Path.GetTempPath(), "NCC_TimeLapse", ServiceProvider.Settings.DefaultSession.Name);
+      _tempFolder = Path.Combine(Path.GetTempPath(), "DCC_TimeLapse", ServiceProvider.Settings.DefaultSession.Name);
       if (Directory.Exists(_tempFolder))
       {
         Directory.Delete(_tempFolder, true);
@@ -66,18 +66,21 @@ namespace CameraControl.windows
 
     void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
     {
+      List<FileItem> _files = ServiceProvider.Settings.DefaultSession.Files.Where(fileItem => fileItem.IsChecked).ToList();
+      if (_files.Count == 0)
+        _files = ServiceProvider.Settings.DefaultSession.Files.ToList();
       _starTime = DateTime.Now;
-      for (int i = 0; i < ServiceProvider.Settings.DefaultSession.Files.Count; i++)
+      for (int i = 0; i < _files.Count; i++)
       {
         
       //}
       //foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
       //{
         _counter++;
-        FileItem item = ServiceProvider.Settings.DefaultSession.Files[i];
+        FileItem item = _files[i];
         if(ServiceProvider.Settings.DefaultSession.TimeLapse.VirtualMove)
         {
-          ResizeImageMove(item.FileName, i, ServiceProvider.Settings.DefaultSession.Files.Count);
+          ResizeImageMove(item.FileName, i, _files.Count);
         }
         else
         {
@@ -89,8 +92,7 @@ namespace CameraControl.windows
                                                    progressBar1.Value++;
                                                    image1.Source = item.Thumbnail;
                                                    label1.Content = string.Format("{0}/{1} ({2})", _counter,
-                                                                                  ServiceProvider.Settings.
-                                                                                    DefaultSession.Files.Count,
+                                                                                  _files.Count,
                                                                                   (DateTime.Now - _starTime).ToString(@"hh\:mm\:ss"));
                                                  }));
         if(_backgroundWorker.CancellationPending)
@@ -105,7 +107,7 @@ namespace CameraControl.windows
       }
       script = script.Replace("$InFile$", Path.Combine(_tempFolder, "img000001.jpg").Replace(@"\",@"\\"));
       script = script.Replace("$FPS$", ServiceProvider.Settings.DefaultSession.TimeLapse.Fps.ToString());
-      script = script.Replace("$Count$", ServiceProvider.Settings.DefaultSession.Files.Count.ToString());
+      script = script.Replace("$Count$", _files.Count.ToString());
       script = script.Replace("$OutFile$", ServiceProvider.Settings.DefaultSession.TimeLapse.OutputFIleName.Replace(@"\", @"\\"));
       using (TextWriter writer = new StreamWriter(Path.Combine(_tempFolder, "VirtualDub.script")))
       {
