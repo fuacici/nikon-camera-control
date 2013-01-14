@@ -7,7 +7,7 @@ Name digiCamControl
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.9.430
+!define VERSION 0.9.428
 !define COMPANY "Duka Istvan"
 !define URL http://www.digicamcontrol.com/
 
@@ -63,7 +63,7 @@ ShowUninstDetails show
 Section -Main SEC0000
     SetOutPath $INSTDIR
     SetOverwrite on
-    File /r ..\CameraControl\bin\Debug\*
+    File /r ..\CameraControl\bin\Release\*
     WriteRegStr HKLM "${REGKEY}\Components" Main 1
 	SimpleFC::AddPort 5513 "CameraControl" 6 0 0 "" 1
 SectionEnd

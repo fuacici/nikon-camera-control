@@ -155,7 +155,8 @@ namespace CameraControl.Core.Classes
           int y = (int) (ToSize(Tags["Exif.NikonAf2.AFAreaYPosition"].Value)*dh);
           int w = (int) (ToSize(Tags["Exif.NikonAf2.AFAreaWidth"].Value)*dw);
           int h = (int) (ToSize(Tags["Exif.NikonAf2.AFAreaHeight"].Value)*dh);
-          Focuspoints.Add(new Rect(x - (w/2), y - (h/2), w, h));
+          if (x - (w / 2) > 0 && y - (h / 2) > 0 && x > 0 && y > 0 && w > 0 && h > 0)
+            Focuspoints.Add(new Rect(x - (w/2), y - (h/2), w, h));
         }
       }
       if (Tags.ContainsKey("Exif.NikonAf2.PhaseDetectAF") && Tags["Exif.NikonAf2.PhaseDetectAF"].Value == "On (11-point)")
