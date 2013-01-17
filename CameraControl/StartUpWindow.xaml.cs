@@ -110,6 +110,7 @@ namespace CameraControl
       Log.Debug("Window command received :" + cmd);
       if (cmd == CmdConsts.All_Close)
       {
+        ServiceProvider.WindowsManager.Event -= WindowsManager_Event;
         ServiceProvider.DeviceManager.CloseAll();
         Thread.Sleep(1000);
         Application.Current.Shutdown();
