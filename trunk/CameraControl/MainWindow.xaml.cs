@@ -187,6 +187,8 @@ namespace CameraControl
         Log.Error("Transfer error !", ex);
       }
       Log.Debug("Photo transfer done.");
+      GC.Collect();
+      GC.WaitForPendingFinalizers();
     }
 
     public RelayCommand<CameraPreset> SelectPresetCommand

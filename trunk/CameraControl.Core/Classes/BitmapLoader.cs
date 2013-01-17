@@ -60,6 +60,7 @@ namespace CameraControl.Core.Classes
         {
           if (_currentfile.FileItem.IsRaw)
           {
+            WriteableBitmap writeableBitmap = null;
             Log.Debug("Loading raw file.");
             BitmapDecoder bmpDec = BitmapDecoder.Create(new Uri(_currentfile.FileItem.FileName),
                                                         BitmapCreateOptions.None,
@@ -70,15 +71,23 @@ namespace CameraControl.Core.Classes
               bitmap.Freeze();
               bitmapFile.DisplayImage = bitmap;
             }
-            WriteableBitmap writeableBitmap = BitmapFactory.ConvertToPbgra32Format(bmpDec.Frames.Single());
+
             if (ServiceProvider.Settings.LowMemoryUsage)
             {
-              double dw = 2000/writeableBitmap.Width;
-              writeableBitmap = writeableBitmap.Resize((int) (writeableBitmap.PixelWidth*dw),
-                                                       (int) (writeableBitmap.PixelHeight*dw),
-                                                       WriteableBitmapExtensions.Interpolation.Bilinear);
+              if (bmpDec.Thumbnail != null)
+              {
+                writeableBitmap = BitmapFactory.ConvertToPbgra32Format(bmpDec.Thumbnail);
+              }
+              else
+              {
+                writeableBitmap = BitmapFactory.ConvertToPbgra32Format(bmpDec.Frames.Single());
+                double dw = 2000/writeableBitmap.Width;
+                writeableBitmap = writeableBitmap.Resize((int) (writeableBitmap.PixelWidth*dw),
+                                                         (int) (writeableBitmap.PixelHeight*dw),
+                                                         WriteableBitmapExtensions.Interpolation.Bilinear);
+              }
             }
-            GetMetadata(_currentfile, writeableBitmap); 
+            GetMetadata(_currentfile, writeableBitmap);
             Log.Debug("Loading raw file done.");
           }
           else
@@ -103,14 +112,14 @@ namespace CameraControl.Core.Classes
             BitmapImage bi = new BitmapImage();
             // BitmapImage.UriSource must be in a BeginInit/EndInit block.
             bi.BeginInit();
-            
+
             if (ServiceProvider.Settings.LowMemoryUsage)
               bi.DecodePixelWidth = 2000;
 
             bi.UriSource = new Uri(_currentfile.FileItem.FileName);
             bi.EndInit();
             WriteableBitmap writeableBitmap = BitmapFactory.ConvertToPbgra32Format(bi);
-            GetMetadata(_currentfile,writeableBitmap);
+            GetMetadata(_currentfile, writeableBitmap);
             Log.Debug("Loading bitmap file done.");
           }
         }
