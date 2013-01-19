@@ -12,6 +12,7 @@ using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
+using CameraControl.Core.Translation;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using CameraControl.windows;
@@ -42,16 +43,6 @@ namespace CameraControl
     {
       // Global exception handling  
       Current.DispatcherUnhandledException += AppDispatcherUnhandledException;
-      //check if wia 2.0 is registered 
-      try
-      {
-        Type t = Type.GetTypeFromCLSID(new Guid("{E1C5D730-7E97-4D8A-9E42-BBAE87C2059F}"), true);
-      }
-      catch (COMException)
-      {
-        System.Windows.Forms.MessageBox.Show("Wia 2.0 not installed");
-      }
-      //InitApplication();
     }
 
 
@@ -80,7 +71,7 @@ namespace CameraControl
 
       string errorMessage =
         string.Format(
-          "An application error occurred.\nPlease check whether your data is correct and repeat the action. If this error occurs again there seems to be a more serious malfunction in the application, and you better close it.\n\nError:{0}\n\nDo you want to continue?\n(if you click Yes you will continue with your work, if you click No the application will close)",
+          TranslationStrings.LabelUnHandledError,
 
           e.Exception.Message + (e.Exception.InnerException != null
                                    ? "\n" +
@@ -90,18 +81,26 @@ namespace CameraControl
       // isn't a clean way
       if (errorMessage.Contains("{E1C5D730-7E97-4D8A-9E42-BBAE87C2059F}"))
       {
-        System.Windows.Forms.MessageBox.Show("Wia 2.0 not installed");
+        System.Windows.Forms.MessageBox.Show(TranslationStrings.LabelWiaNotInstalled);
         PhotoUtils.RunAndWait("regwia.bat", "");
-        System.Windows.Forms.MessageBox.Show("Restart the application !");
+        System.Windows.Forms.MessageBox.Show(TranslationStrings.LabelRestartTheApplication);
         Application.Current.Shutdown();
+      }
+      else if (e.Exception.GetType() == typeof (OutOfMemoryException))
+      {
+        System.Windows.Forms.MessageBox.Show(TranslationStrings.LabelOutOfMemory);
+        if (Current != null)
+          Current.Shutdown();
       }
       else
       {
-        if (MessageBox.Show(errorMessage, "Application Error", MessageBoxButton.YesNo, MessageBoxImage.Error) ==
-            MessageBoxResult.No)
+        if (
+          MessageBox.Show(errorMessage, TranslationStrings.LabelApplicationError, MessageBoxButton.YesNo,
+                          MessageBoxImage.Error) ==
+          MessageBoxResult.No)
         {
-          if (Application.Current != null)
-            Application.Current.Shutdown();
+          if (Current != null)
+            Current.Shutdown();
         }
       }
     }

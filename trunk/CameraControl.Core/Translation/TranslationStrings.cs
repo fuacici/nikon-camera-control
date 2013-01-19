@@ -283,6 +283,12 @@ namespace CameraControl.Core.Translation
     public static string LabelWaitingForDevice = "Waiting for device to be ready";
     public static string LabelAdvanced = "Advanced";
     public static string LabelUseParellelTransfer = "Use parallel file transfer";
+    // 19/01/2013
+    public static string LabelUnHandledError = "An application error occurred.\nPlease check whether your data is correct and repeat the action. If this error occurs again there seems to be a more serious malfunction in the application, and you better close it.\n\nError:{0}\n\nDo you want to continue?\n(if you click Yes you will continue with your work, if you click No the application will close)";
+    public static string LabelApplicationError = "Application Error";
+    public static string LabelWiaNotInstalled = "WIA 2.0 not installed";
+    public static string LabelRestartTheApplication = "Restart the application !";
+    public static string LabelOutOfMemory = "The application run out of memory. Application will shutdown! ";
 
   }
 }
