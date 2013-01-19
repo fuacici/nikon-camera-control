@@ -473,7 +473,7 @@ namespace CameraControl.windows
                                                                                   LiveViewData.ImageData.Length -
                                                                                   LiveViewData.ImagePosition);
 
-                                           using (var bmp = new System.Drawing.Bitmap(stream))
+                                           using (var bmp = new Bitmap(stream))
                                            {
                                              if (chk_motiondetect.IsChecked == true)
                                              {

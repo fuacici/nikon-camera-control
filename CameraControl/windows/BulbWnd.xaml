@@ -5,6 +5,7 @@
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
+                      xmlns:Devices="clr-namespace:CameraControl.Devices;assembly=CameraControl.Devices"
                       Closed="Window_Closed" Topmost="True">
     <Window.Resources>
         <ResourceDictionary>
@@ -32,15 +33,15 @@
             <RowDefinition Height="114*" />
             <RowDefinition Height="29*" />
         </Grid.RowDefinitions>
-        <Button Content="Start Capture" Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="btn_start" VerticalAlignment="Top" Width="98" Click="btn_start_Click" />
-        <Button Content="Stop Capture" Height="23" HorizontalAlignment="Right" Margin="0,12,12,0" Name="btn_stop" VerticalAlignment="Top" Width="98" Click="btn_stop_Click" />
+        <Button Content="{T:TranslateExtension LabelStartCapture}" Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="btn_start" VerticalAlignment="Top" Width="98" Click="btn_start_Click" />
+        <Button Content="{T:TranslateExtension LabelStopCapture}" Height="23" HorizontalAlignment="Right" Margin="0,12,12,0" Name="btn_stop" VerticalAlignment="Top" Width="98" Click="btn_stop_Click" />
         <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="225,15,0,0" Name="upd_time" VerticalAlignment="Top" Width="78" Minimum="30" Maximum="6000" Value="{Binding Path=CaptureTime, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" />
-        <Label Content="Capture time (sec)" Height="28" HorizontalAlignment="Left" Margin="116,12,0,0" Name="label1" VerticalAlignment="Top" />
-        <Label Content="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SystemMessage}" Name="lbl_status" Grid.Row="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+        <Label Content="{T:TranslateExtension LabelCaptureTime}" Height="28" HorizontalAlignment="Left" Margin="116,12,0,0" Name="label1" VerticalAlignment="Top" />
+        <Label Content="{Binding Source={x:Static Member=Devices:StaticHelper.Instance}, Path=SystemMessage}" Name="lbl_status" Grid.Row="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
         <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="223,54,0,0" Name="upd_num" VerticalAlignment="Top" Width="78" Minimum="1" Maximum="10000" Value="{Binding Path=NumOfPhotos, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" />
-        <Label Content="Number of photos" Height="28" HorizontalAlignment="Left" Margin="12,46,0,0" Name="label2" VerticalAlignment="Top" />
-        <Label Content="Time berween shots" Height="28" HorizontalAlignment="Left" Margin="12,77,0,0" Name="label3" VerticalAlignment="Top" />
+        <Label Content="{T:TranslateExtension LabelNumberOfPhotos}" Height="28" HorizontalAlignment="Left" Margin="12,46,0,0" Name="label2" VerticalAlignment="Top" />
+        <Label Content="{T:TranslateExtension LabelTimeBetweenShots}" Height="28" HorizontalAlignment="Left" Margin="12,77,0,0" Name="label3" VerticalAlignment="Top" />
         <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="225,85,0,0" Name="upd_waittime" VerticalAlignment="Top" Width="76" Minimum="0" Maximum="6000" Value="{Binding Path=WaitTime, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}"/>
-        <CheckBox Content="Don't autofocus" Height="16" HorizontalAlignment="Left" Margin="19,111,0,0" Name="checkBox1" VerticalAlignment="Top" IsChecked="{Binding Path=NoAutofocus, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" />
+        <CheckBox Content="{T:TranslateExtension LabelDontAutofocus}" Height="16" HorizontalAlignment="Left" Margin="19,111,0,0" Name="checkBox1" VerticalAlignment="Top" IsChecked="{Binding Path=NoAutofocus, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" />
     </Grid>
 </Controls:MetroWindow>

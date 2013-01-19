@@ -289,6 +289,12 @@ namespace CameraControl.Core.Translation
     public static string LabelWiaNotInstalled = "WIA 2.0 not installed";
     public static string LabelRestartTheApplication = "Restart the application !";
     public static string LabelOutOfMemory = "The application run out of memory. Application will shutdown! ";
-
+    public static string LabelApplicationAlreadyRunning = "Application already running";
+    public static string LabelDeleteSession = "Delete session";
+    public static string LabelStartCapture = "Start Capture";
+    public static string LabelStopCapture = "Stop Capture";
+    public static string LabelCaptureTime= "Capture time (sec)";
+    public static string LabelTimeBetweenShots = "Time between shots";
+    public static string LabelDontAutofocus = "Don't autofocus";    
   }
 }

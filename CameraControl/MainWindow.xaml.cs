@@ -212,17 +212,6 @@ namespace CameraControl
     private void button3_Click(object sender, RoutedEventArgs e)
     {
       Log.Debug("Main window capture started");
-      //if (!ServiceProvider.Settings.DefaultSession.TimeLapse.IsDisabled)
-      //{
-      //  if (
-      //    MessageBox.Show("A time lapse photo session runnig !\n Do you want to stop it  ?",
-      //                    "", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
-      //  {
-      //    ServiceProvider.Settings.DefaultSession.TimeLapse.Stop();
-      //    return;
-      //  }
-      //}
-
       try
       {
         if (ServiceProvider.DeviceManager.SelectedCameraDevice.ShutterSpeed.Value == "Bulb")
@@ -248,7 +237,7 @@ namespace CameraControl
       }
       catch (Exception exception)
       {
-        MessageBox.Show("No picture was taken !\n" + exception.Message);
+        StaticHelper.Instance.SystemMessage = exception.Message;
         Log.Error("Take photo", exception);
       }
     }
@@ -329,10 +318,6 @@ namespace CameraControl
     private void but_fullscreen_Click(object sender, RoutedEventArgs e)
     {
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_Show);
-    }
-
-    private void btn_liveview_Click(object sender, RoutedEventArgs e)
-    {
     }
 
     private void btn_about_Click(object sender, RoutedEventArgs e)
@@ -435,7 +420,7 @@ namespace CameraControl
       }
       catch (Exception exception)
       {
-        MessageBox.Show("No picture was taken !\n" + exception.Message);
+        StaticHelper.Instance.SystemMessage = exception.Message;
         Log.Error("Take photo", exception);
       }
     }
@@ -512,7 +497,7 @@ namespace CameraControl
       {
         try
         {
-          if (MessageBox.Show(string.Format(TranslationStrings.MsgDeleteSessionQuestion, ServiceProvider.Settings.DefaultSession.Name), "Delete session", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+          if (MessageBox.Show(string.Format(TranslationStrings.MsgDeleteSessionQuestion, ServiceProvider.Settings.DefaultSession.Name), TranslationStrings.LabelDeleteSession, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
           {
             PhotoSession session = ServiceProvider.Settings.DefaultSession;
             File.Delete(session.ConfigFile);
