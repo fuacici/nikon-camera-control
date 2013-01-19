@@ -333,7 +333,7 @@
     <string name="LabelDeleteSession">Delete session</string>
     <string name="LabelStartCapture">Start Capture</string>
     <string name="LabelStopCapture">Stop Capture</string>
-    <string name="LabelCaptureTime= "Capture time (sec)</string>
+    <string name="LabelCaptureTime">Capture time (sec)</string>
     <string name="LabelTimeBetweenShots">Time between shots</string>
     <string name="LabelDontAutofocus">Don't autofocus</string>
     <string name="LabelShowUnTranslatedStringIds">Show untranslated string ids</string>    
