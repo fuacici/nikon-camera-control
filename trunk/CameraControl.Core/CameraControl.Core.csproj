@@ -159,6 +159,7 @@
     <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceProvider.cs" />
+    <Compile Include="Translation\TranslateConverter.cs" />
     <Compile Include="Translation\TranslateExtension.cs" />
     <Compile Include="Translation\TranslationLangDesc.cs" />
     <Compile Include="Translation\TranslationManager.cs" />

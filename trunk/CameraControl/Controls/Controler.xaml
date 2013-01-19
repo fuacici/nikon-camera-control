@@ -16,6 +16,9 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>        
     </UserControl.Resources>-->
+    <UserControl.Resources>
+        <T:TranslateConverter x:Key="converter" />
+    </UserControl.Resources>
     <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="115" />
@@ -85,9 +88,15 @@
                 <ListBox Name="listBox1" ItemsSource="{Binding Path=SelectedCameraDevice.AdvancedProperties}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="1" Width="100">
-                                <Label Content="{Binding Path=Name}"/>
-                                <ComboBox IsEnabled="{Binding Path=IsEnabled}" ItemsSource="{Binding Path=Values}" SelectedValue="{Binding Path=Value}"/>
+                            <StackPanel Margin="1">
+                                <Label Content="{Binding Path=Name, Converter={StaticResource converter}}"/>
+                                <ComboBox IsEnabled="{Binding Path=IsEnabled}" ItemsSource="{Binding Path=Values}" SelectedValue="{Binding Path=Value}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Label Content="{Binding Converter={StaticResource converter}}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

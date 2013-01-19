@@ -34,7 +34,7 @@ namespace CameraControl
 
       if (processes.Length > 1)
       {
-        MessageBox.Show("Application already running");
+        MessageBox.Show(TranslationStrings.LabelApplicationAlreadyRunning);
         Close();
       }
     }

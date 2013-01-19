@@ -53,11 +53,6 @@ namespace CameraControl.Core.Translation
       if (!TranslationManager.Strings.ContainsKey(Key))
         return DefaultValue;
       return TranslationManager.Strings[Key];
-      var binding = new Binding("Value")
-      {
-        //Source = new TranslationData(_key)
-      };
-      return binding.ProvideValue(serviceProvider);
     }
   }
 }
