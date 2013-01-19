@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Data;
+using CameraControl.Devices;
 
 namespace CameraControl.Core.Translation
 {
@@ -16,10 +17,18 @@ namespace CameraControl.Core.Translation
       string val = value as string;
       if (val != null)
       {
-        string key = val.Replace(" ", "_").Replace("(","_").Replace(")","_");
-        if (!TranslationManager.Strings.ContainsKey(key))
-          return "?" + val;
-        return TranslationManager.Strings[key];
+        double d = 0;
+        if (double.TryParse(val, out d))
+          return value;
+        string key = val.Trim();
+        key = val.Replace(" ", "_").Replace("(", "_").Replace(")", "_").Replace("-", "_");
+        key = key.ToUpper();
+        if (!TranslationManager.HaveTranslation(key))
+        {
+          Log.Debug("No translation for:" + key + "|" + val);
+          return ServiceProvider.Settings.ShowUntranslatedLabelId ? key : value;
+        }
+        return TranslationManager.GetTranslation(key);
       }
       return parameter;
     }

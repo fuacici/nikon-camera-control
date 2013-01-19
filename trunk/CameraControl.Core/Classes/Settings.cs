@@ -477,6 +477,18 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private bool _showUntranslatedLabelId;
+    public bool ShowUntranslatedLabelId
+    {
+      get { return _showUntranslatedLabelId; }
+      set
+      {
+        _showUntranslatedLabelId = value;
+        NotifyPropertyChanged("ShowUntranslatedLabelId");
+      }
+    }
+
+
     public CameraPropertyEnumerator CameraProperties { get; set; }
     public string SelectedLayout { get; set; }
     public AsyncObservableCollection<CameraPreset> CameraPresets { get; set; }
@@ -528,6 +540,7 @@ namespace CameraControl.Core.Classes
       ShowFocusPoints = true;
       LowMemoryUsage = true;
       UseParallelTransfer = false;
+      ShowUntranslatedLabelId = false;
     }
 
     public void Add(PhotoSession session)

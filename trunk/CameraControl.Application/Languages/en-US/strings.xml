@@ -1,7 +1,48 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <resources>
-    <!-- A -->
-
+    <!-- Property values -->
+    <string name="BURST_NUMBER">Burst Number</string> 
+    <string name="STILL_CAPTURE_MODE">Still Capture Mode</string> 
+    <string name="CONTINUOUS_SHOT__CONTINUOUS_SHOOTING_">Continuous shot (continuous shooting)</string> 
+    <string name="AUTO_ISO">Auto Iso</string> 
+	<string name="ON">ON</string> 	
+    <string name="OFF">OFF</string> 
+    <string name="FLASH">Flash</string> 
+    <string name="NORMAL_SYNCHRONIZATION">Normal synchronization</string> 
+    <string name="LONG_EXP._NR">Long exp. NR</string> 
+    <string name="HIGH_ISO_NR">High ISO NR</string> 
+    <string name="NORMAL">Normal</string> 
+    <string name="EXPOSURE_DELAY_MODE">Exposure delay mode</string> 
+    <string name="LOCK">Lock</string> 
+    <string name="SINGLE_SHOT__SINGLE_FRAME_SHOOTING_">Single shot (single-frame shooting)</string> 
+    <string name="CONTINUOUS_SHOT__CONTINUOUS_SHOOTING_">Continuous shot (continuous shooting)</string> 
+    <string name="SELF_TIMER">Self-timer</string> 
+    <string name="QUICK_RESPONSE_REMOTE">Quick-response remote</string> 
+    <string name="2S_DELAYED_REMOTE">2s delayed remote</string> 
+    <string name="QUIET_SHOOTING">Quiet shooting</string> 
+	<string name="FLASH_PROHIBITED">Flash prohibited</string> 
+	<string name="RED_EYE_REDUCTION">Red-eye reduction</string> 
+	<string name="SLOW_SYNCHRONIZATION">Slow synchronization</string> 
+	<string name="REAR_SYNCHRONIZATION">Rear synchronization</string> 
+	<string name="RED_EYE_REDUCTION_SLOW_SYNCHRONIZATION">Red-eye reduction slow synchronization</string> 
+	<string name="NOT_PERFORMED">Not performed</string> 
+	<string name="LOW">Low</string> 
+	<string name="HIGH">High</string> 
+	<string name="CENTER_WEIGHTED_METERING">Center-weighted metering</string> 
+	<string name="MULTI_PATTERN_METERING">Multi-pattern metering</string> 
+	<string name="SPOT_METERING">Spot metering</string> 
+	<string name="1.SAVE_TO_PC_ONLY">1.Save to PC only</string> 
+	<string name="2.SAVE_TO_CAMERA_ONLY">2.Save to camera only</string> 
+	<string name="3.SAVE_TO_PC_AND_CAMERA">3.Save to PC and camera</string> 
+	<string name="AUTO">Auto</string> 
+	<string name="DAYLIGHT">Daylight</string> 
+	<string name="FLUORESCENT_">Fluorescent</string> 
+	<string name="INCANDESCENT">Incandescent</string> 
+	<string name="CLOUDY">Cloudy</string> 
+	<string name="SHADE">Shade</string> 
+	<string name="CUSTOM">Custom</string> 
+	
+    <!-- End Property values -->	
     <string name="Mode">Mode</string> 
     <string name="Iso">_Iso</string> 
     <string name="ShutterSpeed">_Shutter speed</string> 
@@ -282,5 +323,19 @@
     <string name="LabelWaitingForDevice">Waiting for device to be ready</string>
     <string name="LabelAdvanced">Advanced</string>
     <string name="LabelUseParellelTransfer">Use parallel file transfer</string>
+    <!-- 19/01/2013 -->
+    <string name="LabelUnHandledError">An application error occurred.\nPlease check whether your data is correct and repeat the action. If this error occurs again there seems to be a more serious malfunction in the application, and you better close it.\n\nError:{0}\n\nDo you want to continue?\n(if you click Yes you will continue with your work, if you click No the application will close)</string>
+    <string name="LabelApplicationError">Application Error</string>
+    <string name="LabelWiaNotInstalled">WIA 2.0 not installed</string>
+    <string name="LabelRestartTheApplication">Restart the application !</string>
+    <string name="LabelOutOfMemory">The application run out of memory. Application will shutdown! </string>
+    <string name="LabelApplicationAlreadyRunning">Application already running</string>
+    <string name="LabelDeleteSession">Delete session</string>
+    <string name="LabelStartCapture">Start Capture</string>
+    <string name="LabelStopCapture">Stop Capture</string>
+    <string name="LabelCaptureTime= "Capture time (sec)</string>
+    <string name="LabelTimeBetweenShots">Time between shots</string>
+    <string name="LabelDontAutofocus">Don't autofocus</string>
+    <string name="LabelShowUnTranslatedStringIds">Show untranslated string ids</string>    
 	
 </resources>

@@ -2,6 +2,7 @@ namespace CameraControl.Core.Translation
 {
   public class TranslationStrings
   {
+
     public static string Mode = "Mode";
     public static string Iso = "_Iso";
     public static string ShutterSpeed = "_Shutter speed";
@@ -295,6 +296,7 @@ namespace CameraControl.Core.Translation
     public static string LabelStopCapture = "Stop Capture";
     public static string LabelCaptureTime= "Capture time (sec)";
     public static string LabelTimeBetweenShots = "Time between shots";
-    public static string LabelDontAutofocus = "Don't autofocus";    
+    public static string LabelDontAutofocus = "Don't autofocus";
+    public static string LabelShowUnTranslatedStringIds = "Show untranslated string ids";    
   }
 }

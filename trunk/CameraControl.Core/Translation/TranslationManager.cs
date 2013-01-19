@@ -14,6 +14,7 @@ namespace CameraControl.Core.Translation
     private static Dictionary<string, string> _translations;
     private static readonly string _path = string.Empty;
     private static readonly DateTimeFormatInfo _info;
+    static Dictionary<string, string> TranslatedStrings = new Dictionary<string, string>();
 
     private static AsyncObservableCollection<TranslationLangDesc> _availableLangs;
     public static AsyncObservableCollection<TranslationLangDesc> AvailableLangs
@@ -75,11 +76,12 @@ namespace CameraControl.Core.Translation
       }
     }
 
+   
     static public  int LoadLanguage(string lang_code)
     {
 
       XmlDocument doc = new XmlDocument();
-      Dictionary<string, string> TranslatedStrings = new Dictionary<string, string>();
+      TranslatedStrings = new Dictionary<string, string>();
       string langPath = "";
       try
       {
@@ -122,7 +124,14 @@ namespace CameraControl.Core.Translation
     {
       if (Strings.ContainsKey(key))
         return Strings[key];
+      if (TranslatedStrings.ContainsKey(key))
+        return TranslatedStrings[key];
       return key;
+    }
+
+    static public bool HaveTranslation(string key)
+    {
+      return Strings.ContainsKey(key) || TranslatedStrings.ContainsKey(key);
     }
   }
 }
