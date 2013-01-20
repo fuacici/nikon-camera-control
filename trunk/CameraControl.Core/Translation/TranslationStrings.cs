@@ -298,5 +298,7 @@ namespace CameraControl.Core.Translation
     public static string LabelTimeBetweenShots = "Time between shots";
     public static string LabelDontAutofocus = "Don't autofocus";
     public static string LabelShowUnTranslatedStringIds = "Show untranslated string ids";    
+    // 20/01/2013
+    public static string LabelUseAsMaster = "Use as master";
   }
 }
