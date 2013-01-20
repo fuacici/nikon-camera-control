@@ -186,17 +186,28 @@ namespace FBFX.Plugin.Windows
       dlg.MaxValue = itemstoExport.Count;
       dlg.Progress = 0;
       int i = 0;
-      PhotoSession session = (PhotoSession)CameraDevice.AttachedPhotoSession ?? ServiceProvider.Settings.DefaultSession;
       foreach (FileItem fileItem in itemstoExport)
       {
         dlg.Label = fileItem.FileName;
         dlg.ImageSource = fileItem.Thumbnail;
-        string fileName = Path.Combine(session.Folder, fileItem.FileName);
-        if (File.Exists(fileName))
+        PhotoSession session = (PhotoSession)fileItem.Device.AttachedPhotoSession ?? ServiceProvider.Settings.DefaultSession;
+        string fileName = "";
+
+        if (!session.UseOriginalFilename )
+        {
           fileName =
-            StaticHelper.GetUniqueFilename(
-              Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_", 0,
-              Path.GetExtension(fileName));
+            session.GetNextFileName(Path.GetExtension(fileItem.FileName),
+                                    fileItem.Device);
+        }
+        else
+        {
+          fileName = Path.Combine(session.Folder, fileItem.FileName);
+          if (File.Exists(fileName))
+            fileName =
+              StaticHelper.GetUniqueFilename(
+                Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_", 0,
+                Path.GetExtension(fileName));
+        }
         fileItem.Device.TransferFile(fileItem.DeviceObject.Handle, fileName);
         // double check if file was transferred
         if (File.Exists(fileName) && delete)
@@ -210,7 +221,7 @@ namespace FBFX.Plugin.Windows
       }
       dlg.Hide();
       double transfersec = (DateTime.Now - starttime).TotalSeconds;
-      Log.Debug(string.Format("[BENCHMARK]Total byte transferred ;{0}\nTotal seconds :{1}\nSpeed : {2} Mbyte/sec ", totalbytes,
+      Log.Debug(string.Format("[BENCHMARK]Total byte transferred ;{0} Total seconds :{1} Speed : {2} Mbyte/sec ", totalbytes,
                                     transfersec, (totalbytes/transfersec/1024/1024).ToString("0000.00")));
     }
 
@@ -226,7 +237,7 @@ namespace FBFX.Plugin.Windows
     {
       foreach (FileItem fileItem in Items)
       {
-        fileItem.IsChecked = true;
+        fileItem.IsChecked = false;
       }
     }
 

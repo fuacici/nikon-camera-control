@@ -307,14 +307,15 @@ namespace CameraControl.Core.Classes
         res = res.Replace("$C", Counter.ToString("00000"));
       }
       res = res.Replace("$N", Name.Trim());
-      res = res.Replace("$E", device.ExposureCompensation.Value!="0" ? device.ExposureCompensation.Value : "");
+      if (device.ExposureCompensation != null)
+        res = res.Replace("$E", device.ExposureCompensation.Value != "0" ? device.ExposureCompensation.Value : "");
       res = res.Replace("$D", DateTime.Now.ToString("yyyy-MM-dd"));
       res = res.Replace("$X", property.DeviceName.Replace(":", "_").Replace("?", "_").Replace("*", "_"));
       res = res.Replace("$Tag1", SelectedTag1 != null ? SelectedTag1.Value.Trim() : "");
       res = res.Replace("$Tag2", SelectedTag1 != null ? SelectedTag2.Value.Trim() : "");
       res = res.Replace("$Tag3", SelectedTag1 != null ? SelectedTag3.Value.Trim() : "");
       res = res.Replace("$Tag4", SelectedTag1 != null ? SelectedTag4.Value.Trim() : "");
-      //prevent multiple \ if a tag is mepty 
+      //prevent multiple \ if a tag is empty 
       while (res.Contains(@"\\"))
       {
         res = res.Replace(@"\\", @"\");
