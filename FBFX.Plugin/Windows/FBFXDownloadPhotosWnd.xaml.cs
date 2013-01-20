@@ -254,6 +254,7 @@ namespace FBFX.Plugin.Windows
       double transfersec = (DateTime.Now - starttime).TotalSeconds;
       Log.Debug(string.Format("[BENCHMARK]Total byte transferred ;{0} Total seconds :{1} Speed : {2} Mbyte/sec ", totalbytes,
                                     transfersec, (totalbytes/transfersec/1024/1024).ToString("0000.00")));
+      ServiceProvider.Settings.Save();
     }
 
     private void btn_all_Click(object sender, RoutedEventArgs e)
