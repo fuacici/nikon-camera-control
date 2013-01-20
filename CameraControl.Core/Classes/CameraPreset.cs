@@ -10,10 +10,12 @@ namespace CameraControl.Core.Classes
     public string Name { get; set; }
     
     public AsyncObservableCollection<ValuePair> Values { get; set; }
+    public CameraProperty CameraProperty { get; set; }
 
     public CameraPreset()
     {
       Values = new AsyncObservableCollection<ValuePair>();
+      CameraProperty = new CameraProperty();
     }
 
     public void Get(ICameraDevice camera)
@@ -26,7 +28,10 @@ namespace CameraControl.Core.Classes
       Add(GetFrom(camera.ShutterSpeed, "ShutterSpeed"));
       Add(GetFrom(camera.WhiteBalance, "WhiteBalance"));
       Add(GetFrom(camera.LiveViewImageZoomRatio, "LiveViewImageZoomRatio"));
-      Add(new ValuePair() {Name = "CaptureInSdRam", Value = camera.CaptureInSdRam.ToString()});
+      Add(new ValuePair {Name = "CaptureInSdRam", Value = camera.CaptureInSdRam.ToString()});
+      var property = ServiceProvider.Settings.CameraProperties.Get(camera);
+      CameraProperty.NoDownload = property.NoDownload;
+      CameraProperty.CaptureInSdRam = property.CaptureInSdRam;
     }
 
     public void Set(ICameraDevice camera)
@@ -39,16 +44,21 @@ namespace CameraControl.Core.Classes
       SetTo(camera.ShutterSpeed, "ShutterSpeed");
       SetTo(camera.WhiteBalance, "WhiteBalance");
       SetTo(camera.LiveViewImageZoomRatio, "LiveViewImageZoomRatio");
-      if(!string.IsNullOrEmpty(GetValue("CaptureInSdRam")))
+      if (!string.IsNullOrEmpty(GetValue("CaptureInSdRam")))
       {
         bool val;
         if (bool.TryParse(GetValue("CaptureInSdRam"), out val))
           camera.CaptureInSdRam = val;
       }
+      var property = ServiceProvider.Settings.CameraProperties.Get(camera);
+      property.NoDownload = CameraProperty.NoDownload;
+      property.CaptureInSdRam = CameraProperty.CaptureInSdRam;
     }
 
     public void SetTo(PropertyValue<int> value, string name)
     {
+      if (value == null)
+        return;
       foreach (ValuePair valuePair in Values)
       {
         if (valuePair.Name == name && value.IsEnabled)
@@ -61,6 +71,8 @@ namespace CameraControl.Core.Classes
 
     public void SetTo(PropertyValue<long> value, string name)
     {
+      if (value == null)
+        return;
       foreach (ValuePair valuePair in Values)
       {
         if (valuePair.Name == name && value.IsEnabled)
@@ -75,16 +87,22 @@ namespace CameraControl.Core.Classes
 
     private ValuePair GetFrom(PropertyValue<int> value, string name )
     {
-      return new ValuePair() {Name = name, IsDisabled = value.IsEnabled, Value = value.Value};
+      if (value == null)
+        return null;
+      return new ValuePair {Name = name, IsDisabled = value.IsEnabled, Value = value.Value};
     }
 
     private ValuePair GetFrom(PropertyValue<long> value, string name)
     {
-      return new ValuePair() { Name = name, IsDisabled = value.IsEnabled, Value = value.Value };
+      if (value == null)
+        return null;
+      return new ValuePair { Name = name, IsDisabled = value.IsEnabled, Value = value.Value };
     }
 
     public void Add(ValuePair pair)
     {
+      if(pair==null)
+        return;
       foreach (ValuePair valuePair in Values)
       {
         if(pair.Name==valuePair.Name)

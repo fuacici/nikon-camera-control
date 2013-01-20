@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" 
-             d:DesignHeight="593" d:DesignWidth="235" BorderBrush="{x:Null}" BorderThickness="1" xmlns:my="clr-namespace:CameraControl.Controls"
+             d:DesignHeight="633" d:DesignWidth="235" BorderBrush="{x:Null}" BorderThickness="1" xmlns:my="clr-namespace:CameraControl.Controls"
              xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core">
     <!--<UserControl.Resources>
         <ResourceDictionary>
@@ -97,7 +97,8 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                 </StackPanel>
-                <StackPanel Margin="1">
+                <StackPanel Margin="1" Orientation="Vertical">
+                    <Button Content="{T:TranslateExtension LabelUseAsMaster}" Click="Button_Click" />
                     <Button Height="23" Name="button1" Width="25" Click="button1_Click">
                         <Button.Content>
                             <Image Source="/CameraControl;component/Images/Properties.png" />

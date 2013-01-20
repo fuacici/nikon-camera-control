@@ -1,10 +1,12 @@
 using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Translation;
+using CameraControl.Core.Wpf;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 
@@ -15,6 +17,7 @@ namespace CameraControl.Controls
   /// </summary>
   public partial class Controler : UserControl
   {
+    private ProgressWindow dlg = new ProgressWindow();
 
     public Controler()
     {
@@ -97,6 +100,39 @@ namespace CameraControl.Controls
       property.CaptureInSdRam = ServiceProvider.DeviceManager.SelectedCameraDevice.CaptureInSdRam;
     }
 
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+      dlg.Show();
+      Thread thread = new Thread(SetAsMaster);
+      thread.Start();
+    }
+
+    public void SetAsMaster()
+    {
+      int i = 0;
+      dlg.MaxValue = ServiceProvider.DeviceManager.ConnectedDevices.Count;
+      foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices)
+      {
+        try
+        {
+          if (connectedDevice != ServiceProvider.DeviceManager.SelectedCameraDevice)
+          {
+            dlg.Label = connectedDevice.DisplayName;
+            dlg.Progress = i;
+            i++;
+            CameraPreset preset = new CameraPreset();
+            preset.Get(ServiceProvider.DeviceManager.SelectedCameraDevice);
+            preset.Set(connectedDevice);
+          }
+        }
+        catch (Exception exception)
+        {
+          Log.Error("Unable to set property ", exception);
+        }
+        Thread.Sleep(250);
+      }
+      dlg.Hide();
+    }
 
   }
 }
