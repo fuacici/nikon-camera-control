@@ -406,6 +406,11 @@ namespace CameraControl.Devices
       throw new NotImplementedException();
     }
 
+    public virtual void FormatStorage(object storageId)
+    {
+      throw new NotImplementedException();
+    }
+
     public virtual bool DeleteObject(DeviceObject deviceObject)
     {
       throw new NotImplementedException();

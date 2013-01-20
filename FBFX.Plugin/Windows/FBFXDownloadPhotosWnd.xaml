@@ -112,5 +112,6 @@
                 <TextBox Grid.Column="2" Height="23" HorizontalAlignment="Left" Margin="0,6,0,0" Name="txt_indx" VerticalAlignment="Top" Width="76" />
             </Grid>
         </GroupBox>
+        <CheckBox Content="Format all camera cards" Grid.Row="1" Height="16" HorizontalAlignment="Left" Margin="549,28,0,0" Name="chk_format" VerticalAlignment="Top" />
     </Grid>
 </Controls:MetroWindow>

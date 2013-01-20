@@ -29,6 +29,7 @@ namespace FBFX.Plugin.Windows
   public partial class FBFXDownloadPhotosWnd : INotifyPropertyChanged, IWindow
   {
     private bool delete;
+    private bool format;
     private ProgressWindow dlg = new ProgressWindow();
    
 
@@ -105,6 +106,7 @@ namespace FBFX.Plugin.Windows
                                            Topmost = false;
                                            Focus();
                                            dlg.Show();
+                                           Items.Clear();
                                            Thread thread = new Thread(PopulateImageList);
                                            thread.Start();
                                          }));
@@ -135,7 +137,6 @@ namespace FBFX.Plugin.Windows
 
     private void PopulateImageList()
     {
-      Items.Clear();
       foreach (ICameraDevice cameraDevice in ServiceProvider.DeviceManager.ConnectedDevices)
       {
         CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(cameraDevice);
@@ -169,10 +170,11 @@ namespace FBFX.Plugin.Windows
 
     private void btn_download_Click(object sender, RoutedEventArgs e)
     {
-      if (chk_delete.IsChecked == true && MessageBox.Show(TranslationStrings.LabelAskForDelete, "", MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes)
+      if ((chk_delete.IsChecked == true || chk_format.IsChecked==true) && MessageBox.Show(TranslationStrings.LabelAskForDelete, "", MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes)
         return;
       dlg.Show();
       delete = chk_delete.IsChecked == true;
+      format = chk_format.IsChecked == true;
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.DownloadPhotosWnd_Hide);
       Thread thread = new Thread(TransferFiles); 
       thread.Start();
@@ -182,6 +184,7 @@ namespace FBFX.Plugin.Windows
     {
       DateTime starttime = DateTime.Now;
       long totalbytes = 0;
+      bool somethingwrong = false;
       AsyncObservableCollection<FileItem> itemstoExport = new AsyncObservableCollection<FileItem>(Items.Where(x => x.IsChecked));
       dlg.MaxValue = itemstoExport.Count;
       dlg.Progress = 0;
@@ -210,14 +213,42 @@ namespace FBFX.Plugin.Windows
         }
         fileItem.Device.TransferFile(fileItem.DeviceObject.Handle, fileName);
         // double check if file was transferred
-        if (File.Exists(fileName) && delete)
+        if (File.Exists(fileName))
         {
-          fileItem.Device.DeleteObject(fileItem.DeviceObject);
+          if (delete)
+            fileItem.Device.DeleteObject(fileItem.DeviceObject);
+        }
+        else
+        {
+          somethingwrong = true;
         }
         totalbytes += new FileInfo(fileName).Length;
         session.AddFile(fileName);
         i++;
         dlg.Progress = i;
+      }
+
+      if (format)
+      {
+        if (!somethingwrong)
+        {
+          foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices)
+          {
+            try
+            {
+              connectedDevice.FormatStorage(null);
+            }
+            catch (Exception exception)
+            {
+              Log.Error("Unable to format device ", exception);
+            }
+          }
+        }
+        else
+        {
+          Log.Debug("File transfer failed, format aborted!");
+          StaticHelper.Instance.SystemMessage = "File transfer failed, format aborted!";
+        }
       }
       dlg.Hide();
       double transfersec = (DateTime.Now - starttime).TotalSeconds;

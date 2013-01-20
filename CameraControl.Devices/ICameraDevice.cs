@@ -120,6 +120,7 @@ namespace CameraControl.Devices
     /// <param name="storageId">The storage id.</param>
     /// <returns></returns>
     AsyncObservableCollection<DeviceObject> GetObjects(object storageId);
+    void FormatStorage(object storageId);
     bool DeleteObject(DeviceObject deviceObject);
 
   }
