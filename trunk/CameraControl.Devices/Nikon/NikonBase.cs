@@ -958,12 +958,7 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
-    public static short ToInt16(byte[] value, int startIndex)
-    {
-      int i = (short) (value[startIndex] << 8 | value[startIndex+1]);
-      return (short) (i);
-      //return System.BitConverter.ToInt16(value.Reverse().ToArray(), value.Length - sizeof(Int16) - startIndex);
-    }
+
 
     //private byte _liveViewImageZoomRatio;
 
@@ -1219,6 +1214,11 @@ namespace CameraControl.Devices.Nikon
       }
     }
 
+    public override void FormatStorage(object storageId)
+    {
+      DeviceReady();
+      base.FormatStorage(storageId);
+    }
 
 
     public override string GetProhibitionCondition(OperationEnum operationEnum)

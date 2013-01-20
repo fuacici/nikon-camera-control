@@ -23,6 +23,8 @@ namespace CameraControl.Devices
     public const int CONST_CMD_GetObjectInfo = 0x1008;
     public const int CONST_CMD_GetThumb = 0x100A;
     public const int CONST_CMD_DeleteObject = 0x100B;
+    public const int CONST_CMD_FormatStore = 0x100F;
+    public const int CONST_CMD_GetStorageIDs = 0x1004;
 
 
     private const int CONST_READY_TIME = 1;
@@ -139,6 +141,20 @@ namespace CameraControl.Devices
         //==================================================================
         _timer.Start();
         TransferProgress = 0;
+      }
+    }
+
+    public override void FormatStorage(object storageId)
+    {
+      MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetStorageIDs);
+      if (response.Data.Length > 4)
+      {
+        int objCount = BitConverter.ToInt32(response.Data, 0);
+        for (int i = 0; i < objCount; i++)
+        {
+          uint handle = BitConverter.ToUInt32(response.Data, 4 * i + 4);
+          ErrorCodes.GetException(ExecuteWithNoData(CONST_CMD_FormatStore, handle));
+        }
       }
     }
 
@@ -301,5 +317,14 @@ namespace CameraControl.Devices
       if (timerstate)
         _timer.Start();
     }
+
+    public static short ToInt16(byte[] value, int startIndex)
+    {
+      int i = (short)(value[startIndex] << 8 | value[startIndex + 1]);
+      return (short)(i);
+      //return System.BitConverter.ToInt16(value.Reverse().ToArray(), value.Length - sizeof(Int16) - startIndex);
+    }
+
   }
+
 }
