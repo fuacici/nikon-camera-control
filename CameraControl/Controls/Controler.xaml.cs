@@ -109,27 +109,34 @@ namespace CameraControl.Controls
 
     public void SetAsMaster()
     {
-      int i = 0;
-      dlg.MaxValue = ServiceProvider.DeviceManager.ConnectedDevices.Count;
-      foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices)
+      try
       {
-        try
+        int i = 0;
+        dlg.MaxValue = ServiceProvider.DeviceManager.ConnectedDevices.Count;
+        foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices)
         {
-          if (connectedDevice != ServiceProvider.DeviceManager.SelectedCameraDevice)
+          try
           {
-            dlg.Label = connectedDevice.DisplayName;
-            dlg.Progress = i;
-            i++;
-            CameraPreset preset = new CameraPreset();
-            preset.Get(ServiceProvider.DeviceManager.SelectedCameraDevice);
-            preset.Set(connectedDevice);
+            if (connectedDevice != ServiceProvider.DeviceManager.SelectedCameraDevice)
+            {
+              dlg.Label = connectedDevice.DisplayName;
+              dlg.Progress = i;
+              i++;
+              CameraPreset preset = new CameraPreset();
+              preset.Get(ServiceProvider.DeviceManager.SelectedCameraDevice);
+              preset.Set(connectedDevice);
+            }
           }
+          catch (Exception exception)
+          {
+            Log.Error("Unable to set property ", exception);
+          }
+          Thread.Sleep(250);
         }
-        catch (Exception exception)
-        {
-          Log.Error("Unable to set property ", exception);
-        }
-        Thread.Sleep(250);
+      }
+      catch (Exception exception)
+      {
+        Log.Error("Unable to set as master ", exception);
       }
       dlg.Hide();
     }

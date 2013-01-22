@@ -41,6 +41,7 @@
 	<string name="CLOUDY">Cloudy</string> 
 	<string name="SHADE">Shade</string> 
 	<string name="CUSTOM">Custom</string> 
+	<string name="[A]_AF_SERVO_MODE_AUTOMATIC_SWITCHING">[A] AF servo mode automatic switching</string> 
 	
     <!-- End Property values -->	
     <string name="Mode">Mode</string> 
