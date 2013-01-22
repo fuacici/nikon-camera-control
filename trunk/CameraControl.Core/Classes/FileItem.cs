@@ -129,7 +129,7 @@ namespace CameraControl.Core.Classes
       ItemType = FileItemType.CameraObject;
       FileName = deviceObject.FileName;
       IsChecked = true;
-      if (deviceObject.ThumbData != null)
+      if (deviceObject.ThumbData != null && deviceObject.ThumbData.Length > 4)
       {
         try
         {

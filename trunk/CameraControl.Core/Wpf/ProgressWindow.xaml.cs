@@ -1,6 +1,7 @@
 using System;
 using System.Windows;
 using System.Windows.Media;
+using CameraControl.Devices;
 
 namespace CameraControl.Core.Wpf
 {
@@ -23,7 +24,11 @@ namespace CameraControl.Core.Wpf
     public double Progress
     {
       get { return progressBar.Value; }
-      set { Dispatcher.Invoke(new Action(delegate { progressBar.Value = value; })); }
+      set
+      {
+        Dispatcher.Invoke(
+          new Action(delegate { progressBar.Value = progressBar.Maximum < value ? value : progressBar.Maximum; }));
+      }
     }
 
     public double MaxValue
@@ -34,7 +39,14 @@ namespace CameraControl.Core.Wpf
 
     public new void Hide()
     {
-      Dispatcher.Invoke(new Action(() => base.Hide()));
+      try
+      {
+        Dispatcher.Invoke(new Action(() => base.Hide()));
+      }
+      catch (Exception exception)
+      {
+        Log.Error(exception);
+      }
     }
     
     public ImageSource ImageSource
