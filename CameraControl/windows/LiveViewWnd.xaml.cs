@@ -648,6 +648,8 @@ namespace CameraControl.windows
 
     private void StartLiveView()
     {
+      if (!IsVisible)
+        return;
       Thread thread = new Thread(StartLiveViewThread);
       thread.Start();
     }
