@@ -92,6 +92,7 @@
     <Compile Include="Nikon\NikonD4.cs" />
     <Compile Include="Nikon\NikonD40.cs" />
     <Compile Include="Nikon\NikonD5100.cs" />
+    <Compile Include="Nikon\NikonD5200.cs" />
     <Compile Include="Nikon\NikonD60.cs" />
     <Compile Include="Nikon\NikonD600.cs" />
     <Compile Include="Nikon\NikonD700.cs" />
