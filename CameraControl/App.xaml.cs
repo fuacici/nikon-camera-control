@@ -88,6 +88,7 @@ namespace CameraControl
       }
       else if (e.Exception.GetType() == typeof (OutOfMemoryException))
       {
+        Log.Error("Out of memory. Application exiting ");
         System.Windows.Forms.MessageBox.Show(TranslationStrings.LabelOutOfMemory);
         if (Current != null)
           Current.Shutdown();

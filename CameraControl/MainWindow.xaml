@@ -128,12 +128,22 @@
         <Controls:Flyout Header="{T:TranslateExtension MenuConnectedCameras}" Background="#9f000000" Position="Left" Opacity="0.9">
             <Grid Width="210" Height="{Binding ElementName=Window,Path=Height}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
+                    <RowDefinition Height="70" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="70" />                    
                 </Grid.RowDefinitions>
-
+                <StackPanel>
                 <Button Content="{T:TranslateExtension MenuMultipleCamera}" Click="Button_Click" Margin="3"/>
+                <Button Height="30" Name="btn_sort" Width="30" Click="btn_sort_Click">
+                    <Button.Content>
+                        <Rectangle Width="18" Height="18">
+                            <Rectangle.Fill>
+                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_sort_alphabetical_ascending}" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Button.Content>
+                </Button>
+                </StackPanel>
                 <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="0" Grid.Row="1">
                     <StackPanel >
                         <StackPanel.ScrollOwner>

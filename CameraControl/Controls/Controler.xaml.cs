@@ -102,6 +102,7 @@ namespace CameraControl.Controls
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
+      Dispatcher.Invoke(new Action(() => btn_useasmaster.IsEnabled = false));
       dlg.Show();
       Thread thread = new Thread(SetAsMaster);
       thread.Start();
@@ -122,7 +123,7 @@ namespace CameraControl.Controls
               dlg.Label = connectedDevice.DisplayName;
               dlg.Progress = i;
               i++;
-              CameraPreset preset = new CameraPreset();
+              var preset = new CameraPreset();
               preset.Get(ServiceProvider.DeviceManager.SelectedCameraDevice);
               preset.Set(connectedDevice);
             }
@@ -139,6 +140,7 @@ namespace CameraControl.Controls
         Log.Error("Unable to set as master ", exception);
       }
       dlg.Hide();
+      Dispatcher.Invoke(new Action(() => btn_useasmaster.IsEnabled = true));
     }
 
   }
