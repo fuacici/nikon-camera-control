@@ -98,7 +98,7 @@
                     </ComboBox>
                 </StackPanel>
                 <StackPanel Margin="1" Orientation="Vertical">
-                    <Button Content="{T:TranslateExtension LabelUseAsMaster}" Click="Button_Click" />
+                    <Button Content="{T:TranslateExtension LabelUseAsMaster}" Click="Button_Click" Name="btn_useasmaster" />
                     <Button Height="23" Name="button1" Width="25" Click="button1_Click">
                         <Button.Content>
                             <Image Source="/CameraControl;component/Images/Properties.png" />

@@ -61,7 +61,16 @@ namespace CameraControl.Devices
       }
     }
 
-    public AsyncObservableCollection<ICameraDevice> ConnectedDevices { get; set; }
+    private AsyncObservableCollection<ICameraDevice> _connectedDevices;
+    public AsyncObservableCollection<ICameraDevice> ConnectedDevices
+    {
+      get { return _connectedDevices; }
+      set
+      {
+        _connectedDevices = value;
+        NotifyPropertyChanged("ConnectedDevices");
+      }
+    }
 
     private void PopulateDeviceClass()
     {
@@ -187,8 +196,8 @@ namespace CameraControl.Devices
       {
         Log.Debug("Connection device " + portableDevice.DeviceId);
         //TODO: avoid to load some mass storage in my computer need to find a general solution
-        //if (!portableDevice.DeviceId.StartsWith("\\\\?\\usb") && !portableDevice.DeviceId.StartsWith("\\\\?\\comp"))
-        //  continue;
+        if (!portableDevice.DeviceId.StartsWith("\\\\?\\usb") && !portableDevice.DeviceId.StartsWith("\\\\?\\comp"))
+          continue;
         portableDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
         if (_deviceEnumerator.GetByWpdId(portableDevice.DeviceId) == null && GetNativeDriver(portableDevice.Model)!=null)
         {

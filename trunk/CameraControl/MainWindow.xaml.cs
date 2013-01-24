@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -572,6 +573,13 @@ namespace CameraControl
     private void Button_Click(object sender, RoutedEventArgs e)
     {
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.MultipleCameraWnd_Show);
+    }
+
+    private void btn_sort_Click(object sender, RoutedEventArgs e)
+    {
+      ServiceProvider.DeviceManager.ConnectedDevices =
+        new AsyncObservableCollection<ICameraDevice>(
+          ServiceProvider.DeviceManager.ConnectedDevices.OrderBy(x => x.DisplayName));
     }
 
   }
