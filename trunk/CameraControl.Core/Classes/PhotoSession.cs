@@ -299,8 +299,8 @@ namespace CameraControl.Core.Classes
         res += "$C";
       if (UseCameraCounter)
       {
-        property.Counter++;
         res = res.Replace("$C", property.Counter.ToString("00000"));
+        property.Counter = property.Counter + property.CounterInc;
       }
       else
       {

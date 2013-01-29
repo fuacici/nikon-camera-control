@@ -52,6 +52,22 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    private int _counterInc;
+    public int CounterInc
+    {
+      get
+      {
+        if (_counterInc < 1)
+          _counterInc = 1;
+        return _counterInc;
+      }
+      set
+      {
+        _counterInc = value;
+        NotifyPropertyChanged("CounterInc");
+      }
+    }
+
     private bool _captureInSdRam;
     public bool CaptureInSdRam
     {
