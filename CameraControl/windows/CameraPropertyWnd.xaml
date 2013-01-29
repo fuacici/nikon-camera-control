@@ -24,8 +24,8 @@
     <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
-            <ColumnDefinition Width="116*" />
-            <ColumnDefinition Width="178*" />
+            <ColumnDefinition Width="130*" />
+            <ColumnDefinition Width="158*" />
             <ColumnDefinition Width="10" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -50,5 +50,9 @@
 
         <Label Content="{T:TranslateExtension LabelCounter}" Width="120" Grid.Row="3" Grid.Column="1"/>
         <xctk:IntegerUpDown Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}, Path=CameraProperty.Counter}" Minimum="0" Grid.Row="3" Grid.Column="2" Margin="2"/>
+
+        <Label Content="{T:TranslateExtension LabelCounterIncrementer}" Width="120" Grid.Row="4" Grid.Column="1"/>
+        <xctk:IntegerUpDown Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}, Path=CameraProperty.CounterInc}" Minimum="1" Grid.Row="4" Grid.Column="2" Margin="2"/>
+
     </Grid>
 </ontrols:MetroWindow>

@@ -300,5 +300,8 @@ namespace CameraControl.Core.Translation
     public static string LabelShowUnTranslatedStringIds = "Show untranslated string ids";    
     // 20/01/2013
     public static string LabelUseAsMaster = "Use as master";
+    // 29/01/2013
+    public static string LabelCounterIncrementer = "Counter incrementer";
+    public static string LabelSelected = "Selected";
   }
 }

@@ -573,6 +573,8 @@ namespace CameraControl
     private void Button_Click(object sender, RoutedEventArgs e)
     {
       ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.MultipleCameraWnd_Show);
+      Flyouts[0].IsOpen = false;
+      Flyouts[1].IsOpen = false;
     }
 
     private void btn_sort_Click(object sender, RoutedEventArgs e)
