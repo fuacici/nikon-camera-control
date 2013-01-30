@@ -65,6 +65,8 @@ namespace CameraControl.Core.Classes
             BitmapDecoder bmpDec = BitmapDecoder.Create(new Uri(_currentfile.FileItem.FileName),
                                                         BitmapCreateOptions.None,
                                                         BitmapCacheOption.Default);
+            if (bmpDec.CodecInfo != null)
+              Log.Debug("Raw codec: " + bmpDec.CodecInfo.FriendlyName);
             if (bmpDec.Thumbnail != null)
             {
               WriteableBitmap bitmap = new WriteableBitmap(bmpDec.Thumbnail);
@@ -186,50 +188,58 @@ namespace CameraControl.Core.Classes
 
     public void GetMetadata(BitmapFile file,WriteableBitmap writeableBitmap)
     {
-      Exiv2Helper exiv2Helper=new Exiv2Helper();
-      exiv2Helper.Load(file.FileItem.FileName, writeableBitmap.PixelWidth, writeableBitmap.PixelHeight);
-      file.Metadata.Clear();
-      foreach (var exiv2Data in exiv2Helper.Tags)
+      Exiv2Helper exiv2Helper = new Exiv2Helper();
+      try
       {
-        file.Metadata.Add(new DictionaryItem() { Name = exiv2Data.Value.Tag, Value = exiv2Data.Value.Value });
-      }
-      if (ServiceProvider.Settings.ShowFocusPoints)
-      {
-        writeableBitmap.Lock();
-        foreach (Rect focuspoint in exiv2Helper.Focuspoints)
+        exiv2Helper.Load(file.FileItem.FileName, writeableBitmap.PixelWidth, writeableBitmap.PixelHeight);
+        file.Metadata.Clear();
+        foreach (var exiv2Data in exiv2Helper.Tags)
         {
-          DrawRect(writeableBitmap, (int) focuspoint.X, (int) focuspoint.Y, (int) (focuspoint.X + focuspoint.Width),
-                   (int) (focuspoint.Y + focuspoint.Height), Colors.Aqua, 7);
+          file.Metadata.Add(new DictionaryItem() { Name = exiv2Data.Value.Tag, Value = exiv2Data.Value.Value });
         }
-        writeableBitmap.Unlock();
-      }
-
-      if (exiv2Helper.Tags.ContainsKey("Exif.Image.Orientation"))
-      {
-        if (exiv2Helper.Tags["Exif.Image.Orientation"].Value == "bottom, right")
-          writeableBitmap = writeableBitmap.Rotate(180);
-
-        if (exiv2Helper.Tags["Exif.Image.Orientation"].Value == "right, top")
-          writeableBitmap = writeableBitmap.Rotate(90);
-
-        if (exiv2Helper.Tags["Exif.Image.Orientation"].Value == "left, bottom")
-          writeableBitmap = writeableBitmap.Rotate(270);
-      }
-
-      if (ServiceProvider.Settings.RotateIndex != 0)
-      {
-        switch (ServiceProvider.Settings.RotateIndex)
+        if (ServiceProvider.Settings.ShowFocusPoints)
         {
-          case 1:
-            writeableBitmap = writeableBitmap.Rotate(90);
-            break;
-          case 2:
+          writeableBitmap.Lock();
+          foreach (Rect focuspoint in exiv2Helper.Focuspoints)
+          {
+            DrawRect(writeableBitmap, (int)focuspoint.X, (int)focuspoint.Y, (int)(focuspoint.X + focuspoint.Width),
+                     (int)(focuspoint.Y + focuspoint.Height), Colors.Aqua, 7);
+          }
+          writeableBitmap.Unlock();
+        }
+
+        if (exiv2Helper.Tags.ContainsKey("Exif.Image.Orientation"))
+        {
+          if (exiv2Helper.Tags["Exif.Image.Orientation"].Value == "bottom, right")
             writeableBitmap = writeableBitmap.Rotate(180);
-            break;
-          case 3:
+
+          if (exiv2Helper.Tags["Exif.Image.Orientation"].Value == "right, top")
+            writeableBitmap = writeableBitmap.Rotate(90);
+
+          if (exiv2Helper.Tags["Exif.Image.Orientation"].Value == "left, bottom")
             writeableBitmap = writeableBitmap.Rotate(270);
-            break;
         }
+
+        if (ServiceProvider.Settings.RotateIndex != 0)
+        {
+          switch (ServiceProvider.Settings.RotateIndex)
+          {
+            case 1:
+              writeableBitmap = writeableBitmap.Rotate(90);
+              break;
+            case 2:
+              writeableBitmap = writeableBitmap.Rotate(180);
+              break;
+            case 3:
+              writeableBitmap = writeableBitmap.Rotate(270);
+              break;
+          }
+        }
+
+      }
+      catch (Exception exception)
+      {
+        Log.Error("Error loading metadata ", exception);
       }
 
       writeableBitmap.Freeze();
