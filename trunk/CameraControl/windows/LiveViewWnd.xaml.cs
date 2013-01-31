@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using AForge.Imaging;
 using AForge.Imaging.Filters;
@@ -20,6 +21,7 @@ using CameraControl.Core.Interfaces;
 using CameraControl.Core.Translation;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
+using Color = System.Windows.Media.Color;
 using Point = System.Windows.Point;
 using Rectangle = System.Windows.Shapes.Rectangle;
 using Timer = System.Timers.Timer;
@@ -296,6 +298,16 @@ namespace CameraControl.windows
       }
     }
 
+    private int _gridType;
+    public int GridType
+    {
+      get { return _gridType; }
+      set
+      {
+        _gridType = value;
+        NotifyPropertyChanged("GridType");
+      }
+    }
 
     private Timer _timer = new Timer(1000/20);
     private Timer _freezeTimer = new Timer();
@@ -387,7 +399,7 @@ namespace CameraControl.windows
         Dispatcher.Invoke(new ThreadStart(delegate
                                             {
                                               image1.Visibility = Visibility.Hidden;
-                                              chk_grid.IsChecked = false;
+                                              //chk_grid.IsChecked = false;
                                             }));
         return;
       }
@@ -464,7 +476,7 @@ namespace CameraControl.windows
                                      {
                                        try
                                        {
-
+                                         WriteableBitmap preview;
                                          if (LiveViewData != null && LiveViewData.ImageData != null)
                                          {
 
@@ -482,20 +494,28 @@ namespace CameraControl.windows
                                              ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
                                              this.LuminanceHistogramPoints =
                                                ConvertToPointCollection(hslStatistics.Luminance.Values);
+                                             WriteableBitmap writeableBitmap; 
                                              if (BlackAndWhite)
                                              {
                                                Grayscale filter = new Grayscale(0.299, 0.587, 0.114);
-                                               image1.Source = BitmapSourceConvert.ToBitmapSource(filter.Apply(bmp));
+                                               writeableBitmap =
+                                                 BitmapFactory.ConvertToPbgra32Format(
+                                                   BitmapSourceConvert.ToBitmapSource(filter.Apply(bmp)));
                                              }
                                              else
                                              {
-                                               image1.Source = BitmapSourceConvert.ToBitmapSource(bmp);
+                                               writeableBitmap =
+                                                 BitmapFactory.ConvertToPbgra32Format(
+                                                   BitmapSourceConvert.ToBitmapSource(bmp));
                                              }
+                                             preview = writeableBitmap.CloneCurrentValue();
+                                             DrawGrid(writeableBitmap);
+                                             writeableBitmap.Freeze();
+                                             image1.Source = writeableBitmap;
                                            }
                                            if (SelectedPortableDevice.LiveViewImageZoomRatio.Value == "All")
                                            {
-                                             ImageBrush ib = new ImageBrush();
-                                             ib.ImageSource = image1.Source;
+                                             ImageBrush ib = new ImageBrush {ImageSource = preview};
                                              canvas_image.Background = ib;
                                            }
                                            stream.Close();
@@ -509,13 +529,58 @@ namespace CameraControl.windows
                                        }
 
                                      }));
-      Dispatcher.BeginInvoke(new Action(delegate
-                                          {
-                                            DrawLines();
-                                            ;
-                                          }));
+      //Dispatcher.BeginInvoke(new Action(delegate
+      //                                    {
+      //                                      DrawLines();
+      //                                      ;
+      //                                    }));
       _retries = 0;
       oper_in_progress = false;
+    }
+
+    private void DrawGrid(WriteableBitmap writeableBitmap)
+    {
+      Color color = Colors.White;
+      color.A = 50;
+      switch (GridType)
+      {
+        case 1:
+          {
+            for (int i = 1; i < 3; i++)
+            {
+              writeableBitmap.DrawLine(0, (int)((writeableBitmap.Height / 3) * i), (int)writeableBitmap.Width,
+                                       (int)((writeableBitmap.Height / 3) * i), color);
+              writeableBitmap.DrawLine((int)((writeableBitmap.Width / 3) * i), 0, (int)((writeableBitmap.Width / 3) * i),
+                                       (int)writeableBitmap.Height, color);
+            }
+            writeableBitmap.SetPixel((int) (writeableBitmap.Width/2), (int) (writeableBitmap.Height/2), 128, Colors.Red);
+          }
+          break;
+        case 2:
+          {
+            for (int i = 1; i < 10; i++)
+            {
+              writeableBitmap.DrawLine(0, (int) ((writeableBitmap.Height/10)*i), (int) writeableBitmap.Width,
+                                       (int)((writeableBitmap.Height / 10) * i), color);
+              writeableBitmap.DrawLine((int) ((writeableBitmap.Width/10)*i), 0, (int) ((writeableBitmap.Width/10)*i),
+                                       (int)writeableBitmap.Height, color);
+            }
+            writeableBitmap.SetPixel((int)(writeableBitmap.Width / 2), (int)(writeableBitmap.Height / 2), 128, Colors.Red);
+          }
+          break;
+        case 3:
+          {
+            writeableBitmap.DrawLineDDA(0, 0, (int)writeableBitmap.Width,
+                                     (int)writeableBitmap.Height, color);
+
+            writeableBitmap.DrawLineDDA(0, (int) writeableBitmap.Height,
+                                        (int)writeableBitmap.Width, 0, color);
+            writeableBitmap.SetPixel((int)(writeableBitmap.Width / 2), (int)(writeableBitmap.Height / 2), 128, Colors.Red);
+          }
+          break;
+        default:
+          break;
+      }
     }
 
     private void DrawLines()
@@ -762,7 +827,7 @@ namespace CameraControl.windows
 
     private void canvas_SizeChanged(object sender, SizeChangedEventArgs e)
     {
-      DrawLines();
+      //DrawLines();
     }
 
     private void chk_grid_Checked(object sender, RoutedEventArgs e)

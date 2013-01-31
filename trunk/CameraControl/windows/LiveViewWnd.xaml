@@ -195,8 +195,14 @@
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="186*" />
                             </Grid.RowDefinitions>
-                            <CheckBox Content="{T:TranslateExtension LabelGrid}" Name="chk_grid" IsChecked="True" Checked="chk_grid_Checked" Unchecked="chk_grid_Unchecked" Grid.Column="1" VerticalAlignment="Center"/>
-                            <ComboBox Name="cmb_zoom" IsEnabled="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" ItemsSource="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.Values, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" SelectedValue="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.Value, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="1" Grid.Column="3" />
+                            <Label Content="{T:TranslateExtension LabelGrid}" Grid.Column="1" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="3" Margin="3" SelectedIndex="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=GridType}">
+                                <ComboBoxItem Content="{T:TranslateExtension LabelNone}" />
+                                <ComboBoxItem Content="{T:TranslateExtension LabelRuleOfThirds}" />
+                                <ComboBoxItem Content="{T:TranslateExtension LabelComboGrid}" />
+                                <ComboBoxItem Content="{T:TranslateExtension LabelDiagonal}" />
+                            </ComboBox>
+                            <ComboBox Name="cmb_zoom" IsEnabled="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" ItemsSource="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.Values, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" SelectedValue="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.Value, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="1" Grid.Column="3" Margin="3"/>
                             <Label Content="{T:TranslateExtension LabelLvZoomRation}" Name="label1" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" />
                             <CheckBox Content="B&amp;W" Name="checkBox1" IsChecked="{Binding Path=BlackAndWhite, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" />
                             <Slider Name="slider_transparent" Maximum="1" Value="1" Grid.Row="4" Grid.ColumnSpan="3" Grid.Column="1" ValueChanged="slider_transparent_ValueChanged" />

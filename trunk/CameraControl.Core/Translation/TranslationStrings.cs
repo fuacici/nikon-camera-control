@@ -303,5 +303,10 @@ namespace CameraControl.Core.Translation
     // 29/01/2013
     public static string LabelCounterIncrementer = "Counter incrementer";
     public static string LabelSelected = "Selected";
+    // 31/01/2013
+    public static string LabelNone = "None";
+    public static string LabelRuleOfThirds = "Rule of thirds";
+    public static string LabelComboGrid = "Grid";
+    public static string LabelDiagonal = "Diagonal";
   }
 }
