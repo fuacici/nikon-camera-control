@@ -90,11 +90,11 @@
                 <StackPanel Margin="1">
                     <Label Content="{T:TranslateExtension LabelTransfer}"  />
                     <ComboBox Name="cmb_transfer" SelectionChanged="cmb_transfer_SelectionChanged" ToolTip="{Binding ElementName=cmb_transfer, Path=SelectedItem}">
-                        <ComboBox.ItemTemplate>
+                        <!--<ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <Label Content="{Binding Converter={StaticResource converter}}"/>
                             </DataTemplate>
-                        </ComboBox.ItemTemplate>
+                        </ComboBox.ItemTemplate>-->
                     </ComboBox>
                 </StackPanel>
                 <StackPanel Margin="1" Orientation="Vertical">

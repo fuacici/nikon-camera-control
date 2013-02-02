@@ -1,10 +1,47 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Property values-->
+  <string name="BURST_NUMBER">Liczba zdjęć seryjnych</string>
+  <string name="STILL_CAPTURE_MODE">Wciąż tryb przechwytywania</string>
+  <string name="CONTINUOUS_SHOT__CONTINUOUS_SHOOTING_">Ciągłe zdjęcia (zdjęcia seryjne)</string>
+  <string name="AUTO_ISO">Auto ISO</string>
+  <string name="ON">WŁ</string>
+  <string name="OFF">WYŁ</string>
+  <string name="FLASH">Lampa</string>
+  <string name="NORMAL_SYNCHRONIZATION">Normalna synchronizacja</string>
+  <string name="LONG_EXP._NR">Długa liczba ekspozycji</string>
+  <string name="HIGH_ISO_NR">Duże czułości ISO</string>
   <string name="NORMAL">Normalny</string>
+  <string name="EXPOSURE_DELAY_MODE">Tryb opóźnienia ekspozycji</string>
+  <string name="LOCK">Blokada</string>
+  <string name="SINGLE_SHOT__SINGLE_FRAME_SHOOTING_">Pojedyncze zdjęcie (wykonywanie pojedynczych zdjęć)</string>
+  <string name="CONTINUOUS_SHOT__CONTINUOUS_SHOOTING_">Ciągłe zdjęcia (zdjęcia seryjne)</string>
+  <string name="SELF_TIMER">Samowyzwalacz</string>
+  <string name="QUICK_RESPONSE_REMOTE">Szybka odpowiedź zdalna</string>
+  <string name="2S_DELAYED_REMOTE">2s zdalnego opóźnienia</string>
+  <string name="QUIET_SHOOTING">Ciche fotografowanie</string>
+  <string name="FLASH_PROHIBITED">lampa błyskowa zakazana</string>
+  <string name="RED_EYE_REDUCTION">Redukcja czerwonych oczu</string>
+  <string name="SLOW_SYNCHRONIZATION">Wolna synchronizacja</string>
+  <string name="REAR_SYNCHRONIZATION">Tylna synchronizacja</string>
+  <string name="RED_EYE_REDUCTION_SLOW_SYNCHRONIZATION">Redukcja czerwonych oczu wolej synchronizacji</string>
+  <string name="NOT_PERFORMED">Nie wykonane</string>
+  <string name="LOW">Nisko</string>
+  <string name="HIGH">Wysoko</string>
+  <string name="CENTER_WEIGHTED_METERING">Pomiar centralny</string>
+  <string name="MULTI_PATTERN_METERING">Pomiar wielopunktowy</string>
+  <string name="SPOT_METERING">Pomiar punktowy</string>
   <string name="1.SAVE_TO_PC_ONLY">1. Zapisz tylko do komputera</string>
   <string name="2.SAVE_TO_CAMERA_ONLY">2. Zapisz tylko do kamery</string>
   <string name="3.SAVE_TO_PC_AND_CAMERA">3. Zapisz do komputera i kamery</string>
+  <string name="AUTO">Auto</string>
+  <string name="DAYLIGHT">Światło dzienne</string>
+  <string name="FLUORESCENT_">Świetlówka</string>
+  <string name="INCANDESCENT">Żarówkowe</string>
+  <string name="CLOUDY">Zachmurzone</string>
+  <string name="SHADE">Cień</string>
+  <string name="CUSTOM">Własne</string>
+  <string name="[A]_AF_SERVO_MODE_AUTOMATIC_SWITCHING">[A] AF w trybie automatycznego przełączania</string>
   <!--End Property values-->
   <string name="Mode">Tryb</string>
   <string name="Iso">ISO</string>
@@ -73,6 +110,7 @@
   <string name="LabelPreviewAfterCapture">Podgląd obrazu po wykonaniu na pełnym ekranie</string>
   <string name="LabelPreviewTime">Czas podglądu w sek:</string>
   <string name="LabelPreviewInLIveView">Podgląd obrazu po zrobieniu w trybie podglądu na żywo</string>
+  <string name="LabelLIveViewImageFreeze">Podgląd na żywo zamrożenie obrazu w sek:</string>
   <string name="LabelRotateImage">Obróć obraz:</string>
   <string name="LabelDontLoadThumbs">Nie ładuj miniturek</string>
   <string name="LabelFullscrenBack">Tło okna pełnego ekranu:</string>
@@ -105,6 +143,8 @@ $Tag4 - Wybrany tag 4</string>
   <string name="LabelTags">Tagi</string>
   <string name="LabelManualFocus">Ręczny fokus</string>
   <string name="LabelGrid">Siatka</string>
+  <string name="LabelLvZoomRation">Powiększenie podglądu na żywo</string>
+  <string name="LabelFocusStacking">Stosowanie fokusa</string>
   <string name="LabelNoOfPhots">Liczba zdjęć</string>
   <string name="LabelFocusStep">Krok fokusa</string>
   <string name="LabelLuminosity">Światło</string>
@@ -138,6 +178,7 @@ $Tag4 - Wybrany tag 4</string>
   <string name="LabelFillImage">Wypełnij obraz</string>
   <string name="LabelCreateMovie">Tworzenie filmu</string>
   <string name="LabelAddVirtualMovingToVideo">Dodaj wirtualny ruch do wideo</string>
+  <string name="LabelMovingSurface">Przenoszenie powierzchni (%):</string>
   <string name="LabelMovingDirection">Kierunek ruchu:</string>
   <string name="LabelMovingDirectionLeftToRight">Lewa do prawej</string>
   <string name="LabelMovingDirectionRightToLeft">Prawa do lewej</string>
@@ -157,6 +198,7 @@ $Tag4 - Wybrany tag 4</string>
   <string name="MsgApplicationUpToDate">Aplikacja jest aktualna!</string>
   <string name="MsgUseSessionEditorTags">Użyj edytora sesji by określić tagi!</string>
   <string name="MsgLastSessionCantBeDeleted">Ostatnia sesja nie może być usunięta</string>
+  <string name="MsgStopTimeLapse">Film poklatkowy nie zakończony! Czy chcesz, zatrzymać film?</string>
   <string name="MsgInstallXvidCodec">Kodeki Xvid nie zainstalowane! ⏎ Czy chcesz pobrać i zainstalować?</string>
   <string name="MsgDeleteSessionQuestion">Czy chcesz kontynuować usuwanie sesji {0}? ⏎ Żadne pliki nie zostaną skasowane!</string>
   <string name="MsgBracketingDone">Ekspozycja zrobiona</string>
@@ -221,6 +263,7 @@ $Tag4 - Wybrany tag 4</string>
   <string name="LabelRecordInProgres">Podczas nagrywania pliku z filmem</string>
   <string name="LabelCardProtected">Karta zabezpieczona</string>
   <string name="LabelDuringEnlargedDisplayLiveView">Podczas wyświetlania rozszerzonego Podglądu na żywo</string>
+  <string name="LabelWrongLiveViewType">Ustawienie wyboru podglądu na żywo jest na fotografii podglądu na żywo.</string>
   <string name="LabelNotInApplicationMode">Aparat nie jest w trybie aplikacji.</string>
   <string name="ButtonResetSettings">Reset ustawień</string>
   <!--14/11/2012-->
@@ -272,4 +315,17 @@ $Tag4 - Wybrany tag 4</string>
   <string name="LabelAdvanced">Zaawansowane</string>
   <string name="LabelUseParellelTransfer">Użyj równoległego transferu plików</string>
   <!--19/01/2013-->
+  <string name="LabelUnHandledError">Wystąpił błąd aplikacji. ⏎ Proszę sprawdzić, czy dane są poprawne i powtórzyć czynność. Jeśli błąd wystąpi ponownie, nie wydaje się być bardziej poważna usterka w aplikacji, i lepiej go zamknąć ⏎ Błąd ⏎:. {0} ⏎ ⏎ Czy chcesz kontynuować ⏎ (jeśli przycisk Tak będzie kontynuować swojej pracy? jeśli klikniesz przycisk Nie aplikacja zostanie zamknięta)</string>
+  <string name="LabelApplicationError">Błąd aplikacji</string>
+  <string name="LabelWiaNotInstalled">WIA 2.0 nie zainstalowany</string>
+  <string name="LabelRestartTheApplication">Uruchom ponownie aplikację!</string>
+  <string name="LabelOutOfMemory">Aplikacji zabrakło pamięci. Aplikacja będzie zamknięta!</string>
+  <string name="LabelApplicationAlreadyRunning">Aplikacja już działa</string>
+  <string name="LabelDeleteSession">Usuń sesje</string>
+  <string name="LabelStartCapture">Uruchom przechwytywanie</string>
+  <string name="LabelStopCapture">Zatrzymaj przechwytywanie</string>
+  <string name="LabelCaptureTime">Czas przechwytywania (sek) </string>
+  <string name="LabelTimeBetweenShots">Czas pomiędzy zdjęciami</string>
+  <string name="LabelDontAutofocus">Bez autofokusa</string>
+  <string name="LabelShowUnTranslatedStringIds">Pokaż nie przetłumaczone id ciągów</string>
 </resources>

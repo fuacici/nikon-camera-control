@@ -308,5 +308,6 @@ namespace CameraControl.Core.Translation
     public static string LabelRuleOfThirds = "Rule of thirds";
     public static string LabelComboGrid = "Grid";
     public static string LabelDiagonal = "Diagonal";
+    public static string LabelSplit = "Split";
   }
 }

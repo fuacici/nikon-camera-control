@@ -31,9 +31,6 @@
 	<string name="CENTER_WEIGHTED_METERING">Center-weighted metering</string> 
 	<string name="MULTI_PATTERN_METERING">Multi-pattern metering</string> 
 	<string name="SPOT_METERING">Spot metering</string> 
-	<string name="1.SAVE_TO_PC_ONLY">1.Save to PC only</string> 
-	<string name="2.SAVE_TO_CAMERA_ONLY">2.Save to camera only</string> 
-	<string name="3.SAVE_TO_PC_AND_CAMERA">3.Save to PC and camera</string> 
 	<string name="AUTO">Auto</string> 
 	<string name="DAYLIGHT">Daylight</string> 
 	<string name="FLUORESCENT_">Fluorescent</string> 
@@ -42,6 +39,7 @@
 	<string name="SHADE">Shade</string> 
 	<string name="CUSTOM">Custom</string> 
 	<string name="[A]_AF_SERVO_MODE_AUTOMATIC_SWITCHING">[A] AF servo mode automatic switching</string> 
+	<string name="[S]_SINGLE_AF_SERVO">[S] Single AF servo</string> 
 	
     <!-- End Property values -->	
     <string name="Mode">Mode</string> 

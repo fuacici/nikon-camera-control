@@ -37,10 +37,10 @@ namespace CameraControl.windows
     private int _retries = 0;
     private ICameraDevice selectedPortableDevice;
     private Rectangle _focusrect = new Rectangle();
-    private Line _line11 = new Line();
-    private Line _line12 = new Line();
-    private Line _line21 = new Line();
-    private Line _line22 = new Line();
+    //private Line _line11 = new Line();
+    //private Line _line12 = new Line();
+    //private Line _line21 = new Line();
+    //private Line _line22 = new Line();
     private BackgroundWorker _worker = new BackgroundWorker();
     private bool _preview = false;
     private int _totalframes = 0;
@@ -370,14 +370,6 @@ namespace CameraControl.windows
       _freezeTimer.Elapsed += _freezeTimer_Elapsed;
       _focusrect.Stroke = new SolidColorBrush(Colors.Green);
       canvas.Children.Add(_focusrect);
-      _line11.Stroke = new SolidColorBrush(Colors.White);
-      _line12.Stroke = new SolidColorBrush(Colors.White);
-      _line21.Stroke = new SolidColorBrush(Colors.White);
-      _line22.Stroke = new SolidColorBrush(Colors.White);
-      canvas.Children.Add(_line11);
-      canvas.Children.Add(_line12);
-      canvas.Children.Add(_line21);
-      canvas.Children.Add(_line22);
       _worker.DoWork += delegate
                           {
                             if (!FreezeImage)
@@ -494,7 +486,10 @@ namespace CameraControl.windows
                                              ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
                                              this.LuminanceHistogramPoints =
                                                ConvertToPointCollection(hslStatistics.Luminance.Values);
-                                             WriteableBitmap writeableBitmap; 
+                                             WriteableBitmap writeableBitmap;
+                                             preview =
+                                               BitmapFactory.ConvertToPbgra32Format(
+                                                 BitmapSourceConvert.ToBitmapSource(bmp));
                                              if (BlackAndWhite)
                                              {
                                                Grayscale filter = new Grayscale(0.299, 0.587, 0.114);
@@ -508,7 +503,6 @@ namespace CameraControl.windows
                                                  BitmapFactory.ConvertToPbgra32Format(
                                                    BitmapSourceConvert.ToBitmapSource(bmp));
                                              }
-                                             preview = writeableBitmap.CloneCurrentValue();
                                              DrawGrid(writeableBitmap);
                                              writeableBitmap.Freeze();
                                              image1.Source = writeableBitmap;
@@ -529,11 +523,11 @@ namespace CameraControl.windows
                                        }
 
                                      }));
-      //Dispatcher.BeginInvoke(new Action(delegate
-      //                                    {
-      //                                      DrawLines();
-      //                                      ;
-      //                                    }));
+      Dispatcher.BeginInvoke(new Action(delegate
+                                          {
+                                            DrawLines();
+                                            ;
+                                          }));
       _retries = 0;
       oper_in_progress = false;
     }
@@ -578,6 +572,16 @@ namespace CameraControl.windows
             writeableBitmap.SetPixel((int)(writeableBitmap.Width / 2), (int)(writeableBitmap.Height / 2), 128, Colors.Red);
           }
           break;
+        case 4:
+          {
+            writeableBitmap.DrawLineDDA(0, (int)(writeableBitmap.Height / 2), (int)writeableBitmap.Width,
+                                     (int)(writeableBitmap.Height / 2), color);
+
+            writeableBitmap.DrawLineDDA((int)(writeableBitmap.Width / 2), 0,
+                                        (int)(writeableBitmap.Width/2), (int)writeableBitmap.Height, color);
+            writeableBitmap.SetPixel((int)(writeableBitmap.Width / 2), (int)(writeableBitmap.Height / 2), 128, Colors.Red);
+          }
+          break;
         default:
           break;
       }
@@ -600,15 +604,15 @@ namespace CameraControl.windows
         _focusrect.Width = LiveViewData.FocusFrameYSize*yt;
         double xx = (canvas.ActualWidth - image1.ActualWidth)/2;
         double yy = (canvas.ActualHeight - image1.ActualHeight)/2;
-        SetLinePos(_line11, (int) (xx + image1.ActualWidth/3), (int) yy, (int) (xx + image1.ActualWidth/3),
-                   (int) (yy + image1.ActualHeight));
-        SetLinePos(_line12, (int) (xx + (image1.ActualWidth/3)*2), (int) yy, (int) (xx + (image1.ActualWidth/3)*2),
-                   (int) (yy + image1.ActualHeight));
+        //SetLinePos(_line11, (int) (xx + image1.ActualWidth/3), (int) yy, (int) (xx + image1.ActualWidth/3),
+        //           (int) (yy + image1.ActualHeight));
+        //SetLinePos(_line12, (int) (xx + (image1.ActualWidth/3)*2), (int) yy, (int) (xx + (image1.ActualWidth/3)*2),
+        //           (int) (yy + image1.ActualHeight));
 
-        SetLinePos(_line21, (int) xx, (int) (yy + (image1.ActualHeight/3)), (int) (xx + image1.ActualWidth),
-                   (int) (yy + image1.ActualHeight/3));
-        SetLinePos(_line22, (int) xx, (int) (yy + (image1.ActualHeight/3)*2), (int) (xx + image1.ActualWidth),
-                   (int) (yy + (image1.ActualHeight/3)*2));
+        //SetLinePos(_line21, (int) xx, (int) (yy + (image1.ActualHeight/3)), (int) (xx + image1.ActualWidth),
+        //           (int) (yy + image1.ActualHeight/3));
+        //SetLinePos(_line22, (int) xx, (int) (yy + (image1.ActualHeight/3)*2), (int) (xx + image1.ActualWidth),
+        //           (int) (yy + (image1.ActualHeight/3)*2));
 
         _focusrect.SetValue(Canvas.LeftProperty, LiveViewData.FocusX*xt - (_focusrect.Height/2) + xx);
         _focusrect.SetValue(Canvas.TopProperty, LiveViewData.FocusY*yt - (_focusrect.Width/2) + yy);
@@ -827,23 +831,7 @@ namespace CameraControl.windows
 
     private void canvas_SizeChanged(object sender, SizeChangedEventArgs e)
     {
-      //DrawLines();
-    }
-
-    private void chk_grid_Checked(object sender, RoutedEventArgs e)
-    {
-      _line11.Visibility = Visibility.Visible;
-      _line12.Visibility = Visibility.Visible;
-      _line21.Visibility = Visibility.Visible;
-      _line22.Visibility = Visibility.Visible;
-    }
-
-    private void chk_grid_Unchecked(object sender, RoutedEventArgs e)
-    {
-      _line11.Visibility = Visibility.Hidden;
-      _line12.Visibility = Visibility.Hidden;
-      _line21.Visibility = Visibility.Hidden;
-      _line22.Visibility = Visibility.Hidden;
+      DrawLines();
     }
 
     #region Implementation of IWindow
