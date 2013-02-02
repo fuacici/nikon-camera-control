@@ -201,6 +201,7 @@
                                 <ComboBoxItem Content="{T:TranslateExtension LabelRuleOfThirds}" />
                                 <ComboBoxItem Content="{T:TranslateExtension LabelComboGrid}" />
                                 <ComboBoxItem Content="{T:TranslateExtension LabelDiagonal}" />
+                                <ComboBoxItem Content="{T:TranslateExtension LabelSplit}" />
                             </ComboBox>
                             <ComboBox Name="cmb_zoom" IsEnabled="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" ItemsSource="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.Values, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" SelectedValue="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.Value, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="1" Grid.Column="3" Margin="3"/>
                             <Label Content="{T:TranslateExtension LabelLvZoomRation}" Name="label1" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" />
