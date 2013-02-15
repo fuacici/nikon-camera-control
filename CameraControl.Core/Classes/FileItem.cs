@@ -16,6 +16,7 @@ namespace CameraControl.Core.Classes
   {
     File,
     CameraObject
+
   }
 
   public class FileItem:BaseFieldClass
@@ -128,6 +129,7 @@ namespace CameraControl.Core.Classes
       DeviceObject = deviceObject;
       ItemType = FileItemType.CameraObject;
       FileName = deviceObject.FileName;
+      FileDate = deviceObject.FileDate;
       IsChecked = true;
       if (deviceObject.ThumbData != null && deviceObject.ThumbData.Length > 4)
       {
@@ -143,7 +145,7 @@ namespace CameraControl.Core.Classes
         }
         catch (Exception exception)
         {
-          Log.Error("Error loading device thumb ", exception);
+          Log.Debug("Error loading device thumb ", exception);
         }
       }
     }
@@ -154,6 +156,13 @@ namespace CameraControl.Core.Classes
       FileName = file;
       Name = Path.GetFileName(file);
       ItemType = FileItemType.File;
+    }
+
+    public FileItem(ICameraDevice device)
+    {
+      Device = device;
+      ItemType = FileItemType.CameraObject;
+      IsChecked = true;
     }
 
     private BitmapSource _thumbnail;

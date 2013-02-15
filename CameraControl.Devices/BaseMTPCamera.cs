@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -76,6 +77,20 @@ namespace CameraControl.Devices
             deviceObject.FileName = Encoding.Unicode.GetString(objectdata.Data, 53, 12 * 2);
             if (deviceObject.FileName.Contains("\0"))
               deviceObject.FileName = deviceObject.FileName.Split('\0')[0];
+            try
+            {
+              string datesrt = Encoding.Unicode.GetString(objectdata.Data, 53 + (12 * 2) + 3, 30);
+              //datesrt = datesrt.Replace("T", "");
+              DateTime date = DateTime.MinValue;
+              if (DateTime.TryParseExact(datesrt, "yyyyMMddTHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+              {
+                deviceObject.FileDate = date;
+              }
+            }
+            catch (Exception)
+            {
+            }
+
             MTPDataResponse thumbdata = ExecuteReadDataEx(CONST_CMD_GetThumb, handle);
             deviceObject.ThumbData = thumbdata.Data;
             res.Add(deviceObject);
