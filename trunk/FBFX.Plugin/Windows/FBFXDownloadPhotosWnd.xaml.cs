@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -31,7 +32,9 @@ namespace FBFX.Plugin.Windows
     private bool delete;
     private bool format;
     private ProgressWindow dlg = new ProgressWindow();
-   
+    private Dictionary<ICameraDevice, int> _timeDif = new Dictionary<ICameraDevice, int>();
+    private Dictionary<ICameraDevice, AsyncObservableCollection<FileItem>> _itembycamera = new Dictionary<ICameraDevice, AsyncObservableCollection<FileItem>>();
+    private List<DateTime> _timeTable = new List<DateTime>();
 
     public ObservableCollection<DownloadableItems> Groups { get; set; }
 
@@ -137,6 +140,15 @@ namespace FBFX.Plugin.Windows
 
     private void PopulateImageList()
     {
+      if (ServiceProvider.DeviceManager.ConnectedDevices.Count == 0)
+        return;
+      _timeDif.Clear();
+      _itembycamera.Clear();
+      Items.Clear();
+      _timeTable.Clear();
+      int threshold = 0;
+      Dispatcher.Invoke(new Action(() => int.TryParse(lbl_thresh.Text, out threshold)));
+
       foreach (ICameraDevice cameraDevice in ServiceProvider.DeviceManager.ConnectedDevices)
       {
         CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(cameraDevice);
@@ -145,9 +157,15 @@ namespace FBFX.Plugin.Windows
         try
         {
           var images = cameraDevice.GetObjects(null);
-          foreach (DeviceObject deviceObject in images)
+          if(images.Count>0)
           {
-            Items.Add(new FileItem(deviceObject, cameraDevice));
+            foreach (DeviceObject deviceObject in images)
+            {
+              if (!_itembycamera.ContainsKey(cameraDevice))
+                _itembycamera.Add(cameraDevice, new AsyncObservableCollection<FileItem>());
+              _itembycamera[cameraDevice].Add(new FileItem(deviceObject, cameraDevice));
+              //Items.Add(new FileItem(deviceObject, cameraDevice));
+            }
           }
         }
         catch (Exception exception)
@@ -156,6 +174,53 @@ namespace FBFX.Plugin.Windows
           Log.Error("Error loading file list", exception);
         }
       }
+
+      DateTime basetime = _itembycamera[ServiceProvider.DeviceManager.ConnectedDevices[0]][0].FileDate;
+      foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices.Where(connectedDevice => _itembycamera.ContainsKey(connectedDevice)))
+      {
+        if (!_timeDif.ContainsKey(connectedDevice))
+          _timeDif.Add(connectedDevice, 0);
+        _timeDif[connectedDevice] = (int)(_itembycamera[connectedDevice][0].FileDate - basetime).TotalSeconds;
+      }
+
+      foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices.Where(connectedDevice => _itembycamera.ContainsKey(connectedDevice)))
+      {
+        for (int i = 0; i < _itembycamera[connectedDevice].Count; i++)
+        {
+          DateTime date = _itembycamera[connectedDevice][i].FileDate.AddSeconds(-_timeDif[connectedDevice]);
+          if (i >= _timeTable.Count)
+          {
+            _timeTable.Add(date);
+          }
+          else
+          {
+            if (Math.Abs((_timeTable[i] - date).TotalSeconds) > threshold) _timeTable.Insert(i, date);
+          }
+        }
+      }
+
+      foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices.Where(connectedDevice => _itembycamera.ContainsKey(connectedDevice)))
+      {
+        for (int i = 0; i < _timeTable.Count; i++)
+        {
+          if (i >= _itembycamera[connectedDevice].Count)
+          {
+            _itembycamera[connectedDevice].Add(new FileItem(connectedDevice));
+          }
+          else
+          {
+            DateTime date = _itembycamera[connectedDevice][i].FileDate.AddSeconds(-_timeDif[connectedDevice]);
+            if (Math.Abs((_timeTable[i] - date).TotalSeconds) > threshold)
+              _itembycamera[connectedDevice].Insert(i, new FileItem(connectedDevice));
+          }
+        }
+      }
+
+      foreach (var fileItem in _itembycamera.Values.SelectMany(lists => lists))
+      {
+        Items.Add(fileItem);
+      }
+
       CollectionView myView;
       myView = (CollectionView)CollectionViewSource.GetDefaultView(Items);
       if (myView.CanGroup == true)
@@ -301,6 +366,13 @@ namespace FBFX.Plugin.Windows
           }
         }
       }
+    }
+
+    private void button1_Click(object sender, RoutedEventArgs e)
+    {
+      dlg.Show();
+      Thread thread = new Thread(PopulateImageList);
+      thread.Start();
     }
   }
 
