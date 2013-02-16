@@ -147,8 +147,9 @@ namespace FBFX.Plugin.Windows
       Items.Clear();
       _timeTable.Clear();
       int threshold = 0;
+      bool checkset = false;
       Dispatcher.Invoke(new Action(() => int.TryParse(lbl_thresh.Text, out threshold)));
-
+      Dispatcher.Invoke(new Action(() => checkset = chk_set.IsChecked == true));
       foreach (ICameraDevice cameraDevice in ServiceProvider.DeviceManager.ConnectedDevices)
       {
         CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(cameraDevice);
@@ -175,50 +176,79 @@ namespace FBFX.Plugin.Windows
         }
       }
 
-      DateTime basetime = _itembycamera[ServiceProvider.DeviceManager.ConnectedDevices[0]][0].FileDate;
-      foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices.Where(connectedDevice => _itembycamera.ContainsKey(connectedDevice)))
+      if (checkset)
       {
-        if (!_timeDif.ContainsKey(connectedDevice))
-          _timeDif.Add(connectedDevice, 0);
-        _timeDif[connectedDevice] = (int)(_itembycamera[connectedDevice][0].FileDate - basetime).TotalSeconds;
-      }
-
-      foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices.Where(connectedDevice => _itembycamera.ContainsKey(connectedDevice)))
-      {
-        for (int i = 0; i < _itembycamera[connectedDevice].Count; i++)
+        DateTime basetime = _itembycamera[ServiceProvider.DeviceManager.ConnectedDevices[0]][0].FileDate;
+        foreach (
+          ICameraDevice connectedDevice in
+            ServiceProvider.DeviceManager.ConnectedDevices.Where(
+              connectedDevice => _itembycamera.ContainsKey(connectedDevice)))
         {
-          DateTime date = _itembycamera[connectedDevice][i].FileDate.AddSeconds(-_timeDif[connectedDevice]);
-          if (i >= _timeTable.Count)
-          {
-            _timeTable.Add(date);
-          }
-          else
-          {
-            if (Math.Abs((_timeTable[i] - date).TotalSeconds) > threshold) _timeTable.Insert(i, date);
-          }
+          if (!_timeDif.ContainsKey(connectedDevice))
+            _timeDif.Add(connectedDevice, 0);
+          _timeDif[connectedDevice] = (int)(_itembycamera[connectedDevice][0].FileDate - basetime).TotalSeconds;
         }
-      }
 
-      foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices.Where(connectedDevice => _itembycamera.ContainsKey(connectedDevice)))
-      {
-        for (int i = 0; i < _timeTable.Count; i++)
+
+        foreach (
+          ICameraDevice connectedDevice in
+            ServiceProvider.DeviceManager.ConnectedDevices.Where(
+              connectedDevice => _itembycamera.ContainsKey(connectedDevice)))
         {
-          if (i >= _itembycamera[connectedDevice].Count)
-          {
-            _itembycamera[connectedDevice].Add(new FileItem(connectedDevice));
-          }
-          else
+          for (int i = 0; i < _itembycamera[connectedDevice].Count; i++)
           {
             DateTime date = _itembycamera[connectedDevice][i].FileDate.AddSeconds(-_timeDif[connectedDevice]);
-            if (Math.Abs((_timeTable[i] - date).TotalSeconds) > threshold)
-              _itembycamera[connectedDevice].Insert(i, new FileItem(connectedDevice));
+            if (_timeTable.Contains(date))
+              continue;
+            bool found = _timeTable.Any(t => Math.Abs((t - date).TotalSeconds) < threshold);
+            if (!found)
+              _timeTable.Add(date);
           }
         }
-      }
 
-      foreach (var fileItem in _itembycamera.Values.SelectMany(lists => lists))
+        _timeTable.Sort();
+        foreach (
+          ICameraDevice connectedDevice in
+            ServiceProvider.DeviceManager.ConnectedDevices.Where(
+              connectedDevice => _itembycamera.ContainsKey(connectedDevice)))
+        {
+          for (int i = 0; i < _timeTable.Count; i++)
+          {
+            bool found = false;
+            for (int j = 0; j < _itembycamera[connectedDevice].Count; j++)
+            {
+              DateTime date = _itembycamera[connectedDevice][j].FileDate.AddSeconds(-_timeDif[connectedDevice]);
+              if (Math.Abs((_timeTable[i] - date).TotalSeconds) < threshold)
+              {
+                Items.Add(_itembycamera[connectedDevice][j]);
+                found = true;
+                break;
+              }
+            }
+            if(!found)
+              Items.Add(new FileItem(connectedDevice, _timeTable[i]));
+            //if (i >= _itembycamera[connectedDevice].Count)
+            //{
+            //  _itembycamera[connectedDevice].Add(new FileItem(connectedDevice, _timeTable[i]));
+            //}
+            //else
+            //{
+            //  DateTime date = _itembycamera[connectedDevice][i].FileDate.AddSeconds(-_timeDif[connectedDevice]);
+            //  DateTime refdate = _timeTable[i];
+            //  int dif = (int)Math.Abs((refdate - date).TotalSeconds);
+            //  if (Math.Abs((_timeTable[i] - date).TotalSeconds) > threshold)
+            //    _itembycamera[connectedDevice].Insert(i, new FileItem(connectedDevice, _timeTable[i]));
+            //}
+          }
+        }
+
+      }
+      else
       {
-        Items.Add(fileItem);
+        foreach (var fileItem in _itembycamera.Values.SelectMany(lists => lists))
+        {
+          Items.Add(fileItem);
+        }
       }
 
       CollectionView myView;

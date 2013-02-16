@@ -15,7 +15,8 @@ namespace CameraControl.Core.Classes
   public enum FileItemType
   {
     File,
-    CameraObject
+    CameraObject,
+    Missing
 
   }
 
@@ -33,7 +34,7 @@ namespace CameraControl.Core.Classes
         {
           FileDate = File.GetLastWriteTime(_fileName);
         }
-
+        NotifyPropertyChanged("FileName");
       }
     }
 
@@ -49,7 +50,7 @@ namespace CameraControl.Core.Classes
     [XmlIgnore]
     public string ToolTip
     {
-      get { return string.Format("File name: {0}\nFile date :{1}",Name,FileDate.ToShortDateString()); }
+      get { return string.Format("File name: {0}\nFile date :{1}",FileName,FileDate.ToString()); }
     }
 
     private bool _isChecked;
@@ -158,11 +159,14 @@ namespace CameraControl.Core.Classes
       ItemType = FileItemType.File;
     }
 
-    public FileItem(ICameraDevice device)
+    public FileItem(ICameraDevice device,DateTime time)
     {
       Device = device;
       ItemType = FileItemType.CameraObject;
-      IsChecked = true;
+      IsChecked = false;
+      ItemType = FileItemType.Missing;
+      FileName = "Missing";
+      FileDate = time;
     }
 
     private BitmapSource _thumbnail;
@@ -173,9 +177,9 @@ namespace CameraControl.Core.Classes
       {
         if (_thumbnail == null)
         {
-          _thumbnail = BitmapLoader.Instance.DefaultThumbnail;
+          _thumbnail = ItemType == FileItemType.Missing ? BitmapLoader.Instance.NoImageThumbnail : BitmapLoader.Instance.DefaultThumbnail;
           if (!ServiceProvider.Settings.DontLoadThumbnails)
-            ServiceProvider.QueueManager.Add(new QueueItemFileItem() {FileItem = this});
+            ServiceProvider.QueueManager.Add(new QueueItemFileItem {FileItem = this});
         }
         return _thumbnail;
       }
@@ -188,6 +192,8 @@ namespace CameraControl.Core.Classes
 
     public void GetExtendedThumb()
     {
+      if (ItemType != FileItemType.File)
+        return;
       try
       {
         //FIBITMAP dib = new FIBITMAP();
