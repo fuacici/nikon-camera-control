@@ -36,6 +36,19 @@ namespace CameraControl.Core.Classes
       set { _defaultThumbnail = value; }
     }
 
+
+    private BitmapImage _noImageThumbnail;
+    public BitmapImage NoImageThumbnail
+    {
+      get
+      {
+        return _noImageThumbnail ??
+               (_noImageThumbnail = new BitmapImage(new Uri("pack://application:,,,/Images/NoImage.png")));
+      }
+      set { _noImageThumbnail = value; }
+    }
+
+
     public void GetBitmap(BitmapFile bitmapFile)
     {
       if (_isworking)
