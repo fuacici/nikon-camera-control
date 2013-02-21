@@ -42,6 +42,8 @@ namespace CameraControl.Controls
     {
       if(ServiceProvider.Settings==null)
         return;
+      if (ServiceProvider.DeviceManager.SelectedCameraDevice == null)
+        return;
       CameraProperty property =
         ServiceProvider.Settings.CameraProperties.Get(ServiceProvider.DeviceManager.SelectedCameraDevice);
       cmb_transfer.Items.Clear();
