@@ -142,6 +142,7 @@
     <Compile Include="Classes\BitmapFile.cs" />
     <Compile Include="Classes\BitmapLoader.cs" />
     <Compile Include="Classes\BraketingClass.cs" />
+    <Compile Include="Classes\Branding.cs" />
     <Compile Include="Classes\CameraPreset.cs" />
     <Compile Include="Classes\CameraProperty.cs" />
     <Compile Include="Classes\CameraPropertyEnumerator.cs" />

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading;
 using System.Timers;
 using System.Windows;
 using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Devices;
+using CameraControl.Devices.Classes;
+using Timer = System.Timers.Timer;
 
 namespace CameraControl.windows
 {
@@ -168,26 +171,49 @@ namespace CameraControl.windows
 
     private void btn_stop_Click(object sender, RoutedEventArgs e)
     {
+      Thread thread = new Thread(StopCaptureThread);
+      thread.Start();
+    }
+
+    private void StopCaptureThread()
+    {
       StopCapture();
       _captureTimer.Stop();
       _waitTimer.Stop();
-     StaticHelper.Instance.SystemMessage = "Capture stoped";
-      Log.Debug("Bulb capture stoped");
+      StaticHelper.Instance.SystemMessage = "Capture stopped";
+      Log.Debug("Bulb capture stopped");
     }
+
 
     private void StopCapture()
     {
-      try
+      bool retry ;
+      do
       {
-        CameraDevice.EndBulbMode();
-       StaticHelper.Instance.SystemMessage = "Capture done";
-        Log.Debug("Bulb capture done");
-      }
-      catch (Exception exception)
-      {
-       StaticHelper.Instance.SystemMessage = exception.Message;
-        Log.Error("Bulb done",exception);
-      }
+        retry = false;
+        try
+        {
+          CameraDevice.EndBulbMode();
+          StaticHelper.Instance.SystemMessage = "Capture done";
+          Log.Debug("Bulb capture done");
+        }
+        catch (DeviceException deviceException)
+        {
+          if (deviceException.ErrorCode == ErrorCodes.ERROR_BUSY)
+            retry = true;
+          else
+          {
+            StaticHelper.Instance.SystemMessage = deviceException.Message;
+            Log.Error("Bulb done", deviceException);
+          }
+            
+        }
+        catch (Exception exception)
+        {
+          StaticHelper.Instance.SystemMessage = exception.Message;
+          Log.Error("Bulb done", exception);
+        }
+      } while (retry);
     }
 
     private void Window_Closed(object sender, EventArgs e)
