@@ -777,6 +777,55 @@ namespace CameraControl.windows
       Dispatcher.Invoke(new Action(delegate { image1.Visibility = Visibility.Visible; }));
     }
 
+    private void StopLiveView()
+    {
+      Thread thread = new Thread(StopLiveViewThread);
+      thread.Start();
+    }
+
+    private void StopLiveViewThread()
+    {
+      try
+      {
+        _totalframes = 0;
+        _framestart = DateTime.Now;
+        bool retry = false;
+        int retryNum = 0;
+        Log.Debug("LiveView: Liveview stopping");
+        do
+        {
+          try
+          {
+            LiveViewManager.StopLiveView(SelectedPortableDevice);
+          }
+          catch (DeviceException deviceException)
+          {
+            Dispatcher.Invoke(new Action(delegate { grid_wait.Visibility = Visibility.Visible; }));
+            if (deviceException.ErrorCode == ErrorCodes.ERROR_BUSY ||
+                deviceException.ErrorCode == ErrorCodes.MTP_Device_Busy)
+            {
+              Thread.Sleep(500);
+              Log.Debug("Retry live view stop:" + deviceException.ErrorCode.ToString("X"));
+              retry = true;
+              retryNum++;
+            }
+            else
+            {
+              throw;
+            }
+          }
+
+        } while (retry && retryNum < 35);
+      }
+      catch (Exception exception)
+      {
+        Log.Error("Unable to stop liveview !", exception);
+        StaticHelper.Instance.SystemMessage = "Unable to stop liveview ! " + exception.Message;
+      }
+      Dispatcher.Invoke(new Action(delegate { grid_wait.Visibility = Visibility.Hidden; }));
+      Dispatcher.Invoke(new Action(delegate { image1.Visibility = Visibility.Hidden; }));
+    }
+
     private void image1_MouseDown(object sender, MouseButtonEventArgs e)
     {
       if (e.ButtonState == MouseButtonState.Pressed && e.ChangedButton == MouseButton.Left && LiveViewData != null &&
