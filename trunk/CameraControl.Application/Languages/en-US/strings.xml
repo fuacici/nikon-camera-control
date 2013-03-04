@@ -40,6 +40,8 @@
 	<string name="CUSTOM">Custom</string> 
 	<string name="[A]_AF_SERVO_MODE_AUTOMATIC_SWITCHING">[A] AF servo mode automatic switching</string> 
 	<string name="[S]_SINGLE_AF_SERVO">[S] Single AF servo</string> 
+	<string name="[M]_MANUAL_FOCUS">[M] Manual focus</string> 
+	<string name="KELVIN">Kelvin</string> 
 	
     <!-- End Property values -->	
     <string name="Mode">Mode</string> 
