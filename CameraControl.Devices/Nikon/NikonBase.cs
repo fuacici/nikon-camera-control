@@ -433,6 +433,7 @@ namespace CameraControl.Devices.Nikon
       LiveViewImageZoomRatio.AddValues("50%", 3);
       LiveViewImageZoomRatio.AddValues("66%", 4);
       LiveViewImageZoomRatio.AddValues("100%", 5);
+      LiveViewImageZoomRatio.AddValues("200%", 6);
       LiveViewImageZoomRatio.SetValue("All");
       LiveViewImageZoomRatio.ValueChanged += LiveViewImageZoomRatio_ValueChanged;
     }
