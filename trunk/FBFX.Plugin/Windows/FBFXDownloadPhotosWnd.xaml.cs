@@ -186,7 +186,7 @@ namespace FBFX.Plugin.Windows
         {
           if (!_timeDif.ContainsKey(connectedDevice))
             _timeDif.Add(connectedDevice, 0);
-          _timeDif[connectedDevice] = (int)(_itembycamera[connectedDevice][0].FileDate - basetime).TotalSeconds;
+          _timeDif[connectedDevice] = (int) (_itembycamera[connectedDevice][0].FileDate - basetime).TotalSeconds;
         }
 
 
@@ -225,23 +225,32 @@ namespace FBFX.Plugin.Windows
                 break;
               }
             }
-            if(!found)
+            if (!found)
               Items.Add(new FileItem(connectedDevice, _timeTable[i]));
-            //if (i >= _itembycamera[connectedDevice].Count)
-            //{
-            //  _itembycamera[connectedDevice].Add(new FileItem(connectedDevice, _timeTable[i]));
-            //}
-            //else
-            //{
-            //  DateTime date = _itembycamera[connectedDevice][i].FileDate.AddSeconds(-_timeDif[connectedDevice]);
-            //  DateTime refdate = _timeTable[i];
-            //  int dif = (int)Math.Abs((refdate - date).TotalSeconds);
-            //  if (Math.Abs((_timeTable[i] - date).TotalSeconds) > threshold)
-            //    _itembycamera[connectedDevice].Insert(i, new FileItem(connectedDevice, _timeTable[i]));
-            //}
           }
         }
-
+        //-------------------------------------------
+        bool[] checks = new bool[_timeTable.Count];
+        foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices)
+        {
+          int index = 1;
+          foreach (FileItem fileItem in Items)
+          {
+            if (fileItem.Device == connectedDevice)
+            {
+              if (fileItem.ItemType == FileItemType.Missing)
+                checks[index - 1] = true;
+              index++;
+            }
+          }
+        }
+        //-------------------------------------------
+        for (int i = 0; i < checks.Count(); i++)
+        {
+          if (checks[i])
+            SetIndex(i+1);
+        }
+        //-------------------------------------------
       }
       else
       {
@@ -286,6 +295,8 @@ namespace FBFX.Plugin.Windows
       int i = 0;
       foreach (FileItem fileItem in itemstoExport)
       {
+        if (fileItem.ItemType == FileItemType.Missing)
+          continue;
         dlg.Label = fileItem.FileName;
         dlg.ImageSource = fileItem.Thumbnail;
         PhotoSession session = (PhotoSession)fileItem.Device.AttachedPhotoSession ?? ServiceProvider.Settings.DefaultSession;
@@ -306,7 +317,17 @@ namespace FBFX.Plugin.Windows
                 Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_", 0,
                 Path.GetExtension(fileName));
         }
-        fileItem.Device.TransferFile(fileItem.DeviceObject.Handle, fileName);
+
+        try
+        {
+          fileItem.Device.TransferFile(fileItem.DeviceObject.Handle, fileName);
+        }
+        catch (Exception exception)
+        {
+          somethingwrong = true;
+          Log.Error("Transfer error", exception);
+        }
+
         // double check if file was transferred
         if (File.Exists(fileName))
         {
@@ -382,17 +403,22 @@ namespace FBFX.Plugin.Windows
       int selectedidx = 0;
       if (int.TryParse(txt_indx.Text, out selectedidx))
       {
-        foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices)
+        SetIndex(selectedidx);
+      }
+    }
+
+    private void SetIndex(int selectedidx)
+    {
+      foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices)
+      {
+        int index = 1;
+        foreach (FileItem fileItem in Items)
         {
-          int index = 1;
-          foreach (FileItem fileItem in Items)
+          if (fileItem.Device == connectedDevice)
           {
-            if (fileItem.Device == connectedDevice)
-            {
-              if (index == selectedidx)
-                fileItem.IsChecked = !fileItem.IsChecked;
-              index++;
-            }
+            if (index == selectedidx)
+              fileItem.IsChecked = !fileItem.IsChecked;
+            index++;
           }
         }
       }
