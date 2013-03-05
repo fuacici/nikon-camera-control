@@ -26,6 +26,7 @@ namespace CameraControl.Core
     public static ActionManager ActionManager { get; set; }
     public static QueueManager QueueManager { get; set; }
     public static PluginManager PluginManager { get; set; }
+    public static Branding Branding { get; set; }
 
 
     public static void Configure()
@@ -37,17 +38,19 @@ namespace CameraControl.Core
       Trigger = new TriggerClass();
       ActionManager = new ActionManager();
       QueueManager = new QueueManager();
+      Branding = new Branding();
       Log.Debug("--------------------------------===========================Application starting===========================--------------------------------");
       Log.Debug("Application version : " + Assembly.GetEntryAssembly().GetName().Version);
       PluginManager = new PluginManager();
+
     }
 
-    static void Log_LogError(CameraControl.Devices.Classes.LogEventArgs e)
+    static void Log_LogError(LogEventArgs e)
     {
       _log.Error(e.Message, e.Exception);
     }
 
-    static void Log_LogDebug(CameraControl.Devices.Classes.LogEventArgs e)
+    static void Log_LogDebug(LogEventArgs e)
     {
       _log.Debug(e.Message, e.Exception);
     }
@@ -61,7 +64,7 @@ namespace CameraControl.Core
         var fileAppender = new RollingFileAppender
                                                               {
                                                                 Layout =
-                                                                  new log4net.Layout.PatternLayout(
+                                                                  new PatternLayout(
                                                                   "%d [%t]%-5p %c [%x] - %m%n"),
                                                                 MaximumFileSize = "1000KB",
                                                                 MaxSizeRollBackups = 5,
@@ -79,8 +82,8 @@ namespace CameraControl.Core
         BasicConfigurator.Configure(fileAppender);
 #if DEBUG
         // Setup TraceAppender
-        log4net.Appender.TraceAppender ta = new log4net.Appender.TraceAppender(
-          new log4net.Layout.PatternLayout("%d [%t]%-5p %c [%x] - %m%n"));
+        TraceAppender ta = new TraceAppender(
+          new PatternLayout("%d [%t]%-5p %c [%x] - %m%n"));
         BasicConfigurator.Configure(ta);
 #endif
 

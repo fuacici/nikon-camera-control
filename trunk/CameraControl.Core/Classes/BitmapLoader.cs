@@ -29,25 +29,58 @@ namespace CameraControl.Core.Classes
     private BitmapImage _defaultThumbnail;
     public BitmapImage DefaultThumbnail
     {
-      get {
-        return _defaultThumbnail ??
-               (_defaultThumbnail = new BitmapImage(new Uri("pack://application:,,,/Images/logo.png")));
+      get
+      {
+        if (_defaultThumbnail == null)
+        {
+          if (!string.IsNullOrEmpty(ServiceProvider.Branding.DefaultThumbImage) &&
+              File.Exists(ServiceProvider.Branding.DefaultThumbImage))
+          {
+            BitmapImage bi = new BitmapImage();
+            // BitmapImage.UriSource must be in a BeginInit/EndInit block.
+            bi.BeginInit();
+            bi.UriSource = new Uri(ServiceProvider.Branding.DefaultThumbImage);
+            bi.EndInit();
+            _defaultThumbnail = bi;
+          }
+          else
+          {
+            _defaultThumbnail = new BitmapImage(new Uri("pack://application:,,,/Images/logo.png"));
+          }
+        }
+        return _defaultThumbnail;
       }
       set { _defaultThumbnail = value; }
     }
 
 
     private BitmapImage _noImageThumbnail;
+
     public BitmapImage NoImageThumbnail
     {
       get
       {
-        return _noImageThumbnail ??
-               (_noImageThumbnail = new BitmapImage(new Uri("pack://application:,,,/Images/NoImage.png")));
+        if (_noImageThumbnail == null)
+        {
+          if (!string.IsNullOrEmpty(ServiceProvider.Branding.DefaultMissingThumbImage) &&
+              File.Exists(ServiceProvider.Branding.DefaultMissingThumbImage))
+          {
+            BitmapImage bi = new BitmapImage();
+            // BitmapImage.UriSource must be in a BeginInit/EndInit block.
+            bi.BeginInit();
+            bi.UriSource = new Uri(ServiceProvider.Branding.DefaultMissingThumbImage);
+            bi.EndInit();
+            _noImageThumbnail = bi;
+          }
+          else
+          {
+            _noImageThumbnail = new BitmapImage(new Uri("pack://application:,,,/Images/NoImage.png"));
+          }
+        }
+        return _noImageThumbnail;
       }
       set { _noImageThumbnail = value; }
     }
-
 
     public void GetBitmap(BitmapFile bitmapFile)
     {

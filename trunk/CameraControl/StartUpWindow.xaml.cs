@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using CameraControl.Actions;
 using CameraControl.Actions.Enfuse;
 using CameraControl.Core;
@@ -51,6 +53,19 @@ namespace CameraControl
     private void InitApplication()
     {
       ServiceProvider.Configure();
+
+      ServiceProvider.Settings = new Settings();
+      ServiceProvider.Settings = ServiceProvider.Settings.Load();
+      ServiceProvider.Branding = ServiceProvider.Settings.LoadBranding();
+      if (!string.IsNullOrEmpty(ServiceProvider.Branding.StartupScreenImage) && File.Exists(ServiceProvider.Branding.StartupScreenImage))
+      {
+        BitmapImage bi = new BitmapImage();
+        // BitmapImage.UriSource must be in a BeginInit/EndInit block.
+        bi.BeginInit();
+        bi.UriSource = new Uri(ServiceProvider.Branding.StartupScreenImage);
+        bi.EndInit();
+        background.Source = bi;
+      }
       ServiceProvider.ActionManager.Actions = new AsyncObservableCollection<IMenuAction>
                                                 {
                                                   new CmdFocusStackingCombineZP(),
@@ -58,8 +73,12 @@ namespace CameraControl
                                                   new CmdToJpg(),
                                                   new CmdExpJpg()
                                                 };
-      ServiceProvider.Settings = new Settings();
-      ServiceProvider.Settings = ServiceProvider.Settings.Load();
+      //ServiceProvider.Branding.ApplicationTitle = "digiCamControl";
+      //ServiceProvider.Branding.DefaultMissingThumbImage = "";
+      //ServiceProvider.Branding.DefaultThumbImage = "";
+      //ServiceProvider.Branding.LogoImage = "";
+      //ServiceProvider.Branding.StartupScreenImage = "";
+      //ServiceProvider.Settings.Save(ServiceProvider.Branding);
       if (ServiceProvider.Settings.DisableNativeDrivers && MessageBox.Show(TranslationStrings.MsgDisabledDrivers, "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
         ServiceProvider.Settings.DisableNativeDrivers = false;
       ServiceProvider.Settings.LoadSessionData();

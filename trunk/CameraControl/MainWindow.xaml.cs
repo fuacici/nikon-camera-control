@@ -6,6 +6,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
@@ -46,6 +47,19 @@ namespace CameraControl
       SelectPresetCommand = new RelayCommand<CameraPreset>(SelectPreset);
       ExecuteExportPluginCommand = new RelayCommand<IExportPlugin>(ExecuteExportPlugin);
       InitializeComponent();
+      if (!string.IsNullOrEmpty(ServiceProvider.Branding.ApplicationTitle))
+      {
+        Title = ServiceProvider.Branding.ApplicationTitle;
+      }
+      if (!string.IsNullOrEmpty(ServiceProvider.Branding.LogoImage) && File.Exists(ServiceProvider.Branding.LogoImage))
+      {
+        BitmapImage bi = new BitmapImage();
+        // BitmapImage.UriSource must be in a BeginInit/EndInit block.
+        bi.BeginInit();
+        bi.UriSource = new Uri(ServiceProvider.Branding.LogoImage);
+        bi.EndInit();
+        Icon = bi;
+      }
     }
 
     private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
