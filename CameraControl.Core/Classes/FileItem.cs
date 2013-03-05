@@ -163,7 +163,7 @@ namespace CameraControl.Core.Classes
     {
       Device = device;
       ItemType = FileItemType.CameraObject;
-      IsChecked = false;
+      IsChecked = true;
       ItemType = FileItemType.Missing;
       FileName = "Missing";
       FileDate = time;
