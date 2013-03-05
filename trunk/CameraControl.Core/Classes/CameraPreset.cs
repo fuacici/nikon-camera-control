@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading;
 using System.Xml.Serialization;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
@@ -67,6 +68,7 @@ namespace CameraControl.Core.Classes
           return;
         }
       }
+      Thread.Sleep(100);
     }
 
     public void SetTo(PropertyValue<long> value, string name)

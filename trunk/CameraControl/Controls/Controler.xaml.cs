@@ -116,8 +116,12 @@ namespace CameraControl.Controls
       {
         int i = 0;
         dlg.MaxValue = ServiceProvider.DeviceManager.ConnectedDevices.Count;
+        var preset = new CameraPreset();
+        preset.Get(ServiceProvider.DeviceManager.SelectedCameraDevice);
         foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices)
         {
+          if (connectedDevice == null || !connectedDevice.IsConnected)
+            continue;
           try
           {
             if (connectedDevice != ServiceProvider.DeviceManager.SelectedCameraDevice)
@@ -125,8 +129,6 @@ namespace CameraControl.Controls
               dlg.Label = connectedDevice.DisplayName;
               dlg.Progress = i;
               i++;
-              var preset = new CameraPreset();
-              preset.Get(ServiceProvider.DeviceManager.SelectedCameraDevice);
               preset.Set(connectedDevice);
             }
           }
