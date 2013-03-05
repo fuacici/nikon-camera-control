@@ -604,6 +604,27 @@ namespace CameraControl.Core.Classes
       }
     }
 
+    public void Save(Branding branding)
+    {
+      if (branding == null)
+        return;
+      try
+      {
+        string filename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,"Branding.xml");
+        XmlSerializer serializer = new XmlSerializer(typeof(Branding));
+        // Create a FileStream to write with.
+
+        Stream writer = new FileStream(filename, FileMode.Create);
+        // Serialize the object, and close the TextWriter
+        serializer.Serialize(writer, branding);
+        writer.Close();
+      }
+      catch (Exception)
+      {
+        Log.Error("Unable to save session branding file" );
+      }
+    }
+
     public PhotoSession Load(string filename)
     {
       PhotoSession photoSession = new PhotoSession();
@@ -624,6 +645,28 @@ namespace CameraControl.Core.Classes
         Log.Error(e);
       }
       return photoSession;
+    }
+
+    public Branding LoadBranding()
+    {
+      Branding branding = new Branding();
+      string filename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,"Branding.xml");
+      try
+      {
+        if (File.Exists(filename))
+        {
+          XmlSerializer mySerializer =
+            new XmlSerializer(typeof(Branding));
+          FileStream myFileStream = new FileStream(filename, FileMode.Open);
+          branding = (Branding)mySerializer.Deserialize(myFileStream);
+          myFileStream.Close();
+        }
+      }
+      catch (Exception e)
+      {
+        Log.Error(e);
+      }
+      return branding;
     }
 
     public Settings Load()
