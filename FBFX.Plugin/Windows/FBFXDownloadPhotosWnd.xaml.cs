@@ -245,6 +245,7 @@ namespace FBFX.Plugin.Windows
           }
         }
         //-------------------------------------------
+        // select only complete sets 
         for (int i = 0; i < checks.Count(); i++)
         {
           if (checks[i])
