@@ -255,13 +255,21 @@ namespace CameraControl.Core.Classes
     {
       get
       {
-        var hostEntry = Dns.GetHostEntry(Dns.GetHostName());
-        var ip = (
-                   from addr in hostEntry.AddressList
-                   where addr.AddressFamily.ToString() == "InterNetwork"
-                   select addr.ToString()
-                 ).FirstOrDefault();
-        return string.Format("http://{0}:{1}", ip, WebserverPort);
+        try
+        {
+          var hostEntry = Dns.GetHostEntry(Dns.GetHostName());
+          var ip = (
+                     from addr in hostEntry.AddressList
+                     where addr.AddressFamily.ToString() == "InterNetwork"
+                     select addr.ToString()
+                   ).FirstOrDefault();
+          return string.Format("http://{0}:{1}", ip, WebserverPort);
+        }
+        catch (Exception exception)
+        {
+          Log.Error("Error get web address ",exception);
+        }
+        return "";
       }
     }
 
