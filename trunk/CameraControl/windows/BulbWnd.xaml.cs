@@ -68,6 +68,17 @@ namespace CameraControl.windows
       }
     }
 
+    private string _message;
+    public string Message
+    {
+      get { return _message; }
+      set
+      {
+        _message = value;
+        NotifyPropertyChanged("Message");
+      }
+    }
+
 
     public BulbWnd()
     {
@@ -84,7 +95,7 @@ namespace CameraControl.windows
 
     private void Init()
     {
-      NoAutofocus = true;
+      //NoAutofocus = true;
       CaptureTime = 60;
       NumOfPhotos = 1;
       WaitTime = 0;
@@ -97,8 +108,8 @@ namespace CameraControl.windows
     void _waitTimer_Elapsed(object sender, ElapsedEventArgs e)
     {
       _waitSecs++;
-     StaticHelper.Instance.SystemMessage = string.Format("Waiting for next capture {0} sec. Photo done {1}",
-                                                             _waitSecs, _photoCount);
+      Message = string.Format("Waiting for next capture {0} sec. Photo done {1}/{2}",
+                              _waitSecs, _photoCount, NumOfPhotos);
       if (_waitSecs >= WaitTime)
       {
         _waitTimer.Stop();
@@ -109,7 +120,8 @@ namespace CameraControl.windows
     void _captureTimer_Elapsed(object sender, ElapsedEventArgs e)
     {
       _captureSecs ++;
-     StaticHelper.Instance.SystemMessage = string.Format("Capture time {0} sec", _captureSecs);
+      Message = string.Format("Capture time {0}/{1} sec. Photo done {2}/{3}", _captureSecs, CaptureTime, _photoCount,
+                              NumOfPhotos);
       if (_captureSecs > CaptureTime)
       {
         _captureTimer.Stop();
@@ -131,25 +143,39 @@ namespace CameraControl.windows
 
     void StartCapture()
     {
-      try
+      Thread thread = new Thread(StartCaptureThread);
+      thread.Start();
+    }
+
+    void StartCaptureThread()
+    {
+      bool retry;
+      do
       {
-        Log.Debug("Bulb capture started");
-        CameraDevice.LockCamera();
-        //if (NoAutofocus)
-        //{
-        //  CameraDevice.CapturePhotoNoAf();
-        //}
-        //else
-        //{
-        //  CameraDevice.CapturePhoto();
-        //}
-        CameraDevice.StartBulbMode();
-      }
-      catch (Exception exception)
-      {
-       StaticHelper.Instance.SystemMessage = exception.Message;
-        Log.Error("Bulb start", exception);
-      }
+        retry = false;
+        try
+        {
+          Log.Debug("Bulb capture started");
+          CameraDevice.LockCamera();
+          CameraDevice.StartBulbMode();
+        }
+        catch (DeviceException deviceException)
+        {
+          if (deviceException.ErrorCode == ErrorCodes.ERROR_BUSY)
+            retry = true;
+          else
+          {
+            StaticHelper.Instance.SystemMessage = deviceException.Message;
+            Log.Error("Bulb start", deviceException);
+          }
+        }
+        catch (Exception exception)
+        {
+          StaticHelper.Instance.SystemMessage = exception.Message;
+          Log.Error("Bulb start", exception);
+        }
+      } while (retry);
+
       _waitSecs = 0;
       _captureSecs = 0;
       _captureTimer.Start();
@@ -171,13 +197,13 @@ namespace CameraControl.windows
 
     private void btn_stop_Click(object sender, RoutedEventArgs e)
     {
-      Thread thread = new Thread(StopCaptureThread);
-      thread.Start();
+      StopCapture();
     }
 
-    private void StopCaptureThread()
+    private void StopCapture()
     {
-      StopCapture();
+      Thread thread = new Thread(StopCaptureThread);
+      thread.Start();
       _captureTimer.Stop();
       _waitTimer.Stop();
       StaticHelper.Instance.SystemMessage = "Capture stopped";
@@ -185,7 +211,7 @@ namespace CameraControl.windows
     }
 
 
-    private void StopCapture()
+    private void StopCaptureThread()
     {
       bool retry ;
       do
@@ -220,7 +246,7 @@ namespace CameraControl.windows
     {
       if (_captureTimer.Enabled)
       {
-        StopCapture();
+        StopCaptureThread();
         CameraDevice.UnLockCamera();
       }
       _captureTimer.Stop();
