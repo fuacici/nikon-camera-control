@@ -38,20 +38,20 @@
             <TabItem Header="{T:TranslateExtension LabelGeneral}">
                 <StackPanel Margin="5">
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="{T:TranslateExtension LabelSessonName}" Width="120" />
+                        <Label Content="{T:TranslateExtension LabelSessonName}" Width="120" HorizontalContentAlignment="Right" />
                         <TextBox Text="{Binding Path=Name}" Width="200"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="{T:TranslateExtension LabelFolder}" Width="120" />
+                        <Label Content="{T:TranslateExtension LabelFolder}" Width="120" HorizontalContentAlignment="Right" />
                         <TextBox Text="{Binding Path=Folder}" Width="190"/>
                         <Button Name="btn_browse" Content=" ... " Click="btn_browse_Click" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="{T:TranslateExtension LabelFileNameTemplate}" Width="120" />
+                        <Label Content="{T:TranslateExtension LabelFileNameTemplate}" Width="120" HorizontalContentAlignment="Right" />
                         <TextBox Text="{Binding Path=FileNameTemplate}" Width="200" ToolTip="{T:TranslateExtension LabelFileNameTemplateToolTip}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="{T:TranslateExtension LabelCounter}" Width="120" />
+                        <Label Content="{T:TranslateExtension LabelCounter}" Width="120" HorizontalContentAlignment="Right" />
                         <xctk:IntegerUpDown Value="{Binding Path=Counter}" Width="200" Minimum="0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
