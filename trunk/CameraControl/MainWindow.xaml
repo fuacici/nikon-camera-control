@@ -36,8 +36,8 @@
         <Controls:WindowCommands>
             <Button Content="{T:TranslateExtension SettingsToolTip}" Name="btn_settings" Click="btn_settings_Click" />
             <Button Content="{T:TranslateExtension LabelMenu}" Name="btn_menu" Click="btn_menu_Click" />
-            <Button Content="{T:TranslateExtension ButtonHelp}" Name="btn_help" Click="btn_help_Click" />
-            <Button Content="{T:TranslateExtension MenuDonate}" Name="btn_donate" Click="btn_donate_Click" />
+            <Button Content="{T:TranslateExtension ButtonHelp}" Name="btn_help" Click="btn_help_Click" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}"/>
+            <Button Content="{T:TranslateExtension MenuDonate}" Name="btn_donate" Click="btn_donate_Click" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}"/>
             <!--<Button>
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20" Height="20">
@@ -97,17 +97,17 @@
                     <MenuItem Header="{T:TranslateExtension MenuPresetsSave}" Click="MenuItem_Click_4" />
                     <MenuItem Header="{T:TranslateExtension MenuPresetsEdit}" Click="MenuItem_Click_5" />
                 </MenuItem>
-                <MenuItem Header="{T:TranslateExtension MenuHelp}">
+                    <MenuItem Header="{T:TranslateExtension MenuHelp}" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}">
                     <MenuItem.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </MenuItem.ItemsPanel>
-                    <MenuItem Header="{T:TranslateExtension MenuHomePage}" Click="MenuItem_Click" />
-                    <MenuItem Header="{T:TranslateExtension MenuCheckForUpdate}" Name="mnu_update" Click="MenuItem_Click_1" />
-                    <MenuItem Header="{T:TranslateExtension MenuForum}" Name="mnu_forum" Click="mnu_forum_Click" />
+                        <MenuItem Header="{T:TranslateExtension MenuHomePage}" Click="MenuItem_Click" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}"/>
+                        <MenuItem Header="{T:TranslateExtension MenuCheckForUpdate}" Name="mnu_update" Click="MenuItem_Click_1" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}"/>
+                        <MenuItem Header="{T:TranslateExtension MenuForum}" Name="mnu_forum" Click="mnu_forum_Click" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}"/>
                     <Separator />
-                    <MenuItem Header="{T:TranslateExtension MenuAbout}" Name="mnu_about" Click="btn_about_Click" />
+                        <MenuItem Header="{T:TranslateExtension MenuAbout}" Name="mnu_about" Click="btn_about_Click" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=ShowAboutWindow, Converter={StaticResource BooleanToVisibilityConverter1}}"/>
                 </MenuItem>
             </Menu>
             <StackPanel Orientation="Vertical">
