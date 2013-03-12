@@ -17,5 +17,15 @@ namespace CameraControl.Core.Classes
     public string DefaultThumbImage { get; set; }
 
     public string DefaultMissingThumbImage { get; set; }
+
+    public bool ShowAboutWindow { get; set; }
+
+    public bool OnlineReference { get; set; }
+
+    public Branding()
+    {
+      ShowAboutWindow = true;
+      OnlineReference = true;
+    }
   }
 }

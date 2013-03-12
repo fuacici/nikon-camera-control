@@ -658,7 +658,7 @@ namespace CameraControl.Core.Classes
     public Branding LoadBranding()
     {
       Branding branding = new Branding();
-      string filename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,"Branding.xml");
+      string filename = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "Branding.xml");
       try
       {
         if (File.Exists(filename))
