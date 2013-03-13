@@ -46,6 +46,7 @@ namespace CameraControl
 
       SelectPresetCommand = new RelayCommand<CameraPreset>(SelectPreset);
       ExecuteExportPluginCommand = new RelayCommand<IExportPlugin>(ExecuteExportPlugin);
+      ExecuteToolPluginCommand = new RelayCommand<IToolPlugin>(ExecuteToolPlugin);
       InitializeComponent();
       if (!string.IsNullOrEmpty(ServiceProvider.Branding.ApplicationTitle))
       {
@@ -98,6 +99,10 @@ namespace CameraControl
       obj.Execute();
     }
 
+    private void ExecuteToolPlugin(IToolPlugin obj)
+    {
+      obj.Execute();
+    }
 
     void DeviceManager_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
     {
@@ -215,6 +220,12 @@ namespace CameraControl
     }
 
     public RelayCommand<IExportPlugin> ExecuteExportPluginCommand
+    {
+      get;
+      private set;
+    }
+
+    public RelayCommand<IToolPlugin> ExecuteToolPluginCommand
     {
       get;
       private set;

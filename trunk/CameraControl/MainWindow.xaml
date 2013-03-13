@@ -123,6 +123,19 @@
                         </ListBox>
                     </Expander>
                 </StackPanel>
+                <StackPanel Orientation="Vertical">
+                    <Expander Header="{T:TranslateExtension LabelTools}" IsExpanded="True">
+                        <ListBox ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.PluginManager}, Path=ToolPlugins}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <Button Content="{Binding Path=Title}" Command="{Binding Path=ExecuteToolPluginCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding}" Margin="4"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Expander>
+                </StackPanel>
            </StackPanel>
         </Controls:Flyout>
         <Controls:Flyout Header="{T:TranslateExtension MenuConnectedCameras}" Background="#9f000000" Position="Left" Opacity="0.9">

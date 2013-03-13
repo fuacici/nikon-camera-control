@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using CameraControl.Core;
 using CameraControl.Core.Interfaces;
+using CameraControl.Devices;
+using FBFX.Plugin.Plugins;
 using FBFX.Plugin.Windows;
 
 namespace FBFX.Plugin
@@ -18,11 +20,11 @@ namespace FBFX.Plugin
       {
         ServiceProvider.WindowsManager.Remove("CameraControl.windows.DownloadPhotosWnd");
         ServiceProvider.WindowsManager.Add(new FBFXDownloadPhotosWnd());
+        ServiceProvider.PluginManager.ToolPlugins.Add(new PioControlPlugin());
       }
-      catch (Exception)
+      catch (Exception exception)
       {
-
-
+        Log.Error("Error loading plugin FBFX", exception);
       }
       return true;
     }

@@ -309,5 +309,7 @@ namespace CameraControl.Core.Translation
     public static string LabelComboGrid = "Grid";
     public static string LabelDiagonal = "Diagonal";
     public static string LabelSplit = "Split";
+    // 13/03/2013
+    public static string LabelTools = "Tools";
   }
 }
