@@ -93,6 +93,9 @@
     <Reference Include="AForge.Vision">
       <HintPath>..\packages\AForge.Vision.2.2.4\lib\AForge.Vision.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\packages\Castle.Core.3.2.0\lib\net40-client\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="FreeImageNET, Version=3.15.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\refs\FreeImageNET.dll</HintPath>
@@ -126,6 +129,9 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="TestStack.White">
+      <HintPath>..\packages\TestStack.White.0.10.0.102\lib\net40\TestStack.White.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />

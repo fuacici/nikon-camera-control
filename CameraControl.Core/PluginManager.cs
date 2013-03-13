@@ -46,10 +46,23 @@ namespace CameraControl.Core
       }
     }
 
+    private AsyncObservableCollection<IToolPlugin> _toolPlugins;
+    public AsyncObservableCollection<IToolPlugin> ToolPlugins
+    {
+      get { return _toolPlugins; }
+      set
+      {
+        _toolPlugins = value;
+        NotifyPropertyChanged("ToolPlugins");
+      }
+    }
+
+
     public PluginManager()
     {
       Plugins = new AsyncObservableCollection<IPlugin>();
       ExportPlugins = new AsyncObservableCollection<IExportPlugin>();
+      ToolPlugins = new AsyncObservableCollection<IToolPlugin>();
       MainWindowPlugins = new AsyncObservableCollection<IMainWindowPlugin>();
     }
 

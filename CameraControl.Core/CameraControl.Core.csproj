@@ -176,6 +176,7 @@
     <Compile Include="Exif\translation.cs" />
     <Compile Include="Interfaces\IMenuAction.cs" />
     <Compile Include="Interfaces\IQueueItem.cs" />
+    <Compile Include="Interfaces\IToolPlugin.cs" />
     <Compile Include="Interfaces\IWindow.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
