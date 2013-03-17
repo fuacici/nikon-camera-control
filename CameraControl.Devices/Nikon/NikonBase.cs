@@ -1263,7 +1263,17 @@ namespace CameraControl.Devices.Nikon
           }
           return "";
           break;
-        case OperationEnum.Focus:
+        case OperationEnum.AutoFocus:
+          if (FocusMode.Value.Contains("[M]"))
+            return "LabelMFError";
+          // check if not Single AF servo
+          return "";
+          break;
+        case OperationEnum.ManualFocus:
+          if (FocusMode.Value.Contains("[M]"))
+            return "LabelMFError";
+          if (FocusMode.Value.Contains("[F]"))
+            return "LabelNotAFSError";
           // check if not Single AF servo
           return "";
           break;

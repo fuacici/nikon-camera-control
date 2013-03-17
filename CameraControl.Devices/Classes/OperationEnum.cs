@@ -4,6 +4,7 @@ namespace CameraControl.Devices.Classes
   {
     Capture,
     RecordMovie,
-    Focus
+    AutoFocus,
+    ManualFocus
   }
 }
