@@ -21,6 +21,8 @@ namespace CameraControl.Layouts
   public class LayoutBase : UserControl
   {
     public ListBox ImageLIst { get; set; }
+    private readonly BackgroundWorker _worker = new BackgroundWorker();
+
 
     public LayoutBase()
     {
@@ -31,6 +33,7 @@ namespace CameraControl.Layouts
       OpenViewerCommand = new RelayCommand<object>(OpenViewer);
       DeleteItemCommand = new RelayCommand<object>(DeleteItem);
       ImageDoubleClickCommand = new RelayCommand<object>(delegate { ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FullScreenWnd_Show); });
+      _worker.DoWork += worker_DoWork;
     }
 
     public RelayCommand<object> SelectAllCommand
@@ -168,17 +171,16 @@ namespace CameraControl.Layouts
 
     private void ImageLIst_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-
+      if (_worker.IsBusy)
+        return;
       if (e.AddedItems.Count > 0)
       {
-        BackgroundWorker worker = new BackgroundWorker();
-        worker.DoWork += worker_DoWork;
         FileItem item = e.AddedItems[0] as FileItem;
         if (item != null)
         {
           //image1.Source = item.Thumbnail;
           ServiceProvider.Settings.SelectedBitmap.SetFileItem(item);
-          worker.RunWorkerAsync(item);
+          _worker.RunWorkerAsync(item);
         }
       }
     }
