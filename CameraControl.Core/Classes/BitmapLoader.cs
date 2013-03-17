@@ -128,35 +128,23 @@ namespace CameraControl.Core.Classes
               }
               else
               {
-                writeableBitmap = BitmapFactory.ConvertToPbgra32Format(bmpDec.Frames.Single());
+                writeableBitmap = BitmapFactory.ConvertToPbgra32Format(bmpDec.Frames[0]);
                 double dw = 2000/writeableBitmap.Width;
                 writeableBitmap = writeableBitmap.Resize((int) (writeableBitmap.PixelWidth*dw),
                                                          (int) (writeableBitmap.PixelHeight*dw),
                                                          WriteableBitmapExtensions.Interpolation.Bilinear);
               }
+              bmpDec = null;
+            }
+            else
+            {
+              writeableBitmap = BitmapFactory.ConvertToPbgra32Format(bmpDec.Frames.Single());
             }
             GetMetadata(_currentfile, writeableBitmap);
             Log.Debug("Loading raw file done.");
           }
           else
           {
-            //Log.Debug("Loading bitmap file.");
-            //Bitmap image = (Bitmap) Image.FromFile(_currentfile.FileItem.FileName);
-            //var exif = new EXIFextractor(ref image, "n");
-            //if (exif["Orientation"] != null)
-            //{
-            //  RotateFlipType flip = EXIFextractorEnumerator.OrientationToFlipType(exif["Orientation"].ToString());
-
-            //  if (flip != RotateFlipType.RotateNoneFlipNone) // don't flip of orientation is correct
-            //  {
-            //    image.RotateFlip(flip);
-            //  }
-            //  if (ServiceProvider.Settings.Rotate != RotateFlipType.RotateNoneFlipNone)
-            //  {
-            //    image.RotateFlip(ServiceProvider.Settings.Rotate);
-            //  }
-            //}
-
             BitmapImage bi = new BitmapImage();
             // BitmapImage.UriSource must be in a BeginInit/EndInit block.
             bi.BeginInit();
@@ -170,6 +158,7 @@ namespace CameraControl.Core.Classes
             GetMetadata(_currentfile, writeableBitmap);
             Log.Debug("Loading bitmap file done.");
           }
+          GC.Collect();
         }
         catch (FileFormatException)
         {
