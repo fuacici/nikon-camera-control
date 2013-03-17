@@ -311,5 +311,9 @@ namespace CameraControl.Core.Translation
     public static string LabelSplit = "Split";
     // 13/03/2013
     public static string LabelTools = "Tools";
+    // 17/03/2012
+    public static string LabelMFError = "Camera is in MF focus mode";
+    public static string LabelNotAFSError = "Camera isn't in AF-S focus mode";
+    
   }
 }

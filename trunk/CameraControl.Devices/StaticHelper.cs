@@ -21,7 +21,7 @@ namespace CameraControl.Devices
 
     public StaticHelper()
     {
-      SystemMessage = "";
+      SystemMessage = "System message";
     }
 
     private string _systemMessage;

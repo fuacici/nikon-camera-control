@@ -661,8 +661,8 @@ namespace CameraControl.windows
 
     private void AutoFocus()
     {
-      _timer.Stop();
-      Thread.Sleep(100);
+      //_timer.Stop();
+      //Thread.Sleep(100);
       try
       {
         selectedPortableDevice.AutoFocus();
@@ -672,13 +672,22 @@ namespace CameraControl.windows
         Log.Error("Unable to autofocus", exception);
         StaticHelper.Instance.SystemMessage = exception.Message;
       }
-      FocusCounter = 0;
-      _timer.Start();
+      //FocusCounter = 0;
+      //_timer.Start();
     }
 
     private void button1_Click(object sender, RoutedEventArgs e)
     {
-      AutoFocus();
+      string resp = SelectedPortableDevice.GetProhibitionCondition(OperationEnum.AutoFocus);
+      if (string.IsNullOrEmpty(resp))
+      {
+        Thread thread = new Thread(AutoFocus);
+        thread.Start();
+      }
+      else
+      {
+        MessageBox.Show(TranslationStrings.LabelErrorUnableFocus + "\n" + TranslationManager.GetTranslation(resp));
+      }
     }
 
     private void button2_Click(object sender, RoutedEventArgs e)
@@ -957,7 +966,7 @@ namespace CameraControl.windows
                                              ServiceProvider.Settings.SelectedBitmap.BitmapLoaded -=
                                                SelectedBitmap_BitmapLoaded;
                                              Thread.Sleep(100);
-                                             SelectedPortableDevice.StopLiveView();
+                                             StopLiveView();
                                              Recording = false;
                                              LockA = false;
                                              LockB = false;
@@ -965,7 +974,7 @@ namespace CameraControl.windows
                                            }
                                            catch (Exception exception)
                                            {
-                                             Log.Error("Unable to stop liveview", exception);
+                                             Log.Error("Unable to stop live view", exception);
                                            }
                                            //ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.FocusStackingWnd_Hide);
                                          }));
@@ -1069,8 +1078,8 @@ namespace CameraControl.windows
       _photoCapturedTime = DateTime.Now;
       if (PhotoCount <= PhotoNo && IsBusy)
       {
-        Thread thread_photo = new Thread(TakePhoto);
-        thread_photo.Start();
+        var threadPhoto = new Thread(TakePhoto);
+        threadPhoto.Start();
       }
       else
       {
@@ -1084,8 +1093,23 @@ namespace CameraControl.windows
 
     private void SetFocus(int step)
     {
+      string resp = SelectedPortableDevice.GetProhibitionCondition(OperationEnum.ManualFocus);
+      if (string.IsNullOrEmpty(resp))
+      {
+        Thread thread = new Thread(SetFocusThread);
+        thread.Start(step);
+      }
+      else
+      {
+        MessageBox.Show(TranslationStrings.LabelErrorUnableFocus + "\n" + TranslationManager.GetTranslation(resp));
+      }
+    }
+
+    private void SetFocusThread(object ostep)
+    {
       if (_focusIProgress)
         return;
+      int step = (int) ostep;
       _focusIProgress = true;
       Console.WriteLine("Focus start");
       if (LockA)
@@ -1112,7 +1136,7 @@ namespace CameraControl.windows
       catch (DeviceException exception)
       {
         Log.Error("Unable to focus", exception);
-        StaticHelper.Instance.SystemMessage = TranslationStrings.LabelErrorUnableFocus;
+        StaticHelper.Instance.SystemMessage = TranslationStrings.LabelErrorUnableFocus+" "+exception.Message;
       }
       catch (Exception exception)
       {

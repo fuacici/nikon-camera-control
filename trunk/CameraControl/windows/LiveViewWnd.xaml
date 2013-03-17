@@ -8,6 +8,7 @@
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:local="clr-namespace:CameraControl.Controls"
                       xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
+                      xmlns:Devices="clr-namespace:CameraControl.Devices;assembly=CameraControl.Devices"
                       mc:Ignorable="d" d:DataContext="{d:DesignData }" Topmost="{Binding ElementName=chk_top,Path=IsChecked}"
                       ShowMinButton="False" PreviewKeyDown="MetroWindow_PreviewKeyDown">
     <Window.Resources>
@@ -36,7 +37,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="224" />
             <RowDefinition Height="46*" />
-            <RowDefinition Height="323*" />
+            <RowDefinition Height="303*" />
+            <RowDefinition Height="20*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
@@ -263,5 +265,6 @@
             <ProgressBar IsIndeterminate="True" Height="20"/>
             <Label Content="{T:TranslateExtension LabelWaitingForDevice}" HorizontalContentAlignment="Center" />
         </Grid>
+        <Label Content="{Binding Source={x:Static Member=Devices:StaticHelper.Instance}, Path=SystemMessage}" FontWeight="Bold" HorizontalContentAlignment="Right" Grid.Row="3" Grid.Column="1" Padding="0"/>
     </Grid>
 </Controls:MetroWindow>
