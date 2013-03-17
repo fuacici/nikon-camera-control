@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
@@ -26,14 +27,19 @@ namespace CameraControl.windows
 
     public void ExecuteCommand(string cmd, object param)
     {
+      if (param == null)
+        param = ServiceProvider.DeviceManager.SelectedCameraDevice;
       switch (cmd)
       {
         case WindowsCmdConsts.LiveViewWnd_Show:
           if (!_register.ContainsKey(param))
           {
-            LiveViewWnd wnd = new LiveViewWnd();
-            ServiceProvider.Settings.ApplyTheme(wnd);
-            _register.Add(param, wnd);
+            Application.Current.Dispatcher.Invoke(new Action(delegate
+                                                               {
+                                                                 LiveViewWnd wnd = new LiveViewWnd();
+                                                                 ServiceProvider.Settings.ApplyTheme(wnd);
+                                                                 _register.Add(param, wnd);
+                                                               }));
           }
           _register[param].ExecuteCommand(cmd, param);
           break;
