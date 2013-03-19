@@ -82,7 +82,7 @@ namespace CameraControl.Core.Translation
     public static string LabelUseKeybordToTrigger = "Use keyboard to trigger take photo";
     public static string LabelWebserver = "Webserver";
     public static string LabelUseWebserver = "Use web server";
-    public static string LabelFocusAndLiveview = "Focus and Live view";
+    public static string LabelFocusAndLiveview = "Live view";
     public static string LabelSmallFocusSstep = "Small focus step";
     public static string LabelMediumFocusStep = "Medium focus step";
     public static string LabelLargFocusStep = "Large focus step";

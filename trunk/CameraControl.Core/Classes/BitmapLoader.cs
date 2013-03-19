@@ -158,7 +158,6 @@ namespace CameraControl.Core.Classes
             GetMetadata(_currentfile, writeableBitmap);
             Log.Debug("Loading bitmap file done.");
           }
-          GC.Collect();
         }
         catch (FileFormatException)
         {
