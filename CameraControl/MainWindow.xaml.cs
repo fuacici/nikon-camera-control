@@ -209,7 +209,7 @@ namespace CameraControl
       }
       Log.Debug("Photo transfer done.");
       // not indicated to be used 
-      //GC.Collect();
+      GC.Collect();
       //GC.WaitForPendingFinalizers();
     }
 

@@ -123,7 +123,7 @@
     <string name="LabelUseKeybordToTrigger">Use keyboard to trigger take photo</string> 
     <string name="LabelWebserver">Webserver</string> 
     <string name="LabelUseWebserver">Use web server</string> 
-    <string name="LabelFocusAndLiveview">Focus and Live view</string> 
+    <string name="LabelFocusAndLiveview">Live view</string> 
     <string name="LabelSmallFocusSstep">Small focus step</string> 
     <string name="LabelMediumFocusStep">Medium focus step</string> 
     <string name="LabelLargFocusStep">Larg focus step</string> 

@@ -194,6 +194,7 @@ namespace CameraControl.Layouts
       ServiceProvider.Settings.ImageLoading = true;
       BitmapLoader.Instance.GetBitmap(ServiceProvider.Settings.SelectedBitmap);
       ServiceProvider.Settings.ImageLoading = false;
+      GC.Collect();
     }
 
 
