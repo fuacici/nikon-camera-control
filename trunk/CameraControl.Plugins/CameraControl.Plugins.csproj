@@ -97,11 +97,15 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Astro\PHDWnd.xaml.cs">
+      <DependentUpon>PHDWnd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Class1.cs" />
     <Compile Include="ExportPlugins\ExportToZip.cs" />
     <Compile Include="MainWindowPlugins\SimpleMainWindow.xaml.cs">
       <DependentUpon>SimpleMainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PhdPlugin.cs" />
     <Compile Include="Plugins.cs" />
     <Compile Include="ExportPlugins\ExportToFolder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -121,6 +125,10 @@
     <None Include="Resources\Entypo.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Astro\PHDWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindowPlugins\SimpleMainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
