@@ -9,25 +9,26 @@ using CameraControl.Plugins.MainWindowPlugins;
 
 namespace CameraControl.Plugins
 {
-  public class Plugins : IPlugin
-  {
-    #region Implementation of IPlugin
-
-    public bool Register()
+    public class Plugins : IPlugin
     {
-      try
-      {
-        ServiceProvider.PluginManager.ExportPlugins.Add(new ExportToZip());
-        ServiceProvider.PluginManager.ExportPlugins.Add(new ExportToFolder());
-        ServiceProvider.PluginManager.MainWindowPlugins.Add(new SimpleMainWindow());
-      }
-      catch (Exception exception)
-      {
-       
-      }
-      return true;
-    }
+        #region Implementation of IPlugin
 
-    #endregion
-  }
+        public bool Register()
+        {
+            try
+            {
+                ServiceProvider.PluginManager.ExportPlugins.Add(new ExportToZip());
+                ServiceProvider.PluginManager.ExportPlugins.Add(new ExportToFolder());
+                ServiceProvider.PluginManager.MainWindowPlugins.Add(new SimpleMainWindow());
+                ServiceProvider.PluginManager.ToolPlugins.Add(new PhdPlugin());
+            }
+            catch (Exception exception)
+            {
+
+            }
+            return true;
+        }
+
+        #endregion
+    }
 }
