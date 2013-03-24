@@ -28,13 +28,23 @@ namespace CameraControl.Controls
         public int Maximum
         {
             get { return (int)GetValue(MaximumProperty); }
-            set { SetValue(MaximumProperty, value); }
+            set
+            {
+                SetValue(MaximumProperty, value);
+                if (Value > Maximum)
+                    Value = Maximum;
+            }
         }
 
         public int Minimum
         {
             get { return (int)GetValue(MinimumProperty); }
-            set { SetValue(MinimumProperty, value); }
+            set
+            {
+                SetValue(MinimumProperty, value);
+                if (Value < Minimum)
+                    Value = Minimum;
+            }
         }
 
 
