@@ -165,6 +165,9 @@
     </Compile>
     <Compile Include="Classes\HelpProvider.cs" />
     <Compile Include="Classes\WpfCommands.cs" />
+    <Compile Include="Controls\AdvancedSlider.xaml.cs">
+      <DependentUpon>AdvancedSlider.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CameraItem.xaml.cs">
       <DependentUpon>CameraItem.xaml</DependentUpon>
     </Compile>
@@ -257,6 +260,10 @@
       <DependentUpon>TimeLapseWnd.xaml</DependentUpon>
     </Compile>
     <Page Include="Actions\Enfuse\EnfuseSettingsWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\AdvancedSlider.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

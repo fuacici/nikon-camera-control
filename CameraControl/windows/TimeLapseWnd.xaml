@@ -4,6 +4,7 @@
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
                        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                        xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
+                       xmlns:Controls1="clr-namespace:CameraControl.Controls"
                        Title="{T:TranslateExtension TimeLapseWindowTitle}" Height="359" Width="583" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" UseLayoutRounding="True" ShowActivated="True" Closed="Window_Closed" Closing="Window_Closing"
                        ShowMaxRestoreButton="False" ShowMinButton="False">
     <Window.Resources>
@@ -60,12 +61,17 @@
                     <Label Content="{T:TranslateExtension LabelSecondsBetweenShots}" Name="label1" Grid.Row="1" Grid.Column="1" HorizontalContentAlignment="Right" />
                     <xctk:IntegerUpDown Minimum="0" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.NumberOfPhotos}" Grid.Row="2" Grid.Column="3" Margin="2"/>
                     <Label Content="{T:TranslateExtension LabelNumberOfPhotos}" Name="label2" Grid.Row="2" Grid.Column="1" HorizontalContentAlignment="Right" />
-                    <Button Content="{T:TranslateExtension ButtonStartTimeLapse}" Name="btn_start" Click="btn_start_Click" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Grid.Row="10" Grid.Column="2" Grid.ColumnSpan="2" Margin="3"/>
-                    <CheckBox Content="{T:TranslateExtension LabelDontAutofocusOnEveryCapture}" ToolTip="This option work only if you use native drive, but isn't work for all cameras" Height="16" HorizontalAlignment="Left" Name="chk_noaf" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.NoAutofocus}" Grid.Row="5" Grid.Column="1" Width="199" Margin="2,0,0,0" />
-                    <Button Content="{T:TranslateExtension ButtonClose}" Height="45" HorizontalAlignment="Left"  Name="button2" VerticalAlignment="Bottom" Width="75" Click="button2_Click" Grid.Row="10" Grid.Column="1" Margin="3,3,3,3" />
-                    <xctk:TimePicker Grid.Column="3" Grid.Row="3" TimeInterval="00:00:01" Background="White" UseLayoutRounding="True" Margin="2" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.TimePeriod}" Format="LongTime" />
+                    <Button Content="{T:TranslateExtension ButtonStartTimeLapse}" Name="btn_start" Click="btn_start_Click" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Grid.Row="10" Grid.Column="3" Margin="3"/>
+                    <Label Content="{T:TranslateExtension LabelDontAutofocusOnEveryCapture}" HorizontalContentAlignment="Right" Grid.Row="5" Grid.Column="1" VerticalContentAlignment="Center"/>
+                    
+                    <CheckBox Content="" ToolTip="This option work only if you use native drive, but isn't work for all cameras" Name="chk_noaf" IsChecked="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.NoAutofocus}" Grid.Row="5" Grid.Column="3"  VerticalAlignment="Center" Margin="2"/>
+
+                    <Controls1:AdvancedSlider Label="test" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,0,3,0" Grid.RowSpan="2"  Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.Period}"/>
+                    
+                    <Button Content="{T:TranslateExtension ButtonClose}" Height="39" HorizontalAlignment="Left"  Name="button2" VerticalAlignment="Bottom" Width="75" Click="button2_Click" Grid.Row="10" Grid.Column="1" Margin="3,0,0,3" />
+                    <xctk:TimePicker Grid.Column="3" Grid.Row="3" TimeInterval="00:00:01" Background="White" UseLayoutRounding="True" Margin="2" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.TimePeriod}" Format="LongTime" IsEnabled="False"/>
                     <Label Content="{T:TranslateExtension LabelCaptureInterval}" Grid.Column="1" Grid.Row="3" HorizontalContentAlignment="Right" />
-                    <xctk:TimePicker Grid.Column="3" Grid.Row="4" Margin="2" Background="White" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.MovieLength}" Format="LongTime" />
+                    <xctk:TimePicker Grid.Column="3" Grid.Row="4" Margin="2" Background="White" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.MovieLength}" Format="LongTime" IsEnabled="False"/>
                     <Label Content="{T:TranslateExtension LabelMovieLenght}" Grid.Column="1" Grid.Row="4" ToolTip="The lengt is calculated based on FPS " HorizontalContentAlignment="Right" />
                     <ProgressBar Grid.Column="1" Grid.Row="9" Height="10" HorizontalAlignment="Left" Margin="2,0,0,0" VerticalAlignment="Top" Width="340" Grid.ColumnSpan="3" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.ProgresPictures,Mode=OneWay}"/>
                     <ProgressBar Grid.ColumnSpan="3" Grid.Row="9" Height="10" HorizontalAlignment="Left" VerticalAlignment="Top" Width="340" Margin="2,15,0,0" Grid.Column="1" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.ProgresTime,Mode=OneWay}"/>
@@ -85,7 +91,7 @@
                     <ComboBox Name="comboBox1" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=VideoTypes}" SelectedValue="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.VideoType}" Grid.Row="2" Margin="3"/>
                     <Label Content="{T:TranslateExtension LabelVideoFormat}" Height="28" HorizontalAlignment="Left" Margin="6,0,0,0" Name="label3" VerticalAlignment="Top" Grid.Row="1" />
                     <TextBox Name="textBox1" Text="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.OutputFIleName}" Grid.Row="5" Margin="2,2,38,2" />
-                    <Label Content="{T:TranslateExtension LabelOutputFile}" Height="28" HorizontalAlignment="Left" Margin="6,24,0,0" Name="label4" VerticalAlignment="Top" Grid.Row="3" Grid.RowSpan="2" />
+                    <Label Content="{T:TranslateExtension LabelOutputFile}" Height="28" HorizontalAlignment="Left" Margin="6,0,0,0" Name="label4" VerticalAlignment="Top" Grid.Row="4" />
                     <Button Content="..." Height="23" HorizontalAlignment="Left" Margin="330,5,0,0" Name="button3" VerticalAlignment="Top" Width="26" Click="button3_Click" Grid.Row="5" />
                     <Label Content="{T:TranslateExtension LabelFps}" Height="28" HorizontalAlignment="Left" Margin="6,0,0,0" Name="label5" VerticalAlignment="Top" Grid.Row="3" />
                     <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="40,2,2,2" Name="integerUpDown3" VerticalAlignment="Top" Width="75" Minimum="5" Maximum="60" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.Fps}" Grid.Row="3" />
