@@ -31,9 +31,6 @@
   <string name="CENTER_WEIGHTED_METERING">Centervægtet lysmåling</string>
   <string name="MULTI_PATTERN_METERING">Evaluerende lysmåling</string>
   <string name="SPOT_METERING">Spotlysmåling</string>
-  <string name="1.SAVE_TO_PC_ONLY">1. Gem kun på PC</string>
-  <string name="2.SAVE_TO_CAMERA_ONLY">2. Gem kun på kamera</string>
-  <string name="3.SAVE_TO_PC_AND_CAMERA">3. Gem på PC og kamera</string>
   <string name="AUTO">Automatisk</string>
   <string name="DAYLIGHT">Dagslys</string>
   <string name="FLUORESCENT_">Lysstofrør</string>
@@ -42,6 +39,7 @@
   <string name="SHADE">Skygge</string>
   <string name="CUSTOM">Brugerdefineret</string>
   <string name="[A]_AF_SERVO_MODE_AUTOMATIC_SWITCHING">[A] AF servo-funktion automatisk skift</string>
+  <string name="[S]_SINGLE_AF_SERVO">[S] Single AF servo</string>
   <!--End Property values-->
   <string name="Mode">Tilstand</string>
   <string name="Iso">Iso</string>

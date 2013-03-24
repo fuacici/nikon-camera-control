@@ -31,9 +31,6 @@
   <string name="CENTER_WEIGHTED_METERING">Κεντροβαρής μέτρηση</string>
   <string name="MULTI_PATTERN_METERING">Μέτρηση πολλαπλού μοτίβου</string>
   <string name="SPOT_METERING">Σημειακή μέτρηση</string>
-  <string name="1.SAVE_TO_PC_ONLY">1.Αποθήκευση μόνο στον υπολογιστή</string>
-  <string name="2.SAVE_TO_CAMERA_ONLY">2.Αποθήκευση μόνο στην κάμερα</string>
-  <string name="3.SAVE_TO_PC_AND_CAMERA">3.Αποθήκευση στον υπολογιστή και στην κάμερα</string>
   <string name="AUTO">Αυτόματο</string>
   <string name="DAYLIGHT">Φως ημέρας</string>
   <string name="FLUORESCENT_">Λάμπα φθορισμού</string>

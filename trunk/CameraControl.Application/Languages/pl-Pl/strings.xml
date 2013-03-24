@@ -31,9 +31,6 @@
   <string name="CENTER_WEIGHTED_METERING">Pomiar centralny</string>
   <string name="MULTI_PATTERN_METERING">Pomiar wielopunktowy</string>
   <string name="SPOT_METERING">Pomiar punktowy</string>
-  <string name="1.SAVE_TO_PC_ONLY">1. Zapisz tylko do komputera</string>
-  <string name="2.SAVE_TO_CAMERA_ONLY">2. Zapisz tylko do kamery</string>
-  <string name="3.SAVE_TO_PC_AND_CAMERA">3. Zapisz do komputera i kamery</string>
   <string name="AUTO">Auto</string>
   <string name="DAYLIGHT">Światło dzienne</string>
   <string name="FLUORESCENT_">Świetlówka</string>
@@ -42,6 +39,9 @@
   <string name="SHADE">Cień</string>
   <string name="CUSTOM">Własne</string>
   <string name="[A]_AF_SERVO_MODE_AUTOMATIC_SWITCHING">[A] AF w trybie automatycznego przełączania</string>
+  <string name="[S]_SINGLE_AF_SERVO">[S] Pojedynczy AF</string>
+  <string name="[M]_MANUAL_FOCUS">[M] Ręczna ostrość</string>
+  <string name="KELVIN">Kelwin</string>
   <!--End Property values-->
   <string name="Mode">Tryb</string>
   <string name="Iso">ISO</string>

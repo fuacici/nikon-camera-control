@@ -31,9 +31,6 @@
   <string name="CENTER_WEIGHTED_METERING">mittenbetonte Messung</string>
   <string name="MULTI_PATTERN_METERING">Mehr Punktmessung</string>
   <string name="SPOT_METERING">Punktmessung</string>
-  <string name="1.SAVE_TO_PC_ONLY">1.nur auf dem Computer speichern</string>
-  <string name="2.SAVE_TO_CAMERA_ONLY">2.nur auf der Kamera speichern</string>
-  <string name="3.SAVE_TO_PC_AND_CAMERA">3.auf Kamera und Computer speichern</string>
   <string name="AUTO">Auto</string>
   <string name="DAYLIGHT">Tageslicht</string>
   <string name="FLUORESCENT_">Leuchtstofflampe</string>
@@ -42,6 +39,9 @@
   <string name="SHADE">Schatten</string>
   <string name="CUSTOM">Anwender</string>
   <string name="[A]_AF_SERVO_MODE_AUTOMATIC_SWITCHING">[A] Auto Fokus autom. Umschaltung</string>
+  <string name="[S]_SINGLE_AF_SERVO">[S] Single AF servo</string>
+  <string name="[M]_MANUAL_FOCUS">[M] Manueller Fokus</string>
+  <string name="KELVIN">Kelvin</string>
   <!--End Property values-->
   <string name="Mode">Modus</string>
   <string name="Iso">_Iso</string>
