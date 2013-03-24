@@ -7,6 +7,7 @@ namespace CameraControl.Devices.Nikon
     public override bool Init(DeviceDescriptor deviceDescriptor)
     {
       bool res = base.Init(deviceDescriptor);
+      Capabilities.Clear();
       Capabilities.Add(CapabilityEnum.LiveView);
       Capabilities.Add(CapabilityEnum.RecordMovie);
       CaptureInSdRam = false;
