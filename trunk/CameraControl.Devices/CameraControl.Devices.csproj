@@ -105,6 +105,7 @@
     <Compile Include="Classes\PropertyValue.cs" />
     <Compile Include="ICameraDevice.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="Nikon\NikonD7100.cs" />
     <Compile Include="Nikon\NikonBase.cs" />
     <Compile Include="Nikon\NikonD300.cs" />
     <Compile Include="Nikon\NikonD3200.cs" />
