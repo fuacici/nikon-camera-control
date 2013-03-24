@@ -31,9 +31,6 @@
   <string name="CENTER_WEIGHTED_METERING">中央部重点測光</string>
   <string name="MULTI_PATTERN_METERING">マルチパターン測光</string>
   <string name="SPOT_METERING">スポット測光</string>
-  <string name="1.SAVE_TO_PC_ONLY">１．PCにのみ保存する</string>
-  <string name="2.SAVE_TO_CAMERA_ONLY">２．カメラのみに保存する</string>
-  <string name="3.SAVE_TO_PC_AND_CAMERA">３．PCとカメラに保存する</string>
   <string name="AUTO">自動</string>
   <string name="DAYLIGHT">太陽光</string>
   <string name="FLUORESCENT_">蛍光灯</string>
@@ -41,6 +38,8 @@
   <string name="CLOUDY">曇天</string>
   <string name="SHADE">晴天日陰</string>
   <string name="CUSTOM">カスタム</string>
+  <string name="[A]_AF_SERVO_MODE_AUTOMATIC_SWITCHING">[A] AFサーボモード自動切換え</string>
+  <string name="[S]_SINGLE_AF_SERVO">[S] シングルAFサーボ</string>
   <!--End Property values-->
   <string name="Mode">モード</string>
   <string name="Iso">_ISO感度</string>
@@ -61,7 +60,7 @@
   <string name="TimeLapseToolTip">微速度撮影</string>
   <string name="FullscreenToolTip">全画面</string>
   <string name="LiveViewToolTip">ライブビュー</string>
-  <string name="BrowseSessionsToolTip">作業内容表示</string>
+  <string name="BrowseSessionsToolTip">作業ブラウズ</string>
   <string name="SelectTagsToolTip">タグ選択</string>
   <string name="AboutToolTip">状況</string>
   <string name="Session">作業</string>
@@ -72,7 +71,7 @@
   <string name="SettingsWindowTitle">設定</string>
   <string name="SessionWindowTitle">作業[追加／編集]</string>
   <string name="LiveViewWindowTitle">ライブビュー</string>
-  <string name="PresetEditWindowTitle">編集プリセット</string>
+  <string name="PresetEditWindowTitle">プリセット編集</string>
   <string name="BraketingWindowTitle">ブラケット撮影</string>
   <string name="EditTagWindowTitle">タグ[追加／編集]</string>
   <string name="MultipleCameraWindowTitle">複数カメラ対応</string>
@@ -86,7 +85,7 @@
   <string name="ButtonAutoFocus">_オートフォーカス</string>
   <string name="ButtonCapture">_撮影</string>
   <string name="ButtonRecordMovie">動画記録</string>
-  <string name="ButtonFreezeImage">画像固定</string>
+  <string name="ButtonFreezeImage">フリーズ</string>
   <string name="ButtonStart">開始</string>
   <string name="ButtonPreview">プレビュー</string>
   <string name="ButtonStop">停止</string>
@@ -97,27 +96,27 @@
   <string name="ButtonCapturePhotos">写真キャプチャ</string>
   <string name="ButtonStartTimeLapse">微速度撮影開始</string>
   <string name="ButtonStopTimeLapse">微速度撮影停止</string>
-  <string name="ButtonCreateMovie">動画の作成</string>
+  <string name="ButtonCreateMovie">動画作成</string>
   <string name="ButtonLocateLogFile">ログファイル指定</string>
   <string name="LabelInterfaceLanguage">表示言語</string>
   <string name="LabelDisableDriver">元のドライバの無効化（推奨しません）</string>
   <string name="LabelTheme">テーマ：</string>
   <string name="LabelGeneral">一般</string>
   <string name="LabelPreview">プレビュー</string>
-  <string name="LabelPlaySound">撮影後に表示</string>
+  <string name="LabelPlaySound">撮影音</string>
   <string name="LabelAutoPreview">自動プレビュー</string>
-  <string name="LabelPreviewAfterCapture">画面プレビュー</string>
+  <string name="LabelPreviewAfterCapture">全画面プレビュー</string>
   <string name="LabelPreviewTime">プレビュー時間（秒）：</string>
-  <string name="LabelPreviewInLIveView">ライブビューでの撮影後プレビュー</string>
+  <string name="LabelPreviewInLIveView">ライブビューで撮影後プレビュー</string>
   <string name="LabelLIveViewImageFreeze">ライブビュー画像表示時間（秒）：</string>
   <string name="LabelRotateImage">画像の回転</string>
   <string name="LabelDontLoadThumbs">サムネール表示しない</string>
   <string name="LabelFullscrenBack">フルスクリーンウィンドウの背景：</string>
   <string name="LabelTriggers">トリガー</string>
   <string name="LabelUseKeybordToTrigger">撮影トリガーにキーボードを使う</string>
-  <string name="LabelWebserver">Webサーバー</string>
-  <string name="LabelUseWebserver">Webサーバー使用</string>
-  <string name="LabelFocusAndLiveview">ピント合わせとライブビュー</string>
+  <string name="LabelWebserver">Webサーバ</string>
+  <string name="LabelUseWebserver">Webサーバ使用</string>
+  <string name="LabelFocusAndLiveview">フォーカスとライブビュー</string>
   <string name="LabelSmallFocusSstep">フォーカス送り：小</string>
   <string name="LabelMediumFocusStep">フォーカス送り：中</string>
   <string name="LabelLargFocusStep">フォーカス送り：大</string>
@@ -129,7 +128,7 @@
   <string name="LabelCounter">カウンター：</string>
   <string name="LabelUseOriginal">カメラ設定のファイル名を使用する</string>
   <string name="LabelUseOriginalToolTip">このオプションはWIAドライバでは利用できません</string>
-  <string name="LabelDontDownloadPhotos">PCに写真をダウンロードしません</string>
+  <string name="LabelDontDownloadPhotos">PCに写真をダウンロードしない</string>
   <string name="LabelAlowFolderChange">イメージブラウザでフォルダ変更を許可する</string>
   <string name="LabelTags">タグ</string>
   <string name="LabelManualFocus">マニュアルフォーカス</string>
@@ -140,10 +139,10 @@
   <string name="LabelFocusStep">フォーカス送り量</string>
   <string name="LabelLuminosity">明るさ</string>
   <string name="LabelExposureBracketing">露出ブラケット撮影</string>
-  <string name="LabelExposureBracketingToolTip">失敗を低減するにはカメラを絞り優先モードに設定し、自動ISO感度と自動ホワイトバランスをOFFにします。</string>
+  <string name="LabelExposureBracketingToolTip">失敗を避けるためにカメラを絞り優先モードに設定し、自動ISO感度と自動ホワイトバランスをOFFにします。</string>
   <string name="LabelManualExposureBracketing">手動露出ブラケット撮影</string>
-  <string name="LabelManualExposureBracketingToolTip">失敗を少なくするにはカメラをマニュアルモード（M)に設定し自動ISO感度設定と自動ホワイトバランスをOFFにして下さい。</string>
-  <string name="LabelPresetBracketing">ブラケット撮影のプリセット</string>
+  <string name="LabelManualExposureBracketingToolTip">失敗を避けるため、カメラをマニュアルモード（M)に設定し自動ISO感度設定と自動ホワイトバランスをOFFにして下さい。</string>
+  <string name="LabelPresetBracketing">ブラケット撮影プリセット</string>
   <string name="LabelTagDisplayValue">値の表示</string>
   <string name="LabelTagValue">値</string>
   <string name="LabelTagIncludeInGroup1">グループ１を含む</string>
@@ -154,22 +153,22 @@
   <string name="LabelNumberOfCaptures">キャプチャ数</string>
   <string name="LabelWaitTime">待ち時間（秒）</string>
   <string name="LabelDisableAutofocus">AFを無効にする</string>
-  <string name="LabelConnectedCameras">カメラに接続しました</string>
+  <string name="LabelConnectedCameras">接続中のカメラ</string>
   <string name="LabelPresetName">プリセット名：</string>
   <string name="LabelTimeLapse">微速度撮影</string>
   <string name="LabelSecondsBetweenShots">コマ間秒数</string>
   <string name="LabelNumberOfPhotos">写真の数</string>
-  <string name="LabelDontAutofocusOnEveryCapture">撮影時にAFを行わない</string>
+  <string name="LabelDontAutofocusOnEveryCapture">キャプチャ時にAFしない</string>
   <string name="LabelCaptureInterval">キャプチャ間隔</string>
   <string name="LabelMovieLenght">録画時間</string>
   <string name="LabelMovieSettings">動画設定</string>
   <string name="LabelVideoFormat">ビデオ形式</string>
   <string name="LabelOutputFile">出力ファイル</string>
-  <string name="LabelFps">フレームレート</string>
-  <string name="LabelFillImage">ファイルイメージ</string>
+  <string name="LabelFps">Fps</string>
+  <string name="LabelFillImage">画像埋込</string>
   <string name="LabelCreateMovie">動画の作成</string>
   <string name="LabelAddVirtualMovingToVideo">動画に仮想移動を加える</string>
-  <string name="LabelMovingSurface">移動面積（％）：</string>
+  <string name="LabelMovingSurface">移動量（％）：</string>
   <string name="LabelMovingDirection">移動方向</string>
   <string name="LabelMovingDirectionLeftToRight">左から右へ</string>
   <string name="LabelMovingDirectionRightToLeft">右から左へ</string>
@@ -212,8 +211,8 @@
   <string name="MenuAbout">digiCamControl について</string>
   <string name="MenuLayout">配置</string>
   <string name="MenuLayoutNormal">通常</string>
-  <string name="MenuLayoutGridRight">グリッド適正</string>
-  <string name="MenuLayoutGrid">グリッド</string>
+  <string name="MenuLayoutGridRight">右側にサムネイル</string>
+  <string name="MenuLayoutGrid">サムネイル</string>
   <string name="MenuProperties">プロパティ</string>
   <string name="MenuUseSelectedCameraPreset">選択したカメラのプリセットを使用</string>
   <!--15/10/2012-->
@@ -224,12 +223,12 @@
   <string name="LabelMotionDetection">動き検出</string>
   <string name="LabelActivateMotionDetection">動き検出有効</string>
   <string name="LabelCaptureWhenMove">動き検出時に撮影</string>
-  <string name="LabelThreshold">スレッショルド（％）</string>
+  <string name="LabelThreshold">ｽﾚｯｼｮﾙﾄﾞ(%)</string>
   <string name="LabelWaitMoion">待ち時間（秒）</string>
   <!--25/10/2012-->
-  <string name="LabelAutofocusBeforeCapture">撮影前にオートフォーカス</string>
+  <string name="LabelAutofocusBeforeCapture">撮影前にAF</string>
   <!--26/10/2012-->
-  <string name="LabelOpacity">不透明</string>
+  <string name="LabelOpacity">不透明度</string>
   <!--29/10/2012-->
   <string name="LabelMotionDetectionType">動き検出タイプ</string>
   <string name="LabelTwoFramesDifferenceDetector">フレーム間差分検出</string>
@@ -256,7 +255,7 @@
   <string name="LabelDuringEnlargedDisplayLiveView">ライブビュー拡大表示中</string>
   <string name="LabelWrongLiveViewType">ライブビュー選択が写真撮影になっています</string>
   <string name="LabelNotInApplicationMode">カメラがアプリケーションモードになっていません</string>
-  <string name="ButtonResetSettings">設定をリセットします</string>
+  <string name="ButtonResetSettings">設定をリセット</string>
   <!--14/11/2012-->
   <string name="LabelUseExternalViewer">外部ビュワーを使う</string>
   <string name="LabelExternalPreViewerPath">外部ビュワーのパス</string>
@@ -278,11 +277,11 @@
   <string name="LabelErrorLoadingFileList">フィアルリスト取得失敗</string>
   <!--30/11/2012-->
   <string name="LabelTransfer">転送</string>
-  <string name="LabelTransferItem1">１．PCにのみ保存する</string>
-  <string name="LabelTransferItem2">２．カメラのみに保存する</string>
-  <string name="LabelTransferItem3">３．PCとカメラに保存する</string>
+  <string name="LabelTransferItem1">１．PCのみに保存</string>
+  <string name="LabelTransferItem2">２．カメラのみに保存</string>
+  <string name="LabelTransferItem3">３．PCとカメラに保存</string>
   <!--05/12/2012-->
-  <string name="MsgDisabledDrivers">ドライバーが無効になっています。　有効にしますか？</string>
+  <string name="MsgDisabledDrivers">ドライバーが無効です。　有効にしますか？</string>
   <!--14/12/2012-->
   <string name="LabelShowFocusPoints">フォーカス位置の表示</string>
   <string name="LabelMainWindow">メインウインドウ</string>
@@ -302,7 +301,7 @@
   <!--07/01/2013-->
   <string name="LabelUnabletoDeleteSession">作業内容を削除出来ません。</string>
   <!--12/01/2013-->
-  <string name="LabelWaitingForDevice">機器の準備ができるのを待っています。</string>
+  <string name="LabelWaitingForDevice">機器の準備完了を待っています。</string>
   <string name="LabelAdvanced">拡張</string>
   <string name="LabelUseParellelTransfer">並列ファイル転送を使う</string>
   <!--19/01/2013-->
@@ -317,6 +316,6 @@
   <string name="LabelStopCapture">キャプチャ停止</string>
   <string name="LabelCaptureTime">キャプチャ時間（秒）</string>
   <string name="LabelTimeBetweenShots">撮影間隔</string>
-  <string name="LabelDontAutofocus">AF停止</string>
+  <string name="LabelDontAutofocus">AFしない</string>
   <string name="LabelShowUnTranslatedStringIds">翻訳せずに文字列IDを表示</string>
 </resources>

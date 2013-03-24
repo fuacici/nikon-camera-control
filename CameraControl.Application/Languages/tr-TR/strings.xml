@@ -31,9 +31,6 @@
   <string name="CENTER_WEIGHTED_METERING">Merkez ağırlıklı ölçüm</string>
   <string name="MULTI_PATTERN_METERING">Çoklu desen ölçümü</string>
   <string name="SPOT_METERING">Nokta ölçümü</string>
-  <string name="1.SAVE_TO_PC_ONLY">1.Sadece bilgisayara kaydet</string>
-  <string name="2.SAVE_TO_CAMERA_ONLY">2.Sadece kameraya kaydet</string>
-  <string name="3.SAVE_TO_PC_AND_CAMERA">3.Bilgisayar ve kameraya kaydet</string>
   <string name="AUTO">Otomatik</string>
   <string name="DAYLIGHT">Gün ışığı</string>
   <string name="FLUORESCENT_">Floresan</string>
