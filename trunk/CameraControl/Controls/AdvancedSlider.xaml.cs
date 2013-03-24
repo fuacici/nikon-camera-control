@@ -46,13 +46,13 @@ namespace CameraControl.Controls
 
         private static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof (int), typeof (AdvancedSlider),
-                                        new FrameworkPropertyMetadata(0,
+                                        new FrameworkPropertyMetadata(100,
                                                                       FrameworkPropertyMetadataOptions.
                                                                           BindsTwoWayByDefault));
 
         private static readonly DependencyProperty LabelProperty =
             DependencyProperty.Register("Label", typeof (string), typeof (AdvancedSlider),
-                                        new FrameworkPropertyMetadata("",
+                                        new FrameworkPropertyMetadata("Label",
                                                                       FrameworkPropertyMetadataOptions.
                                                                           BindsTwoWayByDefault));
         private static readonly DependencyProperty MinimumProperty =
