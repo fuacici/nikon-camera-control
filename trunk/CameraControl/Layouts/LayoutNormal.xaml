@@ -29,8 +29,8 @@
                                 </Image>
                             </Grid>
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox IsChecked="{Binding Path=IsChecked}"/>
-                                <Label Content="{Binding Path=Name}" HorizontalAlignment="Center" />
+                                <CheckBox IsChecked="{Binding Path=IsChecked}" Content="{Binding Path=Name}"/>
+                                <!--<Label Content="{Binding Path=Name}" HorizontalAlignment="Center" />-->
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>
@@ -51,7 +51,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="345*" />
             <RowDefinition Height="20" />
-            <RowDefinition Height="145" />
+            <RowDefinition Height="120" />
         </Grid.RowDefinitions>
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Label Content="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.InfoLabel}" HorizontalContentAlignment="Center" Height="30" Margin="0,0,0,0" VerticalAlignment="Top" FontWeight="Bold" />
@@ -81,10 +81,10 @@
         </Grid>
         <StackPanel Grid.Row="1" Margin="0,0,190,0">
             <StackPanel  Orientation="Horizontal" Margin="10,0,0,0" HorizontalAlignment="Right">
-                <Label Content="{Binding Source={x:Static Member=Devices:StaticHelper.Instance}, Path=SystemMessage}" FontWeight="Bold" HorizontalContentAlignment="Right" />
+                <Label Content="{Binding Source={x:Static Member=Devices:StaticHelper.Instance}, Path=SystemMessage}" FontWeight="Bold" HorizontalContentAlignment="Right" Padding="0" />
             </StackPanel>
         </StackPanel>
-        <ProgressBar Grid.Row="1" Height="7" Margin="0,0,12,13" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="157" Value="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.TransferProgress}" ToolTip="File transfer progress" Style="{x:Null}"/>
+        <ProgressBar Grid.Row="1" Height="20" Margin="3,3,12,3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="157" Value="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.TransferProgress}" ToolTip="File transfer progress" Style="{x:Null}"/>
         <StackPanel Grid.Row="2"  Name="ImagePanel">
             <ListBox  Name="ImageLIstBox" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.Files, IsAsync=True}" BorderThickness="0">
                 <ListBox.ContextMenu>
