@@ -109,12 +109,12 @@
         </ScrollViewer>
         <Expander Grid.Column="1"  Name="expander1" UseLayoutRounding="True" ExpandDirection="Right" IsExpanded="False" BorderThickness="0" Margin="0,0,0,3">
             <Grid>
-                <ListBox Name="listBox1" ItemsSource="{Binding Path=SelectedCameraDevice.AdvancedProperties}">
+                <ListBox Name="listBox1" ItemsSource="{Binding Path=SelectedCameraDevice.AdvancedProperties}" HorizontalAlignment="Left">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="1">
+                            <StackPanel Margin="2" >
                                 <Label Content="{Binding Path=Name, Converter={StaticResource converter}}"/>
-                                <ComboBox IsEnabled="{Binding Path=IsEnabled}" ItemsSource="{Binding Path=Values}" SelectedValue="{Binding Path=Value}">
+                                <ComboBox IsEnabled="{Binding Path=IsEnabled}" ItemsSource="{Binding Path=Values}" SelectedValue="{Binding Path=Value}" Margin="3" Width="125">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <Label Content="{Binding Converter={StaticResource converter}}"/>
