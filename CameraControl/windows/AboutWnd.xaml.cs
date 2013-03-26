@@ -24,7 +24,7 @@ namespace CameraControl.windows
 
     private void button1_Click(object sender, RoutedEventArgs e)
     {
-      PhotoUtils.Run("http://nccsoftware.blogspot.com/");
+      PhotoUtils.Run("http://www.digicamcontrol.com/");
     }
 
     private void button3_Click(object sender, RoutedEventArgs e)

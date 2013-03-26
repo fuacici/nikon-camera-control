@@ -29,15 +29,15 @@ namespace CameraControl.Classes
       _helpData = new Dictionary<HelpSections, string>
                     {
                       {HelpSections.MainMenu, "http://www.digicamcontrol.com/manual"},
-                      {HelpSections.Bracketig, "http://www.digicamcontrol.com/wiki/index.php/Interface#Bracketing"},
+                      {HelpSections.Bracketig, "http://www.digicamcontrol.com/manual/bracketing"},
                       {HelpSections.FocusStacking, "http://nccsoftware.blogspot.ro/2012/06/how-to-focus-stacking.html"},
-                      {HelpSections.Settings, "http://www.digicamcontrol.com/wiki/index.php/Configuration"},
-                      {HelpSections.TimeLapse, "http://www.digicamcontrol.com/wiki/index.php/Interface#Time_lapse"},
-                      {HelpSections.LiveView, "http://www.digicamcontrol.com/wiki/index.php/Interface#Live_view"},
-                      {HelpSections.Session, "http://www.digicamcontrol.com/wiki/index.php/Configuration#Session"},
-                      {HelpSections.Bulb, "http://www.digicamcontrol.com/wiki/index.php/Interface#Bulb_mode"},
-                      {HelpSections.MultipleCamera, "http://www.digicamcontrol.com/wiki/index.php/Interface#Multiple_camera_support"},
-                      {HelpSections.DownloadPhotos, "http://www.digicamcontrol.com/wiki/index.php/Interface#Download_photos"},
+                      {HelpSections.Settings, "http://www.digicamcontrol.com/manual/settings"},
+                      {HelpSections.TimeLapse, "http://www.digicamcontrol.com/manual/time-lapse"},
+                      {HelpSections.LiveView, "http://www.digicamcontrol.com/manual/live-view"},
+                      {HelpSections.Session, "http://www.digicamcontrol.com/manual/session"},
+                      {HelpSections.Bulb, "http://www.digicamcontrol.com/manual/bulb-mode"},
+                      {HelpSections.MultipleCamera, "http://www.digicamcontrol.com/manual/multiple-cameras"},
+                      {HelpSections.DownloadPhotos, "http://www.digicamcontrol.com/manual/download-photos"},
                     };
     }
 

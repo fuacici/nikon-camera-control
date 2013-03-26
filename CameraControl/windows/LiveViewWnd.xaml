@@ -97,7 +97,7 @@
                                     </Rectangle>
                                 </ToggleButton.Resources>
                                 <ToggleButton.Style>
-                                    <Style TargetType="ToggleButton">
+                                    <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
                                         <Style.Triggers>
                                             <Trigger Property="IsChecked" Value="True">
                                                 <Setter Property="Content" Value="{StaticResource OnImage}">
@@ -112,7 +112,7 @@
                                 </ToggleButton.Style>
                             </ToggleButton>
                             <Button Margin="1" Content=">|" Grid.Column="4" Grid.Row="1" Name="btn_moveb" Click="btn_moveb_Click" IsEnabled="{Binding Path=LockB, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}"/>
-                            <ToggleButton Margin="1" Grid.Column="5" Grid.Row="1" IsChecked="{Binding Path=LockB, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" IsEnabled="{Binding Path=LockA, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}">
+                            <ToggleButton Margin="1" Grid.Column="5" Grid.Row="1" IsChecked="{Binding Path=LockB, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" IsEnabled="{Binding Path=LockA, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" >
                                 <ToggleButton.Resources>
                                     <Rectangle Width="15" Height="15"  x:Key="OnImage">
                                         <Rectangle.Fill>
@@ -126,7 +126,7 @@
                                     </Rectangle>
                                 </ToggleButton.Resources>
                                 <ToggleButton.Style>
-                                    <Style TargetType="ToggleButton">
+                                    <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
                                         <Style.Triggers>
                                             <Trigger Property="IsChecked" Value="True">
                                                 <Setter Property="Content" Value="{StaticResource OnImage}">
