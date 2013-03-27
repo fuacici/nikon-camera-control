@@ -67,7 +67,7 @@ namespace CameraControl.Devices.Nikon
                                           };
             res.AddValues("Single shot (single-frame shooting)", 0x0001);
             res.AddValues("Continuous high-speed shooting (CH)", 0x0002);
-            res.AddValues("Continuous low-speed shooting (CL)", 0x8011);
+            res.AddValues("Continuous low-speed shooting (CL)", 0x8010);
             res.AddValues("Self-timer", 0x8011);
             res.AddValues("Mirror-up", 0x8012);
             res.AddValues("Quiet shooting", 0x8016);
