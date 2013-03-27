@@ -26,7 +26,7 @@
             <RowDefinition Height="41*" />
         </Grid.RowDefinitions>
         <Button Content="Close" Grid.Row="2" Height="23" Name="button2" VerticalAlignment="Top" Click="button2_Click" Margin="168,0" />
-        <TextBlock Height="27" HorizontalAlignment="Left" Margin="12,12,0,0" Name="textBlock1" Text="    digiCamCOntrol - Copyright (C) 2012 by Duka István. " VerticalAlignment="Top" Width="387" />
+        <TextBlock Height="27" HorizontalAlignment="Left" Margin="12,12,0,0" Name="textBlock1" Text="    digiCamControl - Copyright (C) 2013 by Duka István. " VerticalAlignment="Top" Width="387" />
         <TextBlock Height="81" HorizontalAlignment="Left" Margin="12,37,0,0" Name="textBlock2" Text="    This program is free software: you can redistribute it and/or modify 
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
