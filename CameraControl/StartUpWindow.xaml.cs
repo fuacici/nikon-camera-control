@@ -71,7 +71,7 @@ namespace CameraControl
                                                   new CmdFocusStackingCombineZP(),
                                                   new CmdEnfuse(),
                                                   new CmdToJpg(),
-                                                  new CmdExpJpg()
+                                                  //new CmdExpJpg()
                                                 };
       //ServiceProvider.Branding.ApplicationTitle = "digiCamControl";
       //ServiceProvider.Branding.DefaultMissingThumbImage = "";
