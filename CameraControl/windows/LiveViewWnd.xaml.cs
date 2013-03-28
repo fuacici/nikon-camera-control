@@ -728,8 +728,19 @@ namespace CameraControl.windows
     {
       if (!IsVisible)
         return;
-      Thread thread = new Thread(StartLiveViewThread);
-      thread.Start();
+      string resp = SelectedPortableDevice.GetProhibitionCondition(OperationEnum.LiveView);
+      if (string.IsNullOrEmpty(resp))
+      {
+          Thread thread = new Thread(StartLiveViewThread);
+          thread.Start();
+
+      }
+      else
+      {
+          Log.Error("Error starting live view " + resp);
+          MessageBox.Show(TranslationStrings.LabelLiveViewError + "\n" + TranslationManager.GetTranslation(resp));
+          return;
+      }
     }
 
     private void StartLiveViewThread()

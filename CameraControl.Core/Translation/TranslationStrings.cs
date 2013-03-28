@@ -314,6 +314,24 @@ namespace CameraControl.Core.Translation
     // 17/03/2012
     public static string LabelMFError = "Camera is in MF focus mode";
     public static string LabelNotAFSError = "Camera isn't in AF-S focus mode";
-    
+    // 28/03/2012
+    public static string LabelSequenceError = "Sequence error";
+    public static string LabelFullyPressedButtonError = "Fully pressed button error";
+    public static string LabelApertureValueError = "The aperture value is being set by the lens aperture ring.";
+    public static string LabelBulbError = "Bulb error";
+    public static string LabelDuringCleaningMirror = "During cleaning mirror-up operation";
+    public static string LabelDuringInsufficiencyBattery = "During insufficiency of battery";
+    public static string LabelTTLError = "TTL error";
+    public static string LabelNonCPULEnseError = "A non-CPU lens is mounted and the exposure mode is not M.";
+    public static string LabelImageInRAM = "There is an image whose recording destination is SDRAM.";
+    public static string LabelNoCardInsertedError = "The recording destination is the card or the card & SDRAM,\n and the card is not inserted with the release disabled without a card.";
+    public static string LabelCommandProcesingError = "During processing by the shooting command";
+    public static string LabelShoutingInProgress = "The shooting mode is EFFECTS.";
+    public static string LabelOverHeatedError = "The Live view cannot be started when the temperature rises.";
+    public static string LabelCardProtectedError = "Card protected";
+    public static string LabelMirrorUpError = "The release mode is set to Mirror-up and the mirror-up operation is being performed.";
+    public static string LabelMirrorUpError2 = "The release mode is [Mirror-up].";
+    public static string LabelDestinationCardError = "The recording destination is the card.";
+    public static string LabelLiveViewError = "Error stating live view ";
   }
 }
