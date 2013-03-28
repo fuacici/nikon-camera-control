@@ -151,7 +151,7 @@ namespace CameraControl.Devices.Others
 
 
     private Device Device { get; set; }
-    internal object Locker = new object(); // object used to lock multi hreaded mothods 
+    internal object Locker = new object(); // object used to lock multi  
     public DeviceManager DeviceManager { get; set; }
 
     public override bool Init(DeviceDescriptor deviceDescriptor)
@@ -370,7 +370,7 @@ namespace CameraControl.Devices.Others
         IsConnected = false;
       }
       HaveLiveView = true;
-      Capabilities.Add(CapabilityEnum.LiveView);
+      //Capabilities.Add(CapabilityEnum.LiveView);
       return true;
     }
 
