@@ -338,5 +338,40 @@
     <string name="LabelTimeBetweenShots">Time between shots</string>
     <string name="LabelDontAutofocus">Don't autofocus</string>
     <string name="LabelShowUnTranslatedStringIds">Show untranslated string ids</string>    
+    <!-- 20/01/2013-->
+    <string name="LabelUseAsMaster">Use as master</string>
+    <!--29/01/2013-->
+    <string name="LabelCounterIncrementer">Counter incrementer</string>
+    <string name="LabelSelected">Selected</string>
+    <!-- 31/01/2013-->
+    <string name="LabelNone">None</string>
+    <string name="LabelRuleOfThirds">Rule of thirds</string>
+    <string name="LabelComboGrid">Grid</string>
+    <string name="LabelDiagonal">Diagonal</string>
+    <string name="LabelSplit">Split</string>
+    <!-- 13/03/2013-->
+    <string name="LabelTools">Tools</string>
+    <!-- 17/03/2012-->
+    <string name="LabelMFError">Camera is in MF focus mode</string>
+    <string name="LabelNotAFSError">Camera isn't in AF-S focus mode</string>
+    <!-- 28/03/2012-->
+    <string name="LabelSequenceError">Sequence error</string>
+    <string name="LabelFullyPressedButtonError">Fully pressed button error</string>
+    <string name="LabelApertureValueError">The aperture value is being set by the lens aperture ring.</string>
+    <string name="LabelBulbError">Bulb error</string>
+    <string name="LabelDuringCleaningMirror">During cleaning mirror-up operation</string>
+    <string name="LabelDuringInsufficiencyBattery">During insufficiency of battery</string>
+    <string name="LabelTTLError">TTL error</string>
+    <string name="LabelNonCPULEnseError">A non-CPU lens is mounted and the exposure mode is not M.</string>
+    <string name="LabelImageInRAM">There is an image whose recording destination is SDRAM.</string>
+    <string name="LabelNoCardInsertedError">The recording destination is the card or the card and SDRAM,\n and the card is not inserted with the release disabled without a card.</string>
+    <string name="LabelCommandProcesingError">During processing by the shooting command</string>
+    <string name="LabelShoutingInProgress">The shooting mode is EFFECTS.</string>
+    <string name="LabelOverHeatedError">The Live view cannot be started when the temperature rises.</string>
+    <string name="LabelCardProtectedError">Card protected</string>
+    <string name="LabelMirrorUpError">The release mode is set to Mirror-up and the mirror-up operation is being performed.</string>
+    <string name="LabelMirrorUpError2">The release mode is [Mirror-up].</string>
+    <string name="LabelDestinationCardError">The recording destination is the card.</string>
+    <string name="LabelLiveViewError">Error stating live view </string>
 	
 </resources>
