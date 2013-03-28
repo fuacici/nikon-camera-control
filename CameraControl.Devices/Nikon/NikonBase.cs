@@ -459,6 +459,7 @@ namespace CameraControl.Devices.Nikon
                 {
                     DeviceReady();
                     MTPDataResponse result = ExecuteReadDataEx(CONST_CMD_GetDevicePropDesc, CONST_PROP_ExposureIndex);
+                    //IsoNumber.IsEnabled = result.Data[4] == 1;
                     UInt16 defval = BitConverter.ToUInt16(result.Data, 7);
                     for (int i = 0; i < result.Data.Length - 12; i += 2)
                     {
