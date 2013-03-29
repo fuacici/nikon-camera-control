@@ -34,9 +34,9 @@
 	</COMPANY_INFO>
 	<Program_Info>
 		<Program_Name>digiCamControl</Program_Name>
-		<Program_Version> 0.9.444</Program_Version>
-		<Program_Release_Month>01</Program_Release_Month>
-		<Program_Release_Day>20</Program_Release_Day>
+		<Program_Version> 0.9.494</Program_Version>
+		<Program_Release_Month>03</Program_Release_Month>
+		<Program_Release_Day>29</Program_Release_Day>
 		<Program_Release_Year>2013</Program_Release_Year>
 		<Program_Cost_Dollars />
 		<Program_Cost_Other_Code />
@@ -92,14 +92,14 @@ Manage multiple profiles
 	</Program_Descriptions>
 	<Web_Info>
 		<Application_URLs>
-			<Application_Info_URL>http://www.digicamcontrol.com/wiki/index.php/Complete_feature_list</Application_Info_URL>
+			<Application_Info_URL>http://digicamcontrol.com/manual/complete-feature-list</Application_Info_URL>
 			<Application_Order_URL />
 			<Application_Screenshot_URL />
 			<Application_Icon_URL />
 			<Application_XML_File_URL />
 		</Application_URLs>
 		<Download_URLs>
-			<Primary_Download_URL>http://nikon-camera-control.googlecode.com/files/digiCamControlsetup_0.9.444.exe</Primary_Download_URL>
+			<Primary_Download_URL>https://nikon-camera-control.googlecode.com/files/digiCamControlsetup_0.9.494.exe</Primary_Download_URL>
 			<Secondary_Download_URL />
 			<Additional_Download_URL_1 />
 			<Additional_Download_URL_2 />
