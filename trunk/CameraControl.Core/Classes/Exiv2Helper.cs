@@ -137,12 +137,19 @@ namespace CameraControl.Core.Classes
       process.OutputDataReceived += new DataReceivedEventHandler(process_OutputDataReceived);
       process.BeginOutputReadLine();
       //string outstr = process.StandardOutput.ReadToEnd();
-
+        
       process.WaitForExit();
       if (Tags.ContainsKey("Exif.Photo.PixelXDimension"))
       {
         int.TryParse(Tags["Exif.Photo.PixelXDimension"].Value, out Width);
         int.TryParse(Tags["Exif.Photo.PixelYDimension"].Value, out Height);
+      }
+      else
+      {
+          if (Tags.ContainsKey("Exif.SubImage2.ImageWidth"))
+              int.TryParse(Tags["Exif.SubImage2.ImageWidth"].Value, out Width);
+          if (Tags.ContainsKey("Exif.SubImage2.ImageLength"))
+              int.TryParse(Tags["Exif.SubImage2.ImageLength"].Value, out Height);
       }
       double dw = (double) relWidth/Width;
       double dh = (double) relHeight/Height;

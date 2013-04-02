@@ -236,25 +236,26 @@ namespace CameraControl.Core.Classes
           writeableBitmap.Lock();
           foreach (Rect focuspoint in exiv2Helper.Focuspoints)
           {
-            DrawRect(writeableBitmap, (int)focuspoint.X, (int)focuspoint.Y, (int)(focuspoint.X + focuspoint.Width),
-                     (int)(focuspoint.Y + focuspoint.Height), Colors.Aqua, 7);
+              DrawRect(writeableBitmap, (int) focuspoint.X, (int) focuspoint.Y, (int) (focuspoint.X + focuspoint.Width),
+                       (int) (focuspoint.Y + focuspoint.Height), Colors.Aqua,
+                       ServiceProvider.Settings.LowMemoryUsage ? 2 : 7);
           }
           writeableBitmap.Unlock();
         }
 
-        if (exiv2Helper.Tags.ContainsKey("Exif.Image.Orientation"))
+        if (exiv2Helper.Tags.ContainsKey("Exif.Image.Orientation") && !file.FileItem.IsRaw)
         {
-          if (exiv2Helper.Tags["Exif.Image.Orientation"].Value == "bottom, right")
-            writeableBitmap = writeableBitmap.Rotate(180);
+            if (exiv2Helper.Tags["Exif.Image.Orientation"].Value == "bottom, right")
+                writeableBitmap = writeableBitmap.Rotate(180);
 
-          if (exiv2Helper.Tags["Exif.Image.Orientation"].Value == "right, top")
-            writeableBitmap = writeableBitmap.Rotate(90);
+            if (exiv2Helper.Tags["Exif.Image.Orientation"].Value == "right, top")
+                writeableBitmap = writeableBitmap.Rotate(90);
 
-          if (exiv2Helper.Tags["Exif.Image.Orientation"].Value == "left, bottom")
-            writeableBitmap = writeableBitmap.Rotate(270);
+            if (exiv2Helper.Tags["Exif.Image.Orientation"].Value == "left, bottom")
+                writeableBitmap = writeableBitmap.Rotate(270);
         }
 
-        if (ServiceProvider.Settings.RotateIndex != 0)
+          if (ServiceProvider.Settings.RotateIndex != 0)
         {
           switch (ServiceProvider.Settings.RotateIndex)
           {
