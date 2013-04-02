@@ -220,14 +220,17 @@
     <Compile Include="windows\CreateTimeLapseWnd.xaml.cs">
       <DependentUpon>CreateTimeLapseWnd.xaml</DependentUpon>
     </Compile>
-    <Compile Include="windows\DownloadPhotosWnd.xaml.cs">
-      <DependentUpon>DownloadPhotosWnd.xaml</DependentUpon>
+    <Compile Include="windows\DownloadPhotosWnd_old.xaml.cs">
+      <DependentUpon>DownloadPhotosWnd_old.xaml</DependentUpon>
     </Compile>
     <Compile Include="windows\EditSession.xaml.cs">
       <DependentUpon>EditSession.xaml</DependentUpon>
     </Compile>
     <Compile Include="windows\EditTagWnd.xaml.cs">
       <DependentUpon>EditTagWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="windows\DownloadPhotosWnd.xaml.cs">
+      <DependentUpon>DownloadPhotosWnd.xaml</DependentUpon>
     </Compile>
     <Compile Include="windows\FullScreenWnd.xaml.cs">
       <DependentUpon>FullScreenWnd.xaml</DependentUpon>
@@ -352,7 +355,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="windows\DownloadPhotosWnd.xaml">
+    <Page Include="windows\DownloadPhotosWnd_old.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -363,6 +366,10 @@
     <Page Include="windows\EditTagWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="windows\DownloadPhotosWnd.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="windows\FullScreenWnd.xaml">
       <SubType>Designer</SubType>
