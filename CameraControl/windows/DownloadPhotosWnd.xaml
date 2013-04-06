@@ -59,8 +59,8 @@
     </Controls:MetroWindow.WindowCommands>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="443*" />
-            <RowDefinition Height="100" />
+            <RowDefinition Height="429*" />
+            <RowDefinition Height="125" />
         </Grid.RowDefinitions>
 
         <ListBox   Name="lst_items">
@@ -92,7 +92,7 @@
         </ListBox>
         <Button Content="{Translation:TranslateExtension LabelDownload}" Grid.Row="1" Height="23" Margin="0,0,12,11" Name="btn_download" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="btn_download_Click" />
         <CheckBox Content="{T:TranslateExtension LabelDeleteFilesAfterTransfer}" Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,7,66" Name="chk_delete" Width="161" Height="16" VerticalAlignment="Bottom" />
-        <GroupBox Header="Selection" Height="95" HorizontalAlignment="Left" Name="groupBox1" VerticalAlignment="Top" Width="385" Grid.Row="1" Margin="5,5,0,0">
+        <GroupBox Header="Selection" Height="120" HorizontalAlignment="Left" Name="groupBox1" VerticalAlignment="Top" Width="391" Grid.Row="1" Margin="5,5,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="111*" />
