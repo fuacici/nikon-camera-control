@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBFX.Plugin", "FBFX.Plugin\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraControl.Trigger", "CameraControl.Trigger\CameraControl.Trigger.csproj", "{188147CA-5300-4D1B-881A-8E766BA4FF1E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MtpTester", "MtpTester\MtpTester.csproj", "{B922353F-31DD-44AF-AFF6-C9D5C476A353}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -179,6 +181,18 @@ Global
 		{188147CA-5300-4D1B-881A-8E766BA4FF1E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{188147CA-5300-4D1B-881A-8E766BA4FF1E}.Release|x64.ActiveCfg = Release|Any CPU
 		{188147CA-5300-4D1B-881A-8E766BA4FF1E}.Release|x86.ActiveCfg = Release|Any CPU
+		{B922353F-31DD-44AF-AFF6-C9D5C476A353}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{B922353F-31DD-44AF-AFF6-C9D5C476A353}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{B922353F-31DD-44AF-AFF6-C9D5C476A353}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{B922353F-31DD-44AF-AFF6-C9D5C476A353}.Debug|x64.ActiveCfg = Debug|x86
+		{B922353F-31DD-44AF-AFF6-C9D5C476A353}.Debug|x86.ActiveCfg = Debug|x86
+		{B922353F-31DD-44AF-AFF6-C9D5C476A353}.Debug|x86.Build.0 = Debug|x86
+		{B922353F-31DD-44AF-AFF6-C9D5C476A353}.Release|Any CPU.ActiveCfg = Release|x86
+		{B922353F-31DD-44AF-AFF6-C9D5C476A353}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{B922353F-31DD-44AF-AFF6-C9D5C476A353}.Release|Mixed Platforms.Build.0 = Release|x86
+		{B922353F-31DD-44AF-AFF6-C9D5C476A353}.Release|x64.ActiveCfg = Release|x86
+		{B922353F-31DD-44AF-AFF6-C9D5C476A353}.Release|x86.ActiveCfg = Release|x86
+		{B922353F-31DD-44AF-AFF6-C9D5C476A353}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
