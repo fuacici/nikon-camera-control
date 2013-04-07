@@ -1,7 +1,7 @@
 ﻿<Controls:MetroWindow x:Class="MtpTester.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" Title="MainWindow" Height="498" Width="816" WindowStartupLocation="CenterScreen" xmlns:my="clr-namespace:MtpTester">
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" Title="MainWindow" Height="706" Width="814" WindowStartupLocation="CenterScreen" xmlns:my="clr-namespace:MtpTester">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -22,10 +22,10 @@
             <RowDefinition Height="334*" />
         </Grid.RowDefinitions>
         <Menu Name="menu1">
-            <MenuItem Header="Menu">
+            <MenuItem Header="Menu" >
                 <MenuItem Header="New" Click="MenuItem_Click" />
-                <MenuItem Header="Save as" />
-                <MenuItem Header="Load" />
+                <MenuItem Header="Save as" Click="MenuItem_Click_1"/>
+                <MenuItem Header="Load" Click="MenuItem_Click_2" />
             </MenuItem>
         </Menu>
         <TabControl Grid.Row="1" Name="tabControl1">
@@ -41,7 +41,42 @@
             </TabItem>
             <TabItem Header="Properties" >
                 <Grid>
-                    <ListBox HorizontalAlignment="Left" Margin="5,5,0,5" Name="lst_prop" Width="300" />
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="118*" />
+                        <RowDefinition Height="293*" />
+                        <RowDefinition Height="174*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="312" />
+                        <ColumnDefinition Width="472" />
+                    </Grid.ColumnDefinitions>
+                    <ListBox Name="lst_prop" Margin="5" Grid.RowSpan="3" DisplayMemberPath="DisplayName"/>
+                    <GroupBox Grid.Column="1" Header="Values" Name="groupBox1" Grid.Row="1" DataContext="{Binding ElementName=lst_prop,Path=SelectedItem}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="260*" />
+                                <ColumnDefinition Width="190*" />
+                            </Grid.ColumnDefinitions>
+                            <ListBox ItemsSource="{Binding Values}" DisplayMemberPath="DisplayName"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Grid.Column="1" Grid.Row="2" Header="Testing" Name="groupBox2">
+                        <Grid />
+                    </GroupBox>
+                    <GroupBox Grid.Column="1" Header="Description" Name="groupBox3" DataContext="{Binding ElementName=lst_prop,Path=SelectedItem}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="166*" />
+                                <ColumnDefinition Width="284*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="33*" />
+                                <RowDefinition Height="36*" />
+                            </Grid.RowDefinitions>
+                            <Label Content="Name" HorizontalContentAlignment="Right" />
+                            <TextBox Grid.Column="1" Text="{Binding Name}"/>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Device Control" >

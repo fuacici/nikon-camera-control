@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -10,11 +11,13 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Xml.Serialization;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using CameraControl.Devices.Xml;
+using Microsoft.Win32;
 using PortableDeviceLib;
+using Path = System.Windows.Shapes.Path;
 
 namespace MtpTester
 {
@@ -30,6 +33,7 @@ namespace MtpTester
         public MainWindow()
         {
             InitializeComponent();
+            //MenuItem_Click(null, null);
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -47,6 +51,8 @@ namespace MtpTester
                     MTPCamera.Init(descriptor);
                     MTPDataResponse res = MTPCamera.ExecuteReadDataEx(0x1001);
                     ErrorCodes.GetException(res.ErrorCode);
+                    DeviceInfo.Manufacturer = SelectedDevice.Manufacturer;
+                    DeviceInfo.Model = SelectedDevice.Model;
                     int index = 2 + 4 + 2;
                     int vendorDescCount = res.Data[index];
                     index += vendorDescCount*2;
@@ -79,10 +85,7 @@ namespace MtpTester
                         DeviceInfo.AvaiableProperties.Add(new XmlPropertyDescriptor() { Code = BitConverter.ToUInt16(res.Data, index) });
                     }
                     PopulateProperties();
-                    lst_opers.ItemsSource = DeviceInfo.AvaiableCommands;
-                    lst_events.ItemsSource = DeviceInfo.AvaiableEvents;
-                    lst_prop.ItemsSource = DeviceInfo.AvaiableProperties;
-
+                    InitUi();
                 }
                 catch (DeviceException exception)
                 {
@@ -106,6 +109,7 @@ namespace MtpTester
                     MTPDataResponse result = MTPCamera.ExecuteReadDataEx(BaseMTPCamera.CONST_CMD_GetDevicePropDesc, xmlPropertyDescriptor.Code);
                     ErrorCodes.GetException(result.ErrorCode);
                     uint dataType = BitConverter.ToUInt16(result.Data, 2);
+                    xmlPropertyDescriptor.DataType = dataType;
                     int dataLength = 0;
                     switch (dataType)
                     {
@@ -206,11 +210,30 @@ namespace MtpTester
 
                     byte formFlag = result.Data[index];
                     index += 1;
+                    xmlPropertyDescriptor.DataForm = formFlag;
                     //UInt16 defval = BitConverter.ToUInt16(result.Data, 7);
-                    for (int i = 0; i < result.Data.Length - index; i += dataLength)
+                    if (formFlag == 2)
                     {
+                        int length = BitConverter.ToInt16(result.Data, index);
+                        index += 2;
+                        for (int i = 0; i < length; i ++)
+                        {
+                            long val = GetValue(result, index, dataLength); ;
+                            xmlPropertyDescriptor.Values.Add(new XmlPropertyValue(){Value = val});
+                            index += dataLength;
+                        }
+                    }
+                    if(formFlag==1)
+                    {
+                        long min = GetValue(result,index,dataLength);
                         index += dataLength;
-                        UInt16 val = BitConverter.ToUInt16(result.Data, index);
+                        long max = GetValue(result, index, dataLength);
+                        index += dataLength;
+                        long inc = GetValue(result, index, dataLength);
+                        for (long i = min; i < max; i+=inc)
+                        {
+                            xmlPropertyDescriptor.Values.Add(new XmlPropertyValue() { Value = i });
+                        }
                     }
                 }
                 catch (Exception exception)
@@ -218,6 +241,82 @@ namespace MtpTester
                     MessageBox.Show("Error process property "+exception.Message);
                 }
             }
+        }
+
+
+        private long GetValue (MTPDataResponse result,int index, int dataLength )
+        {
+            long val = 0;
+            switch (dataLength)
+            {
+                case 1:
+                    val = result.Data[index];
+                    break;
+                case 2:
+                    val = BitConverter.ToUInt16(result.Data, index);
+                    break;
+                case 4:
+                    val = BitConverter.ToUInt32(result.Data, index);
+                    break;
+                default:
+                    val = (long)BitConverter.ToUInt64(result.Data, index);
+                    break;
+            }
+            return val;
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "Xml file (*.xml)|*.xml";
+            if (dialog.ShowDialog() == true)
+            {
+                Save(dialog.FileName);
+            }
+        }
+
+        public void Save(string filename)
+        {
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(XmlDeviceData));
+                // Create a FileStream to write with.
+
+                Stream writer = new FileStream(filename, FileMode.Create);
+                // Serialize the object, and close the TextWriter
+                serializer.Serialize(writer, DeviceInfo);
+                writer.Close();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("Unable to save data "+exception.Message);
+            }
+        }
+
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.Filter = "Xml file (*.xml)|*.xml";
+                if (dialog.ShowDialog() == true)
+                {
+                    DeviceInfo = XmlDeviceData.Load(dialog.FileName);
+                }
+                InitUi();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("Error loading file " + exception.Message);
+            }
+        }
+
+
+        private void InitUi()
+        {
+            lst_opers.ItemsSource = DeviceInfo.AvaiableCommands;
+            lst_events.ItemsSource = DeviceInfo.AvaiableEvents;
+            lst_prop.ItemsSource = DeviceInfo.AvaiableProperties;
         }
 
     }
