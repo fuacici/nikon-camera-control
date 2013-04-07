@@ -129,6 +129,7 @@
     <Compile Include="Xml\XmlDeviceData.cs" />
     <Compile Include="Xml\XmlEventDescriptor.cs" />
     <Compile Include="Xml\XmlPropertyDescriptor.cs" />
+    <Compile Include="Xml\XmlPropertyValue.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PortableDeviceLib\PortableDeviceLib.csproj">

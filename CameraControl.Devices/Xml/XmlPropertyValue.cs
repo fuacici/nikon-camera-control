@@ -7,10 +7,10 @@ using CameraControl.Devices.Classes;
 
 namespace CameraControl.Devices.Xml
 {
-    public class XmlPropertyDescriptor : BaseFieldClass
+    public class XmlPropertyValue : BaseFieldClass
     {
         [XmlAttribute]
-        public uint Code { get; set; }
+        public long Value { get; set; }
 
         private string _name;
 
@@ -26,44 +26,29 @@ namespace CameraControl.Devices.Xml
             }
         }
 
-        [XmlIgnore]
-        public string DisplayName
-        {
-            get
-            {
-                return HexCode +" - "+ Name; ;
-            }
-        }
-
-        [XmlAttribute]
-        public string Description { get; set; }
-        [XmlAttribute]
-        public uint DataType { get; set; }
-        [XmlAttribute]
-        public uint DataForm { get; set; }
-
         private string _hexCode;
         [XmlAttribute]
-        public string HexCode
+        public string HexValue
         {
             get
             {
-                _hexCode = Code.ToString("X");
+                _hexCode = Value.ToString("X");
                 return _hexCode;
             }
             set { _hexCode = value; }
         }
 
-        public List<XmlPropertyValue> Values { get; set; }
-
-        public XmlPropertyDescriptor()
+        [XmlIgnore]
+        public string DisplayName
         {
-            Values=new List<XmlPropertyValue>();
+            get
+            {
+                return Value+ " - "+ HexValue + " - " + Name; ;
+            }
         }
-
         public override string ToString()
         {
-            return HexCode + Name;
+            return HexValue + Name;
         }
     }
 }
