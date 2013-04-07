@@ -292,7 +292,7 @@ namespace CameraControl.Devices
       //}
     }
 
-    protected void SetProperty(int code, byte[] data, int param1, int param2)
+    public void SetProperty(int code, byte[] data, int param1, int param2)
     {
       bool timerstate = _timer.Enabled;
       _timer.Stop();

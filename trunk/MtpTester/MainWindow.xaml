@@ -57,7 +57,11 @@
                                 <ColumnDefinition Width="260*" />
                                 <ColumnDefinition Width="190*" />
                             </Grid.ColumnDefinitions>
-                            <ListBox ItemsSource="{Binding Values}" DisplayMemberPath="DisplayName"/>
+                            <ListBox ItemsSource="{Binding Values}" DisplayMemberPath="DisplayName" Name="lst_values"/>
+                            <Label Content="Display name" Grid.Column="1" Height="28" HorizontalAlignment="Left" Margin="6,0,0,0"  VerticalAlignment="Top" />
+                            <TextBox Grid.Column="1" Height="23" HorizontalAlignment="Left" Margin="6,39,0,0" DataContext="{Binding ElementName=lst_values, Path=SelectedItem}" Text="{Binding Name}" VerticalAlignment="Top" Width="178" />
+                            <Button Content="Set value" Grid.Column="1" Height="23" HorizontalAlignment="Left" Margin="6,0,0,6" ToolTip="Set this value to selected camera" VerticalAlignment="Bottom" Width="75" Click="Button_Click" />
+                            <Button Content="Get value" Grid.Column="1" Height="23" HorizontalAlignment="Left" Margin="6,182,0,0" Name="btn_get_value" VerticalAlignment="Top" Width="75" Click="btn_get_value_Click" />
                         </Grid>
                     </GroupBox>
                     <GroupBox Grid.Column="1" Grid.Row="2" Header="Testing" Name="groupBox2">
