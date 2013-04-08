@@ -38,5 +38,36 @@ namespace CameraControl.Devices.Xml
             return photoSession;
         }
 
+        public string GetCommandName(uint code)
+        {
+            foreach (XmlCommandDescriptor xmlCommandDescriptor in AvaiableCommands)
+            {
+                if (xmlCommandDescriptor.Code == code)
+                    return xmlCommandDescriptor.Name;
+            }
+            return "";
+        }
+
+        public string GetEventName(uint code)
+        {
+            foreach (XmlEventDescriptor xmlEventDescriptor in AvaiableEvents)
+            {
+                if (xmlEventDescriptor.Code == code)
+                    return xmlEventDescriptor.Name;
+            }
+            return "";
+        }
+
+        public string GetPropName(uint code)
+        {
+            foreach (XmlPropertyDescriptor xmlPropertyDescriptor in AvaiableProperties)
+            {
+                if (xmlPropertyDescriptor.Code == code)
+                    return xmlPropertyDescriptor.Name;
+            }
+            return "";
+        }
+
+
     }
 }

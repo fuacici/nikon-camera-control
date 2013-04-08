@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -29,11 +30,15 @@ namespace MtpTester
         public PortableDevice SelectedDevice { get; set; }
         private BaseMTPCamera MTPCamera;
         private XmlDeviceData DeviceInfo;
+        private XmlDeviceData DefaultDeviceInfo;
 
         public MainWindow()
         {
             InitializeComponent();
-            //MenuItem_Click(null, null);
+            if (File.Exists("baseMtpDevice.xml"))
+            {
+                DefaultDeviceInfo = XmlDeviceData.Load("baseMtpDevice.xml");
+            }
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -86,7 +91,35 @@ namespace MtpTester
                         DeviceInfo.AvaiableProperties.Add(new XmlPropertyDescriptor()
                                                               {Code = BitConverter.ToUInt16(res.Data, index)});
                     }
+                    MTPDataResponse vendor_res = MTPCamera.ExecuteReadDataEx(0x90CA);
+                    if (vendor_res.Data.Length > 0)
+                    {
+                        index = 0;
+                        propertycount = vendor_res.Data[index];
+                        index += 2;
+                        for (int i = 0; i < propertycount; i++)
+                        {
+                            index += 2;
+                            DeviceInfo.AvaiableProperties.Add(new XmlPropertyDescriptor()
+                                                                  {Code = BitConverter.ToUInt16(vendor_res.Data, index)});
+                        }
+                    }
                     PopulateProperties();
+                    if(DefaultDeviceInfo!=null)
+                    {
+                        foreach (XmlCommandDescriptor command in DeviceInfo.AvaiableCommands)
+                        {
+                            command.Name = DefaultDeviceInfo.GetCommandName(command.Code);
+                        }
+                        foreach (XmlEventDescriptor avaiableEvent in DeviceInfo.AvaiableEvents)
+                        {
+                            avaiableEvent.Name = DefaultDeviceInfo.GetEventName(avaiableEvent.Code);
+                        }
+                        foreach (XmlPropertyDescriptor property in DeviceInfo.AvaiableProperties)
+                        {
+                            property.Name = DefaultDeviceInfo.GetPropName(property.Code);
+                        }
+                    }
                     InitUi();
                 }
                 catch (DeviceException exception)
@@ -406,5 +439,25 @@ namespace MtpTester
                 MessageBox.Show("Error to get value " + exception.Message);
             }
         }
+
+        //private void button1_Click(object sender, RoutedEventArgs e)
+        //{
+        //    using (StreamReader sr = new StreamReader("d:\\events.txt"))
+        //    {
+        //        String line;
+        //        // Read and display lines from the file until the end of
+        //        // the file is reached.
+        //        while ((line = sr.ReadLine()) != null)
+        //        {
+        //            line = line.Trim();
+        //            string name = line.Substring(8, line.Length - 8 - 6).Trim();
+        //            string codestr = line.Substring(line.Length - 6);
+        //            if (codestr.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+        //                codestr = codestr.Substring(2);
+        //            int code = int.Parse(codestr, NumberStyles.HexNumber);
+        //            DeviceInfo.AvaiableEvents.Add(new XmlEventDescriptor(){Code = (uint) code,Name = name});
+        //        }
+        //    }
+        //}
     }
 }
