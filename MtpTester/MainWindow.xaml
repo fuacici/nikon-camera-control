@@ -31,7 +31,30 @@
         <TabControl Grid.Row="1" Name="tabControl1">
             <TabItem Header="Operations" >
                 <Grid>
-                    <ListBox HorizontalAlignment="Left" Margin="5,5,0,5" Name="lst_opers" Width="300" />
+                    <ListBox HorizontalAlignment="Left" Margin="5,5,0,5" Name="lst_opers" Width="300" DisplayMemberPath="DisplayName"/>
+                    <GroupBox Header="Name" Height="127" HorizontalAlignment="Left" Margin="311,0,0,0" VerticalAlignment="Top" Width="465" DataContext="{Binding ElementName=lst_opers,Path=SelectedItem}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="212*" />
+                                <ColumnDefinition Width="241*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="39*" />
+                                <RowDefinition Height="49*" />
+                            </Grid.RowDefinitions>
+                            <Label Content="Name" HorizontalContentAlignment="Right" />
+                            <TextBox  Text="{Binding Name}" Grid.Column="1" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Execute" Height="80" HorizontalAlignment="Left" Margin="311,138,0,0" Name="groupBox4" VerticalAlignment="Top" Width="465">
+                        <Grid />
+                    </GroupBox>
+                    <GroupBox Header="Execute write data" Height="115" HorizontalAlignment="Left" Margin="311,231,0,0" Name="groupBox5" VerticalAlignment="Top" Width="463">
+                        <Grid />
+                    </GroupBox>
+                    <GroupBox Header="Execute read data" Height="224" HorizontalAlignment="Left" Margin="311,355,0,0" Name="groupBox6" VerticalAlignment="Top" Width="465">
+                        <Grid />
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Events" >
