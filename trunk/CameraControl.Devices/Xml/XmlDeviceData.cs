@@ -31,7 +31,7 @@ namespace CameraControl.Devices.Xml
             {
                 XmlSerializer mySerializer =
                     new XmlSerializer(typeof (XmlDeviceData));
-                FileStream myFileStream = new FileStream(filename, FileMode.Open);
+                FileStream myFileStream = new FileStream(filename, FileMode.Open, FileAccess.Read);
                 photoSession = (XmlDeviceData) mySerializer.Deserialize(myFileStream);
                 myFileStream.Close();
             }

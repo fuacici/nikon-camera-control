@@ -31,6 +31,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraControl.Trigger", "CameraControl.Trigger\CameraControl.Trigger.csproj", "{188147CA-5300-4D1B-881A-8E766BA4FF1E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MtpTester", "MtpTester\MtpTester.csproj", "{B922353F-31DD-44AF-AFF6-C9D5C476A353}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CD20011B-67C3-45A4-B69D-C7A9E8481550} = {CD20011B-67C3-45A4-B69D-C7A9E8481550}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
