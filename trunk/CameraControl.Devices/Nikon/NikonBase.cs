@@ -56,8 +56,6 @@ namespace CameraControl.Devices.Nikon
         public const int CONST_Event_StoreFull = 0x400A;
         public const int CONST_Event_CaptureComplete = 0x400D;
         public const int CONST_Event_CaptureCompleteRecInSdram = 0xC102;
-        public const int CONST_Event_ObjectAdded = 0x4002;
-        public const int CONST_Event_ObjectAddedInSdram = 0xC101;
         public const int CONST_Event_ObsoleteEvent = 0xC104;
 
 

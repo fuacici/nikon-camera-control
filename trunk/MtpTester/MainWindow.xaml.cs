@@ -104,6 +104,27 @@ namespace MtpTester
                                                                   {Code = BitConverter.ToUInt16(vendor_res.Data, index)});
                         }
                     }
+                    // canon
+                    try
+                    {
+                        MTPDataResponse canon_vendor_res = MTPCamera.ExecuteReadDataEx(0x9108);
+                        if (vendor_res.Data.Length > 0)
+                        {
+                            index = 0;
+                            propertycount = canon_vendor_res.Data[index];
+                            index += 2;
+                            for (int i = 0; i < propertycount; i++)
+                            {
+                                index += 2;
+                                DeviceInfo.AvaiableProperties.Add(new XmlPropertyDescriptor() { Code = BitConverter.ToUInt16(canon_vendor_res.Data, index) });
+                            }
+                        }
+
+                    }
+                    catch (Exception)
+                    {
+                        
+                    }
                     PopulateProperties();
                     if(DefaultDeviceInfo!=null)
                     {
