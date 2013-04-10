@@ -36,6 +36,8 @@ namespace CameraControl.Devices
         public const int CONST_CMD_FormatStore = 0x100F;
         public const int CONST_CMD_GetStorageIDs = 0x1004;
 
+        public const int CONST_Event_ObjectAdded = 0x4002;
+        public const int CONST_Event_ObjectAddedInSdram = 0xC101;
 
         private const int CONST_READY_TIME = 1;
         private const int CONST_LOOP_TIME = 100;
@@ -45,7 +47,7 @@ namespace CameraControl.Devices
         /// <summary>
         /// The timer for get periodically the event list
         /// </summary>
-        protected Timer _timer = new Timer(1000 / 15);
+        protected Timer _timer = new Timer(1000 / 5);
 
         public override bool Init(DeviceDescriptor deviceDescriptor)
         {
@@ -366,7 +368,6 @@ namespace CameraControl.Devices
             return (short)(i);
             //return System.BitConverter.ToInt16(value.Reverse().ToArray(), value.Length - sizeof(Int16) - startIndex);
         }
-
     }
 
 }
