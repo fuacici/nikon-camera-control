@@ -20,8 +20,16 @@ namespace CameraControl.Devices.Canon
         public const int CONST_CMD_CANON_EOS_GetEvent = 0x9116;
         public const int CONST_CMD_CANON_EOS_DoAf = 0x9154;
         public const int CONST_CMD_CANON_EOS_GetViewFinderData = 0x9153;
+        public const int CONST_CMD_CANON_EOS_GetObjectInfo = 0x9103;
+
+        public const int CONST_CMD_CANON_EOS_SetDevicePropValueEx = 0x9110;
+        public const int CONST_CMD_CANON_EOS_RequestDevicePropValue = 0x9109;
 
         public const int CONST_PROP_EOS_ShutterSpeed = 0xD102;
+        public const int CONST_PROP_EOS_LiveView = 0xD1B0;
+
+        public const int CONST_Event_CANON_EOS_PropValueChanged = 0xc189 ;
+        public const int CONST_Event_CANON_EOS_ObjectAddedEx = 0xc181;
 
         private bool _eventIsbusy = false;
 
@@ -140,38 +148,48 @@ namespace CameraControl.Devices.Canon
                             int longeventParam = BitConverter.ToInt32(response.Data, 6 * i + 4);
                             switch (eventCode)
                             {
-                                //case CONST_Event_DevicePropChanged:
-                                //    ReadDeviceProperties(eventParam);
-                                //    break;
+                                case CONST_Event_CANON_EOS_PropValueChanged:
+                                    Log.Debug("EOS property changed " + eventParam.ToString("X"));
+                                    //ReadDeviceProperties(eventParam);
+                                    break;
+                                case CONST_Event_CANON_EOS_ObjectAddedEx:
                                 case CONST_Event_ObjectAddedInSdram:
                                 case CONST_Event_ObjectAdded:
                                     {
-                                        MTPDataResponse objectdata = ExecuteReadDataEx(CONST_CMD_GetObjectInfo, (uint)longeventParam);
-                                        string filename = "DSC_0000.JPG";
-                                        if (objectdata.Data != null)
+                                        try
                                         {
-                                            filename = Encoding.Unicode.GetString(objectdata.Data, 53, 12 * 2);
-                                            if (filename.Contains("\0"))
-                                                filename = filename.Split('\0')[0];
+                                            MTPDataResponse objectdata = ExecuteReadDataEx(CONST_CMD_CANON_EOS_GetObjectInfo, (uint)longeventParam);
+                                            string filename = "DSC_0000.JPG";
+                                            if (objectdata.Data != null)
+                                            {
+                                                filename = Encoding.Unicode.GetString(objectdata.Data, 53, 12 * 2);
+                                                if (filename.Contains("\0"))
+                                                    filename = filename.Split('\0')[0];
+                                            }
+                                            else
+                                            {
+                                                Log.Error("Error getting file name");
+                                            }
+                                            Log.Debug("File transfer " + filename);
+                                            PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
+                                            {
+                                                WiaImageItem = null,
+                                                EventArgs =
+                                                  new PortableDeviceEventArgs(new PortableDeviceEventType()
+                                                  {
+                                                      ObjectHandle =
+                                                        (uint)longeventParam
+                                                  }),
+                                                CameraDevice = this,
+                                                FileName = filename,
+                                                Handle = (uint)longeventParam
+                                            };
+                                            OnPhotoCapture(this, args);
                                         }
-                                        else
+                                        catch (Exception exception)
                                         {
-                                            Log.Error("Error getting file name");
+                                            Log.Error("Object added error", exception);
                                         }
-                                        PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
-                                        {
-                                            WiaImageItem = null,
-                                            EventArgs =
-                                              new PortableDeviceEventArgs(new PortableDeviceEventType()
-                                              {
-                                                  ObjectHandle =
-                                                    (uint)longeventParam
-                                              }),
-                                            CameraDevice = this,
-                                            FileName = filename,
-                                            Handle = (uint)longeventParam
-                                        };
-                                        OnPhotoCapture(this, args);
                                     }
                                     break;
                                 //case CONST_Event_CaptureComplete:
@@ -216,7 +234,12 @@ namespace CameraControl.Devices.Canon
             DeviceName = StillImageDevice.Model;
             Manufacturer = StillImageDevice.Manufacturer;
             Capabilities.Add(CapabilityEnum.Bulb);
+            Capabilities.Add(CapabilityEnum.LiveView);
             InitShutterSpeed();
+            IsConnected = true;
+            ExecuteWithNoData(CONST_CMD_CANON_EOS_SetRemoteMode, 1);
+            ExecuteWithNoData(CONST_CMD_CANON_EOS_SetEventMode, 1);
+            _timer.Start();
             return true;
         }
 
@@ -236,16 +259,20 @@ namespace CameraControl.Devices.Canon
                 {
                     byte datasize = 4;
                     ShutterSpeed.Clear();
-                    byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_EOS_ShutterSpeed);
-                    int type = BitConverter.ToInt16(result, 2);
-                    byte formFlag = result[(2 * datasize) + 5];
-                    UInt32 defval = BitConverter.ToUInt32(result, datasize + 5);
-                    for (int i = 0; i < result.Length - ((2 * datasize) + 6 + 2); i += datasize)
+                    foreach (KeyValuePair<uint, string> keyValuePair in _shutterTable)
                     {
-                        UInt32 val = BitConverter.ToUInt32(result, ((2 * datasize) + 6 + 2) + i);
-                        ShutterSpeed.AddValues(_shutterTable.ContainsKey(val) ? _shutterTable[val] : val.ToString(), val);
+                        ShutterSpeed.AddValues(keyValuePair.Value, keyValuePair.Key);
                     }
-                    ShutterSpeed.SetValue(defval);
+                    //byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_EOS_ShutterSpeed);
+                    //int type = BitConverter.ToInt16(result, 2);
+                    //byte formFlag = result[(2 * datasize) + 5];
+                    //UInt32 defval = BitConverter.ToUInt32(result, datasize + 5);
+                    //for (int i = 0; i < result.Length - ((2 * datasize) + 6 + 2); i += datasize)
+                    //{
+                    //    UInt32 val = BitConverter.ToUInt32(result, ((2 * datasize) + 6 + 2) + i);
+                    //    ShutterSpeed.AddValues(_shutterTable.ContainsKey(val) ? _shutterTable[val] : val.ToString(), val);
+                    //}
+                    //ShutterSpeed.SetValue(defval);
                 }
                 catch (Exception ex)
                 {
@@ -256,8 +283,9 @@ namespace CameraControl.Devices.Canon
 
         void ShutterSpeed_ValueChanged(object sender, string key, long val)
         {
-            SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+            SetProperty(CONST_CMD_CANON_EOS_SetDevicePropValueEx, BitConverter.GetBytes(val),
                                                CONST_PROP_EOS_ShutterSpeed, -1);
+            SetEOSProperty(CONST_PROP_EOS_ShutterSpeed, (uint) val);
         }
 
         public override void CapturePhoto()
@@ -320,15 +348,19 @@ namespace CameraControl.Devices.Canon
                 {
                     //DeviceReady();
                     viewData.HaveFocusData = false;
-
-                    byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_CANON_EOS_GetViewFinderData);
-                    if (result == null)
+                    MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_CANON_EOS_GetViewFinderData, 0x00100000);
+                    ErrorCodes.GetException(response.ErrorCode);
+                    if (response.Data == null)
                     {
                         _timer.Start();
                         return null;
                     }
                     viewData.ImagePosition = 0;
-                    viewData.ImageData = result;
+                    viewData.ImageData = response.Data;
+                }
+                catch (Exception e)
+                {
+                    Log.Error("Error get live view image ", e);
                 }
                 finally
                 {
@@ -339,5 +371,61 @@ namespace CameraControl.Devices.Canon
             return viewData;
         }
 
+        public override void StartLiveView()
+        {
+            SetProperty(CONST_CMD_CANON_EOS_SetDevicePropValueEx, BitConverter.GetBytes(2),
+                                      CONST_PROP_EOS_LiveView, -1);
+            SetEOSProperty(CONST_PROP_EOS_LiveView, (uint)2);   
+        }
+
+        public override void StopLiveView()
+        {
+            SetProperty(CONST_CMD_CANON_EOS_SetDevicePropValueEx, BitConverter.GetBytes(0),
+                          CONST_PROP_EOS_LiveView, -1);
+            SetEOSProperty(CONST_PROP_EOS_LiveView, (uint)0);   
+        }
+
+
+        public void SetEOSProperty(uint prop, uint val)
+        {
+            bool timerstate = _timer.Enabled;
+            _timer.Stop();
+            bool retry = false;
+            int retrynum = 0;
+            //DeviceReady();
+            do
+            {
+                if (retrynum > 5)
+                {
+                    return;
+                }
+                try
+                {
+                    retry = false;
+                    uint resp = ExecuteWithNoData(CONST_CMD_CANON_EOS_SetDevicePropValueEx, 0x0000000C, (int) prop,
+                                                  (int) val);
+                    if (resp != 0 || resp != ErrorCodes.MTP_OK)
+                    {
+                        //Console.WriteLine("Retry ...." + resp.ToString("X"));
+                        if (resp == ErrorCodes.MTP_Device_Busy || resp == 0x800700AA)
+                        {
+                            Thread.Sleep(100);
+                            retry = true;
+                            retrynum++;
+                        }
+                        else
+                        {
+                            ErrorCodes.GetException(resp);
+                        }
+                    }
+                }
+                catch (Exception exception)
+                {
+                    Log.Debug("Error set property :" + prop.ToString("X"), exception);
+                }
+            } while (retry);
+            if (timerstate)
+                _timer.Start();
+        }
     }
 }

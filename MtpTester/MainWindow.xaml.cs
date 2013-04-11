@@ -54,94 +54,10 @@ namespace MtpTester
                     DeviceDescriptor descriptor = new DeviceDescriptor {WpdId = SelectedDevice.DeviceId};
                     MTPCamera = new BaseMTPCamera();
                     MTPCamera.Init(descriptor);
-                    MTPDataResponse res = MTPCamera.ExecuteReadDataEx(0x1001);
-                    ErrorCodes.GetException(res.ErrorCode);
-                    DeviceInfo.Manufacturer = SelectedDevice.Manufacturer;
-                    DeviceInfo.Model = SelectedDevice.Model;
-                    int index = 2 + 4 + 2;
-                    int vendorDescCount = res.Data[index];
-                    index += vendorDescCount*2;
-                    index += 3;
-                    int comandsCount = res.Data[index];
-                    index += 2;
-                    // load commands
-                    for (int i = 0; i < comandsCount; i++)
-                    {
-                        index += 2;
-                        DeviceInfo.AvaiableCommands.Add(new XmlCommandDescriptor()
-                                                            {Code = BitConverter.ToUInt16(res.Data, index)});
-                    }
-                    index += 2;
-                    int eventcount = res.Data[index];
-                    index += 2;
-                    // load events
-                    for (int i = 0; i < eventcount; i++)
-                    {
-                        index += 2;
-                        DeviceInfo.AvaiableEvents.Add(new XmlEventDescriptor()
-                                                          {Code = BitConverter.ToUInt16(res.Data, index)});
-                    }
-                    index += 2;
-                    int propertycount = res.Data[index];
-                    index += 2;
-                    // load properties codes
-                    for (int i = 0; i < propertycount; i++)
-                    {
-                        index += 2;
-                        DeviceInfo.AvaiableProperties.Add(new XmlPropertyDescriptor()
-                                                              {Code = BitConverter.ToUInt16(res.Data, index)});
-                    }
-                    MTPDataResponse vendor_res = MTPCamera.ExecuteReadDataEx(0x90CA);
-                    if (vendor_res.Data.Length > 0)
-                    {
-                        index = 0;
-                        propertycount = vendor_res.Data[index];
-                        index += 2;
-                        for (int i = 0; i < propertycount; i++)
-                        {
-                            index += 2;
-                            DeviceInfo.AvaiableProperties.Add(new XmlPropertyDescriptor()
-                                                                  {Code = BitConverter.ToUInt16(vendor_res.Data, index)});
-                        }
-                    }
-                    // canon
-                    try
-                    {
-                        MTPDataResponse canon_vendor_res = MTPCamera.ExecuteReadDataEx(0x9108);
-                        if (vendor_res.Data.Length > 0)
-                        {
-                            index = 0;
-                            propertycount = canon_vendor_res.Data[index];
-                            index += 2;
-                            for (int i = 0; i < propertycount; i++)
-                            {
-                                index += 2;
-                                DeviceInfo.AvaiableProperties.Add(new XmlPropertyDescriptor() { Code = BitConverter.ToUInt16(canon_vendor_res.Data, index) });
-                            }
-                        }
-
-                    }
-                    catch (Exception)
-                    {
-                        
-                    }
+                    LoadDeviceData(MTPCamera.ExecuteReadDataEx(0x1001));
+                    LoadDeviceData(MTPCamera.ExecuteReadDataEx(0x9108));
+     
                     PopulateProperties();
-                    if(DefaultDeviceInfo!=null)
-                    {
-                        foreach (XmlCommandDescriptor command in DeviceInfo.AvaiableCommands)
-                        {
-                            command.Name = DefaultDeviceInfo.GetCommandName(command.Code);
-                        }
-                        foreach (XmlEventDescriptor avaiableEvent in DeviceInfo.AvaiableEvents)
-                        {
-                            avaiableEvent.Name = DefaultDeviceInfo.GetEventName(avaiableEvent.Code);
-                        }
-                        foreach (XmlPropertyDescriptor property in DeviceInfo.AvaiableProperties)
-                        {
-                            property.Name = DefaultDeviceInfo.GetPropName(property.Code);
-                        }
-                    }
-                    InitUi();
                 }
                 catch (DeviceException exception)
                 {
@@ -151,9 +67,75 @@ namespace MtpTester
                 {
                     MessageBox.Show("General error" + exception.Message);
                 }
+                if (DefaultDeviceInfo != null)
+                {
+                    foreach (XmlCommandDescriptor command in DeviceInfo.AvaiableCommands)
+                    {
+                        command.Name = DefaultDeviceInfo.GetCommandName(command.Code);
+                    }
+                    foreach (XmlEventDescriptor avaiableEvent in DeviceInfo.AvaiableEvents)
+                    {
+                        avaiableEvent.Name = DefaultDeviceInfo.GetEventName(avaiableEvent.Code);
+                    }
+                    foreach (XmlPropertyDescriptor property in DeviceInfo.AvaiableProperties)
+                    {
+                        property.Name = DefaultDeviceInfo.GetPropName(property.Code);
+                    }
+                }
+                InitUi();
             }
 
         }
+
+        private void LoadDeviceData(MTPDataResponse res)
+        {
+            ErrorCodes.GetException(res.ErrorCode);
+            DeviceInfo.Manufacturer = SelectedDevice.Manufacturer;
+            DeviceInfo.Model = SelectedDevice.Model;
+            int index = 2 + 4 + 2;
+            int vendorDescCount = res.Data[index];
+            index += vendorDescCount * 2;
+            index += 3;
+            int comandsCount = res.Data[index];
+            index += 2;
+            // load commands
+            for (int i = 0; i < comandsCount; i++)
+            {
+                index += 2;
+                DeviceInfo.AvaiableCommands.Add(new XmlCommandDescriptor() { Code = BitConverter.ToUInt16(res.Data, index) });
+            }
+            index += 2;
+            int eventcount = res.Data[index];
+            index += 2;
+            // load events
+            for (int i = 0; i < eventcount; i++)
+            {
+                index += 2;
+                DeviceInfo.AvaiableEvents.Add(new XmlEventDescriptor() { Code = BitConverter.ToUInt16(res.Data, index) });
+            }
+            index += 2;
+            int propertycount = res.Data[index];
+            index += 2;
+            // load properties codes
+            for (int i = 0; i < propertycount; i++)
+            {
+                index += 2;
+                DeviceInfo.AvaiableProperties.Add(new XmlPropertyDescriptor() { Code = BitConverter.ToUInt16(res.Data, index) });
+            }
+            MTPDataResponse vendor_res = MTPCamera.ExecuteReadDataEx(0x90CA);
+            if (vendor_res.Data.Length > 0)
+            {
+                index = 0;
+                propertycount = vendor_res.Data[index];
+                index += 2;
+                for (int i = 0; i < propertycount; i++)
+                {
+                    index += 2;
+                    DeviceInfo.AvaiableProperties.Add(new XmlPropertyDescriptor() { Code = BitConverter.ToUInt16(vendor_res.Data, index) });
+                }
+            }   
+        }
+
 
         private void PopulateProperties()
         {
