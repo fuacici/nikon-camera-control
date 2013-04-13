@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MtpTester", "MtpTester\MtpT
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Setup_digiCamControl", "Setup_digiCamControl\Setup_digiCamControl.wixproj", "{CB3EE390-4E28-491D-AB3E-07932781E437}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Canon.Eos.Framework", "Canon.Eos.Framework\Canon.Eos.Framework.csproj", "{F809DBB6-E0E8-47A8-92ED-C24575576A5D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -204,13 +206,25 @@ Global
 		{CB3EE390-4E28-491D-AB3E-07932781E437}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{CB3EE390-4E28-491D-AB3E-07932781E437}.Debug|x64.ActiveCfg = Debug|x86
 		{CB3EE390-4E28-491D-AB3E-07932781E437}.Debug|x86.ActiveCfg = Debug|x86
-		{CB3EE390-4E28-491D-AB3E-07932781E437}.Debug|x86.Build.0 = Debug|x86
 		{CB3EE390-4E28-491D-AB3E-07932781E437}.Release|Any CPU.ActiveCfg = Release|x86
 		{CB3EE390-4E28-491D-AB3E-07932781E437}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{CB3EE390-4E28-491D-AB3E-07932781E437}.Release|Mixed Platforms.Build.0 = Release|x86
 		{CB3EE390-4E28-491D-AB3E-07932781E437}.Release|x64.ActiveCfg = Release|x86
 		{CB3EE390-4E28-491D-AB3E-07932781E437}.Release|x86.ActiveCfg = Release|x86
 		{CB3EE390-4E28-491D-AB3E-07932781E437}.Release|x86.Build.0 = Release|x86
+		{F809DBB6-E0E8-47A8-92ED-C24575576A5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F809DBB6-E0E8-47A8-92ED-C24575576A5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F809DBB6-E0E8-47A8-92ED-C24575576A5D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F809DBB6-E0E8-47A8-92ED-C24575576A5D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F809DBB6-E0E8-47A8-92ED-C24575576A5D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F809DBB6-E0E8-47A8-92ED-C24575576A5D}.Debug|x86.ActiveCfg = Debug|x86
+		{F809DBB6-E0E8-47A8-92ED-C24575576A5D}.Debug|x86.Build.0 = Debug|x86
+		{F809DBB6-E0E8-47A8-92ED-C24575576A5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F809DBB6-E0E8-47A8-92ED-C24575576A5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F809DBB6-E0E8-47A8-92ED-C24575576A5D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F809DBB6-E0E8-47A8-92ED-C24575576A5D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F809DBB6-E0E8-47A8-92ED-C24575576A5D}.Release|x64.ActiveCfg = Release|Any CPU
+		{F809DBB6-E0E8-47A8-92ED-C24575576A5D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
