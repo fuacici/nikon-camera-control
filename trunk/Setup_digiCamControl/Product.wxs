@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="200a8e01-34cf-43a4-b228-9c4389b874f8" Name="Setup_digiCamControl" Language="1033" Version="1.0.0.0" Manufacturer="" UpgradeCode="9e6d5708-9441-4a30-b164-d17bdcb34a09">
+	<Product Id="200a8e01-34cf-43a4-b228-9c4389b874f8" Name="Setup_digiCamControl" Language="1033" Version="1.0.0.0" Manufacturer="Duka Istvan" UpgradeCode="9e6d5708-9441-4a30-b164-d17bdcb34a09">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-		<MediaTemplate />
+
     
-    <Media Id="1" Cabinet="Product.cab" EmbedCab="yes" CompressionLevel="high"/>
+    <Media Id="01" Cabinet="Product.cab" EmbedCab="yes" CompressionLevel="high"/>
 
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
@@ -20,7 +20,7 @@
     </Directory>
     
 		<Feature Id="ProductFeature" Title="Setup_digiCamControl" Level="1">
-			<ComponentGroupRef Id="ProductComponents" />
+			<!--<ComponentGroupRef Id="ProductComponents" />-->
 		</Feature>
 	</Product>
 
