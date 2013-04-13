@@ -404,6 +404,7 @@ namespace CameraControl.Devices.Canon
                     retry = false;
                     uint resp = ExecuteWithNoData(CONST_CMD_CANON_EOS_SetDevicePropValueEx, 0x0000000C, (int) prop,
                                                   (int) val);
+
                     if (resp != 0 || resp != ErrorCodes.MTP_OK)
                     {
                         //Console.WriteLine("Retry ...." + resp.ToString("X"));
@@ -421,7 +422,7 @@ namespace CameraControl.Devices.Canon
                 }
                 catch (Exception exception)
                 {
-                    Log.Debug("Error set property :" + prop.ToString("X"), exception);
+                    Log.Debug("Error EOS set property :" + prop.ToString("X"), exception);
                 }
             } while (retry);
             if (timerstate)
