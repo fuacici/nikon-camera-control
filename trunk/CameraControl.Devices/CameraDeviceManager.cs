@@ -170,6 +170,7 @@ namespace CameraControl.Devices
 
                 if(shouldbeadded)
                 {
+                    Log.Debug("New canon camera found !");
                     CanonSDKBase camera = new CanonSDKBase();
                     camera.Init(eosCamera);
                     ConnectedDevices.Add(camera);
