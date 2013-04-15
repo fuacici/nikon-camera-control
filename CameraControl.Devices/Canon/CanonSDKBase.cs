@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -15,24 +16,24 @@ namespace CameraControl.Devices.Canon
     public class CanonSDKBase : BaseMTPCamera
     {
         
-        public const int CONST_CMD_CANON_EOS_RemoteRelease = 0x910F;
-        public const int CONST_CMD_CANON_EOS_BulbStart = 0x9125;
-        public const int CONST_CMD_CANON_EOS_BulbEnd = 0x9126;
-        public const int CONST_CMD_CANON_EOS_SetEventMode = 0x9115;
-        public const int CONST_CMD_CANON_EOS_SetRemoteMode = 0x9114;
-        public const int CONST_CMD_CANON_EOS_GetEvent = 0x9116;
-        public const int CONST_CMD_CANON_EOS_DoAf = 0x9154;
-        public const int CONST_CMD_CANON_EOS_GetViewFinderData = 0x9153;
-        public const int CONST_CMD_CANON_EOS_GetObjectInfo = 0x9103;
+        //public const int CONST_CMD_CANON_EOS_RemoteRelease = 0x910F;
+        //public const int CONST_CMD_CANON_EOS_BulbStart = 0x9125;
+        //public const int CONST_CMD_CANON_EOS_BulbEnd = 0x9126;
+        //public const int CONST_CMD_CANON_EOS_SetEventMode = 0x9115;
+        //public const int CONST_CMD_CANON_EOS_SetRemoteMode = 0x9114;
+        //public const int CONST_CMD_CANON_EOS_GetEvent = 0x9116;
+        //public const int CONST_CMD_CANON_EOS_DoAf = 0x9154;
+        //public const int CONST_CMD_CANON_EOS_GetViewFinderData = 0x9153;
+        //public const int CONST_CMD_CANON_EOS_GetObjectInfo = 0x9103;
 
-        public const int CONST_CMD_CANON_EOS_SetDevicePropValueEx = 0x9110;
-        public const int CONST_CMD_CANON_EOS_RequestDevicePropValue = 0x9109;
+        //public const int CONST_CMD_CANON_EOS_SetDevicePropValueEx = 0x9110;
+        //public const int CONST_CMD_CANON_EOS_RequestDevicePropValue = 0x9109;
 
-        public const int CONST_PROP_EOS_ShutterSpeed = 0xD102;
-        public const int CONST_PROP_EOS_LiveView = 0xD1B0;
+        //public const int CONST_PROP_EOS_ShutterSpeed = 0xD102;
+        //public const int CONST_PROP_EOS_LiveView = 0xD1B0;
 
-        public const int CONST_Event_CANON_EOS_PropValueChanged = 0xc189 ;
-        public const int CONST_Event_CANON_EOS_ObjectAddedEx = 0xc181;
+        //public const int CONST_Event_CANON_EOS_PropValueChanged = 0xc189 ;
+        //public const int CONST_Event_CANON_EOS_ObjectAddedEx = 0xc181;
 
         private bool _eventIsbusy = false;
 
@@ -101,27 +102,30 @@ namespace CameraControl.Devices.Canon
 
         public CanonSDKBase()
         {
-                        _timer.AutoReset = true;
-                        //_timer.Elapsed += _timer_Elapsed;
+
         }
 
         public override bool CaptureInSdRam
         {
-            get
-            {
-                return base.CaptureInSdRam;
-            }
+            get { return base.CaptureInSdRam; }
             set
             {
+                base.CaptureInSdRam = value;
                 try
                 {
-                    Camera.SavePicturesToCamera();
+                    if (base.CaptureInSdRam)
+                    {
+                        Camera.SavePicturesToCamera();
+                    }
+                    else
+                    {
+                        Camera.SavePicturesToHost(Path.GetTempPath());
+                    }
                 }
                 catch (Exception exception)
                 {
-                   Log.Error("Error set CaptureInSdram",exception);
+                    Log.Error("Error set CaptureInSdram", exception);
                 }
-                base.CaptureInSdRam = value;
             }
         }
 
@@ -137,9 +141,11 @@ namespace CameraControl.Devices.Canon
                 Camera.Shutdown += _camera_Shutdown;
                 Camera.LiveViewPaused += Camera_LiveViewPaused;
                 Camera.LiveViewUpdate += Camera_LiveViewUpdate;
+                Camera.PictureTaken += Camera_PictureTaken;
                 Capabilities.Add(CapabilityEnum.Bulb);
                 Capabilities.Add(CapabilityEnum.LiveView);
                 IsConnected = true;
+                CaptureInSdRam = true;
                 return true; 
             }
             catch (Exception exception)
@@ -147,6 +153,25 @@ namespace CameraControl.Devices.Canon
                 Log.Error("Error initialize EOS camera object ", exception);
                 return false;
             }
+        }
+
+        void Camera_PictureTaken(object sender, EosImageEventArgs e)
+        {
+            Log.Debug("Picture taken event received type" + e.GetType().ToString());
+            PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
+            {
+                WiaImageItem = null,
+                //EventArgs =
+                //  new PortableDeviceEventArgs(new PortableDeviceEventType()
+                //  {
+                //      ObjectHandle =
+                //        (uint)longeventParam
+                //  }),
+                CameraDevice = this,
+                FileName = "IMG0000.jpg",
+                Handle =e
+            };
+            OnPhotoCapture(this, args);
         }
 
         void Camera_LiveViewUpdate(object sender, EosLiveImageEventArgs e)
@@ -192,7 +217,14 @@ namespace CameraControl.Devices.Canon
 
         void _camera_Error(object sender, EosExceptionEventArgs e)
         {
-            Log.Error("Canon error", e.Exception);
+            try
+            {
+                Log.Error("Canon error", e.Exception);
+            }
+            catch (Exception exception)
+            {
+                Log.Error("Error get camera error", exception);
+            }
         }
 
         public override bool Init(DeviceDescriptor deviceDescriptor)
@@ -203,7 +235,6 @@ namespace CameraControl.Devices.Canon
 
             InitShutterSpeed();
             IsConnected = true;
-            _timer.Start();
             return true;
         }
 
@@ -298,17 +329,16 @@ namespace CameraControl.Devices.Canon
 
         public override void StartBulbMode()
         {
-            ErrorCodes.GetException(ExecuteWithNoData(CONST_CMD_CANON_EOS_BulbStart));
+            //ErrorCodes.GetException(ExecuteWithNoData(CONST_CMD_CANON_EOS_BulbStart));
         }
 
         public override void EndBulbMode()
         {
-            ErrorCodes.GetException(ExecuteWithNoData(CONST_CMD_CANON_EOS_BulbEnd));
+            //ErrorCodes.GetException(ExecuteWithNoData(CONST_CMD_CANON_EOS_BulbEnd));
         }
 
         public override LiveViewData GetLiveViewImage()
         {
-            //_timer.Stop();
             LiveViewData viewData = new LiveViewData();
             if (Monitor.TryEnter(Locker, 1))
             {
@@ -343,51 +373,44 @@ namespace CameraControl.Devices.Canon
 
         public override void TransferFile(object o, string filename)
         {
-            
-        }
-
-        private void SetEOSProperty(uint prop, uint val)
-        {
-            bool timerstate = _timer.Enabled;
-            _timer.Stop();
-            bool retry = false;
-            int retrynum = 0;
-            //DeviceReady();
-            do
+            EosFileImageEventArgs file = o as EosFileImageEventArgs;
+            if (file != null)
             {
-                if (retrynum > 5)
-                {
-                    return;
-                }
+                Log.Debug("File transfer started");
                 try
                 {
-                    retry = false;
-
-                    uint resp = ExecuteWithNoData(CONST_CMD_CANON_EOS_SetDevicePropValueEx, 0x0000000C, (int) prop,
-                                                  (int) val);
-
-                    if (resp != 0 || resp != ErrorCodes.MTP_OK)
+                    if(File.Exists(file.ImageFilePath))
                     {
-                        //Console.WriteLine("Retry ...." + resp.ToString("X"));
-                        if (resp == ErrorCodes.MTP_Device_Busy || resp == 0x800700AA)
-                        {
-                            Thread.Sleep(100);
-                            retry = true;
-                            retrynum++;
-                        }
-                        else
-                        {
-                            ErrorCodes.GetException(resp);
-                        }
+                        File.Copy(file.ImageFilePath, filename, true);
+                        File.Delete(file.ImageFilePath);
+                    }
+                    else
+                    {
+                        Log.Error("Base file not found " + file.ImageFilePath);
                     }
                 }
                 catch (Exception exception)
                 {
-                    Log.Debug("Error EOS set property :" + prop.ToString("X"), exception);
+                    Log.Error("Transfer error ", exception);
                 }
-            } while (retry);
-            if (timerstate)
-                _timer.Start();
+            }
+            EosMemoryImageEventArgs memory = o as EosMemoryImageEventArgs;
+            if(memory!=null)
+            {
+                Log.Debug("Memory file transfer started");
+                try
+                {
+                    using (FileStream fileStream = File.Create(filename, (int)memory.ImageData.Length))
+                    {
+                        fileStream.Write(memory.ImageData, 0, memory.ImageData.Length);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    Log.Error("Error transfer memory file", exception);
+                }
+            }
         }
+
     }
 }
