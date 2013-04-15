@@ -27,6 +27,7 @@ namespace Canon.Eos.Framework
         public event EventHandler<EosImageEventArgs> PictureTaken;
         public event EventHandler Shutdown;        
         public event EventHandler<EosVolumeInfoEventArgs> VolumeInfoChanged;
+        public event EventHandler<EosPropertyEventArgs> PropertyChanged;
         public event EventHandler<EosExceptionEventArgs> Error;
         
 

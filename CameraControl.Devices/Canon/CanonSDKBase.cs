@@ -142,6 +142,7 @@ namespace CameraControl.Devices.Canon
                 Camera.LiveViewPaused += Camera_LiveViewPaused;
                 Camera.LiveViewUpdate += Camera_LiveViewUpdate;
                 Camera.PictureTaken += Camera_PictureTaken;
+                Camera.PropertyChanged += Camera_PropertyChanged;
                 Capabilities.Add(CapabilityEnum.Bulb);
                 Capabilities.Add(CapabilityEnum.LiveView);
                 IsConnected = true;
@@ -152,6 +153,24 @@ namespace CameraControl.Devices.Canon
             {
                 Log.Error("Error initialize EOS camera object ", exception);
                 return false;
+            }
+        }
+
+        void Camera_PropertyChanged(object sender, EosPropertyEventArgs e)
+        {
+            try
+            {
+                Log.Debug("Property changed " + e.PropertyId.ToString("X"));
+                switch (e.PropertyId)
+                {
+                    case Edsdk.PropID_Tv:
+                        ShutterSpeed.SetValue(Camera.GetProperty(Edsdk.PropID_Tv));
+                        break;
+                }
+            }
+            catch (Exception exception)
+            {
+                Log.Error("Error set property " + e.PropertyId.ToString("X"), exception);
             }
         }
 
@@ -267,7 +286,7 @@ namespace CameraControl.Devices.Canon
                     //    UInt32 val = BitConverter.ToUInt32(result, ((2 * datasize) + 6 + 2) + i);
                     //    ShutterSpeed.AddValues(_shutterTable.ContainsKey(val) ? _shutterTable[val] : val.ToString(), val);
                     //}
-                    ShutterSpeed.SetValue(Camera.GetProperty(Edsdk.PropID_OwnerName));
+                    ShutterSpeed.SetValue(Camera.GetProperty(Edsdk.PropID_Tv));
                 }
                 catch (Exception ex)
                 {
@@ -280,7 +299,7 @@ namespace CameraControl.Devices.Canon
         {
             try
             {
-                Camera.SetProperty(Edsdk.PropID_OwnerName, val);
+                Camera.SetProperty(Edsdk.PropID_Tv, val);
             }
             catch (Exception exception)
             {
