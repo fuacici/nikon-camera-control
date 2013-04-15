@@ -105,6 +105,27 @@ namespace CameraControl.Devices.Canon
                         //_timer.Elapsed += _timer_Elapsed;
         }
 
+        public override bool CaptureInSdRam
+        {
+            get
+            {
+                return base.CaptureInSdRam;
+            }
+            set
+            {
+                try
+                {
+                    Camera.SavePicturesToCamera();
+                }
+                catch (Exception exception)
+                {
+                   Log.Error("Error set CaptureInSdram",exception);
+                }
+                base.CaptureInSdRam = value;
+            }
+        }
+
+
         public bool Init(EosCamera camera)
         {
             try
@@ -130,7 +151,24 @@ namespace CameraControl.Devices.Canon
 
         void Camera_LiveViewUpdate(object sender, EosLiveImageEventArgs e)
         {
-            _liveViewImageData = e.ImageData;
+            LiveViewData viewData = new LiveViewData();
+            if (Monitor.TryEnter(Locker, 1))
+            {
+                try
+                {
+                    _liveViewImageData = e.ImageData;
+                    Log.Debug("live data length " + e.ImageData.Length);
+                }
+                catch (Exception exception)
+                {
+                    Log.Error("Error get live view image event", exception);
+                }
+                finally
+                {
+                    Monitor.Exit(Locker);
+                }
+            }
+
         }
 
         void Camera_LiveViewPaused(object sender, EventArgs e)
@@ -253,6 +291,11 @@ namespace CameraControl.Devices.Canon
             Log.Debug("EOS capture end");
         }
 
+        public override void CapturePhotoNoAf()
+        {
+            CapturePhoto();
+        }
+
         public override void StartBulbMode()
         {
             ErrorCodes.GetException(ExecuteWithNoData(CONST_CMD_CANON_EOS_BulbStart));
@@ -285,7 +328,6 @@ namespace CameraControl.Devices.Canon
                     Monitor.Exit(Locker);
                 }
             }
-            _timer.Start();
             return viewData;
         }
 
