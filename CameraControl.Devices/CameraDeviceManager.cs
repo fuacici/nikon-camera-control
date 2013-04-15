@@ -412,6 +412,9 @@ namespace CameraControl.Devices
             {
                 // Look for CameraDeviceType devices
                 string model = devInfo.Properties["Name"].get_Value();
+                // skip canon cameras 
+                if (!string.IsNullOrEmpty(model) && model.Contains("Canon"))
+                    continue;
                 if (devInfo.Type == WiaDeviceType.CameraDeviceType && (GetNativeDriver(model) == null || DisableNativeDrivers || noDriversDetected))
                 {
                     do

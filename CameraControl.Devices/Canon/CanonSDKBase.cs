@@ -105,57 +105,27 @@ namespace CameraControl.Devices.Canon
                         //_timer.Elapsed += _timer_Elapsed;
         }
 
-        void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            _timer.Stop();
-            try
-            {
-                lock (Locker)
-                {
-                    Thread thread = new Thread(getEvent);
-                    thread.Start();
-                }
-            }
-            catch (Exception)
-            {
-
-
-            }
-            //
-        }
-
-
-        private void getEvent()
+        public bool Init(EosCamera camera)
         {
             try
             {
-                if (_eventIsbusy)
-                    return;
-                _eventIsbusy = true;
-                //DeviceReady();
+                Camera = camera;
+                DeviceName = Camera.DeviceDescription;
+                Manufacturer = "Canon Inc.";
+                Camera.Error += _camera_Error;
+                Camera.Shutdown += _camera_Shutdown;
+                Camera.LiveViewPaused += Camera_LiveViewPaused;
+                Camera.LiveViewUpdate += Camera_LiveViewUpdate;
+                Capabilities.Add(CapabilityEnum.Bulb);
+                Capabilities.Add(CapabilityEnum.LiveView);
+                IsConnected = true;
+                return true; 
             }
             catch (Exception exception)
             {
-                //Log.Error("Event exception ", exception);
+                Log.Error("Error initialize EOS camera object ", exception);
+                return false;
             }
-            _eventIsbusy = false;
-            _timer.Start();
-        }
-
-        public bool Init(EosCamera camera)
-        {
-            Camera = camera;
-            DeviceName = Camera.DeviceDescription;
-            Manufacturer = "Canon Inc.";
-            Camera.Error += _camera_Error;
-            Camera.Shutdown += _camera_Shutdown;
-            Camera.LiveViewPaused += Camera_LiveViewPaused;
-            Camera.LiveViewUpdate += Camera_LiveViewUpdate;
-            Capabilities.Add(CapabilityEnum.Bulb);
-            Capabilities.Add(CapabilityEnum.LiveView);
-            IsConnected = true;
-            _timer.Start();
-            return true; 
         }
 
         void Camera_LiveViewUpdate(object sender, EosLiveImageEventArgs e)
@@ -169,7 +139,6 @@ namespace CameraControl.Devices.Canon
             {
                 Camera.TakePicture();
                 Camera.ResumeLiveview();
-
             }
             catch (Exception exception)
             {
@@ -240,11 +209,19 @@ namespace CameraControl.Devices.Canon
 
         void ShutterSpeed_ValueChanged(object sender, string key, long val)
         {
-            Camera.SetProperty(Edsdk.PropID_OwnerName, val);
+            try
+            {
+                Camera.SetProperty(Edsdk.PropID_OwnerName, val);
+            }
+            catch (Exception exception)
+            {
+                Log.Error("Error set property sP", exception);
+            }
         }
 
         public override void CapturePhoto()
         {
+            Log.Debug("EOS capture start");
             Monitor.Enter(Locker);
             try
             {
@@ -273,6 +250,7 @@ namespace CameraControl.Devices.Canon
             {
                 Monitor.Exit(Locker);
             }
+            Log.Debug("EOS capture end");
         }
 
         public override void StartBulbMode()
@@ -321,8 +299,12 @@ namespace CameraControl.Devices.Canon
             if (Camera.IsInHostLiveViewMode) Camera.StopLiveView();
         }
 
+        public override void TransferFile(object o, string filename)
+        {
+            
+        }
 
-        public void SetEOSProperty(uint prop, uint val)
+        private void SetEOSProperty(uint prop, uint val)
         {
             bool timerstate = _timer.Enabled;
             _timer.Stop();
