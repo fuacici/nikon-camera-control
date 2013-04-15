@@ -128,6 +128,8 @@ namespace Canon.Eos.Framework
                     this.OnPropertyEventPropertyEvfOutputDeviceChanged(param, context);
                     break;
             }
+            if (PropertyChanged != null)
+                PropertyChanged(this, new EosPropertyEventArgs() {PropertyId = propertyId});
         }
 
         private void OnPropertyEventPropertyDescChanged(uint propertyId, uint param, IntPtr context)

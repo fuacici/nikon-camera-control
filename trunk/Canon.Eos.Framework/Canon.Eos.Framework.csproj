@@ -89,6 +89,7 @@
     <Compile Include="Eventing\EosFileImageEventArgs.cs" />
     <Compile Include="Eventing\EosImageEventArgs.cs" />
     <Compile Include="Eventing\EosLiveImageEventArgs.cs" />
+    <Compile Include="Eventing\EosPropertyEventArgs.cs" />
     <Compile Include="Eventing\EosVolumeInfoEventArgs.cs" />
     <Compile Include="Interfaces\IEosAssertable.cs" />
     <Compile Include="Interfaces\IEosLog.cs" />
