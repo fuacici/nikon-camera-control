@@ -43,61 +43,44 @@ namespace CameraControl.Devices.Canon
 
         protected Dictionary<uint, string> _shutterTable = new Dictionary<uint, string>
                                                          {
-                                                           {0, "30"},
-                                                           {1, "25"},
-                                                           {2, "20"},
-                                                           {3, "15"},
-                                                           {4, "13"},
-                                                           {5, "10"},
-                                                           {6, "8"},
-                                                           {7, "6"},
-                                                           {8, "5"},
-                                                           {9, "4"},
-                                                           {10, "3.2"},
-                                                           {11, "2.5"},
-                                                           {12, "2"},
-                                                           {13, "1.6"},
-                                                           {14, "1.3"},
-                                                           {15, "1"},
-                                                           {16, "0.8"},
-                                                           {17, "0.6"},
-                                                           {18, "0.5"},
-                                                           {19, "0.4"},
-                                                           {20, "0.3"},
-                                                           {21, "1/4"},
-                                                           {22, "1/5"},
-                                                           {23, "1/6"},
-                                                           {24, "1/8"},
-                                                           {25, "1/10"},
-                                                           {26, "1/13"},
-                                                           {27, "1/15"},
-                                                           {28, "1/20"},
-                                                           {29, "1/25"},
-                                                           {30, "1/30"},
-                                                           {31, "1/40"},
-                                                           {32, "1/50"},
-                                                           {33, "1/60"},
-                                                           {34, "1/80"},
-                                                           {35, "1/100"},
-                                                           {36, "1/125"},
-                                                           {37, "1/160"},
-                                                           {38, "1/200"},
-                                                           {39, "1/250"},
-                                                           {40, "1/320"},
-                                                           {41, "1/400"},
-                                                           {42, "1/500"},
-                                                           {43, "1/640"},
-                                                           {44, "1/800"},
-                                                           {45, "1/1000"},
-                                                           {46, "1/1250"},
-                                                           {47, "1/1600"},
-                                                           {48, "1/2000"},
-                                                           {49, "1/2500"},
-                                                           {50, "1/3200"},
-                                                           {51, "1/4000"},
-                                                           {52, "1/5000"},
-                                                           {53, "1/6400"},
-                                                           {54, "1/8000"}
+                                                           {0x0C, "Bulb"},
+                                                           {0x10, "30"},
+                                                           {0x13, "25"},
+                                                           {0x14, "20"},
+                                                           {0x15, "20 (1/3)"},
+                                                           {0x18, "15"},
+                                                           {0x1B, "13"},
+                                                           {0x1C, "10"},
+                                                           {0x1D, "20  (1/3)"},
+                                                           {0x20, "8"},
+                                                           {0x23, "6 (1/3)"},
+                                                           {0x24, "6"},
+                                                           {0x25, "5"},
+                                                           {0x28, "4"},
+                                                           {0x2B, "3.2"},
+                                                           {0x2C, "3"},
+                                                           {0x2D, "2.5"},
+                                                           {0x30, "2"},
+                                                           {0x33, "1.6"},
+                                                           {0x34, "1.5"},
+                                                           {0x35, "1.3"},
+                                                           {0x38, "1"},
+                                                           {0x3B, "0.8"},
+                                                           {0x3C, "0.7"},
+                                                           {0x3D, "0.6"},
+                                                           {0x40, "0.5"},
+                                                           {0x43, "0.4"},
+                                                           {0x44, "0.3"},
+                                                           {0x45, "0.3 (1/3)"},
+                                                           {0x48, "1/4"},
+                                                           {0x4B, "1/5"},
+                                                           {0x4C, "1/6"},
+                                                           {0x4D, "1/56 (1/3)"},
+                                                           {0x50, "1/8"},
+                                                           {0x53, "1/10 (1/3)"},
+                                                           {0x54, "1/10"},
+                                                           {0x55, "1/13"},
+                                                           {0x58 ,"1/15"},
                                                          };
 
         public CanonSDKBase()
@@ -147,6 +130,8 @@ namespace CameraControl.Devices.Canon
                 Capabilities.Add(CapabilityEnum.LiveView);
                 IsConnected = true;
                 CaptureInSdRam = true;
+                InitShutterSpeed();
+                InitOther();
                 return true; 
             }
             catch (Exception exception)
@@ -155,6 +140,27 @@ namespace CameraControl.Devices.Canon
                 return false;
             }
         }
+
+
+        private void InitOther()
+        {
+            LiveViewImageZoomRatio = new PropertyValue<int> { Name = "LiveViewImageZoomRatio" };
+            LiveViewImageZoomRatio.AddValues("All", 0);
+            LiveViewImageZoomRatio.AddValues("25%", 1);
+            LiveViewImageZoomRatio.AddValues("33%", 2);
+            LiveViewImageZoomRatio.AddValues("50%", 3);
+            LiveViewImageZoomRatio.AddValues("66%", 4);
+            LiveViewImageZoomRatio.AddValues("100%", 5);
+            LiveViewImageZoomRatio.AddValues("200%", 6);
+            LiveViewImageZoomRatio.SetValue("All");
+            LiveViewImageZoomRatio.ValueChanged += LiveViewImageZoomRatio_ValueChanged;
+        }
+
+        void LiveViewImageZoomRatio_ValueChanged(object sender, string key, int val)
+        {
+            
+        }
+
 
         void Camera_PropertyChanged(object sender, EosPropertyEventArgs e)
         {
@@ -252,7 +258,7 @@ namespace CameraControl.Devices.Canon
             //StillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
             //StillImageDevice.DeviceEvent += _stillImageDevice_DeviceEvent;
 
-            InitShutterSpeed();
+            
             IsConnected = true;
             return true;
         }
@@ -430,6 +436,13 @@ namespace CameraControl.Devices.Canon
                 }
             }
         }
+
+        public override string GetProhibitionCondition(OperationEnum operationEnum)
+        {
+            return "";
+        }
+
+
 
     }
 }
