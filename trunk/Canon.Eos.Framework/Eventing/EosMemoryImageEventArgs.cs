@@ -11,6 +11,8 @@ namespace Canon.Eos.Framework.Eventing
 
         public byte[] ImageData { get; private set; }
 
+        public string FileName { get; set; }
+
         public override Stream GetStream()
         {
             return new MemoryStream(this.ImageData);

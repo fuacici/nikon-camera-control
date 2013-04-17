@@ -488,6 +488,30 @@ namespace Canon.Eos.Framework
                 "Failed to take picture.");
         }
 
+        public void BulbStart()
+        {
+            if (this.IsLegacy && !this.IsLocked)
+            {
+                this.LockAndExceute(this.BulbStart);
+                return;
+            }
+
+            Util.Assert(this.SendCommand(Edsdk.CameraCommand_BulbStart),
+                "Failed to take picture.");
+        }
+
+        public void BulbEnd()
+        {
+            if (this.IsLegacy && !this.IsLocked)
+            {
+                this.LockAndExceute(this.BulbEnd);
+                return;
+            }
+
+            Util.Assert(this.SendCommand(Edsdk.CameraCommand_BulbEnd),
+                "Failed to take picture.");
+        }
+
         public void TakePictureInLiveview()
         {
             this._pauseLiveViewRequested = true;

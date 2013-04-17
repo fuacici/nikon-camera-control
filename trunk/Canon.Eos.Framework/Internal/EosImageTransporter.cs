@@ -97,7 +97,7 @@ namespace Canon.Eos.Framework.Internal
             {
                 Transport(directoryItem, directoryItemInfo.Size, stream, false);           
                 var converter = new EosConverter();
-                return new EosMemoryImageEventArgs(converter.ConvertImageStreamToBytes(stream));
+                return new EosMemoryImageEventArgs(converter.ConvertImageStreamToBytes(stream)){FileName = directoryItemInfo.szFileName};
             }
             finally
             {

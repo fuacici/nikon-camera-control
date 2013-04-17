@@ -81,6 +81,42 @@ namespace CameraControl.Devices.Canon
                                                            {0x54, "1/10"},
                                                            {0x55, "1/13"},
                                                            {0x58 ,"1/15"},
+                                                           {0x5B ,"1/20 (1/3)"},
+                                                           {0x5C ,"1/20"},
+                                                           {0x5D ,"1/25"},
+                                                           {0x60 ,"1/30"},
+                                                           {0x63 ,"1/40"},
+                                                           {0x64 ,"1/45"},
+                                                           {0x65 ,"1/50"},
+                                                           {0x68 ,"1/60"},
+                                                           {0x6B ,"1/80"},
+                                                           {0x6C ,"1/90"},
+                                                           {0x6D ,"1/100"},
+                                                           {0x70 ,"1/125"},
+                                                           {0x73 ,"1/160"},
+                                                           {0x74 ,"1/180"},
+                                                           {0x75 ,"1/200"},
+                                                           {0x78 ,"1/250"},
+                                                           {0x7B ,"1/320"},
+                                                           {0x7C ,"1/350"},
+                                                           {0x7D ,"1/400"},
+                                                           {0x80 ,"1/500"},
+                                                           {0x83 ,"1/640"},
+                                                           {0x84 ,"1/750"},
+                                                           {0x85 ,"1/800"},
+                                                           {0x88 ,"1/1000"},
+                                                           {0x8B ,"1/1250"},
+                                                           {0x8C ,"1/1500"},
+                                                           {0x8D ,"1/1600"},
+                                                           {0x90 ,"1/2000"},
+                                                           {0x93 ,"1/2500"},
+                                                           {0x94 ,"1/3000"},
+                                                           {0x95 ,"1/3200"},
+                                                           {0x98 ,"1/4000"},
+                                                           {0x9B ,"1/5000"},
+                                                           {0x9C ,"1/6000"},
+                                                           {0x9D ,"1/6400"},
+                                                           {0xA0 ,"1/8000"},
                                                          };
 
         public CanonSDKBase()
@@ -166,7 +202,7 @@ namespace CameraControl.Devices.Canon
         {
             try
             {
-                Log.Debug("Property changed " + e.PropertyId.ToString("X"));
+                //Log.Debug("Property changed " + e.PropertyId.ToString("X"));
                 switch (e.PropertyId)
                 {
                     case Edsdk.PropID_Tv:
@@ -182,21 +218,42 @@ namespace CameraControl.Devices.Canon
 
         void Camera_PictureTaken(object sender, EosImageEventArgs e)
         {
-            Log.Debug("Picture taken event received type" + e.GetType().ToString());
-            PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
+            try
             {
-                WiaImageItem = null,
-                //EventArgs =
-                //  new PortableDeviceEventArgs(new PortableDeviceEventType()
-                //  {
-                //      ObjectHandle =
-                //        (uint)longeventParam
-                //  }),
-                CameraDevice = this,
-                FileName = "IMG0000.jpg",
-                Handle =e
-            };
-            OnPhotoCapture(this, args);
+
+                Log.Debug("Picture taken event received type" + e.GetType().ToString());
+                PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
+                                                  {
+                                                      WiaImageItem = null,
+                                                      //EventArgs =
+                                                      //  new PortableDeviceEventArgs(new PortableDeviceEventType()
+                                                      //  {
+                                                      //      ObjectHandle =
+                                                      //        (uint)longeventParam
+                                                      //  }),
+                                                      CameraDevice = this,
+                                                      FileName = "IMG0000.jpg",
+                                                      Handle = e
+                                                  };
+
+                EosFileImageEventArgs file = e as EosFileImageEventArgs;
+                if (file != null)
+                {
+                    args.FileName = Path.GetFileName(file.ImageFilePath);
+                }
+                EosMemoryImageEventArgs memory = e as EosMemoryImageEventArgs;
+                if (memory != null)
+                {
+                    if (!string.IsNullOrEmpty(memory.FileName))
+                        args.FileName = Path.GetFileName(memory.FileName);
+                }
+                OnPhotoCapture(this, args);
+            }
+            catch (Exception exception)
+            {
+                Log.Error("EOS Picture taken event error", exception);
+            }
+
         }
 
         void Camera_LiveViewUpdate(object sender, EosLiveImageEventArgs e)
@@ -257,7 +314,8 @@ namespace CameraControl.Devices.Canon
             //StillImageDevice = new StillImageDevice(deviceDescriptor.WpdId);
             //StillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
             //StillImageDevice.DeviceEvent += _stillImageDevice_DeviceEvent;
-
+            Capabilities.Add(CapabilityEnum.Bulb);
+            Capabilities.Add(CapabilityEnum.LiveView);
             
             IsConnected = true;
             return true;
@@ -354,12 +412,12 @@ namespace CameraControl.Devices.Canon
 
         public override void StartBulbMode()
         {
-            //ErrorCodes.GetException(ExecuteWithNoData(CONST_CMD_CANON_EOS_BulbStart));
+            Camera.BulbStart();
         }
 
         public override void EndBulbMode()
         {
-            //ErrorCodes.GetException(ExecuteWithNoData(CONST_CMD_CANON_EOS_BulbEnd));
+            Camera.BulbStart();
         }
 
         public override LiveViewData GetLiveViewImage()
@@ -373,6 +431,10 @@ namespace CameraControl.Devices.Canon
                     viewData.HaveFocusData = false;
                     viewData.ImagePosition = 0;
                     viewData.ImageData = _liveViewImageData;
+                    viewData.ImageHeight = 100;
+                    viewData.ImageWidth = 100;
+                    viewData.LiveViewImageHeight = 100;
+                    viewData.LiveViewImageWidth = 100;
                 }
                 catch (Exception e)
                 {
@@ -388,12 +450,14 @@ namespace CameraControl.Devices.Canon
 
         public override void StartLiveView()
         {
-            if (!Camera.IsInHostLiveViewMode) Camera.StartLiveView();
+            //if (!Camera.IsInLiveViewMode) 
+                Camera.StartLiveView();
         }
 
         public override void StopLiveView()
         {
-            if (Camera.IsInHostLiveViewMode) Camera.StopLiveView();
+            //if (Camera.IsInHostLiveViewMode)
+                Camera.StopLiveView();
         }
 
         public override void TransferFile(object o, string filename)
