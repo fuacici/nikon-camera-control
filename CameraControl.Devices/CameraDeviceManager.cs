@@ -176,7 +176,8 @@ namespace CameraControl.Devices
                     ConnectedDevices.Add(camera);
                     NewCameraConnected(camera);
                 }
-            }
+
+           }
         }
 
         private ICameraDevice GetWiaIDevice(IDeviceInfo devInfo)
@@ -230,6 +231,7 @@ namespace CameraControl.Devices
 
         private void ConnectDevices()
         {
+ 
             if (PortableDeviceCollection.Instance == null)
             {
                 PortableDeviceCollection.CreateInstance(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
