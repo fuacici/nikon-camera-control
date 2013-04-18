@@ -335,7 +335,7 @@ namespace CameraControl.windows
             FocusStep = 75;
             FreezeImage = false;
             Recording = false;
-            chk_top.IsChecked = true;
+            chk_top.IsChecked = false;
         }
 
         private void SelectedBitmap_BitmapLoaded(object sender)
@@ -489,9 +489,9 @@ namespace CameraControl.windows
                                                            {
                                                                ProcessMotionDetection(bmp);
                                                            }
-                                                           ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
-                                                           this.LuminanceHistogramPoints =
-                                                             ConvertToPointCollection(hslStatistics.Luminance.Values);
+                                                           //ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
+                                                           //this.LuminanceHistogramPoints =
+                                                           //  ConvertToPointCollection(hslStatistics.Luminance.Values);
                                                            WriteableBitmap writeableBitmap;
                                                            preview =
                                                              BitmapFactory.ConvertToPbgra32Format(

@@ -127,7 +127,6 @@ namespace CameraControl.Devices
             WiaDeviceManager.RegisterEvent(Conts.wiaEventDeviceConnected, "*");
             WiaDeviceManager.RegisterEvent(Conts.wiaEventDeviceDisconnected, "*");
             WiaDeviceManager.OnEvent += DeviceManager_OnEvent;
-            InitCanon();
         }
 
         private void InitCanon()
@@ -137,7 +136,6 @@ namespace CameraControl.Devices
                 _framework = new EosFramework();
                 AddCanonCameras();
                 _framework.CameraAdded += _framework_CameraAdded;
-
             }
             catch (Exception exception)
             {
@@ -176,8 +174,8 @@ namespace CameraControl.Devices
                     ConnectedDevices.Add(camera);
                     NewCameraConnected(camera);
                 }
-
            }
+            Thread.Sleep(2500);
         }
 
         private ICameraDevice GetWiaIDevice(IDeviceInfo devInfo)
@@ -238,6 +236,8 @@ namespace CameraControl.Devices
                 PortableDeviceCollection.Instance.AutoConnectToPortableDevice = false;
             }
             _deviceEnumerator.RemoveDisconnected();
+            
+            InitCanon();
 
             foreach (PortableDevice portableDevice in PortableDeviceCollection.Instance.Devices)
             {
@@ -408,6 +408,10 @@ namespace CameraControl.Devices
             {
                 Log.Debug("Native drivers are disabled !!!!");
             }
+            // if canon camera is connected don't use wia driver
+            if (_framework.GetCameraCollection().Count > 0)
+                return true;
+
             bool ret = false;
             bool noDriversDetected = ConnectedDevices.Count == 0;
             int retries = 0;
