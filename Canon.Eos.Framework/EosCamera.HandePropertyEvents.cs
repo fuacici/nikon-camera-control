@@ -53,7 +53,7 @@ namespace Canon.Eos.Framework
                 Util.Assert(Edsdk.EdsCreateMemoryStream(0, out memoryStream), "Failed to create memory stream.");
                 using (var image = EosLiveImage.CreateFromStream(memoryStream))
                 {
-                    Util.Assert(Edsdk.EdsDownloadEvfImageCdecl(this.Handle, image.Handle), "Failed to download evf image.");
+                    Util.Assert(Edsdk.EdsDownloadEvfImage(this.Handle, image.Handle), "Failed to download evf image.");
 
                     var converter = new EosConverter();
                     this.OnLiveViewUpdate(new EosLiveImageEventArgs(converter.ConvertImageStreamToBytes(memoryStream))
@@ -61,14 +61,14 @@ namespace Canon.Eos.Framework
                         Zoom = image.Zoom,
                         ZommBounds = image.ZoomBounds,
                         ImagePosition = image.ImagePosition,
-                        Histogram = image.Histogram,
+                        //Histogram = image.Histogram,
                     });
                 }
             }
             catch (EosException eosEx)
             {
-                if (eosEx.EosErrorCode != EosErrorCode.DeviceBusy && eosEx.EosErrorCode != EosErrorCode.ObjectNotReady)
-                    throw;
+                //if (eosEx.EosErrorCode != EosErrorCode.DeviceBusy && eosEx.EosErrorCode != EosErrorCode.ObjectNotReady)
+                //    throw;
             }
             finally
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Canon.Eos.Framework.Eventing;
 using Canon.Eos.Framework.Helper;
 using Canon.Eos.Framework.Internal.SDK;
@@ -488,28 +489,89 @@ namespace Canon.Eos.Framework
                 "Failed to take picture.");
         }
 
-        public void BulbStart()
+        public void TakePictureNoAf()
         {
             if (this.IsLegacy && !this.IsLocked)
             {
-                this.LockAndExceute(this.BulbStart);
+                this.LockAndExceute(this.TakePictureNoAf);
                 return;
             }
 
-            Util.Assert(this.SendCommand(Edsdk.CameraCommand_BulbStart),
-                "Failed to take picture.");
+            Util.Assert(this.SendCommand(Edsdk.CameraCommand_PressShutterButton, (int) Edsdk.EdsShutterButton.CameraCommand_ShutterButton_Completely_NonAF),
+                "Failed to take picture no AF.");
+        }
+
+        public void ResetShutterButton()
+        {
+            if (this.IsLegacy && !this.IsLocked)
+            {
+                this.LockAndExceute(this.ResetShutterButton);
+                return;
+            }
+
+            Util.Assert(this.SendCommand(Edsdk.CameraCommand_PressShutterButton, (int)Edsdk.EdsShutterButton.CameraCommand_ShutterButton_OFF),
+                "Failed to take picture no AF.");
+        }
+
+        public void AutoFocus()
+        {
+            if (this.IsLegacy && !this.IsLocked)
+            {
+                this.LockAndExceute(this.AutoFocus);
+                return;
+            }
+
+            Util.Assert(this.SendCommand(Edsdk.CameraCommand_PressShutterButton, (int)Edsdk.EdsShutterButton.CameraCommand_ShutterButton_OFF),
+                "Failed to take picture no AF.");
+            Util.Assert(this.SendCommand(Edsdk.CameraCommand_PressShutterButton, (int)Edsdk.EdsShutterButton.CameraCommand_ShutterButton_Halfway),
+                "Failed to take picture no AF.");
+        }
+
+
+        public void BulbStart()
+        {
+            //this.Lock();
+            //Thread.Sleep(120);
+            Util.Assert(this.SendCommand(Edsdk.CameraCommand_PressShutterButton, 65539),
+                "Failed to start bulb mode");
         }
 
         public void BulbEnd()
         {
+            try
+            {
+                Util.Assert(this.SendCommand(Edsdk.CameraCommand_PressShutterButton, 0),
+                    "Failed to start bulb mode");
+            }
+            finally
+            {
+                if (this.IsLocked)
+                    this.Unlock();
+            }
+        }
+
+        public void FocusInLiveView(uint focus)
+        {
             if (this.IsLegacy && !this.IsLocked)
             {
-                this.LockAndExceute(this.BulbEnd);
+                this.LockAndExceute(() => this.FocusInLiveView(focus));
                 return;
             }
 
-            Util.Assert(this.SendCommand(Edsdk.CameraCommand_BulbEnd),
-                "Failed to take picture.");
+            Util.Assert(this.SendCommand(Edsdk.CameraCommand_DriveLensEvf, (int) focus),
+                "Failed to focus");
+        }
+
+        public void FocusModeLiveView(uint focus)
+        {
+            if (this.IsLegacy && !this.IsLocked)
+            {
+                this.LockAndExceute(() => this.FocusModeLiveView(focus));
+                return;
+            }
+
+            Util.Assert(this.SendCommand(Edsdk.CameraCommand_DoEvfAf, (int)focus),
+                "Failed to focus");
         }
 
         public void TakePictureInLiveview()

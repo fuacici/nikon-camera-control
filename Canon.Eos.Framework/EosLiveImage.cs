@@ -10,7 +10,7 @@ namespace Canon.Eos.Framework
         internal static EosLiveImage CreateFromStream(IntPtr stream)
         {
             IntPtr imagePtr;
-            Util.Assert(Edsdk.EdsCreateEvfImageRefCdecl(stream, out imagePtr), "Failed to create evf image.");
+            Util.Assert(Edsdk.EdsCreateEvfImageRef(stream, out imagePtr), "Failed to create evf image.");
             return new EosLiveImage(imagePtr);    
         }
 
@@ -46,5 +46,6 @@ namespace Canon.Eos.Framework
         {
             get { return this.GetPropertyPointData(Edsdk.PropID_Evf_ZoomPosition); }
         }
+
     }
 }

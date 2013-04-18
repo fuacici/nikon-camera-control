@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -37,7 +38,7 @@ namespace CameraControl.Devices.Canon
 
         private bool _eventIsbusy = false;
 
-        private byte[] _liveViewImageData = null;
+        private EosLiveImageEventArgs _liveViewImageData = null;
 
         public EosCamera Camera = null;
 
@@ -119,6 +120,62 @@ namespace CameraControl.Devices.Canon
                                                            {0xA0 ,"1/8000"},
                                                          };
 
+        protected Dictionary<int, string> _apertureTable = new Dictionary<int, string>
+                                                               {
+                                                                   {0x08, "1"},
+                                                                   {0x0B, "1.1"},
+                                                                   {0x0C, "1.2"},
+                                                                   {0x0D, "1 (1/3)"},
+                                                                   {0x10, "1.4"},
+                                                                   {0x13, "1.6"},
+                                                                   {0x14, "1.8"},
+                                                                   {0x15, "1.8 (1/3)"},
+                                                                   {0x18, "2"},
+                                                                   {0x1B, "2.2"},
+                                                                   {0x1C, "2.5"},
+                                                                   {0x1D, "2.5 (1/3)"},
+                                                                   {0x20, "2.8"},
+                                                                   {0x23, "3.2"},
+                                                                   {0x24, "3.5"},
+                                                                   {0x25, "3.5 (1/3)"},
+                                                                   {0x28, "4"},
+                                                                   {0x2B, "4.5"},
+                                                                   {0x2C, "4.5"},
+                                                                   {0x2D, "5"},
+                                                                   {0x30, "5.6"},
+                                                                   {0x33, "6.3"},
+                                                                   {0x34, "6.7"},
+                                                                   {0x35, "7.1"},
+                                                                   {0x38, "8"},
+                                                                   {0x3B, "9"},
+                                                                   {0x3C, "9.5"},
+                                                                   {0x3D, "10"},
+                                                                   {0x40, "11"},
+                                                                   {0x43, "13 (1/3)"},
+                                                                   {0x44, "13"},
+                                                                   {0x45, "14"},
+                                                                   {0x48, "16"},
+                                                                   {0x4B, "18"},
+                                                                   {0x4C, "19"},
+                                                                   {0x4D, "20"},
+                                                                   {0x50, "22"},
+                                                                   {0x53, "25"},
+                                                                   {0x54, "27"},
+                                                                   {0x55, "29"},
+                                                                   {0x58, "32"},
+                                                                   {0x5B, "36"},
+                                                                   {0x5C, "38"},
+                                                                   {0x5D, "40"},
+                                                                   {0x60, "45"},
+                                                                   {0x63, "51"},
+                                                                   {0x64, "54"},
+                                                                   {0x65, "57"},
+                                                                   {0x68, "64"},
+                                                                   {0x6B, "72"},
+                                                                   {0x6C, "76"},
+                                                                   {0x6D, "80"},
+                                                                   {0x70, "91"},
+                                                               };
         public CanonSDKBase()
         {
 
@@ -154,8 +211,10 @@ namespace CameraControl.Devices.Canon
             try
             {
                 Camera = camera;
+                Camera.IsErrorTolerantMode = true;
                 DeviceName = Camera.DeviceDescription;
                 Manufacturer = "Canon Inc.";
+                SerialNumber = Camera.SerialNumber;
                 Camera.Error += _camera_Error;
                 Camera.Shutdown += _camera_Shutdown;
                 Camera.LiveViewPaused += Camera_LiveViewPaused;
@@ -164,10 +223,13 @@ namespace CameraControl.Devices.Canon
                 Camera.PropertyChanged += Camera_PropertyChanged;
                 Capabilities.Add(CapabilityEnum.Bulb);
                 Capabilities.Add(CapabilityEnum.LiveView);
-                IsConnected = true;
+                Capabilities.Add(CapabilityEnum.CaptureInRam);
                 CaptureInSdRam = true;
                 InitShutterSpeed();
+                InitFNumber();
                 InitOther();
+                Battery = (int)Camera.BatteryLevel;
+                IsConnected = true;
                 return true; 
             }
             catch (Exception exception)
@@ -206,7 +268,13 @@ namespace CameraControl.Devices.Canon
                 switch (e.PropertyId)
                 {
                     case Edsdk.PropID_Tv:
-                        ShutterSpeed.SetValue(Camera.GetProperty(Edsdk.PropID_Tv));
+                        ReInitShutterSpeed();
+                        break;
+                    case Edsdk.PropID_Av:
+                        ReInitFNumber(true);
+                        break;
+                    case Edsdk.PropID_BatteryLevel:
+                        Battery = (int) Camera.BatteryLevel;
                         break;
                 }
             }
@@ -220,7 +288,6 @@ namespace CameraControl.Devices.Canon
         {
             try
             {
-
                 Log.Debug("Picture taken event received type" + e.GetType().ToString());
                 PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
                                                   {
@@ -263,8 +330,7 @@ namespace CameraControl.Devices.Canon
             {
                 try
                 {
-                    _liveViewImageData = e.ImageData;
-                    Log.Debug("live data length " + e.ImageData.Length);
+                    _liveViewImageData = e;
                 }
                 catch (Exception exception)
                 {
@@ -282,11 +348,14 @@ namespace CameraControl.Devices.Canon
         {
             try
             {
-                Camera.TakePicture();
-                Camera.ResumeLiveview();
+                Camera.ResetShutterButton();
+                Camera.TakePictureNoAf();
+                Camera.ResetShutterButton();
+                //Camera.ResumeLiveview();
             }
             catch (Exception exception)
             {
+                IsBusy = false;
                 Log.Debug("Live view pause error", exception);
             }
         }
@@ -335,22 +404,31 @@ namespace CameraControl.Devices.Canon
             {
                 try
                 {
-                    byte datasize = 4;
                     ShutterSpeed.Clear();
+                    var data = Camera.GetPropertyDescription(Edsdk.PropID_Tv);
                     foreach (KeyValuePair<uint, string> keyValuePair in _shutterTable)
                     {
-                        ShutterSpeed.AddValues(keyValuePair.Value, keyValuePair.Key);
+                        if (data.NumElements > 0)
+                        {
+                            if (ArrayContainValue(data.PropDesc, keyValuePair.Key))
+                                ShutterSpeed.AddValues(keyValuePair.Value, keyValuePair.Key);
+                        }
+                        else
+                        {
+                            ShutterSpeed.AddValues(keyValuePair.Value, keyValuePair.Key);
+                        }
                     }
-                    //byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_EOS_ShutterSpeed);
-                    //int type = BitConverter.ToInt16(result, 2);
-                    //byte formFlag = result[(2 * datasize) + 5];
-                    //UInt32 defval = BitConverter.ToUInt32(result, datasize + 5);
-                    //for (int i = 0; i < result.Length - ((2 * datasize) + 6 + 2); i += datasize)
-                    //{
-                    //    UInt32 val = BitConverter.ToUInt32(result, ((2 * datasize) + 6 + 2) + i);
-                    //    ShutterSpeed.AddValues(_shutterTable.ContainsKey(val) ? _shutterTable[val] : val.ToString(), val);
-                    //}
-                    ShutterSpeed.SetValue(Camera.GetProperty(Edsdk.PropID_Tv));
+                    
+                    long value = Camera.GetProperty(Edsdk.PropID_Tv);
+                    if (value == 0)
+                    {
+                        ShutterSpeed.IsEnabled = false;
+                    }
+                    else
+                    {
+                        ShutterSpeed.IsEnabled = true;
+                        ShutterSpeed.SetValue(Camera.GetProperty(Edsdk.PropID_Tv), false);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -370,6 +448,60 @@ namespace CameraControl.Devices.Canon
                 Log.Error("Error set property sP", exception);
             }
         }
+
+        private void InitFNumber()
+        {
+            FNumber = new PropertyValue<int> { IsEnabled = true, Name = "FNumber" };
+            FNumber.ValueChanged += FNumber_ValueChanged;
+            ReInitFNumber(true);
+        }
+
+        void FNumber_ValueChanged(object sender, string key, int val)
+        {
+            try
+            {
+                Camera.SetProperty(Edsdk.PropID_Av, val);
+            }
+            catch (Exception exception)
+            {
+                Log.Error("Error set property AV", exception);
+            }
+        }
+
+        private void ReInitFNumber(bool trigervaluchange)
+        {
+            try
+            {
+                var data = Camera.GetPropertyDescription(Edsdk.PropID_Av);
+                FNumber.Clear();
+                foreach (KeyValuePair<int, string> keyValuePair in _apertureTable)
+                {
+                    if (data.NumElements > 0)
+                    {
+                        if (ArrayContainValue(data.PropDesc, keyValuePair.Key))
+                            FNumber.AddValues(keyValuePair.Value, keyValuePair.Key);
+                    }
+                    else
+                    {
+                        FNumber.AddValues(keyValuePair.Value, keyValuePair.Key);
+                    }
+                }
+                long value = Camera.GetProperty(Edsdk.PropID_Av);
+                if(value==0)
+                {
+                    FNumber.IsEnabled = false;
+                }
+                else
+                {
+                    FNumber.SetValue((int)value, trigervaluchange);
+                    FNumber.IsEnabled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
 
         public override void CapturePhoto()
         {
@@ -407,7 +539,36 @@ namespace CameraControl.Devices.Canon
 
         public override void CapturePhotoNoAf()
         {
-            CapturePhoto();
+            Log.Debug("EOS capture start");
+            Monitor.Enter(Locker);
+            try
+            {
+                IsBusy = true;
+                if (Camera.IsInHostLiveViewMode)
+                {
+                    Camera.TakePictureInLiveview();
+                }
+                else
+                {
+                    Camera.TakePicture();
+                }
+            }
+            catch (COMException comException)
+            {
+                IsBusy = false;
+                ErrorCodes.GetException(comException);
+            }
+            catch
+            {
+                IsBusy = false;
+                throw;
+            }
+            finally
+            {
+                Monitor.Exit(Locker);
+            }
+            Log.Debug("EOS capture end");
+
         }
 
         public override void StartBulbMode()
@@ -417,7 +578,7 @@ namespace CameraControl.Devices.Canon
 
         public override void EndBulbMode()
         {
-            Camera.BulbStart();
+            Camera.BulbEnd();
         }
 
         public override LiveViewData GetLiveViewImage()
@@ -430,15 +591,19 @@ namespace CameraControl.Devices.Canon
                     //DeviceReady();
                     viewData.HaveFocusData = false;
                     viewData.ImagePosition = 0;
-                    viewData.ImageData = _liveViewImageData;
+                    viewData.ImageData = _liveViewImageData.ImageData;
                     viewData.ImageHeight = 100;
                     viewData.ImageWidth = 100;
                     viewData.LiveViewImageHeight = 100;
                     viewData.LiveViewImageWidth = 100;
+                    viewData.FocusX = _liveViewImageData.ZommBounds.X;
+                    viewData.FocusY = _liveViewImageData.ZommBounds.Y;
+                    viewData.FocusFrameXSize = _liveViewImageData.ZommBounds.Width;
+                    viewData.FocusFrameYSize = _liveViewImageData.ZommBounds.Height;
                 }
                 catch (Exception e)
                 {
-                    Log.Error("Error get live view image ", e);
+                    //Log.Error("Error get live view image ", e);
                 }
                 finally
                 {
@@ -450,14 +615,46 @@ namespace CameraControl.Devices.Canon
 
         public override void StartLiveView()
         {
+            Camera.ResetShutterButton();
             //if (!Camera.IsInLiveViewMode) 
                 Camera.StartLiveView();
         }
 
         public override void StopLiveView()
         {
-            //if (Camera.IsInHostLiveViewMode)
+            Camera.ResetShutterButton();
+            //if (Camera.IsInLiveViewMode)
                 Camera.StopLiveView();
+        }
+
+        public override void AutoFocus()
+        {
+            Camera.ResetShutterButton();
+            Camera.AutoFocus();
+        }
+
+        public override void Focus(int step)
+        {
+            Camera.ResetShutterButton();
+            if(step<0)
+            {
+                step = -step;
+                if (step < 50)
+                    Camera.FocusInLiveView(Edsdk.EvfDriveLens_Near1);
+                else if (step >= 50 && step< 200)
+                    Camera.FocusInLiveView(Edsdk.EvfDriveLens_Near2);
+                else
+                    Camera.FocusInLiveView(Edsdk.EvfDriveLens_Near3);
+            }
+            else
+            {
+                if (step < 50)
+                    Camera.FocusInLiveView(Edsdk.EvfDriveLens_Far1);
+                else if (step >= 50 && step < 200)
+                    Camera.FocusInLiveView(Edsdk.EvfDriveLens_Far2);
+                else
+                    Camera.FocusInLiveView(Edsdk.EvfDriveLens_Far3);
+            }
         }
 
         public override void TransferFile(object o, string filename)
@@ -506,7 +703,14 @@ namespace CameraControl.Devices.Canon
             return "";
         }
 
+        private bool ArrayContainValue(IEnumerable<int> data, uint value)
+        {
+            return ArrayContainValue(data, (int) value);
+        }
 
-
+        private bool ArrayContainValue(IEnumerable<int> data, int value)
+        {
+            return data.Any(i => i == (int)value);
+        }
     }
 }
