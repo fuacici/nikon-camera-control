@@ -176,6 +176,85 @@ namespace CameraControl.Devices.Canon
                                                                    {0x6D, "80"},
                                                                    {0x70, "91"},
                                                                };
+
+        protected Dictionary<uint, string> _exposureModeTable = new Dictionary<uint, string>()
+                            {
+                              {0, "P"},
+                              {1, "Tv"},
+                              {2, "Av"},
+                              {3, "M"},
+                              {4, "Bulb"},
+                              {5, "A-DEP"},
+                              {6, "DEP"},
+                              {7, "Camera settings registered"},
+                              {8, "Lock"},
+                              {9, "Auto"},
+                              {10, "Night scene Portrait"},
+                              {11, "Sport"},
+                              {12, "Portrait"},
+                              {13, "Landscape"},
+                              {14, "Close-Up"},
+                              {15, "Flash Off"},
+                              {19, "Creative Auto"},
+                              {21, "Photo in Movie"},
+                            };
+
+        protected Dictionary<uint, string> _isoTable = new Dictionary<uint, string>()
+                                                  {
+                                                    {0x00000028, "6"},
+                                                    {0x00000030, "12"},
+                                                    {0x00000038, "25"},
+                                                    {0x00000040, "50"},
+                                                    {0x00000048, "100"},
+                                                    {0x0000004B, "125"},
+                                                    {0x0000004D, "160"},
+                                                    {0x00000050, "200"},
+                                                    {0x00000053, "250"},
+                                                    {0x00000055, "320"},
+                                                    {0x00000058, "400"},
+                                                    {0x0000005B, "500"},
+                                                    {0x0000005D, "640"},
+                                                    {0x00000060, "800"},
+                                                    {0x00000063, "1000"},
+                                                    {0x00000065, "1250"},
+                                                    {0x00000068, "1600"},
+                                                    {0x00000070, "3200"},
+                                                    {0x00000078, "6400"},
+                                                    {0x00000080, "12800"},
+                                                    {0x00000088, "25600"},
+                                                    {0x00000090, "51200"},
+                                                    {0x00000098, "102400"},
+                                                  };
+
+        protected Dictionary<uint, string> _ec = new Dictionary<uint, string>()
+                                                     {
+                                                         {0x18,"+3"},
+                                                         {0x15,"+2 2/3"},
+                                                         {0x14,"+2 1/2"},
+                                                         {0x13,"+2 1/3"},
+                                                         {0x10,"+2"},
+                                                         {0x0D,"+1 2/3"},
+                                                         {0x0C,"+1 1/2"},
+                                                         {0x0B,"+1 1/3"},
+                                                         {0x08,"+1"},
+                                                         {0x05,"+2/3"},
+                                                         {0x04,"+1/2"},
+                                                         {0x03,"+1/3"},
+                                                         {0x00,"0"},
+                                                         {0xFD,"-1/3"},
+                                                         {0xFC,"-1/2"},
+                                                         {0xFB,"-2/3"},
+                                                         {0xF8,"-1"},
+                                                         {0xF5,"-1 1/3"},
+                                                         {0xF4,"-1 1/3"},
+                                                         {0xF3,"-1 2/3"},
+                                                         {0xF0,"-2"},
+                                                         {0xED,"-2 1/3"},
+                                                         {0xEC,"-2 1/2"},
+                                                         {0xEB,"-3 2/3"},
+                                                         {0xE8,"-3"},
+                                                     };
+
         public CanonSDKBase()
         {
 
@@ -225,8 +304,11 @@ namespace CameraControl.Devices.Canon
                 Capabilities.Add(CapabilityEnum.LiveView);
                 Capabilities.Add(CapabilityEnum.CaptureInRam);
                 CaptureInSdRam = true;
+                InitMode();
                 InitShutterSpeed();
                 InitFNumber();
+                InitIso();
+                InitEc();
                 InitOther();
                 Battery = (int)Camera.BatteryLevel;
                 IsConnected = true;
@@ -267,6 +349,12 @@ namespace CameraControl.Devices.Canon
                 //Log.Debug("Property changed " + e.PropertyId.ToString("X"));
                 switch (e.PropertyId)
                 {
+                    case Edsdk.PropID_ExposureCompensation:
+                        ExposureCompensation.SetValue((int)Camera.GetProperty(Edsdk.PropID_ExposureCompensation), false);
+                        break;
+                    case Edsdk.PropID_AEMode:
+                        Mode.SetValue((uint)Camera.GetProperty(Edsdk.PropID_AEMode), false);
+                        break;
                     case Edsdk.PropID_Tv:
                         ReInitShutterSpeed();
                         break;
@@ -390,6 +478,7 @@ namespace CameraControl.Devices.Canon
             return true;
         }
 
+
         private void InitShutterSpeed()
         {
             ShutterSpeed = new PropertyValue<long>();
@@ -448,7 +537,7 @@ namespace CameraControl.Devices.Canon
                 Log.Error("Error set property sP", exception);
             }
         }
-
+#region F number
         private void InitFNumber()
         {
             FNumber = new PropertyValue<int> { IsEnabled = true, Name = "FNumber" };
@@ -473,35 +562,156 @@ namespace CameraControl.Devices.Canon
             try
             {
                 var data = Camera.GetPropertyDescription(Edsdk.PropID_Av);
-                FNumber.Clear();
-                foreach (KeyValuePair<int, string> keyValuePair in _apertureTable)
+                long value = Camera.GetProperty(Edsdk.PropID_Av);
+                bool shouldinit = FNumber.Values.Count == 0;
+                
+                if (data.NumElements > 0)
+                    FNumber.Clear();
+
+                if (shouldinit && data.NumElements == 0)
                 {
-                    if (data.NumElements > 0)
-                    {
-                        if (ArrayContainValue(data.PropDesc, keyValuePair.Key))
-                            FNumber.AddValues(keyValuePair.Value, keyValuePair.Key);
-                    }
-                    else
+                    foreach (KeyValuePair<int, string> keyValuePair in _apertureTable)
                     {
                         FNumber.AddValues(keyValuePair.Value, keyValuePair.Key);
                     }
                 }
-                long value = Camera.GetProperty(Edsdk.PropID_Av);
+                else
+                {
+                    foreach (KeyValuePair<int, string> keyValuePair in _apertureTable.Where(keyValuePair => data.NumElements > 0).Where(keyValuePair => ArrayContainValue(data.PropDesc, keyValuePair.Key)))
+                    {
+                        FNumber.AddValues(keyValuePair.Value, keyValuePair.Key);
+                    }
+                }
+
                 if(value==0)
                 {
                     FNumber.IsEnabled = false;
                 }
                 else
                 {
-                    FNumber.SetValue((int)value, trigervaluchange);
+                    FNumber.SetValue((int)value, false);
                     FNumber.IsEnabled = true;
                 }
             }
             catch (Exception ex)
             {
+                Log.Debug("Error set aperture ", ex);
+            }
+        }
+#endregion
+
+        private void InitIso()
+        {
+            IsoNumber = new PropertyValue<int>();
+            IsoNumber.ValueChanged += IsoNumber_ValueChanged;
+            ReInitIso();
+        }
+
+        void IsoNumber_ValueChanged(object sender, string key, int val)
+        {
+            try
+            {
+                Camera.SetProperty(Edsdk.PropID_ISOSpeed, val);
+            }
+            catch (Exception exception)
+            {
+                Log.Debug("Error set ISO to camera", exception);
             }
         }
 
+        private void ReInitIso()
+        {
+            try
+            {
+                var data = Camera.GetPropertyDescription(Edsdk.PropID_ISOSpeed);
+                long value = Camera.GetProperty(Edsdk.PropID_ISOSpeed);
+                bool shouldinit = IsoNumber.Values.Count == 0;
+
+                if (data.NumElements > 0)
+                    IsoNumber.Clear();
+
+                if (shouldinit && data.NumElements == 0)
+                {
+                    foreach (KeyValuePair<uint, string> keyValuePair in _isoTable)
+                    {
+                        IsoNumber.AddValues(keyValuePair.Value, (int) keyValuePair.Key);
+                    }
+                }
+                else
+                {
+                    foreach (KeyValuePair<uint, string> keyValuePair in _isoTable.Where(keyValuePair => data.NumElements > 0).Where(keyValuePair => ArrayContainValue(data.PropDesc, keyValuePair.Key)))
+                    {
+                        IsoNumber.AddValues(keyValuePair.Value, (int) keyValuePair.Key);
+                    }
+                }
+
+                if (value == 0)
+                {
+                    IsoNumber.IsEnabled = false;
+                }
+                else
+                {
+                    IsoNumber.SetValue((int)value, false);
+                    IsoNumber.IsEnabled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Debug("Error set iso ", ex);
+            }   
+        }
+
+        private void InitMode()
+        {
+            Mode = new PropertyValue<uint>();
+            try
+            {
+                foreach (KeyValuePair<uint, string> keyValuePair in _exposureModeTable)
+                {
+                    Mode.AddValues(keyValuePair.Value, keyValuePair.Key);
+                }
+
+                Mode.SetValue((uint)Camera.GetProperty(Edsdk.PropID_AEMode), false);
+                Mode.IsEnabled = false;
+
+            }
+            catch (Exception ex)
+            {
+                Log.Debug("Error set aperture ", ex);
+            }
+
+        }
+
+        private void InitEc()
+        {
+            ExposureCompensation = new PropertyValue<int>();
+            ExposureCompensation.ValueChanged += ExposureCompensation_ValueChanged;
+            try
+            {
+                foreach (KeyValuePair<uint, string> keyValuePair in _ec)
+                {
+                    ExposureCompensation.AddValues(keyValuePair.Value, (int) keyValuePair.Key);
+                }
+                ExposureCompensation.IsEnabled = true;
+                ExposureCompensation.SetValue((int)Camera.GetProperty(Edsdk.PropID_ExposureCompensation), false);
+            }
+            catch (Exception exception)
+            {
+                Log.Debug("Error get EC", exception);
+            }
+        }
+
+        void ExposureCompensation_ValueChanged(object sender, string key, int val)
+        {
+            try
+            {
+                Camera.SetProperty(Edsdk.PropID_ExposureCompensation, val);
+            }
+            catch (Exception exception)
+            {
+                Log.Debug("Error set EC to camera", exception);
+            }
+        }
 
         public override void CapturePhoto()
         {
