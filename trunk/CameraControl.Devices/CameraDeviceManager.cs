@@ -120,6 +120,7 @@ namespace CameraControl.Devices
 
         public CameraDeviceManager()
         {
+            UseExperimentalDrivers = true;
             SelectedCameraDevice = new NotConnectedCameraDevice();
             ConnectedDevices = new AsyncObservableCollection<ICameraDevice>();
             _deviceEnumerator = new DeviceDescriptorEnumerator();
@@ -236,8 +237,9 @@ namespace CameraControl.Devices
                 PortableDeviceCollection.Instance.AutoConnectToPortableDevice = false;
             }
             _deviceEnumerator.RemoveDisconnected();
-            
-            InitCanon();
+
+            if (UseExperimentalDrivers)
+                InitCanon();
 
             foreach (PortableDevice portableDevice in PortableDeviceCollection.Instance.Devices)
             {
@@ -409,7 +411,7 @@ namespace CameraControl.Devices
                 Log.Debug("Native drivers are disabled !!!!");
             }
             // if canon camera is connected don't use wia driver
-            if (_framework.GetCameraCollection().Count > 0)
+            if (UseExperimentalDrivers && _framework.GetCameraCollection().Count > 0)
                 return true;
 
             bool ret = false;
