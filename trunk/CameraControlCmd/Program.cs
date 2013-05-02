@@ -14,12 +14,17 @@ using PortableDeviceLib;
 
 namespace CameraControlCmd
 {
+    
     class Program
     {
         //public static bool IsBusy { get; set; }
 
+        private static string _outFilename = null;
+
         private static InputArguments _arguments;
-        static void Main(string[] args)
+        
+        //[STAThread]
+        static int  Main(string[] args)
         {
             Console.WriteLine("digiCamControl command line utility");
             Console.WriteLine();
@@ -28,15 +33,15 @@ namespace CameraControlCmd
             {
                 ShowHelp();
                 Console.ReadLine();
-                return;
+                return 0;
             }
             InitApplication();
             if (ServiceProvider.DeviceManager.ConnectedDevices.Count == 0)
             {
                 Console.WriteLine("No connected device was found ! Exiting");
-                return;
+                return 0;
             }
-            ExecuteArgs();
+            int exitCodes= ExecuteArgs();
             Thread.Sleep(500);
             while (CamerasAreBusy())
             {
@@ -57,9 +62,10 @@ namespace CameraControlCmd
                     Console.ReadLine();
                 }
             }
+            return exitCodes;
         }
 
-        static void ExecuteArgs()
+        static int ExecuteArgs()
         {
             try
             {
@@ -117,7 +123,8 @@ namespace CameraControlCmd
                 if (_arguments.Contains("counter"))
                 {
                     int i = 0;
-                    if (string.IsNullOrEmpty(_arguments["counter"]) && !int.TryParse(_arguments["counter"], out i))
+                    string val = _arguments["counter"];
+                    if (string.IsNullOrEmpty(_arguments["counter"]) || !int.TryParse(val, out i))
                     {
                         Console.WriteLine("Wrong counter !!!");
                     }
@@ -126,15 +133,47 @@ namespace CameraControlCmd
                         ServiceProvider.Settings.DefaultSession.Counter = i;
                     }
                 }
+                if (_arguments.Contains("filename"))
+                {
+                    _outFilename = _arguments["filename"];
+                    //if(string.IsNullOrEmpty(_outFilename))
+                    //{
+                    //    SaveFileDialog dlg = new SaveFileDialog();
+                    //    dlg.Filter = "Jpg file (*.jpg)|*.jpg|All files|*.*";
+                    //    if(dlg.ShowDialog()==DialogResult.OK)
+                    //    {
+                    //        _outFilename = dlg.FileName;
+                    //    }
+                    //}
+                }
                 if (_arguments.Contains("capture"))
                 {
-                    ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
-                    return;
+                    try
+                    {
+                        ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
+                    }
+                    catch (Exception exception)
+                    {
+                        ServiceProvider.DeviceManager.SelectedCameraDevice.IsBusy = false;
+                        Console.WriteLine("Error occurred while capturing photo "+exception);
+                        return 1;
+                    }
+                    return 0;
                 }
                 if (_arguments.Contains("capturenoaf"))
                 {
-                    ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhotoNoAf();
-                    return;
+                    try
+                    {
+                        ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhotoNoAf();
+                    }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine("Error occurred while capturing photo " + exception);
+                        ServiceProvider.DeviceManager.SelectedCameraDevice.IsBusy = false;
+                        return 1;
+                    }
+
+                    return 0;
                 }
                 if (_arguments.Contains("captureall"))
                 {
@@ -157,7 +196,9 @@ namespace CameraControlCmd
             {
                 Log.Error(exception);
                 Console.WriteLine(exception.Message);
+                return 1;
             }
+            return 0;
         }
 
         private static void ShowHelp()
@@ -172,6 +213,7 @@ namespace CameraControlCmd
             Console.WriteLine(" /preset preset_name        - use preset [session_name]");
             Console.WriteLine(" /folder path               - set the photo save folder");
             Console.WriteLine(" /filenameTemplate template - set the photo save file name template");
+            Console.WriteLine(" /filename fileName         - set the photo save file name");
             Console.WriteLine(" /counter number            - set the photo initial counter");
             Console.WriteLine(" /wait [mseconds]           - after done wait for a keypress/ milliseconds ");
         }
@@ -223,7 +265,9 @@ namespace CameraControlCmd
 
         static void DeviceManager_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
         {
-            PhotoCaptured(eventArgs);
+            Thread thread = new Thread(PhotoCaptured);
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start(eventArgs);
         }
 
 
@@ -239,20 +283,32 @@ namespace CameraControlCmd
                 if ((property.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
                     return;
                 string fileName = "";
-                if (!ServiceProvider.Settings.DefaultSession.UseOriginalFilename || eventArgs.CameraDevice.CaptureInSdRam)
+                if (string.IsNullOrEmpty(_outFilename))
                 {
-                    fileName =
-                      ServiceProvider.Settings.DefaultSession.GetNextFileName(Path.GetExtension(eventArgs.FileName),
-                                                                                              eventArgs.CameraDevice);
+                    if (!ServiceProvider.Settings.DefaultSession.UseOriginalFilename ||
+                        eventArgs.CameraDevice.CaptureInSdRam)
+                    {
+                        fileName =
+                            ServiceProvider.Settings.DefaultSession.GetNextFileName(
+                                Path.GetExtension(eventArgs.FileName),
+                                eventArgs.CameraDevice);
+                    }
+                    else
+                    {
+                        fileName = Path.Combine(ServiceProvider.Settings.DefaultSession.Folder, eventArgs.FileName);
+                        if (File.Exists(fileName))
+                            fileName =
+                                StaticHelper.GetUniqueFilename(
+                                    Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) +
+                                    "_", 0,
+                                    Path.GetExtension(fileName));
+                    }
                 }
                 else
                 {
-                    fileName = Path.Combine(ServiceProvider.Settings.DefaultSession.Folder, eventArgs.FileName);
-                    if (File.Exists(fileName))
-                        fileName =
-                          StaticHelper.GetUniqueFilename(
-                            Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_", 0,
-                            Path.GetExtension(fileName));
+                    if(File.Exists(_outFilename))
+                        File.Delete(_outFilename);
+                    fileName = _outFilename;
                 }
                 if (!Directory.Exists(Path.GetDirectoryName(fileName)))
                 {
