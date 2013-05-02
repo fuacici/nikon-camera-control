@@ -146,6 +146,54 @@ namespace CameraControlCmd
                     //    }
                     //}
                 }
+                if (_arguments.Contains("iso"))
+                {
+                    if (string.IsNullOrEmpty(_arguments["iso"]))
+                    {
+                        Console.WriteLine("No iso number !!!");
+                    }
+                    else
+                    {
+                        Thread.Sleep(200);
+                        ServiceProvider.DeviceManager.SelectedCameraDevice.IsoNumber.SetValue(_arguments["iso"]);
+                    }
+                }
+                if (_arguments.Contains("aperture"))
+                {
+                    if (string.IsNullOrEmpty(_arguments["aperture"]))
+                    {
+                        Console.WriteLine("No aperture number !!!");
+                    }
+                    else
+                    {
+                        Thread.Sleep(200);
+                        ServiceProvider.DeviceManager.SelectedCameraDevice.FNumber.SetValue("ƒ/" + _arguments["aperture"]);
+                    }
+                }
+                if (_arguments.Contains("shutter"))
+                {
+                    if (string.IsNullOrEmpty(_arguments["shutter"]))
+                    {
+                        Console.WriteLine("No shutter number !!!");
+                    }
+                    else
+                    {
+                        Thread.Sleep(200);
+                        ServiceProvider.DeviceManager.SelectedCameraDevice.ShutterSpeed.SetValue(_arguments["shutter"]);
+                    }
+                }
+                if (_arguments.Contains("ec"))
+                {
+                    if (string.IsNullOrEmpty(_arguments["ec"]))
+                    {
+                        Console.WriteLine("No ec number !!!");
+                    }
+                    else
+                    {
+                        Thread.Sleep(200);
+                        ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue( _arguments["ec"]);
+                    }
+                }
                 if (_arguments.Contains("capture"))
                 {
                     try
@@ -216,6 +264,13 @@ namespace CameraControlCmd
             Console.WriteLine(" /filename fileName         - set the photo save file name");
             Console.WriteLine(" /counter number            - set the photo initial counter");
             Console.WriteLine(" /wait [mseconds]           - after done wait for a keypress/ milliseconds ");
+            Console.WriteLine("----------------------------------------------------------------------------------------");
+            Console.WriteLine("For single camera usage :");
+            Console.WriteLine("----------------------------------------------------------------------------------------");
+            Console.WriteLine(" /iso isonumber             - set the iso number ex. 100 200 400");
+            Console.WriteLine(" /aperture aperture         - set the aperture number ex. 9,5 8,0");
+            Console.WriteLine(" /shutter shutter speed     - set the shutter speed ex. \"1/50\" \"1/250\" 1s 3s");
+            Console.WriteLine(" /ec compensation           - set the exposure comp. -1,5 +2");
         }
 
         private static void InitApplication()
