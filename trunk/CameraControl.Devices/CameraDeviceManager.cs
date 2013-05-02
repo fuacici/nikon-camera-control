@@ -411,7 +411,7 @@ namespace CameraControl.Devices
                 Log.Debug("Native drivers are disabled !!!!");
             }
             // if canon camera is connected don't use wia driver
-            if (UseExperimentalDrivers && _framework.GetCameraCollection().Count > 0)
+            if (UseExperimentalDrivers && _framework!=null && _framework.GetCameraCollection().Count > 0)
                 return true;
 
             bool ret = false;

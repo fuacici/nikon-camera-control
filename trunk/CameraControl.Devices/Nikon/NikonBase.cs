@@ -1107,10 +1107,8 @@ namespace CameraControl.Devices.Nikon
                 int eventCount = BitConverter.ToInt16(response.Data, 0);
                 if (eventCount > 0)
                 {
-                    Console.WriteLine("Event queue length " + eventCount);
                     for (int i = 0; i < eventCount; i++)
                     {
-                        Console.WriteLine("Event processed " + i);
                         try
                         {
                             uint eventCode = BitConverter.ToUInt16(response.Data, 6 * i + 2);
