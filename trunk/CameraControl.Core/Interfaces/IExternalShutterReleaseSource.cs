@@ -1,4 +1,5 @@
-﻿using CameraControl.Core.Classes;
+﻿using System.Windows.Controls;
+using CameraControl.Core.Classes;
 
 namespace CameraControl.Core.Interfaces
 {
@@ -7,5 +8,6 @@ namespace CameraControl.Core.Interfaces
         string Name { get; set; }
         bool Execute(CustomConfig config);
         bool CanExecute(CustomConfig config);
+        UserControl GetConfig(CustomConfig config);
     }
 }

@@ -336,5 +336,7 @@ namespace CameraControl.Core.Translation
         //07/05/2013
         public static string LabelDevices = "Devices";
         public static string LabelExternalShutterRelease = "External shutter release";
+        public static string LabelConfigName = "Configuration name";
+        public static string LabelDriver = "Driver";
     }
 }

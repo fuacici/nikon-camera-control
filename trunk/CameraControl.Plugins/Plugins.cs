@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using CameraControl.Core;
 using CameraControl.Core.Interfaces;
+using CameraControl.Devices;
 using CameraControl.Plugins.ExportPlugins;
+using CameraControl.Plugins.ExternalDevices;
 using CameraControl.Plugins.MainWindowPlugins;
 
 namespace CameraControl.Plugins
@@ -21,10 +23,11 @@ namespace CameraControl.Plugins
                 ServiceProvider.PluginManager.ExportPlugins.Add(new ExportToFolder());
                 ServiceProvider.PluginManager.MainWindowPlugins.Add(new SimpleMainWindow());
                 ServiceProvider.PluginManager.ToolPlugins.Add(new PhdPlugin());
+                ServiceProvider.ExternalDeviceManager.ExternalShutterReleaseSources.Add(new SerialPortShutterRelease());
             }
             catch (Exception exception)
             {
-
+                Log.Error("Error loadings plugins ", exception);
             }
             return true;
         }
