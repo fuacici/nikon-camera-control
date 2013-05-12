@@ -51,5 +51,24 @@ namespace CameraControl.Core.Classes
                 NotifyPropertyChanged("Config");
             }
         }
+
+        public string Get(string name)
+        {
+            return (from valuePair in ConfigData where valuePair.Name == name select valuePair.Value).FirstOrDefault();
+        }
+
+        public void Set(string name, string value)
+        {
+            foreach (ValuePair valuePair in ConfigData)
+            {
+                if (valuePair.Name == name)
+                {
+                    valuePair.Value = value;
+                    return;
+                }
+            }
+            ConfigData.Add(new ValuePair() {Name = name, Value = value});
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Windows.Controls;
@@ -10,6 +11,7 @@ namespace CameraControl.Plugins.ExternalDevices
 {
     public class SerialPortShutterRelease : IExternalDevice
     {
+        private SerialPort _serialPort =null;
         #region Implementation of IExternalShutterReleaseSource
 
         public string Name { get; set; }
@@ -30,6 +32,16 @@ namespace CameraControl.Plugins.ExternalDevices
         }
 
         public SourceEnum DeviceType { get; set; }
+        public bool Start(CustomConfig config)
+        {
+           _serialPort=new SerialPort();
+            return true;
+        }
+
+        public bool Stop(CustomConfig config)
+        {
+            return true;
+        }
 
         #endregion
 
