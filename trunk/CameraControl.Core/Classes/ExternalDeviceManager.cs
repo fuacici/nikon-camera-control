@@ -12,23 +12,34 @@ namespace CameraControl.Core.Classes
     /// </summary>
     public class ExternalDeviceManager:BaseFieldClass
     {
-        private AsyncObservableCollection<IExternalShutterReleaseSource> _externalShutterReleaseSources;
-        public AsyncObservableCollection<IExternalShutterReleaseSource> ExternalShutterReleaseSources
+        //private AsyncObservableCollection<IExternalDevice> _externalShutterReleaseSources;
+        //public AsyncObservableCollection<IExternalDevice> ExternalShutterReleaseSources
+        //{
+        //    get { return _externalShutterReleaseSources; }
+        //    set
+        //    {
+        //        _externalShutterReleaseSources = value;
+        //        NotifyPropertyChanged("ExternalShutterReleaseSources");
+        //    }
+        //}
+
+        private AsyncObservableCollection<IExternalDevice> _externalDevices;
+        public AsyncObservableCollection<IExternalDevice> ExternalDevices
         {
-            get { return _externalShutterReleaseSources; }
+            get { return _externalDevices; }
             set
             {
-                _externalShutterReleaseSources = value;
-                NotifyPropertyChanged("ExternalShutterReleaseSources");
+                _externalDevices = value;
+                NotifyPropertyChanged("ExternalDevices");
             }
         }
 
-        public AsyncObservableCollection<string> ExternalShutterReleaseSourcesNames
+        public AsyncObservableCollection<string> ExternalDeviceNames
         {
             get
             {
                 var res = new AsyncObservableCollection<string>();
-                foreach (IExternalShutterReleaseSource externalShutterReleaseSource in ExternalShutterReleaseSources)
+                foreach (IExternalDevice externalShutterReleaseSource in ExternalDevices)
                 {
                     res.Add(externalShutterReleaseSource.Name);
                 }
@@ -36,14 +47,14 @@ namespace CameraControl.Core.Classes
             }
         }
 
-        public IExternalShutterReleaseSource Get(string name)
+        public IExternalDevice Get(string name)
         {
-            return ExternalShutterReleaseSources.FirstOrDefault(externalShutterReleaseSource => externalShutterReleaseSource.Name == name);
+            return ExternalDevices.FirstOrDefault(external => external.Name == name);
         }
 
         public ExternalDeviceManager()
         {
-            ExternalShutterReleaseSources = new AsyncObservableCollection<IExternalShutterReleaseSource>();
+            ExternalDevices = new AsyncObservableCollection<IExternalDevice>();
         }
     }
 }

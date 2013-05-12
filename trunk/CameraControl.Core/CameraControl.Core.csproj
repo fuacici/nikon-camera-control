@@ -163,7 +163,7 @@
     <Compile Include="Classes\WebServer.cs" />
     <Compile Include="Classes\WindowsCmdConsts.cs" />
     <Compile Include="Interfaces\IExportPlugin.cs" />
-    <Compile Include="Interfaces\IExternalShutterReleaseSource.cs" />
+    <Compile Include="Interfaces\IExternalDevice.cs" />
     <Compile Include="Interfaces\IMainWindowPlugin.cs" />
     <Compile Include="Interfaces\IPlugin.cs" />
     <Compile Include="Classes\ActionEventArgs.cs" />

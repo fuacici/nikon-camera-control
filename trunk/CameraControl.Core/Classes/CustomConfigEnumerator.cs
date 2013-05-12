@@ -8,8 +8,8 @@ namespace CameraControl.Core.Classes
 {
     public class CustomConfigEnumerator : BaseFieldClass
     {
-        private AsyncObservableCollection<CameraPreset> _items;
-        public AsyncObservableCollection<CameraPreset> Items
+        private AsyncObservableCollection<CustomConfig> _items;
+        public AsyncObservableCollection<CustomConfig> Items
         {
             get { return _items; }
             set
@@ -22,7 +22,7 @@ namespace CameraControl.Core.Classes
 
         public CustomConfigEnumerator()
         {
-            Items=new AsyncObservableCollection<CameraPreset>();
+            Items=new AsyncObservableCollection<CustomConfig>();
         }
     }
 }

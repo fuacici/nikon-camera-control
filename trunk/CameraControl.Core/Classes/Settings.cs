@@ -496,14 +496,14 @@ namespace CameraControl.Core.Classes
             }
         }
 
-        private CustomConfigEnumerator _customConfigs;
-        public CustomConfigEnumerator CustomConfigs
+        private CustomConfigEnumerator _deviceConfigs;
+        public CustomConfigEnumerator DeviceConfigs
         {
-            get { return _customConfigs; }
+            get { return _deviceConfigs; }
             set
             {
-                _customConfigs = value;
-                NotifyPropertyChanged("CustomConfigs");
+                _deviceConfigs = value;
+                NotifyPropertyChanged("DeviceConfigs");
             }
         }
 
@@ -529,7 +529,7 @@ namespace CameraControl.Core.Classes
                        new VideoType("Super VGA 4:3", 800, 600),
                      };
             CameraProperties = new CameraPropertyEnumerator();
-            CustomConfigs = new CustomConfigEnumerator();
+            DeviceConfigs = new CustomConfigEnumerator();
             ResetSettings();
         }
 

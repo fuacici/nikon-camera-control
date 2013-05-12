@@ -23,7 +23,7 @@ namespace CameraControl.Plugins
                 ServiceProvider.PluginManager.ExportPlugins.Add(new ExportToFolder());
                 ServiceProvider.PluginManager.MainWindowPlugins.Add(new SimpleMainWindow());
                 ServiceProvider.PluginManager.ToolPlugins.Add(new PhdPlugin());
-                ServiceProvider.ExternalDeviceManager.ExternalShutterReleaseSources.Add(new SerialPortShutterRelease());
+                ServiceProvider.ExternalDeviceManager.ExternalDevices.Add(new SerialPortShutterRelease());
             }
             catch (Exception exception)
             {

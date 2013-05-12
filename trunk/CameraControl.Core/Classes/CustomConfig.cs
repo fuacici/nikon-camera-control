@@ -9,7 +9,7 @@ using CameraControl.Devices.Classes;
 
 namespace CameraControl.Core.Classes
 {
-    public class CustomConfig
+    public class CustomConfig:BaseFieldClass
     {
         public string Name { get; set; }
         public AsyncObservableCollection<ValuePair> ConfigData { get; set; }
@@ -20,13 +20,36 @@ namespace CameraControl.Core.Classes
             set
             {
                 _driverName = value;
-                IExternalShutterReleaseSource source = ServiceProvider.ExternalDeviceManager.Get(_driverName);
-                Config = source.GetConfig(this);
+                IExternalDevice source = ServiceProvider.ExternalDeviceManager.Get(_driverName);
+                if (source != null)
+                {
+                    Config = source.GetConfig(this);
+                    SourceEnum = source.DeviceType;
+                }
+                NotifyPropertyChanged("DriverName");
             }
         }
 
         public SourceEnum SourceEnum { get; set; }
+        private UserControl _config;
+
         [XmlIgnore]
-        public UserControl Config { get; set; }
+        public UserControl Config
+        {
+            get
+            {
+                IExternalDevice source = ServiceProvider.ExternalDeviceManager.Get(_driverName);
+                if (source != null)
+                {
+                    _config = source.GetConfig(this);
+                }
+                return _config;
+            }
+            set
+            {
+                _config = value;
+                NotifyPropertyChanged("Config");
+            }
+        }
     }
 }
