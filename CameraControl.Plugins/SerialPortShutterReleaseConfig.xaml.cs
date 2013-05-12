@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -22,6 +23,11 @@ namespace CameraControl.Plugins
         public SerialPortShutterReleaseConfig()
         {
             InitializeComponent();
+            string[] ports = SerialPort.GetPortNames();
+            foreach (string port in ports)
+            {
+                cmb_ports.Items.Add(port);
+            }
         }
     }
 }

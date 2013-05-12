@@ -8,7 +8,7 @@ using CameraControl.Core.Interfaces;
 
 namespace CameraControl.Plugins.ExternalDevices
 {
-    public class SerialPortShutterRelease : IExternalShutterReleaseSource
+    public class SerialPortShutterRelease : IExternalDevice
     {
         #region Implementation of IExternalShutterReleaseSource
 
@@ -29,11 +29,14 @@ namespace CameraControl.Plugins.ExternalDevices
             return new SerialPortShutterReleaseConfig();
         }
 
+        public SourceEnum DeviceType { get; set; }
+
         #endregion
 
         public SerialPortShutterRelease()
         {
             Name = "Serial Port Shutter Release";
+            DeviceType=SourceEnum.ExternaExternalShutterRelease;
         }
     }
 }

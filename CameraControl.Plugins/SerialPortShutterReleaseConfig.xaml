@@ -15,6 +15,6 @@
             <RowDefinition Height="53*" />
         </Grid.RowDefinitions>
         <Label Content="Com port"  />
-        <ComboBox Grid.Column="1" Margin="2" />
+        <ComboBox Grid.Column="1" Margin="2" Name="cmb_ports"/>
     </Grid>
 </UserControl>

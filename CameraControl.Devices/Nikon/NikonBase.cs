@@ -1256,7 +1256,8 @@ namespace CameraControl.Devices.Nikon
                         if (StaticHelper.GetBit(resp, 13))
                             return "LabelWrongLiveViewType";
                         if (StaticHelper.GetBit(resp, 14))
-                            return "LabelNotInApplicationMode";
+                            return "";
+                            //return "LabelNotInApplicationMode";
                     }
                     return "";
                     break;

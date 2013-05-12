@@ -13,6 +13,7 @@ using CameraControl.Devices.Classes;
 using Path = System.IO.Path;
 using CameraControl.Core;
 using HelpProvider = CameraControl.Classes.HelpProvider;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace CameraControl.windows
 {
@@ -111,6 +112,23 @@ namespace CameraControl.windows
         ServiceProvider.Settings.ExternalViewerPath = dialog.FileName;
       }
     }
+
+    private void btn_add_device_Click(object sender, RoutedEventArgs e)
+    {
+        if(ServiceProvider.ExternalDeviceManager.ExternalDevices.Count==0)
+        {
+            MessageBox.Show("No external devices are defined");
+        }
+        ServiceProvider.Settings.DeviceConfigs.Items.Add(new CustomConfig()
+                                                             {
+                                                                 Name = "New device config",
+                                                                 DriverName =
+                                                                     ServiceProvider.ExternalDeviceManager.
+                                                                     ExternalDeviceNames[0]
+                                                             });
+    }
+
+
 
   }
 }
