@@ -51,7 +51,8 @@ namespace CameraControl.Devices.Nikon
         public const int CONST_PROP_ExposureIndicateStatus = 0xD1B1;
         public const int CONST_PROP_RecordingMedia = 0xD10B;
         public const int CONST_PROP_NoiseReduction = 0xD06B;
-
+        public const int CONST_PROP_ApplicationMode = 0xD1F0;
+       
         public const int CONST_Event_DevicePropChanged = 0x4006;
         public const int CONST_Event_StoreFull = 0x400A;
         public const int CONST_Event_CaptureComplete = 0x400D;
