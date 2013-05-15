@@ -613,5 +613,11 @@ namespace CameraControl
                 ServiceProvider.DeviceManager.ConnectedDevices.OrderBy(x => x.DisplayName));
         }
 
+        private void but_star_Click(object sender, RoutedEventArgs e)
+        {
+            BulbWnd wnd = new BulbWnd();
+            wnd.ShowDialog();
+        }
+
     }
 }
