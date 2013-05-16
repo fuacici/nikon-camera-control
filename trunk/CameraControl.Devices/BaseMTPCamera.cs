@@ -9,7 +9,7 @@ using Timer = System.Timers.Timer;
 
 namespace CameraControl.Devices
 {
-    public class DeviceEventArgs:EventArgs
+    public class DeviceEventArgs : EventArgs
     {
         public uint Code { get; set; }
     }
@@ -217,6 +217,11 @@ namespace CameraControl.Devices
             return ExecuteWithNoData(code, param1, CONST_LOOP_TIME, 0);
         }
 
+        public uint ExecuteWithNoData(int code, uint param1, uint param2, uint param3)
+        {
+            return ExecuteWithNoData(code, param1, param2, param3, CONST_LOOP_TIME, 0);
+        }
+
         public uint ExecuteWithNoData(int code)
         {
             return ExecuteWithNoData(code, CONST_LOOP_TIME, 0);
@@ -232,6 +237,25 @@ namespace CameraControl.Devices
             {
                 allok = true;
                 res = StillImageDevice.ExecuteWithNoData(code, param1);
+                if ((res == ErrorCodes.MTP_Device_Busy || res == PortableDeviceErrorCodes.ERROR_BUSY) && counter < loop)
+                {
+                    Thread.Sleep(CONST_READY_TIME);
+                    counter++;
+                    allok = false;
+                }
+            } while (!allok);
+            return res;
+        }
+
+        public uint ExecuteWithNoData(int code, uint param1, uint param2, uint param3, int loop, int counter)
+        {
+            WaitForReady();
+            uint res = 0;
+            bool allok;
+            do
+            {
+                allok = true;
+                res = StillImageDevice.ExecuteWithNoData(code, param1, param2, param3);
                 if ((res == ErrorCodes.MTP_Device_Busy || res == PortableDeviceErrorCodes.ERROR_BUSY) && counter < loop)
                 {
                     Thread.Sleep(CONST_READY_TIME);
@@ -277,6 +301,28 @@ namespace CameraControl.Devices
             {
                 allok = true;
                 res = StillImageDevice.ExecuteReadDataEx(code, param1, param2);
+                if ((res.ErrorCode == ErrorCodes.MTP_Device_Busy || res.ErrorCode == PortableDeviceErrorCodes.ERROR_BUSY) &&
+                    counter < loop)
+                {
+                    Thread.Sleep(CONST_READY_TIME);
+                    counter++;
+                    allok = false;
+                }
+            } while (!allok);
+            DeviceIsBusy = false;
+            return res;
+        }
+
+        public MTPDataResponse ExecuteReadDataEx(int code, uint param1, uint param2, uint param3, int loop, int counter)
+        {
+            WaitForReady();
+            DeviceIsBusy = true;
+            MTPDataResponse res = new MTPDataResponse();
+            bool allok;
+            do
+            {
+                allok = true;
+                res = StillImageDevice.ExecuteReadDataEx(code, param1, param2, param3);
                 if ((res.ErrorCode == ErrorCodes.MTP_Device_Busy || res.ErrorCode == PortableDeviceErrorCodes.ERROR_BUSY) &&
                     counter < loop)
                 {
@@ -338,6 +384,47 @@ namespace CameraControl.Devices
                 {
                     retry = false;
                     uint resp = StillImageDevice.ExecuteWriteData(code, data, param1, param2);
+                    if (resp != 0 || resp != ErrorCodes.MTP_OK)
+                    {
+                        //Console.WriteLine("Retry ...." + resp.ToString("X"));
+                        if (resp == ErrorCodes.MTP_Device_Busy || resp == 0x800700AA)
+                        {
+                            Thread.Sleep(100);
+                            retry = true;
+                            retrynum++;
+                        }
+                        else
+                        {
+                            ErrorCodes.GetException(resp);
+                        }
+                    }
+                }
+                catch (Exception exception)
+                {
+                    Log.Debug("Error set property :" + param1.ToString("X"), exception);
+                }
+            } while (retry);
+            if (timerstate)
+                _timer.Start();
+        }
+
+        public void SetProperty(int code, byte[] data, uint param1, uint param2, uint param3)
+        {
+            bool timerstate = _timer.Enabled;
+            _timer.Stop();
+            bool retry = false;
+            int retrynum = 0;
+            //DeviceReady();
+            do
+            {
+                if (retrynum > 5)
+                {
+                    return;
+                }
+                try
+                {
+                    retry = false;
+                    uint resp = StillImageDevice.ExecuteWriteData(code, data, param1, param2, param3);
                     if (resp != 0 || resp != ErrorCodes.MTP_OK)
                     {
                         //Console.WriteLine("Retry ...." + resp.ToString("X"));
