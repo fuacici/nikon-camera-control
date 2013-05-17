@@ -47,6 +47,16 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        public List<CustomConfig> ExternalShutters
+        {
+            get
+            {
+                return ServiceProvider.Settings.DeviceConfigs.Items.Where(config => config.SourceEnum == SourceEnum.ExternaExternalShutterRelease).ToList();
+            }
+            
+        }
+
+
         public IExternalDevice Get(string name)
         {
             return ExternalDevices.FirstOrDefault(external => external.Name == name);
