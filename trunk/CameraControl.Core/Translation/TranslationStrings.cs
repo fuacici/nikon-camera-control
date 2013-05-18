@@ -341,5 +341,6 @@ namespace CameraControl.Core.Translation
         public static string LabelAstrology = "Astrology";
         public static string LabelEnable = "Enable";
         public static string LabelUseConfiguration = "Use configuration";
+        public static string LabelNoExternalDeviceSelected = "No external device is selected";
     }
 }
