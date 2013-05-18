@@ -11,7 +11,7 @@ namespace CameraControl.Plugins.ExternalDevices
 {
     public class SerialPortShutterRelease : IExternalDevice
     {
-        private SerialPort _serialPort =null;
+
         #region Implementation of IExternalShutterReleaseSource
 
         public string Name { get; set; }
@@ -28,18 +28,30 @@ namespace CameraControl.Plugins.ExternalDevices
 
         public UserControl GetConfig(CustomConfig config)
         {
-            return new SerialPortShutterReleaseConfig();
+            return new SerialPortShutterReleaseConfig(config);
         }
 
         public SourceEnum DeviceType { get; set; }
         public bool Start(CustomConfig config)
         {
-           _serialPort=new SerialPort();
+            if (config.AttachedObject != null)
+                Stop(config);
+            SerialPort serialPort = new SerialPort(config.Get("Port"));
+            serialPort.Open();
+            serialPort.RtsEnable = true;
+            config.AttachedObject = serialPort;
             return true;
         }
 
         public bool Stop(CustomConfig config)
         {
+            if (config.AttachedObject == null)
+                return false;
+            SerialPort serialPort = config.AttachedObject as SerialPort;
+            if (serialPort == null) throw new ArgumentNullException("serialPort");
+            serialPort.RtsEnable = false;
+            serialPort.Close();
+            config.AttachedObject = null;
             return true;
         }
 

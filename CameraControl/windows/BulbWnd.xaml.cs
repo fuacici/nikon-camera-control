@@ -5,8 +5,11 @@ using System.Timers;
 using System.Windows;
 using CameraControl.Classes;
 using CameraControl.Core;
+using CameraControl.Core.Classes;
+using CameraControl.Core.Translation;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
+using MessageBox = System.Windows.Forms.MessageBox;
 using Timer = System.Timers.Timer;
 
 namespace CameraControl.windows
@@ -90,6 +93,18 @@ namespace CameraControl.windows
             }
         }
 
+        private CustomConfig _selectedConfig;
+        public CustomConfig SelectedConfig
+        {
+            get { return _selectedConfig; }
+            set
+            {
+                _selectedConfig = value;
+                NotifyPropertyChanged("SelectedConfig");
+            }
+        }
+
+
         public BulbWnd()
         {
             CameraDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
@@ -166,8 +181,29 @@ namespace CameraControl.windows
                 try
                 {
                     Log.Debug("Bulb capture started");
-                    CameraDevice.LockCamera();
-                    CameraDevice.StartBulbMode();
+                    if (UseExternal)
+                    {
+                        if (SelectedConfig != null)
+                        {
+                            ServiceProvider.ExternalDeviceManager.Start(SelectedConfig);
+                        }
+                        else
+                        {
+                            MessageBox.Show(TranslationStrings.LabelNoExternalDeviceSelected);
+                        }
+                    }
+                    else
+                    {
+                        if (CameraDevice.GetCapability(CapabilityEnum.Bulb))
+                        {
+                            CameraDevice.LockCamera();
+                            CameraDevice.StartBulbMode();
+                        }
+                        else
+                        {
+                            StaticHelper.Instance.SystemMessage = TranslationStrings.MsgBulbModeNotSupported;
+                        }
+                    }
                 }
                 catch (DeviceException deviceException)
                 {
@@ -229,7 +265,28 @@ namespace CameraControl.windows
                 retry = false;
                 try
                 {
-                    CameraDevice.EndBulbMode();
+                    if (UseExternal)
+                    {
+                        if (SelectedConfig != null)
+                        {
+                            ServiceProvider.ExternalDeviceManager.Stop(SelectedConfig);
+                        }
+                        else
+                        {
+                            MessageBox.Show(TranslationStrings.LabelNoExternalDeviceSelected);
+                        }
+                    }
+                    else
+                    {
+                        if (CameraDevice.GetCapability(CapabilityEnum.Bulb))
+                        {
+                            CameraDevice.EndBulbMode();
+                        }
+                        else
+                        {
+                            StaticHelper.Instance.SystemMessage = TranslationStrings.MsgBulbModeNotSupported;
+                        }
+                    }
                     StaticHelper.Instance.SystemMessage = "Capture done";
                     Log.Debug("Bulb capture done");
                 }

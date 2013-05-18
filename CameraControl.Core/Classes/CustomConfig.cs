@@ -13,6 +13,9 @@ namespace CameraControl.Core.Classes
     {
         public string Name { get; set; }
         public AsyncObservableCollection<ValuePair> ConfigData { get; set; }
+        [XmlIgnore]
+        public object AttachedObject { get; set; }
+
         private string _driverName;
         public string DriverName
         {

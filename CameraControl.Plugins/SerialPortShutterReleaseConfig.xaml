@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="61" d:DesignWidth="368">
+             d:DesignHeight="61" d:DesignWidth="368" xmlns:my="clr-namespace:CameraControl.Plugins">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150*" />
@@ -15,6 +15,6 @@
             <RowDefinition Height="53*" />
         </Grid.RowDefinitions>
         <Label Content="Com port"  />
-        <ComboBox Grid.Column="1" Margin="2" Name="cmb_ports"/>
+        <ComboBox Grid.Column="1" Margin="2" Name="cmb_ports" SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:SerialPortShutterReleaseConfig, AncestorLevel=1}, Path=Port}"/>
     </Grid>
 </UserControl>

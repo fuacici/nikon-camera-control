@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CameraControl.Core.Classes;
 
 namespace CameraControl.Plugins
 {
@@ -20,8 +21,18 @@ namespace CameraControl.Plugins
     /// </summary>
     public partial class SerialPortShutterReleaseConfig : UserControl
     {
-        public SerialPortShutterReleaseConfig()
+        public CustomConfig CustomConfig { get; set; }
+
+
+        public string Port
         {
+            get { return CustomConfig.Get("Port"); }
+            set { CustomConfig.Set("Port", value); }
+        }
+
+        public SerialPortShutterReleaseConfig(CustomConfig config)
+        {
+            CustomConfig = config;
             InitializeComponent();
             string[] ports = SerialPort.GetPortNames();
             foreach (string port in ports)

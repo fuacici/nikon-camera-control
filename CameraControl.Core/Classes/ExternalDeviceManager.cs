@@ -66,5 +66,15 @@ namespace CameraControl.Core.Classes
         {
             ExternalDevices = new AsyncObservableCollection<IExternalDevice>();
         }
+
+        public bool Start(CustomConfig config)
+        {
+            return (from device in ExternalDevices where device.Name == config.DriverName select device.Start(config)).FirstOrDefault();
+        }
+
+        public bool Stop(CustomConfig config)
+        {
+            return (from device in ExternalDevices where device.Name == config.DriverName select device.Stop(config)).FirstOrDefault();
+        }
     }
 }
