@@ -342,5 +342,8 @@ namespace CameraControl.Core.Translation
         public static string LabelEnable = "Enable";
         public static string LabelUseConfiguration = "Use configuration";
         public static string LabelNoExternalDeviceSelected = "No external device is selected";
+        public static string LabelScript = "Script";
+        public static string LabelStartScript = "Start Script";
+        public static string LabelStopScript = "Stop Script";
     }
 }
