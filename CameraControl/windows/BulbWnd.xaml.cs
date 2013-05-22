@@ -6,6 +6,7 @@ using System.Windows;
 using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
+using CameraControl.Core.Scripting;
 using CameraControl.Core.Translation;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
@@ -104,6 +105,16 @@ namespace CameraControl.windows
             }
         }
 
+        private ScriptObject _defaultScript;
+        public ScriptObject DefaultScript
+        {
+            get { return _defaultScript; }
+            set
+            {
+                _defaultScript = value;
+                NotifyPropertyChanged("DefaultScript");
+            }
+        }
 
         public BulbWnd()
         {
@@ -121,6 +132,8 @@ namespace CameraControl.windows
         private void Init()
         {
             //NoAutofocus = true;
+            AddCommand = new RelayCommand<IScriptCommand>(AddCommandMethod);
+            DefaultScript = new ScriptObject();
             CaptureTime = 60;
             NumOfPhotos = 1;
             WaitTime = 0;
@@ -128,6 +141,11 @@ namespace CameraControl.windows
             _captureTimer.Elapsed += _captureTimer_Elapsed;
             _waitTimer.Elapsed += _waitTimer_Elapsed;
             ServiceProvider.Settings.ApplyTheme(this);
+        }
+
+        public void AddCommandMethod(IScriptCommand command)
+        {
+            DefaultScript.Commands.Add(command);
         }
 
         void _waitTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -225,6 +243,12 @@ namespace CameraControl.windows
             _waitSecs = 0;
             _captureSecs = 0;
             _captureTimer.Start();
+        }
+
+        public RelayCommand<IScriptCommand> AddCommand
+        {
+            get;
+            private set;
         }
 
         #region Implementation of INotifyPropertyChanged

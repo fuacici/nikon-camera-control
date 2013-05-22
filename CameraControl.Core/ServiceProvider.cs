@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using CameraControl.Core.Classes;
+using CameraControl.Core.Scripting;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using log4net;
@@ -27,6 +28,7 @@ namespace CameraControl.Core
         public static QueueManager QueueManager { get; set; }
         public static PluginManager PluginManager { get; set; }
         public static Branding Branding { get; set; }
+        public static ScriptManager ScriptManager { get; set; }
         public static ExternalDeviceManager ExternalDeviceManager { get; set; }
 
 
@@ -43,6 +45,7 @@ namespace CameraControl.Core
             ActionManager = new ActionManager();
             QueueManager = new QueueManager();
             Branding = new Branding();
+            ScriptManager = new ScriptManager();
             PluginManager = new PluginManager();
 
         }
