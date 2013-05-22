@@ -184,6 +184,10 @@
     <Compile Include="Interfaces\IWindow.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scripting\IScriptCommand.cs" />
+    <Compile Include="Scripting\ScriptCommands\BulbCapture.cs" />
+    <Compile Include="Scripting\ScriptManager.cs" />
+    <Compile Include="Scripting\ScriptObject.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="Translation\TranslateConverter.cs" />
     <Compile Include="Translation\TranslateExtension.cs" />

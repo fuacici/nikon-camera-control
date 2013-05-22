@@ -81,13 +81,23 @@
                     <RowDefinition Height="32*" />
                 </Grid.RowDefinitions>
                 <Menu Name="menu1">
-                    <MenuItem Header="Add" />
+                    <MenuItem Header="Add">
+                        <MenuItem Header="Commands" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.ScriptManager}, Path=AvaiableCommands}" >
+                            <MenuItem.ItemTemplate>
+                                <DataTemplate>
+                                    <MenuItem Header="{Binding Path=Name}" 
+                                      Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}, Path=AddCommand}" 
+                                      CommandParameter="{Binding}" />
+                                </DataTemplate>
+                            </MenuItem.ItemTemplate>
+                        </MenuItem>
+                    </MenuItem>
                     <MenuItem Header="Edit" />
                     <MenuItem Header="Delete" />
                     <MenuItem Header="Save" />
                     <MenuItem Header="Load" />
                 </Menu>
-                <ListBox Grid.Row="1" Name="listBox1" />
+                <ListBox Grid.Row="1" ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}, Path=DefaultScript.Commands}" DisplayMemberPath="DisplayName"/>
                 <Button Content="{T:TranslateExtension LabelStartScript}" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="6,4,0,0" Name="button1" VerticalAlignment="Top" Width="100" />
                 <Button Content="{T:TranslateExtension LabelStopScript}" Grid.Row="2" Height="23" Margin="0,4,6,0" Name="button2" VerticalAlignment="Top" HorizontalAlignment="Right" Width="100" />
             </Grid>
