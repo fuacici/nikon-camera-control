@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace CameraControl.Core.Scripting.ScriptCommands
 {
-    class BulbCapture : IScriptCommand
+    public class BulbCapture : IScriptCommand
     {
         #region Implementation of IScriptCommand
 
@@ -16,9 +16,18 @@ namespace CameraControl.Core.Scripting.ScriptCommands
             return true;
         }
 
-        public XmlNode Save()
+        public IScriptCommand Create()
         {
-            return null;
+            return new BulbCapture();
+        }
+
+        public XmlNode Save(XmlDocument doc)
+        {
+            XmlNode nameNode = doc.CreateElement("BulbCapture");
+            XmlAttribute attribute = doc.CreateAttribute("CaptureTime");
+            attribute.Value = CaptureTime.ToString();
+            nameNode.Attributes.Append(attribute);
+            return nameNode;
         }
 
         public void Load(XmlNode node)
@@ -40,10 +49,13 @@ namespace CameraControl.Core.Scripting.ScriptCommands
 
         public UserControl GetConfig()
         {
-            return null;
+            return new BulbCaptureControl(this);
         }
 
         #endregion
+
+        public int CaptureTime { get; set; }
+
 
         public BulbCapture()
         {

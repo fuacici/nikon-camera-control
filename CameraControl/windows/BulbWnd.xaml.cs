@@ -116,6 +116,7 @@ namespace CameraControl.windows
             }
         }
 
+
         public BulbWnd()
         {
             CameraDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
@@ -133,6 +134,7 @@ namespace CameraControl.windows
         {
             //NoAutofocus = true;
             AddCommand = new RelayCommand<IScriptCommand>(AddCommandMethod);
+            EditCommand = new RelayCommand<IScriptCommand>(EditCommandMethod);
             DefaultScript = new ScriptObject();
             CaptureTime = 60;
             NumOfPhotos = 1;
@@ -145,7 +147,18 @@ namespace CameraControl.windows
 
         public void AddCommandMethod(IScriptCommand command)
         {
-            DefaultScript.Commands.Add(command);
+            IScriptCommand scriptCommand = command.Create();
+            EditCommandMethod(scriptCommand);
+            DefaultScript.Commands.Add(scriptCommand);
+            lst_commands.SelectedItem = scriptCommand;
+        }
+
+        public void EditCommandMethod(IScriptCommand command)
+        {
+            if (command == null)
+                return;
+            var dlg = new ScriptCommandEdit(command.GetConfig());
+            dlg.ShowDialog();
         }
 
         void _waitTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -251,6 +264,12 @@ namespace CameraControl.windows
             private set;
         }
 
+        public RelayCommand<IScriptCommand> EditCommand
+        {
+            get;
+            private set;
+        }
+
         #region Implementation of INotifyPropertyChanged
 
         public virtual event PropertyChangedEventHandler PropertyChanged;
@@ -347,6 +366,11 @@ namespace CameraControl.windows
         private void btn_help_Click(object sender, RoutedEventArgs e)
         {
             HelpProvider.Run(HelpSections.Bulb);
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ServiceProvider.ScriptManager.Save(DefaultScript,"d:\\test.xml");
         }
 
     }

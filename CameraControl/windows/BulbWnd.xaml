@@ -92,12 +92,14 @@
                             </MenuItem.ItemTemplate>
                         </MenuItem>
                     </MenuItem>
-                    <MenuItem Header="Edit" />
+                    <MenuItem Header="Edit" 
+                              Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}, Path=EditCommand}" 
+                              CommandParameter="{Binding ElementName=lst_commands, Path=SelectedItem}"/>
                     <MenuItem Header="Delete" />
-                    <MenuItem Header="Save" />
+                    <MenuItem Header="Save" Click="MenuItem_Click" />
                     <MenuItem Header="Load" />
                 </Menu>
-                <ListBox Grid.Row="1" ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}, Path=DefaultScript.Commands}" DisplayMemberPath="DisplayName"/>
+                <ListBox Grid.Row="1" ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}, Path=DefaultScript.Commands}" DisplayMemberPath="DisplayName" Name="lst_commands"/>
                 <Button Content="{T:TranslateExtension LabelStartScript}" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="6,4,0,0" Name="button1" VerticalAlignment="Top" Width="100" />
                 <Button Content="{T:TranslateExtension LabelStopScript}" Grid.Row="2" Height="23" Margin="0,4,6,0" Name="button2" VerticalAlignment="Top" HorizontalAlignment="Right" Width="100" />
             </Grid>
