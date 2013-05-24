@@ -246,9 +246,7 @@ namespace CameraControl
                 {
                     if (ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.Bulb))
                     {
-                        BulbWnd wnd = new BulbWnd();
-                        wnd.ShowDialog();
-                        return;
+                        ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.BulbWnd_Show, ServiceProvider.DeviceManager.SelectedCameraDevice); return;
                     }
                     else
                     {
@@ -432,9 +430,7 @@ namespace CameraControl
                 {
                     if (ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.Bulb))
                     {
-                        BulbWnd wnd = new BulbWnd();
-                        wnd.ShowDialog();
-                        return;
+                        ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.BulbWnd_Show, ServiceProvider.DeviceManager.SelectedCameraDevice); return;
                     }
                     else
                     {
@@ -615,8 +611,7 @@ namespace CameraControl
 
         private void but_star_Click(object sender, RoutedEventArgs e)
         {
-            BulbWnd wnd = new BulbWnd();
-            wnd.ShowDialog();
+            ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.BulbWnd_Show, ServiceProvider.DeviceManager.SelectedCameraDevice);
         }
 
     }
