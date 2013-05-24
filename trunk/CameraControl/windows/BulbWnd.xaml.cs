@@ -353,14 +353,7 @@ namespace CameraControl.windows
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            if (_captureTimer.Enabled)
-            {
-                StopCaptureThread();
-                CameraDevice.UnLockCamera();
-            }
-            _captureTimer.Stop();
-            _waitTimer.Stop();
-            ServiceProvider.ScriptManager.Save(DefaultScript, _defaultScriptFile);
+
         }
 
         private void btn_help_Click(object sender, RoutedEventArgs e)
@@ -422,23 +415,31 @@ namespace CameraControl.windows
                         return;
                     Init();
                     Dispatcher.Invoke(new Action(delegate
-                    {
-                        Show();
-                        Activate();
-                        Topmost = true;
-                        //Topmost = false;
-                        Focus();
-                    }));
+                                                     {
+                                                         Show();
+                                                         Activate();
+                                                         Topmost = true;
+                                                         //Topmost = false;
+                                                         Focus();
+                                                     }));
                     break;
                 case WindowsCmdConsts.BulbWnd_Hide:
+                    if (_captureTimer.Enabled)
+                    {
+                        StopCaptureThread();
+                        CameraDevice.UnLockCamera();
+                    }
+                    _captureTimer.Stop();
+                    _waitTimer.Stop();
+                    ServiceProvider.ScriptManager.Save(DefaultScript, _defaultScriptFile);
                     Hide();
                     break;
                 case CmdConsts.All_Close:
                     Dispatcher.Invoke(new Action(delegate
-                    {
-                        Hide();
-                        Close();
-                    }));
+                                                     {
+                                                         Hide();
+                                                         Close();
+                                                     }));
                     break;
             }
         }

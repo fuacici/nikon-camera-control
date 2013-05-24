@@ -5,36 +5,44 @@ using System.Text;
 using System.Threading;
 using System.Windows.Controls;
 using System.Xml;
+using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 
 namespace CameraControl.Core.Scripting.ScriptCommands
 {
-    public class BulbCapture :BaseFieldClass, IScriptCommand
+    public class BulbCapture : BaseScript
     {
         #region Implementation of IScriptCommand
 
-        public bool Execute(ScriptObject scriptObject)
+        public override bool Execute(ScriptObject scriptObject)
         {
+            StaticHelper.Instance.SystemMessage = "Bulb capture started";
             Executing = true;
             scriptObject.CameraDevice.IsoNumber.SetValue(Iso);
             Thread.Sleep(200);
             scriptObject.CameraDevice.FNumber.SetValue(Aperture);
             Thread.Sleep(200);
             scriptObject.StartCapture();
-            Thread.Sleep(CaptureTime*1000);
+            Thread.Sleep(200);
+            for (int i = 0; i < CaptureTime; i++)
+            {
+                Thread.Sleep(1000);
+                StaticHelper.Instance.SystemMessage = string.Format("Bulb capture in progress .... {0}/{1}", i + 1, CaptureTime);
+            }
             scriptObject.StopCapture();
             Thread.Sleep(200);
             Executing = false;
             IsExecuted = true;
+            StaticHelper.Instance.SystemMessage = "Bulb capture done";
             return true;
         }
 
-        public IScriptCommand Create()
+        public override IScriptCommand Create()
         {
             return new BulbCapture();
         }
 
-        public XmlNode Save(XmlDocument doc)
+        public override XmlNode Save(XmlDocument doc)
         {
             XmlNode nameNode = doc.CreateElement("BulbCapture");
             nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "CaptureTime", CaptureTime.ToString()));
@@ -43,7 +51,7 @@ namespace CameraControl.Core.Scripting.ScriptCommands
             return nameNode;
         }
 
-        public IScriptCommand Load(XmlNode node)
+        public override IScriptCommand Load(XmlNode node)
         {
             BulbCapture res = new BulbCapture
                                   {
@@ -54,19 +62,13 @@ namespace CameraControl.Core.Scripting.ScriptCommands
             return res;
         }
 
-        public bool IsExecuted { get; set; }
-
-        public bool Executing { get; set; }
-
-        public string Name { get; set; }
-
-        public string DisplayName
+        public override string DisplayName
         {
             get { return string.Format("[{0}][CaptureTime={1}, Iso={2}, Aperture={3}]", Name, CaptureTime, Iso,Aperture); }
             set { }
         }
 
-        public UserControl GetConfig()
+        public override UserControl GetConfig()
         {
             return new BulbCaptureControl(this);
         }
