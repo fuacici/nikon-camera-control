@@ -189,9 +189,14 @@
     <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripting\IScriptCommand.cs" />
+    <Compile Include="Scripting\ScriptCommands\BaseScript.cs" />
     <Compile Include="Scripting\ScriptCommands\BulbCapture.cs" />
     <Compile Include="Scripting\ScriptCommands\BulbCaptureControl.xaml.cs">
       <DependentUpon>BulbCaptureControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Scripting\ScriptCommands\WaitCommand.cs" />
+    <Compile Include="Scripting\ScriptCommands\WaitCommandControl.xaml.cs">
+      <DependentUpon>WaitCommandControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Scripting\ScriptManager.cs" />
     <Compile Include="Scripting\ScriptObject.cs" />
@@ -227,6 +232,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Scripting\ScriptCommands\BulbCaptureControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Scripting\ScriptCommands\WaitCommandControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

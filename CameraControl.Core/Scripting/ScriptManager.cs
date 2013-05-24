@@ -29,7 +29,7 @@ namespace CameraControl.Core.Scripting
 
         public ScriptManager()
         {
-            AvaiableCommands = new List<IScriptCommand> {new BulbCapture()};
+            AvaiableCommands = new List<IScriptCommand> {new BulbCapture(), new WaitCommand()};
         }
 
         public void Save(ScriptObject scriptObject, string fileName)
@@ -103,11 +103,13 @@ namespace CameraControl.Core.Scripting
         {
             try
             {
+                StaticHelper.Instance.SystemMessage = "Script execution started";
                 ScriptObject scriptObject = o as ScriptObject;
                 foreach (IScriptCommand scriptCommand in scriptObject.Commands)
                 {
                     scriptCommand.Execute(scriptObject);
                 }
+                StaticHelper.Instance.SystemMessage = "Script execution done";
             }
             catch (Exception exception)
             {
