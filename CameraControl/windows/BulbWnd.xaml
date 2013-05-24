@@ -97,7 +97,7 @@
                               CommandParameter="{Binding ElementName=lst_commands, Path=SelectedItem}"/>
                     <MenuItem Header="Delete" />
                     <MenuItem Header="Save" Click="MenuItem_Click" />
-                    <MenuItem Header="Load" />
+                    <MenuItem Header="Load" Click="MenuItem_Click_1" />
                 </Menu>
                 <ListBox Grid.Row="1" ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}, Path=DefaultScript.Commands}" DisplayMemberPath="DisplayName" Name="lst_commands"/>
                 <Button Content="{T:TranslateExtension LabelStartScript}" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="6,4,0,0" Name="button1" VerticalAlignment="Top" Width="100" />

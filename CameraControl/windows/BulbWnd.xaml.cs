@@ -373,5 +373,10 @@ namespace CameraControl.windows
             ServiceProvider.ScriptManager.Save(DefaultScript,"d:\\test.xml");
         }
 
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            DefaultScript = ServiceProvider.ScriptManager.Load( "d:\\test.xml");
+        }
+
     }
 }
