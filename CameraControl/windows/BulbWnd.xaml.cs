@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Threading;
 using System.Timers;
 using System.Windows;
@@ -10,6 +11,7 @@ using CameraControl.Core.Scripting;
 using CameraControl.Core.Translation;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
+using Microsoft.Win32;
 using MessageBox = System.Windows.Forms.MessageBox;
 using Timer = System.Timers.Timer;
 
@@ -25,6 +27,7 @@ namespace CameraControl.windows
         private int _captureSecs;
         private int _waitSecs;
         private int _photoCount = 0;
+        private string _defaultScriptFile = "";
 
         public ICameraDevice CameraDevice { get; set; }
         private bool _noAutofocus;
@@ -83,27 +86,6 @@ namespace CameraControl.windows
             }
         }
 
-        private bool _useExternal;
-        public bool UseExternal
-        {
-            get { return _useExternal; }
-            set
-            {
-                _useExternal = value;
-                NotifyPropertyChanged("UseExternal");
-            }
-        }
-
-        private CustomConfig _selectedConfig;
-        public CustomConfig SelectedConfig
-        {
-            get { return _selectedConfig; }
-            set
-            {
-                _selectedConfig = value;
-                NotifyPropertyChanged("SelectedConfig");
-            }
-        }
 
         private ScriptObject _defaultScript;
         public ScriptObject DefaultScript
@@ -135,7 +117,13 @@ namespace CameraControl.windows
             //NoAutofocus = true;
             AddCommand = new RelayCommand<IScriptCommand>(AddCommandMethod);
             EditCommand = new RelayCommand<IScriptCommand>(EditCommandMethod);
+            DelCommand = new RelayCommand<IScriptCommand>(DelCommandMethod);
             DefaultScript = new ScriptObject();
+            _defaultScriptFile = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), Settings.AppName,
+                "default.dccscript");
+            if (File.Exists(_defaultScriptFile))
+                DefaultScript = ServiceProvider.ScriptManager.Load(_defaultScriptFile);
             CaptureTime = 60;
             NumOfPhotos = 1;
             WaitTime = 0;
@@ -159,6 +147,18 @@ namespace CameraControl.windows
                 return;
             var dlg = new ScriptCommandEdit(command.GetConfig());
             dlg.ShowDialog();
+        }
+
+        public void DelCommandMethod(IScriptCommand command)
+        {
+            if (command == null)
+                return;
+            int ind = DefaultScript.Commands.IndexOf(command);
+            DefaultScript.Commands.Remove(command);
+            if (ind >= DefaultScript.Commands.Count)
+                ind = DefaultScript.Commands.Count - 1;
+            if (ind > 0)
+                lst_commands.SelectedItem = DefaultScript.Commands[ind];
         }
 
         void _waitTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -212,11 +212,11 @@ namespace CameraControl.windows
                 try
                 {
                     Log.Debug("Bulb capture started");
-                    if (UseExternal)
+                    if (DefaultScript.UseExternal)
                     {
-                        if (SelectedConfig != null)
+                        if (DefaultScript.SelectedConfig != null)
                         {
-                            ServiceProvider.ExternalDeviceManager.Start(SelectedConfig);
+                            ServiceProvider.ExternalDeviceManager.Start(DefaultScript.SelectedConfig);
                         }
                         else
                         {
@@ -270,6 +270,12 @@ namespace CameraControl.windows
             private set;
         }
 
+        public RelayCommand<IScriptCommand> DelCommand
+        {
+            get;
+            private set;
+        }
+
         #region Implementation of INotifyPropertyChanged
 
         public virtual event PropertyChangedEventHandler PropertyChanged;
@@ -308,11 +314,11 @@ namespace CameraControl.windows
                 retry = false;
                 try
                 {
-                    if (UseExternal)
+                    if (DefaultScript.UseExternal)
                     {
-                        if (SelectedConfig != null)
+                        if (DefaultScript.SelectedConfig != null)
                         {
-                            ServiceProvider.ExternalDeviceManager.Stop(SelectedConfig);
+                            ServiceProvider.ExternalDeviceManager.Stop(DefaultScript.SelectedConfig);
                         }
                         else
                         {
@@ -361,6 +367,7 @@ namespace CameraControl.windows
             }
             _captureTimer.Stop();
             _waitTimer.Stop();
+            ServiceProvider.ScriptManager.Save(DefaultScript, _defaultScriptFile);
         }
 
         private void btn_help_Click(object sender, RoutedEventArgs e)
@@ -370,12 +377,44 @@ namespace CameraControl.windows
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            ServiceProvider.ScriptManager.Save(DefaultScript,"d:\\test.xml");
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Filter = "Script file(*.dccscript)|*.dccscript|All files|*.*";
+            if (dlg.ShowDialog() == true)
+            {
+                try
+                {
+                    ServiceProvider.ScriptManager.Save(DefaultScript, dlg.FileName);
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("Error saving script file" + exception.Message);
+                    Log.Error("Error saving script file", exception);
+                }
+            }
         }
 
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
-            DefaultScript = ServiceProvider.ScriptManager.Load( "d:\\test.xml");
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = "Script file(*.dccscript)|*.dccscript|All files|*.*";
+            if(dlg.ShowDialog()==true)
+            {
+                try
+                {
+                    DefaultScript = ServiceProvider.ScriptManager.Load(dlg.FileName);
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("Error loading script file" + exception.Message);
+                    Log.Error("Error loading script file", exception);
+                }
+            }
+        }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            DefaultScript.CameraDevice = CameraDevice;
+            ServiceProvider.ScriptManager.Execute(DefaultScript);
         }
 
     }

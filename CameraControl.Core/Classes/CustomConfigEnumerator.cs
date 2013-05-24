@@ -24,5 +24,10 @@ namespace CameraControl.Core.Classes
         {
             Items=new AsyncObservableCollection<CustomConfig>();
         }
+
+        public CustomConfig Get(string name)
+        {
+            return Items.FirstOrDefault(customConfig => customConfig.Name == name);
+        }
     }
 }

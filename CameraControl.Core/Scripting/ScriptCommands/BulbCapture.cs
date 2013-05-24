@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Controls;
 using System.Xml;
 using CameraControl.Devices.Classes;
@@ -12,8 +13,19 @@ namespace CameraControl.Core.Scripting.ScriptCommands
     {
         #region Implementation of IScriptCommand
 
-        public bool Execute()
+        public bool Execute(ScriptObject scriptObject)
         {
+            Executing = true;
+            scriptObject.CameraDevice.IsoNumber.SetValue(Iso);
+            Thread.Sleep(200);
+            scriptObject.CameraDevice.FNumber.SetValue(Aperture);
+            Thread.Sleep(200);
+            scriptObject.StartCapture();
+            Thread.Sleep(CaptureTime*1000);
+            scriptObject.StopCapture();
+            Thread.Sleep(200);
+            Executing = false;
+            IsExecuted = true;
             return true;
         }
 
@@ -25,9 +37,9 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         public XmlNode Save(XmlDocument doc)
         {
             XmlNode nameNode = doc.CreateElement("BulbCapture");
-            nameNode.Attributes.Append(CreateAttribute(doc, "CaptureTime", CaptureTime.ToString()));
-            nameNode.Attributes.Append(CreateAttribute(doc, "Iso", Iso));
-            nameNode.Attributes.Append(CreateAttribute(doc, "Aperture", Aperture));
+            nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "CaptureTime", CaptureTime.ToString()));
+            nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "Iso", Iso));
+            nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "Aperture", Aperture));
             return nameNode;
         }
 
@@ -35,9 +47,9 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         {
             BulbCapture res = new BulbCapture
                                   {
-                                      CaptureTime = Convert.ToInt32(GetValue(node,"CaptureTime")),
-                                      Iso = GetValue(node,"Iso"),
-                                      Aperture = GetValue(node,"Aperture")
+                                      CaptureTime = Convert.ToInt32(ScriptManager.GetValue(node, "CaptureTime")),
+                                      Iso = ScriptManager.GetValue(node, "Iso"),
+                                      Aperture = ScriptManager.GetValue(node, "Aperture")
                                   };
             return res;
         }
@@ -103,20 +115,6 @@ namespace CameraControl.Core.Scripting.ScriptCommands
             IsExecuted = false;
             Executing = false;
             CaptureTime = 30;
-        }
-
-        public string GetValue(XmlNode node, string atribute)
-        {
-            if (node.Attributes != null && node.Attributes[atribute] == null)
-                return "";
-            return node.Attributes[atribute].Value;
-        }
-
-        public XmlAttribute CreateAttribute(XmlDocument doc, string name,string val)
-        {
-            XmlAttribute attribute = doc.CreateAttribute(name);
-            attribute.Value = val;
-            return attribute;
         }
 
     }
