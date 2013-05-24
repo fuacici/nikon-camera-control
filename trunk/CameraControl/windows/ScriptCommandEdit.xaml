@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                      Title="ScriptCommandEdit" Height="277" Width="484" Topmost="True" WindowStartupLocation="CenterOwner">
+                      Title="ScriptCommandEdit" Height="277" Width="484" Topmost="True" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -25,6 +25,6 @@
             <RowDefinition Height="42*" />
         </Grid.RowDefinitions>
         <Button Content="Close" Grid.Row="1" Height="23" HorizontalAlignment="Left" Margin="12,7,0,0" Name="button1" VerticalAlignment="Top" Width="75" Click="button1_Click" />
-        <StackPanel Name="stackPanel" />
+        <StackPanel Name="stackPanel" Margin="5"/>
     </Grid>
 </Controls:MetroWindow>

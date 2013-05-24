@@ -7,7 +7,7 @@ Name digiCamControl
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 1.0.534
+!define VERSION 1.0.540
 !define COMPANY "Duka Istvan"
 !define URL http://www.digicamcontrol.com/
 

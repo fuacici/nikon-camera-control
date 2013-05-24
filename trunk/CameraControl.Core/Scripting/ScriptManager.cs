@@ -31,5 +31,22 @@ namespace CameraControl.Core.Scripting
             }
             doc.Save(fileName);
         }
+
+        public ScriptObject Load(string fileName)
+        {
+            ScriptObject res = new ScriptObject();
+            XmlDocument doc = new XmlDocument();
+            doc.Load(fileName);
+            XmlNode commandNode = doc.SelectSingleNode("/ScriptObject/Commands");
+            foreach (XmlNode node in commandNode.ChildNodes)
+            {
+                foreach (var command in AvaiableCommands)
+                {
+                    if(command.Name==node.Name)
+                        res.Commands.Add(command.Load(node));
+                }
+            }
+            return res;
+        }
     }
 }
