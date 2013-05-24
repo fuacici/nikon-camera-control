@@ -22,7 +22,7 @@
             <RowDefinition Height="100*" />
         </Grid.RowDefinitions>
         <Label Content="{T:TranslateExtension LabelCaptureTime}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" />
-        <xctk:IntegerUpDown Grid.Column="1" Value="{Binding Path=CaptureTime}" Margin="3"/>
+        <xctk:IntegerUpDown Grid.Column="1" Value="{Binding Path=CaptureTime}" Margin="3" Minimum="1"/>
 
         <Label Grid.Row="1" Content="{T:TranslateExtension Iso}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
         <ComboBox Grid.Column="1" Grid.Row="1" Margin="3" SelectedValue="{Binding Path=Iso}" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsoNumber.Values}"/>

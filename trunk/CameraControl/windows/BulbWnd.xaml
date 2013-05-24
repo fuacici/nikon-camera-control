@@ -69,8 +69,8 @@
                 </Grid.RowDefinitions>
                 <Label Content="{T:TranslateExtension LabelEnable}" Margin="3" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
                 <Label Content="{T:TranslateExtension LabelUseConfiguration}" Margin="3" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.Row="1"/>
-                <ComboBox Grid.Column="1" Grid.Row="1" Margin="3" IsEnabled="{Binding Path=UseExternal, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.ExternalDeviceManager}, Path=ExternalShutters}" DisplayMemberPath="Name" SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}, Path=SelectedConfig}"/>
-                <CheckBox Grid.Column="1" Height="16" HorizontalAlignment="Left" Name="checkBox1" VerticalAlignment="Top" IsChecked="{Binding Path=UseExternal, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" Margin="3,8,3,3" />
+                <ComboBox Grid.Column="1" Grid.Row="1" Margin="3" IsEnabled="{Binding Path=DefaultScript.UseExternal, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.ExternalDeviceManager}, Path=ExternalShutters}" DisplayMemberPath="Name" SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}, Path=DefaultScript.SelectedConfig}"/>
+                <CheckBox Grid.Column="1" Height="16" HorizontalAlignment="Left" Name="checkBox1" VerticalAlignment="Top" IsChecked="{Binding Path=DefaultScript.UseExternal, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" Margin="3,8,3,3" />
             </Grid>
         </GroupBox>
         <GroupBox Grid.Column="4" Grid.Row="1" Grid.RowSpan="5" Header="{T:TranslateExtension LabelScript}">
@@ -95,12 +95,14 @@
                     <MenuItem Header="Edit" 
                               Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}, Path=EditCommand}" 
                               CommandParameter="{Binding ElementName=lst_commands, Path=SelectedItem}"/>
-                    <MenuItem Header="Delete" />
+                    <MenuItem Header="Delete"                               
+                              Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}, Path=DelCommand}" 
+                              CommandParameter="{Binding ElementName=lst_commands, Path=SelectedItem}"/>
                     <MenuItem Header="Save" Click="MenuItem_Click" />
                     <MenuItem Header="Load" Click="MenuItem_Click_1" />
                 </Menu>
                 <ListBox Grid.Row="1" ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}, Path=DefaultScript.Commands}" DisplayMemberPath="DisplayName" Name="lst_commands"/>
-                <Button Content="{T:TranslateExtension LabelStartScript}" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="6,4,0,0" Name="button1" VerticalAlignment="Top" Width="100" />
+                <Button Content="{T:TranslateExtension LabelStartScript}" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="6,4,0,0" Name="button1" VerticalAlignment="Top" Width="100" Click="button1_Click" />
                 <Button Content="{T:TranslateExtension LabelStopScript}" Grid.Row="2" Height="23" Margin="0,4,6,0" Name="button2" VerticalAlignment="Top" HorizontalAlignment="Right" Width="100" />
             </Grid>
         </GroupBox>

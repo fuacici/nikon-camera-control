@@ -6,7 +6,7 @@ namespace CameraControl.Core.Scripting
 {
     public interface IScriptCommand
     {
-        bool Execute();
+        bool Execute(ScriptObject scriptObject);
         IScriptCommand Create();
         XmlNode Save(XmlDocument doc);
         IScriptCommand Load(XmlNode node);
