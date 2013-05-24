@@ -707,8 +707,7 @@ namespace CameraControl.windows
                 {
                     if (SelectedPortableDevice.GetCapability(CapabilityEnum.Bulb))
                     {
-                        BulbWnd wnd = new BulbWnd(SelectedPortableDevice);
-                        wnd.ShowDialog();
+                        ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.BulbWnd_Show, SelectedPortableDevice);
                         return;
                     }
                     else

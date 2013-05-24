@@ -7,6 +7,7 @@ using System.Windows;
 using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
+using CameraControl.Core.Interfaces;
 using CameraControl.Core.Scripting;
 using CameraControl.Core.Translation;
 using CameraControl.Devices;
@@ -20,7 +21,7 @@ namespace CameraControl.windows
     /// <summary>
     /// Interaction logic for BulbWnd.xaml
     /// </summary>
-    public partial class BulbWnd : INotifyPropertyChanged
+    public partial class BulbWnd : INotifyPropertyChanged, IWindow
     {
         private Timer _captureTimer = new Timer(1000);
         private Timer _waitTimer = new Timer(1000);
@@ -102,35 +103,27 @@ namespace CameraControl.windows
         public BulbWnd()
         {
             CameraDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
-            Init();
-        }
-
-        public BulbWnd(ICameraDevice device)
-        {
-            CameraDevice = device;
-            Init();
-        }
-
-
-        private void Init()
-        {
             //NoAutofocus = true;
             AddCommand = new RelayCommand<IScriptCommand>(AddCommandMethod);
             EditCommand = new RelayCommand<IScriptCommand>(EditCommandMethod);
             DelCommand = new RelayCommand<IScriptCommand>(DelCommandMethod);
+            InitializeComponent();
+            CaptureTime = 60;
+            NumOfPhotos = 1;
+            WaitTime = 0;
+            _captureTimer.Elapsed += _captureTimer_Elapsed;
+            _waitTimer.Elapsed += _waitTimer_Elapsed;
+            ServiceProvider.Settings.ApplyTheme(this);
+        }
+
+        private void Init()
+        {
             DefaultScript = new ScriptObject();
             _defaultScriptFile = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), Settings.AppName,
                 "default.dccscript");
             if (File.Exists(_defaultScriptFile))
                 DefaultScript = ServiceProvider.ScriptManager.Load(_defaultScriptFile);
-            CaptureTime = 60;
-            NumOfPhotos = 1;
-            WaitTime = 0;
-            InitializeComponent();
-            _captureTimer.Elapsed += _captureTimer_Elapsed;
-            _waitTimer.Elapsed += _waitTimer_Elapsed;
-            ServiceProvider.Settings.ApplyTheme(this);
         }
 
         public void AddCommandMethod(IScriptCommand command)
@@ -417,5 +410,48 @@ namespace CameraControl.windows
             ServiceProvider.ScriptManager.Execute(DefaultScript);
         }
 
+        #region Implementation of IWindow
+
+        public void ExecuteCommand(string cmd, object param)
+        {
+            switch (cmd)
+            {
+                case WindowsCmdConsts.BulbWnd_Show:
+                    CameraDevice = param as ICameraDevice;
+                    if (CameraDevice == null)
+                        return;
+                    Init();
+                    Dispatcher.Invoke(new Action(delegate
+                    {
+                        Show();
+                        Activate();
+                        Topmost = true;
+                        //Topmost = false;
+                        Focus();
+                    }));
+                    break;
+                case WindowsCmdConsts.BulbWnd_Hide:
+                    Hide();
+                    break;
+                case CmdConsts.All_Close:
+                    Dispatcher.Invoke(new Action(delegate
+                    {
+                        Hide();
+                        Close();
+                    }));
+                    break;
+            }
+        }
+
+        #endregion
+
+        private void MetroWindow_Closing(object sender, CancelEventArgs e)
+        {
+            if (IsVisible)
+            {
+                e.Cancel = true;
+                ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.BulbWnd_Hide);
+            }
+        }
     }
 }
