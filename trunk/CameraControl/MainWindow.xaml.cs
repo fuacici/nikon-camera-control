@@ -614,5 +614,24 @@ namespace CameraControl
             ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.BulbWnd_Show, ServiceProvider.DeviceManager.SelectedCameraDevice);
         }
 
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Right)
+            {
+                ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Next_Image);
+                e.Handled = true;
+            }
+            if (e.Key == Key.Left)
+            {
+                ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Prev_Image);
+                e.Handled = true;
+            }
+            if(e.Key==Key.Delete)
+            {
+                ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Del_Image);
+                e.Handled = true;
+            }
+        }
+
     }
 }

@@ -10,7 +10,7 @@
                        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                        xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
                        xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
-                       Closed="Window_Closed" Closing="Window_Closing" Icon="/CameraControl;component/Images/logo.png" WindowState="Maximized" VerticalContentAlignment="Center" PreviewKeyDown="MetroWindow_PreviewKeyDown" Loaded="MetroWindow_Loaded" Name="Window">
+                       Closed="Window_Closed" Closing="Window_Closing" Icon="/CameraControl;component/Images/logo.png" WindowState="Maximized" VerticalContentAlignment="Center" PreviewKeyDown="MetroWindow_PreviewKeyDown" Loaded="MetroWindow_Loaded" Name="Window" KeyDown="Window_KeyDown">
     <i:Interaction.Behaviors>
         <Behaviours:BorderlessWindowBehavior/>
     </i:Interaction.Behaviors>
