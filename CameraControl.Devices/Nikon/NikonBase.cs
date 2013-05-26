@@ -839,14 +839,13 @@ namespace CameraControl.Devices.Nikon
         {
             if (step == 0)
                 return;
-            lock (Locker)
-            {
+            //lock (Locker)
+            //{
                 //DeviceReady();
                 ErrorCodes.GetException(step > 0
                                           ? ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000001, (uint)step)
                                           : ExecuteWithNoData(CONST_CMD_MfDrive, 0x00000002, (uint)-step));
-                DeviceReady();
-            }
+            //}
         }
 
         public override void AutoFocus()
