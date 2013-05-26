@@ -121,6 +121,10 @@ namespace CameraControl.windows
             {
                 _photoNo = value;
                 NotifyPropertyChanged("PhotoNo");
+                if (PhotoNo > 0)
+                    _focusStep =
+                        Convert.ToInt32(Decimal.Round((decimal) FocusValue/PhotoNo, MidpointRounding.AwayFromZero));
+                NotifyPropertyChanged("FocusStep");
             }
         }
 
@@ -738,7 +742,7 @@ namespace CameraControl.windows
             {
                 Thread thread = new Thread(StartLiveViewThread);
                 thread.Start();
-
+                thread.Join();
             }
             else
             {
@@ -769,7 +773,7 @@ namespace CameraControl.windows
                         if (deviceException.ErrorCode == ErrorCodes.ERROR_BUSY ||
                             deviceException.ErrorCode == ErrorCodes.MTP_Device_Busy)
                         {
-                            Thread.Sleep(500);
+                            Thread.Sleep(200);
                             if (!IsVisible)
                                 break;
                             Log.Debug("Retry live view :" + deviceException.ErrorCode.ToString("X"));
@@ -798,8 +802,8 @@ namespace CameraControl.windows
                 //MessageBox.Show("Unable to start liveview !");
                 //ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.LiveViewWnd_Hide);
             }
-            Dispatcher.Invoke(new Action(delegate { grid_wait.Visibility = Visibility.Hidden; }));
-            Dispatcher.Invoke(new Action(delegate { image1.Visibility = Visibility.Visible; }));
+            Dispatcher.BeginInvoke(new Action(delegate { grid_wait.Visibility = Visibility.Hidden; }));
+            Dispatcher.BeginInvoke(new Action(delegate { image1.Visibility = Visibility.Visible; }));
         }
 
         private void StopLiveView()
@@ -1128,6 +1132,7 @@ namespace CameraControl.windows
             {
                 Thread thread = new Thread(SetFocusThread);
                 thread.Start(step);
+                thread.Join();
             }
             else
             {
@@ -1154,14 +1159,14 @@ namespace CameraControl.windows
                 if (FocusCounter + step > FocusValue)
                     step = FocusValue - FocusCounter;
             }
-            Console.WriteLine(step);
+            //Console.WriteLine(step);
             try
             {
                 _timer.Stop();
                 selectedPortableDevice.StartLiveView();
                 selectedPortableDevice.Focus(step);
                 FocusCounter += step;
-                Console.WriteLine(FocusCounter);
+                //Console.WriteLine(FocusCounter);
             }
             catch (DeviceException exception)
             {
@@ -1174,7 +1179,7 @@ namespace CameraControl.windows
                 StaticHelper.Instance.SystemMessage = TranslationStrings.LabelErrorUnableFocus;
             }
             if (LockB)
-                Dispatcher.Invoke(new Action(delegate { focus_slider.Value = FocusCounter; }));
+                Dispatcher.BeginInvoke(new Action(delegate { focus_slider.Value = FocusCounter; }));
             if (!IsBusy)
                 _timer.Start();
             Console.WriteLine("Focus end");
@@ -1229,10 +1234,9 @@ namespace CameraControl.windows
                     //  Thread.Sleep(1);
                     //}
                     StartLiveView();
-                    Thread.Sleep(500);
+                    //Thread.Sleep(500);
                     if (PhotoCount > 0)
                     {
-                        Thread.Sleep(400);
                         SetFocus(FocusStep);
                     }
                     PhotoCount++;
@@ -1293,6 +1297,8 @@ namespace CameraControl.windows
 
         private void btn_takephoto_Click(object sender, RoutedEventArgs e)
         {
+            Thread.Sleep(500);
+            _focusIProgress = false;
             SetFocus(-FocusCounter);
             //FreezeImage = true;
             GetLiveImage();
