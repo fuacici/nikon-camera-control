@@ -187,11 +187,11 @@ namespace CameraControl.Layouts
 
         private void ImageLIst_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _selectedItem = e.AddedItems[0] as FileItem;
-            if (_worker.IsBusy)
-                return;
             if (e.AddedItems.Count > 0)
             {
+                _selectedItem = e.AddedItems[0] as FileItem;
+                if (_worker.IsBusy)
+                    return;
                 FileItem item = e.AddedItems[0] as FileItem;
                 if (item != null)
                 {
