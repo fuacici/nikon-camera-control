@@ -345,5 +345,7 @@ namespace CameraControl.Core.Translation
         public static string LabelScript = "Script";
         public static string LabelStartScript = "Start Script";
         public static string LabelStopScript = "Stop Script";
+        public static string LabelDeviceSettings = "Device settings";
+        public static string LabelAvailableDevices = "Available devices";
     }
 }

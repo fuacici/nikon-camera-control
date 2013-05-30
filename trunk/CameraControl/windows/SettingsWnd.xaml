@@ -201,11 +201,19 @@
                         <ColumnDefinition Width="273" />
                         <ColumnDefinition Width="347*" />
                     </Grid.ColumnDefinitions>
-                    <ListBox Name="lst_device" BorderBrush="Black" BorderThickness="2" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DeviceConfigs.Items}" DisplayMemberPath="Name" Margin="0,-1,0,1" />
-                    <Button Content="{T:Translate ButtonAdd}" Height="23" Margin="6,4,192,0" Name="btn_add_device" VerticalAlignment="Top" Grid.Row="1" Click="btn_add_device_Click" />
-                    <Button Content="{T:Translate ButtonDelete}" Height="23" Margin="190,4,8,0" Name="btn_del_device" VerticalAlignment="Top" Grid.Row="1"/>
+                    <GroupBox Header="{T:TranslateExtension LabelAvailableDevices}"  Grid.RowSpan="2">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="276*" />
+                                <RowDefinition Height="35" />
+                            </Grid.RowDefinitions>
+                            <ListBox Name="lst_device" BorderBrush="Black" BorderThickness="2" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DeviceConfigs.Items}" DisplayMemberPath="Name" Margin="0,-1,0,1" />
+                            <Button Content="{T:Translate ButtonAdd}" Height="23" Margin="6,4,192,0" Name="btn_add_device" VerticalAlignment="Top" Grid.Row="1" Click="btn_add_device_Click" />
+                            <Button Content="{T:Translate ButtonDelete}" Height="23" Margin="190,4,8,0" Name="btn_del_device" VerticalAlignment="Top" Grid.Row="1" Click="btn_del_device_Click" />
+                        </Grid>
+                    </GroupBox>
 
-                    <GroupBox Header="Settings" Grid.Column="1" Grid.RowSpan="2">
+                    <GroupBox Header="{T:TranslateExtension LabelDeviceSettings}" Grid.Column="1" Grid.RowSpan="2">
                         <Grid DataContext="{Binding ElementName=lst_device, Path=SelectedItem}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="115*" />

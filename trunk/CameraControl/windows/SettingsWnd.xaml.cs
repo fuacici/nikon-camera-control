@@ -13,7 +13,9 @@ using CameraControl.Devices.Classes;
 using Path = System.IO.Path;
 using CameraControl.Core;
 using HelpProvider = CameraControl.Classes.HelpProvider;
-using MessageBox = System.Windows.Forms.MessageBox;
+using MessageBox = System.Windows.MessageBox;
+
+//using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace CameraControl.windows
 {
@@ -126,6 +128,18 @@ namespace CameraControl.windows
                                                                      ServiceProvider.ExternalDeviceManager.
                                                                      ExternalDeviceNames[0]
                                                              });
+    }
+
+    private void btn_del_device_Click(object sender, RoutedEventArgs e)
+    {
+        if (lst_device.SelectedItem != null)
+        {
+            if(MessageBox.Show("Do you want to delete the selected device configuration ?","Delete",MessageBoxButton.YesNo)==MessageBoxResult.Yes)
+            {
+                CustomConfig config = lst_device.SelectedItem as CustomConfig;
+                ServiceProvider.Settings.DeviceConfigs.Items.Remove(config);
+            }
+        }
     }
 
 
