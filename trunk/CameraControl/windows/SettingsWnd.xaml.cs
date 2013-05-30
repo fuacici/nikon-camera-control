@@ -120,6 +120,7 @@ namespace CameraControl.windows
         if(ServiceProvider.ExternalDeviceManager.ExternalDevices.Count==0)
         {
             MessageBox.Show("No external devices are defined");
+            return;
         }
         ServiceProvider.Settings.DeviceConfigs.Items.Add(new CustomConfig()
                                                              {
