@@ -103,7 +103,7 @@
                 </Menu>
                 <ListBox Grid.Row="1" ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}, Path=DefaultScript.Commands}" DisplayMemberPath="DisplayName" Name="lst_commands"/>
                 <Button Content="{T:TranslateExtension LabelStartScript}" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="6,4,0,0" Name="button1" VerticalAlignment="Top" Width="100" Click="button1_Click" />
-                <Button Content="{T:TranslateExtension LabelStopScript}" Grid.Row="2" Height="23" Margin="0,4,6,0" Name="button2" VerticalAlignment="Top" HorizontalAlignment="Right" Width="100" />
+                <Button Content="{T:TranslateExtension LabelStopScript}" Grid.Row="2" Height="23" Margin="0,4,6,0" Name="btn_stop_script" VerticalAlignment="Top" HorizontalAlignment="Right" Width="100" Click="btn_stop_script_Click" />
             </Grid>
         </GroupBox>
     </Grid>

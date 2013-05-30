@@ -12,8 +12,9 @@ namespace CameraControl.Core.Scripting
 {
     public class ScriptManager : BaseFieldClass
     {
-        private bool _isBusy;
+        private bool _shouldStop = false;
 
+        private bool _isBusy;
         public bool IsBusy
         {
             get { return _isBusy; }
@@ -94,6 +95,7 @@ namespace CameraControl.Core.Scripting
 
         public void Execute(ScriptObject scriptObject)
         {
+            _shouldStop = false;
             IsBusy = true;
             Thread thread=new Thread(ExecuteThread);
             thread.Start(scriptObject);
@@ -107,9 +109,11 @@ namespace CameraControl.Core.Scripting
                 ScriptObject scriptObject = o as ScriptObject;
                 foreach (IScriptCommand scriptCommand in scriptObject.Commands)
                 {
+                    if (_shouldStop)
+                        break;
                     scriptCommand.Execute(scriptObject);
                 }
-                StaticHelper.Instance.SystemMessage = "Script execution done";
+                StaticHelper.Instance.SystemMessage = _shouldStop ? "Script execution stopped" : "Script execution done";
             }
             catch (Exception exception)
             {
@@ -117,6 +121,12 @@ namespace CameraControl.Core.Scripting
                 StaticHelper.Instance.SystemMessage = exception.Message;
             }
             IsBusy = false;
+        }
+
+        public void Stop()
+        {
+            _shouldStop = true;
+            StaticHelper.Instance.SystemMessage = "Script execution stopping ....";
         }
     }
 }

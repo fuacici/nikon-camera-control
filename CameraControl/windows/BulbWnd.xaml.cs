@@ -454,5 +454,10 @@ namespace CameraControl.windows
                 ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.BulbWnd_Hide);
             }
         }
+
+        private void btn_stop_script_Click(object sender, RoutedEventArgs e)
+        {
+            ServiceProvider.ScriptManager.Stop();
+        }
     }
 }
