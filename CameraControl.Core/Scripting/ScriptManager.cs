@@ -29,7 +29,7 @@ namespace CameraControl.Core.Scripting
 
         public ScriptManager()
         {
-            AvaiableCommands = new List<IScriptCommand> {new BulbCapture(), new WaitCommand()};
+            AvaiableCommands = new List<IScriptCommand> {new BulbCapture(), new WaitCommand(), new PHDGuiding()};
         }
 
         public void Save(ScriptObject scriptObject, string fileName)

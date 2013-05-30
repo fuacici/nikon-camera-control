@@ -73,5 +73,9 @@ namespace CameraControl.Core.Classes
             ConfigData.Add(new ValuePair() {Name = name, Value = value});
         }
 
+        public CustomConfig()
+        {
+            ConfigData = new AsyncObservableCollection<ValuePair>();
+        }
     }
 }
