@@ -79,7 +79,7 @@ namespace CameraControl.Core.Classes
     {
       _cameraDevice = device;
       Log.Debug("Bracketing started");
-      _cameraDevice.PhotoCaptured += _cameraDevice_PhotoCaptured;
+      _cameraDevice.CaptureCompleted += _cameraDevice_CaptureCompleted;
       IsBusy = true;
       switch (Mode)
       {
@@ -152,13 +152,14 @@ namespace CameraControl.Core.Classes
       }
     }
 
-    void _cameraDevice_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
+    void _cameraDevice_CaptureCompleted(object sender, EventArgs e)
     {
-      if (!IsBusy)
-        return;
-      Thread thread = new Thread(EventNextPhoto);
-      thread.Start();
+        if (!IsBusy)
+            return;
+        Thread thread = new Thread(EventNextPhoto);
+        thread.Start();
     }
+
 
     private void EventNextPhoto()
     {
@@ -271,7 +272,7 @@ namespace CameraControl.Core.Classes
         return;
       Log.Debug("Bracketing stop");
       IsBusy = false;
-      _cameraDevice.PhotoCaptured -= _cameraDevice_PhotoCaptured;
+      _cameraDevice.CaptureCompleted -= _cameraDevice_CaptureCompleted;
       Thread thread = null;
       switch (Mode)
       {
