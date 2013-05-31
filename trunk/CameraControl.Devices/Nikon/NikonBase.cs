@@ -1038,15 +1038,26 @@ namespace CameraControl.Devices.Nikon
                             FocusMode.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_FocusMode), false);
                             break;
                         case CONST_PROP_BatteryLevel:
-                            Battery = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_BatteryLevel, -1)[0];
+                            {
+                                byte[] data = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                                               CONST_PROP_BatteryLevel, -1);
+                                if (data != null && data.Length > 0)
+                                    Battery = data[0];
+                            }
                             break;
                         case CONST_PROP_ExposureIndicateStatus:
-                            sbyte i =
-                              unchecked(
-                                (sbyte)
-                                StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_ExposureIndicateStatus, -1)
-                                  [0]);
-                            ExposureStatus = Convert.ToInt32(i);
+                            {
+                                byte[] data =
+                                    StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                                     CONST_PROP_ExposureIndicateStatus, -1);
+                                if (data != null && data.Length > 0)
+                                {
+                                    sbyte i =
+                                        unchecked(
+                                            (sbyte) data[0]);
+                                    ExposureStatus = Convert.ToInt32(i);
+                                }
+                            }
                             break;
                         default:
                             foreach (PropertyValue<long> advancedProperty in AdvancedProperties)
