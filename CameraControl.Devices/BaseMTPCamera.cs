@@ -47,7 +47,7 @@ namespace CameraControl.Devices
         /// <summary>
         /// The timer for get periodically the event list
         /// </summary>
-        protected Timer _timer = new Timer(1000 / 5);
+        protected Timer _timer = new Timer(1000 / 2);
 
         public override bool Init(DeviceDescriptor deviceDescriptor)
         {

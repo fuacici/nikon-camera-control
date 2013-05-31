@@ -217,6 +217,17 @@ namespace CameraControl.Devices.Nikon
         {
             _timer.AutoReset = true;
             _timer.Elapsed += _timer_Elapsed;
+            SlowDownEventTimer();
+        }
+
+        private void SlowDownEventTimer()
+        {
+            _timer.Interval = 1000;
+        }
+
+        private void SpeedUpEventTimer()
+        {
+            _timer.Interval = 1000 / 5;
         }
 
         void _timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -227,6 +238,7 @@ namespace CameraControl.Devices.Nikon
                 lock (Locker)
                 {
                     Thread thread = new Thread(getEvent);
+                    thread.Name = "Event timer";
                     thread.Start();
                 }
             }
@@ -235,7 +247,7 @@ namespace CameraControl.Devices.Nikon
 
 
             }
-            //_timer.Start();
+            _timer.Start();
         }
 
 
@@ -859,6 +871,7 @@ namespace CameraControl.Devices.Nikon
 
         public override void CapturePhoto()
         {
+            SpeedUpEventTimer();
             Monitor.Enter(Locker);
             try
             {
@@ -886,6 +899,7 @@ namespace CameraControl.Devices.Nikon
 
         public override void CapturePhotoNoAf()
         {
+            SpeedUpEventTimer();
             lock (Locker)
             {
                 byte[] val = null;
@@ -1164,6 +1178,7 @@ namespace CameraControl.Devices.Nikon
                                 case CONST_Event_CaptureComplete:
                                 case CONST_Event_CaptureCompleteRecInSdram:
                                     {
+                                        SlowDownEventTimer();
                                         OnCaptureCompleted(this, new EventArgs());
                                     }
                                     break;
