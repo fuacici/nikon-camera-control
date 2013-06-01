@@ -205,6 +205,9 @@
     <Compile Include="windows\ActionExecuteWnd.xaml.cs">
       <DependentUpon>ActionExecuteWnd.xaml</DependentUpon>
     </Compile>
+    <Compile Include="windows\AstroLiveViewWnd.xaml.cs">
+      <DependentUpon>AstroLiveViewWnd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="windows\BraketingWnd.xaml.cs">
       <DependentUpon>BraketingWnd.xaml</DependentUpon>
     </Compile>
@@ -335,6 +338,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="windows\ActionExecuteWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="windows\AstroLiveViewWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

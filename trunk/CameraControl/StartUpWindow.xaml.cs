@@ -104,6 +104,7 @@ namespace CameraControl
             ServiceProvider.WindowsManager.Add(new TagSelectorWnd());
             ServiceProvider.WindowsManager.Add(new DownloadPhotosWnd());
             ServiceProvider.WindowsManager.Add(new BulbWnd());
+            ServiceProvider.WindowsManager.Add(new AstroLiveViewWnd());
             ServiceProvider.WindowsManager.Event += WindowsManager_Event;
             ServiceProvider.Trigger.Start();
             ServiceProvider.PluginManager.LoadPlugins(Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Plugins"));

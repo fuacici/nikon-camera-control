@@ -21,6 +21,8 @@ namespace CameraControl.Core.Classes
         public const string FocusStackingWnd_Hide = "FocusStackingWnd_Hide";
         public const string LiveViewWnd_Show = "LiveViewWnd_Show";
         public const string LiveViewWnd_Hide = "LiveViewWnd_Hide";
+        public const string AstroLiveViewWnd_Show = "AstroLiveViewWnd_Show";
+        public const string AstroLiveViewWnd_Hide = "AstroLiveViewWnd_Hide";
         public const string Prev_Image = "Prev_Image";
         public const string Next_Image = "Next_Image";
         public const string Select_Image = "Select_Image";

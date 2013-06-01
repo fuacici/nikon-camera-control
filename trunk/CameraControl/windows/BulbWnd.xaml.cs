@@ -459,5 +459,10 @@ namespace CameraControl.windows
         {
             ServiceProvider.ScriptManager.Stop();
         }
+
+        private void btn_astrolv_Click(object sender, RoutedEventArgs e)
+        {
+            ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.AstroLiveViewWnd_Show, CameraDevice);
+        }
     }
 }
