@@ -313,11 +313,11 @@ namespace CameraControl.Devices.Nikon
            
             if(result.Data.Length>112)
             {
-                res.AddValues(Encoding.Unicode.GetString(result.Data, 51, 18), 0);
-                res.AddValues(Encoding.Unicode.GetString(result.Data, 72, 18), 0);
-                res.AddValues(Encoding.Unicode.GetString(result.Data, 93, 18), 0);
+                res.AddValues(Encoding.Unicode.GetString(result.Data, 51, 20), 0);
+                res.AddValues(Encoding.Unicode.GetString(result.Data, 72, 20), 0);
+                res.AddValues(Encoding.Unicode.GetString(result.Data, 93, 20), 0);
             }
-            res.SetValue(Encoding.Unicode.GetString(result.Data, 27, 18));
+            res.SetValue(Encoding.Unicode.GetString(result.Data, 27, 20));
             return res;
         }
 
@@ -1110,7 +1110,7 @@ namespace CameraControl.Devices.Nikon
                                     advancedProperty.SetValue(
                                         Encoding.Unicode.GetString(
                                             StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
-                                                                             advancedProperty.Code), 1, 18));
+                                                                             advancedProperty.Code), 1, 20));
 
                                 }
                                 else
