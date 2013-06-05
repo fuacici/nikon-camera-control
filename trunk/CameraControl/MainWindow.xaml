@@ -248,7 +248,7 @@
                 <Button Content="Lv" ToolTip="{T:TranslateExtension LiveViewToolTip}" Height="50" Name="btn_liveview" Width="50" Margin="5" Command="{Binding Source={x:Static Member=myClasess:WpfCommands.ShowLiveViewCommand}}" CommandParameter="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice}" FontSize="15" Style="{DynamicResource MetroCircleButtonStyle}"/>
                 <Button Content="B" ToolTip="{T:TranslateExtension BrowseSessionsToolTip}" Height="50" Name="btn_browse" Width="50" Margin="5"  FontSize="15" Click="btn_browse_Click" Style="{DynamicResource MetroCircleButtonStyle}"/>
                 <Button Content="Tags" ToolTip="{T:TranslateExtension SelectTagsToolTip}" Height="50" Name="btn_Tags" Width="50" Margin="5"  FontSize="15" Click="btn_Tags_Click" Style="{DynamicResource MetroCircleButtonStyle}"/>
-                <Button ToolTip="{T:TranslateExtension LabelAstrology}" Height="50" Name="but_star" Width="50" Margin="5" Style="{DynamicResource MetroCircleButtonStyle}" Click="but_star_Click">
+                <Button ToolTip="{T:TranslateExtension LabelAstronomy}" Height="50" Name="but_star" Width="50" Margin="5" Style="{DynamicResource MetroCircleButtonStyle}" Click="but_star_Click">
                     <Rectangle Width="20" Height="20">
                         <Rectangle.Fill>
                             <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_star_add}" />
