@@ -338,7 +338,7 @@ namespace CameraControl.Core.Translation
         public static string LabelExternalShutterRelease = "External shutter release";
         public static string LabelConfigName = "Configuration name";
         public static string LabelDriver = "Driver";
-        public static string LabelAstrology = "Astrology";
+        public static string LabelAstronomy = "Astronomy";
         public static string LabelEnable = "Enable";
         public static string LabelUseConfiguration = "Use configuration";
         public static string LabelNoExternalDeviceSelected = "No external device is selected";

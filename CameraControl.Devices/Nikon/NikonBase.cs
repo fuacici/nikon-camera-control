@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Timers;
 using CameraControl.Devices.Classes;
+using CameraControl.Devices.Xml;
 using PortableDeviceLib;
 using PortableDeviceLib.Model;
 using Timer = System.Timers.Timer;
@@ -35,6 +36,7 @@ namespace CameraControl.Devices.Nikon
         public const int CONST_CMD_StartMovieRecInCard = 0x920A;
         public const int CONST_CMD_EndMovieRec = 0x920B;
 
+        public const int CONST_PROP_ImageSize = 0x5003;
         public const int CONST_PROP_Fnumber = 0x5007;
         public const int CONST_PROP_ExposureIndex = 0x500F;
         public const int CONST_PROP_ExposureTime = 0x500D;
@@ -285,6 +287,7 @@ namespace CameraControl.Devices.Nikon
 
         public virtual void AddAditionalProps()
         {
+            AdvancedProperties.Add(InitImageSize());
             AdvancedProperties.Add(InitBurstNumber());
             AdvancedProperties.Add(InitStillCaptureMode());
             AdvancedProperties.Add(InitOnOffProperty("Auto Iso", 0xD054));
@@ -297,6 +300,32 @@ namespace CameraControl.Devices.Nikon
             {
                 ReadDeviceProperties(value.Code);
             }
+        }
+
+        protected virtual PropertyValue<long> InitImageSize()
+        {
+            var res = new PropertyValue<long>() { Name = "Image Size", IsEnabled = true, Code = CONST_PROP_ImageSize };
+            res.ValueChanged += ImageSize_ValueChanged;
+
+            MTPDataResponse result = ExecuteReadDataEx(CONST_CMD_GetDevicePropDesc, res.Code);
+            
+            ErrorCodes.GetException(result.ErrorCode);
+           
+            if(result.Data.Length>112)
+            {
+                res.AddValues(Encoding.Unicode.GetString(result.Data, 51, 18), 0);
+                res.AddValues(Encoding.Unicode.GetString(result.Data, 72, 18), 0);
+                res.AddValues(Encoding.Unicode.GetString(result.Data, 93, 18), 0);
+            }
+            res.SetValue(Encoding.Unicode.GetString(result.Data, 27, 18));
+            return res;
+        }
+
+        private void ImageSize_ValueChanged(object sender, string key, long val)
+        {
+            List<byte> vals = new List<byte>() {10};
+            vals.AddRange(Encoding.Unicode.GetBytes(key));
+            SetProperty(CONST_CMD_SetDevicePropValue, vals.ToArray() , CONST_PROP_ImageSize, -1);
         }
 
         protected virtual PropertyValue<long> InitOnOffProperty(string name, ushort code)
@@ -1076,8 +1105,20 @@ namespace CameraControl.Devices.Nikon
                         default:
                             foreach (PropertyValue<long> advancedProperty in AdvancedProperties)
                             {
-                                advancedProperty.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
-                                                                                           advancedProperty.Code), false);
+                                if (advancedProperty.Name == "Image Size")
+                                {
+                                    advancedProperty.SetValue(
+                                        Encoding.Unicode.GetString(
+                                            StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                                             advancedProperty.Code), 1, 18));
+
+                                }
+                                else
+                                {
+                                    advancedProperty.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                           advancedProperty.Code), false);
+
+                                }
                             }
                             break;
                     }
