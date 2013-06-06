@@ -309,15 +309,15 @@ namespace CameraControl.Devices.Nikon
 
             MTPDataResponse result = ExecuteReadDataEx(CONST_CMD_GetDevicePropDesc, res.Code);
             
-            ErrorCodes.GetException(result.ErrorCode);
-           
-            if(result.Data.Length>112)
+            //ErrorCodes.GetException(result.ErrorCode);
+
+            if (result.Data!=null && result.Data.Length > 112)
             {
                 res.AddValues(Encoding.Unicode.GetString(result.Data, 51, 20), 0);
                 res.AddValues(Encoding.Unicode.GetString(result.Data, 72, 20), 0);
                 res.AddValues(Encoding.Unicode.GetString(result.Data, 93, 20), 0);
+                res.SetValue(Encoding.Unicode.GetString(result.Data, 27, 20));
             }
-            res.SetValue(Encoding.Unicode.GetString(result.Data, 27, 20));
             return res;
         }
 
