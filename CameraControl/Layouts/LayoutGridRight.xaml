@@ -57,6 +57,7 @@
             <RowDefinition Height="25" />
         </Grid.RowDefinitions>
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.RowSpan="2">
+            <Label Content="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.InfoLabel}" HorizontalContentAlignment="Center" Height="30" Margin="0,0,0,0" VerticalAlignment="Top" FontWeight="Bold" />
             <!--<xctk:MagnifierManager.Magnifier>
                 <xctk:Magnifier Radius="100" ZoomFactor=".4"/>
             </xctk:MagnifierManager.Magnifier>-->
@@ -73,9 +74,9 @@
                 </xctk:Zoombox.ViewStack>
 
                 <Image Name="image1" Stretch="Uniform"  Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}"  >
-                    <!--<Image.InputBindings>
+                    <Image.InputBindings>
                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=ImageDoubleClickCommand}" />
-                    </Image.InputBindings>-->
+                    </Image.InputBindings>
                 </Image>
             </xctk:Zoombox>
             <ProgressBar Height="20" Margin="150,0,150,0" Name="progressBar1" VerticalAlignment="Bottom" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false}" IsIndeterminate="True" Opacity="0.5" />
