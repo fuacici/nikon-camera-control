@@ -14,18 +14,18 @@ namespace CameraControl.Core.Scripting.ScriptCommands
 
         public override string DisplayName
         {
-            get { return string.Format("[{0}][WaitTime={1}]", Name, WaitTime ); }
+            get { return string.Format("[{0}][Time={1}]", Name, Time ); }
             set { }
         }
 
-        private int _waitTIme;
-        public int WaitTime
+        private int _time;
+        public int Time
         {
-            get { return _waitTIme; }
+            get { return _time; }
             set
             {
-                _waitTIme = value;
-                NotifyPropertyChanged("WaitTime");
+                _time = value;
+                NotifyPropertyChanged("Time");
                 NotifyPropertyChanged("DisplayName");
             }
         }
@@ -33,10 +33,10 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         public override bool Execute(ScriptObject scriptObject)
         {
             Executing = true;
-            for (int i = 0; i < WaitTime; i++)
+            for (int i = 0; i < Time; i++)
             {
                 Thread.Sleep(1000);
-                StaticHelper.Instance.SystemMessage = string.Format("Waiting .... {0}/{1}", i + 1, WaitTime);
+                ServiceProvider.ScriptManager.OutPut(string.Format("Waiting .... {0}/{1}", i + 1, Time));
             }
             Executing = false;
             IsExecuted = true;
@@ -55,8 +55,8 @@ namespace CameraControl.Core.Scripting.ScriptCommands
 
         public override XmlNode Save(XmlDocument doc)
         {
-            XmlNode nameNode = doc.CreateElement("WaitCommand");
-            nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "WaitTime", WaitTime.ToString()));
+            XmlNode nameNode = doc.CreateElement("wait");
+            nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "time", Time.ToString()));
             return nameNode;
         }
 
@@ -64,15 +64,17 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         {
             WaitCommand res = new WaitCommand()
             {
-                WaitTime = Convert.ToInt32(ScriptManager.GetValue(node, "WaitTime")),
+                Time = Convert.ToInt32(ScriptManager.GetValue(node, "time")),
             };
             return res;
         }
 
         public WaitCommand()
         {
-            Name = "WaitCommand";
-            WaitTime = 1;
+            Name = "wait";
+            Description = "Wait the specified seconds in time parameter";
+            DefaultValue = "wait time=\"2\"";
+            Time = 1;
         }
     }
 }

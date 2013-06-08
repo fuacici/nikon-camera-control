@@ -17,29 +17,29 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         {
             try
             {
-                StaticHelper.Instance.SystemMessage = "PHDGuiding started";
+                ServiceProvider.ScriptManager.OutPut("PHDGuiding started");
                 Executing = true;
                 TcpClient socket = new TcpClient("localhost", 4300);
                 Thread.Sleep(200);
-                switch (MoveType)
+                switch (MoveType.ToLower())
                 {
-                    case "Move 1":
+                    case "move 1":
                         SendReceiveTest2(socket, 3);
                         break;
-                    case "Move 2":
+                    case "move 2":
                         SendReceiveTest2(socket, 4);
                         break;
-                    case "Move 3":
+                    case "move 3":
                         SendReceiveTest2(socket, 5);
                         break;
-                    case "Move 4":
+                    case "move 4":
                         SendReceiveTest2(socket, 12);
                         break;
-                    case "Move 5":
+                    case "move 5":
                         SendReceiveTest2(socket, 13);
                         break;
                 }
-                StaticHelper.Instance.SystemMessage = "PHDGuiding waiting....";
+                ServiceProvider.ScriptManager.OutPut("PHDGuiding waiting....");
                 Thread.Sleep(WaitTime);
                 socket.Close();
             }
@@ -48,7 +48,7 @@ namespace CameraControl.Core.Scripting.ScriptCommands
                 StaticHelper.Instance.SystemMessage = "PHDGuiding error "+exception.Message;
                 Log.Error("PHDGuiding error", exception);
             }
-            StaticHelper.Instance.SystemMessage = "PHDGuiding done";
+            ServiceProvider.ScriptManager.OutPut("PHDGuiding done");
             return true;
         }
 
@@ -59,9 +59,9 @@ namespace CameraControl.Core.Scripting.ScriptCommands
 
         public override XmlNode Save(XmlDocument doc)
         {
-            XmlNode nameNode = doc.CreateElement("PHDGuiding");
-            nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "WaitTime", WaitTime.ToString()));
-            nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "MoveType", MoveType));
+            XmlNode nameNode = doc.CreateElement("phdguiding");
+            nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "waittime", WaitTime.ToString()));
+            nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "movetype", MoveType));
             return nameNode;
         }
 
@@ -69,8 +69,8 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         {
             PHDGuiding res = new PHDGuiding
             {
-                WaitTime = Convert.ToInt32(ScriptManager.GetValue(node, "WaitTime")),
-                MoveType = ScriptManager.GetValue(node, "MoveType"),
+                WaitTime = Convert.ToInt32(ScriptManager.GetValue(node, "waittime")),
+                MoveType = ScriptManager.GetValue(node, "movetype"),
                 //Aperture = ScriptManager.GetValue(node, "Aperture")
             };
             return res;
@@ -113,30 +113,31 @@ namespace CameraControl.Core.Scripting.ScriptCommands
 
         public PHDGuiding()
         {
-            Name = "PHDGuiding";
+            Name = "phdguiding";
+            Description = "Send command to PHD.\nParameters: \nmovetype : value can be move 1..5";
+            DefaultValue = "phdguiding movetype=\"move 1\"";
             WaitTime = 2000;
-            MoveType = "Move 1";
+            MoveType = "move 1";
         }
 
         public static int SendReceiveTest2(TcpClient server, byte opersEnum)
         {
-            byte[] msg = Encoding.UTF8.GetBytes("This is a test");
             byte[] bytes = new byte[256];
             try
             {
                 // Blocks until send returns. 
                 int byteCount = server.Client.Send(new[] { opersEnum }, SocketFlags.None);
-                Console.WriteLine("Sent {0} bytes.", byteCount);
+                //Console.WriteLine("Sent {0} bytes.", byteCount);
 
                 // Get reply from the server.
                 byteCount = server.Client.Receive(bytes, SocketFlags.None);
-                Console.WriteLine(byteCount);
+                //Console.WriteLine(byteCount);
                 //if (byteCount > 0)
                 //    Console.WriteLine(Encoding.UTF8.GetString(bytes));
             }
             catch (SocketException e)
             {
-                Console.WriteLine("{0} Error code: {1}.", e.Message, e.ErrorCode);
+                //Console.WriteLine("{0} Error code: {1}.", e.Message, e.ErrorCode);
                 return (e.ErrorCode);
             }
             return 0;
