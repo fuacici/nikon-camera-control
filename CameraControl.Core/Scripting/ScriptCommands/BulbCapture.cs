@@ -16,7 +16,7 @@ namespace CameraControl.Core.Scripting.ScriptCommands
 
         public override bool Execute(ScriptObject scriptObject)
         {
-            StaticHelper.Instance.SystemMessage = "Bulb capture started";
+            ServiceProvider.ScriptManager.OutPut("Bulb capture started");
             Executing = true;
             scriptObject.CameraDevice.IsoNumber.SetValue(Iso);
             Thread.Sleep(200);
@@ -27,13 +27,13 @@ namespace CameraControl.Core.Scripting.ScriptCommands
             for (int i = 0; i < CaptureTime; i++)
             {
                 Thread.Sleep(1000);
-                StaticHelper.Instance.SystemMessage = string.Format("Bulb capture in progress .... {0}/{1}", i + 1, CaptureTime);
+                ServiceProvider.ScriptManager.OutPut(string.Format("Bulb capture in progress .... {0}/{1}", i + 1, CaptureTime));
             }
             scriptObject.StopCapture();
             Thread.Sleep(200);
             Executing = false;
             IsExecuted = true;
-            StaticHelper.Instance.SystemMessage = "Bulb capture done";
+            ServiceProvider.ScriptManager.OutPut("Bulb capture done");
             return true;
         }
 
@@ -44,10 +44,10 @@ namespace CameraControl.Core.Scripting.ScriptCommands
 
         public override XmlNode Save(XmlDocument doc)
         {
-            XmlNode nameNode = doc.CreateElement("BulbCapture");
-            nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "CaptureTime", CaptureTime.ToString()));
-            nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "Iso", Iso));
-            nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "Aperture", Aperture));
+            XmlNode nameNode = doc.CreateElement("bulbcapture");
+            nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "capturetime", CaptureTime.ToString()));
+            nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "iso", Iso));
+            nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "aperture", Aperture));
             return nameNode;
         }
 
@@ -55,9 +55,9 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         {
             BulbCapture res = new BulbCapture
                                   {
-                                      CaptureTime = Convert.ToInt32(ScriptManager.GetValue(node, "CaptureTime")),
-                                      Iso = ScriptManager.GetValue(node, "Iso"),
-                                      Aperture = ScriptManager.GetValue(node, "Aperture")
+                                      CaptureTime = Convert.ToInt32(ScriptManager.GetValue(node, "capturetime")),
+                                      Iso = ScriptManager.GetValue(node, "iso"),
+                                      Aperture = ScriptManager.GetValue(node, "aperture")
                                   };
             return res;
         }
@@ -113,7 +113,9 @@ namespace CameraControl.Core.Scripting.ScriptCommands
 
         public BulbCapture()
         {
-            Name = "BulbCapture";
+            Name = "bulbcapture";
+            Description = "Start bulb capture camera should be set in manual mode with bulb.\nParameters: capturetime\niso\naperture";
+            DefaultValue = "bulbcapture capturetime=\"10\" iso=\"100\"";
             IsExecuted = false;
             Executing = false;
             CaptureTime = 30;

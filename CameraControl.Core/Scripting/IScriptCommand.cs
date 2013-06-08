@@ -14,6 +14,8 @@ namespace CameraControl.Core.Scripting
         bool Executing { get; set; }
         string Name { get; set; }
         string DisplayName { get; set; }
+        string Description { get; set; }
+        string DefaultValue { get; set; }
         UserControl GetConfig();
     }
 }

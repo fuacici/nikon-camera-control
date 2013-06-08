@@ -122,8 +122,15 @@ namespace CameraControl.windows
             _defaultScriptFile = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), Settings.AppName,
                 "default.dccscript");
-            if (File.Exists(_defaultScriptFile))
-                DefaultScript = ServiceProvider.ScriptManager.Load(_defaultScriptFile);
+            try
+            {
+                if (File.Exists(_defaultScriptFile))
+                    DefaultScript = ServiceProvider.ScriptManager.Load(_defaultScriptFile);
+            }
+            catch (Exception exception)
+            {
+                Log.Error("Error loading default scrip", exception);
+            }
         }
 
         public void AddCommandMethod(IScriptCommand command)

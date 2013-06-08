@@ -95,11 +95,15 @@ namespace CameraControl
 
         private void ExecuteExportPlugin(IExportPlugin obj)
         {
+            Flyouts[0].IsOpen = false;
+            Flyouts[1].IsOpen = false;
             obj.Execute();
         }
 
         private void ExecuteToolPlugin(IToolPlugin obj)
         {
+            Flyouts[0].IsOpen = false;
+            Flyouts[1].IsOpen = false;
             obj.Execute();
         }
 

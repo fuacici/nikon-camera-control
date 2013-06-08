@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Xml;
+using CameraControl.Core.Classes;
 using CameraControl.Core.Scripting.ScriptCommands;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
@@ -12,6 +13,13 @@ namespace CameraControl.Core.Scripting
 {
     public class ScriptManager : BaseFieldClass
     {
+        public ValuePairEnumerator Variabiles { get; set; }
+
+
+        public delegate void MessageEventHandler(object sender, MessageEventArgs e);
+
+        public event MessageEventHandler OutPutMessageReceived;
+
         private bool _shouldStop = false;
 
         private bool _isBusy;
@@ -30,7 +38,9 @@ namespace CameraControl.Core.Scripting
 
         public ScriptManager()
         {
-            AvaiableCommands = new List<IScriptCommand> {new BulbCapture(), new WaitCommand(), new PHDGuiding()};
+            AvaiableCommands = new List<IScriptCommand>
+                                   {new BulbCapture(), new WaitCommand(), new PHDGuiding(), new Echo()};
+            Variabiles = new ValuePairEnumerator();
         }
 
         public void Save(ScriptObject scriptObject, string fileName)
@@ -38,11 +48,11 @@ namespace CameraControl.Core.Scripting
             XmlDocument doc = new XmlDocument();
             XmlNode docNode = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
             doc.AppendChild(docNode);
-            XmlNode rootNode = doc.CreateElement("ScriptObject");
+            XmlNode rootNode = doc.CreateElement("dccscript");
             rootNode.Attributes.Append(CreateAttribute(doc, "UseExternal", scriptObject.UseExternal ? "true" : "false"));
             rootNode.Attributes.Append(CreateAttribute(doc, "SelectedConfig", scriptObject.SelectedConfig.Name));
             doc.AppendChild(rootNode);
-            XmlNode commandsNode = doc.CreateElement("Commands");
+            XmlNode commandsNode = doc.CreateElement("commands");
             rootNode.AppendChild(commandsNode);
             foreach (IScriptCommand avaiableCommand in scriptObject.Commands)
             {
@@ -54,15 +64,17 @@ namespace CameraControl.Core.Scripting
         public ScriptObject Load(string fileName)
         {
             ScriptObject res = new ScriptObject();
-            try
+            XmlDocument doc = new XmlDocument();
+            doc.Load(fileName);
+            XmlNode rootNode = doc.SelectSingleNode("/dccscript");
+            if(rootNode==null)
+                throw new ArgumentException("Wrong start of script. Should use ScriptObject");
+            if (GetValue(rootNode, "UseExternal") == "true")
+                res.UseExternal = true;
+            res.SelectedConfig = ServiceProvider.Settings.DeviceConfigs.Get(GetValue(rootNode, "SelectedConfig"));
+            XmlNode commandNode = doc.SelectSingleNode("/dccscript/commands");
+            if (commandNode != null)
             {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(fileName);
-                XmlNode rootNode = doc.SelectSingleNode("/ScriptObject");
-                if (GetValue(rootNode, "UseExternal") == "true")
-                    res.UseExternal = true;
-                res.SelectedConfig = ServiceProvider.Settings.DeviceConfigs.Get(GetValue(rootNode, "SelectedConfig"));
-                XmlNode commandNode = doc.SelectSingleNode("/ScriptObject/Commands");
                 foreach (XmlNode node in commandNode.ChildNodes)
                 {
                     foreach (var command in AvaiableCommands)
@@ -72,10 +84,20 @@ namespace CameraControl.Core.Scripting
                     }
                 }
             }
-            catch (Exception exception)
+            return res;
+        }
+
+        public bool Verify(ScriptObject scriptObject)
+        {
+            if (scriptObject == null)
+                return false;
+            var res = true;
+            if (scriptObject.Commands.Count == 0)
             {
-                Log.Error("Unable to load log file " + fileName, exception);
+                ServiceProvider.ScriptManager.OutPut("No commands are defined");
+                res = false;
             }
+
             return res;
         }
 
@@ -97,7 +119,8 @@ namespace CameraControl.Core.Scripting
         {
             _shouldStop = false;
             IsBusy = true;
-            Thread thread=new Thread(ExecuteThread);
+            Variabiles.Items.Clear();
+            var thread=new Thread(ExecuteThread);
             thread.Start(scriptObject);
         }
 
@@ -128,5 +151,17 @@ namespace CameraControl.Core.Scripting
             _shouldStop = true;
             StaticHelper.Instance.SystemMessage = "Script execution stopping ....";
         }
+
+        public void OnOutPutMessageReceived(MessageEventArgs e)
+        {
+            MessageEventHandler handler = OutPutMessageReceived;
+            if (handler != null) handler(this, e);
+        }
+
+        public void OutPut(string text)
+        {
+            OnOutPutMessageReceived(new MessageEventArgs(text));
+        }
+
     }
 }
