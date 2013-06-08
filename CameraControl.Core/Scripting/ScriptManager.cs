@@ -67,7 +67,7 @@ namespace CameraControl.Core.Scripting
                 {
                     foreach (var command in AvaiableCommands)
                     {
-                        if (command.Name == node.Name)
+                        if (command.Name.ToLower() == node.Name.ToLower())
                             res.Commands.Add(command.Load(node));
                     }
                 }

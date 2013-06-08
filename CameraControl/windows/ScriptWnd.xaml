@@ -1,0 +1,48 @@
+﻿<Controls:MetroWindow x:Class="CameraControl.windows.ScriptWnd"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit" Title="Script Execution" Height="482" Width="686" Closing="MetroWindow_Closing">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/CameraControl;component/Styles/Wpf.Toolkit.Extended.xaml" />
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colours.xaml"/>-->
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml"/>-->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />-->
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="267*" />
+            <RowDefinition Height="149*" />
+        </Grid.RowDefinitions>
+        <Menu Name="menu2">
+            <MenuItem Header="File">
+                <MenuItem Header="New" />
+                <MenuItem Header="Open" />
+                <MenuItem Header="Save" />
+                <MenuItem Header="Save as..." />
+            </MenuItem>
+            <MenuItem Header="Verify" />
+            <MenuItem Header="Run" />
+            <MenuItem Header="Stop" />
+        </Menu>
+        <GroupBox Grid.Row="1" Header="Code">
+            <Grid>
+                <avalonedit:TextEditor/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="2" Header="Output">
+            <Grid />
+        </GroupBox>
+    </Grid>
+</Controls:MetroWindow>

@@ -2,6 +2,8 @@ namespace CameraControl.Core.Classes
 {
     public class WindowsCmdConsts
     {
+        public const string ScriptWnd_Show = "ScriptWnd_Show";
+        public const string ScriptWnd_Hide = "ScriptWnd_Hide";
         public const string BulbWnd_Show = "BulbWnd_Show";
         public const string BulbWnd_Hide = "BulbWnd_Hide";
         public const string DownloadPhotosWnd_Show = "DownloadPhotosWnd_Show";
