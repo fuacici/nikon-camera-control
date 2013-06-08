@@ -105,11 +105,13 @@ namespace CameraControl
             ServiceProvider.WindowsManager.Add(new DownloadPhotosWnd());
             ServiceProvider.WindowsManager.Add(new BulbWnd());
             ServiceProvider.WindowsManager.Add(new AstroLiveViewWnd());
+            ServiceProvider.WindowsManager.Add(new ScriptWnd());
             ServiceProvider.WindowsManager.Event += WindowsManager_Event;
             ServiceProvider.Trigger.Start();
             ServiceProvider.PluginManager.LoadPlugins(Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Plugins"));
             _basemainwindow = new MainWindow();
             ServiceProvider.PluginManager.MainWindowPlugins.Add(_basemainwindow);
+            ServiceProvider.PluginManager.ToolPlugins.Add(new ScriptWnd());
             // event handlers
             ServiceProvider.Settings.SessionSelected += Settings_SessionSelected;
             ServiceProvider.DeviceManager.CameraConnected += DeviceManager_CameraConnected;
@@ -136,6 +138,8 @@ namespace CameraControl
                     mainWindowPlugin = windowPlugin;
             }
             mainWindowPlugin.Show();
+            if (mainWindowPlugin is Window)
+                ((Window) mainWindowPlugin).Activate();
         }
 
         void WindowsManager_Event(string cmd, object o)

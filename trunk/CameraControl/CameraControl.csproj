@@ -103,6 +103,9 @@
     <Reference Include="Gma.QrCodeNet.Encoding">
       <HintPath>..\refs\Gma.QrCodeNet.Encoding.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.AvalonEdit">
+      <HintPath>..\packages\AvalonEdit.4.3.1.9430\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\DotNetZip.1.9.1.8\lib\net20\Ionic.Zip.dll</HintPath>
     </Reference>
@@ -257,6 +260,9 @@
     <Compile Include="windows\ScriptCommandEdit.xaml.cs">
       <DependentUpon>ScriptCommandEdit.xaml</DependentUpon>
     </Compile>
+    <Compile Include="windows\ScriptWnd.xaml.cs">
+      <DependentUpon>ScriptWnd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="windows\SelectorWnd.xaml.cs">
       <DependentUpon>SelectorWnd.xaml</DependentUpon>
     </Compile>
@@ -406,6 +412,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="windows\ScriptCommandEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="windows\ScriptWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
