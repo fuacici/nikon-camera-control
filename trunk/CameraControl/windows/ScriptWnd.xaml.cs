@@ -230,10 +230,12 @@ namespace CameraControl.windows
             {
                 lst_output.Items.Clear();
                 scriptObject = ServiceProvider.ScriptManager.Load(ScriptFileName);
+                scriptObject.CameraDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
             }
             catch (Exception exception)
             {
                 AddOutput("Loading error :" + exception.Message);
+                return;
             }
             if (ServiceProvider.ScriptManager.Verify(scriptObject))
             {
@@ -243,6 +245,11 @@ namespace CameraControl.windows
             {
                 AddOutput("Error in script. Running aborted ! ");
             }
+        }
+
+        private void mnu_stop_Click(object sender, RoutedEventArgs e)
+        {
+            ServiceProvider.ScriptManager.Stop();
         }
     }
 }
