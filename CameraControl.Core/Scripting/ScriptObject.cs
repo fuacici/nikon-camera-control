@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using CameraControl.Core.Classes;
@@ -13,6 +14,9 @@ namespace CameraControl.Core.Scripting
 {
     public class ScriptObject : BaseFieldClass
     {
+
+        public ValuePairEnumerator Variabiles { get; set; }
+
         private AsyncObservableCollection<IScriptCommand> _commands;
         public AsyncObservableCollection<IScriptCommand> Commands
         {
@@ -60,6 +64,7 @@ namespace CameraControl.Core.Scripting
         public ScriptObject()
         {
             Commands = new AsyncObservableCollection<IScriptCommand>();
+            Variabiles = new ValuePairEnumerator();
             UseExternal = false;
         }
 
@@ -176,6 +181,61 @@ namespace CameraControl.Core.Scripting
                     Log.Error("Bulb start", exception);
                 }
             } while (retry);
+        }
+
+        public string ParseString(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return "";
+
+            StringBuilder output = new StringBuilder(input);
+            int offset = 0;
+
+            Regex variablePattern = new Regex(@"\${([^:{}]+)(?::([^}\(]+))?(?:\(([^\)]+)\))?}");
+            MatchCollection matches = variablePattern.Matches(input);
+            foreach (Match currMatch in matches)
+            {
+                string varName = "";
+                string modifier = string.Empty;
+                string value = string.Empty;
+                string options = string.Empty;
+
+                // get rid of the escaped variable string
+                output.Remove(currMatch.Index + offset, currMatch.Length);
+
+                // grab details for this parse
+                varName = currMatch.Groups[1].Value;
+                value = Variabiles[varName];
+                if (currMatch.Groups.Count >= 3)
+                    modifier = currMatch.Groups[2].Value.ToLower();
+                if (currMatch.Groups.Count >= 4)
+                    options = currMatch.Groups[3].Value;
+
+                // if there is no variable for what was passed in we are done
+                if (string.IsNullOrEmpty(value))
+                {
+                    offset -= currMatch.Length;
+                    continue;
+                }
+
+                //// handle any modifiers
+                //if (!modifier.IsNullOrWhiteSpace())
+                //{
+                //    IValueModifier handler = Load(modifier);
+                //    if (handler != null)
+                //    {
+                //        value = handler.Parse(this.Context, value, options);
+                //    }
+                //}
+
+                output.Insert(currMatch.Index + offset, value);
+                offset = offset - currMatch.Length + value.Length;
+            }
+
+            // if we did some replacements search again to check forembeded variables
+            if (matches.Count > 0)
+                return ParseString(output.ToString());
+            else return output.ToString();
         }
 
     }

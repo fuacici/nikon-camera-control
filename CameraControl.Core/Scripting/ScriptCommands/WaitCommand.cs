@@ -21,7 +21,10 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         private int _time;
         public int Time
         {
-            get { return _time; }
+            get
+            {
+                return _time;
+            }
             set
             {
                 _time = value;
@@ -32,11 +35,15 @@ namespace CameraControl.Core.Scripting.ScriptCommands
 
         public override bool Execute(ScriptObject scriptObject)
         {
+            int time = 0;
+            int.TryParse(scriptObject.ParseString(this.LoadedParams["time"]), out time);
             Executing = true;
-            for (int i = 0; i < Time; i++)
+            ServiceProvider.ScriptManager.OutPut(string.Format("Waiting .... {0}s", time));
+            for (int i = 0; i < time; i++)
             {
                 Thread.Sleep(1000);
-                ServiceProvider.ScriptManager.OutPut(string.Format("Waiting .... {0}/{1}", i + 1, Time));
+                if (ServiceProvider.ScriptManager.ShouldStop)
+                    break;
             }
             Executing = false;
             IsExecuted = true;
@@ -48,26 +55,28 @@ namespace CameraControl.Core.Scripting.ScriptCommands
             return new WaitCommand();
         }
 
-        public override UserControl GetConfig()
-        {
-            return new WaitCommandControl(this);
-        }
+        //public override UserControl GetConfig()
+        //{
+        //    return new WaitCommandControl(this);
+        //}
 
-        public override XmlNode Save(XmlDocument doc)
-        {
-            XmlNode nameNode = doc.CreateElement("wait");
-            nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "time", Time.ToString()));
-            return nameNode;
-        }
+        //public override XmlNode Save(XmlDocument doc)
+        //{
+        //    XmlNode nameNode = doc.CreateElement("wait");
+        //    nameNode.Attributes.Append(ScriptManager.CreateAttribute(doc, "time", Time.ToString()));
+        //    return nameNode;
+        //}
 
-        public override IScriptCommand Load(XmlNode node)
-        {
-            WaitCommand res = new WaitCommand()
-            {
-                Time = Convert.ToInt32(ScriptManager.GetValue(node, "time")),
-            };
-            return res;
-        }
+        //public override IScriptCommand Load(XmlNode node)
+        //{
+        //    int time = 0;
+        //    if(int.TryParse( out time))
+        //    WaitCommand res = new WaitCommand()
+        //    {
+        //        Time = Convert.ToInt32(ScriptManager.GetValue(node, "time")),
+        //    };
+        //    return res;
+        //}
 
         public WaitCommand()
         {

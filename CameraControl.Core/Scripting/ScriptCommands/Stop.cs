@@ -5,19 +5,19 @@ using System.Text;
 
 namespace CameraControl.Core.Scripting.ScriptCommands
 {
-    public class Echo : BaseScript
+    public class Stop:BaseScript
     {
         public override bool Execute(ScriptObject scriptObject)
         {
-            ServiceProvider.ScriptManager.OutPut(scriptObject.ParseString(LoadedParams["text"]));
+            ServiceProvider.ScriptManager.Stop();
             return true;
         }
 
-        public Echo()
+        public Stop()
         {
-            Name = "echo";
-            DefaultValue = "echo text=\"message\"";
-            Description = "Send a text message to output window";
+            Name = "stop";
+            Description = "stop script execution";
+            DefaultValue = "stop";
         }
     }
 }

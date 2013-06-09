@@ -200,11 +200,17 @@
     <Compile Include="Scripting\ScriptCommands\BulbCaptureControl.xaml.cs">
       <DependentUpon>BulbCaptureControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Scripting\ScriptCommands\Capture.cs" />
     <Compile Include="Scripting\ScriptCommands\Echo.cs" />
+    <Compile Include="Scripting\ScriptCommands\IfCommand.cs" />
+    <Compile Include="Scripting\ScriptCommands\Loop.cs" />
     <Compile Include="Scripting\ScriptCommands\PHDGuiding.cs" />
     <Compile Include="Scripting\ScriptCommands\PHDGuidingControl.xaml.cs">
       <DependentUpon>PHDGuidingControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Scripting\ScriptCommands\Set.cs" />
+    <Compile Include="Scripting\ScriptCommands\SetCamera.cs" />
+    <Compile Include="Scripting\ScriptCommands\Stop.cs" />
     <Compile Include="Scripting\ScriptCommands\WaitCommand.cs" />
     <Compile Include="Scripting\ScriptCommands\WaitCommandControl.xaml.cs">
       <DependentUpon>WaitCommandControl.xaml</DependentUpon>

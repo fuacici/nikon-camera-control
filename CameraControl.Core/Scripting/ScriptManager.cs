@@ -8,19 +8,21 @@ using CameraControl.Core.Classes;
 using CameraControl.Core.Scripting.ScriptCommands;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
+using Timer = System.Timers.Timer;
 
 namespace CameraControl.Core.Scripting
 {
     public class ScriptManager : BaseFieldClass
     {
-        public ValuePairEnumerator Variabiles { get; set; }
-
 
         public delegate void MessageEventHandler(object sender, MessageEventArgs e);
-
         public event MessageEventHandler OutPutMessageReceived;
+        private Timer _timer=new Timer(1000);
 
-        private bool _shouldStop = false;
+        public ScriptObject CurrentScript { get; set; }
+
+
+        public bool ShouldStop = false;
 
         private bool _isBusy;
         public bool IsBusy
@@ -39,8 +41,28 @@ namespace CameraControl.Core.Scripting
         public ScriptManager()
         {
             AvaiableCommands = new List<IScriptCommand>
-                                   {new BulbCapture(), new WaitCommand(), new PHDGuiding(), new Echo()};
-            Variabiles = new ValuePairEnumerator();
+                                   {
+                                       new BulbCapture(),
+                                       new Capture(),
+                                       new Echo(),
+                                       new IfCommand(),
+                                       new Loop(),
+                                       new PHDGuiding(),
+                                       new Set(),
+                                       new SetCamera(),
+                                       new Stop(),
+                                       new WaitCommand(),
+                                   };
+            _timer.Elapsed += _timer_Elapsed;
+            _timer.AutoReset = true;
+        }
+
+        void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (CurrentScript != null)
+            {
+                CurrentScript.Variabiles["time"] = DateTime.Now.ToString("HH:mm");
+            }
         }
 
         public void Save(ScriptObject scriptObject, string fileName)
@@ -80,7 +102,7 @@ namespace CameraControl.Core.Scripting
                     foreach (var command in AvaiableCommands)
                     {
                         if (command.Name.ToLower() == node.Name.ToLower())
-                            res.Commands.Add(command.Load(node));
+                            res.Commands.Add(((IScriptCommand)Activator.CreateInstance(command.GetType())).Load(node));
                     }
                 }
             }
@@ -117,10 +139,12 @@ namespace CameraControl.Core.Scripting
 
         public void Execute(ScriptObject scriptObject)
         {
-            _shouldStop = false;
+            ShouldStop = false;
             IsBusy = true;
-            Variabiles.Items.Clear();
-            var thread=new Thread(ExecuteThread);
+            scriptObject.Variabiles.Items.Clear();
+            CurrentScript = scriptObject;
+            _timer.Start();
+            var thread = new Thread(ExecuteThread);
             thread.Start(scriptObject);
         }
 
@@ -132,23 +156,25 @@ namespace CameraControl.Core.Scripting
                 ScriptObject scriptObject = o as ScriptObject;
                 foreach (IScriptCommand scriptCommand in scriptObject.Commands)
                 {
-                    if (_shouldStop)
+                    if (ShouldStop)
                         break;
                     scriptCommand.Execute(scriptObject);
                 }
-                StaticHelper.Instance.SystemMessage = _shouldStop ? "Script execution stopped" : "Script execution done";
+                StaticHelper.Instance.SystemMessage = ShouldStop ? "Script execution stopped" : "Script execution done";
             }
             catch (Exception exception)
             {
+                OutPut("Error executing script " + exception.Message);
                 Log.Error("Error executing script", exception);
                 StaticHelper.Instance.SystemMessage = exception.Message;
             }
             IsBusy = false;
+            _timer.Stop();
         }
 
         public void Stop()
         {
-            _shouldStop = true;
+            ShouldStop = true;
             StaticHelper.Instance.SystemMessage = "Script execution stopping ....";
         }
 

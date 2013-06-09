@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -640,7 +641,7 @@ namespace CameraControl.Devices.Nikon
                 {
                     UInt16 val = BitConverter.ToUInt16(result, ((2 * datasize) + 6 + 2) + i);
                     double d = val;
-                    string s = "ƒ/" + (d / 100).ToString("0.0");
+                    string s = "ƒ/" + (d / 100).ToString("0.0", CultureInfo.CreateSpecificCulture("eu-ES"));
                     FNumber.AddValues(s, val);
                 }
                 FNumber.SetValue(defval, trigervaluchange);

@@ -23,7 +23,9 @@ namespace CameraControl.windows
       InitializeComponent();
       ServiceProvider.Settings.DefaultSession.TimeLapse.TimeLapseDone += TimeLapse_TimeLapseDone;
       ServiceProvider.Settings.ApplyTheme(this);
-      chk_noaf.IsEnabled = ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.CaptureNoAf);
+      if (ServiceProvider.DeviceManager.SelectedCameraDevice != null)
+          chk_noaf.IsEnabled =
+              ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.CaptureNoAf);
     }
 
     void TimeLapse_TimeLapseDone(object sender, EventArgs e)
