@@ -14,6 +14,7 @@ namespace CameraControl.Core.Scripting
 {
     public class ScriptObject : BaseFieldClass
     {
+        public bool ExitLoop { get; set; }
 
         public ValuePairEnumerator Variabiles { get; set; }
 
