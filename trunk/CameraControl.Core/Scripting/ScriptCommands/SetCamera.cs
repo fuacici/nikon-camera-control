@@ -41,6 +41,11 @@ namespace CameraControl.Core.Scripting.ScriptCommands
                         scriptObject.CameraDevice.ShutterSpeed.SetValue(val);
                     }
                     break;
+                case "ec":
+                    {
+                        scriptObject.CameraDevice.ExposureCompensation.SetValue(val);
+                    }
+                    break;
                 default:
                     {
                         ServiceProvider.ScriptManager.OutPut("Wrong property :" + property);
@@ -53,8 +58,8 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         public SetCamera()
         {
             Name = "setcamera";
-            Description = "Set a camera property\n Supported properties:\n aperture\n iso\n  shutter\n";
-            DefaultValue = "setcamera property=\"shutter\" value=\"4.8\"";
+            Description = "Set a camera property\n Supported properties:\n aperture\n iso\n  shutter\n  ec\n";
+            DefaultValue = "setcamera property=\"aperture\" value=\"4.0\"";
         }
     }
 }
