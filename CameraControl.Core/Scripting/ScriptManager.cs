@@ -45,6 +45,7 @@ namespace CameraControl.Core.Scripting
                                        new BulbCapture(),
                                        new Capture(),
                                        new Echo(),
+                                       new ExitLoop(),
                                        new IfCommand(),
                                        new Loop(),
                                        new PHDGuiding(),
@@ -142,6 +143,7 @@ namespace CameraControl.Core.Scripting
             ShouldStop = false;
             IsBusy = true;
             scriptObject.Variabiles.Items.Clear();
+            scriptObject.ExitLoop = false;
             CurrentScript = scriptObject;
             _timer.Start();
             var thread = new Thread(ExecuteThread);

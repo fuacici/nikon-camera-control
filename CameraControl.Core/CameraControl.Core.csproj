@@ -202,6 +202,7 @@
     </Compile>
     <Compile Include="Scripting\ScriptCommands\Capture.cs" />
     <Compile Include="Scripting\ScriptCommands\Echo.cs" />
+    <Compile Include="Scripting\ScriptCommands\ExitLoop.cs" />
     <Compile Include="Scripting\ScriptCommands\IfCommand.cs" />
     <Compile Include="Scripting\ScriptCommands\Loop.cs" />
     <Compile Include="Scripting\ScriptCommands\PHDGuiding.cs" />

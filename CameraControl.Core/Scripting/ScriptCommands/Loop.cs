@@ -46,11 +46,16 @@ namespace CameraControl.Core.Scripting.ScriptCommands
                     break;
                 foreach (IScriptCommand command in Commands)
                 {
+                    command.Execute(scriptObject);
                     if (ServiceProvider.ScriptManager.ShouldStop)
                         break;
-                    command.Execute(scriptObject);
+                    if (scriptObject.ExitLoop)
+                        break;
                 }
+                if (scriptObject.ExitLoop)
+                    break;
             }
+            scriptObject.ExitLoop = false;
             return true;
         }
 
