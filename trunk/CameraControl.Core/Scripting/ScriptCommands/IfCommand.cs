@@ -102,12 +102,7 @@ namespace CameraControl.Core.Scripting.ScriptCommands
 
             if (cond)
             {
-                foreach (IScriptCommand command in Commands)
-                {
-                    if (ServiceProvider.ScriptManager.ShouldStop)
-                        break;
-                    command.Execute(scriptObject);
-                }
+                scriptObject.ExecuteCommands(Commands);
             }
             return true;
         }

@@ -44,6 +44,7 @@ namespace CameraControl.Core.Scripting
                                    {
                                        new BulbCapture(),
                                        new Capture(),
+                                       new CaptureAll(),
                                        new Echo(),
                                        new ExitLoop(),
                                        new IfCommand(),
@@ -154,15 +155,10 @@ namespace CameraControl.Core.Scripting
         {
             try
             {
-                StaticHelper.Instance.SystemMessage = "Script execution started";
+                OutPut("Script execution started");
                 ScriptObject scriptObject = o as ScriptObject;
-                foreach (IScriptCommand scriptCommand in scriptObject.Commands)
-                {
-                    if (ShouldStop)
-                        break;
-                    scriptCommand.Execute(scriptObject);
-                }
-                StaticHelper.Instance.SystemMessage = ShouldStop ? "Script execution stopped" : "Script execution done";
+                scriptObject.ExecuteCommands(scriptObject.Commands);
+                OutPut(ShouldStop ? "Script execution stopped" : "Script execution done");
             }
             catch (Exception exception)
             {
@@ -177,7 +173,7 @@ namespace CameraControl.Core.Scripting
         public void Stop()
         {
             ShouldStop = true;
-            StaticHelper.Instance.SystemMessage = "Script execution stopping ....";
+            OutPut("Script execution stopping ....");
         }
 
         public void OnOutPutMessageReceived(MessageEventArgs e)

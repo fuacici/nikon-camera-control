@@ -50,7 +50,23 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         public virtual bool IsExecuted { get; set; }
         public virtual bool Executing { get; set; }
         public virtual string Name { get; set; }
-        public virtual string DisplayName { get; set; }
+        
+        public virtual string DisplayName
+        {
+            get
+            {
+                StringBuilder s = new StringBuilder();
+                s.Append("[");
+                s.Append(Name);
+                s.Append("]");
+                foreach (ValuePair item in LoadedParams.Items)
+                {
+                    s.Append(string.Format("{0}={1}", item.Name, item.Value));
+                }
+                return s.ToString();
+            }
+            set { }
+        }
 
         public string Description { get; set; }
 

@@ -149,6 +149,7 @@
     <Compile Include="Classes\BitmapLoader.cs" />
     <Compile Include="Classes\BraketingClass.cs" />
     <Compile Include="Classes\Branding.cs" />
+    <Compile Include="Classes\CameraHelper.cs" />
     <Compile Include="Classes\CameraPreset.cs" />
     <Compile Include="Classes\CameraProperty.cs" />
     <Compile Include="Classes\CameraPropertyEnumerator.cs" />
@@ -201,6 +202,7 @@
       <DependentUpon>BulbCaptureControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Scripting\ScriptCommands\Capture.cs" />
+    <Compile Include="Scripting\ScriptCommands\CaptureAll.cs" />
     <Compile Include="Scripting\ScriptCommands\Echo.cs" />
     <Compile Include="Scripting\ScriptCommands\ExitLoop.cs" />
     <Compile Include="Scripting\ScriptCommands\IfCommand.cs" />

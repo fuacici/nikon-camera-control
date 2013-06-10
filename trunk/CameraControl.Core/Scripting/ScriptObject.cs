@@ -239,5 +239,26 @@ namespace CameraControl.Core.Scripting
             else return output.ToString();
         }
 
+        public void ExecuteCommands(AsyncObservableCollection<IScriptCommand> commands)
+        {
+            ExitLoop = false;
+            foreach (IScriptCommand command in commands)
+            {
+                try
+                {
+                    command.Execute(this);
+                    if (ServiceProvider.ScriptManager.ShouldStop)
+                        break;
+                    if (ExitLoop)
+                        break;
+                }
+                catch (Exception exception)
+                {
+                    ServiceProvider.ScriptManager.OutPut("Error executing script command " + command.DisplayName +
+                                                         " Exception:" + exception.Message);
+                    Log.Debug("Error executing commands",exception);
+                }
+            }
+        }
     }
 }
