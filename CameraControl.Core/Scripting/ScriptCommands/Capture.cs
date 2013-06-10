@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CameraControl.Core.Classes;
 using CameraControl.Devices;
 
 namespace CameraControl.Core.Scripting.ScriptCommands
@@ -13,7 +14,7 @@ namespace CameraControl.Core.Scripting.ScriptCommands
             try
             {
                 ServiceProvider.ScriptManager.OutPut("Capture started");
-                scriptObject.CameraDevice.CapturePhoto();
+                CameraHelper.Capture(scriptObject.CameraDevice); 
             }
             catch (Exception exception)
             {

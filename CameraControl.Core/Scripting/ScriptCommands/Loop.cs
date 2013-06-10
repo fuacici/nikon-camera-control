@@ -41,17 +41,10 @@ namespace CameraControl.Core.Scripting.ScriptCommands
             int.TryParse(scriptObject.ParseString(this.LoadedParams["loopcount"]), out loopcount);
             for (int i = 0; i < loopcount; i++)
             {
-                scriptObject.Variabiles["loopcount"] = i.ToString();
+                scriptObject.Variabiles["loopno"] = i.ToString();
                 if (ServiceProvider.ScriptManager.ShouldStop)
                     break;
-                foreach (IScriptCommand command in Commands)
-                {
-                    command.Execute(scriptObject);
-                    if (ServiceProvider.ScriptManager.ShouldStop)
-                        break;
-                    if (scriptObject.ExitLoop)
-                        break;
-                }
+                scriptObject.ExecuteCommands(Commands);
                 if (scriptObject.ExitLoop)
                     break;
             }
