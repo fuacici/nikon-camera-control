@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using CameraControl.Devices.Classes;
@@ -131,6 +132,7 @@ namespace CameraControl.Devices
 
         public override void TransferFile(object o, string filename)
         {
+            int retryes = 10;
             lock (Locker)
             {
                 _timer.Stop();
@@ -156,6 +158,10 @@ namespace CameraControl.Devices
                     {
 
                     }
+                    catch(COMException)
+                    {
+                        
+                    }
                     if (result != null && result.Data != null)
                     {
                         using (BinaryWriter writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
@@ -166,10 +172,10 @@ namespace CameraControl.Devices
                     else
                     {
                         Log.Error("Transfer error code retrying " + result.ErrorCode.ToString("X"));
-                        Thread.Sleep(500);
+                        Thread.Sleep(200);
+                        retryes--;
                     }
-                    //TODO: prevent infinite loop
-                } while (result.Data == null);
+                } while (result.Data == null && retryes>0);
                 //==================================================================
                 //=================== direct file write
                 //StillImageDevice.ExecuteReadBigDataWriteToFile(CONST_CMD_GetObject,
