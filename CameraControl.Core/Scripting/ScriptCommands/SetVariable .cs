@@ -5,11 +5,11 @@ using System.Text;
 
 namespace CameraControl.Core.Scripting.ScriptCommands
 {
-    public sealed class Set:BaseScript
+    public sealed class SetVariable :BaseScript
     {
         public override bool Execute(ScriptObject scriptObject)
         {
-            var varName = LoadedParams["variable"];
+            var varName = LoadedParams["name"];
             if (!string.IsNullOrEmpty(varName))
             {
                 var val = scriptObject.ParseString(LoadedParams["value"]);
@@ -26,11 +26,11 @@ namespace CameraControl.Core.Scripting.ScriptCommands
             return base.Execute(scriptObject);
         }
 
-        public Set()
+        public SetVariable()
         {
-            Name = "set";
+            Name = "setvariable";
             Description = "Set value to a variable";
-            DefaultValue = "set variable=\"var_name\" value=\"value\" inc=\"0\"";
+            DefaultValue = "setvariable  name=\"var_name\" value=\"value\" inc=\"0\"";
         }
     }
 }

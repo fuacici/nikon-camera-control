@@ -50,7 +50,7 @@ namespace CameraControl.Core.Scripting
                                        new IfCommand(),
                                        new Loop(),
                                        new PHDGuiding(),
-                                       new Set(),
+                                       new SetVariable(),
                                        new SetCamera(),
                                        new Stop(),
                                        new WaitCommand(),
