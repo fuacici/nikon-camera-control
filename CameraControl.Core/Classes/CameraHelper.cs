@@ -17,8 +17,19 @@ namespace CameraControl.Core.Classes
             if (o != null)
             {
                 var camera = o as ICameraDevice;
-                if (camera != null) camera.CapturePhoto();
+                if (camera != null)
+                {
+                    CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(camera);
+                    if (property.UseExternalShutter && property.SelectedConfig!=null)
+                    {
+                        ServiceProvider.ExternalDeviceManager.Start(property.SelectedConfig);
+                        return;
+                    }
+                    camera.CapturePhoto();
+                }
             }
         }
+
+
     }
 }
