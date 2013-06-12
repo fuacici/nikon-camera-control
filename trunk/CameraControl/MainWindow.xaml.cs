@@ -258,7 +258,7 @@ namespace CameraControl
                         return;
                     }
                 }
-                ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
+                CameraHelper.Capture(ServiceProvider.DeviceManager.SelectedCameraDevice);
             }
             catch (DeviceException exception)
             {
