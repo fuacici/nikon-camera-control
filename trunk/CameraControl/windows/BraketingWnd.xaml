@@ -30,7 +30,7 @@
             <RowDefinition Height="33*" />
             <RowDefinition Height="49*" />
         </Grid.RowDefinitions>
-        <TabControl SelectionChanged="TabControl_SelectionChanged" TabStripPlacement="Top">
+        <TabControl SelectionChanged="TabControl_SelectionChanged" TabStripPlacement="Left">
             <TabItem Header="{T:TranslateExtension LabelExposureBracketing}" Name="tab_exposure" >
                 <Grid>
                     <Grid.RowDefinitions>
