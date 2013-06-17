@@ -243,7 +243,7 @@ namespace CameraControl.windows
                 {
                     Directory.CreateDirectory(dir);
                 }
-                try
+                 try
                 {
                     fileItem.Device.TransferFile(fileItem.DeviceObject.Handle, fileName);
                 }
