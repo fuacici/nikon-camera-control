@@ -291,13 +291,14 @@ namespace CameraControl.Core.Classes
                     ext = ".nef";
                 if (!string.IsNullOrEmpty(_lastFilename) && RawExtensions.Contains(ext.ToLower()) && !RawExtensions.Contains(Path.GetExtension(_lastFilename).ToLower()))
                 {
-                    string rawfile = Path.Combine(Path.GetDirectoryName(_lastFilename), Path.GetFileNameWithoutExtension(_lastFilename) + (!ext.StartsWith(".") ? "." : "") + ext);
+                    string rawfile = Path.Combine(Folder,
+                                                  FormatFileName(device, ext,false) + (!ext.StartsWith(".") ? "." : "") + ext);
                     if (!File.Exists(rawfile))
                         return rawfile;
                 }
-                if (!UseCameraCounter)
-                    Counter++;
-                string fileName = Path.Combine(Folder, FormatFileName(device) + (!ext.StartsWith(".") ? "." : "") + ext);
+                    
+                string fileName = Path.Combine(Folder,
+                                               FormatFileName(device, ext) + (!ext.StartsWith(".") ? "." : "") + ext);
                 if (File.Exists(fileName))
                     return GetNextFileName(ext, device);
                 _lastFilename = fileName;
@@ -305,7 +306,7 @@ namespace CameraControl.Core.Classes
             }
         }
 
-        private string FormatFileName(ICameraDevice device)
+        private string FormatFileName(ICameraDevice device, string ext, bool incremetCounter=true)
         {
             CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(device);
             string res = FileNameTemplate;
@@ -314,16 +315,22 @@ namespace CameraControl.Core.Classes
             if (UseCameraCounter)
             {
                 res = res.Replace("$C", property.Counter.ToString("00000"));
-                property.Counter = property.Counter + property.CounterInc;
+                if (incremetCounter)
+                    property.Counter = property.Counter + property.CounterInc;
             }
             else
             {
                 res = res.Replace("$C", Counter.ToString("00000"));
+                if (incremetCounter)
+                    Counter++;
             }
             res = res.Replace("$N", Name.Trim());
             if (device.ExposureCompensation != null)
                 res = res.Replace("$E", device.ExposureCompensation.Value != "0" ? device.ExposureCompensation.Value : "");
             res = res.Replace("$D", DateTime.Now.ToString("yyyy-MM-dd"));
+
+            res = res.Replace("$Type", GetType(ext));
+
             res = res.Replace("$X", property.DeviceName.Replace(":", "_").Replace("?", "_").Replace("*", "_"));
             res = res.Replace("$Tag1", SelectedTag1 != null ? SelectedTag1.Value.Trim() : "");
             res = res.Replace("$Tag2", SelectedTag1 != null ? SelectedTag2.Value.Trim() : "");
@@ -338,6 +345,24 @@ namespace CameraControl.Core.Classes
             if (res.StartsWith("\\"))
                 res = res.Substring(1);
             return res;
+        }
+
+        private string GetType(string ext)
+        {
+            if (ext.StartsWith("."))
+                ext = ext.Substring(1);
+            switch (ext.ToLower())
+            {
+                case "jpg":
+                    return "Jpg";
+                case "nef":
+                    return "Raw";
+                case "cr2":
+                    return "Raw";
+                case "tif":
+                    return "Tif";
+            }
+            return ext;
         }
 
         public FileItem AddFile(string fileName)
