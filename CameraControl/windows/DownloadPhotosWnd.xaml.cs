@@ -188,7 +188,21 @@ namespace CameraControl.windows
                     = new PropertyGroupDescription("Device");
                 myView.GroupDescriptions.Add(groupDescription);
             }
-            Dispatcher.Invoke(new Action(() => lst_items.ItemsSource = myView));
+            Dispatcher.Invoke(new Action(delegate
+                                             {
+                                                 if (ServiceProvider.DeviceManager.ConnectedDevices.Count>1)
+                                                 {
+                                                     lst_items.Visibility=Visibility.Visible;
+                                                     lst_items_simple.Visibility=Visibility.Collapsed;
+                                                     lst_items.ItemsSource = myView;                                                     
+                                                 }
+                                                 else
+                                                 {
+                                                     lst_items.Visibility = Visibility.Collapsed;
+                                                     lst_items_simple.Visibility = Visibility.Visible;
+                                                     lst_items_simple.ItemsSource = Items;
+                                                 }
+                                             }));
             dlg.Hide();
         }
 

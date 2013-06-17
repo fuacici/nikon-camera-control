@@ -117,7 +117,7 @@ namespace CameraControl.Core.Classes
             set
             {
                 _selectedConfig = value;
-                SelectedConfigName = value.Name;
+                SelectedConfigName = _selectedConfig == null ? "" : value.Name;
                 NotifyPropertyChanged("SelectedConfig");
             }
         }

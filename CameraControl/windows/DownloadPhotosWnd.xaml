@@ -63,7 +63,28 @@
             <RowDefinition Height="125" />
         </Grid.RowDefinitions>
 
-        <ListBox   Name="lst_items">
+        <ListBox   Name="lst_items_simple" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" Margin="6" >
+                            <Image Source="{Binding Path=Thumbnail}" ToolTip="{Binding Path=ToolTip}" Stretch="Uniform" Width="120" Height="80">
+                            </Image>
+                        </Border>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding Path=IsChecked}"/>
+                            <Label Content="{Binding Path=Name}" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+        <ListBox   Name="lst_items" >
             <ListBox.GroupStyle>
                 <GroupStyle ContainerStyle="{StaticResource ContainerStyle}"/>
             </ListBox.GroupStyle>
