@@ -352,6 +352,7 @@ namespace CameraControl.Core.Translation
         public static string LabelStopLiveView = "Stop Live View";
         public static string LabelBrightness = "Brightness";
         public static string LabelUseExternalShutterRelease = "Use external shutter release";
-        
+        public static string LabelDownloadJpgOnly = "Download Jpg file only";
+        public static string LabelDownloadJpgOnlyToolTip = "Only active if photos are saved on camera card too";
     }
 }

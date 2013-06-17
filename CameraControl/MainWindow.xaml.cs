@@ -141,10 +141,19 @@ namespace CameraControl
                 PhotoSession session = (PhotoSession)eventArgs.CameraDevice.AttachedPhotoSession ??
                                        ServiceProvider.Settings.DefaultSession;
                 StaticHelper.Instance.SystemMessage = "";
-                if ((property.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
+                if (!eventArgs.CameraDevice.CaptureInSdRam)
                 {
-                    eventArgs.CameraDevice.IsBusy = false;
-                    return;
+                    if (property.NoDownload)
+                    {
+                        eventArgs.CameraDevice.IsBusy = false;
+                        return;
+                    }
+                    var extension = Path.GetExtension(eventArgs.FileName);
+                    if (extension != null && (session.DownloadOnlyJpg && extension.ToLower() != ".jpg"))
+                    {
+                        eventArgs.CameraDevice.IsBusy = false;
+                        return;
+                    }
                 }
                 StaticHelper.Instance.SystemMessage = TranslationStrings.MsgPhotoTransferBegin;
                 string fileName = "";

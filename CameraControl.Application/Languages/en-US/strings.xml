@@ -15,7 +15,6 @@
     <string name="EXPOSURE_DELAY_MODE">Exposure delay mode</string> 
     <string name="LOCK">Lock</string> 
     <string name="SINGLE_SHOT__SINGLE_FRAME_SHOOTING_">Single shot (single-frame shooting)</string> 
-    <string name="CONTINUOUS_SHOT__CONTINUOUS_SHOOTING_">Continuous shot (continuous shooting)</string> 
     <string name="SELF_TIMER">Self-timer</string> 
     <string name="QUICK_RESPONSE_REMOTE">Quick-response remote</string> 
     <string name="2S_DELAYED_REMOTE">2s delayed remote</string> 
