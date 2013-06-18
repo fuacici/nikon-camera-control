@@ -9,7 +9,7 @@
                       xmlns:local="clr-namespace:CameraControl.Controls"
                       xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
                       xmlns:Devices="clr-namespace:CameraControl.Devices;assembly=CameraControl.Devices"
-                      mc:Ignorable="d" d:DataContext="{d:DesignData }" Topmost="{Binding ElementName=chk_top,Path=IsChecked}"
+                      xmlns:Controls1="clr-namespace:CameraControl.Controls;assembly=CameraControl.Core" mc:Ignorable="d" d:DataContext="{d:DesignData }" Topmost="{Binding ElementName=chk_top,Path=IsChecked}"
                       ShowMinButton="False" PreviewKeyDown="MetroWindow_PreviewKeyDown">
     <Window.Resources>
         <ResourceDictionary>
@@ -167,18 +167,18 @@
                             <!--<xctk:IntegerUpDown Name="int_photono" Minimum="0" Maximum="36000" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=PhotoNo}" Grid.Column="2" Margin="3"/>
                             <Label Content="{T:TranslateExtension LabelNoOfPhots}" />-->
                             
-                            <local:AdvancedSlider Minimum="1" Maximum="100" Label="{T:TranslateExtension LabelNoOfPhots}" Grid.ColumnSpan="4" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=PhotoNo}" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" />
+                            <Controls1:AdvancedSlider Minimum="1" Maximum="100" Label="{T:TranslateExtension LabelNoOfPhots}" Grid.ColumnSpan="4" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=PhotoNo}" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" />
                             
                             <!--<xctk:IntegerUpDown Name="int_step" Minimum="1" Maximum="2024" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=FocusStep}" Grid.Row="1" Grid.Column="2" Margin="3"/>
                             <Label Content="{T:TranslateExtension LabelFocusStep}" Grid.Row="1" />-->
-                            <local:AdvancedSlider Minimum="1" Maximum="1024" Label="{T:TranslateExtension LabelFocusStep}" Grid.ColumnSpan="4" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=FocusStep}" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Grid.Row="1" />
+                            <Controls1:AdvancedSlider Minimum="1" Maximum="1024" Label="{T:TranslateExtension LabelFocusStep}" Grid.ColumnSpan="4" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=FocusStep}" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Grid.Row="1" />
                             
                             <Label Content="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=PhotoCount}" Height="28" HorizontalAlignment="Left" Margin="5,7,0,0" Name="label3" VerticalAlignment="Top" Width="75" Grid.Row="4" />
                         
                             <!--<Label Content="{T:TranslateExtension LabelWaitTime}" Grid.Row="2" />
                             <xctk:IntegerUpDown Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=WaitTime}" Grid.Column="2" Grid.Row="2" Name="int_wait" Margin="3" Maximum="60" Minimum="1" />-->
 
-                            <local:AdvancedSlider Minimum="2" Maximum="60" Label="{T:TranslateExtension LabelWaitTime}" Grid.ColumnSpan="4" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=WaitTime}" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Grid.Row="2" />
+                            <Controls1:AdvancedSlider Minimum="2" Maximum="60" Label="{T:TranslateExtension LabelWaitTime}" Grid.ColumnSpan="4" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=WaitTime}" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=IsFree}" Grid.Row="2" />
                         </Grid>
                     </Expander.Content>
                 </Expander>
