@@ -19,16 +19,21 @@ using UserControl = System.Windows.Controls.UserControl;
 
 namespace CameraControl.Layouts
 {
-  /// <summary>
-  /// Interaction logic for LayoutNormal.xaml
-  /// </summary>
-  public partial class LayoutNormal : LayoutBase
-  {
-    public LayoutNormal()
+    /// <summary>
+    /// Interaction logic for LayoutNormal.xaml
+    /// </summary>
+    public partial class LayoutNormal : LayoutBase
     {
-      InitializeComponent();
-      ImageLIst = ImageLIstBox;
-      InitServices();
+        public LayoutNormal()
+        {
+            InitializeComponent();
+            ImageLIst = ImageLIstBox;
+            InitServices();
+            zoombox.RelativeZoomModifiers.Clear();
+            zoombox.RelativeZoomModifiers.Add(KeyModifier.None);
+            zoombox.DragModifiers.Clear();
+            zoombox.DragModifiers.Add(KeyModifier.None);
+
+        }
     }
-  }
 }
