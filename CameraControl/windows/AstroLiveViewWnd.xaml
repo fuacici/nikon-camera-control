@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
-                      Title="AstroLiveViewWnd" Height="455" Width="634" Closing="MetroWindow_Closing" xmlns:my="clr-namespace:CameraControl.Controls" xmlns:my1="clr-namespace:CameraControl.windows">
+                      Title="AstroLiveViewWnd" Height="455" Width="634" Closing="MetroWindow_Closing" xmlns:my="clr-namespace:CameraControl.Controls" xmlns:my1="clr-namespace:CameraControl.windows"
+                      xmlns:Controls1="clr-namespace:CameraControl.Controls;assembly=CameraControl.Core">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -43,10 +44,10 @@
                 <ToggleButton Content="{T:TranslateExtension ButtonFreezeImage}" Grid.Row="2" Margin="2" IsChecked="{Binding Path=Freeze, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:AstroLiveViewWnd, AncestorLevel=1}}" />
             </Grid>
         </GroupBox>
-        <my:AdvancedSlider Grid.Column="2" Height="52" Minimum="-255" Maximum="255" HorizontalAlignment="Left" Margin="4,9,0,0" x:Name="advancedSlider1" VerticalAlignment="Top" Width="164" Label="{T:TranslateExtension LabelBrightness}" Value="{Binding Path=Brightness, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:AstroLiveViewWnd, AncestorLevel=1}}" />
+        <Controls1:AdvancedSlider Grid.Column="2" Height="52" Minimum="-255" Maximum="255" HorizontalAlignment="Left" Margin="4,9,0,0" x:Name="advancedSlider1" VerticalAlignment="Top" Width="164" Label="{T:TranslateExtension LabelBrightness}" Value="{Binding Path=Brightness, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:AstroLiveViewWnd, AncestorLevel=1}}" />
         <StackPanel Grid.Column="2" Grid.Row="1" Name="panel_preview">
         <Image Name="img_preview" Stretch="Uniform"/>
         </StackPanel>
-        <my:AdvancedSlider Grid.Column="2" Grid.Row="2" HorizontalAlignment="Left" Margin="2,2,2,2" Minimum="1" Maximum="5" VerticalAlignment="Top" Width="169" Label="Zomm X" Value="{Binding Path=ZoomFactor, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:AstroLiveViewWnd, AncestorLevel=1}}" />
+        <Controls1:AdvancedSlider Grid.Column="2" Grid.Row="2" HorizontalAlignment="Left" Margin="2,2,2,2" Minimum="1" Maximum="5" VerticalAlignment="Top" Width="169" Label="Zomm X" Value="{Binding Path=ZoomFactor, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:AstroLiveViewWnd, AncestorLevel=1}}" />
     </Grid>
 </Controls:MetroWindow>

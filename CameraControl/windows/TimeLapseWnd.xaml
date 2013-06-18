@@ -5,6 +5,7 @@
                        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                        xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
                        xmlns:Controls1="clr-namespace:CameraControl.Controls"
+                       xmlns:Controls2="clr-namespace:CameraControl.Controls;assembly=CameraControl.Core"
                        Title="{T:TranslateExtension TimeLapseWindowTitle}" Height="411" Width="631" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" UseLayoutRounding="True" ShowActivated="True" Closed="Window_Closed" Closing="Window_Closing"
                        ShowMaxRestoreButton="False" ShowMinButton="False">
     <Window.Resources>
@@ -58,9 +59,9 @@
                         <RowDefinition Height="50*" />
                     </Grid.RowDefinitions>
 
-                    <Controls1:AdvancedSlider Minimum="1" Maximum="3600" Label="{T:TranslateExtension LabelSecondsBetweenShots}" Grid.ColumnSpan="3" Margin="0,0,0,0" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.Period}"  Grid.Row="1" Grid.Column="1"/>
-                    <Controls1:AdvancedSlider Minimum="1" Maximum="10000" Label="{T:TranslateExtension LabelNumberOfPhotos}" Grid.ColumnSpan="3" Margin="0,0,0,0" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.NumberOfPhotos}"  Grid.Row="2" Grid.Column="1"/>
-                    <Controls1:AdvancedSlider Minimum="5" Maximum="60" Label="{T:TranslateExtension LabelFps}" Grid.ColumnSpan="3" Margin="0" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.Fps}"  Grid.Row="3" Grid.Column="1"/>
+                    <Controls2:AdvancedSlider Minimum="1" Maximum="3600" Label="{T:TranslateExtension LabelSecondsBetweenShots}" Grid.ColumnSpan="3" Margin="0,0,0,0" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.Period}"  Grid.Row="1" Grid.Column="1"/>
+                    <Controls2:AdvancedSlider Minimum="1" Maximum="10000" Label="{T:TranslateExtension LabelNumberOfPhotos}" Grid.ColumnSpan="3" Margin="0,0,0,0" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.NumberOfPhotos}"  Grid.Row="2" Grid.Column="1"/>
+                    <Controls2:AdvancedSlider Minimum="5" Maximum="60" Label="{T:TranslateExtension LabelFps}" Grid.ColumnSpan="3" Margin="0" Value="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.Fps}"  Grid.Row="3" Grid.Column="1"/>
 
                     <Button Content="{T:TranslateExtension ButtonStartTimeLapse}" Name="btn_start" Click="btn_start_Click" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Grid.Row="11" Grid.Column="3" Margin="3"/>
                     <Label Content="{T:TranslateExtension LabelDontAutofocusOnEveryCapture}" HorizontalContentAlignment="Right" Grid.Row="6" Grid.Column="1" VerticalContentAlignment="Center"/>
