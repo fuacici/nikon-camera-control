@@ -312,17 +312,18 @@ namespace CameraControl.Core.Classes
             string res = FileNameTemplate;
             if (!res.Contains("$C"))
                 res += "$C";
+
             if (UseCameraCounter)
             {
-                res = res.Replace("$C", property.Counter.ToString("00000"));
                 if (incremetCounter)
                     property.Counter = property.Counter + property.CounterInc;
+                res = res.Replace("$C", property.Counter.ToString("00000"));
             }
             else
             {
-                res = res.Replace("$C", Counter.ToString("00000"));
                 if (incremetCounter)
                     Counter++;
+                res = res.Replace("$C", Counter.ToString("00000"));
             }
             res = res.Replace("$N", Name.Trim());
             if (device.ExposureCompensation != null)

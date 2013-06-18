@@ -215,5 +215,18 @@ namespace CameraControl.windows
             }
         }
 
+        private void btn_set_counter_Click(object sender, RoutedEventArgs e)
+        {
+            int counter = 0;
+            if (int.TryParse(txt_counter.Text, out counter))
+            {
+                foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices)
+                {
+                    CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(connectedDevice);
+                    property.Counter = counter;
+                }
+            }
+        }
+
     }
 }
