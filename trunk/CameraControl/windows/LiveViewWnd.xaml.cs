@@ -33,14 +33,11 @@ namespace CameraControl.windows
     /// </summary>
     public partial class LiveViewWnd : IWindow, INotifyPropertyChanged
     {
+        private const int DesiredFrameRate = 20;
 
         private int _retries = 0;
         private ICameraDevice selectedPortableDevice;
         private Rectangle _focusrect = new Rectangle();
-        //private Line _line11 = new Line();
-        //private Line _line12 = new Line();
-        //private Line _line21 = new Line();
-        //private Line _line22 = new Line();
         private BackgroundWorker _worker = new BackgroundWorker();
         private bool _preview = false;
         private int _totalframes = 0;
@@ -313,7 +310,7 @@ namespace CameraControl.windows
             }
         }
 
-        private Timer _timer = new Timer(1000 / 20);
+        private Timer _timer = new Timer(1000 / DesiredFrameRate);
         private Timer _freezeTimer = new Timer();
 
         private bool oper_in_progress = false;
@@ -493,9 +490,15 @@ namespace CameraControl.windows
                                                            {
                                                                ProcessMotionDetection(bmp);
                                                            }
-                                                           //ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
-                                                           //this.LuminanceHistogramPoints =
-                                                           //  ConvertToPointCollection(hslStatistics.Luminance.Values);
+
+                                                           if (_totalframes % DesiredFrameRate == 0)
+                                                           {
+                                                               ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(bmp);
+                                                               this.LuminanceHistogramPoints =
+                                                                   ConvertToPointCollection(
+                                                                       hslStatistics.Luminance.Values);
+                                                           }
+
                                                            WriteableBitmap writeableBitmap;
                                                            preview =
                                                              BitmapFactory.ConvertToPbgra32Format(
@@ -515,12 +518,16 @@ namespace CameraControl.windows
                                                            }
                                                            DrawGrid(writeableBitmap);
                                                            writeableBitmap.Freeze();
+                                                           image1.BeginInit();
                                                            image1.Source = writeableBitmap;
+                                                           image1.EndInit();
                                                        }
                                                        if (SelectedPortableDevice.LiveViewImageZoomRatio.Value == "All")
                                                        {
                                                            ImageBrush ib = new ImageBrush { ImageSource = preview };
+                                                           canvas_image.BeginInit();
                                                            canvas_image.Background = ib;
+                                                           canvas_image.EndInit();
                                                        }
                                                        stream.Close();
                                                    }
