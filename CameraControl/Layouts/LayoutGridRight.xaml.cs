@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CameraControl.Core;
+using Xceed.Wpf.Toolkit.Core.Input;
 
 namespace CameraControl.Layouts
 {
@@ -23,6 +24,10 @@ namespace CameraControl.Layouts
     public LayoutGridRight()
     {
       InitializeComponent();
+      zoombox.RelativeZoomModifiers.Clear();
+      zoombox.RelativeZoomModifiers.Add(KeyModifier.None);
+      zoombox.DragModifiers.Clear();
+      zoombox.DragModifiers.Add(KeyModifier.None);
       ImageLIst = ImageLIstBox;
       InitServices();
       ServiceProvider.Settings.PropertyChanged += Settings_PropertyChanged;
