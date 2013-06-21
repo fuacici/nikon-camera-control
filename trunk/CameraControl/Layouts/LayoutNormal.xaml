@@ -63,8 +63,7 @@
                     Grid.Column="1"
                     Margin="20"
                     Focusable="True"
-                    IsTabStop="True"
-                          >
+                    IsTabStop="True" MouseWheel="zoombox_MouseWheel" PreviewMouseWheel="zoombox_PreviewMouseWheel" ViewStackIndexChanged="zoombox_ViewStackIndexChanged">
                 <xctk:Zoombox.ViewStack>
                     <xctk:ZoomboxView>Fit</xctk:ZoomboxView>
                 </xctk:Zoombox.ViewStack>

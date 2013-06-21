@@ -17,6 +17,7 @@ using CameraControl.Layouts;
 using CameraControl.windows;
 using MahApps.Metro.Controls;
 using EditSession = CameraControl.windows.EditSession;
+using FileInfo = System.IO.FileInfo;
 using HelpProvider = CameraControl.Classes.HelpProvider;
 using MessageBox = System.Windows.MessageBox;
 //using MessageBox = System.Windows.Forms.MessageBox;

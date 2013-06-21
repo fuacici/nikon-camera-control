@@ -1,9 +1,14 @@
+using System.Xml.Serialization;
+
 namespace CameraControl.Core.Classes
 {
-  public class ValuePair
-  {
-    public string Name { get; set; }
-    public string Value { get; set; }
-    public bool IsDisabled { get; set; }
-  }
+    public class ValuePair
+    {
+        [XmlAttribute]
+        public string Name { get; set; }
+        [XmlAttribute]
+        public string Value { get; set; }
+        [XmlAttribute]
+        public bool IsDisabled { get; set; }
+    }
 }

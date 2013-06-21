@@ -30,6 +30,12 @@ namespace CameraControl.Plugins
             set { CustomConfig.Set("Port", value); }
         }
 
+        public SerialPortShutterReleaseConfig()
+        {
+            InitializeComponent();
+            CustomConfig = new CustomConfig();
+        }
+
         public SerialPortShutterReleaseConfig(CustomConfig config)
         {
             CustomConfig = config;

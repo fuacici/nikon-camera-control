@@ -61,5 +61,10 @@ namespace CameraControl.Core.Classes
         {
             return Items.FirstOrDefault(valuePair => valuePair.Name == name);
         }
+
+        public bool ContainName(string name)
+        {
+            return Items.Any(item => item.Name == name);
+        }
     }
 }

@@ -33,7 +33,30 @@ namespace CameraControl.Layouts
             zoombox.RelativeZoomModifiers.Add(KeyModifier.None);
             zoombox.DragModifiers.Clear();
             zoombox.DragModifiers.Add(KeyModifier.None);
+            zoombox.KeepContentInBounds = true;
+        }
 
+        private void zoombox_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+           
+        }
+
+        private void zoombox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            
+        }
+
+        private void zoombox_ViewStackIndexChanged(object sender, Xceed.Wpf.Toolkit.Core.IndexChangedEventArgs e)
+        {
+            LoadFullRes();
+        }
+
+        public override void OnImageLoaded()
+        {
+            Dispatcher.Invoke(new Action(delegate
+                                             {
+                                                 zoombox.FitToBounds();
+                                             }));
         }
     }
 }

@@ -195,25 +195,41 @@ namespace CameraControl.Layouts
                 FileItem item = e.AddedItems[0] as FileItem;
                 if (item != null)
                 {
-                    //image1.Source = item.Thumbnail;
                     ServiceProvider.Settings.SelectedBitmap.SetFileItem(item);
-                    _worker.RunWorkerAsync(item);
+                    _worker.RunWorkerAsync(false);
                 }
             }
         }
 
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            //Thread.Sleep(200);
-            //FileItem fileItem = e.Argument as FileItem;
-            //if (ServiceProvider.Settings.SelectedBitmap.FileItem.FileName != fileItem.FileName)
-            //  return;
-            ServiceProvider.Settings.ImageLoading = true;
-            BitmapLoader.Instance.GetBitmap(ServiceProvider.Settings.SelectedBitmap);
+            if (ServiceProvider.Settings.SelectedBitmap.FileItem == null)
+                return;
+            bool fullres = e.Argument is bool && (bool) e.Argument;
+            ServiceProvider.Settings.ImageLoading = fullres || !ServiceProvider.Settings.SelectedBitmap.FileItem.IsLoaded;
+            BitmapLoader.Instance.GenerateCache(ServiceProvider.Settings.SelectedBitmap.FileItem);
+            ServiceProvider.Settings.SelectedBitmap.DisplayImage =
+                BitmapLoader.Instance.LoadImage(ServiceProvider.Settings.SelectedBitmap.FileItem, fullres);
+            BitmapLoader.Instance.SetData(ServiceProvider.Settings.SelectedBitmap, ServiceProvider.Settings.SelectedBitmap.FileItem);
+            ServiceProvider.Settings.SelectedBitmap.FullResLoaded = fullres;
             ServiceProvider.Settings.ImageLoading = false;
+            OnImageLoaded();
             GC.Collect();
         }
 
+        public virtual void OnImageLoaded()
+        {
+            
+        }
+
+        public void LoadFullRes()
+        {
+            if (_worker.IsBusy)
+                return;
+            if (ServiceProvider.Settings.SelectedBitmap.FullResLoaded)
+                return;
+            _worker.RunWorkerAsync(true);
+        }
 
         private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
