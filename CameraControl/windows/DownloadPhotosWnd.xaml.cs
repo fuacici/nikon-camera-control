@@ -15,6 +15,7 @@ using CameraControl.Core.Translation;
 using CameraControl.Core.Wpf;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
+using FileInfo = System.IO.FileInfo;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 //using CameraControl.Classes;

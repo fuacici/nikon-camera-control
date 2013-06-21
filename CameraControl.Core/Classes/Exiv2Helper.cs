@@ -225,10 +225,114 @@ namespace CameraControl.Core.Classes
                     Focuspoints.Add(ToRect(relWidth, relHeight, FocusPoints7[Tags["Exif.NikonAf.AFPointsInFocus"].Value], dw, dh));
                 }
             }
-
-            //StaticHelper.GetBit
             return;
         }
+
+
+        public void Load(FileItem fileItem)
+        {
+            var startInfo = new ProcessStartInfo(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Tools", "exiv2.exe"))
+            {
+                Arguments = "\"" + fileItem.FileName + "\"" + " -p a",
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Minimized
+            };
+
+            var process = Process.Start(startInfo);
+            process.OutputDataReceived += process_OutputDataReceived;
+            process.BeginOutputReadLine();
+
+            process.WaitForExit();
+            if (Tags.ContainsKey("Exif.Photo.PixelXDimension"))
+            {
+                int.TryParse(Tags["Exif.Photo.PixelXDimension"].Value, out Width);
+                int.TryParse(Tags["Exif.Photo.PixelYDimension"].Value, out Height);
+            }
+            else
+            {
+                if (Tags.ContainsKey("Exif.SubImage2.ImageWidth"))
+                    int.TryParse(Tags["Exif.SubImage2.ImageWidth"].Value, out Width);
+                if (Tags.ContainsKey("Exif.SubImage2.ImageLength"))
+                    int.TryParse(Tags["Exif.SubImage2.ImageLength"].Value, out Height);
+            }
+            int relWidth = Width;
+            int relHeight = Height;
+
+            Focuspoints = new List<Rect>();
+            if (Tags.ContainsKey("Exif.NikonAf2.ContrastDetectAF"))
+            {
+                if (Tags["Exif.NikonAf2.ContrastDetectAF"].Value == "On")
+                {
+                    int x = (int)(ToSize(Tags["Exif.NikonAf2.AFAreaXPosition"].Value) );
+                    int y = (int)(ToSize(Tags["Exif.NikonAf2.AFAreaYPosition"].Value) );
+                    int w = (int)(ToSize(Tags["Exif.NikonAf2.AFAreaWidth"].Value)  );
+                    int h = (int)(ToSize(Tags["Exif.NikonAf2.AFAreaHeight"].Value) );
+                    if (x - (w / 2) > 0 && y - (h / 2) > 0 && x > 0 && y > 0 && w > 0 && h > 0)
+                        Focuspoints.Add(new Rect(x - (w / 2), y - (h / 2), w, h));
+                }
+            }
+            if (Tags.ContainsKey("Exif.NikonAf2.PhaseDetectAF") && Tags["Exif.NikonAf2.PhaseDetectAF"].Value == "On (11-point)")
+            {
+                if (Tags["Exif.NikonAf2.AFPointsUsed"].Value.Contains(" "))
+                {
+                    string[] strbytes = Tags["Exif.NikonAf2.AFPointsUsed"].Value.Split(' ');
+                    byte[] bytes = new byte[8];
+                    for (int i = 0; i < strbytes.Length; i++)
+                    {
+                        byte.TryParse(strbytes[i], out bytes[i]);
+                    }
+                    Int64 focuspoints = BitConverter.ToInt64(bytes, 0);
+                    for (var i = 1; i < 12; i++)
+                    {
+                        if (StaticHelper.GetBit(focuspoints, i - 1))
+                            Focuspoints.Add(ToRect(relWidth, relHeight, FocusPoints11[i.ToString()], 1, 1));
+                    }
+                }
+            }
+            if (Tags.ContainsKey("Exif.NikonAf2.PhaseDetectAF") && Tags["Exif.NikonAf2.PhaseDetectAF"].Value == "On (51-point)")
+            {
+                if (Tags["Exif.NikonAf2.AFPointsUsed"].Value.Contains(" "))
+                {
+                    string[] strbytes = Tags["Exif.NikonAf2.AFPointsUsed"].Value.Split(' ');
+                    byte[] bytes = new byte[8];
+                    for (int i = 0; i < strbytes.Length; i++)
+                    {
+                        byte.TryParse(strbytes[i], out bytes[i]);
+                    }
+                    BitArray bitArray = new BitArray(bytes);
+                    for (var i = 1; i < 52; i++)
+                    {
+                        if (bitArray.Get(i - 1))
+                            Focuspoints.Add(ToRect(relWidth, relHeight, FocusPoints51[i.ToString()], 1, 1));
+                    }
+                }
+            }
+
+            if (Tags.ContainsKey("Exif.NikonAf.AFPointsInFocus"))
+            {
+                if (FocusPoints7.ContainsKey(Tags["Exif.NikonAf.AFPointsInFocus"].Value))
+                {
+                    Focuspoints.Add(ToRect(relWidth, relHeight, FocusPoints7[Tags["Exif.NikonAf.AFPointsInFocus"].Value], 1, 1));
+                }
+            }
+
+            fileItem.FileInfo.ExifTags.Items.Clear();
+
+            foreach (KeyValuePair<string, Exiv2Data> data in Tags)
+            {
+                fileItem.FileInfo.ExifTags.Items.Add(new ValuePair() {Name = data.Key, Value = data.Value.Value});
+            }
+            fileItem.FileInfo.FocusPoints.Clear();
+            foreach (Rect focuspoint in Focuspoints)
+            {
+                fileItem.FileInfo.FocusPoints.Add(focuspoint);
+            }
+            return;
+        }
+
+
 
         void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {

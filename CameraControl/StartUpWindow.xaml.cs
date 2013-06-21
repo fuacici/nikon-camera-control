@@ -148,6 +148,15 @@ namespace CameraControl
             if (cmd == CmdConsts.All_Close)
             {
                 ServiceProvider.WindowsManager.Event -= WindowsManager_Event;
+                if (ServiceProvider.Settings != null)
+                {
+                    ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
+                    ServiceProvider.Settings.Save();
+                    if (ServiceProvider.Trigger != null)
+                    {
+                        ServiceProvider.Trigger.Stop();
+                    }
+                }
                 ServiceProvider.DeviceManager.CloseAll();
                 Thread.Sleep(1000);
                 Application.Current.Shutdown();
