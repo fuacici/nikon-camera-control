@@ -311,6 +311,18 @@ namespace CameraControl.windows
             }
         }
 
+        private bool _edgeDetection;
+        public bool EdgeDetection
+        {
+            get { return _edgeDetection; }
+            set
+            {
+                _edgeDetection = value;
+                NotifyPropertyChanged("EdgeDetection");
+            }
+        }
+
+
         private Timer _timer = new Timer(1000 / DesiredFrameRate);
         private Timer _freezeTimer = new Timer();
 
@@ -543,24 +555,36 @@ namespace CameraControl.windows
                                                                filtering.FillColor = new RGB(System.Drawing.Color.Red);
                                                                filtering.ApplyInPlace(bmp);
                                                            }
+                                                           preview =
+                                                               BitmapFactory.ConvertToPbgra32Format(
+                                                                   BitmapSourceConvert.ToBitmapSource(bmp));
 
+                                                           Bitmap newbmp = bmp;
+                                                           if (EdgeDetection)
+                                                           {
+                                                               var filter = new FiltersSequence(
+                                                                   Grayscale.CommonAlgorithms.BT709,
+                                                                   new HomogenityEdgeDetector()
+                                                                   );
+                                                               newbmp = filter.Apply(bmp);
+                                                               //Merge merge=new Merge(newbmp);
+                                                               //newbmp = merge.Apply(bmp);
+                                                           }
 
                                                            WriteableBitmap writeableBitmap;
-                                                           preview =
-                                                             BitmapFactory.ConvertToPbgra32Format(
-                                                               BitmapSourceConvert.ToBitmapSource(bmp));
+
                                                            if (BlackAndWhite)
                                                            {
                                                                Grayscale filter = new Grayscale(0.299, 0.587, 0.114);
                                                                writeableBitmap =
                                                                  BitmapFactory.ConvertToPbgra32Format(
-                                                                   BitmapSourceConvert.ToBitmapSource(filter.Apply(bmp)));
+                                                                   BitmapSourceConvert.ToBitmapSource(filter.Apply(newbmp)));
                                                            }
                                                            else
                                                            {
                                                                writeableBitmap =
                                                                  BitmapFactory.ConvertToPbgra32Format(
-                                                                   BitmapSourceConvert.ToBitmapSource(bmp));
+                                                                   BitmapSourceConvert.ToBitmapSource(newbmp));
                                                            }
                                                            DrawGrid(writeableBitmap);
                                                            writeableBitmap.Freeze();
