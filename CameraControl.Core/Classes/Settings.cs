@@ -508,6 +508,28 @@ namespace CameraControl.Core.Classes
         }
 
 
+        private bool _highlightUnderExp;
+        public bool HighlightUnderExp
+        {
+            get { return _highlightUnderExp; }
+            set
+            {
+                _highlightUnderExp = value;
+                NotifyPropertyChanged("HighlightUnderExp");
+            }
+        }
+
+        private bool _highlightOverExp;
+        public bool HighlightOverExp
+        {
+            get { return _highlightOverExp; }
+            set
+            {
+                _highlightOverExp = value;
+                NotifyPropertyChanged("HighlightOverExp");
+            }
+        }
+
         public CameraPropertyEnumerator CameraProperties { get; set; }
         public string SelectedLayout { get; set; }
         public AsyncObservableCollection<CameraPreset> CameraPresets { get; set; }
@@ -561,6 +583,8 @@ namespace CameraControl.Core.Classes
             LowMemoryUsage = true;
             UseParallelTransfer = false;
             ShowUntranslatedLabelId = false;
+            HighlightOverExp = false;
+            HighlightUnderExp = false;
         }
 
         public void Add(PhotoSession session)
