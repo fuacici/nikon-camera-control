@@ -78,6 +78,8 @@
                     </Grid>
                 </Border>
             </GroupBox>
+            <CheckBox Grid.Column="1" Height="16" HorizontalAlignment="Left" Margin="12,39,0,0" IsChecked="{Binding Path=Settings.HighlightUnderExp}" VerticalAlignment="Top" />
+            <CheckBox Grid.Column="1" Height="16" Width="16" Margin="0,39,11,0"  IsChecked="{Binding Path=Settings.HighlightOverExp}" VerticalAlignment="Top" HorizontalAlignment="Right" HorizontalContentAlignment="Right"/>
             <!--</TabItem>
                 <TabItem Header="Metadata" Name="tabItem2">-->
             <!--</TabItem>

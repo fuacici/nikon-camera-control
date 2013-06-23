@@ -140,6 +140,7 @@ namespace CameraControl.Core.Classes
             {
                 for (var i = 0; i < bitmapContext.Width*bitmapContext.Height; i++)
                 {
+
                     int num1 = bitmapContext.Pixels[i];
                     byte a = (byte) (num1 >> 24);
                     int num2 = (int) a;
@@ -157,6 +158,38 @@ namespace CameraControl.Core.Classes
                 }
             }
 
+        }
+
+        public unsafe void Highlight(BitmapFile file, bool under , bool over)
+        {
+            if (!under && over)
+                return;
+            WriteableBitmap bitmap = file.DisplayImage.Clone();
+            int color1 = ConvertColor(Colors.Blue);
+            int color2 = ConvertColor(Colors.Red);
+            int treshold = 3;
+            using (BitmapContext bitmapContext = bitmap.GetBitmapContext())
+            {
+                for (var i = 0; i < bitmapContext.Width * bitmapContext.Height; i++)
+                {
+
+                    int num1 = bitmapContext.Pixels[i];
+                    byte a = (byte)(num1 >> 24);
+                    int num2 = (int)a;
+                    if (num2 == 0)
+                        num2 = 1;
+                    int num3 = 65280 / num2;
+                    Color col = Color.FromArgb(a, (byte)((num1 >> 16 & (int)byte.MaxValue) * num3 >> 8),
+                                               (byte)((num1 >> 8 & (int)byte.MaxValue) * num3 >> 8),
+                                               (byte)((num1 & (int)byte.MaxValue) * num3 >> 8));
+                    if ( under && col.R < treshold && col.G < treshold && col.B < treshold)
+                        bitmapContext.Pixels[i] = color1;
+                    if (over && col.R > 255 - treshold && col.G > 255 - treshold && col.B > 255 - treshold)
+                        bitmapContext.Pixels[i] = color2;
+                }
+            }
+            bitmap.Freeze();
+            file.DisplayImage = bitmap;
         }
 
         public void SetData(BitmapFile file,FileItem fileItem)
@@ -316,6 +349,12 @@ namespace CameraControl.Core.Classes
             }
 
             return smoothedValues;
+        }
+
+        private static int ConvertColor(Color color)
+        {
+            int num = (int)color.A + 1;
+            return (int)color.A << 24 | (int)(byte)((int)color.R * num >> 8) << 16 | (int)(byte)((int)color.G * num >> 8) << 8 | (int)(byte)((int)color.B * num >> 8);
         }
     }
 }
