@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using AForge;
 using AForge.Imaging;
 using AForge.Imaging.Filters;
 using AForge.Vision.Motion;
@@ -328,6 +329,28 @@ namespace CameraControl.windows
             }
         }
 
+        private bool _highlightUnderExp;
+        public bool HighlightUnderExp
+        {
+            get { return _highlightUnderExp; }
+            set
+            {
+                _highlightUnderExp = value;
+                NotifyPropertyChanged("HighlightUnderExp");
+            }
+        }
+
+        private bool _highlightOverExp;
+        public bool HighlightOverExp
+        {
+            get { return _highlightOverExp; }
+            set
+            {
+                _highlightOverExp = value;
+                NotifyPropertyChanged("HighlightOverExp");
+            }
+        }
+
         public LiveViewWnd()
         {
             SelectedPortableDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
@@ -498,6 +521,29 @@ namespace CameraControl.windows
                                                                    ConvertToPointCollection(
                                                                        hslStatistics.Luminance.Values);
                                                            }
+
+                                                           if (HighlightUnderExp)
+                                                           {
+                                                               ColorFiltering filtering = new ColorFiltering();
+                                                               filtering.Blue = new IntRange(0, 10);
+                                                               filtering.Red = new IntRange(0, 10);
+                                                               filtering.Green = new IntRange(0, 10);
+                                                               filtering.FillOutsideRange = false;
+                                                               filtering.FillColor = new RGB(System.Drawing.Color.Blue);
+                                                               filtering.ApplyInPlace(bmp);
+                                                           }
+
+                                                           if (HighlightOverExp)
+                                                           {
+                                                               ColorFiltering filtering = new ColorFiltering();
+                                                               filtering.Blue = new IntRange(245, 255);
+                                                               filtering.Red = new IntRange(245, 255);
+                                                               filtering.Green = new IntRange(245, 255);
+                                                               filtering.FillOutsideRange = false;
+                                                               filtering.FillColor = new RGB(System.Drawing.Color.Red);
+                                                               filtering.ApplyInPlace(bmp);
+                                                           }
+
 
                                                            WriteableBitmap writeableBitmap;
                                                            preview =
