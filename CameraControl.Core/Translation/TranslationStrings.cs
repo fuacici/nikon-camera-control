@@ -88,9 +88,9 @@ namespace CameraControl.Core.Translation
         public static string LabelLargFocusStep = "Large focus step";
         public static string ReStartToolTip = "You need to restart the application for this changes to take affect";
 
-        public static string LabelSessonName = "Session name :";
-        public static string LabelFolder = "Folder :";
-        public static string LabelFileNameTemplate = "File Name Template :";
+        public static string LabelSessonName = "Session name ";
+        public static string LabelFolder = "Folder ";
+        public static string LabelFileNameTemplate = "File Name Template ";
         public static string LabelFileNameTemplateToolTip = "$N - Session name &#xa;$C - Counter &#xa;$E - Exposure comp &#xa;$X - Camera name&#xa;$D - Current date&#xa;$Type - Type of file (Raw|Jpg) &#xa;$Tag1 - Selected tag 1&#xa;$Tag2 - Selected tag 2&#xa;$Tag3 - Selected tag 3&#xa;$Tag4 - Selected tag 4";
         public static string LabelCounter = "Counter";
         public static string LabelUseOriginal = "Use original filename gave by the camera";
@@ -356,5 +356,6 @@ namespace CameraControl.Core.Translation
         public static string LabelDownloadJpgOnlyToolTip = "Only active if photos are saved on camera card too";
         public static string LabelSetCounters = "Set Counters";
         public static string LabelEdgeDetection = "Edge detection";
+        public static string LabelLeadingZeros = "Counter leading zeros";
     }
 }

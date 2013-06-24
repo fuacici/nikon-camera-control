@@ -218,6 +218,16 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        private int _leadingZeros;
+        public int LeadingZeros
+        {
+            get { return _leadingZeros; }
+            set
+            {
+                _leadingZeros = value;
+                NotifyPropertyChanged("LeadingZeros");
+            }
+        }
 
         public string ConfigFile { get; set; }
         private FileSystemWatcher _systemWatcher;
@@ -244,6 +254,7 @@ namespace CameraControl.Core.Classes
             Tags = new AsyncObservableCollection<TagItem>();
             UseCameraCounter = false;
             DownloadOnlyJpg = false;
+            LeadingZeros = 4;
         }
 
         void _systemWatcher_Created(object sender, FileSystemEventArgs e)
@@ -317,13 +328,13 @@ namespace CameraControl.Core.Classes
             {
                 if (incremetCounter)
                     property.Counter = property.Counter + property.CounterInc;
-                res = res.Replace("$C", property.Counter.ToString("00000"));
+                res = res.Replace("$C", property.Counter.ToString(new string('0', LeadingZeros)));
             }
             else
             {
                 if (incremetCounter)
                     Counter++;
-                res = res.Replace("$C", Counter.ToString("00000"));
+                res = res.Replace("$C", Counter.ToString(new string('0', LeadingZeros)));
             }
             res = res.Replace("$N", Name.Trim());
             if (device.ExposureCompensation != null)
