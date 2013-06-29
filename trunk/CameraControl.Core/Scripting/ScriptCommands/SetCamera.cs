@@ -46,6 +46,16 @@ namespace CameraControl.Core.Scripting.ScriptCommands
                         scriptObject.CameraDevice.ExposureCompensation.SetValue(val);
                     }
                     break;
+                case "wb":
+                    {
+                        scriptObject.CameraDevice.WhiteBalance.SetValue(val);
+                    }
+                    break;
+                case "cs":
+                    {
+                        scriptObject.CameraDevice.CompressionSetting.SetValue(val);
+                    }
+                    break;
                 default:
                     {
                         ServiceProvider.ScriptManager.OutPut("Wrong property :" + property);
@@ -58,7 +68,7 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         public SetCamera()
         {
             Name = "setcamera";
-            Description = "Set a camera property\n Supported properties:\n aperture\n iso\n  shutter\n  ec\n";
+            Description = "Set a camera property";
             DefaultValue = "setcamera";
         }
     }

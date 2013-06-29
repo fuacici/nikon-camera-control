@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -206,7 +207,29 @@ namespace CameraControl.Core.Scripting
 
                 // grab details for this parse
                 varName = currMatch.Groups[1].Value;
-                value = Variabiles[varName];
+
+                if(varName.StartsWith("session."))
+                {
+                    IList<PropertyInfo> props = new List<PropertyInfo>(typeof(PhotoSession).GetProperties());
+                    foreach (PropertyInfo prop in props)
+                    {
+                        //object propValue = prop.GetValue(myObject, null);
+                        if (prop.PropertyType == typeof(string) || prop.PropertyType == typeof(int) || prop.PropertyType == typeof(bool))
+                        {
+                            if(varName.Split('.')[1].ToLower()==prop.Name.ToLower())
+                            {
+                                value = prop.GetValue(ServiceProvider.Settings.DefaultSession, null).ToString();
+                            }
+                        }
+                        // Do something with propValue
+                    }
+                }
+                else
+                {
+                    value = Variabiles[varName];    
+                }
+                
+
                 if (currMatch.Groups.Count >= 3)
                     modifier = currMatch.Groups[2].Value.ToLower();
                 if (currMatch.Groups.Count >= 4)
@@ -233,7 +256,7 @@ namespace CameraControl.Core.Scripting
                 offset = offset - currMatch.Length + value.Length;
             }
 
-            // if we did some replacements search again to check forembeded variables
+            // if we did some replacements search again to check for embedded variables
             if (matches.Count > 0)
                 return ParseString(output.ToString());
             else return output.ToString();

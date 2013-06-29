@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -59,10 +60,35 @@ namespace CameraControl.windows
                                                    completionWindow = null;
                                                };
             }
+            if (e.Text == ".")
+            {
+                string word = textEditor.GetWordBeforeDot();
+                if (word == "{session")
+                {
+                    IList<PropertyInfo> props = new List<PropertyInfo>(typeof(PhotoSession).GetProperties());
+                    completionWindow = new CompletionWindow(textEditor.TextArea);
+                    // provide AvalonEdit with the data:
+                    IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
+                    foreach (PropertyInfo prop in props)
+                    {
+                        //object propValue = prop.GetValue(myObject, null);
+                        if(prop.PropertyType==typeof(string) || prop.PropertyType==typeof(int) || prop.PropertyType==typeof(bool))
+                        {
+                            data.Add(new MyCompletionData(prop.Name.ToLower(), "", prop.Name.ToLower()));
+                        }
+                        // Do something with propValue
+                    }
+                    completionWindow.Show();
+                    completionWindow.Closed += delegate
+                    {
+                        completionWindow = null;
+                    };
+                }
+            }
             if (e.Text == " ")
             {
                 string line = textEditor.GetLine();
-                string word = textEditor.GetWordBeforeDot();
+                
                 if (line.StartsWith("setcamera"))
                 {
                     if (!line.Contains("property") && !line.Contains("value"))
@@ -105,6 +131,8 @@ namespace CameraControl.windows
                         data.Add(new MyCompletionData("\"" + "iso" + "\"", "", "iso"));
                         data.Add(new MyCompletionData("\"" + "shutter" + "\"", "", "shutter"));
                         data.Add(new MyCompletionData("\"" + "ec" + "\"", "Exposure Compensation", "ec"));
+                        data.Add(new MyCompletionData("\"" + "wb" + "\"", "White Balance", "wb"));
+                        data.Add(new MyCompletionData("\"" + "cs" + "\"", "Compression Setting", "cs"));
                         completionWindow.Show();
                         completionWindow.Closed += delegate
                         {
@@ -181,6 +209,42 @@ namespace CameraControl.windows
                                                            {
                                                                completionWindow = null;
                                                            };
+                        }
+                        if (line.Contains("property=\"wb\"") &&
+                             ServiceProvider.DeviceManager.SelectedCameraDevice.WhiteBalance != null)
+                        {
+                            completionWindow = new CompletionWindow(textEditor.TextArea);
+                            IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
+
+                            foreach (
+                                string value in
+                                    ServiceProvider.DeviceManager.SelectedCameraDevice.WhiteBalance.Values)
+                            {
+                                data.Add(new MyCompletionData("\"" + value + "\"", value, value));
+                            }
+                            completionWindow.Show();
+                            completionWindow.Closed += delegate
+                                                           {
+                                                               completionWindow = null;
+                                                           };
+                        }
+                        if (line.Contains("property=\"cs\"") &&
+                                ServiceProvider.DeviceManager.SelectedCameraDevice.CompressionSetting != null)
+                        {
+                            completionWindow = new CompletionWindow(textEditor.TextArea);
+                            IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
+
+                            foreach (
+                                string value in
+                                    ServiceProvider.DeviceManager.SelectedCameraDevice.CompressionSetting.Values)
+                            {
+                                data.Add(new MyCompletionData("\"" + value + "\"", value, value));
+                            }
+                            completionWindow.Show();
+                            completionWindow.Closed += delegate
+                            {
+                                completionWindow = null;
+                            };
                         }
                     }
                 }
