@@ -59,7 +59,7 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         {
             Name = "setcamera";
             Description = "Set a camera property\n Supported properties:\n aperture\n iso\n  shutter\n  ec\n";
-            DefaultValue = "setcamera property=\"aperture\" value=\"4.0\"";
+            DefaultValue = "setcamera";
         }
     }
 }

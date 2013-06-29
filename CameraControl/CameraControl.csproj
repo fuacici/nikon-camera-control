@@ -182,6 +182,7 @@
     </Compile>
     <Compile Include="Classes\HelpProvider.cs" />
     <Compile Include="Classes\WpfCommands.cs" />
+    <Compile Include="Controls\AvalonEditExtensions.cs" />
     <Compile Include="Controls\CameraItem.xaml.cs">
       <DependentUpon>CameraItem.xaml</DependentUpon>
     </Compile>

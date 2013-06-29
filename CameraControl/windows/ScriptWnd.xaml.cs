@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using CameraControl.Controls;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
@@ -54,9 +55,135 @@ namespace CameraControl.windows
                 }
                 completionWindow.Show();
                 completionWindow.Closed += delegate
+                                               {
+                                                   completionWindow = null;
+                                               };
+            }
+            if (e.Text == " ")
+            {
+                string line = textEditor.GetLine();
+                string word = textEditor.GetWordBeforeDot();
+                if (line.StartsWith("setcamera"))
                 {
-                    completionWindow = null;
-                };
+                    if (!line.Contains("property") && !line.Contains("value"))
+                    {
+                        completionWindow = new CompletionWindow(textEditor.TextArea);
+                        IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
+                        data.Add(new MyCompletionData("property", "", "property"));
+                        completionWindow.Show();
+                        completionWindow.Closed += delegate
+                                                       {
+                                                           completionWindow = null;
+                                                       };
+                    }
+                    if (line.Contains("property") && !line.Contains("value"))
+                    {
+                        completionWindow = new CompletionWindow(textEditor.TextArea);
+                        IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
+                        data.Add(new MyCompletionData("value", "", "value"));
+                        completionWindow.Show();
+                        completionWindow.Closed += delegate
+                        {
+                            completionWindow = null;
+                        };
+                    }
+                }
+            }
+
+
+            if (e.Text == "=" && ServiceProvider.DeviceManager.SelectedCameraDevice != null)
+            {
+                string line = textEditor.GetLine();
+                string word = textEditor.GetWordBeforeDot();
+                if (line.StartsWith("setcamera"))
+                {
+                    if (word == "property")
+                    {
+                        completionWindow = new CompletionWindow(textEditor.TextArea);
+                        IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
+                        data.Add(new MyCompletionData("\"" + "aperture" + "\"", "", "aperture"));
+                        data.Add(new MyCompletionData("\"" + "iso" + "\"", "", "iso"));
+                        data.Add(new MyCompletionData("\"" + "shutter" + "\"", "", "shutter"));
+                        data.Add(new MyCompletionData("\"" + "ec" + "\"", "Exposure Compensation", "ec"));
+                        completionWindow.Show();
+                        completionWindow.Closed += delegate
+                        {
+                            completionWindow = null;
+                        };
+                    }
+                    if (word == "value")
+                    {
+
+                        if (line.Contains("property=\"aperture\"") &&
+                            ServiceProvider.DeviceManager.SelectedCameraDevice.FNumber != null)
+                        {
+                            completionWindow = new CompletionWindow(textEditor.TextArea);
+                            IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
+
+                            foreach (string value in ServiceProvider.DeviceManager.SelectedCameraDevice.FNumber.Values)
+                            {
+                                data.Add(new MyCompletionData("\"" + value + "\"", value, value));
+                            }
+                            completionWindow.Show();
+                            completionWindow.Closed += delegate
+                                                           {
+                                                               completionWindow = null;
+                                                           };
+                        }
+                        if (line.Contains("property=\"iso\"") &&
+                            ServiceProvider.DeviceManager.SelectedCameraDevice.IsoNumber != null)
+                        {
+                            completionWindow = new CompletionWindow(textEditor.TextArea);
+                            IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
+
+                            foreach (string value in ServiceProvider.DeviceManager.SelectedCameraDevice.IsoNumber.Values
+                                )
+                            {
+                                data.Add(new MyCompletionData("\"" + value + "\"", value, value));
+                            }
+                            completionWindow.Show();
+                            completionWindow.Closed += delegate
+                                                           {
+                                                               completionWindow = null;
+                                                           };
+                        }
+                        if (line.Contains("property=\"shutter\"") &&
+                            ServiceProvider.DeviceManager.SelectedCameraDevice.ShutterSpeed != null)
+                        {
+                            completionWindow = new CompletionWindow(textEditor.TextArea);
+                            IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
+
+                            foreach (
+                                string value in ServiceProvider.DeviceManager.SelectedCameraDevice.ShutterSpeed.Values)
+                            {
+                                data.Add(new MyCompletionData("\"" + value + "\"", value, value));
+                            }
+                            completionWindow.Show();
+                            completionWindow.Closed += delegate
+                                                           {
+                                                               completionWindow = null;
+                                                           };
+                        }
+                        if (line.Contains("property=\"ec\"") &&
+                            ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation != null)
+                        {
+                            completionWindow = new CompletionWindow(textEditor.TextArea);
+                            IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
+
+                            foreach (
+                                string value in
+                                    ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.Values)
+                            {
+                                data.Add(new MyCompletionData("\"" + value + "\"", value, value));
+                            }
+                            completionWindow.Show();
+                            completionWindow.Closed += delegate
+                                                           {
+                                                               completionWindow = null;
+                                                           };
+                        }
+                    }
+                }
             }
         }
 
@@ -251,5 +378,6 @@ namespace CameraControl.windows
         {
             ServiceProvider.ScriptManager.Stop();
         }
+
     }
 }
