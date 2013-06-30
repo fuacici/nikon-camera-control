@@ -72,17 +72,7 @@ namespace CameraControl.Devices.Nikon
             return res;
         }
 
-        public override void StartRecordMovie()
-        {
-            SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)1 }, CONST_PROP_ApplicationMode, -1);
-            base.StartRecordMovie();
-        }
 
-        public override void StopRecordMovie()
-        {
-            base.StopRecordMovie();
-            SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)0 }, CONST_PROP_ApplicationMode, -1);
-        }
 
     }
 }
