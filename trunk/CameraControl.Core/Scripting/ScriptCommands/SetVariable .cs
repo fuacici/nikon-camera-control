@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using CameraControl.Core.Classes;
 
 namespace CameraControl.Core.Scripting.ScriptCommands
 {
@@ -21,7 +23,38 @@ namespace CameraControl.Core.Scripting.ScriptCommands
                     intval += intinc;
                     val = intval.ToString();
                 }
-                scriptObject.Variabiles[varName] = val;
+                if (varName.StartsWith("session."))
+                {
+                    IList<PropertyInfo> props = new List<PropertyInfo>(typeof(PhotoSession).GetProperties());
+                    foreach (PropertyInfo prop in props)
+                    {
+                        if (prop.PropertyType == typeof(string) || prop.PropertyType == typeof(int) || prop.PropertyType == typeof(bool))
+                        {
+                            if (varName.Split('.')[1].ToLower() == prop.Name.ToLower())
+                            {
+                                if(prop.PropertyType == typeof(string))
+                                {
+                                    prop.SetValue(ServiceProvider.Settings.DefaultSession, val, null);
+                                }
+                                if (prop.PropertyType == typeof(bool))
+                                {
+                                    prop.SetValue(ServiceProvider.Settings.DefaultSession, val == "true", null);
+                                }
+                                if (prop.PropertyType == typeof(int))
+                                {
+                                    int i = 0;
+                                    if (int.TryParse(val, out i))
+                                        prop.SetValue(ServiceProvider.Settings.DefaultSession, i, null);
+                                }
+
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    scriptObject.Variabiles[varName] = val;
+                }
             }
             return base.Execute(scriptObject);
         }

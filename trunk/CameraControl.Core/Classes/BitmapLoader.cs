@@ -162,7 +162,9 @@ namespace CameraControl.Core.Classes
 
         public unsafe void Highlight(BitmapFile file, bool under , bool over)
         {
-            if (!under && over)
+            if (!under && !over)
+                return;
+            if (file == null || file.DisplayImage == null)
                 return;
             WriteableBitmap bitmap = file.DisplayImage.Clone();
             int color1 = ConvertColor(Colors.Blue);

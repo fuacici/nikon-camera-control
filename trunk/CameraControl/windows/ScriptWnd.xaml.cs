@@ -63,7 +63,7 @@ namespace CameraControl.windows
             if (e.Text == ".")
             {
                 string word = textEditor.GetWordBeforeDot();
-                if (word == "{session")
+                if (word == "{session" || word == "session")
                 {
                     IList<PropertyInfo> props = new List<PropertyInfo>(typeof(PhotoSession).GetProperties());
                     completionWindow = new CompletionWindow(textEditor.TextArea);
