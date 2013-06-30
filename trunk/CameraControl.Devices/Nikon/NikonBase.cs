@@ -55,6 +55,7 @@ namespace CameraControl.Devices.Nikon
         public const int CONST_PROP_RecordingMedia = 0xD10B;
         public const int CONST_PROP_NoiseReduction = 0xD06B;
         public const int CONST_PROP_ApplicationMode = 0xD1F0;
+        public const int CONST_PROP_RawCompressionType = 0xD016;
        
         public const int CONST_Event_DevicePropChanged = 0x4006;
         public const int CONST_Event_StoreFull = 0x400A;
@@ -289,6 +290,7 @@ namespace CameraControl.Devices.Nikon
         public virtual void AddAditionalProps()
         {
             AdvancedProperties.Add(InitImageSize());
+            AdvancedProperties.Add(InitRawQuality());
             AdvancedProperties.Add(InitBurstNumber());
             AdvancedProperties.Add(InitStillCaptureMode());
             AdvancedProperties.Add(InitOnOffProperty("Auto Iso", 0xD054));
@@ -327,6 +329,17 @@ namespace CameraControl.Devices.Nikon
             List<byte> vals = new List<byte>() {10};
             vals.AddRange(Encoding.Unicode.GetBytes(key));
             SetProperty(CONST_CMD_SetDevicePropValue, vals.ToArray() , CONST_PROP_ImageSize, -1);
+        }
+
+        protected virtual PropertyValue<long> InitRawQuality()
+        {
+            PropertyValue<long> res = new PropertyValue<long>() { Name = "Flash", IsEnabled = true, Code = CONST_PROP_RawCompressionType, SubType = typeof(byte) };
+            res.AddValues("Lossless compressed RAW", 0);
+            res.AddValues("Compressed RAW", 1);
+            res.AddValues("Uncompressed RAW", 2);
+            res.ValueChanged += (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                                                                  res.Code, -1);
+            return res;
         }
 
         protected virtual PropertyValue<long> InitOnOffProperty(string name, ushort code)
