@@ -333,7 +333,7 @@ namespace CameraControl.Devices.Nikon
 
         protected virtual PropertyValue<long> InitRawQuality()
         {
-            PropertyValue<long> res = new PropertyValue<long>() { Name = "Flash", IsEnabled = true, Code = CONST_PROP_RawCompressionType, SubType = typeof(byte) };
+            PropertyValue<long> res = new PropertyValue<long>() { Name = "Raw Compression", IsEnabled = true, Code = CONST_PROP_RawCompressionType, SubType = typeof(byte) };
             res.AddValues("Lossless compressed RAW", 0);
             res.AddValues("Compressed RAW", 1);
             res.AddValues("Uncompressed RAW", 2);
