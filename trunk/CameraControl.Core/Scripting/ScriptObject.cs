@@ -223,6 +223,18 @@ namespace CameraControl.Core.Scripting
                         }
                         // Do something with propValue
                     }
+                } if(varName.StartsWith("camera."))
+                {
+                    if(ServiceProvider.DeviceManager.SelectedCameraDevice!=null)
+                    {
+                        CameraPreset preset = new CameraPreset();
+                        preset.Get(ServiceProvider.DeviceManager.SelectedCameraDevice);
+                        foreach (ValuePair pair in preset.Values)
+                        {
+                            if (varName.Split('.')[1].ToLower() == pair.Name.Replace(" ","").ToLower())
+                                value = pair.Value;
+                        }
+                    }
                 }
                 else
                 {

@@ -94,8 +94,10 @@ Section -post SEC0002
     CreateDirectory "$SMPROGRAMS\$StartMenuGroup"
     CreateShortCut "$SMPROGRAMS\$StartMenuGroup\digiCamControl.lnk" "$INSTDIR\CameraControl.exe"
 	CreateShortCut "$SMPROGRAMS\$StartMenuGroup\MtpTester.lnk" "$INSTDIR\MtpTester.exe"
+    CreateShortCut "$SMPROGRAMS\$StartMenuGroup\PhotoBooth.lnk" "$INSTDIR\PhotoBooth.exe" 
+	
     CreateShortCut "$DESKTOP\digiCamControl.lnk" "$INSTDIR\CameraControl.exe" "" "$INSTDIR\CameraControl.exe" 0 "" "" "digiCamControl"
-    
+	
     CreateShortcut "$SMPROGRAMS\$StartMenuGroup\Uninstall $(^Name).lnk" "$INSTDIR\uninstall.exe"
   
     !insertmacro MUI_STARTMENU_WRITE_END
