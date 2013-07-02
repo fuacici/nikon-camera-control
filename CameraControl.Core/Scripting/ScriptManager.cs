@@ -74,7 +74,10 @@ namespace CameraControl.Core.Scripting
             doc.AppendChild(docNode);
             XmlNode rootNode = doc.CreateElement("dccscript");
             rootNode.Attributes.Append(CreateAttribute(doc, "UseExternal", scriptObject.UseExternal ? "true" : "false"));
-            rootNode.Attributes.Append(CreateAttribute(doc, "SelectedConfig", scriptObject.SelectedConfig.Name));
+            rootNode.Attributes.Append(CreateAttribute(doc, "SelectedConfig",
+                                                       scriptObject.SelectedConfig == null
+                                                           ? ""
+                                                           : scriptObject.SelectedConfig.Name));
             doc.AppendChild(rootNode);
             XmlNode commandsNode = doc.CreateElement("commands");
             rootNode.AppendChild(commandsNode);

@@ -84,6 +84,23 @@ namespace CameraControl.windows
                         completionWindow = null;
                     };
                 }
+                if (word == "{camera" && ServiceProvider.DeviceManager.SelectedCameraDevice != null)
+                {
+                    completionWindow = new CompletionWindow(textEditor.TextArea);
+                    IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
+
+                    CameraPreset preset = new CameraPreset();
+                    preset.Get(ServiceProvider.DeviceManager.SelectedCameraDevice);
+                    foreach (ValuePair value in preset.Values)
+                    {
+                        data.Add(new MyCompletionData(value.Name.Replace(" ", "").ToLower(), "Current value :" + value.Value, value.Name.Replace(" ", "").ToLower()));
+                    }
+                    completionWindow.Show();
+                    completionWindow.Closed += delegate
+                                                   {
+                                                       completionWindow = null;
+                                                   };
+                }
             }
             if (e.Text == " ")
             {
