@@ -372,5 +372,28 @@
     <string name="LabelMirrorUpError2">The release mode is [Mirror-up].</string>
     <string name="LabelDestinationCardError">The recording destination is the card.</string>
     <string name="LabelLiveViewError">Error stating live view </string>
-	
+	<!-- 07/05/2013 -->
+	<string name="LabelDevices">Devices</string>
+	<string name="LabelExternalShutterRelease">External shutter release</string>
+	<string name="LabelConfigName">Configuration name</string>
+	<string name="LabelDriver">Driver</string>
+	<string name="LabelAstronomy">Astronomy</string>
+	<string name="LabelEnable">Enable</string>
+	<string name="LabelUseConfiguration">Use configuration</string>
+	<string name="LabelNoExternalDeviceSelected">No external device is selected</string>
+	<string name="LabelScript">Script</string>
+	<string name="LabelStartScript">Start Script</string>
+	<string name="LabelStopScript">Stop Script</string>
+	<string name="LabelDeviceSettings">Device settings</string>
+	<string name="LabelAvailableDevices">Available devices</string>
+	<string name="LabelCommands">Commands</string>
+	<string name="LabelStartLiveView">Start Live View</string>
+	<string name="LabelStopLiveView">Stop Live View</string>
+	<string name="LabelBrightness">Brightness</string>
+	<string name="LabelUseExternalShutterRelease">Use external shutter release</string>
+	<string name="LabelDownloadJpgOnly">Download Jpg file only</string>
+	<string name="LabelDownloadJpgOnlyToolTip">If capture done with JPG+RAW only the jpg files are downloaded</string>
+	<string name="LabelSetCounters">Set Counters</string>
+	<string name="LabelEdgeDetection">Edge detection</string>
+	<string name="LabelLeadingZeros">Counter leading zeros</string>
 </resources>
