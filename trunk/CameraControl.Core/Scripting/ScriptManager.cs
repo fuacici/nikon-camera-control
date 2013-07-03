@@ -42,6 +42,7 @@ namespace CameraControl.Core.Scripting
         {
             AvaiableCommands = new List<IScriptCommand>
                                    {
+                                       new Alert(),
                                        new BulbCapture(),
                                        new Capture(),
                                        new CaptureAll(),
