@@ -147,13 +147,14 @@ namespace CameraControl.Core.Classes
                     if (num2 == 0)
                         num2 = 1;
                     int num3 = 65280/num2;
-                    Color col = Color.FromArgb(a, (byte) ((num1 >> 16 & (int) byte.MaxValue)*num3 >> 8),
-                                               (byte) ((num1 >> 8 & (int) byte.MaxValue)*num3 >> 8),
-                                               (byte) ((num1 & (int) byte.MaxValue)*num3 >> 8));
-                    fileItem.FileInfo.HistogramBlue[col.B]++;
-                    fileItem.FileInfo.HistogramGreen[col.G]++;
-                    fileItem.FileInfo.HistogramRed[col.R]++;
-                    int lum = (col.R + col.R + col.R + col.B + col.G + col.G + col.G + col.G) >> 3;
+                    byte R = (byte) ((num1 >> 16 & (int) byte.MaxValue)*num3 >> 8);
+                    byte G = (byte) ((num1 >> 8 & (int) byte.MaxValue)*num3 >> 8);
+                    byte B = (byte) ((num1 & (int) byte.MaxValue)*num3 >> 8);
+
+                    fileItem.FileInfo.HistogramBlue[B]++;
+                    fileItem.FileInfo.HistogramGreen[G]++;
+                    fileItem.FileInfo.HistogramRed[R]++;
+                    int lum = (R + R + R + B + G + G + G + G) >> 3;
                     fileItem.FileInfo.HistogramLuminance[lum]++;
                 }
             }
@@ -181,12 +182,16 @@ namespace CameraControl.Core.Classes
                     if (num2 == 0)
                         num2 = 1;
                     int num3 = 65280 / num2;
-                    Color col = Color.FromArgb(a, (byte)((num1 >> 16 & (int)byte.MaxValue) * num3 >> 8),
-                                               (byte)((num1 >> 8 & (int)byte.MaxValue) * num3 >> 8),
-                                               (byte)((num1 & (int)byte.MaxValue) * num3 >> 8));
-                    if ( under && col.R < treshold && col.G < treshold && col.B < treshold)
+                    //Color col = Color.FromArgb(a, (byte)((num1 >> 16 & (int)byte.MaxValue) * num3 >> 8),
+                    //                           (byte)((num1 >> 8 & (int)byte.MaxValue) * num3 >> 8),
+                    //                           (byte)((num1 & (int)byte.MaxValue) * num3 >> 8));
+                    byte R = (byte)((num1 >> 16 & byte.MaxValue) * num3 >> 8);
+                    byte G = (byte)((num1 >> 8 & byte.MaxValue) * num3 >> 8);
+                    byte B = (byte)((num1 & byte.MaxValue) * num3 >> 8);
+
+                    if ( under && R < treshold && G < treshold && B < treshold)
                         bitmapContext.Pixels[i] = color1;
-                    if (over && col.R > 255 - treshold && col.G > 255 - treshold && col.B > 255 - treshold)
+                    if (over && R > 255 - treshold && G > 255 - treshold && B > 255 - treshold)
                         bitmapContext.Pixels[i] = color2;
                 }
             }
