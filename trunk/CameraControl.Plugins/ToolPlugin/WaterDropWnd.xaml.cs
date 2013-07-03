@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -64,7 +65,9 @@ namespace CameraControl.Plugins.ToolPlugin
         {
             if (!sp.IsOpen)
             {
-                sp.PortName = (string)cmb_ports.SelectionBoxItem;
+                sp.PortName = (string)cmb_ports.SelectedItem;
+                sp.BaudRate = 9600;
+                sp.WriteTimeout = 500;
                 sp.Open();
                 sp.DataReceived += sp_DataReceived;
             }
@@ -83,6 +86,7 @@ namespace CameraControl.Plugins.ToolPlugin
         {
             SerialPort spL = (SerialPort)sender;
             string str = spL.ReadLine();
+            Dispatcher.Invoke(new Action(delegate { lst_message.Items.Add(str); }));
             if(str.Contains("="))
             {
                 string command = str.Split('=')[0];
@@ -118,12 +122,16 @@ namespace CameraControl.Plugins.ToolPlugin
         {
             try
             {
+                lst_message.Items.Clear();
                 OpenPort();
-                sp.WriteLine("camera_timer=" + slider_cmera.Value);
-                sp.WriteLine("drop1_time=" + slider_drop1.Value);
-                sp.WriteLine("drop_wait_time=" + slider_drop_wait.Value);
-                sp.WriteLine("drop2_time=" + slider_drop2.Value);
-                sp.WriteLine("flash_time=" + slider_flash.Value);
+                sp.WriteLine("c=" + slider_cmera.Value);
+                sp.WriteLine("dw=" + slider_drop_wait.Value);
+                //Thread.Sleep(100);
+                sp.WriteLine("d1=" + slider_drop1.Value);
+                //Thread.Sleep(100);
+                sp.WriteLine("d2=" + slider_drop2.Value);
+                //Thread.Sleep(100);
+                sp.WriteLine("f=" + slider_flash.Value.ToString());
             }
             catch (Exception exception)
             {
@@ -139,10 +147,30 @@ namespace CameraControl.Plugins.ToolPlugin
 
         private void MetroWindow_Closed(object sender, EventArgs e)
         {
-            ClosePort();
+            try
+            {
+                ClosePort();
+            }
+            catch (Exception)
+            {
+            }
         }
 
         private void btn_get_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ClosePort();
+                OpenPort();
+                sp.Write("?");
+            }
+            catch (Exception exception)
+            {
+                lst_message.Items.Add(exception.Message);
+            }
+        }
+
+        private void cmb_ports_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
