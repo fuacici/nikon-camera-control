@@ -61,9 +61,15 @@ namespace CameraControl.Core.Scripting
 
         void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
+            GenerateVariabiles();
+        }
+
+        void GenerateVariabiles()
+        {
             if (CurrentScript != null)
             {
                 CurrentScript.Variabiles["time"] = DateTime.Now.ToString("HH:mm");
+                CurrentScript.Variabiles["day"] = DateTime.Now.Day.ToString();
             }
         }
 
@@ -149,6 +155,7 @@ namespace CameraControl.Core.Scripting
             scriptObject.Variabiles.Items.Clear();
             scriptObject.ExitLoop = false;
             CurrentScript = scriptObject;
+            GenerateVariabiles();
             _timer.Start();
             var thread = new Thread(ExecuteThread);
             thread.Start(scriptObject);

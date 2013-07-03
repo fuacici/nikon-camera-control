@@ -21,6 +21,7 @@ namespace CameraControl.Core.Classes
 
         public void Get(ICameraDevice camera)
         {
+            Add(GetFrom(camera.Mode, "Mode"));
             Add(GetFrom(camera.CompressionSetting, "CompressionSetting"));
             Add(GetFrom(camera.ExposureCompensation, "ExposureCompensation"));
             Add(GetFrom(camera.ExposureMeteringMode, "ExposureMeteringMode"));
@@ -70,6 +71,7 @@ namespace CameraControl.Core.Classes
             }
         }
 
+
         public void SetTo(PropertyValue<int> value, string name)
         {
             if (value == null)
@@ -100,6 +102,12 @@ namespace CameraControl.Core.Classes
         }
 
 
+        private ValuePair GetFrom(PropertyValue<uint> value, string name)
+        {
+            if (value == null)
+                return null;
+            return new ValuePair { Name = name, IsDisabled = value.IsEnabled, Value = value.Value };
+        }
 
         private ValuePair GetFrom(PropertyValue<int> value, string name)
         {
