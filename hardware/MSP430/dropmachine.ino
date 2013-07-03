@@ -23,18 +23,18 @@ String value = "" ;
 boolean stringComplete = false;  // whether the string is complete
 boolean start = false;
 // pins -----------------
-const int valvePin =  GREEN_LED;
-const int cameraPin =  RED_LED;
-const int flashPin =  GREEN_LED;
+const int valvePin =  P2_3;
+const int cameraPin =  P2_4;
+const int flashPin =  P2_5;
 const int ledPin =  RED_LED;
 const int buttonPin = PUSH2;
 // -----------------------
 // timers-----------------
-int camera_timer = 550;
+int camera_timer = 1000;
 int drop1_time = 45;
-int drop_wait_time = 65;
+int drop_wait_time = 100;
 int drop2_time = 45;
-int flash_time = 45;
+int flash_time = 370;
 // -----------------------
 void setup() {
   // initialize serial:
@@ -86,15 +86,18 @@ void loop() {
  response.  Multiple bytes of data may be available.
  */
 void serialEvent() {
+    bool shouldBlink = false;  
   while (Serial.available()) {
     // get the new byte:
     char inChar = (char)Serial.read(); 
-
+    inputString += inChar;
+    
     if(inChar == ' ')
     {
       command = "";
       inputString = "";
       start = true;
+      shouldBlink = true;
     }
 
     if(inChar == '?')
@@ -109,51 +112,48 @@ void serialEvent() {
     {
       command = inputString;
       inputString = "";
-    }
-    else
-    {
-      inputString += inChar;
+      Serial.println(command);
     }
 
-    bool shouldBlink = false;
     // if the incoming character is a newline, set a flag
     // so the main loop can do something about it:
     if (inChar == '\n') {
-      stringComplete = true;
-      if(command=="camera_timer")
+      stringComplete = true;      
+              Serial.println(inputString);
+      if(command=="c=")
       {
         camera_timer = inputString.toInt();
         shouldBlink = true;
       } 
-      else if(command=="drop1_time")
+      if(command=="d1=")
       {
         drop1_time = inputString.toInt();
         shouldBlink = true;
       } 
-      else if(command=="drop_wait_time")
+      if(command=="dw=")
       {
         drop_wait_time = inputString.toInt();
         shouldBlink = true;
       } 
-      else if(command=="drop2_time")
+      if(command=="d2=")
       {
         drop2_time = inputString.toInt();
         shouldBlink = true;
       } 
-      else if(command=="flash_time")
+      if(command=="f=")
       {
         flash_time = inputString.toInt();
         shouldBlink = true;
       } 
       command = "";
       inputString = "";
+    } 
+  }
       if(shouldBlink)
       {
         blinkLed();
         shouldBlink = false;
       }
-    } 
-  }
 }
 
 void resetState(){
@@ -164,7 +164,7 @@ void resetState(){
 
 void blinkLed()
 {
-  for (int i=0; i <= 5; i++){
+  for (int i=0; i <= 1; i++){
     digitalWrite(ledPin, HIGH);
     delay(25);
     digitalWrite(ledPin, LOW);
