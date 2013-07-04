@@ -124,10 +124,18 @@ namespace CameraControl.Devices
             SelectedCameraDevice = new NotConnectedCameraDevice();
             ConnectedDevices = new AsyncObservableCollection<ICameraDevice>();
             _deviceEnumerator = new DeviceDescriptorEnumerator();
-            WiaDeviceManager = new DeviceManager();
-            WiaDeviceManager.RegisterEvent(Conts.wiaEventDeviceConnected, "*");
-            WiaDeviceManager.RegisterEvent(Conts.wiaEventDeviceDisconnected, "*");
-            WiaDeviceManager.OnEvent += DeviceManager_OnEvent;
+            // prevent program crash in something wrong with wia
+            try
+            {
+                WiaDeviceManager = new DeviceManager();
+                WiaDeviceManager.RegisterEvent(Conts.wiaEventDeviceConnected, "*");
+                WiaDeviceManager.RegisterEvent(Conts.wiaEventDeviceDisconnected, "*");
+                WiaDeviceManager.OnEvent += DeviceManager_OnEvent;
+            }
+            catch (Exception exception)
+            {
+                Log.Error("Error initialize WIA", exception);
+            }
         }
 
         private void InitCanon()
