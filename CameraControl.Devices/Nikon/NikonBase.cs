@@ -56,7 +56,8 @@ namespace CameraControl.Devices.Nikon
         public const int CONST_PROP_NoiseReduction = 0xD06B;
         public const int CONST_PROP_ApplicationMode = 0xD1F0;
         public const int CONST_PROP_RawCompressionType = 0xD016;
-       
+        public const int CONST_PROP_ActivePicCtrlItem = 0xD200;
+
         public const int CONST_Event_DevicePropChanged = 0x4006;
         public const int CONST_Event_StoreFull = 0x400A;
         public const int CONST_Event_CaptureComplete = 0x400D;
@@ -299,10 +300,38 @@ namespace CameraControl.Devices.Nikon
             AdvancedProperties.Add(InitNRHiIso());
             AdvancedProperties.Add(InitExposureDelay());
             AdvancedProperties.Add(InitLock());
+            AdvancedProperties.Add(InitPictControl());
             foreach (PropertyValue<long> value in AdvancedProperties)
             {
                 ReadDeviceProperties(value.Code);
             }
+        }
+
+        protected virtual PropertyValue<long> InitPictControl()
+        {
+            var res = new PropertyValue<long>() { Name = "Picture control", IsEnabled = true, Code = CONST_PROP_ActivePicCtrlItem, SubType = typeof(UInt16)};
+            res.AddValues("Standard", 1);
+            res.AddValues("Neutral", 2);
+            res.AddValues("Vivid", 3);
+            res.AddValues("Monochrome", 4);
+            res.AddValues("Portrait", 5);
+            res.AddValues("Landscape", 6);
+            res.AddValues("Option picture control 1", 101);
+            res.AddValues("Option picture control 2", 102);
+            res.AddValues("Option picture control 3", 103);
+            res.AddValues("Option picture control 4", 104);
+            res.AddValues("Custom picture control 1", 201);
+            res.AddValues("Custom picture control 2", 202);
+            res.AddValues("Custom picture control 3", 203);
+            res.AddValues("Custom picture control 4", 204);
+            res.AddValues("Custom picture control 5", 205);
+            res.AddValues("Custom picture control 6", 206);
+            res.AddValues("Custom picture control 7", 207);
+            res.AddValues("Custom picture control 8", 208);
+            res.AddValues("Custom picture control 9", 209);
+            res.ValueChanged += (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                                                                 res.Code, -1);
+            return res;
         }
 
         protected virtual PropertyValue<long> InitImageSize()
