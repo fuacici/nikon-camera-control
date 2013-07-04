@@ -91,6 +91,16 @@ namespace CameraControl.windows
             }
         }
 
+        private bool _showFocusRect;
+        public bool ShowFocusRect
+        {
+            get { return _showFocusRect; }
+            set
+            {
+                _showFocusRect = value;
+                NotifyPropertyChanged("ShowFocusRect");
+            }
+        }
 
         private bool _isBusy;
 
@@ -371,6 +381,7 @@ namespace CameraControl.windows
             FocusStep = 75;
             FreezeImage = false;
             Recording = false;
+            ShowFocusRect = true;
             chk_top.IsChecked = false;
         }
 
@@ -681,10 +692,13 @@ namespace CameraControl.windows
                 if (LiveViewData == null)
                     return;
                 _focusrect.BeginInit();
-                _focusrect.Visibility = LiveViewData.HaveFocusData ? Visibility.Visible : Visibility.Hidden;
-                _focusrect.Visibility = selectedPortableDevice.LiveViewImageZoomRatio.Value == "All"
-                                          ? Visibility.Visible
-                                          : Visibility.Hidden;
+                _focusrect.Visibility = LiveViewData.HaveFocusData && ShowFocusRect &&
+                                        selectedPortableDevice.LiveViewImageZoomRatio.Value == "All"
+                                            ? Visibility.Visible
+                                            : Visibility.Hidden;
+                //_focusrect.Visibility = selectedPortableDevice.LiveViewImageZoomRatio.Value == "All"
+                //                          ? Visibility.Visible
+                //                          : Visibility.Hidden;
                 double xt = image1.ActualWidth / LiveViewData.ImageWidth;
                 double yt = image1.ActualHeight / LiveViewData.ImageHeight;
                 _focusrect.Height = LiveViewData.FocusFrameXSize * xt;
