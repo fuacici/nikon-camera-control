@@ -104,6 +104,7 @@
     <Compile Include="Classes\LogEventArgs.cs" />
     <Compile Include="Classes\OperationEnum.cs" />
     <Compile Include="Classes\PhotoCapturedEventArgs.cs" />
+    <Compile Include="Classes\PictureControl.cs" />
     <Compile Include="Classes\PropertyValue.cs" />
     <Compile Include="ICameraDevice.cs" />
     <Compile Include="Log.cs" />

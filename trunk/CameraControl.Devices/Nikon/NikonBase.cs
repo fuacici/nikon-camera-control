@@ -56,8 +56,10 @@ namespace CameraControl.Devices.Nikon
         public const int CONST_PROP_NoiseReduction = 0xD06B;
         public const int CONST_PROP_ApplicationMode = 0xD1F0;
         public const int CONST_PROP_RawCompressionType = 0xD016;
+        public const int CONST_PROP_RawCompressionBitMode = 0xD149;
         public const int CONST_PROP_ActivePicCtrlItem = 0xD200;
-
+        public const int CONST_PROP_ColorSpace = 0xD032;
+        
         public const int CONST_Event_DevicePropChanged = 0x4006;
         public const int CONST_Event_StoreFull = 0x400A;
         public const int CONST_Event_CaptureComplete = 0x400D;
@@ -255,36 +257,88 @@ namespace CameraControl.Devices.Nikon
             _timer.Start();
         }
 
+        public PictureControl GetPictureControl(byte slotnum)
+        {
+            PictureControl control = new PictureControl();
+            MTPDataResponse result = ExecuteReadDataEx(0x90CC, slotnum, 0);
+            if (result.Data != null && result.Data.Length>30)
+            {
+                control.IsLoaded = true;
+                control.ItemNumber = slotnum;
+                control.Monocrome = result.Data[1]==1;
+                control.CustomFlag = result.Data[2];
+                string name=Encoding.ASCII.GetString(result.Data, 3, 20);
+                control.RegistrationName = name.Contains("\0") ? name.Split('\0')[0] : name;
+                if(!control.Monocrome)
+                {
+                    control.QuickAdjustFlag = result.Data[23];
+                    control.QuickAdjust = (sbyte) result.Data[24];
+                    control.Saturation = (sbyte) result.Data[25];
+                    control.Hue = (sbyte) result.Data[26];
+                }
+                else
+                {
+                    control.FilterEffects = result.Data[23];
+                    control.Toning = result.Data[24];
+                    control.ToningDensity = result.Data[25];
+                    //control.Hue = result.Data[27];
+                }
+                control.Sharpening = (sbyte) result.Data[27];
+                control.Contrast = (sbyte) result.Data[28];
+                control.Brightness = (sbyte)result.Data[29];
+                control.CustomCurveFlag = result.Data[30];
+                if (control.CustomCurveFlag == 1)
+                    result.Data.CopyTo(control.CustomCurveData, 31);
+            }
+            else
+            {
+                return null;
+            }
+            return control;
+        }
+
+        public void SetPictureControl(PictureControl control)
+        {
+            
+        }
 
         public override bool Init(DeviceDescriptor deviceDescriptor)
         {
-            IsBusy = false;
-            Capabilities.Add(CapabilityEnum.CaptureInRam);
-            Capabilities.Add(CapabilityEnum.CaptureNoAf);
-            StillImageDevice = new StillImageDevice(deviceDescriptor.WpdId);
-            StillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
-            StillImageDevice.DeviceEvent += _stillImageDevice_DeviceEvent;
-            HaveLiveView = true;
-            DeviceReady();
-            DeviceName = StillImageDevice.Model;
-            Manufacturer = StillImageDevice.Manufacturer;
-            InitIso();
-            InitShutterSpeed();
-            InitFNumber();
-            InitMode();
-            InitWhiteBalance();
-            InitExposureCompensation();
-            InitCompressionSetting();
-            InitExposureMeteringMode();
-            InitFocusMode();
-            InitOther();
-            ReadDeviceProperties(CONST_PROP_BatteryLevel);
-            ReadDeviceProperties(CONST_PROP_ExposureIndicateStatus);
-            IsConnected = true;
-            PropertyChanged += NikonBase_PropertyChanged;
-            CaptureInSdRam = true;
-            AddAditionalProps();
-            _timer.Start();
+            try
+            {
+                IsBusy = false;
+                Capabilities.Add(CapabilityEnum.CaptureInRam);
+                Capabilities.Add(CapabilityEnum.CaptureNoAf);
+                StillImageDevice = new StillImageDevice(deviceDescriptor.WpdId);
+                StillImageDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
+                StillImageDevice.DeviceEvent += _stillImageDevice_DeviceEvent;
+                HaveLiveView = true;
+                DeviceReady();
+                DeviceName = StillImageDevice.Model;
+                Manufacturer = StillImageDevice.Manufacturer;
+                InitIso();
+                InitShutterSpeed();
+                InitFNumber();
+                InitMode();
+                InitWhiteBalance();
+                InitExposureCompensation();
+                InitCompressionSetting();
+                InitExposureMeteringMode();
+                InitFocusMode();
+                InitOther();
+                ReadDeviceProperties(CONST_PROP_BatteryLevel);
+                ReadDeviceProperties(CONST_PROP_ExposureIndicateStatus);
+                IsConnected = true;
+                PropertyChanged += NikonBase_PropertyChanged;
+                CaptureInSdRam = true;
+                AddAditionalProps();
+                _timer.Start();
+            }
+            catch (Exception)
+            {
+                
+                
+            }
             return true;
         }
 
@@ -301,10 +355,32 @@ namespace CameraControl.Devices.Nikon
             AdvancedProperties.Add(InitExposureDelay());
             AdvancedProperties.Add(InitLock());
             AdvancedProperties.Add(InitPictControl());
+            AdvancedProperties.Add(InitRawBit());
+            AdvancedProperties.Add(InitColorSpace());
             foreach (PropertyValue<long> value in AdvancedProperties)
             {
                 ReadDeviceProperties(value.Code);
             }
+        }
+
+        protected virtual PropertyValue<long> InitColorSpace()
+        {
+            PropertyValue<long> res = new PropertyValue<long>() { Name = "Color space", IsEnabled = true, Code = CONST_PROP_ColorSpace, SubType = typeof(byte) };
+            res.AddValues("sRGB", 0);
+            res.AddValues("Adobe RGB", 1);
+            res.ValueChanged += (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                                                                  res.Code, -1);
+            return res;
+        }
+
+        protected virtual PropertyValue<long> InitRawBit()
+        {
+            PropertyValue<long> res = new PropertyValue<long>() { Name = "Raw Recording bit mode", IsEnabled = true, Code = CONST_PROP_RawCompressionBitMode, SubType = typeof(byte) };
+            res.AddValues("12-bit recording", 0);
+            res.AddValues("14-bit recording", 1);
+            res.ValueChanged += (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                                                                  res.Code, -1);
+            return res;
         }
 
         protected virtual PropertyValue<long> InitPictControl()
@@ -316,19 +392,18 @@ namespace CameraControl.Devices.Nikon
             res.AddValues("Monochrome", 4);
             res.AddValues("Portrait", 5);
             res.AddValues("Landscape", 6);
-            res.AddValues("Option picture control 1", 101);
-            res.AddValues("Option picture control 2", 102);
-            res.AddValues("Option picture control 3", 103);
-            res.AddValues("Option picture control 4", 104);
-            res.AddValues("Custom picture control 1", 201);
-            res.AddValues("Custom picture control 2", 202);
-            res.AddValues("Custom picture control 3", 203);
-            res.AddValues("Custom picture control 4", 204);
-            res.AddValues("Custom picture control 5", 205);
-            res.AddValues("Custom picture control 6", 206);
-            res.AddValues("Custom picture control 7", 207);
-            res.AddValues("Custom picture control 8", 208);
-            res.AddValues("Custom picture control 9", 209);
+            //res.AddValues("Option picture control 1", 101);
+            //res.AddValues("Option picture control 2", 102);
+            //res.AddValues("Option picture control 3", 103);
+            //res.AddValues("Option picture control 4", 104);
+            for (byte i = 201; i < 210; i++)
+            {
+                PictureControl control = GetPictureControl(i);
+                if (control.IsLoaded && !string.IsNullOrWhiteSpace(control.RegistrationName))
+                    res.AddValues(control.RegistrationName, i);
+                else
+                    res.AddValues("Custom picture control " + (i - 200), i);
+            }
             res.ValueChanged += (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
                                                                  res.Code, -1);
             return res;
