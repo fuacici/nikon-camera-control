@@ -201,6 +201,7 @@
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
                                 <RowDefinition Height="186*" />
                             </Grid.RowDefinitions>
                             <Label Content="{T:TranslateExtension LabelGrid}" Grid.Column="1" VerticalAlignment="Center"/>
@@ -217,6 +218,7 @@
                             <Slider Name="slider_transparent" Maximum="1" Value="1" Grid.Row="4" Grid.ColumnSpan="3" Grid.Column="1" ValueChanged="slider_transparent_ValueChanged" />
                             <CheckBox Content="{T:TranslateExtension LabelStayOnTop}" Name="chk_top" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" />
                             <Label Content="{T:TranslateExtension LabelOpacity}" Grid.Column="1" Grid.Row="3" Name="label2" Grid.ColumnSpan="3" />
+                            <CheckBox Content="{T:TranslateExtension LabelShowFocusRect}" IsChecked="{Binding Path=ShowFocusRect, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Grid.ColumnSpan="3" Margin="0,8,1,8" Width="169" />
                         </Grid>
                     </Expander.Content>
                 </Expander>

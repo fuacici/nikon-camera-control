@@ -357,5 +357,7 @@ namespace CameraControl.Core.Translation
         public static string LabelSetCounters = "Set Counters";
         public static string LabelEdgeDetection = "Edge detection";
         public static string LabelLeadingZeros = "Counter leading zeros";
+        //04/07/2013
+        public static string LabelShowFocusRect = "Show focus rectangle";
     }
 }
