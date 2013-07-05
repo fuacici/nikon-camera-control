@@ -34,15 +34,20 @@ namespace CameraControl.Core.Classes
                 _fileName = value;
                 if (File.Exists(_fileName))
                 {
-                    FileDate = File.GetLastWriteTime(_fileName);
+                    FileDate = File.GetCreationTimeUtc(_fileName);
                 }
                 NotifyPropertyChanged("FileName");
+                NotifyPropertyChanged("ToolTip");
             }
         }
 
         public bool IsRaw
         {
-            get { return !string.IsNullOrEmpty(FileName) && Path.GetExtension(FileName).ToLower() == ".nef"; }
+            get
+            {
+                var extension = Path.GetExtension(FileName);
+                return extension != null && (!string.IsNullOrEmpty(FileName) && extension.ToLower() == ".nef");
+            }
         }
 
         public DateTime FileDate { get; set; }
@@ -174,20 +179,21 @@ namespace CameraControl.Core.Classes
             FileDate = time;
         }
 
-        /// <summary>
-        /// Returns a hash code for this instance.
-        /// </summary>
-        /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
-        /// </returns>
-        public override int GetHashCode()
+        private int _id;
+        public int Id
         {
-            if(!string.IsNullOrEmpty(FileName) && File.Exists(FileName))
+            get
             {
-                long hash = FileName.GetHashCode() +File.GetCreationTime(FileName).GetHashCode();
-                return hash.GetHashCode();
+                if(_id==0)
+                {
+                    if (!string.IsNullOrEmpty(FileName) && File.Exists(FileName))
+                    {
+                        _id = Math.Abs(FileName.GetHashCode() + File.GetCreationTimeUtc(FileName).GetHashCode());
+                    }
+                }
+                return _id;
             }
-            return base.GetHashCode();
+            set { _id = value; }
         }
 
 
@@ -203,7 +209,7 @@ namespace CameraControl.Core.Classes
             get
             {
                 return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                                    Settings.AppName, "Cache\\Small", GetHashCode() + ".jpg");
+                                    Settings.AppName, "Cache\\Small", Id + ".jpg");
             }
         }
 
@@ -212,9 +218,18 @@ namespace CameraControl.Core.Classes
             get
             {
                 return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                                    Settings.AppName, "Cache\\Large", GetHashCode() + ".jpg");
+                                    Settings.AppName, "Cache\\Large", Id + ".jpg");
             }
         }
+
+        public void RemoveThumbs()
+        {
+            if (File.Exists(SmallThumb))
+                File.Delete(SmallThumb);
+            if (File.Exists(LargeThumb))
+                File.Delete(LargeThumb);
+        }
+
 
         private BitmapSource _thumbnail;
         [XmlIgnore]
