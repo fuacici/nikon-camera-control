@@ -108,6 +108,7 @@ namespace CameraControl.Core.Classes
                                                          (int) (writeableBitmap.PixelHeight*dw),
                                                          WriteableBitmapExtensions.Interpolation.Bilinear);
                 Save2Jpg(writeableBitmap, fileItem.SmallThumb);
+                fileItem.Thumbnail = LoadSmallImage(fileItem);
                 fileItem.IsLoaded = true;
             }
             catch (Exception exception)
