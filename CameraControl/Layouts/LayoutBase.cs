@@ -165,6 +165,7 @@ namespace CameraControl.Layouts
                         ImageLIst.SelectedIndex = selectedindex + 1;
                         ImageLIst.SelectedIndex = selectedindex - 1;
                         FileItem item = ImageLIst.SelectedItem as FileItem;
+                        
                         if (item != null)
                             ImageLIst.ScrollIntoView(item);
                     }
