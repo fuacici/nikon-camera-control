@@ -82,7 +82,9 @@ namespace CameraControl.Core.Classes
         {
             if (fileItem == null)
                 return;
-            if (!File.Exists(fileItem.FileName) || fileItem.IsLoaded)
+            if (!File.Exists(fileItem.FileName))
+                return;
+            if ((File.Exists(fileItem.LargeThumb) && File.Exists(fileItem.SmallThumb)) && fileItem.FileInfo.HistogramLuminance != null)
                 return;
             GetMetadata(fileItem);
             try
