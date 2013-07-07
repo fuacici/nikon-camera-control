@@ -229,7 +229,7 @@ namespace CameraControl.Devices.Nikon
 
         private void SlowDownEventTimer()
         {
-            _timer.Interval = 1000;
+            _timer.Interval = 2500;
         }
 
         private void SpeedUpEventTimer()
@@ -1372,6 +1372,12 @@ namespace CameraControl.Devices.Nikon
         public void DeviceReady()
         {
             DeviceReady(0);
+        }
+
+        public void ResetTimer()
+        {
+            _timer.Stop();
+            _timer.Start();
         }
 
         public void DeviceReady(int retrynum)
