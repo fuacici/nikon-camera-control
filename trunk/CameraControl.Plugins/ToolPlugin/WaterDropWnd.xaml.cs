@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CameraControl.Core;
 using CameraControl.Core.Interfaces;
+using CameraControl.Devices.Nikon;
 
 namespace CameraControl.Plugins.ToolPlugin
 {
@@ -52,6 +53,11 @@ namespace CameraControl.Plugins.ToolPlugin
         {
             try
             {
+                NikonBase camera = ServiceProvider.DeviceManager.SelectedCameraDevice as NikonBase;
+                if(camera!=null)
+                {
+                    camera.ResetTimer();
+                }
                 OpenPort();
                 sp.WriteLine(" ");
             }

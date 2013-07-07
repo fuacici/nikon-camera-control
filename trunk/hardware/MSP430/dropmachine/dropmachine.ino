@@ -68,7 +68,8 @@ void loop() {
     delay(drop_wait_time);        
     digitalWrite(valvePin, HIGH);
     delay(drop2_time);    
-    digitalWrite(valvePin, LOW);    
+    digitalWrite(valvePin, LOW);   
+ 
     delay(flash_time);    
     digitalWrite(flashPin, HIGH);
     delay(100);    
