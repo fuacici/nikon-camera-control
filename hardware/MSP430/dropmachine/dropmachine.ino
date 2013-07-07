@@ -101,6 +101,13 @@ void serialEvent() {
       shouldBlink = true;
     }
 
+    if(inChar == '>')
+    {
+      digitalWrite(valvePin, HIGH);
+      delay(500);    
+      digitalWrite(valvePin, LOW); 
+    }    
+    
     if(inChar == '?')
     {
       command = "";
@@ -160,6 +167,7 @@ void serialEvent() {
 void resetState(){
   digitalWrite(valvePin, LOW);
   digitalWrite(cameraPin, LOW);
+  digitalWrite(flashPin, LOW);
   digitalWrite(ledPin, LOW);
 }
 

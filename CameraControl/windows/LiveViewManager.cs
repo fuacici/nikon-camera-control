@@ -21,11 +21,13 @@ namespace CameraControl.windows
 
         private Dictionary<object, LiveViewWnd> _register;
         private static Dictionary<ICameraDevice, bool> _recordtoRam;
+        private static Dictionary<ICameraDevice, CameraPreset> _presets;
 
         public LiveViewManager()
         {
             _register = new Dictionary<object, LiveViewWnd>();
             _recordtoRam = new Dictionary<ICameraDevice, bool>();
+            _presets = new Dictionary<ICameraDevice, CameraPreset>();
         }
 
         public void ExecuteCommand(string cmd, object param)
@@ -35,20 +37,47 @@ namespace CameraControl.windows
             switch (cmd)
             {
                 case WindowsCmdConsts.LiveViewWnd_Show:
-                    if (!_register.ContainsKey(param))
                     {
-                        Application.Current.Dispatcher.Invoke(new Action(delegate
-                                                                           {
-                                                                               LiveViewWnd wnd = new LiveViewWnd();
-                                                                               ServiceProvider.Settings.ApplyTheme(wnd);
-                                                                               _register.Add(param, wnd);
-                                                                           }));
+                        if (!_register.ContainsKey(param))
+                        {
+                            Application.Current.Dispatcher.Invoke(new Action(delegate
+                                                                                 {
+                                                                                     LiveViewWnd wnd = new LiveViewWnd();
+                                                                                     ServiceProvider.Settings.ApplyTheme
+                                                                                         (wnd);
+                                                                                     _register.Add(param, wnd);
+                                                                                 }));
+                        }
+                        NikonBase nikonBase = param as NikonBase;
+                        if (nikonBase != null && ServiceProvider.Settings.EasyLiveViewControl)
+                        {
+                            CameraPreset preset = new CameraPreset();
+                            preset.Get(nikonBase);
+                            if (!_presets.ContainsKey(nikonBase))
+                                _presets.Add(nikonBase, preset);
+                            else
+                                _presets[nikonBase] = preset;
+                            if (nikonBase.ShutterSpeed.Value == "Bulb")
+                            {
+                                nikonBase.ShutterSpeed.Value =
+                                    nikonBase.ShutterSpeed.Values[nikonBase.ShutterSpeed.Values.Count/2];
+                            }
+                            nikonBase.FNumber.Value = nikonBase.FNumber.Values[0];
+                        }
+                        _register[param].ExecuteCommand(cmd, param);
                     }
-                    _register[param].ExecuteCommand(cmd, param);
                     break;
                 case WindowsCmdConsts.LiveViewWnd_Hide:
-                    if (_register.ContainsKey(param))
-                        _register[param].ExecuteCommand(cmd, param);
+                    {
+                        if (_register.ContainsKey(param))
+                            _register[param].ExecuteCommand(cmd, param);
+                        NikonBase nikonBase = param as NikonBase;
+                        if (ServiceProvider.Settings.EasyLiveViewControl)
+                        {
+                            nikonBase.ShutterSpeed.Value = _presets[nikonBase].GetValue("ShutterSpeed");
+                            nikonBase.FNumber.Value = _presets[nikonBase].GetValue("FNumber");
+                        }
+                    }
                     break;
                 case CmdConsts.All_Close:
                     foreach (var liveViewWnd in _register)
@@ -98,7 +127,6 @@ namespace CameraControl.windows
                 {
                     if (_recordtoRam.ContainsKey(device))
                         device.CaptureInSdRam = _recordtoRam[device];
-
                 }
 
             }
