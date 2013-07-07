@@ -188,5 +188,19 @@ namespace CameraControl.Plugins.ToolPlugin
                 lst_message.Items.Add(exception.Message);
             }
         }
+
+        private void btn_valve_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OpenPort();
+                sp.Write(">");
+            }
+            catch (Exception exception)
+            {
+                lst_message.Items.Add(exception.Message);
+            }
+
+        }
     }
 }

@@ -530,6 +530,17 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        private bool _easyLiveViewControl;
+        public bool EasyLiveViewControl
+        {
+            get { return _easyLiveViewControl; }
+            set
+            {
+                _easyLiveViewControl = value;
+                NotifyPropertyChanged("EasyLiveViewControl");
+            }
+        }
+
         public CameraPropertyEnumerator CameraProperties { get; set; }
         public string SelectedLayout { get; set; }
         public AsyncObservableCollection<CameraPreset> CameraPresets { get; set; }

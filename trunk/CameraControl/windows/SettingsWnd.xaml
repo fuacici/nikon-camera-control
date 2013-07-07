@@ -176,6 +176,7 @@
                         <RowDefinition Height="35" />
                         <RowDefinition Height="35" />
                         <RowDefinition Height="35" />
+                        <RowDefinition Height="35" />
                         <RowDefinition Height="260*" />
                     </Grid.RowDefinitions>
 
@@ -189,6 +190,9 @@
                         <ComboBoxItem Content="{T:TranslateExtension LabelSimpleBackgroundModelingDetector}"/>
                     </ComboBox>
                     <Controls2:AdvancedSlider Minimum="5" Maximum="250" Label="{T:TranslateExtension LabelSmallestBlockSize}" Grid.ColumnSpan="3" Margin="1,0" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=MotionBlockSize}"  Grid.Row="5" Grid.Column="0"/>
+
+                    <Label Content="{T:TranslateExtension LabelEasyLiveViewControl}" Grid.Row="6" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                    <CheckBox Grid.Column="1" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=EasyLiveViewControl}"/>
                     
                 </Grid>
             </TabItem>
