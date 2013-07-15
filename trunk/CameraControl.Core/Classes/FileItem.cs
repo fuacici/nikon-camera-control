@@ -129,7 +129,7 @@ namespace CameraControl.Core.Classes
         public FileItem()
         {
             IsLoaded = false;
-            FileInfo = new FileInfo();
+            //FileInfo = new FileInfo();
         }
 
         public FileItem(DeviceObject deviceObject, ICameraDevice device)
@@ -166,7 +166,7 @@ namespace CameraControl.Core.Classes
             FileName = file;
             Name = Path.GetFileName(file);
             ItemType = FileItemType.File;
-            FileInfo = new FileInfo();
+            //FileInfo = new FileInfo();
         }
 
         public FileItem(ICameraDevice device, DateTime time)
@@ -197,12 +197,12 @@ namespace CameraControl.Core.Classes
         }
 
 
-        public int Orientation { get; set; }
+
         public bool IsLoaded { get; set; }
-        public string InfoLabel { get; set; }
+
+        [XmlIgnore]
         public FileInfo FileInfo { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
+
 
         public string SmallThumb
         {
@@ -222,12 +222,23 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        public string InfoFile
+        {
+            get
+            {
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                                    Settings.AppName, "Cache\\InfoFile", Id + ".xml");
+            }
+        }
+        
         public void RemoveThumbs()
         {
             if (File.Exists(SmallThumb))
                 File.Delete(SmallThumb);
             if (File.Exists(LargeThumb))
                 File.Delete(LargeThumb);
+            if (File.Exists(InfoFile))
+                File.Delete(InfoFile);
         }
 
 
@@ -309,5 +320,49 @@ namespace CameraControl.Core.Classes
         {
             return false;
         }
+
+        public void SaveInfo()
+        {
+            if (FileInfo == null)
+                return;
+            try
+            {
+                if (!Directory.Exists(Path.GetDirectoryName(InfoFile)))
+                    Directory.CreateDirectory(Path.GetDirectoryName(InfoFile));
+
+                XmlSerializer serializer = new XmlSerializer(typeof(FileInfo));
+                // Create a FileStream to write with.
+
+                Stream writer = new FileStream(InfoFile, FileMode.Create);
+                // Serialize the object, and close the TextWriter
+                serializer.Serialize(writer, FileInfo);
+                writer.Close();
+            }
+            catch (Exception)
+            {
+                Log.Error("Unable to save session branding file");
+            }
+        }
+
+        public void LoadInfo()
+        {
+            try
+            {
+                
+                if (File.Exists(InfoFile))
+                {
+                    XmlSerializer mySerializer =
+                      new XmlSerializer(typeof(FileInfo));
+                    FileStream myFileStream = new FileStream(InfoFile, FileMode.Open);
+                    FileInfo = (FileInfo)mySerializer.Deserialize(myFileStream);
+                    myFileStream.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+            }
+        }
+
     }
 }

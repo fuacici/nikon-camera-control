@@ -12,7 +12,7 @@ namespace CameraControl.Core.Classes
 {
     public class BitmapLoader
     {
-        private const int LargeThumbSize = 1920;
+        private const int LargeThumbSize = 1600;
         private const int SmallThumbSize = 255;
 
         private static BitmapLoader _instance;
@@ -84,7 +84,7 @@ namespace CameraControl.Core.Classes
                 return;
             if (!File.Exists(fileItem.FileName))
                 return;
-            if ((File.Exists(fileItem.LargeThumb) && File.Exists(fileItem.SmallThumb)) && fileItem.FileInfo.HistogramLuminance != null)
+            if ((File.Exists(fileItem.LargeThumb) && File.Exists(fileItem.SmallThumb)) && File.Exists(fileItem.InfoFile))
                 return;
             GetMetadata(fileItem);
             try
@@ -94,8 +94,8 @@ namespace CameraControl.Core.Classes
                                                             BitmapCacheOption.Default);
                 WriteableBitmap writeableBitmap = BitmapFactory.ConvertToPbgra32Format(bmpDec.Frames[0]);
 
-                fileItem.Width = writeableBitmap.PixelWidth;
-                fileItem.Height = writeableBitmap.PixelHeight;
+                fileItem.FileInfo.Width = writeableBitmap.PixelWidth;
+                fileItem.FileInfo.Height = writeableBitmap.PixelHeight;
 
                 double dw = (double) LargeThumbSize/writeableBitmap.PixelWidth;
                 writeableBitmap = writeableBitmap.Resize((int) (writeableBitmap.PixelWidth*dw),
@@ -110,6 +110,7 @@ namespace CameraControl.Core.Classes
                 Save2Jpg(writeableBitmap, fileItem.SmallThumb);
                 fileItem.Thumbnail = LoadSmallImage(fileItem);
                 fileItem.IsLoaded = true;
+                fileItem.SaveInfo();
             }
             catch (Exception exception)
             {
@@ -204,8 +205,9 @@ namespace CameraControl.Core.Classes
 
         public void SetData(BitmapFile file,FileItem fileItem)
         {
-            if (fileItem == null)
+            if (fileItem == null || fileItem.FileInfo == null)
                 return;
+            fileItem.LoadInfo();
             file.Metadata.Clear();
             foreach (ValuePair item in fileItem.FileInfo.ExifTags.Items)
             {
@@ -217,7 +219,7 @@ namespace CameraControl.Core.Classes
             file.LuminanceHistogramPoints = ConvertToPointCollection(fileItem.FileInfo.HistogramLuminance);
 
             file.InfoLabel = Path.GetFileName(file.FileItem.FileName);
-            file.InfoLabel += String.Format(" | {0}x{1}", fileItem.Width, fileItem.Height);
+            file.InfoLabel += String.Format(" | {0}x{1}", fileItem.FileInfo.Width, fileItem.FileInfo.Height);
             if (fileItem.FileInfo.ExifTags.ContainName("Exif.Photo.ExposureTime"))
                 file.InfoLabel += " | E " + fileItem.FileInfo.ExifTags["Exif.Photo.ExposureTime"];
             if (fileItem.FileInfo.ExifTags.ContainName("Exif.Photo.FNumber"))
@@ -237,6 +239,12 @@ namespace CameraControl.Core.Classes
                 return null;
             if (!File.Exists(fileItem.LargeThumb) && !fullres)
                 return null;
+            
+            if (!File.Exists(fileItem.InfoFile))
+                fileItem.LoadInfo();
+            else
+                fileItem.FileInfo = new FileInfo();
+
             try
             {
                 BitmapDecoder bmpDec = BitmapDecoder.Create(new Uri(fullres ? fileItem.FileName : fileItem.LargeThumb),
@@ -295,14 +303,14 @@ namespace CameraControl.Core.Classes
         private void DrawFocusPoints(FileItem fileItem, WriteableBitmap bitmap)
         {
             bitmap.Lock();
-            double dw = (double)bitmap.PixelWidth / fileItem.Width;
-            double dh = (double)bitmap.PixelHeight / fileItem.Height;
+            double dw = (double)bitmap.PixelWidth / fileItem.FileInfo.Width;
+            double dh = (double)bitmap.PixelHeight / fileItem.FileInfo.Height;
 
             foreach (Rect focuspoint in fileItem.FileInfo.FocusPoints)
             {
                 DrawRect(bitmap, (int) (focuspoint.X*dw), (int) (focuspoint.Y*dh),
                          (int) ((focuspoint.X + focuspoint.Width)*dw),
-                         (int) ((focuspoint.Y + focuspoint.Height)*dh), Colors.Aqua, fileItem.Width/1000*2);
+                         (int)((focuspoint.Y + focuspoint.Height) * dh), Colors.Aqua, fileItem.FileInfo.Width / 1000 * 2);
             }
             bitmap.Unlock();
         }
