@@ -8,6 +8,10 @@ namespace CameraControl.Core.Classes
 {
     public class FileInfo
     {
+        public string InfoLabel { get; set; }
+        public int Orientation { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
         public ValuePairEnumerator ExifTags { get; set; }
         public List<Rect> FocusPoints { get; set; }
         public int[] HistogramRed { get; set; }
