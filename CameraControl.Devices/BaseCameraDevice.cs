@@ -132,8 +132,8 @@ namespace CameraControl.Devices
       }
     }
 
-    private PropertyValue<uint> _focusMode;
-    public virtual PropertyValue<uint> FocusMode
+    private PropertyValue<long> _focusMode;
+    public virtual PropertyValue<long> FocusMode
     {
       get { return _focusMode; }
       set

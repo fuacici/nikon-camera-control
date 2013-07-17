@@ -52,14 +52,29 @@ namespace CameraControl.Devices.Classes
                 {
                     foreach (KeyValuePair<string, T> keyValuePair in _valuesDictionary)
                     {
+                        
                         if (keyValuePair.Key == _value)
+                        {
                             OnValueChanged(this, _value, keyValuePair.Value);
+                        }
                     }
                 }
                 //}
                 NotifyPropertyChanged("Value");
             }
         }
+
+        private T _numericValue;
+        public T NumericValue
+        {
+            get { return _numericValue; }
+            set
+            {
+                _numericValue = value;
+                NotifyPropertyChanged("NumericValue");
+            }
+        }
+
 
         public void OnValueChanged(object sender, string key, T val)
         {
@@ -137,6 +152,7 @@ namespace CameraControl.Devices.Classes
 
         public void SetValue(T o)
         {
+            NumericValue = o;
             foreach (KeyValuePair<string, T> keyValuePair in _valuesDictionary)
             {
                 if (EqualityComparer<T>.Default.Equals(keyValuePair.Value, o)) //(keyValuePair.Value== o)
@@ -181,6 +197,11 @@ namespace CameraControl.Devices.Classes
             if (typeof(T) == typeof(int))
             {
                 int val = BitConverter.ToInt16(ba, 0);
+                SetValue((T)((object)val));
+            }
+            if (typeof(T) == typeof(uint))
+            {
+                uint val = BitConverter.ToUInt16(ba, 0);
                 SetValue((T)((object)val));
             }
             if (typeof(T) == typeof(long) && ba.Length == 1)
