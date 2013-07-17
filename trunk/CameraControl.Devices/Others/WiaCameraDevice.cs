@@ -436,7 +436,7 @@ namespace CameraControl.Devices.Others
       ExposureCompensation.ValueChanged += ExposureCompensation_ValueChanged;
       ExposureMeteringMode = new PropertyValue<int>();
       ExposureMeteringMode.ValueChanged += ExposureMeteringMode_ValueChanged;
-      FocusMode = new PropertyValue<uint>();
+      FocusMode = new PropertyValue<long>();
       FocusMode.IsEnabled = false;
 
     }

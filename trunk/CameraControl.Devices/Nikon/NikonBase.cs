@@ -897,24 +897,27 @@ namespace CameraControl.Devices.Nikon
             try
             {
                 DeviceReady();
-                byte datasize = 2;
-                FocusMode = new PropertyValue<uint>();
+                FocusMode = new PropertyValue<long>();
                 FocusMode.Name = "FocusMode";
-                FocusMode.IsEnabled = false;
-                MTPDataResponse result = ExecuteReadDataEx(CONST_CMD_GetDevicePropDesc, CONST_PROP_FocusMode);
-                int type = BitConverter.ToInt16(result.Data, 2);
-                byte formFlag = result.Data[(2 * datasize) + 5];
-                UInt16 defval = BitConverter.ToUInt16(result.Data, datasize + 5);
-                for (int i = 0; i < result.Data.Length - ((2 * datasize) + 6 + 2); i += datasize)
-                {
-                    UInt16 val = BitConverter.ToUInt16(result.Data, ((2 * datasize) + 6 + 2) + i);
-                    FocusMode.AddValues(_fmTable.ContainsKey(val) ? _fmTable[val] : val.ToString(), val);
-                }
-                FocusMode.SetValue(defval);
+                FocusMode.Code = CONST_PROP_AFModeSelect;
+                FocusMode.IsEnabled = true;
+                FocusMode.AddValues("AF-S", 0);
+                FocusMode.AddValues("AF-C", 1);
+                FocusMode.AddValues("AF-A", 2);
+                FocusMode.AddValues("MF (hard)", 3);
+                FocusMode.AddValues("MF (soft)", 4);
+                FocusMode.ValueChanged += FocusMode_ValueChanged;
+                ReadDeviceProperties(FocusMode.Code);
             }
             catch (Exception)
             {
             }
+        }
+
+        void FocusMode_ValueChanged(object sender, string key, long val)
+        {
+            SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((sbyte)val),
+                     CONST_PROP_AFModeSelect, -1);
         }
 
         public override void StartLiveView()
@@ -1195,8 +1198,9 @@ namespace CameraControl.Devices.Nikon
                             ExposureMeteringMode.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
                                                                                             CONST_PROP_ExposureMeteringMode), false);
                             break;
-                        case CONST_PROP_FocusMode:
-                            FocusMode.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_FocusMode), false);
+                        case CONST_PROP_AFModeSelect:
+                            FocusMode.SetValue(StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue, CONST_PROP_AFModeSelect), false);
+                            FocusMode.IsEnabled = FocusMode.NumericValue != 3;
                             break;
                         case CONST_PROP_BatteryLevel:
                             {

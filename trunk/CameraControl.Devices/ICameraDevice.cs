@@ -30,7 +30,7 @@ namespace CameraControl.Devices
     PropertyValue<int> ExposureCompensation { get; set; }
     PropertyValue<int> CompressionSetting { get; set; }
     PropertyValue<int> ExposureMeteringMode { get; set; }
-    PropertyValue<uint> FocusMode { get; set; }
+    PropertyValue<long> FocusMode { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the camera is connected.
