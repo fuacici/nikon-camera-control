@@ -88,24 +88,28 @@ namespace CameraControl
                 delegate
                 {
                     btn_capture_noaf.IsEnabled = newcameraDevice != null && newcameraDevice.GetCapability(CapabilityEnum.CaptureNoAf);
-                    Flyouts[0].IsOpen = false;
-                    Flyouts[1].IsOpen = false;
+                    ((Flyout)Flyouts.Items[0]).IsOpen = false;
+                    ((Flyout)Flyouts.Items[1]).IsOpen = false;
                     Title = "digiCamControl - " + ServiceProvider.Settings.CameraProperties.Get(newcameraDevice).DeviceName;
                 }));
         }
 
         private void ExecuteExportPlugin(IExportPlugin obj)
         {
-            Flyouts[0].IsOpen = false;
-            Flyouts[1].IsOpen = false;
+            HideFlatOuts();
             obj.Execute();
         }
 
         private void ExecuteToolPlugin(IToolPlugin obj)
         {
-            Flyouts[0].IsOpen = false;
-            Flyouts[1].IsOpen = false;
+            HideFlatOuts();
             obj.Execute();
+        }
+
+        private void HideFlatOuts()
+        {
+            ((Flyout)Flyouts.Items[0]).IsOpen = false;
+            ((Flyout)Flyouts.Items[1]).IsOpen = false;
         }
 
         void DeviceManager_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
@@ -571,8 +575,8 @@ namespace CameraControl
 
         private void btn_menu_Click(object sender, RoutedEventArgs e)
         {
-            Flyouts[0].IsOpen = !Flyouts[0].IsOpen;
-            Flyouts[1].IsOpen = !Flyouts[1].IsOpen;
+            ((Flyout)Flyouts.Items[0]).IsOpen = !((Flyout)Flyouts.Items[0]).IsOpen;
+            ((Flyout)Flyouts.Items[1]).IsOpen = !((Flyout)Flyouts.Items[1]).IsOpen;
         }
 
         private void mnu_forum_Click(object sender, RoutedEventArgs e)
@@ -604,16 +608,14 @@ namespace CameraControl
         {
             if (e.Key == Key.Escape)
             {
-                Flyouts[0].IsOpen = false;
-                Flyouts[1].IsOpen = false;
+                HideFlatOuts();
             }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.MultipleCameraWnd_Show);
-            Flyouts[0].IsOpen = false;
-            Flyouts[1].IsOpen = false;
+            HideFlatOuts();
         }
 
         private void btn_sort_Click(object sender, RoutedEventArgs e)

@@ -58,7 +58,7 @@
     </Window.DataContext>
 
     <Controls:MetroWindow.Flyouts>
-
+      <Controls:FlyoutsControl>
         <Controls:Flyout Header="{T:TranslateExtension LabelMenu}" Position="Right" Opacity="0.9" IsOpen="False">
             <StackPanel>
             <Menu  VerticalAlignment="Top" HorizontalAlignment="Left">
@@ -177,6 +177,7 @@
                     </StackPanel>
                 </Grid>
         </Controls:Flyout>
+      </Controls:FlyoutsControl>
     </Controls:MetroWindow.Flyouts>
 
     <Grid>
