@@ -62,6 +62,7 @@ namespace CameraControl.windows
                                 nikonBase.ShutterSpeed.Value =
                                     nikonBase.ShutterSpeed.Values[nikonBase.ShutterSpeed.Values.Count/2];
                             }
+                            nikonBase.FocusMode.Value = nikonBase.FocusMode.Values[0];
                             nikonBase.FNumber.Value = nikonBase.FNumber.Values[0];
                         }
                         _register[param].ExecuteCommand(cmd, param);
@@ -74,8 +75,12 @@ namespace CameraControl.windows
                         NikonBase nikonBase = param as NikonBase;
                         if (ServiceProvider.Settings.EasyLiveViewControl)
                         {
-                            nikonBase.ShutterSpeed.Value = _presets[nikonBase].GetValue("ShutterSpeed");
-                            nikonBase.FNumber.Value = _presets[nikonBase].GetValue("FNumber");
+                            if (nikonBase != null)
+                            {
+                                nikonBase.ShutterSpeed.Value = _presets[nikonBase].GetValue("ShutterSpeed");
+                                nikonBase.FNumber.Value = _presets[nikonBase].GetValue("FNumber");
+                                nikonBase.FocusMode.Value = _presets[nikonBase].GetValue("FocusMode");
+                            }
                         }
                     }
                     break;

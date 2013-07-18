@@ -29,6 +29,7 @@ namespace CameraControl.Core.Classes
             Add(GetFrom(camera.IsoNumber, "IsoNumber"));
             Add(GetFrom(camera.ShutterSpeed, "ShutterSpeed"));
             Add(GetFrom(camera.WhiteBalance, "WhiteBalance"));
+            Add(GetFrom(camera.FocusMode, "FocusMode"));
             Add(GetFrom(camera.LiveViewImageZoomRatio, "LiveViewImageZoomRatio"));
             Add(new ValuePair { Name = "CaptureInSdRam", Value = camera.CaptureInSdRam.ToString() });
             var property = ServiceProvider.Settings.CameraProperties.Get(camera);
@@ -52,6 +53,7 @@ namespace CameraControl.Core.Classes
             SetTo(camera.IsoNumber, "IsoNumber");
             SetTo(camera.ShutterSpeed, "ShutterSpeed");
             SetTo(camera.WhiteBalance, "WhiteBalance");
+            SetTo(camera.FocusMode, "FocusMode");
             SetTo(camera.LiveViewImageZoomRatio, "LiveViewImageZoomRatio");
             if (!string.IsNullOrEmpty(GetValue("CaptureInSdRam")))
             {
