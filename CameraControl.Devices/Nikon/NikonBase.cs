@@ -98,6 +98,7 @@ namespace CameraControl.Devices.Nikon
                                                     {0x3200, "Hi 1"},
                                                     {0x6400, "Hi 2"},
                                                   };
+
         protected Dictionary<uint, string> _shutterTable = new Dictionary<uint, string>
                                                {
                          {1, "1/6400"},
@@ -204,6 +205,7 @@ namespace CameraControl.Devices.Nikon
                                                   {6, "RAW + JPEG (NORMAL)"},
                                                   {7, "RAW + JPEG (FINE)"}
                                                 };
+
         private Dictionary<int, string> _emmTable = new Dictionary<int, string>
                                                   {
                                                 {2, "Center-weighted metering"},
@@ -357,6 +359,7 @@ namespace CameraControl.Devices.Nikon
             AdvancedProperties.Add(InitPictControl());
             AdvancedProperties.Add(InitRawBit());
             AdvancedProperties.Add(InitColorSpace());
+            AdvancedProperties.Add(InitOnOffProperty("Application mode", CONST_PROP_ApplicationMode));
             foreach (PropertyValue<long> value in AdvancedProperties)
             {
                 ReadDeviceProperties(value.Code);
