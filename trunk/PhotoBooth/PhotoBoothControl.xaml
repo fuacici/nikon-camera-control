@@ -4,24 +4,16 @@
         Title="Photo Booth Control" Height="450" Width="525"
         xmlns:local="clr-namespace:PhotoBooth"
         >
-    <Window.Resources>
-        <Style TargetType="Button">
-            <!--Default Button content to be the Text provided from the Command.-->
-            <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
-        </Style>
-        <Style x:Key="DataEntryTextBox" TargetType="TextBox">
-            <Setter Property="VerticalAlignment" Value="Center" />
-        </Style>
-    </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static local:RoutedCommands.PrinterSetup}" CanExecute="PrinterSetup_CanExecute" Executed="PrinterSetup_Executed" />
         <CommandBinding Command="{x:Static local:RoutedCommands.OpenPhotoBooth}" CanExecute="PhotoBooth_CanExecute" Executed="PhotoBooth_Executed" />
         <CommandBinding Command="{x:Static local:RoutedCommands.InitializeCamera}" CanExecute="InitializeCamera_CanExecute" Executed="InitializeCamera_Executed" />
-        <CommandBinding Command="{x:Static local:RoutedCommands.ShowCardView}" CanExecute="ShowCardView_CanExecute" Executed="ShowCardView_Executed" />
+        <CommandBinding Command="{x:Static local:RoutedCommands.DesignCard}" CanExecute="DesignCard_CanExecute" Executed="DesignCard_Executed" />
+        <CommandBinding Command="ApplicationCommands.Open" CanExecute="OpenSaveFile_CanExecute" Executed="OpenSaveFile_Executed" />
     </Window.CommandBindings>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
+            <RowDefinition Height="auto" />
             <RowDefinition />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
@@ -35,12 +27,10 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="0">
-                <Button Name="initializeCameraPB" Command="{x:Static local:RoutedCommands.InitializeCamera}"></Button>
-                <Button Name="printSetupPB" Command="{x:Static local:RoutedCommands.PrinterSetup}"></Button>
-                <Button Name="photoBoothPB" Command="{x:Static local:RoutedCommands.OpenPhotoBooth}"></Button>
-                <Button Name="cardViewPB" Command="{x:Static local:RoutedCommands.ShowCardView}"></Button>
-            </StackPanel>
-            
+                <Button Style="{StaticResource ResourceKey=CommandButton}" Command="{x:Static local:RoutedCommands.InitializeCamera}"></Button>
+                <Button Style="{StaticResource ResourceKey=CommandButton}" Command="{x:Static local:RoutedCommands.PrinterSetup}"></Button>
+                <Button Style="{StaticResource ResourceKey=CommandButton}" Command="{x:Static local:RoutedCommands.OpenPhotoBooth}"></Button>
+            </StackPanel>            
         </Grid>
 
         <Grid Name="photoContainer" Grid.Row="1">
@@ -78,26 +68,27 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
+                    <ColumnDefinition Width="5" />
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Row="0" Grid.Column="0">F Stop:</TextBlock>
-                <ComboBox Grid.Row="0" Grid.Column="1"  IsEnabled="{Binding Path=FNumber.IsEnabled}" ItemsSource="{Binding Path=FNumber.Values}" SelectedValue="{Binding Path=FNumber.Value}" />
-                <TextBlock Grid.Row="0" Grid.Column="2">ISO:</TextBlock>
-                <ComboBox Grid.Row="0" Grid.Column="3" IsEnabled="{Binding Path=IsoNumber.IsEnabled}" ItemsSource="{Binding Path=IsoNumber.Values}" SelectedValue="{Binding Path=IsoNumber.Value}" />
+                <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource ResourceKey=DataEntryLabel}">F Stop:</Label>
+                <ComboBox Grid.Row="0" Grid.Column="1" IsEnabled="{Binding Path=FNumber.IsEnabled}" ItemsSource="{Binding Path=FNumber.Values}" SelectedValue="{Binding Path=FNumber.Value}" />
+                <Label Grid.Row="0" Grid.Column="3" Style="{StaticResource ResourceKey=DataEntryLabel}">ISO:</Label>
+                <ComboBox Grid.Row="0" Grid.Column="4" IsEnabled="{Binding Path=IsoNumber.IsEnabled}" ItemsSource="{Binding Path=IsoNumber.Values}" SelectedValue="{Binding Path=IsoNumber.Value}" />
 
-                <TextBlock Grid.Row="1" Grid.Column="0">Shutter:</TextBlock>
+                <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource ResourceKey=DataEntryLabel}">Shutter:</Label>
                 <ComboBox Grid.Row="1" Grid.Column="1"  IsEnabled="{Binding Path=ShutterSpeed.IsEnabled}" ItemsSource="{Binding Path=ShutterSpeed.Values}" SelectedValue="{Binding Path=ShutterSpeed.Value}"  />
-                <TextBlock Grid.Row="1" Grid.Column="2">White Balance:</TextBlock>
-                <ComboBox Grid.Row="1" Grid.Column="3" IsEnabled="{Binding Path=WhiteBalance.IsEnabled}" ItemsSource="{Binding Path=WhiteBalance.Values}" SelectedValue="{Binding Path=WhiteBalance.Value}" />
+                <Label Grid.Row="1" Grid.Column="3" Style="{StaticResource ResourceKey=DataEntryLabel}">White Balance:</Label>
+                <ComboBox Grid.Row="1" Grid.Column="4" IsEnabled="{Binding Path=WhiteBalance.IsEnabled}" ItemsSource="{Binding Path=WhiteBalance.Values}" SelectedValue="{Binding Path=WhiteBalance.Value}" />
 
-                <TextBlock Grid.Row="2" Grid.Column="0">Mode:</TextBlock>
+                <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource ResourceKey=DataEntryLabel}">Mode:</Label>
                 <ComboBox Grid.Row="2" Grid.Column="1" IsEnabled="{Binding Path=Mode.IsEnabled}" ItemsSource="{Binding Path=Mode.Values}" SelectedValue="{Binding Path=Mode.Value}" />
-                <TextBlock Grid.Row="2" Grid.Column="2">FocusMode:</TextBlock>
-                <ComboBox Grid.Row="2" Grid.Column="3" IsEnabled="{Binding Path=FocusMode.IsEnabled}" ItemsSource="{Binding Path=FocusMode.Values}" SelectedValue="{Binding Path=FocusMode.Value}" />
+                <Label Grid.Row="2" Grid.Column="3" Style="{StaticResource ResourceKey=DataEntryLabel}">FocusMode:</Label>
+                <ComboBox Grid.Row="2" Grid.Column="4" IsEnabled="{Binding Path=FocusMode.IsEnabled}" ItemsSource="{Binding Path=FocusMode.Values}" SelectedValue="{Binding Path=FocusMode.Value}" />
 
-                <Label Content="Compression" Grid.Row="3" Grid.Column="0"/>
+                <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource ResourceKey=DataEntryLabel}">Compression:</Label>
                 <ComboBox Grid.Row="3" Grid.Column="1" IsEnabled="{Binding Path=CompressionSetting.IsEnabled}" ItemsSource="{Binding Path=CompressionSetting.Values}" SelectedValue="{Binding Path=CompressionSetting.Value}"  />
             </Grid>
         </GroupBox>
@@ -112,27 +103,26 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition />
                     <ColumnDefinition  Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Grid.Row="0">Save File Location:</Label>
+                <Label Grid.Column="0" Grid.Row="0" Style="{StaticResource ResourceKey=DataEntryLabel}">Save File Location:</Label>
                 <TextBox Name="saveFileDir" Style="{StaticResource ResourceKey=DataEntryTextBox}" Grid.Column="1" Grid.Row="0" Text="{Binding Path=SaveFileFolder}" />
-                <Button Name="saveFileBrowsePB" Grid.Column="2" Grid.Row="0" Click="saveFileBrowsePB_Click" Margin="4,0" Padding="8,1">...</Button>
-                <Label Grid.Column="0" Grid.Row="1">Banner Text:</Label>
-                <TextBox Name="cardBannerText" Style="{StaticResource ResourceKey=DataEntryTextBox}" Grid.Column="1" Grid.ColumnSpan="2"  Grid.Row="1" Text="{Binding Path=CardBannerText}" />
-                <Label Grid.Column="0" Grid.Row="2">Top Vertical Text:</Label>
-                <TextBox Name="topVerticalText" Style="{StaticResource ResourceKey=DataEntryTextBox}" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Text="{Binding Path=CardTopVerticalText}" />
-                <Label Grid.Column="0" Grid.Row="3">Bottom Vertical Text:</Label>
-                <TextBox Name="bottomVerticalText" Style="{StaticResource ResourceKey=DataEntryTextBox}" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" Text="{Binding Path=CardBottomVerticalText}" />
-                <Label Grid.Column="0" Grid.Row="4">Kiosk Mode:</Label>
-                <CheckBox Grid.Column="1" Grid.Row="4" IsChecked="{Binding Path=KioskMode}" VerticalAlignment="Center" />
-                <Label Grid.Column="0" Grid.Row="5">One Button Operation:</Label>
-                <CheckBox Grid.Column="1" Grid.Row="5" IsChecked="{Binding Path=OneButtonOperation}" VerticalAlignment="Center" />
+                <Button Grid.Column="2" Grid.Row="0" Style="{StaticResource ResourceKey=CommandButton}" Command="ApplicationCommands.Open" />
+                <Label Grid.Column="0" Grid.Row="1" Style="{StaticResource ResourceKey=DataEntryLabel}">Kiosk Mode:</Label>
+                <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding Path=KioskMode}" VerticalAlignment="Center" />
+                <Label Grid.Column="0" Grid.Row="2" Style="{StaticResource ResourceKey=DataEntryLabel}">One Button Operation:</Label>
+                <CheckBox Grid.Column="1" Grid.Row="2" IsChecked="{Binding Path=OneButtonOperation}" VerticalAlignment="Center" />
+
+                <Label Grid.Column="0" Grid.Row="3" Style="{StaticResource ResourceKey=DataEntryLabel}">Card Template:</Label>
+                <ComboBox Name="templateCombo" Grid.Column="1" Grid.Row="3"
+                          ItemsSource="{Binding Path=AvailableTemplates}" 
+                            DisplayMemberPath="DisplayName" 
+                            SelectedValue="{Binding Path=SelectedTemplateInfo}" />
+                <Button Style="{StaticResource ResourceKey=CommandButton}" Grid.Column="2" Grid.Row="3" Command="{x:Static local:RoutedCommands.DesignCard}" />
             </Grid>
         </GroupBox>
     </Grid>

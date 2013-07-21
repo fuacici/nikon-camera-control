@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Printing;
 using System.Windows;
@@ -22,7 +23,7 @@ namespace PhotoBooth
         // TODO: localize
         private static string RegularStartPrompt = "Ready";
         private static string KioskStartPrompt = "Press the button to start.";
-        private static string TakingPicturesPrompt = "Now taking 4 pictures. Please look at the camera.";
+        private static string TakingPicturesPrompt = "Now taking {0} pictures. Please look at the camera.";
         private static string PrintingPrompt = "Printing your photos. Please wait.";
         private static string SmileMessage = "Smile";
         private const int CaptureDelay = 5; // in seconds
@@ -39,11 +40,9 @@ namespace PhotoBooth
         private PhotoBoothCamera camera;
         private int saveFileCount = 0;
         private static string SaveCardFormat = "PhotoBoothCard{0}.jpg";
-        private string image1File;
-        private string image2File;
-        private string image3File;
-        private string image4File;
         private ScreenSaverInhibitor screenSaverInhibitor;
+        private PhotoCardTemplate cardTemplate;
+        private int requiredImagedCount = 0;
 
         /// <summary>
         /// Gets and sets whether card images should be saved.
@@ -69,12 +68,6 @@ namespace PhotoBooth
             private set;
         }
 
-        public string BottomVerticalText { get; set; }
-
-        public string TopVerticalText { get; set; }
-
-        public string BannerText { get; set; }
-
         public bool OneButtonOperation
         {
             get { return (bool)GetValue(OneButtonOperationProperty); }
@@ -91,6 +84,29 @@ namespace PhotoBooth
         {
             get { return (string)GetValue(StatusTextProperty); }
             set { SetValue(StatusTextProperty, value); }
+        }
+
+        public int GridRows
+        {
+            get { return (int)GetValue(GridRowsProperty); }
+            set { SetValue(GridRowsProperty, value); }
+        }
+
+        public int GridColumns
+        {
+            get { return (int)GetValue(GridColumnsProperty); }
+            set { SetValue(GridColumnsProperty, value); }
+        }
+
+        public PhotoCardTemplate CardTemplate
+        {
+            get { return this.cardTemplate; }
+
+            set
+            {
+                this.cardTemplate = value;
+                this.OnCardTemplateChanged();                
+            }
         }
 
         /// <summary>
@@ -117,62 +133,6 @@ namespace PhotoBooth
             }
         }
 
-        public string Image1File
-        {
-            get { return this.image1File; }
-
-            set
-            {
-                this.image1File = value;
-                if (!string.IsNullOrEmpty(this.image1File))
-                {
-                    this.SetImageControl(this.image1, this.image1File);
-                }
-            }
-        }
-
-        public string Image2File
-        {
-            get { return this.image2File; }
-
-            set
-            {
-                this.image2File = value;
-                if (!string.IsNullOrEmpty(this.image2File))
-                {
-                    this.SetImageControl(this.image2, this.image2File);
-                }
-            }
-        }
-
-        public string Image3File
-        {
-            get { return this.image3File; }
-
-            set
-            {
-                this.image3File = value;
-                if (!string.IsNullOrEmpty(this.image3File))
-                {
-                    this.SetImageControl(this.image3, this.image3File);
-                }
-            }
-        }
-
-        public string Image4File
-        {
-            get { return this.image4File; }
-
-            set
-            {
-                this.image4File = value;
-                if (!string.IsNullOrEmpty(this.image4File))
-                {
-                    this.SetImageControl(this.image4, this.image4File);
-                }
-            }
-        }
-
         public PhotoBoothWindow()
         {
             InitializeComponent();
@@ -187,7 +147,7 @@ namespace PhotoBooth
             this.Loaded += PhotoBoothWindow_Loaded;
         }
 
-        void PhotoBoothWindow_Loaded(object sender, RoutedEventArgs e)
+        private void PhotoBoothWindow_Loaded(object sender, RoutedEventArgs e)
         {
             this.SetStartPrompt();
         }
@@ -213,7 +173,7 @@ namespace PhotoBooth
             this.statusText.FontSize = this.initialStatusFontSize;
         }
 
-        void fontSizeAnimation_Completed(object sender, EventArgs e)
+        private void fontSizeAnimation_Completed(object sender, EventArgs e)
         {
             if (this.Dispatcher.CheckAccess())
             {
@@ -308,91 +268,102 @@ namespace PhotoBooth
             }
         }
 
+        private void OnCardTemplateChanged()
+        {
+            int neccessaryImages = 0;
+            if (this.CardTemplate != null)
+            {
+                neccessaryImages = this.CardTemplate.ImagesRequired;
+            }
+
+            if (this.requiredImagedCount != neccessaryImages)
+            {
+                this.requiredImagedCount = neccessaryImages;
+                double squareRoot = Math.Sqrt(this.requiredImagedCount);
+                int newRowCount = Convert.ToInt32(Math.Ceiling(squareRoot));
+                int newColCount = Convert.ToInt32(Math.Round(squareRoot, 0));
+
+                this.GridRows = newRowCount;
+                this.GridColumns = newColCount;
+            }
+
+            if (this.CardTemplate != null)
+            {
+                this.photoDisplay.ItemsSource = this.CardTemplate.Images;
+            }
+        }
+
         private void UpdateImageDisplay()
         {
             this.UpdateImageDisplay(this.Camera.CaptureFiles);
 
-            if (this.Camera.CaptureFiles.Count >= 4)
+            if (this.Camera.CaptureFiles.Count >= 1 && !string.IsNullOrEmpty(this.Camera.CaptureFiles[0]))
             {
-
-                if (!string.IsNullOrEmpty(this.Camera.CaptureFiles[0]))
-                {
-                    Properties.Settings.Default.ImagePath1 = this.Camera.CaptureFiles[0];
-                }
-                if (!string.IsNullOrEmpty(this.Camera.CaptureFiles[1]))
-                {
-                    Properties.Settings.Default.ImagePath2 = this.Camera.CaptureFiles[1];
-                }
-                if (!string.IsNullOrEmpty(this.Camera.CaptureFiles[2]))
-                {
-                    Properties.Settings.Default.ImagePath3 = this.Camera.CaptureFiles[2];
-                }
-                if (!string.IsNullOrEmpty(this.Camera.CaptureFiles[3]))
-                {
-                    Properties.Settings.Default.ImagePath4 = this.Camera.CaptureFiles[3];
-                    CommandManager.InvalidateRequerySuggested();
-                }
-
-                this.TakingPictures = false;
-
-                if (this.Camera.CaptureFiles.Count == 4)
-                {
-                    if (this.OneButtonOperation && this.CanPrint())
-                    {
-                        this.PrintCard();
-                    }
-                    else
-                    {
-                        this.SetStartPrompt();
-                    }
-                }
+                Properties.Settings.Default.ImagePath1 = this.Camera.CaptureFiles[0];
             }
+            if (this.Camera.CaptureFiles.Count >= 2 && !string.IsNullOrEmpty(this.Camera.CaptureFiles[1]))
+            {
+                Properties.Settings.Default.ImagePath2 = this.Camera.CaptureFiles[1];
+            }
+            if (this.Camera.CaptureFiles.Count >= 3 && !string.IsNullOrEmpty(this.Camera.CaptureFiles[2]))
+            {
+                Properties.Settings.Default.ImagePath3 = this.Camera.CaptureFiles[2];
+            }
+            if (this.Camera.CaptureFiles.Count >= 4 && !string.IsNullOrEmpty(this.Camera.CaptureFiles[3]))
+            {
+                Properties.Settings.Default.ImagePath4 = this.Camera.CaptureFiles[3];
+            }
+
+            if (this.Camera.CaptureFiles.Count >= this.CardTemplate.ImagesRequired)
+            {
+                this.SessionComplete();
+            }
+        }
+
+        private void SessionComplete()
+        {
+            this.TakingPictures = false;
+
+            if (this.OneButtonOperation && this.CanPrint())
+            {
+                this.PrintCard();
+            }
+            else
+            {
+                this.SetStartPrompt();
+                this.DisplayCardView();
+            }
+
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private void UpdateImageDisplay(List<string> imageFilenames)
         {
+            if (this.CardTemplate == null)
+            {
+                return;
+            }
+
             int count = 0;
+            BitmapImage image;
             this.statusText.Visibility = System.Windows.Visibility.Hidden;
+            this.photoContainer.Visibility = System.Windows.Visibility.Visible;
             foreach (string filename in imageFilenames)
             {
-                switch (count)
+                image = this.GetImage(filename);
+                if (this.CardTemplate.Images.Count >= (count + 1))
                 {
-                    case 0:
-                        if (this.image1.Visibility == System.Windows.Visibility.Hidden)
-                        {
-                            SetImageControl(this.image1, filename);
-                        }
-                        break;
-                    case 1:
-                        if (this.image2.Visibility == System.Windows.Visibility.Hidden)
-                        {
-                            SetImageControl(this.image2, filename);
-                        }
-                        break;
-                    case 2:
-                        if (this.image3.Visibility == System.Windows.Visibility.Hidden)
-                        {
-                            SetImageControl(this.image3, filename);
-                        }
-                        break;
-                    case 3:
-                        if (this.image4.Visibility == System.Windows.Visibility.Hidden)
-                        {
-                            SetImageControl(this.image4, filename);
-                        }
-                        break;
-                    default:
-                        break;
+                    this.CardTemplate.Images[count] = image;
                 }
-                if (count >= 3)
+                else
                 {
-                    break;
+                    this.CardTemplate.Images.Add(image);
                 }
                 count++;
             }
         }
 
-        private void SetImageControl(Image imageControl, string filename)
+        private BitmapImage GetImage(string filename)
         {
             Uri imageLocation = new Uri(filename, UriKind.Absolute);
             BitmapImage image = new BitmapImage();
@@ -401,22 +372,19 @@ namespace PhotoBooth
             image.UriSource = imageLocation;
             image.EndInit();
 
-            imageControl.Source = image;
-            imageControl.Visibility = System.Windows.Visibility.Visible;
+            return image;
         }
 
         private void TakePhotoBoothPictures()
         {
             this.TakingPictures = true;
-            this.StatusText = TakingPicturesPrompt;
-            this.image1.Visibility = System.Windows.Visibility.Hidden;
-            this.image1.Source = null;
-            this.image2.Visibility = System.Windows.Visibility.Hidden;
-            this.image2.Source = null;
-            this.image3.Visibility = System.Windows.Visibility.Hidden;
-            this.image3.Source = null;
-            this.image4.Visibility = System.Windows.Visibility.Hidden;
-            this.image4.Source = null;
+            this.StatusText = string.Format(TakingPicturesPrompt, this.CardTemplate.ImagesRequired);
+            if (this.CardTemplate != null)
+            {
+                this.CardTemplate.Images.Clear();
+            }
+
+            this.photoContainer.Visibility = System.Windows.Visibility.Hidden;
             this.statusText.Visibility = System.Windows.Visibility.Visible;
             this.startTime = DateTime.Now;
             this.timerTick = CaptureDelay;
@@ -425,8 +393,9 @@ namespace PhotoBooth
 
         private void TakePictureSet()
         {
-            if (this.Camera != null)
+            if (this.Camera != null && this.CardTemplate != null)
             {
+                this.Camera.ImageCount = this.CardTemplate.ImagesRequired;
                 this.Camera.BeginTakePictureSet();
             }
         }
@@ -450,37 +419,36 @@ namespace PhotoBooth
         private bool CanPrint()
         {
             return !this.TakingPictures &&
-                this.image1 != null &&
-                this.image2 != null &&
-                this.image3 != null &&
-                this.image4 != null &&
-                this.image1.Visibility == System.Windows.Visibility.Visible &&
-                this.image2.Visibility == System.Windows.Visibility.Visible &&
-                this.image3.Visibility == System.Windows.Visibility.Visible &&
-                this.image4.Visibility == System.Windows.Visibility.Visible;
+                this.CardTemplate != null &&
+                this.CardTemplate.CanPrint &&
+                this.photoContainer.Visibility == System.Windows.Visibility.Visible;
         }
 
-        private CardView CreateCardView()
+        private PhotoCard CreateCardView()
         {
-            PhotoCardInformation info = new PhotoCardInformation()
+            PhotoCard cardView = null;
+            if (this.CardTemplate != null)
             {
-                TopLeftImage = this.image1.Source,
-                TopRightImage = this.image2.Source,
-                BottomLeftImage = this.image3.Source,
-                BottomRightImage = this.image4.Source,
-                BottomVerticalText = this.BottomVerticalText,
-                TopVerticalText = this.TopVerticalText,
-                BannerText = this.BannerText
-            };
-
-            CardView cardView = new CardView();
-            cardView.DataContext = info;
+                cardView = this.CardTemplate.CreateCard();
+            }
 
             return cardView;
         }
 
+        private void DisplayCardView()
+        {
+            PhotoCard card = this.CreateCardView();
+            if (card != null)
+            {
+                card.ShowDialog();
+            }
+        }
+
         private void PrintCard()
         {
+            Debug.Assert(this.CardTemplate != null);
+            Debug.Assert(this.CardTemplate.CanPrint);
+
             this.StatusText = PrintingPrompt;
 
             PrintDialog printDlg = new PrintDialog();
@@ -492,7 +460,7 @@ namespace PhotoBooth
             double width = printDlg.PrintableAreaWidth;
             double height = printDlg.PrintableAreaHeight;
 
-            CardView cardView = this.CreateCardView(); ;
+            PhotoCard cardView = this.CreateCardView();
             cardView.Width = width;
             cardView.Height = height;
             cardView.Show();
@@ -574,5 +542,13 @@ namespace PhotoBooth
         // Using a DependencyProperty as the backing store for TakingPictures.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TakingPicturesProperty =
             DependencyProperty.Register("TakingPictures", typeof(bool), typeof(PhotoBoothWindow), new PropertyMetadata(false));
+
+        // Using a DependencyProperty as the backing store for GridRows.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty GridRowsProperty =
+            DependencyProperty.Register("GridRows", typeof(int), typeof(PhotoBoothWindow), new PropertyMetadata(0));
+
+        // Using a DependencyProperty as the backing store for GridColumns.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty GridColumnsProperty =
+            DependencyProperty.Register("GridColumns", typeof(int), typeof(PhotoBoothWindow), new PropertyMetadata(0));
     }
 }
