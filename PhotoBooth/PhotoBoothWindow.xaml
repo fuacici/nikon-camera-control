@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:PhotoBooth"
         Background="Black" Foreground="AntiqueWhite"        
-        Title="PhotoBoothWindow" Height="400" Width="600">
+        Title="PhotoBooth" Height="400" Width="600">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -92,22 +92,31 @@
 
         </Grid>
 
-        <Grid Name="photoContainer" Grid.Row="0">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
-                <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Image Name="image1" Grid.Column="0" Grid.Row="0"></Image>
-            <Image Name="image2" Grid.Column="1" Grid.Row="0"></Image>
-            <Image Name="image3" Grid.Column="0" Grid.Row="1"></Image>
-            <Image Name="image4" Grid.Column="1" Grid.Row="1"></Image>
-
+            
+            <Grid Name="photoContainer" Grid.Row="0">
+                <ItemsControl Name="photoDisplay">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid IsItemsHost="True" Rows="{Binding Path=GridRows}" Columns="{Binding Path=GridColumns}" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Image Source="{Binding}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
             <TextBlock Name="statusText" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2" Visibility="Hidden" FontSize="532" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
-
         </Grid>
 
     </Grid>

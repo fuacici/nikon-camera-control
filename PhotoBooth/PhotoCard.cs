@@ -6,19 +6,15 @@ using System.Windows.Media.Imaging;
 
 namespace PhotoBooth
 {
-    /// <summary>
-    /// Interaction logic for CardView.xaml
-    /// </summary>
-    public partial class CardView : Window
+    public abstract class PhotoCard : Window
     {
-        public CardView()
+        public PhotoCard()
         {
-            InitializeComponent();
         }
 
-        public UIElement RootVisual
+        public abstract UIElement RootVisual
         {
-            get { return this.LayoutGrid; }
+            get;
         }
 
         /// 

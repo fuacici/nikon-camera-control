@@ -143,7 +143,7 @@ namespace PhotoBooth
                 return;
             }
 
-            if (this.ImageCount < 2 || this.ImageCount > 5)
+            if (this.ImageCount < 1 || this.ImageCount > 100)
             {
                 this.ImageCount = 4;
             }
