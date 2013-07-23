@@ -37,8 +37,7 @@ namespace PhotoBooth
         {
             if (this.CardTemplate != null)
             {
-                this.CardTemplate.Images.Clear();
-                for (int i = 1; i <= this.CardTemplate.ImagesRequired; i++)
+                for (int i = this.CardTemplate.Images.Count + 1; i <= this.CardTemplate.ImagesRequired; i++)
                 {
                     this.CardTemplate.Images.Add(this.GenerateImage(string.Format("{0}", i)));
                 }
