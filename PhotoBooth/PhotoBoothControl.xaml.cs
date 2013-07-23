@@ -63,6 +63,25 @@ namespace PhotoBooth
                 {
                     this.selectedTemplate = this.SelectedTemplateInfo.CreateTemplate();
                     Properties.Settings.Default.PhototCardTemplate = this.SelectedTemplateInfo.TemplateType.Name;
+                    if (this.selectedTemplate != null)
+                    {
+                        if (this.image1.Source != null)
+                        {
+                            this.selectedTemplate.Images.Add(this.image1.Source);
+                        }
+                        if (this.image2.Source != null)
+                        {
+                            this.selectedTemplate.Images.Add(this.image2.Source);
+                        }
+                        if (this.image3.Source != null)
+                        {
+                            this.selectedTemplate.Images.Add(this.image3.Source);
+                        }
+                        if (this.image4.Source != null)
+                        {
+                            this.selectedTemplate.Images.Add(this.image4.Source);
+                        }
+                    }
                 }
 
                 return this.selectedTemplate;
@@ -122,6 +141,7 @@ namespace PhotoBooth
             if (this.SelectedTemplate != null)
             {
                 CardDesigner designer = new CardDesigner();
+                designer.Owner = this;
                 designer.CardTemplate = this.SelectedTemplate;
                 designer.ShowDialog();
             }
