@@ -165,5 +165,29 @@ namespace PhotoBooth.Properties {
                 this["PhototCardTemplate"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SaveCards {
+            get {
+                return ((bool)(this["SaveCards"]));
+            }
+            set {
+                this["SaveCards"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OneButtonMessage {
+            get {
+                return ((string)(this["OneButtonMessage"]));
+            }
+            set {
+                this["OneButtonMessage"] = value;
+            }
+        }
     }
 }

@@ -98,7 +98,17 @@
                 <Label FontWeight="Bold">Photo Booth Settings</Label>
             </GroupBox.Header>
             <Grid>
+                <Grid.Resources>
+                    <Style TargetType="CheckBox">
+                        <Setter Property="Margin" Value="30,0,0,0" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="Grid.ColumnSpan" Value="2" />
+                    </Style>
+                </Grid.Resources>
                 <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
@@ -109,20 +119,40 @@
                     <ColumnDefinition />
                     <ColumnDefinition  Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Grid.Row="0" Style="{StaticResource ResourceKey=DataEntryLabel}">Save File Location:</Label>
-                <TextBox Name="saveFileDir" Style="{StaticResource ResourceKey=DataEntryTextBox}" Grid.Column="1" Grid.Row="0" Text="{Binding Path=SaveFileFolder}" />
-                <Button Grid.Column="2" Grid.Row="0" Style="{StaticResource ResourceKey=CommandButton}" Command="ApplicationCommands.Open" />
-                <Label Grid.Column="0" Grid.Row="1" Style="{StaticResource ResourceKey=DataEntryLabel}">Kiosk Mode:</Label>
-                <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding Path=KioskMode}" VerticalAlignment="Center" />
-                <Label Grid.Column="0" Grid.Row="2" Style="{StaticResource ResourceKey=DataEntryLabel}">One Button Operation:</Label>
-                <CheckBox Grid.Column="1" Grid.Row="2" IsChecked="{Binding Path=OneButtonOperation}" VerticalAlignment="Center" />
 
-                <Label Grid.Column="0" Grid.Row="3" Style="{StaticResource ResourceKey=DataEntryLabel}">Card Template:</Label>
-                <ComboBox Name="templateCombo" Grid.Column="1" Grid.Row="3"
+                <CheckBox Grid.Row="0" IsChecked="{Binding Path=SaveCards}">
+                    <CheckBox.Content>
+                        <Label Style="{StaticResource ResourceKey=DataEntryLabel}" HorizontalAlignment="Left">Save Cards</Label>
+                    </CheckBox.Content>
+                </CheckBox>
+
+                <Label Grid.Column="0" Grid.Row="1" Style="{StaticResource ResourceKey=DataEntryLabel}" IsEnabled="{Binding Path=SaveCards}">Save File Location:</Label>
+                <TextBox Name="saveFileDir" Style="{StaticResource ResourceKey=DataEntryTextBox}" Grid.Column="1" Grid.Row="1" Text="{Binding Path=SaveFileFolder}" IsEnabled="{Binding Path=SaveCards}" />
+                <Button Grid.Column="2" Grid.Row="1" Style="{StaticResource ResourceKey=CommandButton}" Command="ApplicationCommands.Open" />
+
+                <CheckBox Grid.Row="2" IsChecked="{Binding Path=KioskMode}" >
+                    <CheckBox.Content>
+                        <Label Style="{StaticResource ResourceKey=DataEntryLabel}" HorizontalAlignment="Left">Kiosk Mode</Label>
+                    </CheckBox.Content>
+                </CheckBox>
+
+                <CheckBox Grid.Row="3" IsChecked="{Binding Path=OneButtonOperation}">
+                    <CheckBox.Content>
+                        <Label Style="{StaticResource ResourceKey=DataEntryLabel}" HorizontalAlignment="Left">One Button Operation</Label>
+                    </CheckBox.Content>
+                </CheckBox>
+                <Label Grid.Column="0" Grid.Row="4" Style="{StaticResource ResourceKey=DataEntryLabel}"  IsEnabled="{Binding Path=OneButtonOperation}" >One Button:</Label>
+                <ComboBox Grid.Column="1" Grid.Row="4"  IsEnabled="{Binding Path=OneButtonOperation}" 
+                          ItemsSource="{Binding Path=OneButtonMessages}" 
+                            DisplayMemberPath="Description" 
+                            SelectedValue="{Binding Path=OneButtonMessage}" />
+
+                <Label Grid.Column="0" Grid.Row="5" Style="{StaticResource ResourceKey=DataEntryLabel}">Card Template:</Label>
+                <ComboBox Name="templateCombo" Grid.Column="1" Grid.Row="5"
                           ItemsSource="{Binding Path=AvailableTemplates}" 
                             DisplayMemberPath="DisplayName" 
                             SelectedValue="{Binding Path=SelectedTemplateInfo}" />
-                <Button Style="{StaticResource ResourceKey=CommandButton}" Grid.Column="2" Grid.Row="3" Command="{x:Static local:RoutedCommands.DesignCard}" />
+                <Button Style="{StaticResource ResourceKey=CommandButton}" Grid.Column="2" Grid.Row="5" Command="{x:Static local:RoutedCommands.DesignCard}" />
             </Grid>
         </GroupBox>
     </Grid>

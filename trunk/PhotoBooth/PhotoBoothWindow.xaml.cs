@@ -22,14 +22,13 @@ namespace PhotoBooth
         // User messages.
         // TODO: localize
         private static string RegularStartPrompt = "Ready";
-        private static string KioskStartPrompt = "Press the button to start.";
+        private static string OneButtonStartPrompt = "Press the button to start.";
         private static string TakingPicturesPrompt = "Now taking {0} pictures. Please look at the camera.";
         private static string PrintingPrompt = "Printing your photos. Please wait.";
         private static string SmileMessage = "Smile";
         private const int CaptureDelay = 5; // in seconds
         // TODO: make this configurable or monitor the printer queue
         private const int PrintingDelay = 10000; // in milliseconds
-        private const int ONE_BUTTON_OPERATION_MOUSE_EVENT = Constants.WM_MBUTTONDOWN;
 
         private int timerTick;
         private double initialStatusFontSize;
@@ -43,6 +42,12 @@ namespace PhotoBooth
         private ScreenSaverInhibitor screenSaverInhibitor;
         private PhotoCardTemplate cardTemplate;
         private int requiredImagedCount = 0;
+
+        /// <summary>
+        /// Gets and set the windows message that will be used to initiate operation when in
+        /// <see cref="OneButtonOperation"/>.
+        /// </summary>
+        public WindowsMessage OneButtonMessage { get; set; }
 
         /// <summary>
         /// Gets and sets whether card images should be saved.
@@ -271,9 +276,13 @@ namespace PhotoBooth
         private void OnCardTemplateChanged()
         {
             int neccessaryImages = 0;
-            if (this.CardTemplate != null)
+            if (this.CardTemplate != null) 
             {
                 neccessaryImages = this.CardTemplate.ImagesRequired;
+                while(this.CardTemplate.ImagesRequired < this.CardTemplate.Images.Count)
+                {
+                    this.CardTemplate.Images.RemoveAt(neccessaryImages);
+                }
             }
 
             if (this.requiredImagedCount != neccessaryImages)
@@ -486,7 +495,7 @@ namespace PhotoBooth
         {
             if (this.OneButtonOperation)
             {
-                this.StatusText = KioskStartPrompt;
+                this.StatusText = OneButtonStartPrompt;
             }
             else
             {
@@ -523,7 +532,7 @@ namespace PhotoBooth
 
         protected IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            if (this.OneButtonOperation && msg == ONE_BUTTON_OPERATION_MOUSE_EVENT && this.CanTakePictureSet())
+            if (this.OneButtonOperation && this.OneButtonMessage != null && this.OneButtonMessage.Matches(msg, wParam, lParam) && this.CanTakePictureSet())
             {
                 this.TakePhotoBoothPictures();
             }
