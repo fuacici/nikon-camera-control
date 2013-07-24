@@ -102,6 +102,7 @@
     <Compile Include="Cards\TwoByTwoDesigner.xaml.cs">
       <DependentUpon>TwoByTwoDesigner.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WindowsMessage.cs" />
     <Page Include="ButtonStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

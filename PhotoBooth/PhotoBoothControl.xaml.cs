@@ -21,6 +21,17 @@ namespace PhotoBooth
         private bool initializing = false;
         private PhotoCardTemplate selectedTemplate;
 
+        public IEnumerable<WindowsMessage> OneButtonMessages
+        {
+            get { return WindowsMessage.OneButtonMessages; }
+        }
+
+        public bool SaveCards
+        {
+            get { return (bool)GetValue(SaveCardsProperty); }
+            set { SetValue(SaveCardsProperty, value); }
+        }
+
         public string SaveFileFolder
         {
             get { return (string)GetValue(SaveFileFolderProperty); }
@@ -37,6 +48,12 @@ namespace PhotoBooth
         {
             get { return (bool)GetValue(OneButtonOperationProperty); }
             set { SetValue(OneButtonOperationProperty, value); }
+        }
+
+        public WindowsMessage OneButtonMessage
+        {
+            get { return (WindowsMessage)GetValue(OneButtonMessageProperty); }
+            set { SetValue(OneButtonMessageProperty, value); }
         }
 
         public PhotoCardTemplateInfo SelectedTemplateInfo
@@ -100,6 +117,7 @@ namespace PhotoBooth
             {
                 saveFileFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
             }
+            this.SaveCards = Properties.Settings.Default.SaveCards;
             this.SaveFileFolder = saveFileFolder;
             this.OneButtonOperation = Properties.Settings.Default.OneButtonOperation;
             this.KioskMode = Properties.Settings.Default.KioskMode;
@@ -112,6 +130,8 @@ namespace PhotoBooth
             this.AvailableTemplates = PhotoCardTemplateInfo.GetTemplateListing();
 
             this.SelectedTemplateInfo = this.AvailableTemplates.FirstOrDefault(t => t.TemplateType.Name == Properties.Settings.Default.PhototCardTemplate);
+
+            this.OneButtonMessage = this.OneButtonMessages.FirstOrDefault(m => m.Name == Properties.Settings.Default.OneButtonMessage);
         }
 
         private void LoadPreviousImages()
@@ -154,7 +174,9 @@ namespace PhotoBooth
                 Camera = this.camera,
                 PrinterSetupTicket = this.printerSetupTicket,
                 OneButtonOperation = this.OneButtonOperation,
-                CardTemplate = this.SelectedTemplate
+                OneButtonMessage = this.OneButtonMessage,
+                CardTemplate = this.SelectedTemplate,
+                SaveCards = this.SaveCards
             };
 
             if(this.KioskMode)
@@ -164,12 +186,11 @@ namespace PhotoBooth
                 window.Topmost = true;
             }
 
-            if (!string.IsNullOrEmpty(this.SaveFileFolder))
+            if (this.SaveCards && !string.IsNullOrEmpty(this.SaveFileFolder))
             {
                 DirectoryInfo saveFolderInfo = new DirectoryInfo(this.SaveFileFolder);
                 if (saveFolderInfo.Exists)
                 {
-                    window.SaveCards = true;
                     window.SaveFileLocation = saveFolderInfo;
                 }
             }
@@ -200,7 +221,7 @@ namespace PhotoBooth
 
         private void OpenSaveFile_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            e.CanExecute = this.SaveCards;
         }
 
         private void PhotoBooth_Executed(object target, ExecutedRoutedEventArgs e)
@@ -210,7 +231,10 @@ namespace PhotoBooth
 
         private void PhotoBooth_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = !this.initializing && this.camera != null && this.camera.CameraReady && this.SelectedTemplate != null;
+            e.CanExecute = !this.initializing && 
+                this.camera != null && this.camera.CameraReady && 
+                this.SelectedTemplate != null &&
+                (!this.OneButtonOperation || this.OneButtonMessage != null);
         }
 
         private void PrinterSetup_Executed(object target, ExecutedRoutedEventArgs e)
@@ -342,7 +366,11 @@ namespace PhotoBooth
             Properties.Settings.Default.SaveFileFolder = this.SaveFileFolder;
             Properties.Settings.Default.OneButtonOperation  = this.OneButtonOperation;
             Properties.Settings.Default.KioskMode = this.KioskMode;
-
+            Properties.Settings.Default.SaveCards = this.SaveCards;
+            if(this.OneButtonMessage != null)
+            {
+                Properties.Settings.Default.OneButtonMessage = this.OneButtonMessage.Name;
+            }
             Properties.Settings.Default.Save();
 
             base.OnClosing(e);
@@ -353,10 +381,21 @@ namespace PhotoBooth
         public static readonly DependencyProperty OneButtonOperationProperty =
             DependencyProperty.Register("OneButtonOperation", typeof(bool), typeof(PhotoBoothControlWindow), new PropertyMetadata(false));
 
+
+
+
+        // Using a DependencyProperty as the backing store for OneButtonMessage.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty OneButtonMessageProperty =
+            DependencyProperty.Register("OneButtonMessage", typeof(WindowsMessage), typeof(PhotoBoothControlWindow), new PropertyMetadata(null));
+
         // Using a DependencyProperty as the backing store for KioskMode.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty KioskModeProperty =
             DependencyProperty.Register("KioskMode", typeof(bool), typeof(PhotoBoothControlWindow), new PropertyMetadata(false));
 
+        // Using a DependencyProperty as the backing store for SaveCards.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SaveCardsProperty =
+            DependencyProperty.Register("SaveCards", typeof(bool), typeof(PhotoBoothControlWindow), new PropertyMetadata(false));
+        
         // Using a DependencyProperty as the backing store for SaveFileFolder.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SaveFileFolderProperty =
             DependencyProperty.Register("SaveFileFolder", typeof(string), typeof(PhotoBoothControlWindow), new PropertyMetadata(null));
