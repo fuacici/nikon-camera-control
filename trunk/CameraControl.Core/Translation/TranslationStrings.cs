@@ -360,5 +360,9 @@ namespace CameraControl.Core.Translation
         //04/07/2013
         public static string LabelShowFocusRect = "Show focus rectangle";
         public static string LabelEasyLiveViewControl = "Easy live view control";
+        public static string LabelExif = "Exif";
+        public static string LabelImageProperties = "Image Properties";
+        public static string LabelFileName = "File Name";
+        public static string LabelSet = "Set";
     }
 }

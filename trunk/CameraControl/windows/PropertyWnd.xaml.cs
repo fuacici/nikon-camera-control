@@ -36,5 +36,10 @@ namespace CameraControl.windows
       }
     }
 
+    private void btn_set_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
   }
 }

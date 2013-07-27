@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
                      xmlns:ontrols="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        Title="Image Propert" Height="322" Width="522" ShowInTaskbar="False" Topmost="True" WindowStyle="None" AllowsTransparency="True"   Background="Transparent" Closing="Window_Closing" ShowMaxRestoreButton="False">
+                     xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
+                     Title="Image Propert" Height="353" Width="671" ShowInTaskbar="False" Topmost="True" WindowStyle="None" AllowsTransparency="True"   Background="Transparent" Closing="Window_Closing" ShowMaxRestoreButton="False">
     <Window.DataContext>
         <Core:ServiceProvider/>
     </Window.DataContext>
@@ -54,6 +55,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250*" />
                 <ColumnDefinition Width="250*" />
+                <ColumnDefinition Width="250*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="150*" />
@@ -61,9 +63,9 @@
             </Grid.RowDefinitions>
             <!--<TabControl Name="tabControl1" Background="{x:Null}" Grid.ColumnSpan="2">
                 <TabItem Header="Histogram" Name="tabItem1">-->
-            <!--<StackPanel Grid.RowSpan="2">-->
+            <GroupBox Grid.RowSpan="2" Header="{T:TranslateExtension LabelExif}">
                 <ListBox ItemsSource="{Binding Path=Settings.SelectedBitmap.Metadata}" Background="{x:Null}" Grid.RowSpan="2" Margin="2" ScrollViewer.HorizontalScrollBarVisibility="Hidden"/>
-            <!--</StackPanel>-->
+            </GroupBox>
             <GroupBox Grid.Column="1" Header="Luminosity" BorderThickness="0">
                 <Border BorderThickness="1" BorderBrush="Black" Background="White">
                     <Polygon Points="{Binding Path=Settings.SelectedBitmap.LuminanceHistogramPoints}" Stretch="Fill" Fill="Black" Opacity="0.8" />
@@ -80,6 +82,19 @@
             </GroupBox>
             <CheckBox Grid.Column="1" Height="16" HorizontalAlignment="Left" Margin="12,39,0,0" IsChecked="{Binding Path=Settings.HighlightUnderExp}" VerticalAlignment="Top" />
             <CheckBox Grid.Column="1" Height="16" Width="16" Margin="0,39,11,0"  IsChecked="{Binding Path=Settings.HighlightOverExp}" VerticalAlignment="Top" HorizontalAlignment="Right" HorizontalContentAlignment="Right"/>
+            <GroupBox Grid.Column="2" Grid.RowSpan="2" Header="{T:TranslateExtension LabelImageProperties}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="26*" />
+                        <RowDefinition Height="30*" />
+                        <RowDefinition Height="173*" />
+                        <RowDefinition Height="37*" />
+                    </Grid.RowDefinitions>
+                    <Label Content="{T:TranslateExtension LabelFileName}"/>
+                    <TextBox Grid.Row="1" Margin="2" />
+                    <Button Content="{T:TranslateExtension LabelSet}" Grid.Row="3" Margin="4" Name="btn_set" Click="btn_set_Click" />
+                </Grid>
+            </GroupBox>
             <!--</TabItem>
                 <TabItem Header="Metadata" Name="tabItem2">-->
             <!--</TabItem>
