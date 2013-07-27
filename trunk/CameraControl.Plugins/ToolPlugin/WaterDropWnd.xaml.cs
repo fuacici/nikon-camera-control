@@ -110,8 +110,14 @@ namespace CameraControl.Plugins.ToolPlugin
                         case "drop_wait_time":
                             Dispatcher.Invoke(new Action(delegate { slider_drop_wait.Value = value; }));
                             break;
+                        case "drop2_wait_time":
+                            Dispatcher.Invoke(new Action(delegate { slider_drop2_wait.Value = value; }));
+                            break;
                         case "drop2_time":
                             Dispatcher.Invoke(new Action(delegate { slider_drop2.Value = value; }));
+                            break;
+                        case "drop3_time":
+                            Dispatcher.Invoke(new Action(delegate { slider_drop3.Value = value; }));
                             break;
                         case "flash_time":
                             Dispatcher.Invoke(new Action(delegate { slider_flash.Value = value; }));
@@ -132,11 +138,10 @@ namespace CameraControl.Plugins.ToolPlugin
                 OpenPort();
                 sp.WriteLine("c=" + slider_cmera.Value);
                 sp.WriteLine("dw=" + slider_drop_wait.Value);
-                //Thread.Sleep(100);
+                sp.WriteLine("dw2=" + slider_drop_wait.Value);
                 sp.WriteLine("d1=" + slider_drop1.Value);
-                //Thread.Sleep(100);
                 sp.WriteLine("d2=" + slider_drop2.Value);
-                //Thread.Sleep(100);
+                sp.WriteLine("d3=" + slider_drop3.Value);
                 sp.WriteLine("f=" + slider_flash.Value.ToString());
             }
             catch (Exception exception)
@@ -164,43 +169,42 @@ namespace CameraControl.Plugins.ToolPlugin
 
         private void btn_get_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                ClosePort();
-                OpenPort();
-                sp.Write("?");
-            }
-            catch (Exception exception)
-            {
-                lst_message.Items.Add(exception.Message);
-            }
+            SendCommand("?");
         }
 
         private void cmb_ports_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            try
-            {
-                OpenPort();
-                sp.Write("?");
-            }
-            catch (Exception exception)
-            {
-                lst_message.Items.Add(exception.Message);
-            }
+            SendCommand("?");
         }
 
         private void btn_valve_Click(object sender, RoutedEventArgs e)
         {
+            SendCommand(">");
+        }
+
+        private void SendCommand(string cmd)
+        {
             try
             {
+                ClosePort();
                 OpenPort();
-                sp.Write(">");
+                sp.Write(cmd);
             }
             catch (Exception exception)
             {
                 lst_message.Items.Add(exception.Message);
             }
+   
+        }
 
+        private void btn_drop_Click(object sender, RoutedEventArgs e)
+        {
+            SendCommand("<");
+        }
+
+        private void btn_stay_on_top_Click(object sender, RoutedEventArgs e)
+        {
+            Topmost = !Topmost;
         }
     }
 }

@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="310">
+             d:DesignHeight="60" d:DesignWidth="310">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -22,15 +22,20 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="232*" />
-            <ColumnDefinition Width="78*" />
+            <ColumnDefinition Width="169*" />
+            <ColumnDefinition Width="25" />
+            <ColumnDefinition Width="25" />
+            <ColumnDefinition Width="80" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25*" />
+            <RowDefinition Height="30*" />
             <RowDefinition Height="24*" />
         </Grid.RowDefinitions>
-        <Slider Grid.ColumnSpan="2" Grid.Row="1" Name="slider" Margin="5,0" Value="{Binding Value}" Maximum="{Binding Maximum}" Minimum="{Binding Minimum}"/>
-        <TextBox Grid.Column="1" Name="textBox" VerticalContentAlignment="Center" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Padding="0"/>
+        <Slider Grid.ColumnSpan="4" Grid.Row="1" Name="slider" Margin="5,0" Value="{Binding Value}" Maximum="{Binding Maximum}" Minimum="{Binding Minimum}"/>
+
+        <TextBox Grid.Column="3" Name="textBox" VerticalContentAlignment="Center" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Padding="0" Panel.ZIndex="1" Margin="0,0,0,2" />
         <Label Content="{Binding Label}" Name="label" VerticalContentAlignment="Center" Padding="0" Margin="5,0,0,0" />
+        <Button Content="-" Grid.Column="1" Name="btn_m" Margin="2" Click="btn_m_Click" />
+        <Button Content="+" Grid.Column="2" Name="btn_p" Margin="2" Click="btn_p_Click" />
     </Grid>
 </UserControl>
