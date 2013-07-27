@@ -29,7 +29,7 @@ namespace CameraControl
     public partial class StartUpWindow : Window
     {
         private IMainWindowPlugin _basemainwindow;
-        private Timer _timer = new Timer(1000);
+        private Timer _timer = new Timer(2000);
         public StartUpWindow()
         {
             InitializeComponent();
@@ -49,7 +49,7 @@ namespace CameraControl
 
         void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(InitApplication));
+            this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(InitApplication));
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -84,12 +84,7 @@ namespace CameraControl
                                                   new CmdToJpg(),
                                                   //new CmdExpJpg()
                                                 };
-            //ServiceProvider.Branding.ApplicationTitle = "digiCamControl";
-            //ServiceProvider.Branding.DefaultMissingThumbImage = "";
-            //ServiceProvider.Branding.DefaultThumbImage = "";
-            //ServiceProvider.Branding.LogoImage = "";
-            //ServiceProvider.Branding.StartupScreenImage = "";
-            //ServiceProvider.Settings.Save(ServiceProvider.Branding);
+
             if (ServiceProvider.Settings.DisableNativeDrivers && MessageBox.Show(TranslationStrings.MsgDisabledDrivers, "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 ServiceProvider.Settings.DisableNativeDrivers = false;
             ServiceProvider.Settings.LoadSessionData();

@@ -70,6 +70,7 @@ namespace CameraControl.Controls
                                 new FrameworkPropertyMetadata(0,
                                                               FrameworkPropertyMetadataOptions.
                                                                   BindsTwoWayByDefault));
+
         private static readonly DependencyProperty MaximumProperty =
     DependencyProperty.Register("Maximum", typeof(int), typeof(AdvancedSlider),
                                 new FrameworkPropertyMetadata(int.MaxValue,
@@ -80,6 +81,16 @@ namespace CameraControl.Controls
         {
             InitializeComponent();
             DataContext = this;
+        }
+
+        private void btn_m_Click(object sender, RoutedEventArgs e)
+        {
+            Value--;
+        }
+
+        private void btn_p_Click(object sender, RoutedEventArgs e)
+        {
+            Value++;
         }
     }
 }

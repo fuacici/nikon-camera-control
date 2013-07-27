@@ -5,10 +5,12 @@
 	<Window.Resources>
 		<Storyboard x:Key="OnLoaded1">
 			<PointAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransformOrigin)" Storyboard.TargetName="background">
+				<EasingPointKeyFrame KeyTime="0" Value="0.5,0.5"/>
 				<EasingPointKeyFrame KeyTime="0:0:1" Value="0.5,0.5"/>
 				<EasingPointKeyFrame KeyTime="0:0:2" Value="0.5,0.5"/>
 			</PointAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="background">
+				<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
 				<EasingDoubleKeyFrame KeyTime="0:0:1" Value="-1"/>
 				<EasingDoubleKeyFrame KeyTime="0:0:2" Value="1"/>
 			</DoubleAnimationUsingKeyFrames>
@@ -20,7 +22,7 @@
 		</EventTrigger>
 	</Window.Triggers>
     <Grid>
-        <Image Name="background" Stretch="Uniform" Source="file:///D:/devel/vs2010/CameraControl/CameraControl/SplashScreen1.png" >
+        <Image Name="background" Stretch="Uniform" Source="file:///D:/devel/vs2010/CameraControl/CameraControl/SplashScreen1.png" HorizontalAlignment="Left" Margin="-441,-8,0,8" Width="435" >
         	<Image.RenderTransform>
         		<TransformGroup>
         			<ScaleTransform/>

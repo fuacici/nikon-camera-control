@@ -34,6 +34,8 @@ int camera_timer = 1000;
 int drop1_time = 45;
 int drop_wait_time = 100;
 int drop2_time = 45;
+int drop2_wait_time = 100;
+int drop3_time = 45;
 int flash_time = 370;
 // -----------------------
 void setup() {
@@ -65,12 +67,24 @@ void loop() {
     digitalWrite(valvePin, HIGH);
     delay(drop1_time);    
     digitalWrite(valvePin, LOW);    
+ 
     delay(drop_wait_time);        
     digitalWrite(valvePin, HIGH);
     delay(drop2_time);    
     digitalWrite(valvePin, LOW);   
- 
-    delay(flash_time);    
+
+    delay(drop2_wait_time);        
+
+    /*
+    Trigger the 3 drop only if size >0
+    */
+    if(drop3_time>0){
+          digitalWrite(valvePin, HIGH);
+          delay(drop3_time);    
+          digitalWrite(valvePin, LOW);   
+    }
+
+    delay(flash_time-drop1_time-drop_wait_time-drop2_time-drop2_wait_time-drop3_time );    
     digitalWrite(flashPin, HIGH);
     delay(100);    
     digitalWrite(flashPin, LOW);    
@@ -106,6 +120,13 @@ void serialEvent() {
       digitalWrite(valvePin, HIGH);
       delay(500);    
       digitalWrite(valvePin, LOW); 
+    }    
+
+    if(inChar == '<')
+    {
+      digitalWrite(valvePin, HIGH);
+      delay(drop1_time);    
+      digitalWrite(valvePin, LOW);
     }    
     
     if(inChar == '?')
@@ -143,11 +164,21 @@ void serialEvent() {
         drop_wait_time = inputString.toInt();
         shouldBlink = true;
       } 
+      if(command=="dw2=")
+      {
+        drop2_wait_time = inputString.toInt();
+        shouldBlink = true;
+      }       
       if(command=="d2=")
       {
         drop2_time = inputString.toInt();
         shouldBlink = true;
       } 
+      if(command=="d3=")
+      {
+        drop3_time = inputString.toInt();
+        shouldBlink = true;
+      }      
       if(command=="f=")
       {
         flash_time = inputString.toInt();

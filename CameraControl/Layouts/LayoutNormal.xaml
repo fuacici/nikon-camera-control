@@ -18,7 +18,7 @@
                 <Setter.Value>
                     <DataTemplate>
                         <StackPanel>
-                            <Grid Width="120" Height="80">
+                            <Grid Width="130" Height="90">
                             <Rectangle Stroke="Black" Margin="0" />
                                 <Rectangle Stroke="White" Margin="1" />
                                 <Rectangle Stroke="Black" Margin="2" />
@@ -27,12 +27,12 @@
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=ImageDoubleClickCommand}" />
                                     </Image.InputBindings>-->
                                 </Image>
+							<CheckBox IsChecked="{Binding Path=IsChecked}" Content="{Binding Path=Name}" Margin="3" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom"/>								
                             </Grid>
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox IsChecked="{Binding Path=IsChecked}" Content="{Binding Path=Name}"/>
-                                <!--<Label Content="{Binding Path=Name}" HorizontalAlignment="Center" />-->
-                            </StackPanel>
                         </StackPanel>
+                    	<DataTemplate.Triggers>
+                    		<EventTrigger RoutedEvent="FrameworkElement.Loaded"/>
+                    	</DataTemplate.Triggers>
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
@@ -68,7 +68,7 @@
                     <xctk:ZoomboxView>Fit</xctk:ZoomboxView>
                 </xctk:Zoombox.ViewStack>
 
-                    <Image Name="image1" Stretch="Uniform" Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" >
+                    <Image Name="image1" Stretch="Uniform" Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" HorizontalAlignment="Right" >
                     <Image.InputBindings>
                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=ImageDoubleClickCommand}" />
                     </Image.InputBindings>
