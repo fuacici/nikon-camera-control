@@ -192,6 +192,28 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        public static void DelKeyword(string filename)
+        {
+            try
+            {
+                var startInfo = new ProcessStartInfo(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Tools", "exiv2.exe"))
+                {
+                    Arguments = "-M\"del Iptc.Application2.Keywords\" " + "\"" + filename + "\"",
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Minimized
+                };
+
+                var process = Process.Start(startInfo);
+                process.WaitForExit();
+            }
+            catch (Exception exception)
+            {
+                Log.Error("Error set keyword to file", exception);
+            }
+        }
+
         public void Load(string filename, int relWidth, int relHeight)
         {
             var startInfo = new ProcessStartInfo(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Tools", "exiv2.exe"))

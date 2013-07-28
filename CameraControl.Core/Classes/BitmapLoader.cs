@@ -203,11 +203,16 @@ namespace CameraControl.Core.Classes
             file.DisplayImage = bitmap;
         }
 
-        public void SetData(BitmapFile file,FileItem fileItem)
+        public void SetData(BitmapFile file, FileItem fileItem)
         {
             if (fileItem == null || fileItem.FileInfo == null)
                 return;
             fileItem.LoadInfo();
+            file.FileName = Path.GetFileNameWithoutExtension(fileItem.FileName);
+            file.Comment = "";
+            if (fileItem.FileInfo.ExifTags.ContainName("Iptc.Application2.Caption"))
+                file.Comment = fileItem.FileInfo.ExifTags["Iptc.Application2.Caption"];
+
             file.Metadata.Clear();
             foreach (ValuePair item in fileItem.FileInfo.ExifTags.Items)
             {
