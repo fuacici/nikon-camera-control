@@ -367,5 +367,6 @@ namespace CameraControl.Core.Translation
         public static string LabelTagSelector = "Tag selector";
         public static string LabelComment = "Comment";
         public static string LabelWriteComments = "Write comments/tags in downloaded image file";
+        public static string LabelStayOnTop2 = "Stay on top";
     }
 }
