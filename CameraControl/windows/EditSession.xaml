@@ -58,18 +58,11 @@
                         <Label Content="{T:TranslateExtension LabelLeadingZeros}" Width="150" HorizontalContentAlignment="Right" />
                         <xctk:IntegerUpDown Value="{Binding Path=LeadingZeros}" Width="200" Minimum="1" Maximum="10"/>
                     </StackPanel>                    
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Content="{T:TranslateExtension LabelUseOriginal}" ToolTip="{T:TranslateExtension LabelUseOriginalToolTip}" IsChecked="{Binding Path=UseOriginalFilename}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Content="{T:TranslateExtension LabelAlowFolderChange}" IsChecked="{Binding Path=AlowFolderChange}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Content="{T:TranslateExtension LabelUseCameraCounter}" ToolTip="" IsChecked="{Binding Path=UseCameraCounter}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Content="{T:TranslateExtension LabelDownloadJpgOnly}" ToolTip="{T:TranslateExtension LabelDownloadJpgOnlyToolTip}" IsChecked="{Binding Path=DownloadOnlyJpg}" />
-                    </StackPanel>
+                    <CheckBox Content="{T:TranslateExtension LabelUseOriginal}" ToolTip="{T:TranslateExtension LabelUseOriginalToolTip}" IsChecked="{Binding Path=UseOriginalFilename}"/>
+                    <CheckBox Content="{T:TranslateExtension LabelAlowFolderChange}" IsChecked="{Binding Path=AlowFolderChange}"/>
+                    <CheckBox Content="{T:TranslateExtension LabelUseCameraCounter}" ToolTip="" IsChecked="{Binding Path=UseCameraCounter}"/>
+                    <CheckBox Content="{T:TranslateExtension LabelDownloadJpgOnly}" ToolTip="{T:TranslateExtension LabelDownloadJpgOnlyToolTip}" IsChecked="{Binding Path=DownloadOnlyJpg}" />
+                    <CheckBox Content="{T:TranslateExtension LabelWriteComments}" IsChecked="{Binding Path=WriteComment}" />
                 </StackPanel>
             </TabItem>
             <TabItem Header="{T:TranslateExtension LabelTags}">

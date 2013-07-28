@@ -195,6 +195,27 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        private string _comment;
+        public string Comment
+        {
+            get { return _comment; }
+            set
+            {
+                _comment = value;
+                NotifyPropertyChanged("Comment");
+            }
+        }
+
+        private bool _writeComment;
+        public bool WriteComment
+        {
+            get { return _writeComment; }
+            set
+            {
+                _writeComment = value;
+                NotifyPropertyChanged("WriteComment");
+            }
+        }
 
         private bool _useCameraCounter;
         public bool UseCameraCounter
@@ -264,6 +285,7 @@ namespace CameraControl.Core.Classes
             UseCameraCounter = false;
             DownloadOnlyJpg = false;
             LeadingZeros = 4;
+            WriteComment = false;
         }
 
         void _systemWatcher_Created(object sender, FileSystemEventArgs e)

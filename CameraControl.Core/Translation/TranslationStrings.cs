@@ -364,5 +364,8 @@ namespace CameraControl.Core.Translation
         public static string LabelImageProperties = "Image Properties";
         public static string LabelFileName = "File Name";
         public static string LabelSet = "Set";
+        public static string LabelTagSelector = "Tag selector";
+        public static string LabelComment = "Comment";
+        public static string LabelWriteComments = "Write comments/tags in downloaded image file";
     }
 }

@@ -137,6 +137,61 @@ namespace CameraControl.Core.Classes
                       };
         }
 
+        /// <summary>
+        /// Saves a comment string in a image file as Iptc.Application2.Caption
+        /// </summary>
+        /// <param name="filename">The filename.</param>
+        /// <param name="comment">The comment.</param>
+        public static void SaveComment(string filename, string comment)
+        {
+            try
+            {
+                var startInfo = new ProcessStartInfo(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Tools", "exiv2.exe"))
+                {
+                    Arguments = "-M\"set Iptc.Application2.Caption " + comment + "\" " + "\"" + filename + "\"",
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Minimized
+                };
+
+                var process = Process.Start(startInfo);
+                process.WaitForExit();
+            }
+            catch (Exception exception)
+            {
+                Log.Error("Error set comment to file", exception);
+            }
+        }
+
+
+        /// <summary>
+        /// Adds a keyword to image file
+        /// </summary>
+        /// <param name="filename">The filename.</param>
+        /// <param name="keyword">The keyword.</param>
+        public static void AddKeyword(string filename, string keyword)
+        {
+            try
+            {
+                var startInfo = new ProcessStartInfo(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Tools", "exiv2.exe"))
+                {
+                    Arguments = "-M\"add Iptc.Application2.Keywords " + keyword + "\" " + "\"" + filename + "\"",
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Minimized
+                };
+
+                var process = Process.Start(startInfo);
+                process.WaitForExit();
+            }
+            catch (Exception exception)
+            {
+                Log.Error("Error set keyword to file", exception);
+            }
+        }
+
         public void Load(string filename, int relWidth, int relHeight)
         {
             var startInfo = new ProcessStartInfo(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Tools", "exiv2.exe"))
@@ -337,7 +392,7 @@ namespace CameraControl.Core.Classes
 
         void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            if (e.Data != null)
+            if (e.Data != null && !Tags.ContainsKey(e.Data.Substring(0, 45).Trim()))
                 Tags.Add(e.Data.Substring(0, 45).Trim(), new Exiv2Data() { Tag = e.Data.Substring(0, 45).Trim(), Type = e.Data.Substring(45, 11), Length = e.Data.Substring(45 + 11, 4), Value = e.Data.Substring(45 + 11 + 4).Trim() });
         }
 
