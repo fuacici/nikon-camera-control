@@ -545,9 +545,10 @@ namespace CameraControl
                     if (MessageBox.Show(string.Format(TranslationStrings.MsgDeleteSessionQuestion, ServiceProvider.Settings.DefaultSession.Name), TranslationStrings.LabelDeleteSession, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
                         PhotoSession session = ServiceProvider.Settings.DefaultSession;
-                        File.Delete(session.ConfigFile);
-                        ServiceProvider.Settings.DefaultSession = ServiceProvider.Settings.PhotoSessions[0];
+                        if (!string.IsNullOrEmpty(session.ConfigFile) && File.Exists(session.ConfigFile))
+                            File.Delete(session.ConfigFile);
                         ServiceProvider.Settings.PhotoSessions.Remove(session);
+                        ServiceProvider.Settings.DefaultSession = ServiceProvider.Settings.PhotoSessions[0];
                         ServiceProvider.Settings.Save();
                     }
                 }

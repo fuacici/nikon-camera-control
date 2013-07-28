@@ -161,7 +161,7 @@ namespace CameraControl
         #region eventhandlers
         void Settings_SessionSelected(PhotoSession oldvalue, PhotoSession newvalue)
         {
-            if (oldvalue != null)
+            if (oldvalue != null && ServiceProvider.Settings.PhotoSessions.Contains(oldvalue))
                 ServiceProvider.Settings.Save(oldvalue);
             ServiceProvider.QueueManager.Clear();
             if (ServiceProvider.DeviceManager.SelectedCameraDevice != null)

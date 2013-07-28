@@ -229,7 +229,16 @@ namespace CameraControl.Core.Classes
             }
         }
 
-        public string ConfigFile { get; set; }
+        private string _configFile;
+        public string ConfigFile
+        {
+            get
+            {
+                return _configFile;
+            }
+            set { _configFile = value; }
+        }
+
         private FileSystemWatcher _systemWatcher;
 
         public PhotoSession()
