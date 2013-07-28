@@ -6,7 +6,7 @@
                        xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
                        xmlns:Controls1="clr-namespace:CameraControl.Controls"
                        xmlns:Controls2="clr-namespace:CameraControl.Controls;assembly=CameraControl.Core"
-                       Title="{T:TranslateExtension TimeLapseWindowTitle}" Height="411" Width="631" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" UseLayoutRounding="True" ShowActivated="True" Closed="Window_Closed" Closing="Window_Closing"
+                       Title="{T:TranslateExtension TimeLapseWindowTitle}" Height="445" Width="631" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" UseLayoutRounding="True" ShowActivated="True" Closed="Window_Closed" Closing="Window_Closing"
                        ShowMaxRestoreButton="False" ShowMinButton="False">
     <Window.Resources>
         <ResourceDictionary>
@@ -19,7 +19,7 @@
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml"/>-->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -46,9 +46,9 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="10" />
-                        <RowDefinition Height="35" />
-                        <RowDefinition Height="35" />
-                        <RowDefinition Height="35" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
                         <RowDefinition Height="25" />
                         <RowDefinition Height="25" />
                         <RowDefinition Height="25" />
@@ -92,9 +92,9 @@
                     <Label Content="{T:TranslateExtension LabelVideoFormat}" Height="28" HorizontalAlignment="Left" Margin="3,0,0,0" Name="label3" VerticalAlignment="Top" Grid.Row="1" />
                     <TextBox Name="textBox1" Text="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.OutputFIleName}" Grid.Row="5" Margin="2,2,38,2" />
                     <Label Content="{T:TranslateExtension LabelOutputFile}" Height="28" HorizontalAlignment="Left" Margin="6,0,0,0" Name="label4" VerticalAlignment="Top" Grid.Row="4" />
-                    <Button Content="..." Height="23" HorizontalAlignment="Left" Margin="330,5,0,0" Name="button3" VerticalAlignment="Top" Width="26" Click="button3_Click" Grid.Row="5" />
+                    <Button Content="..." Height="23" Margin="389,5,2,0" Name="button3" VerticalAlignment="Top" Click="button3_Click" Grid.Row="5" />
                                         
-                    <CheckBox Content="{T:TranslateExtension LabelFillImage}" Height="24" HorizontalAlignment="Left" Margin="276,6,0,0" Name="checkBox1" VerticalAlignment="Top" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.FillImage}" Grid.Row="4" />
+                    <CheckBox Content="{T:TranslateExtension LabelFillImage}" Name="checkBox1" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DefaultSession.TimeLapse.FillImage}" Grid.Row="4" Margin="109,0,0,0" Width="308" VerticalContentAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
             </TabItem>
             <TabItem Header="{T:TranslateExtension LabelCreateMovie}" Name="tabItem3">
