@@ -188,6 +188,21 @@ namespace CameraControl
                 Log.Debug("[BENCHMARK]Speed :" +
                           (new FileInfo(fileName).Length / (DateTime.Now - startTIme).TotalSeconds / 1024 / 1024).ToString("0000.00"));
                 Log.Debug("[BENCHMARK]Transfer time :" + ((DateTime.Now - startTIme).TotalSeconds).ToString("0000.000"));
+                
+                // write comment and tags directly in transferred file
+                if (ServiceProvider.Settings.DefaultSession.WriteComment)
+                {
+                    if (!string.IsNullOrEmpty(ServiceProvider.Settings.DefaultSession.Comment))
+                        Exiv2Helper.SaveComment(fileName, ServiceProvider.Settings.DefaultSession.Comment);
+                    if (!string.IsNullOrEmpty(ServiceProvider.Settings.DefaultSession.SelectedTag1.Value))
+                        Exiv2Helper.AddKeyword(fileName, ServiceProvider.Settings.DefaultSession.SelectedTag1.Value);
+                    if (!string.IsNullOrEmpty(ServiceProvider.Settings.DefaultSession.SelectedTag2.Value))
+                        Exiv2Helper.AddKeyword(fileName, ServiceProvider.Settings.DefaultSession.SelectedTag2.Value);
+                    if (!string.IsNullOrEmpty(ServiceProvider.Settings.DefaultSession.SelectedTag3.Value))
+                        Exiv2Helper.AddKeyword(fileName, ServiceProvider.Settings.DefaultSession.SelectedTag3.Value);
+                    if (!string.IsNullOrEmpty(ServiceProvider.Settings.DefaultSession.SelectedTag4.Value))
+                        Exiv2Helper.AddKeyword(fileName, ServiceProvider.Settings.DefaultSession.SelectedTag4.Value);
+                }
                 //select the new file only when the multiple camera support isn't used to prevent high CPU usage on raw files
                 if (ServiceProvider.Settings.AutoPreview &&
                     !ServiceProvider.WindowsManager.Get(typeof(MultipleCameraWnd)).IsVisible &&
@@ -199,6 +214,7 @@ namespace CameraControl
                 {
                     session.AddFile(fileName);
                 }
+
                 //ServiceProvider.Settings.Save(session);
                 StaticHelper.Instance.SystemMessage = TranslationStrings.MsgPhotoTransferDone;
                 eventArgs.CameraDevice.IsBusy = false;
@@ -526,11 +542,11 @@ namespace CameraControl
 
         private void btn_Tags_Click(object sender, RoutedEventArgs e)
         {
-            if (ServiceProvider.Settings.DefaultSession.Tags.Count == 0)
-            {
-                MessageBox.Show(TranslationStrings.MsgUseSessionEditorTags);
-                return;
-            }
+            //if (ServiceProvider.Settings.DefaultSession.Tags.Count == 0)
+            //{
+            //    MessageBox.Show(TranslationStrings.MsgUseSessionEditorTags);
+            //    return;
+            //}
             ServiceProvider.WindowsManager.ExecuteCommand(ServiceProvider.WindowsManager.Get(typeof(TagSelectorWnd)).IsVisible
                                                             ? WindowsCmdConsts.TagSelectorWnd_Hide
                                                             : WindowsCmdConsts.TagSelectorWnd_Show);
