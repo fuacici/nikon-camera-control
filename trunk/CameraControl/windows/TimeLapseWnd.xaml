@@ -6,6 +6,7 @@
                        xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
                        xmlns:Controls1="clr-namespace:CameraControl.Controls"
                        xmlns:Controls2="clr-namespace:CameraControl.Controls;assembly=CameraControl.Core"
+                       xmlns:my="clr-namespace:CameraControl.windows"
                        Title="{T:TranslateExtension TimeLapseWindowTitle}" Height="445" Width="631" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" UseLayoutRounding="True" ShowActivated="True" Closed="Window_Closed" Closing="Window_Closing"
                        ShowMaxRestoreButton="False" ShowMinButton="False">
     <Window.Resources>
@@ -25,6 +26,7 @@
     </Window.Resources>
     <Controls:MetroWindow.WindowCommands>
         <Controls:WindowCommands>
+            <CheckBox Content="{T:TranslateExtension LabelStayOnTop2}" Name="btn_stay_on_top" IsChecked="{Binding Path=Topmost, RelativeSource={RelativeSource FindAncestor, AncestorType=my:TimeLapseWnd, AncestorLevel=1}}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
             <Button Content="{T:TranslateExtension ButtonHelp}" Name="btn_help" Click="btn_help_Click" />
         </Controls:WindowCommands>
     </Controls:MetroWindow.WindowCommands>

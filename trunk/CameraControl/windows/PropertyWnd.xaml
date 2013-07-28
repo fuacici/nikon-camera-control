@@ -4,7 +4,7 @@
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
                      xmlns:ontrols="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                      xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
-                     Title="Image Propert" Height="353" Width="671" ShowInTaskbar="False" Topmost="True" WindowStyle="None" AllowsTransparency="True"   Background="Transparent" Closing="Window_Closing" ShowMaxRestoreButton="False">
+                     xmlns:my1="clr-namespace:CameraControl.windows" Title="Image Propert" Height="353" Width="671" ShowInTaskbar="False" Topmost="True" WindowStyle="None" AllowsTransparency="True"   Background="Transparent" Closing="Window_Closing" ShowMaxRestoreButton="False">
     <Window.DataContext>
         <Core:ServiceProvider/>
     </Window.DataContext>
@@ -50,6 +50,11 @@
             </Style>
         </ResourceDictionary>
     </Window.Resources>
+    <ontrols:MetroWindow.WindowCommands>
+        <ontrols:WindowCommands>
+            <CheckBox Content="{T:TranslateExtension LabelStayOnTop2}" Name="btn_stay_on_top" IsChecked="{Binding Path=Topmost, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:PropertyWnd, AncestorLevel=1}}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+        </ontrols:WindowCommands>
+    </ontrols:MetroWindow.WindowCommands>
     <Border Background="#68000000" CornerRadius="5" BorderBrush="{StaticResource WindowFrameBrush}" BorderThickness="2,0,2,2">
         <Grid>
             <Grid.ColumnDefinitions>

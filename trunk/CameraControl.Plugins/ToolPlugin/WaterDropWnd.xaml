@@ -4,7 +4,7 @@
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                       xmlns:behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro" 
-              xmlns:my="clr-namespace:CameraControl.Controls;assembly=CameraControl.Core" Height="518" Width="600" Closed="MetroWindow_Closed">
+              xmlns:my="clr-namespace:CameraControl.Controls;assembly=CameraControl.Core" Height="518" Width="600" Closed="MetroWindow_Closed" xmlns:my1="clr-namespace:CameraControl.Plugins.ToolPlugin">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -28,7 +28,7 @@
 
     <Controls:MetroWindow.WindowCommands>
         <Controls:WindowCommands>
-            <Button Content="Stay on top" Name="btn_stay_on_top" Click="btn_stay_on_top_Click" />
+            <CheckBox Content="Stay on top" Name="btn_stay_on_top" IsChecked="{Binding Path=Topmost, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:WaterDropWnd, AncestorLevel=1}}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
         </Controls:WindowCommands>
     </Controls:MetroWindow.WindowCommands>
     <Grid>
