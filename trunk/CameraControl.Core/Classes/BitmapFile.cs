@@ -141,6 +141,29 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        private string _fileName;
+        public string FileName
+        {
+            get { return _fileName; }
+            set
+            {
+                _fileName = value;
+                NotifyPropertyChanged("FileName");
+            }
+        }
+
+        private string _comment;
+        public string Comment
+        {
+            get { return _comment; }
+            set
+            {
+                _comment = value;
+                NotifyPropertyChanged("Comment");
+            }
+        }
+
+
         public AsyncObservableCollection<DictionaryItem> Metadata { get; set; }
 
         public void OnBitmapLoaded()

@@ -266,8 +266,8 @@ namespace CameraControl.Core.Classes
         {
             _systemWatcher = new FileSystemWatcher();
             _systemWatcher.EnableRaisingEvents = false;
-            _systemWatcher.Deleted += _systemWatcher_Deleted;
-            _systemWatcher.Created += new FileSystemEventHandler(_systemWatcher_Created);
+            //_systemWatcher.Deleted += _systemWatcher_Deleted;
+            //_systemWatcher.Created += new FileSystemEventHandler(_systemWatcher_Created);
 
             Name = "Default";
             Braketing = new BraketingClass();

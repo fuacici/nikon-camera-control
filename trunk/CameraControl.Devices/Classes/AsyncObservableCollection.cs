@@ -25,12 +25,13 @@ namespace CameraControl.Devices.Classes
       if (SynchronizationContext.Current == _synchronizationContext)
       {
         // Execute the CollectionChanged event on the current thread
-        RaiseCollectionChanged(e);
+              RaiseCollectionChanged(e);
       }
       else
       {
         // Post the CollectionChanged event on the creator thread
-        _synchronizationContext.Post(RaiseCollectionChanged, e);
+          if (_synchronizationContext != null)
+              _synchronizationContext.Post(RaiseCollectionChanged, e);
       }
     }
 
@@ -57,7 +58,8 @@ namespace CameraControl.Devices.Classes
       else
       {
         // Post the PropertyChanged event on the creator thread
-        _synchronizationContext.Post(RaisePropertyChanged, e);
+          if (_synchronizationContext != null)
+              _synchronizationContext.Post(RaisePropertyChanged, e);
       }
     }
 
