@@ -652,6 +652,7 @@ namespace CameraControl.Core.Classes
                 // Serialize the object, and close the TextWriter
                 serializer.Serialize(writer, session);
                 writer.Close();
+                session.ConfigFile = filename;
             }
             catch (Exception exception)
             {
