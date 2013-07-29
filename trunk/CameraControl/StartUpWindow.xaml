@@ -22,7 +22,7 @@
 		</EventTrigger>
 	</Window.Triggers>
     <Grid>
-        <Image Name="background" Stretch="Uniform" Source="file:///D:/devel/vs2010/CameraControl/CameraControl/SplashScreen1.png" HorizontalAlignment="Left" Margin="-441,-8,0,8" Width="435" >
+        <Image Name="background" Stretch="Uniform" Source="file:///D:/devel/vs2010/CameraControl/CameraControl/SplashScreen1.png" HorizontalAlignment="Center"  >
         	<Image.RenderTransform>
         		<TransformGroup>
         			<ScaleTransform/>
