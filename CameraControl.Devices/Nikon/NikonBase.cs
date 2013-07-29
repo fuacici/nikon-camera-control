@@ -229,14 +229,24 @@ namespace CameraControl.Devices.Nikon
             SlowDownEventTimer();
         }
 
+        public void StopEventTimer()
+        {
+            _timer.Stop();
+        }
+
+        public void StartEventTimer()
+        {
+            _timer.Start();
+        }
+
         private void SlowDownEventTimer()
         {
-            _timer.Interval = 2500;
+            _timer.Interval = 1000 / 10;
         }
 
         private void SpeedUpEventTimer()
         {
-            _timer.Interval = 1000 / 5;
+            _timer.Interval = 1000 / 10;
         }
 
         void _timer_Elapsed(object sender, ElapsedEventArgs e)

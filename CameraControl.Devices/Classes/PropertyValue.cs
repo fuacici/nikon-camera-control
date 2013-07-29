@@ -196,7 +196,7 @@ namespace CameraControl.Devices.Classes
                 return;
             if (typeof(T) == typeof(int))
             {
-                int val = BitConverter.ToInt16(ba, 0);
+                int val = ba.Length==1 ? ba[0] : BitConverter.ToInt16(ba, 0);
                 SetValue((T)((object)val));
             }
             if (typeof(T) == typeof(uint))
