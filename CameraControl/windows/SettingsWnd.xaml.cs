@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
@@ -140,6 +141,19 @@ namespace CameraControl.windows
                 CustomConfig config = lst_device.SelectedItem as CustomConfig;
                 ServiceProvider.Settings.DeviceConfigs.Items.Remove(config);
             }
+        }
+    }
+
+    private void btn_clearcache_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                                          Settings.AppName, "Cache"), true);
+        }
+        catch (Exception exception)
+        {
+            Log.Error("Error delete cache directory",exception);
         }
     }
 
