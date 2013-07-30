@@ -178,7 +178,10 @@ namespace CameraControl.Core.Classes
                     fileItem.FileInfo.HistogramLuminance[lum]++;
                 }
             }
-
+            fileItem.FileInfo.HistogramBlue = SmoothHistogram(fileItem.FileInfo.HistogramBlue);
+            fileItem.FileInfo.HistogramGreen = SmoothHistogram(fileItem.FileInfo.HistogramGreen);
+            fileItem.FileInfo.HistogramRed = SmoothHistogram(fileItem.FileInfo.HistogramRed);
+            fileItem.FileInfo.HistogramLuminance = SmoothHistogram(fileItem.FileInfo.HistogramLuminance);
         }
 
         public unsafe void Highlight(BitmapFile file, bool under , bool over)
