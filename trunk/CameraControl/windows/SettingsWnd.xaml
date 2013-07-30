@@ -262,6 +262,7 @@
                     <CheckBox Content="{T:TranslateExtension LabelUseParellelTransfer}" Grid.ColumnSpan="2" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=UseParallelTransfer}" Margin="0,4,0,1" Grid.RowSpan="2" />
                     <CheckBox Content="{T:TranslateExtension LabelShowUnTranslatedStringIds}" Grid.ColumnSpan="2" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ShowUntranslatedLabelId}" Grid.Row="2" />
                     <Controls:ToggleSwitch Header="{T:TranslateExtension LabelDisableDriver}" Padding="0" UseLayoutRounding="False" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DisableNativeDrivers}" ToolTip="This option disable special handig of some cameras. Use this if you experience some problem" Margin="1,0,1,1" />
+                    <Button Content="{T:TranslateExtension LabelClearCache}" Grid.Column="1" Grid.Row="5" Height="30" HorizontalAlignment="Left" Name="btn_clearcache" VerticalAlignment="Top" Width="195" Click="btn_clearcache_Click" />
                 </Grid>
             </TabItem>
         </Controls:MetroAnimatedSingleRowTabControl>

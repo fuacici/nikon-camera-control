@@ -107,6 +107,22 @@ namespace CameraControl.Core.Classes
                 writeableBitmap = writeableBitmap.Resize((int) (writeableBitmap.PixelWidth*dw),
                                                          (int) (writeableBitmap.PixelHeight*dw),
                                                          WriteableBitmapExtensions.Interpolation.Bilinear);
+                
+                if (fileItem.FileInfo.ExifTags.ContainName("Exif.Image.Orientation") && !fileItem.IsRaw)
+                {
+                    if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "bottom, right")
+                        writeableBitmap = writeableBitmap.Rotate(180);
+
+                    //if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "top, left")
+                    //    writeableBitmap = writeableBitmap.Rotate(180);
+
+                    if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "right, top")
+                        writeableBitmap = writeableBitmap.Rotate(90);
+
+                    if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "left, bottom")
+                        writeableBitmap = writeableBitmap.Rotate(270);
+                }
+
                 Save2Jpg(writeableBitmap, fileItem.SmallThumb);
                 fileItem.Thumbnail = LoadSmallImage(fileItem);
                 fileItem.IsLoaded = true;
@@ -244,8 +260,8 @@ namespace CameraControl.Core.Classes
                 return null;
             if (!File.Exists(fileItem.LargeThumb) && !fullres)
                 return null;
-            
-            if (!File.Exists(fileItem.InfoFile))
+
+            if (File.Exists(fileItem.InfoFile))
                 fileItem.LoadInfo();
             else
                 fileItem.FileInfo = new FileInfo();
@@ -260,6 +276,38 @@ namespace CameraControl.Core.Classes
                 
                 if (ServiceProvider.Settings.ShowFocusPoints)
                     DrawFocusPoints(fileItem, bitmap);
+
+                if (fileItem.FileInfo.ExifTags.ContainName("Exif.Image.Orientation") && !fileItem.IsRaw)
+                {
+                    if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "bottom, right")
+                        bitmap = bitmap.Rotate(180);
+
+                    //if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "top, left")
+                    //    bitmap = bitmap.Rotate(180);
+                    
+                    if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "right, top")
+                        bitmap = bitmap.Rotate(90);
+
+                    if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "left, bottom")
+                        bitmap = bitmap.Rotate(270);
+                }
+
+                if (ServiceProvider.Settings.RotateIndex != 0)
+                {
+                    switch (ServiceProvider.Settings.RotateIndex)
+                    {
+                        case 1:
+                            bitmap = bitmap.Rotate(90);
+                            break;
+                        case 2:
+                            bitmap = bitmap.Rotate(180);
+                            break;
+                        case 3:
+                            bitmap = bitmap.Rotate(270);
+                            break;
+                    }
+                }
+
                 bitmap.Freeze();
                 return bitmap;
             }
