@@ -104,6 +104,7 @@ namespace CameraControl.Devices
                         {"D800E", typeof (NikonD800)},
                         {"D800e", typeof (NikonD800)},
                         {"D90", typeof (NikonD90)},
+                        {"V1", typeof (NikonD5100)},
                         //{"Canon EOS 5D Mark II", typeof (CanonSDKBase)},
                         {"MTP Sim", typeof (BaseMTPCamera)},
                         
