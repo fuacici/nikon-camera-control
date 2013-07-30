@@ -159,8 +159,16 @@ namespace CameraControl
         }
 
         #region eventhandlers
+        /// <summary>
+        /// Called when default session is assigned or changed
+        /// </summary>
+        /// <param name="oldvalue">The oldvalue.</param>
+        /// <param name="newvalue">The newvalue.</param>
         void Settings_SessionSelected(PhotoSession oldvalue, PhotoSession newvalue)
         {
+            // check if same session is used 
+            if (oldvalue == newvalue)
+                return;
             if (oldvalue != null && ServiceProvider.Settings.PhotoSessions.Contains(oldvalue))
                 ServiceProvider.Settings.Save(oldvalue);
             ServiceProvider.QueueManager.Clear();

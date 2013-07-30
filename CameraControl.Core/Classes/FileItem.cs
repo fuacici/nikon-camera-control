@@ -250,18 +250,11 @@ namespace CameraControl.Core.Classes
             {
                 if (_thumbnail == null)
                 {
-                    if (File.Exists(SmallThumb))
-                    {
-                        _thumbnail = BitmapLoader.Instance.LoadSmallImage(this);
-                    }
-                    else
-                    {
-                        _thumbnail = ItemType == FileItemType.Missing
-                                         ? BitmapLoader.Instance.NoImageThumbnail
-                                         : BitmapLoader.Instance.DefaultThumbnail;
-                        if (!ServiceProvider.Settings.DontLoadThumbnails)
-                            ServiceProvider.QueueManager.Add(new QueueItemFileItem {FileItem = this});
-                    }
+                    _thumbnail = ItemType == FileItemType.Missing
+                                     ? BitmapLoader.Instance.NoImageThumbnail
+                                     : BitmapLoader.Instance.DefaultThumbnail;
+                    if (!ServiceProvider.Settings.DontLoadThumbnails)
+                        ServiceProvider.QueueManager.Add(new QueueItemFileItem { FileItem = this });
                 }
                 return _thumbnail;
             }
