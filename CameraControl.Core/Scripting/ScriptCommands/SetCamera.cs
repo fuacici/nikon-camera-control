@@ -9,8 +9,8 @@ namespace CameraControl.Core.Scripting.ScriptCommands
     {
         public override bool Execute(ScriptObject scriptObject)
         {
-            string property = scriptObject.ParseString(LoadedParams["property"]);
-            string val = scriptObject.ParseString(LoadedParams["value"]).Trim().ToLower();
+            string property = scriptObject.ParseString(LoadedParams["property"].ToLower());
+            string val = scriptObject.ParseString(LoadedParams["value"]).Trim();
             switch (property)
             {
                 case "iso":

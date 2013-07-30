@@ -185,7 +185,7 @@ namespace CameraControl.Devices.Nikon
                   {
                     {2, "Auto"},
                     {4, "Daylight"},
-                    {5, "Fluorescent "},
+                    {5, "Fluorescent"},
                     {6, "Incandescent"},
                     {7, "Flash"},
                     {32784, "Cloudy"},
