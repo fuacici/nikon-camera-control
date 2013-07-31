@@ -238,6 +238,7 @@
     <Compile Include="Scripting\ScriptCommands\PHDGuidingControl.xaml.cs">
       <DependentUpon>PHDGuidingControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Scripting\ScriptCommands\SelectCamera.cs" />
     <Compile Include="Scripting\ScriptCommands\SetVariable .cs" />
     <Compile Include="Scripting\ScriptCommands\SetCamera.cs" />
     <Compile Include="Scripting\ScriptCommands\Stop.cs" />
