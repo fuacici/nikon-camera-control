@@ -51,6 +51,7 @@ namespace CameraControl.Core.Scripting
                                        new IfCommand(),
                                        new Loop(),
                                        new PHDGuiding(),
+                                       new SelectCamera(),
                                        new SetVariable(),
                                        new SetCamera(),
                                        new Stop(),
@@ -58,6 +59,24 @@ namespace CameraControl.Core.Scripting
                                    };
             _timer.Elapsed += _timer_Elapsed;
             _timer.AutoReset = true;
+            ServiceProvider.DeviceManager.CameraConnected += DeviceManager_CameraConnected;
+            ServiceProvider.DeviceManager.CameraDisconnected += DeviceManager_CameraDisconnected;
+        }
+
+        void DeviceManager_CameraDisconnected(ICameraDevice cameraDevice)
+        {
+            if (CurrentScript != null)
+            {
+                CurrentScript.Variabiles["cameraccount"] = ServiceProvider.DeviceManager.ConnectedDevices.Count.ToString();
+            }            
+        }
+
+        void DeviceManager_CameraConnected(ICameraDevice cameraDevice)
+        {
+            if (CurrentScript != null)
+            {
+                CurrentScript.Variabiles["cameraccount"] = ServiceProvider.DeviceManager.ConnectedDevices.Count.ToString();
+            }            
         }
 
         void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -71,6 +90,7 @@ namespace CameraControl.Core.Scripting
             {
                 CurrentScript.Variabiles["time"] = DateTime.Now.ToString("HH:mm");
                 CurrentScript.Variabiles["day"] = DateTime.Now.Day.ToString();
+                CurrentScript.Variabiles["cameraccount"] = ServiceProvider.DeviceManager.ConnectedDevices.Count.ToString();
             }
         }
 
