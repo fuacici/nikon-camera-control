@@ -18,6 +18,7 @@ namespace CameraControl.Devices
         private const string AppName = "CameraControl";
         private const int AppMajorVersionNumber = 1;
         private const int AppMinorVersionNumber = 0;
+        private bool _connectionInProgress = false;
         private DeviceDescriptorEnumerator _deviceEnumerator;
         private EosFramework _framework;
 
@@ -239,7 +240,10 @@ namespace CameraControl.Devices
 
         private void ConnectDevices()
         {
- 
+
+            if (_connectionInProgress)
+                return;
+            _connectionInProgress = true;
             if (PortableDeviceCollection.Instance == null)
             {
                 PortableDeviceCollection.CreateInstance(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
@@ -274,6 +278,7 @@ namespace CameraControl.Devices
                     NewCameraConnected(cameraDevice);
                 }
             }
+            _connectionInProgress = false;
         }
 
         private void NewCameraConnected(ICameraDevice cameraDevice)

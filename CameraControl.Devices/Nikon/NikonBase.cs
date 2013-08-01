@@ -59,6 +59,8 @@ namespace CameraControl.Devices.Nikon
         public const int CONST_PROP_RawCompressionBitMode = 0xD149;
         public const int CONST_PROP_ActivePicCtrlItem = 0xD200;
         public const int CONST_PROP_ColorSpace = 0xD032;
+        public const int CONST_PROP_WbTuneFluorescentType = 0xD14F;
+        
         
         public const int CONST_Event_DevicePropChanged = 0x4006;
         public const int CONST_Event_StoreFull = 0x400A;
@@ -346,10 +348,9 @@ namespace CameraControl.Devices.Nikon
                 AddAditionalProps();
                 _timer.Start();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                
-                
+                Log.Error("Error initialize device", exception);
             }
             return true;
         }
@@ -368,7 +369,8 @@ namespace CameraControl.Devices.Nikon
             AdvancedProperties.Add(InitLock());
             AdvancedProperties.Add(InitPictControl());
             AdvancedProperties.Add(InitRawBit());
-            AdvancedProperties.Add(InitColorSpace());
+            AdvancedProperties.Add(InitColorSpace());//12
+            AdvancedProperties.Add(InitWbTuneFluorescentType());
             AdvancedProperties.Add(InitOnOffProperty("Application mode", CONST_PROP_ApplicationMode));
             foreach (PropertyValue<long> value in AdvancedProperties)
             {
@@ -386,9 +388,32 @@ namespace CameraControl.Devices.Nikon
             return res;
         }
 
+        protected virtual PropertyValue<long> InitWbTuneFluorescentType()
+        {
+            PropertyValue<long> res = new PropertyValue<long>()
+                                          {
+                                              Name = "Fluorescent light type",
+                                              IsEnabled = WhiteBalance.NumericValue == 5,
+                                              Code = CONST_PROP_WbTuneFluorescentType,
+                                              SubType = typeof (byte),
+                                              DisableIfWrongValue = false
+                                          };
+            res.AddValues("Sodium lamp mixed light", 0);
+            res.AddValues("Cool white fluorescent lamp", 1);
+            res.AddValues("Warm white fluorescent lamp", 2);
+            res.AddValues("White fluorescent lamp", 3);
+            res.AddValues("Day white fluorescent lamp", 4);
+            res.AddValues("Daylight fluorescent lamp", 5);
+            res.AddValues("High color-temperature mercury lamp", 6);
+            res.ValueChanged +=
+                (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                                                  res.Code, -1);
+            return res;
+        }
+
         protected virtual PropertyValue<long> InitRawBit()
         {
-            PropertyValue<long> res = new PropertyValue<long>() { Name = "Raw Recording bit mode", IsEnabled = true, Code = CONST_PROP_RawCompressionBitMode, SubType = typeof(byte) };
+            PropertyValue<long> res = new PropertyValue<long>() { Name = "Raw Recording bit mode", IsEnabled = true, Code = CONST_PROP_RawCompressionBitMode, SubType = typeof(byte), DisableIfWrongValue = true};
             res.AddValues("12-bit recording", 0);
             res.AddValues("14-bit recording", 1);
             res.ValueChanged += (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
@@ -412,7 +437,7 @@ namespace CameraControl.Devices.Nikon
             for (byte i = 201; i < 210; i++)
             {
                 PictureControl control = GetPictureControl(i);
-                if (control.IsLoaded && !string.IsNullOrWhiteSpace(control.RegistrationName))
+                if (control != null && (control.IsLoaded && !string.IsNullOrWhiteSpace(control.RegistrationName)))
                     res.AddValues(control.RegistrationName, i);
                 else
                     res.AddValues("Custom picture control " + (i - 200), i);
@@ -450,7 +475,7 @@ namespace CameraControl.Devices.Nikon
 
         protected virtual PropertyValue<long> InitRawQuality()
         {
-            PropertyValue<long> res = new PropertyValue<long>() { Name = "Raw Compression", IsEnabled = true, Code = CONST_PROP_RawCompressionType, SubType = typeof(byte) };
+            PropertyValue<long> res = new PropertyValue<long>() { Name = "Raw Compression", IsEnabled = true, Code = CONST_PROP_RawCompressionType, SubType = typeof(byte), DisableIfWrongValue = true };
             res.AddValues("Lossless compressed RAW", 0);
             res.AddValues("Compressed RAW", 1);
             res.AddValues("Uncompressed RAW", 2);
@@ -809,13 +834,16 @@ namespace CameraControl.Devices.Nikon
             }
             catch (Exception ex)
             {
+                Log.Error("Error init white balance",ex);
             }
         }
 
         void WhiteBalance_ValueChanged(object sender, string key, long val)
         {
-            SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt16)val),
-                                    CONST_PROP_WhiteBalance, -1);
+            SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes((UInt16) val),
+                        CONST_PROP_WhiteBalance, -1);
+            if (AdvancedProperties.Count > 13)
+                AdvancedProperties[13].IsEnabled = val == 5;
         }
 
         public void InitExposureCompensation()

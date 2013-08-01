@@ -51,6 +51,7 @@ namespace PortableDeviceLib
                 throw new ArgumentNullException("appName");
 
             this.deviceManager = new PortableDeviceManagerClass();
+
             this.portableDevices = new Dictionary<string, PortableDevice>();
 
             this.appName = appName;

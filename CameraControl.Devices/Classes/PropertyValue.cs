@@ -26,6 +26,7 @@ namespace CameraControl.Devices.Classes
         }
 
         public Type SubType { get; set; }
+        public bool DisableIfWrongValue { get; set; }
 
         private string _name;
         public string Name
@@ -118,6 +119,14 @@ namespace CameraControl.Devices.Classes
             {
                 //if (Values == null || Values.Count==0)
                 //  return false;
+                //if (DisableIfWrongValue)
+                //{
+                //    return _isEnabled && !string.IsNullOrEmpty(Value);
+                //}
+                //else
+                //{
+                //    return _isEnabled;
+                //}
                 return _isEnabled;
             }
             set
@@ -140,6 +149,7 @@ namespace CameraControl.Devices.Classes
         public PropertyValue()
         {
             _valuesDictionary = new Dictionary<string, T>();
+            DisableIfWrongValue = false;
             IsEnabled = true;
         }
 

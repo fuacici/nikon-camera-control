@@ -30,6 +30,8 @@ namespace CameraControl.Devices.Classes
     public const uint MTP_Invalid_Parameter = 0x201D;
     public const uint MTP_Invalid_Status = 0xA004;
     public const uint MTP_Operation_Not_Supported = 0x2005;
+    public const uint MTP_Access_Denied = 0x200F;
+      
 
     public const uint E_WPD_DEVICE_IS_HUNG = 0x802A0006;
     public const uint ERROR_BUSY = 0x800700AA;
@@ -67,6 +69,8 @@ namespace CameraControl.Devices.Classes
             throw new DeviceException("Parameter Not Supported. Coding error !", code);
           case MTP_Invalid_Status:
             throw new DeviceException("Invalid status.", code);
+          case MTP_Access_Denied:
+            throw new DeviceException("Access denied.", code);
           case E_WPD_DEVICE_IS_HUNG:
             throw new DeviceException("E_WPD_DEVICE_IS_HUNG", code);
           case ERROR_BUSY:
