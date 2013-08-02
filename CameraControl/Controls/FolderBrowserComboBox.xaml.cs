@@ -93,6 +93,11 @@ namespace CameraControl.Controls
     }
 
     #endregion
+
+    private void PopupTest_Opened(object sender, EventArgs e)
+    {
+
+    }
  
   }
 }
