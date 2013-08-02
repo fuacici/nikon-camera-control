@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CameraControl.Core;
 using CameraControl.Core.Interfaces;
+using CameraControl.Devices.Classes;
 using CameraControl.Devices.Nikon;
 
 namespace CameraControl.Plugins.ToolPlugin
@@ -56,7 +57,8 @@ namespace CameraControl.Plugins.ToolPlugin
                 NikonBase camera = ServiceProvider.DeviceManager.SelectedCameraDevice as NikonBase;
                 if(camera!=null)
                 {
-                    camera.ResetTimer();
+                    camera.StopEventTimer();
+                    DelayedDelegate.Add(camera.StartEventTimer, GetTotalLength()+100);
                 }
                 OpenPort();
                 sp.WriteLine(" ");
@@ -128,6 +130,13 @@ namespace CameraControl.Plugins.ToolPlugin
             Console.WriteLine(str);
 
             Console.WriteLine();
+        }
+
+
+        private int GetTotalLength()
+        {
+            return slider_cmera.Value + slider_drop1.Value + slider_drop_wait.Value + slider_drop2_wait.Value +
+                   slider_drop2.Value + slider_drop3.Value + slider_flash.Value;
         }
 
         private void SendData()
@@ -202,9 +211,5 @@ namespace CameraControl.Plugins.ToolPlugin
             SendCommand("<");
         }
 
-        private void btn_stay_on_top_Click(object sender, RoutedEventArgs e)
-        {
-            Topmost = !Topmost;
-        }
     }
 }

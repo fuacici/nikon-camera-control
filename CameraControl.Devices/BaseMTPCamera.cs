@@ -48,7 +48,12 @@ namespace CameraControl.Devices
         /// <summary>
         /// The timer for get periodically the event list
         /// </summary>
-        protected Timer _timer = new Timer(1000 / 2);
+        protected Timer _timer = new Timer(1000 / 10);
+
+        /// <summary>
+        /// Variable to check if event processing is in progress 
+        /// </summary>
+        protected bool _eventIsbusy = false;
 
         public override bool Init(DeviceDescriptor deviceDescriptor)
         {
@@ -57,6 +62,21 @@ namespace CameraControl.Devices
             StillImageDevice.DeviceEvent += StillImageDevice_DeviceEvent;
             IsConnected = true;
             return true;
+        }
+
+
+        public void StopEventTimer()
+        {
+            while (_eventIsbusy)
+            {
+
+            }
+            _timer.Stop();
+        }
+
+        public void StartEventTimer()
+        {
+            _timer.Start();
         }
 
         void StillImageDevice_DeviceEvent(object sender, PortableDeviceEventArgs e)
