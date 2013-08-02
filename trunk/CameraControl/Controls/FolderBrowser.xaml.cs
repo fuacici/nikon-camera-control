@@ -51,8 +51,8 @@ namespace CameraControl.Controls
     void folder_Expanded(object sender, RoutedEventArgs e)
     {
       TreeViewItem item = (TreeViewItem)sender;
-      if (item.Items.Count == 1 && item.Items[0] == dummyNode)
-      {
+      //if (item.Items.Count == 1 && item.Items[0] == dummyNode)
+      //{
         item.Items.Clear();
         try
         {
@@ -68,7 +68,7 @@ namespace CameraControl.Controls
           }
         }
         catch (Exception) { }
-      }
+      //}
     }
 
     private void foldersItem_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

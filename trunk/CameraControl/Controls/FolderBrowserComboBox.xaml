@@ -12,7 +12,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBox Grid.Row="0" x:Name="header" PreviewMouseDown="header_PreviewMouseDown" SizeChanged="header_SizeChanged" IsReadOnly="True" Text="{Binding ElementName=folderBrowser, Path=SelectedImagePath }"/>
-        <Popup Grid.Row="1" x:Name="PopupTest" AllowsTransparency="True" IsOpen="False" >
+        <Popup Grid.Row="1" x:Name="PopupTest" AllowsTransparency="True" IsOpen="False" Opened="PopupTest_Opened">
             <my:FolderBrowser  x:Name="folderBrowser" BorderThickness="1" MouseDoubleClick="folderBrowser_MouseDoubleClick" />
         </Popup>
     </Grid>
