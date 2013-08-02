@@ -69,11 +69,6 @@ namespace CameraControl.Devices.Nikon
         public const int CONST_Event_ObsoleteEvent = 0xC104;
 
 
-        /// <summary>
-        /// Variable to check if event processing is in progress 
-        /// </summary>
-        private bool _eventIsbusy = false;
-
         protected Dictionary<uint, string> _isoTable = new Dictionary<uint, string>()
                                                   {
                                                     {0x0064, "100"},
@@ -231,15 +226,6 @@ namespace CameraControl.Devices.Nikon
             SlowDownEventTimer();
         }
 
-        public void StopEventTimer()
-        {
-            _timer.Stop();
-        }
-
-        public void StartEventTimer()
-        {
-            _timer.Start();
-        }
 
         private void SlowDownEventTimer()
         {

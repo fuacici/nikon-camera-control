@@ -53,10 +53,7 @@ namespace CameraControl.Layouts
 
         public override void OnImageLoaded()
         {
-            Dispatcher.Invoke(new Action(delegate
-                                             {
-                                                 zoombox.FitToBounds();
-                                             }));
+            Dispatcher.Invoke(new Action(() => zoombox.FitToBounds()));
         }
     }
 }

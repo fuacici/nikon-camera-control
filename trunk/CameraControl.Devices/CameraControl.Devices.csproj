@@ -95,6 +95,7 @@
     <Compile Include="Classes\BaseFieldClass.cs" />
     <Compile Include="Classes\CapabilityEnum.cs" />
     <Compile Include="Classes\Conts.cs" />
+    <Compile Include="Classes\DelayedDelegate.cs" />
     <Compile Include="Classes\DeviceDescriptor.cs" />
     <Compile Include="Classes\DeviceDescriptorEnumerator.cs" />
     <Compile Include="Classes\DeviceException.cs" />

@@ -216,12 +216,22 @@ void sendData()
 {
   Serial.print("camera_timer=");
   Serial.println(camera_timer);
+  
   Serial.print("drop1_time=");
   Serial.println(drop1_time);
+  
   Serial.print("drop_wait_time=");
   Serial.println(drop_wait_time);
+  
+  Serial.print("drop2_wait_time=");
+  Serial.println(drop2_wait_time);  
+  
   Serial.print("drop2_time=");
   Serial.println(drop2_time);
+  
+  Serial.print("drop3_time=");
+  Serial.println(drop3_time);  
+  
   Serial.print("flash_time=");
   Serial.println(flash_time);
 }
