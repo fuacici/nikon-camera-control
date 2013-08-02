@@ -10,6 +10,7 @@ using CameraControl.Core.Classes;
 using CameraControl.Core.Translation;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
+using CameraControl.Devices.Nikon;
 
 namespace CameraControl.Core.Scripting
 {
@@ -95,6 +96,9 @@ namespace CameraControl.Core.Scripting
                         if (SelectedConfig != null)
                         {
                             ServiceProvider.ExternalDeviceManager.Stop(SelectedConfig);
+                            NikonBase nikonBase = CameraDevice as NikonBase;
+                            if (nikonBase != null)
+                                nikonBase.StartEventTimer();
                         }
                         else
                         {
@@ -147,6 +151,9 @@ namespace CameraControl.Core.Scripting
                     {
                         if (SelectedConfig != null)
                         {
+                            NikonBase nikonBase = CameraDevice as NikonBase;
+                            if (nikonBase != null)
+                                nikonBase.StopEventTimer();
                             ServiceProvider.ExternalDeviceManager.Start(SelectedConfig);
                         }
                         else
