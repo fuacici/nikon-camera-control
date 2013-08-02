@@ -12,6 +12,7 @@ using CameraControl.Core.Scripting;
 using CameraControl.Core.Translation;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
+using CameraControl.Devices.Nikon;
 using Microsoft.Win32;
 using MessageBox = System.Windows.Forms.MessageBox;
 using Timer = System.Timers.Timer;
@@ -216,6 +217,9 @@ namespace CameraControl.windows
                     {
                         if (DefaultScript.SelectedConfig != null)
                         {
+                            NikonBase nikonBase = CameraDevice as NikonBase;
+                            if(nikonBase!=null)
+                                nikonBase.StopEventTimer();
                             ServiceProvider.ExternalDeviceManager.Start(DefaultScript.SelectedConfig);
                         }
                         else
@@ -319,6 +323,9 @@ namespace CameraControl.windows
                         if (DefaultScript.SelectedConfig != null)
                         {
                             ServiceProvider.ExternalDeviceManager.Stop(DefaultScript.SelectedConfig);
+                            NikonBase nikonBase = CameraDevice as NikonBase;
+                            if (nikonBase != null)
+                                nikonBase.StartEventTimer();
                         }
                         else
                         {
