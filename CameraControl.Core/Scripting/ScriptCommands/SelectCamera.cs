@@ -18,6 +18,7 @@ namespace CameraControl.Core.Scripting.ScriptCommands
                     {
                         ServiceProvider.DeviceManager.SelectedCameraDevice =
                             ServiceProvider.DeviceManager.ConnectedDevices[cameranum];
+                        scriptObject.CameraDevice = ServiceProvider.DeviceManager.ConnectedDevices[cameranum];
                     }
                     else
                     {
