@@ -454,6 +454,8 @@ namespace CameraControl.Devices.Nikon
 
         private void ImageSize_ValueChanged(object sender, string key, long val)
         {
+            if(CompressionSetting.Value.Contains("RAW"))
+                return;
             List<byte> vals = new List<byte>() {10};
             vals.AddRange(Encoding.Unicode.GetBytes(key));
             SetProperty(CONST_CMD_SetDevicePropValue, vals.ToArray() , CONST_PROP_ImageSize, -1);
@@ -697,8 +699,9 @@ namespace CameraControl.Devices.Nikon
 
         void ShutterSpeed_ValueChanged(object sender, string key, long val)
         {
-            SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
-                                               CONST_PROP_ExposureTime, -1);
+            if (Mode != null && (Mode.Value == "M" || Mode.Value == "S"))
+                SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                            CONST_PROP_ExposureTime, -1);
         }
 
         private void InitMode()
@@ -794,8 +797,9 @@ namespace CameraControl.Devices.Nikon
 
         void FNumber_ValueChanged(object sender, string key, int val)
         {
-            SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
-                                         CONST_PROP_Fnumber, -1);
+            if (Mode != null && (Mode.Value == "A" || Mode.Value == "M"))
+                SetProperty(CONST_CMD_SetDevicePropValue, BitConverter.GetBytes(val),
+                            CONST_PROP_Fnumber, -1);
         }
 
         private void InitWhiteBalance()

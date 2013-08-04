@@ -80,8 +80,9 @@ namespace CameraControl.Devices.Classes
         public void OnValueChanged(object sender, string key, T val)
         {
             Thread thread = new Thread(OnValueChangedThread);
+            thread.Name = "SetProperty thread";
             thread.Start(new object[] {sender, key, val});
-            thread.Join(1000);
+            thread.Join(200);
         }
 
         public void OnValueChangedThread(object obj)

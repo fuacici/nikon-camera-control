@@ -71,6 +71,8 @@ namespace CameraControl.Devices.Classes
             throw new DeviceException("Invalid status.", code);
           case MTP_Access_Denied:
             throw new DeviceException("Access denied.", code);
+          case MTP_Set_Property_Not_Support:
+            throw new DeviceException("Set Property Not Support.", code);
           case E_WPD_DEVICE_IS_HUNG:
             throw new DeviceException("E_WPD_DEVICE_IS_HUNG", code);
           case ERROR_BUSY:
