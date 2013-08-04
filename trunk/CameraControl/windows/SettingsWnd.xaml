@@ -113,6 +113,9 @@
                             <xctk:IntegerUpDown Minimum="2" Width="100" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=PreviewSeconds}"/>
                         </StackPanel>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <CheckBox Content="{T:TranslateExtension LabelShowMagnifierInFullSccreen}" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ShowMagnifierInFullSccreen}"/>
+                    </StackPanel>
                     <StackPanel Margin="3">
                         <CheckBox Content="{T:TranslateExtension LabelPreviewInLIveView}" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=PreviewLiveViewImage}"/>
                         <StackPanel Orientation="Horizontal" Margin="3">
@@ -120,6 +123,7 @@
                             <xctk:IntegerUpDown Minimum="2" Maximum="120" Width="100" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=LiveViewFreezeTimeOut}"/>
                         </StackPanel>
                     </StackPanel>
+                    
                     <StackPanel Orientation="Horizontal" Margin="3">
                         <Label Content="{T:TranslateExtension LabelRotateImage}"/>
                         <ComboBox SelectedIndex="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=RotateIndex}">

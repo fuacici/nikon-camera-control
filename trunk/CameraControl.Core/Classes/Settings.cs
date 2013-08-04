@@ -541,6 +541,18 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        private bool _showMagnifierInFullSccreen;
+        public bool ShowMagnifierInFullSccreen
+        {
+            get { return _showMagnifierInFullSccreen; }
+            set
+            {
+                _showMagnifierInFullSccreen = value;
+                NotifyPropertyChanged("ShowMagnifierInFullSccreen");
+            }
+        }
+
+
         public CameraPropertyEnumerator CameraProperties { get; set; }
         public string SelectedLayout { get; set; }
         public AsyncObservableCollection<CameraPreset> CameraPresets { get; set; }
@@ -596,6 +608,7 @@ namespace CameraControl.Core.Classes
             ShowUntranslatedLabelId = false;
             HighlightOverExp = false;
             HighlightUnderExp = false;
+            ShowMagnifierInFullSccreen = true;
         }
 
         public void Add(PhotoSession session)
