@@ -552,6 +552,17 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        private bool _delayImageLoading;
+        public bool DelayImageLoading
+        {
+            get { return _delayImageLoading; }
+            set
+            {
+                _delayImageLoading = value;
+                NotifyPropertyChanged("DelayImageLoading");
+            }
+        }
+
 
         public CameraPropertyEnumerator CameraProperties { get; set; }
         public string SelectedLayout { get; set; }
@@ -609,6 +620,7 @@ namespace CameraControl.Core.Classes
             HighlightOverExp = false;
             HighlightUnderExp = false;
             ShowMagnifierInFullSccreen = true;
+            DelayImageLoading = true;
         }
 
         public void Add(PhotoSession session)

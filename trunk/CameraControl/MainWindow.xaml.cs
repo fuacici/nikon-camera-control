@@ -3,6 +3,7 @@ using System.Linq;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -35,6 +36,8 @@ namespace CameraControl
         public string DisplayName { get; set; }
 
         private object _locker = new object();
+        private FileItem _selectedItem = null;
+        private Timer _selectiontimer = new Timer(4000);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow" /> class.
@@ -61,6 +64,14 @@ namespace CameraControl
                 bi.EndInit();
                 Icon = bi;
             }
+            _selectiontimer.Elapsed += _selectiontimer_Elapsed;
+            _selectiontimer.AutoReset = false;
+        }
+
+        void _selectiontimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (_selectedItem != null)
+                ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Select_Image, _selectedItem);
         }
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
@@ -208,7 +219,16 @@ namespace CameraControl
                     !ServiceProvider.WindowsManager.Get(typeof(MultipleCameraWnd)).IsVisible &&
                     !ServiceProvider.Settings.UseExternalViewer)
                 {
-                    ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Select_Image, session.AddFile(fileName));
+                    _selectedItem = session.AddFile(fileName);
+                    if (ServiceProvider.Settings.DelayImageLoading)
+                    {
+                        _selectiontimer.Stop();
+                        _selectiontimer.Start();
+                    }
+                    else
+                    {
+                        ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Select_Image, _selectedItem);
+                    }
                 }
                 else
                 {
