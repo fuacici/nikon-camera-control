@@ -371,5 +371,6 @@ namespace CameraControl.Core.Translation
         public static string LabelWriteSelectedTags = "Write tags from tag selector";
         public static string LabelClearCache = "Clear cache";
         public static string LabelShowMagnifierInFullSccreen = "Show magnifier in fullSccreen";
+        public static string LabelDelayImageLoading = "Delay image loading";
     }
 }
