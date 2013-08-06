@@ -568,6 +568,16 @@ namespace CameraControl.Core.Classes
         public string SelectedLayout { get; set; }
         public AsyncObservableCollection<CameraPreset> CameraPresets { get; set; }
 
+        public string OverlayFolder
+        {
+            get
+            {
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,
+                                    "LiveViewOverlay"); ;
+            }
+        }
+
+
         public Settings()
         {
             ConfigFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,
