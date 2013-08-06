@@ -23,6 +23,7 @@ using CameraControl.Core.Translation;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using Color = System.Windows.Media.Color;
+using Path = System.IO.Path;
 using Point = System.Windows.Point;
 using Rectangle = System.Windows.Shapes.Rectangle;
 using Timer = System.Timers.Timer;
@@ -410,7 +411,6 @@ namespace CameraControl.windows
             PhotoNo = 2;
             FocusStep = 2;
             InitializeComponent();
-            //ThemeManager.ChangeTheme(Application.Current, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
             _timer.Stop();
             _timer.AutoReset = true;
             _timer.Elapsed += _timer_Elapsed;
@@ -422,6 +422,14 @@ namespace CameraControl.windows
                                     if (!FreezeImage)
                                         GetLiveImage();
                                 };
+            if (Directory.Exists(ServiceProvider.Settings.OverlayFolder))
+            {
+                string[] files = Directory.GetFiles(ServiceProvider.Settings.OverlayFolder, "*.png");
+                foreach (string file in files)
+                {
+                    cmb_overlay.Items.Add(Path.GetFileNameWithoutExtension(file));
+                }
+            }
         }
 
         private void _freezeTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -640,47 +648,80 @@ namespace CameraControl.windows
                     {
                         for (int i = 1; i < 3; i++)
                         {
-                            writeableBitmap.DrawLine(0, (int)((writeableBitmap.Height / 3) * i), (int)writeableBitmap.Width,
-                                                     (int)((writeableBitmap.Height / 3) * i), color);
-                            writeableBitmap.DrawLine((int)((writeableBitmap.Width / 3) * i), 0, (int)((writeableBitmap.Width / 3) * i),
-                                                     (int)writeableBitmap.Height, color);
+                            writeableBitmap.DrawLine(0, (int) ((writeableBitmap.Height/3)*i),
+                                                     (int) writeableBitmap.Width,
+                                                     (int) ((writeableBitmap.Height/3)*i), color);
+                            writeableBitmap.DrawLine((int) ((writeableBitmap.Width/3)*i), 0,
+                                                     (int) ((writeableBitmap.Width/3)*i),
+                                                     (int) writeableBitmap.Height, color);
                         }
-                        writeableBitmap.SetPixel((int)(writeableBitmap.Width / 2), (int)(writeableBitmap.Height / 2), 128, Colors.Red);
+                        writeableBitmap.SetPixel((int) (writeableBitmap.Width/2), (int) (writeableBitmap.Height/2), 128,
+                                                 Colors.Red);
                     }
                     break;
                 case 2:
                     {
                         for (int i = 1; i < 10; i++)
                         {
-                            writeableBitmap.DrawLine(0, (int)((writeableBitmap.Height / 10) * i), (int)writeableBitmap.Width,
-                                                     (int)((writeableBitmap.Height / 10) * i), color);
-                            writeableBitmap.DrawLine((int)((writeableBitmap.Width / 10) * i), 0, (int)((writeableBitmap.Width / 10) * i),
-                                                     (int)writeableBitmap.Height, color);
+                            writeableBitmap.DrawLine(0, (int) ((writeableBitmap.Height/10)*i),
+                                                     (int) writeableBitmap.Width,
+                                                     (int) ((writeableBitmap.Height/10)*i), color);
+                            writeableBitmap.DrawLine((int) ((writeableBitmap.Width/10)*i), 0,
+                                                     (int) ((writeableBitmap.Width/10)*i),
+                                                     (int) writeableBitmap.Height, color);
                         }
-                        writeableBitmap.SetPixel((int)(writeableBitmap.Width / 2), (int)(writeableBitmap.Height / 2), 128, Colors.Red);
+                        writeableBitmap.SetPixel((int) (writeableBitmap.Width/2), (int) (writeableBitmap.Height/2), 128,
+                                                 Colors.Red);
                     }
                     break;
                 case 3:
                     {
-                        writeableBitmap.DrawLineDDA(0, 0, (int)writeableBitmap.Width,
-                                                 (int)writeableBitmap.Height, color);
+                        writeableBitmap.DrawLineDDA(0, 0, (int) writeableBitmap.Width,
+                                                    (int) writeableBitmap.Height, color);
 
-                        writeableBitmap.DrawLineDDA(0, (int)writeableBitmap.Height,
-                                                    (int)writeableBitmap.Width, 0, color);
-                        writeableBitmap.SetPixel((int)(writeableBitmap.Width / 2), (int)(writeableBitmap.Height / 2), 128, Colors.Red);
+                        writeableBitmap.DrawLineDDA(0, (int) writeableBitmap.Height,
+                                                    (int) writeableBitmap.Width, 0, color);
+                        writeableBitmap.SetPixel((int) (writeableBitmap.Width/2), (int) (writeableBitmap.Height/2), 128,
+                                                 Colors.Red);
                     }
                     break;
                 case 4:
                     {
-                        writeableBitmap.DrawLineDDA(0, (int)(writeableBitmap.Height / 2), (int)writeableBitmap.Width,
-                                                 (int)(writeableBitmap.Height / 2), color);
+                        writeableBitmap.DrawLineDDA(0, (int) (writeableBitmap.Height/2), (int) writeableBitmap.Width,
+                                                    (int) (writeableBitmap.Height/2), color);
 
-                        writeableBitmap.DrawLineDDA((int)(writeableBitmap.Width / 2), 0,
-                                                    (int)(writeableBitmap.Width / 2), (int)writeableBitmap.Height, color);
-                        writeableBitmap.SetPixel((int)(writeableBitmap.Width / 2), (int)(writeableBitmap.Height / 2), 128, Colors.Red);
+                        writeableBitmap.DrawLineDDA((int) (writeableBitmap.Width/2), 0,
+                                                    (int) (writeableBitmap.Width/2), (int) writeableBitmap.Height, color);
+                        writeableBitmap.SetPixel((int) (writeableBitmap.Width/2), (int) (writeableBitmap.Height/2), 128,
+                                                 Colors.Red);
                     }
                     break;
                 default:
+                    try
+                    {
+                        if (GridType > 4)
+                        {
+                            string filename = Path.Combine(ServiceProvider.Settings.OverlayFolder,
+                                                           (string) cmb_overlay.SelectedValue + ".png");
+                            if (File.Exists(filename))
+                            {
+                                BitmapImage bitmapSource = new BitmapImage();
+                                bitmapSource.BeginInit();
+                                bitmapSource.UriSource = new Uri(filename);
+                                bitmapSource.EndInit();
+                                WriteableBitmap overlay = BitmapFactory.ConvertToPbgra32Format(bitmapSource);
+                                writeableBitmap.Blit(
+                                    new Rect(0, 0, writeableBitmap.PixelWidth, writeableBitmap.PixelHeight),
+                                    overlay,
+                                    new Rect(0, 0, overlay.PixelWidth, overlay.PixelHeight));
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+
+                    }
                     break;
             }
         }

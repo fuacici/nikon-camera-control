@@ -157,6 +157,15 @@ namespace CameraControl.windows
         }
     }
 
+    private void button5_Click(object sender, RoutedEventArgs e)
+    {
+        if(!Directory.Exists(ServiceProvider.Settings.OverlayFolder))
+        {
+            Directory.CreateDirectory(ServiceProvider.Settings.OverlayFolder);
+        }
+        PhotoUtils.Run("explorer", ServiceProvider.Settings.OverlayFolder,ProcessWindowStyle.Normal);
+    }
+
 
 
   }

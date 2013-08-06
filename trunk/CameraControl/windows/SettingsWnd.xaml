@@ -186,7 +186,8 @@
                         <RowDefinition Height="35" />
                         <RowDefinition Height="50" />
                         <RowDefinition Height="35" />
-                        <RowDefinition Height="260*" />
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="67*" />
                     </Grid.RowDefinitions>
 
                     <Controls2:AdvancedSlider Minimum="1" Maximum="50" Label="{T:TranslateExtension LabelSmallFocusSstep}" Grid.ColumnSpan="3" Margin="1,0" Value="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SmalFocusStep}"  Grid.Row="1" Grid.Column="0"/>
@@ -202,7 +203,7 @@
 
                     <Label Content="{T:TranslateExtension LabelEasyLiveViewControl}" Grid.Row="6" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
                     <CheckBox Grid.Column="1" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=EasyLiveViewControl}"/>
-                    
+                    <Button Content="{T:TranslateExtension LabelShowOverlayFolder}" Grid.Column="1" Grid.Row="7" Height="24" HorizontalAlignment="Left" Margin="3,3,0,0" Name="btn_showoverlay" VerticalAlignment="Top" Width="157" Click="button5_Click" />
                 </Grid>
             </TabItem>
             <TabItem Header="{T:TranslateExtension LabelDevices}">
