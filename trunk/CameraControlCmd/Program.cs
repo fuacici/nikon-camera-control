@@ -7,6 +7,7 @@ using System.Threading;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
+using CameraControl.Core.Scripting;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using CameraControlCmd.Classes;
@@ -36,6 +37,11 @@ namespace CameraControlCmd
                 return 0;
             }
             InitApplication();
+            if (args != null && args.Count() == 1 && File.Exists(args[0]))
+            {
+                RunScript(args[0]);
+                return 0;
+            }
             if (ServiceProvider.DeviceManager.ConnectedDevices.Count == 0)
             {
                 Console.WriteLine("No connected device was found ! Exiting");
@@ -63,6 +69,33 @@ namespace CameraControlCmd
                 }
             }
             return exitCodes;
+        }
+
+        static void RunScript(string filename)
+        {
+            ScriptObject scriptObject = null;
+            try
+            {
+                scriptObject = ServiceProvider.ScriptManager.Load(filename);
+                scriptObject.CameraDevice = ServiceProvider.DeviceManager.SelectedCameraDevice;
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine("Loading error :" + exception.Message);
+                return;
+            }
+            if (ServiceProvider.ScriptManager.Verify(scriptObject))
+            {
+                ServiceProvider.ScriptManager.Execute(scriptObject);
+                while (ServiceProvider.ScriptManager.IsBusy)
+                {
+                    
+                }
+            }
+            else
+            {
+                Console.WriteLine("Error in script. Running aborted ! ");
+            }
         }
 
         static int ExecuteArgs()
@@ -293,7 +326,13 @@ namespace CameraControlCmd
             {
                 cameraDevice.CaptureCompleted += SelectedCameraDevice_CaptureCompleted;
             }
+            ServiceProvider.ScriptManager.OutPutMessageReceived += ScriptManager_OutPutMessageReceived;
             //ServiceProvider.DeviceManager.SelectedCameraDevice.CaptureCompleted += SelectedCameraDevice_CaptureCompleted;
+        }
+
+        static void ScriptManager_OutPutMessageReceived(object sender, MessageEventArgs e)
+        {
+            Console.WriteLine(e.Message);
         }
 
         static void SelectedCameraDevice_CaptureCompleted(object sender, EventArgs e)
