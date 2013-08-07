@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
@@ -420,12 +421,9 @@ namespace CameraControl.Core.Classes
 
         public bool ContainFile(string fileName)
         {
-            foreach (FileItem fileItem in Files)
-            {
-                if (fileItem.FileName.ToUpper() == fileName.ToUpper())
-                    return true;
-            }
-            return false;
+            if (string.IsNullOrEmpty(fileName))
+                return false;
+            return Files.Any(fileItem => fileItem.FileName.ToUpper() == fileName.ToUpper());
         }
 
         public FileItem GetFile(string fileName)

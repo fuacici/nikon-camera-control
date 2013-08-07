@@ -645,31 +645,38 @@ namespace CameraControl.Core.Classes
         /// <param name="session"></param>
         public void LoadData(PhotoSession session)
         {
-            if (session == null)
-                return;
-            FileItem[] fileItems = new FileItem[session.Files.Count];
-            session.Files.CopyTo(fileItems, 0);
-            //session.Files.Clear();
-            if (!Directory.Exists(session.Folder))
+            try
             {
-                Directory.CreateDirectory(session.Folder);
-            }
-            string[] files = Directory.GetFiles(session.Folder);
-            foreach (string file in files)
-            {
-                if (session.SupportedExtensions.Contains(Path.GetExtension(file).ToLower()))
+                if (session == null)
+                    return;
+                FileItem[] fileItems = new FileItem[session.Files.Count];
+                session.Files.CopyTo(fileItems, 0);
+                //session.Files.Clear();
+                if (!Directory.Exists(session.Folder))
                 {
-                    if (!session.ContainFile(file))
-                        session.AddFile(file);
+                    Directory.CreateDirectory(session.Folder);
                 }
+                string[] files = Directory.GetFiles(session.Folder);
+                foreach (string file in files)
+                {
+                    if (session.SupportedExtensions.Contains(Path.GetExtension(file).ToLower()))
+                    {
+                        if (!string.IsNullOrEmpty(file) && !session.ContainFile(file))
+                            session.AddFile(file);
+                    }
+                }
+                // remove files which was deleted or not exist
+                List<FileItem> removedItems = session.Files.Where(fileItem => !File.Exists(fileItem.FileName)).ToList();
+                foreach (FileItem removedItem in removedItems)
+                {
+                    session.Files.Remove(removedItem);
+                }
+                //session.Files = new AsyncObservableCollection<FileItem>(session.Files.OrderBy(x => x.FileDate));
             }
-            // remove files which was deleted or not exist
-            List<FileItem> removedItems = session.Files.Where(fileItem => !File.Exists(fileItem.FileName)).ToList();
-            foreach (FileItem removedItem in removedItems)
+            catch (Exception exception)
             {
-                session.Files.Remove(removedItem);
+                Log.Error("Error loading session ", exception);
             }
-            //session.Files = new AsyncObservableCollection<FileItem>(session.Files.OrderBy(x => x.FileDate));
         }
 
         public void Save(PhotoSession session)
