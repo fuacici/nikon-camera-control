@@ -219,6 +219,7 @@
     <Compile Include="Interfaces\IToolPlugin.cs" />
     <Compile Include="Interfaces\IWindow.cs" />
     <Compile Include="PluginManager.cs" />
+    <Compile Include="Plugin\PluginInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripting\IScriptCommand.cs" />
     <Compile Include="Scripting\MyCompletionData .cs" />
