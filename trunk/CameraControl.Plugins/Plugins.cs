@@ -8,7 +8,7 @@ using CameraControl.Devices;
 using CameraControl.Plugins.ExportPlugins;
 using CameraControl.Plugins.ExternalDevices;
 using CameraControl.Plugins.MainWindowPlugins;
-using CameraControl.Plugins.ToolPlugin;
+
 
 namespace CameraControl.Plugins
 {
@@ -24,7 +24,6 @@ namespace CameraControl.Plugins
                 ServiceProvider.PluginManager.ExportPlugins.Add(new ExportToFolder());
                 ServiceProvider.PluginManager.MainWindowPlugins.Add(new SimpleMainWindow());
                 ServiceProvider.PluginManager.ToolPlugins.Add(new PhdPlugin());
-                ServiceProvider.PluginManager.ToolPlugins.Add(new WaterDropWnd());
                 ServiceProvider.ExternalDeviceManager.ExternalDevices.Add(new SerialPortShutterRelease());
             }
             catch (Exception exception)
