@@ -5,7 +5,7 @@
                       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                       xmlns:behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro" 
               xmlns:my="clr-namespace:CameraControl.Controls;assembly=CameraControl.Core"
-                      xmlns:DeviceControl="clr-namespace:Plugin.DeviceControl" Height="518" Width="600" Closed="MetroWindow_Closed">
+                      xmlns:DeviceControl="clr-namespace:Plugin.DeviceControl" Height="518" Width="600" Closed="MetroWindow_Closed" KeyDown="MetroWindow_KeyDown">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -62,9 +62,10 @@
         <ComboBox Grid.Column="3" Name="cmb_ports" Margin="5" SelectionChanged="cmb_ports_SelectionChanged" />
         <Button Content="Get Data" Grid.Column="3" Grid.Row="1" Name="btn_get" Margin="5" Click="btn_get_Click" />
         <Button Content="Set Data" Grid.Column="3" Grid.Row="2" Name="btn_set" Margin="5" Click="btn_set_Click" />
-        <Button Content="Start" Grid.Column="3" Grid.Row="5" Name="btn_start" Click="btn_start_Click" Margin="5"/>
+        <Button Content="Start" Grid.Column="2" Grid.Row="7" Name="btn_start" Click="btn_start_Click" Grid.ColumnSpan="2" Margin="10" />
         <ListBox Grid.Column="1" Grid.Row="7" Name="lst_message" />
-        <Button Content="Open valve" Grid.Column="3" Grid.Row="4" Name="btn_valve" Click="btn_valve_Click" Margin="5" />
+        <Button Content="Open valve" Grid.Column="2" Grid.Row="4" Name="btn_valve" Click="btn_valve_Click" Margin="5" />
         <Button Content="Drop" Grid.Column="2" Grid.Row="1" Name="btn_drop" Margin="5" Click="btn_drop_Click" />
+        <Button Content="Close valve" Grid.Column="3" Grid.Row="4" Name="btn_valve_close" Margin="5" Click="btn_valve_close_Click" />
     </Grid>
 </Controls:MetroWindow>

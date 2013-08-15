@@ -2,6 +2,7 @@ using System;
 using System.IO.Ports;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using CameraControl.Core;
 using CameraControl.Core.Interfaces;
 using CameraControl.Devices.Classes;
@@ -16,6 +17,8 @@ namespace Plugin.DeviceControl
     public partial class WaterDropWnd :MetroWindow, IToolPlugin
     {
         private SerialPort sp = new SerialPort();
+        private object _locker = new object();
+
 
         public WaterDropWnd()
         {
@@ -65,7 +68,7 @@ namespace Plugin.DeviceControl
             {
                 sp.PortName = (string)cmb_ports.SelectedItem;
                 sp.BaudRate = 9600;
-                sp.WriteTimeout = 500;
+                sp.WriteTimeout = 3500;
                 sp.Open();
                 sp.DataReceived += sp_DataReceived;
             }
@@ -131,23 +134,26 @@ namespace Plugin.DeviceControl
 
         private void SendData()
         {
-            try
+            lock (_locker)
             {
-                lst_message.Items.Clear();
-                OpenPort();
-                sp.WriteLine("c=" + slider_cmera.Value);
-                sp.WriteLine("dw=" + slider_drop_wait.Value);
-                sp.WriteLine("dw2=" + slider_drop_wait.Value);
-                sp.WriteLine("d1=" + slider_drop1.Value);
-                sp.WriteLine("d2=" + slider_drop2.Value);
-                sp.WriteLine("d3=" + slider_drop3.Value);
-                sp.WriteLine("f=" + slider_flash.Value.ToString());
+                try
+                {
+                    lst_message.Items.Clear();
+                    ClosePort();
+                    OpenPort();
+                    sp.WriteLine("c=" + slider_cmera.Value);
+                    sp.WriteLine("dw=" + slider_drop_wait.Value);
+                    sp.WriteLine("dw2=" + slider_drop2_wait.Value);
+                    sp.WriteLine("d1=" + slider_drop1.Value);
+                    sp.WriteLine("d2=" + slider_drop2.Value);
+                    sp.WriteLine("d3=" + slider_drop3.Value);
+                    sp.WriteLine("f=" + slider_flash.Value.ToString());
+                }
+                catch (Exception exception)
+                {
+                    lst_message.Items.Add(exception.Message);
+                }
             }
-            catch (Exception exception)
-            {
-                lst_message.Items.Add(exception.Message);
-            }
-
         }
 
         private void btn_set_Click(object sender, RoutedEventArgs e)
@@ -178,27 +184,43 @@ namespace Plugin.DeviceControl
 
         private void btn_valve_Click(object sender, RoutedEventArgs e)
         {
-            SendCommand(">");
+            SendCommand("|");
         }
 
         private void SendCommand(string cmd)
         {
-            try
+            lock (_locker)
             {
-                ClosePort();
-                OpenPort();
-                sp.Write(cmd);
+                try
+                {
+                    ClosePort();
+                    OpenPort();
+                    sp.Write(cmd);
+                }
+                catch (Exception exception)
+                {
+                    lst_message.Items.Add(exception.Message);
+                }
             }
-            catch (Exception exception)
-            {
-                lst_message.Items.Add(exception.Message);
-            }
-   
         }
 
         private void btn_drop_Click(object sender, RoutedEventArgs e)
         {
             SendCommand("<");
+        }
+
+        private void btn_valve_close_Click(object sender, RoutedEventArgs e)
+        {
+            SendCommand("\\");
+        }
+
+        private void MetroWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+            {
+                btn_start_Click(null, null);
+                e.Handled = true;
+            }
         }
 
     }
