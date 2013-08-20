@@ -241,6 +241,12 @@ namespace CameraControlCmd
                     }
                     return 0;
                 }
+                if (_arguments.Contains("comment"))
+                {
+                    Thread.Sleep(200);
+                    ServiceProvider.DeviceManager.SelectedCameraDevice.SetComment(_arguments["comment"]);
+                    Console.WriteLine("Comment was set");
+                }
                 if (_arguments.Contains("capturenoaf"))
                 {
                     try
@@ -304,6 +310,10 @@ namespace CameraControlCmd
             Console.WriteLine(" /aperture aperture         - set the aperture number ex. 9,5 8,0");
             Console.WriteLine(" /shutter shutter speed     - set the shutter speed ex. \"1/50\" \"1/250\" 1s 3s");
             Console.WriteLine(" /ec compensation           - set the exposure comp. -1,5 +2");
+            Console.WriteLine("----------------------------------------------------------------------------------------");
+            Console.WriteLine("For Nikon camera only :");
+            Console.WriteLine("----------------------------------------------------------------------------------------");
+            Console.WriteLine(" /comment comment             - set in camera comment string");
         }
 
         private static void InitApplication()
