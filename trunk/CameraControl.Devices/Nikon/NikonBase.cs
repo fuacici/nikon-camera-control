@@ -1308,6 +1308,40 @@ namespace CameraControl.Devices.Nikon
             ErrorCodes.GetException(ExecuteWithNoData(CONST_CMD_EndMovieRec));
         }
 
+        public override void SetComment(string comment)
+        {
+            if (string.IsNullOrEmpty(comment))
+            {
+                SetProperty(CONST_CMD_SetDevicePropValue, new[] {(byte) 0}, 0xD091, -1);
+            }
+            else
+            {
+                try
+                {
+                    comment = comment.Length > 32 ? comment.Substring(0, 32) : comment.PadRight(32);
+                    List<byte> vals = new List<byte>() { 32  };
+                    List<byte> valsnew = new List<byte>();
+                    valsnew.Add(37);
+                    vals.AddRange(Encoding.UTF8.GetBytes(comment));
+                    foreach (byte val in vals)
+                    {
+                        valsnew.Add(val);
+                        valsnew.Add(0);
+                    }
+                    valsnew.Add(0);
+                    valsnew.Add(0);
+                    SetProperty(CONST_CMD_SetDevicePropValue, valsnew.ToArray(), 0xD090, -1);
+                    SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)1 }, 0xD091, -1);
+
+                }
+                catch (Exception exception)
+                {
+                    
+                    
+                }
+            }
+        }
+
         private void getEvent()
         {
             try
