@@ -419,8 +419,9 @@ namespace CameraControl.Devices
         /// <summary>
         /// Sets the in comment field.
         /// </summary>
+        /// <param name="cameraFieldType"> </param>
         /// <param name="comment">The comment.</param>
-        public virtual void SetComment(string comment)
+        public virtual void SetCameraField(CameraFieldType cameraFieldType, string comment)
         {
             
         }

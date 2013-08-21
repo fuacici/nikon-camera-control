@@ -123,7 +123,7 @@ namespace CameraControl.Devices
         void FormatStorage(object storageId);
         bool DeleteObject(DeviceObject deviceObject);
 
-        void SetComment(string comment);
+        void SetCameraField(CameraFieldType cameraFieldType, string comment);
 
     }
 }
