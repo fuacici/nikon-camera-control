@@ -244,8 +244,20 @@ namespace CameraControlCmd
                 if (_arguments.Contains("comment"))
                 {
                     Thread.Sleep(200);
-                    ServiceProvider.DeviceManager.SelectedCameraDevice.SetComment(_arguments["comment"]);
+                    ServiceProvider.DeviceManager.SelectedCameraDevice.SetCameraField(CameraFieldType.Comment, _arguments["comment"]);
                     Console.WriteLine("Comment was set");
+                }
+                if (_arguments.Contains("artist"))
+                {
+                    Thread.Sleep(200);
+                    ServiceProvider.DeviceManager.SelectedCameraDevice.SetCameraField(CameraFieldType.Artist, _arguments["artist"]);
+                    Console.WriteLine("Artist was set");
+                }
+                if (_arguments.Contains("copyright"))
+                {
+                    Thread.Sleep(200);
+                    ServiceProvider.DeviceManager.SelectedCameraDevice.SetCameraField(CameraFieldType.Copyright, _arguments["copyright"]);
+                    Console.WriteLine("Copyright was set");
                 }
                 if (_arguments.Contains("capturenoaf"))
                 {
@@ -313,7 +325,10 @@ namespace CameraControlCmd
             Console.WriteLine("----------------------------------------------------------------------------------------");
             Console.WriteLine("For Nikon camera only :");
             Console.WriteLine("----------------------------------------------------------------------------------------");
-            Console.WriteLine(" /comment comment             - set in camera comment string");
+            Console.WriteLine(" /comment comment           - set in camera comment string");
+            Console.WriteLine(" /copyright copyright       - set in camera copyright string");
+            Console.WriteLine(" /artist artist             - set in camera artist string");
+
         }
 
         private static void InitApplication()

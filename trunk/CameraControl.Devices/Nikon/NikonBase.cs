@@ -1308,37 +1308,83 @@ namespace CameraControl.Devices.Nikon
             ErrorCodes.GetException(ExecuteWithNoData(CONST_CMD_EndMovieRec));
         }
 
-        public override void SetComment(string comment)
+        public override void SetCameraField(CameraFieldType cameraFieldType, string comment)
         {
-            if (string.IsNullOrEmpty(comment))
+            switch (cameraFieldType)
             {
-                SetProperty(CONST_CMD_SetDevicePropValue, new[] {(byte) 0}, 0xD091, -1);
-            }
-            else
-            {
-                try
-                {
-                    comment = comment.Length > 32 ? comment.Substring(0, 32) : comment.PadRight(32);
-                    List<byte> vals = new List<byte>() { 32  };
-                    List<byte> valsnew = new List<byte>();
-                    valsnew.Add(37);
-                    vals.AddRange(Encoding.UTF8.GetBytes(comment));
-                    foreach (byte val in vals)
+                case CameraFieldType.Comment:
+                    if (string.IsNullOrEmpty(comment))
                     {
-                        valsnew.Add(val);
-                        valsnew.Add(0);
+                        SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)0 }, 0xD091, -1);
                     }
-                    valsnew.Add(0);
-                    valsnew.Add(0);
-                    SetProperty(CONST_CMD_SetDevicePropValue, valsnew.ToArray(), 0xD090, -1);
-                    SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)1 }, 0xD091, -1);
+                    else
+                    {
+                        comment = comment.Length > 32 ? comment.Substring(0, 32) : comment.PadRight(32);
+                        List<byte> vals = new List<byte>() { 32 };
+                        List<byte> valsnew = new List<byte>();
+                        valsnew.Add(37);
+                        vals.AddRange(Encoding.UTF8.GetBytes(comment));
+                        foreach (byte val in vals)
+                        {
+                            valsnew.Add(val);
+                            valsnew.Add(0);
+                        }
+                        valsnew.Add(0);
+                        valsnew.Add(0);
+                        SetProperty(CONST_CMD_SetDevicePropValue, valsnew.ToArray(), 0xD090, -1);
+                        SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)1 }, 0xD091, -1);
+                    }
+                    break;
+                case CameraFieldType.Artist:
+                    if (string.IsNullOrEmpty(comment))
+                    {
+                        SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)0, (byte)0, (byte)0 }, 0xD072, -1);
+                    }
+                    else
+                    {
+                        comment = comment.Length > 36 ? comment.Substring(0, 36) : comment.PadRight(36);
+                        List<byte> vals = new List<byte>() { 36 };
+                        List<byte> valsnew = new List<byte>();
+                        valsnew.Add(37);
+                        vals.AddRange(Encoding.UTF8.GetBytes(comment));
+                        foreach (byte val in vals)
+                        {
+                            valsnew.Add(val);
+                            valsnew.Add(0);
+                        }
+                        valsnew.Add(0);
+                        valsnew.Add(0);
+                        SetProperty(CONST_CMD_SetDevicePropValue, valsnew.ToArray(), 0xD072, -1);
 
-                }
-                catch (Exception exception)
-                {
-                    
-                    
-                }
+                    }
+
+                    break;
+                case CameraFieldType.Copyright:
+                    if (string.IsNullOrEmpty(comment))
+                    {
+                        SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)0, (byte)0, (byte)0 }, 0xD073, -1);
+                    }
+                    else
+                    {
+                        comment = comment.Length > 36 ? comment.Substring(0, 36) : comment.PadRight(36);
+                        List<byte> vals = new List<byte>() { 36 };
+                        List<byte> valsnew = new List<byte>();
+                        valsnew.Add(37);
+                        vals.AddRange(Encoding.UTF8.GetBytes(comment));
+                        foreach (byte val in vals)
+                        {
+                            valsnew.Add(val);
+                            valsnew.Add(0);
+                        }
+                        valsnew.Add(0);
+                        valsnew.Add(0);
+                        SetProperty(CONST_CMD_SetDevicePropValue, valsnew.ToArray(), 0xD073, -1);
+
+                    }
+                    break;
+                default:
+                    //throw new ArgumentOutOfRangeException("cameraFieldType");
+                    break;
             }
         }
 
