@@ -1345,7 +1345,7 @@ namespace CameraControl.Devices.Nikon
                         comment = comment.Length > 36 ? comment.Substring(0, 36) : comment.PadRight(36);
                         List<byte> vals = new List<byte>() { 36 };
                         List<byte> valsnew = new List<byte>();
-                        valsnew.Add(37);
+                        valsnew.Add(32);
                         vals.AddRange(Encoding.UTF8.GetBytes(comment));
                         foreach (byte val in vals)
                         {
@@ -1369,7 +1369,7 @@ namespace CameraControl.Devices.Nikon
                         comment = comment.Length > 36 ? comment.Substring(0, 36) : comment.PadRight(36);
                         List<byte> vals = new List<byte>() { 36 };
                         List<byte> valsnew = new List<byte>();
-                        valsnew.Add(37);
+                        valsnew.Add(32);
                         vals.AddRange(Encoding.UTF8.GetBytes(comment));
                         foreach (byte val in vals)
                         {
