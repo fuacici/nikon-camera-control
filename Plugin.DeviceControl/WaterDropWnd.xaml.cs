@@ -1,5 +1,6 @@
 using System;
 using System.IO.Ports;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -18,6 +19,7 @@ namespace Plugin.DeviceControl
     {
         private SerialPort sp = new SerialPort();
         private object _locker = new object();
+        private Timer _timer = new Timer();
 
 
         public WaterDropWnd()
@@ -30,6 +32,17 @@ namespace Plugin.DeviceControl
                 cmb_ports.Items.Add(port);
             }
             ServiceProvider.Settings.ApplyTheme(this);
+            _timer.Elapsed += _timer_Elapsed;
+            _timer.AutoReset = false;
+        }
+
+        void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            var camera = ServiceProvider.DeviceManager.SelectedCameraDevice as NikonBase;
+            if (camera != null)
+            {
+                camera.StartEventTimer();
+            }
         }
 
         #region Implementation of IToolPlugin
@@ -47,11 +60,31 @@ namespace Plugin.DeviceControl
         {
             try
             {
-                NikonBase camera = ServiceProvider.DeviceManager.SelectedCameraDevice as NikonBase;
-                if(camera!=null)
+                if (ServiceProvider.Settings.DefaultSession.WriteComment)
                 {
-                    camera.StopEventTimer();
-                    DelayedDelegate.Add(camera.StartEventTimer, GetTotalLength()+100);
+                    ServiceProvider.Settings.DefaultSession.Comment = "c=" + slider_cmera.Value + "|";
+                    ServiceProvider.Settings.DefaultSession.Comment += "dw=" + slider_drop_wait.Value + "|";
+                    ServiceProvider.Settings.DefaultSession.Comment += "dw2=" + slider_drop2_wait.Value + "|";
+                    ServiceProvider.Settings.DefaultSession.Comment += "d1=" + slider_drop1.Value + "|";
+                    ServiceProvider.Settings.DefaultSession.Comment += "d2=" + slider_drop2.Value + "|";
+                    ServiceProvider.Settings.DefaultSession.Comment += "d3=" + slider_drop3.Value + "|";
+                    ServiceProvider.Settings.DefaultSession.Comment += "f=" + slider_flash.Value.ToString() + "|";
+                }
+                if (chk_external.IsChecked == true)
+                {
+
+                    NikonBase camera = ServiceProvider.DeviceManager.SelectedCameraDevice as NikonBase;
+                    if (camera != null)
+                    {
+                        camera.StopEventTimer();
+                        _timer.Interval = GetTotalLength() + 100;
+                        _timer.Start();
+
+                    }
+                }
+                else
+                {
+                    ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
                 }
                 OpenPort();
                 sp.WriteLine(" ");
