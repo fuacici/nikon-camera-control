@@ -13,7 +13,7 @@ const int ledPin =  RED_LED;
 const int buttonPin = PUSH2;
 // -----------------------
 // timers-----------------
-int camera_timer = 1000;
+int camera_timer = 350;
 int drop1_time = 45;
 int drop_wait_time = 100;
 int drop2_time = 45;
@@ -199,7 +199,7 @@ void doWaterDrop()
 {
     digitalWrite(cameraPin, HIGH);
 
-    delay(camera_timer/2);
+    delay(camera_timer);
     stPin(valvePin, drop1_time);
 
     delay(drop_wait_time);        
@@ -216,8 +216,7 @@ void doWaterDrop()
 
     delay(flash_time-drop1_time-drop_wait_time-drop2_time-drop2_wait_time-drop3_time );    
     stPin(flashPin, 100);
-    delay(camera_timer/2);
-
+    delay(50);
     digitalWrite(cameraPin, LOW);  
 }
 
