@@ -102,6 +102,28 @@ namespace CameraControlCmd
         {
             try
             {
+
+                if (_arguments.Contains("export"))
+                {
+                    if (string.IsNullOrEmpty(_arguments["export"]))
+                    {
+                        Console.WriteLine("No export file is specified");
+                    }
+                    else
+                    {
+                        using (StreamWriter writer = File.CreateText(_arguments["export"]))
+                        {
+                            Console.WriteLine("Exporting properties to: " + _arguments["export"]);
+                            CameraPreset preset = new CameraPreset();
+                            preset.Get(ServiceProvider.DeviceManager.SelectedCameraDevice);
+                            foreach (ValuePair valuePair in preset.Values)
+                            {
+                                writer.WriteLine("\"{0}\",\"{1}\"", valuePair.Name, valuePair.Value);
+                            }
+                            writer.Close();
+                        }
+                    }
+                }
                 if (_arguments.Contains("session"))
                 {
                     PhotoSession session = ServiceProvider.Settings.GetSession(_arguments["session"]);
@@ -304,6 +326,7 @@ namespace CameraControlCmd
         {
             Console.WriteLine("Arguments :");
             Console.WriteLine(" /help                      - this screen");
+            Console.WriteLine(" /export filename           - export current connected camera properties");
             Console.WriteLine(" /capture                   - capture photo");
             Console.WriteLine(" /capturenoaf               - capture photo without autofocus");
             Console.WriteLine(" /captureall                - capture photo with all connected devices");
