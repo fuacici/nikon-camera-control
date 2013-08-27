@@ -1319,10 +1319,10 @@ namespace CameraControl.Devices.Nikon
                     }
                     else
                     {
-                        comment = comment.Length > 32 ? comment.Substring(0, 32) : comment.PadRight(32);
-                        List<byte> vals = new List<byte>() { 32 };
+                        comment = comment.Length > 36 ? comment.Substring(0, 36) : comment.PadRight(36);
+                        List<byte> vals = new List<byte>() ;
                         List<byte> valsnew = new List<byte>();
-                        valsnew.Add(37);
+                        valsnew.Add(36);
                         vals.AddRange(Encoding.UTF8.GetBytes(comment));
                         foreach (byte val in vals)
                         {
@@ -1343,9 +1343,9 @@ namespace CameraControl.Devices.Nikon
                     else
                     {
                         comment = comment.Length > 36 ? comment.Substring(0, 36) : comment.PadRight(36);
-                        List<byte> vals = new List<byte>() { 36 };
+                        List<byte> vals = new List<byte>() ;
                         List<byte> valsnew = new List<byte>();
-                        valsnew.Add(32);
+                        valsnew.Add(36);
                         vals.AddRange(Encoding.UTF8.GetBytes(comment));
                         foreach (byte val in vals)
                         {
@@ -1366,10 +1366,10 @@ namespace CameraControl.Devices.Nikon
                     }
                     else
                     {
-                        comment = comment.Length > 36 ? comment.Substring(0, 36) : comment.PadRight(36);
-                        List<byte> vals = new List<byte>() { 36 };
+                        comment = comment.Length > 53 ? comment.Substring(0, 53) : comment.PadRight(53);
+                        List<byte> vals = new List<byte>();
                         List<byte> valsnew = new List<byte>();
-                        valsnew.Add(32);
+                        valsnew.Add(54);
                         vals.AddRange(Encoding.UTF8.GetBytes(comment));
                         foreach (byte val in vals)
                         {
