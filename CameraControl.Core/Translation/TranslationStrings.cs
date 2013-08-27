@@ -373,6 +373,7 @@ namespace CameraControl.Core.Translation
         public static string LabelShowMagnifierInFullSccreen = "Show magnifier in fullSccreen";
         public static string LabelDelayImageLoading = "Delay image loading";
         public static string LabelShowOverlayFolder = "Show overlay folder";
-        public static string LabelOverlay = "Overlay";
+        public static string LabelPHDGuiding = "PHD Guiding";
+        public static string LabelWaitPHDGuiding = "Wait for PHD (sec)";
     }
 }

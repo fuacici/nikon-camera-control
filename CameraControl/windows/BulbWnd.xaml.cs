@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Net.Sockets;
 using System.Threading;
 using System.Timers;
 using System.Windows;
@@ -100,6 +101,28 @@ namespace CameraControl.windows
             }
         }
 
+        private int _phdType;
+        public int PhdType
+        {
+            get { return _phdType; }
+            set
+            {
+                _phdType = value;
+                NotifyPropertyChanged("PhdType");
+            }
+        }
+
+        private int _phdWait;
+        public int PhdWait
+        {
+            get { return _phdWait; }
+            set
+            {
+                _phdWait = value;
+                NotifyPropertyChanged("PhdWait");
+            }
+        }
+
 
         public BulbWnd()
         {
@@ -112,6 +135,8 @@ namespace CameraControl.windows
             CaptureTime = 60;
             NumOfPhotos = 1;
             WaitTime = 0;
+            PhdType = 0;
+            PhdWait = 5;
             _captureTimer.Elapsed += _captureTimer_Elapsed;
             _waitTimer.Elapsed += _waitTimer_Elapsed;
             ServiceProvider.Settings.ApplyTheme(this);
@@ -331,6 +356,8 @@ namespace CameraControl.windows
                         {
                             MessageBox.Show(TranslationStrings.LabelNoExternalDeviceSelected);
                         }
+                        if (PhdType > 0)
+                            PhdGuiding(PhdType);
                     }
                     else
                     {
@@ -477,6 +504,63 @@ namespace CameraControl.windows
         private void btn_astrolv_Click(object sender, RoutedEventArgs e)
         {
             ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.AstroLiveViewWnd_Show, CameraDevice);
+        }
+
+        public void PhdGuiding(int movetype)
+        {
+            try
+            {
+                TcpClient socket = new TcpClient("localhost", 4300);
+                Thread.Sleep(200);
+                switch (movetype)
+                {
+                    case 1:
+                        SendReceiveTest2(socket, 3);
+                        break;
+                    case 2:
+                        SendReceiveTest2(socket, 4);
+                        break;
+                    case 3:
+                        SendReceiveTest2(socket, 5);
+                        break;
+                    case 4:
+                        SendReceiveTest2(socket, 12);
+                        break;
+                    case 5:
+                        SendReceiveTest2(socket, 13);
+                        break;
+                }
+                Thread.Sleep(PhdWait);
+                socket.Close();
+            }
+            catch (Exception exception)
+            {
+                StaticHelper.Instance.SystemMessage = "PHDGuiding error " + exception.Message;
+                Log.Error("PHDGuiding error", exception);
+            }
+        }
+        
+        public static int SendReceiveTest2(TcpClient server, byte opersEnum)
+        {
+            byte[] bytes = new byte[256];
+            try
+            {
+                // Blocks until send returns. 
+                int byteCount = server.Client.Send(new[] { opersEnum }, SocketFlags.None);
+                //Console.WriteLine("Sent {0} bytes.", byteCount);
+
+                // Get reply from the server.
+                byteCount = server.Client.Receive(bytes, SocketFlags.None);
+                //Console.WriteLine(byteCount);
+                //if (byteCount > 0)
+                //    Console.WriteLine(Encoding.UTF8.GetString(bytes));
+            }
+            catch (SocketException e)
+            {
+                //Console.WriteLine("{0} Error code: {1}.", e.Message, e.ErrorCode);
+                return (e.ErrorCode);
+            }
+            return 0;
         }
     }
 }
