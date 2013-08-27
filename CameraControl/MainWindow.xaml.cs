@@ -205,13 +205,13 @@ namespace CameraControl
                 {
                     if (!string.IsNullOrEmpty(ServiceProvider.Settings.DefaultSession.Comment))
                         Exiv2Helper.SaveComment(fileName, ServiceProvider.Settings.DefaultSession.Comment);
-                    if (!string.IsNullOrEmpty(ServiceProvider.Settings.DefaultSession.SelectedTag1.Value))
+                    if (ServiceProvider.Settings.DefaultSession.SelectedTag1!=null && !string.IsNullOrEmpty(ServiceProvider.Settings.DefaultSession.SelectedTag1.Value))
                         Exiv2Helper.AddKeyword(fileName, ServiceProvider.Settings.DefaultSession.SelectedTag1.Value);
-                    if (!string.IsNullOrEmpty(ServiceProvider.Settings.DefaultSession.SelectedTag2.Value))
+                    if (ServiceProvider.Settings.DefaultSession.SelectedTag2 != null && !string.IsNullOrEmpty(ServiceProvider.Settings.DefaultSession.SelectedTag2.Value))
                         Exiv2Helper.AddKeyword(fileName, ServiceProvider.Settings.DefaultSession.SelectedTag2.Value);
-                    if (!string.IsNullOrEmpty(ServiceProvider.Settings.DefaultSession.SelectedTag3.Value))
+                    if (ServiceProvider.Settings.DefaultSession.SelectedTag3 != null && !string.IsNullOrEmpty(ServiceProvider.Settings.DefaultSession.SelectedTag3.Value))
                         Exiv2Helper.AddKeyword(fileName, ServiceProvider.Settings.DefaultSession.SelectedTag3.Value);
-                    if (!string.IsNullOrEmpty(ServiceProvider.Settings.DefaultSession.SelectedTag4.Value))
+                    if (ServiceProvider.Settings.DefaultSession.SelectedTag4 != null && !string.IsNullOrEmpty(ServiceProvider.Settings.DefaultSession.SelectedTag4.Value))
                         Exiv2Helper.AddKeyword(fileName, ServiceProvider.Settings.DefaultSession.SelectedTag4.Value);
                 }
                 //select the new file only when the multiple camera support isn't used to prevent high CPU usage on raw files

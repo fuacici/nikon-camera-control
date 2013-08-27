@@ -150,6 +150,9 @@ namespace Plugin.DeviceControl
                         case "flash_time":
                             Dispatcher.Invoke(new Action(delegate { slider_flash.Value = value; }));
                             break;
+                        case "sound":
+                            Dispatcher.Invoke(new Action(delegate { prg_threshold.Value = value; }));
+                            break;
                     }
                 }
             }
@@ -254,6 +257,16 @@ namespace Plugin.DeviceControl
                 btn_start_Click(null, null);
                 e.Handled = true;
             }
+        }
+
+        private void btn_start_detect_Click(object sender, RoutedEventArgs e)
+        {
+            SendCommand("m=3");
+        }
+
+        private void btn_stop_detect_Click(object sender, RoutedEventArgs e)
+        {
+            SendCommand("m=9");
         }
 
     }
