@@ -49,7 +49,7 @@ namespace CameraControl.windows
             _secounter++;
             if (_secounter > WaitSec)
             {
-                WaitSec = 0;
+                _secounter = 0;
                 _timer.Stop();
                 CapturePhotos();
             }

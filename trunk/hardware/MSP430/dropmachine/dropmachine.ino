@@ -9,6 +9,7 @@ boolean start = false;
 const int valvePin =  P2_3;
 const int cameraPin =  P2_4;
 const int flashPin =  P2_5;
+const int soundPin =  A7;
 const int ledPin =  RED_LED;
 const int buttonPin = PUSH2;
 // -----------------------
@@ -20,8 +21,12 @@ int drop2_time = 45;
 int drop2_wait_time = 100;
 int drop3_time = 45;
 int flash_time = 370;
+int mode = 0;
 // -----------------------
-  bool shouldBlink = false;  
+bool shouldBlink = false;  
+// -----------------------
+long time=0;
+int maxdetect=0;
 // -----------------------
 void setup() {
   // initialize serial:
@@ -47,7 +52,7 @@ void loop() {
   {
     start = true;
     blinkLed();
-    delay(500);
+    delay(200);
   }
   // print the string when a newline arrives:
   if (start) {
@@ -55,7 +60,31 @@ void loop() {
     start = false;
     doWaterDrop();
   }
+  // detect sound 
+  if(mode=3)
+  {
+    DetectSound();
+  }
 }
+
+void DetectSound()
+{
+  if(time=0){
+    time = millis();
+    maxdetect = 0;
+  }
+  int i = analogRead(A7);
+  if(i>maxdetect)
+      maxdetect = i;
+  if(millis() -time >1000)
+  {
+     time = millis();
+     Serial.print("sound="); 
+     Serial.println(maxdetect);
+     maxdetect = 0 ; 
+  }
+}
+
 
 /*
   SerialEvent occurs whenever a new data comes in the
@@ -74,17 +103,18 @@ void serialEvent() {
       command = "";
       inputString = "";
       start = true;
+      mode = 0;
       shouldBlink = true;
     }
 
     if(inChar == '|')
     {
-     digitalWrite(valvePin, HIGH);
+      digitalWrite(valvePin, HIGH);
     }    
 
     if(inChar == '\\')
     {
-     digitalWrite(valvePin, LOW);
+      digitalWrite(valvePin, LOW);
     }    
 
     if(inChar == '<')
@@ -98,6 +128,7 @@ void serialEvent() {
       inputString = "";
       sendData();
     }
+
 
     // check for varieable separator
     if(inChar == '=')
@@ -127,38 +158,42 @@ void phraseParams()
   if(command=="c=")
   {
     camera_timer = inputString.toInt();
-//    shouldBlink = true;
+    //    shouldBlink = true;
   } 
   if(command=="d1=")
   {
     drop1_time = inputString.toInt();
-//    shouldBlink = true;
+    //    shouldBlink = true;
   } 
   if(command=="dw=")
   {
     drop_wait_time = inputString.toInt();
-//    shouldBlink = true;
+    //    shouldBlink = true;
   } 
   if(command=="dw2=")
   {
     drop2_wait_time = inputString.toInt();
-//    shouldBlink = true;
+    //    shouldBlink = true;
   }       
   if(command=="d2=")
   {
     drop2_time = inputString.toInt();
-//    shouldBlink = true;
+    //    shouldBlink = true;
   } 
   if(command=="d3=")
   {
     drop3_time = inputString.toInt();
-//    shouldBlink = true;
+    //    shouldBlink = true;
   }      
   if(command=="f=")
   {
     flash_time = inputString.toInt();
     shouldBlink = true;
   } 
+  if(command=="m=")
+  {
+    mode = inputString.toInt();
+  }
   command = "";
   inputString = "";  
 }
@@ -166,9 +201,9 @@ void phraseParams()
 
 void blinkLed()
 {
- // for (int i=0; i <= 1; i++){
-    stPin(ledPin, 25);
-//  }
+  // for (int i=0; i <= 1; i++){
+  stPin(ledPin, 25);
+  //  }
 }
 
 void sendData()
@@ -193,39 +228,43 @@ void sendData()
 
   Serial.print("flash_time=");
   Serial.println(flash_time);
+
+  Serial.print("mode=");
+  Serial.println(mode);
 }
 
 void doWaterDrop()
 {
-    digitalWrite(cameraPin, HIGH);
+  digitalWrite(cameraPin, HIGH);
 
-    delay(camera_timer);
-    stPin(valvePin, drop1_time);
+  delay(camera_timer);
+  stPin(valvePin, drop1_time);
 
-    delay(drop_wait_time);        
-    stPin(valvePin, drop2_time);
+  delay(drop_wait_time);        
+  stPin(valvePin, drop2_time);
 
-    delay(drop2_wait_time);        
+  delay(drop2_wait_time);        
 
-    /*
+  /*
     Trigger the 3 drop only if size >0
-     */
-    if(drop3_time>0){
-      stPin(valvePin, drop3_time);
-    }
+   */
+  if(drop3_time>0){
+    stPin(valvePin, drop3_time);
+  }
 
-    delay(flash_time-drop1_time-drop_wait_time-drop2_time-drop2_wait_time-drop3_time );    
-    stPin(flashPin, 100);
-    delay(50);
-    digitalWrite(cameraPin, LOW);  
+  delay(flash_time-drop1_time-drop_wait_time-drop2_time-drop2_wait_time-drop3_time );    
+  stPin(flashPin, 100);
+  delay(50);
+  digitalWrite(cameraPin, LOW);  
 }
 
 void stPin(int pin, int delayM)
 {
-    digitalWrite(pin, HIGH);
-    delay(delayM);    
-    digitalWrite(pin, LOW);     
+  digitalWrite(pin, HIGH);
+  delay(delayM);    
+  digitalWrite(pin, LOW);     
 }
+
 
 
 
