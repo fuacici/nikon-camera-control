@@ -206,29 +206,17 @@ namespace CameraControl.Core.Classes
 
         public string SmallThumb
         {
-            get
-            {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                                    Settings.AppName, "Cache\\Small", Id + ".jpg");
-            }
+            get { return Path.Combine(Settings.DataFolder, "Cache\\Small", Id + ".jpg"); }
         }
 
         public string LargeThumb
         {
-            get
-            {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                                    Settings.AppName, "Cache\\Large", Id + ".jpg");
-            }
+            get { return Path.Combine(Settings.DataFolder, "Cache\\Large", Id + ".jpg"); }
         }
 
         public string InfoFile
         {
-            get
-            {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                                    Settings.AppName, "Cache\\InfoFile", Id + ".xml");
-            }
+            get { return Path.Combine(Settings.DataFolder, "Cache\\InfoFile", Id + ".xml"); }
         }
         
         public void RemoveThumbs()

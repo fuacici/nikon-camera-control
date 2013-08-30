@@ -60,6 +60,16 @@ namespace CameraControl.Core
             }
         }
 
+        public string PluginsFolder
+        {
+            get { return Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Plugins"); }
+        }
+
+        public string PluginsFolderInInstallFolder
+        {
+            get { return Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Plugins"); }
+        }
+
 
         public PluginManager()
         {
@@ -68,6 +78,16 @@ namespace CameraControl.Core
             ToolPlugins = new AsyncObservableCollection<IToolPlugin>();
             MainWindowPlugins = new AsyncObservableCollection<IMainWindowPlugin>();
             AvaiablePlugins = new AsyncObservableCollection<PluginInfo>();
+        }
+
+
+        /// <summary>
+        /// Copies the plugins folders from program files to programdata folder.
+        /// 
+        /// </summary>
+        public void CopyPlugins()
+        {
+            
         }
 
         public void LoadPlugins(string pluginFolder)

@@ -572,16 +572,22 @@ namespace CameraControl.Core.Classes
         {
             get
             {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,
+                return Path.Combine(DataFolder,
                                     "LiveViewOverlay"); ;
             }
         }
 
+        public static string DataFolder
+        {
+            get
+            {
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName); ;
+            }
+        }
 
         public Settings()
         {
-            ConfigFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,
-                                      "settings.xml");
+            ConfigFile = Path.Combine(DataFolder, "settings.xml");
             CameraPresets = new AsyncObservableCollection<CameraPreset>();
             DefaultSession = new PhotoSession();
             PhotoSessions = new ObservableCollection<PhotoSession>();
@@ -685,8 +691,7 @@ namespace CameraControl.Core.Classes
                 return;
             try
             {
-                string filename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName,
-                                               "Sessions", session.Name + ".xml");
+                string filename = Path.Combine(DataFolder, "Sessions", session.Name + ".xml");
                 XmlSerializer serializer = new XmlSerializer(typeof(PhotoSession));
                 // Create a FileStream to write with.
 
@@ -708,7 +713,7 @@ namespace CameraControl.Core.Classes
                 return;
             try
             {
-                string filename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName, "Branding.xml");
+                string filename = Path.Combine(DataFolder, "Branding.xml");
                 XmlSerializer serializer = new XmlSerializer(typeof(Branding));
                 // Create a FileStream to write with.
 
@@ -821,8 +826,7 @@ namespace CameraControl.Core.Classes
 
         public void LoadSessionData()
         {
-            string sesionFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                                         AppName, "Sessions");
+            string sesionFolder = Path.Combine(DataFolder, "Sessions");
             if (!Directory.Exists(sesionFolder))
             {
                 Directory.CreateDirectory(sesionFolder);
