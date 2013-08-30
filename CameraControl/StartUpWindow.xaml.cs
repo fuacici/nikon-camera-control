@@ -103,6 +103,7 @@ namespace CameraControl
             ServiceProvider.WindowsManager.Add(new ScriptWnd());
             ServiceProvider.WindowsManager.Event += WindowsManager_Event;
             ServiceProvider.Trigger.Start();
+            ServiceProvider.PluginManager.CopyPlugins();
             ServiceProvider.PluginManager.LoadPlugins(Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Plugins"));
             _basemainwindow = new MainWindow();
             ServiceProvider.PluginManager.MainWindowPlugins.Add(_basemainwindow);

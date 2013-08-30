@@ -9,6 +9,7 @@ using CameraControl.Core.Interfaces;
 using CameraControl.Core.Plugin;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
+using FileInfo = System.IO.FileInfo;
 
 namespace CameraControl.Core
 {
@@ -62,7 +63,7 @@ namespace CameraControl.Core
 
         public string PluginsFolder
         {
-            get { return Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Plugins"); }
+            get { return Path.Combine(Settings.DataFolder, "Plugins"); }
         }
 
         public string PluginsFolderInInstallFolder
@@ -87,7 +88,36 @@ namespace CameraControl.Core
         /// </summary>
         public void CopyPlugins()
         {
-            
+            if (!Directory.Exists(PluginsFolderInInstallFolder))
+                return;
+            if (!Directory.Exists(PluginsFolder))
+                Directory.CreateDirectory(PluginsFolder);
+            string[] folders = Directory.GetDirectories(PluginsFolderInInstallFolder);
+            foreach (string folder in folders)
+            {
+                CopyFilesRecursively(new DirectoryInfo(folder), new DirectoryInfo(Path.Combine(PluginsFolder,Path.GetFileName(folder))));
+            }
+        }
+
+        public static void CopyFilesRecursively(DirectoryInfo source, DirectoryInfo target)
+        {
+            if (!target.Exists)
+                target.Create();
+            foreach (DirectoryInfo dir in source.GetDirectories())
+            {
+                CopyFilesRecursively(dir, target.CreateSubdirectory(dir.Name));
+            }
+            foreach (FileInfo file in source.GetFiles())
+            {
+                string newfile = Path.Combine(target.FullName, file.Name);
+                if (!File.Exists(newfile))
+                    file.CopyTo(newfile, true);
+                else
+                {
+                    if (File.GetLastWriteTimeUtc(newfile) < file.LastWriteTimeUtc)
+                        file.CopyTo(newfile, true);
+                }
+            }
         }
 
         public void LoadPlugins(string pluginFolder)
@@ -103,6 +133,8 @@ namespace CameraControl.Core
                     try
                     {
                         PluginInfo pluginInfo = PluginInfo.Load(configFile);
+                        if (File.Exists(Path.Combine(folder, "disabled")))
+                            return;
                         string assemblyFile = Path.Combine(folder, pluginInfo.AssemblyFileName);
                         AvaiablePlugins.Add(pluginInfo);
                         Log.Debug("Loading plugin dll: " + assemblyFile);
