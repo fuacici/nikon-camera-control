@@ -6,18 +6,32 @@ using System.Text;
 using System.Xml.Serialization;
 using CameraControl.Core.Classes;
 using CameraControl.Devices;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.Core.Plugin
 {
-    public class PluginInfo
+    public class PluginInfo : BaseFieldClass
     {
-        public string Name { get; set; }
+        private string _name;
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                NotifyPropertyChanged("Name");
+            }
+        }
+
         public string Id { get; set; }
         public string Version { get; set; }
+        public string Author { get; set; }
         public string Description { get; set; }
+        public string Folder { get; set; }
         public string AssemblyFileName { get; set; }
         [XmlIgnore]
         public bool Enabled { get; set; }
+
 
         public static PluginInfo Load(string filename)
         {
