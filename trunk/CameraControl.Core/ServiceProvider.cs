@@ -67,22 +67,18 @@ namespace CameraControl.Core
             {
                 // Setup RollingFileAppender
                 var fileAppender = new RollingFileAppender
-                                                                      {
-                                                                          Layout =
-                                                                            new PatternLayout(
-                                                                            "%d [%t]%-5p %c [%x] - %m%n"),
-                                                                          MaximumFileSize = "1000KB",
-                                                                          MaxSizeRollBackups = 5,
-                                                                          RollingStyle = RollingFileAppender.RollingMode.Size,
-                                                                          AppendToFile = true,
-                                                                          File =
-                                                                            Path.Combine(
-                                                                              Environment.GetFolderPath(
-                                                                                Environment.SpecialFolder.CommonApplicationData),
-                                                                              appfolder, "Log",
-                                                                              "app.log"),
-                                                                          Name = "XXXRollingFileAppender"
-                                                                      };
+                                       {
+                                           Layout =
+                                               new PatternLayout(
+                                               "%d [%t]%-5p %c [%x] - %m%n"),
+                                           MaximumFileSize = "1000KB",
+                                           MaxSizeRollBackups = 5,
+                                           RollingStyle = RollingFileAppender.RollingMode.Size,
+                                           AppendToFile = true,
+                                           File =
+                                               Path.Combine(Settings.DataFolder, "Log", "app.log"),
+                                           Name = "XXXRollingFileAppender"
+                                       };
                 fileAppender.ActivateOptions(); // IMPORTANT, creates the file
                 BasicConfigurator.Configure(fileAppender);
 #if DEBUG

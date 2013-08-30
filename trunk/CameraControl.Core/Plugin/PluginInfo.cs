@@ -41,5 +41,9 @@ namespace CameraControl.Core.Plugin
             return pluginInfo;    
         }
 
+        public PluginInfo()
+        {
+            
+        }
     }
 }

@@ -73,11 +73,9 @@ namespace CameraControl.windows
         processStartInfo.FileName = "explorer";
         processStartInfo.UseShellExecute = true;
         processStartInfo.WindowStyle = ProcessWindowStyle.Normal;
-        processStartInfo.Arguments =
-          string.Format("/e,/select,\"{0}\"",
-                        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                                     ServiceProvider.AppName, "Log",
-                                     "app.log"));
+          processStartInfo.Arguments =
+              string.Format("/e,/select,\"{0}\"",
+                            Path.Combine(Settings.DataFolder, "Log", "app.log"));
         Process.Start(processStartInfo);
       }
       catch (Exception exception)
@@ -148,8 +146,7 @@ namespace CameraControl.windows
     {
         try
         {
-            Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                                          Settings.AppName, "Cache"), true);
+            Directory.Delete(Path.Combine(Settings.DataFolder, "Cache"), true);
         }
         catch (Exception exception)
         {
