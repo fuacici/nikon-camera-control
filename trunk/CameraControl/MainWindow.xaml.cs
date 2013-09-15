@@ -38,6 +38,7 @@ namespace CameraControl
         private object _locker = new object();
         private FileItem _selectedItem = null;
         private Timer _selectiontimer = new Timer(4000);
+        private DateTime _lastLoadTime = DateTime.Now;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow" /> class.
@@ -214,13 +215,13 @@ namespace CameraControl
                     if (ServiceProvider.Settings.DefaultSession.SelectedTag4 != null && !string.IsNullOrEmpty(ServiceProvider.Settings.DefaultSession.SelectedTag4.Value))
                         Exiv2Helper.AddKeyword(fileName, ServiceProvider.Settings.DefaultSession.SelectedTag4.Value);
                 }
+                _selectedItem = session.AddFile(fileName);
                 //select the new file only when the multiple camera support isn't used to prevent high CPU usage on raw files
                 if (ServiceProvider.Settings.AutoPreview &&
                     !ServiceProvider.WindowsManager.Get(typeof(MultipleCameraWnd)).IsVisible &&
                     !ServiceProvider.Settings.UseExternalViewer)
                 {
-                    _selectedItem = session.AddFile(fileName);
-                    if (ServiceProvider.Settings.DelayImageLoading)
+                    if (ServiceProvider.Settings.DelayImageLoading && (_lastLoadTime-DateTime.Now).TotalSeconds<4)
                     {
                         _selectiontimer.Stop();
                         _selectiontimer.Start();
@@ -230,11 +231,7 @@ namespace CameraControl
                         ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Select_Image, _selectedItem);
                     }
                 }
-                else
-                {
-                    session.AddFile(fileName);
-                }
-
+                _lastLoadTime = DateTime.Now;
                 //ServiceProvider.Settings.Save(session);
                 StaticHelper.Instance.SystemMessage = TranslationStrings.MsgPhotoTransferDone;
                 eventArgs.CameraDevice.IsBusy = false;
