@@ -100,5 +100,15 @@ namespace CameraControl.PluginManager
         }
 
         #endregion
+
+        private void CheckUpdates()
+        {
+            
+        }
+
+        private void btn_check_updates_Click(object sender, RoutedEventArgs e)
+        {
+            CheckUpdates();
+        }
     }
 }
