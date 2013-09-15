@@ -64,7 +64,7 @@
         <xctk:IntegerUpDown Name="upd_waittime" Minimum="0" Maximum="6000" Value="{Binding Path=WaitTime, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" Grid.Column="2" Grid.Row="3" Margin="5"/>
         <xctk:IntegerUpDown Name="upd_phdwaittime" Minimum="0" Maximum="30" Value="{Binding Path=PhdWait, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" Grid.Column="2" Grid.Row="5" Margin="5"/>
         <Label Content="{Binding Path=Message, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="11" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="13" FontWeight="Bold" Margin="0,56,0,0" />
-        <GroupBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="7" Header="{T:TranslateExtension LabelExternalShutterRelease}">
+        <GroupBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="8" Header="{T:TranslateExtension LabelExternalShutterRelease}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="152*" />
@@ -113,7 +113,7 @@
                 <Button Content="{T:TranslateExtension LabelStopScript}" Grid.Row="2" Height="23" Margin="0,4,6,0" Name="btn_stop_script" VerticalAlignment="Top" HorizontalAlignment="Right" Width="100" Click="btn_stop_script_Click" />
             </Grid>
         </GroupBox>
-        <GroupBox Grid.ColumnSpan="3" Grid.Row="8" Header="{T:TranslateExtension LabelCommands}" Grid.Column="1">
+        <GroupBox Grid.Row="8" Header="{T:TranslateExtension LabelCommands}" Grid.Column="4">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="60" />
