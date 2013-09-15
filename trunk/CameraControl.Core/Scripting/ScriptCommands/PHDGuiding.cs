@@ -40,7 +40,12 @@ namespace CameraControl.Core.Scripting.ScriptCommands
                         break;
                 }
                 ServiceProvider.ScriptManager.OutPut("PHDGuiding waiting....");
-                Thread.Sleep(WaitTime);
+                for (int i = 1; i <= WaitTime / 1000; i++)
+                {
+                    if (ServiceProvider.ScriptManager.ShouldStop)
+                        break;
+                    Thread.Sleep(i*1000);
+                }
                 socket.Close();
             }
             catch (Exception exception)

@@ -55,7 +55,7 @@
         <Button Content="{T:TranslateExtension LabelStopCapture}" Name="btn_stop" Click="btn_stop_Click" Grid.Column="3" Grid.Row="3" Margin="5"/>
         <xctk:IntegerUpDown Name="upd_time" Minimum="1" Maximum="6000" Value="{Binding Path=CaptureTime, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" Grid.Column="2" Grid.Row="1" Margin="5"/>
         <Label Content="{T:TranslateExtension LabelCaptureTime}" Name="label1" Grid.Column="1" Grid.Row="1" Margin="5" HorizontalContentAlignment="Right" />
-        <Label Content="{Binding Source={x:Static Member=Devices:StaticHelper.Instance}, Path=SystemMessage}" Name="lbl_status" Grid.Row="11" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.ColumnSpan="4" />
+        <Label Content="{Binding Source={x:Static Member=Devices:StaticHelper.Instance}, Path=SystemMessage}" Name="lbl_status" Grid.Row="11" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="4" />
         <xctk:IntegerUpDown Name="upd_num" Minimum="1" Maximum="10000" Value="{Binding Path=NumOfPhotos, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" Grid.Column="2" Grid.Row="2" Margin="5"/>
         <Label Content="{T:TranslateExtension LabelNumberOfPhotos}" Grid.Row="2" Grid.Column="1" Margin="5" HorizontalContentAlignment="Right" />
         <Label Content="{T:TranslateExtension LabelTimeBetweenShots}" Grid.Row="3" Grid.Column="1" Margin="4,4,6,6" HorizontalContentAlignment="Right" />
@@ -130,5 +130,6 @@
             <ComboBoxItem Content="Move 4" />
             <ComboBoxItem Content="Move 5" />
         </ComboBox>
+        <ListBox Grid.Column="4" Grid.Row="9" Grid.RowSpan="2" Name="lst_output" />
     </Grid>
 </Controls:MetroWindow>

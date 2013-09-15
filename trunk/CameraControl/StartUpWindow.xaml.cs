@@ -153,6 +153,7 @@ namespace CameraControl
                         ServiceProvider.Trigger.Stop();
                     }
                 }
+                ServiceProvider.ScriptManager.Stop();
                 ServiceProvider.DeviceManager.CloseAll();
                 Thread.Sleep(1000);
                 Application.Current.Shutdown();
