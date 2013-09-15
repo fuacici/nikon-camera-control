@@ -455,6 +455,7 @@ namespace CameraControl.windows
                     if (CameraDevice == null)
                         return;
                     Init();
+                    ServiceProvider.ScriptManager.OutPutMessageReceived += ScriptManager_OutPutMessageReceived;
                     Dispatcher.Invoke(new Action(delegate
                                                      {
                                                          Show();
@@ -472,10 +473,12 @@ namespace CameraControl.windows
                     }
                     _captureTimer.Stop();
                     _waitTimer.Stop();
+                    ServiceProvider.ScriptManager.OutPutMessageReceived -= ScriptManager_OutPutMessageReceived;
                     ServiceProvider.ScriptManager.Save(DefaultScript, _defaultScriptFile);
                     Hide();
                     break;
                 case CmdConsts.All_Close:
+                    ServiceProvider.ScriptManager.OutPutMessageReceived -= ScriptManager_OutPutMessageReceived;
                     Dispatcher.Invoke(new Action(delegate
                                                      {
                                                          Hide();
@@ -483,6 +486,11 @@ namespace CameraControl.windows
                                                      }));
                     break;
             }
+        }
+
+        void ScriptManager_OutPutMessageReceived(object sender, MessageEventArgs e)
+        {
+            AddOutput(e.Message);
         }
 
         #endregion
@@ -561,6 +569,15 @@ namespace CameraControl.windows
                 return (e.ErrorCode);
             }
             return 0;
+        }
+
+        public void AddOutput(string msg)
+        {
+            Dispatcher.Invoke(new Action(delegate
+            {
+                lst_output.Items.Add(msg);
+                lst_output.ScrollIntoView(lst_output.Items[lst_output.Items.Count - 1]);
+            }));
         }
     }
 }

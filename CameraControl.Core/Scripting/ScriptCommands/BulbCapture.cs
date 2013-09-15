@@ -18,14 +18,21 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         {
             ServiceProvider.ScriptManager.OutPut("Bulb capture started");
             Executing = true;
-            scriptObject.CameraDevice.IsoNumber.SetValue(Iso);
-            Thread.Sleep(200);
-            scriptObject.CameraDevice.FNumber.SetValue(Aperture);
-            Thread.Sleep(200);
+            if (scriptObject.CameraDevice != null)
+            {
+                if (scriptObject.CameraDevice.IsoNumber != null)
+                    scriptObject.CameraDevice.IsoNumber.SetValue(Iso);
+                Thread.Sleep(200);
+                if (scriptObject.CameraDevice.FNumber != null)
+                    scriptObject.CameraDevice.FNumber.SetValue(Aperture);
+                Thread.Sleep(200);
+            }
             scriptObject.StartCapture();
             Thread.Sleep(200);
             for (int i = 0; i < CaptureTime; i++)
             {
+                if (ServiceProvider.ScriptManager.ShouldStop)
+                    break;
                 Thread.Sleep(1000);
                 ServiceProvider.ScriptManager.OutPut(string.Format("Bulb capture in progress .... {0}/{1}", i + 1, CaptureTime));
             }
