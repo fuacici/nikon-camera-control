@@ -47,8 +47,28 @@ namespace CameraControl.Core.Scripting.ScriptCommands
             return this;
         }
 
-        public virtual bool IsExecuted { get; set; }
-        public virtual bool Executing { get; set; }
+        private bool _isExecuted;
+        public virtual bool IsExecuted
+        {
+            get { return _isExecuted; }
+            set
+            {
+                _isExecuted = value;
+                NotifyPropertyChanged("IsExecuted");
+            }
+        }
+
+        private bool _executing;
+        public virtual bool Executing
+        {
+            get { return _executing; }
+            set
+            {
+                _executing = value;
+                NotifyPropertyChanged("Executing");
+            }
+        }
+
         public virtual string Name { get; set; }
         
         public virtual string DisplayName
