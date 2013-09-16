@@ -375,5 +375,8 @@ namespace CameraControl.Core.Translation
         public static string LabelShowOverlayFolder = "Show overlay folder";
         public static string LabelPHDGuiding = "PHD Guiding";
         public static string LabelWaitPHDGuiding = "Wait for PHD (sec)";
+        public static string LabelCountDown = "Countdown";
+        public static string LabelCurrentEvent = "Current event";
+        public static string LabelRemainingCaptures = "Captures left";
     }
 }
