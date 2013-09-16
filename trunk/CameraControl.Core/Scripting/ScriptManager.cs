@@ -177,6 +177,11 @@ namespace CameraControl.Core.Scripting
             scriptObject.ExitLoop = false;
             CurrentScript = scriptObject;
             GenerateVariabiles();
+            foreach (IScriptCommand command in scriptObject.Commands)
+            {
+                command.IsExecuted = false;
+                command.Executing = false;
+            }
             _timer.Start();
             var thread = new Thread(ExecuteThread);
             thread.Start(scriptObject);

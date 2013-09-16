@@ -108,7 +108,28 @@
                     <MenuItem Header="Save" Click="MenuItem_Click" />
                     <MenuItem Header="Load" Click="MenuItem_Click_1" />
                 </Menu>
-                <ListBox Grid.Row="1" ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}, Path=DefaultScript.Commands}" DisplayMemberPath="DisplayName" Name="lst_commands"/>
+                <ListBox Grid.Row="1" ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}, Path=DefaultScript.Commands}" Name="lst_commands">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DisplayName}" Name="lst_label" >
+                            </TextBlock>
+                            <DataTemplate.Triggers >
+                                <DataTrigger Binding="{Binding Executing}" Value="True">
+                                    <Setter TargetName="lst_label" Property="TextBlock.FontWeight" Value="Bold" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Executing}" Value="False">
+                                    <Setter TargetName="lst_label" Property="TextBlock.FontWeight" Value="Normal" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsExecuted}" Value="True">
+                                    <Setter TargetName="lst_label" Property="TextBlock.FontStyle" Value="Oblique" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsExecuted}" Value="False">
+                                    <Setter TargetName="lst_label" Property="TextBlock.FontStyle" Value="Normal" />
+                                </DataTrigger>                                
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
                 <Button Content="{T:TranslateExtension LabelStartScript}" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="6,4,0,0" Name="button1" VerticalAlignment="Top" Width="100" Click="button1_Click" />
                 <Button Content="{T:TranslateExtension LabelStopScript}" Grid.Row="2" Height="23" Margin="0,4,6,0" Name="btn_stop_script" VerticalAlignment="Top" HorizontalAlignment="Right" Width="100" Click="btn_stop_script_Click" />
             </Grid>
@@ -145,6 +166,6 @@
             <Grid>
                 <Label Content="{Binding Path=PhotoLeft, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="24" FontWeight="Bold" />
             </Grid>
-        </GroupBox>        
+        </GroupBox>
     </Grid>
 </Controls:MetroWindow>
