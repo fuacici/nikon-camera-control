@@ -123,6 +123,39 @@ namespace CameraControl.windows
             }
         }
 
+        private int _countDown;
+        public int CountDown
+        {
+            get { return _countDown; }
+            set
+            {
+                _countDown = value;
+                NotifyPropertyChanged("CountDown");
+            }
+        }
+
+        private string _event;
+        public string Event
+        {
+            get { return _event; }
+            set
+            {
+                _event = value;
+                NotifyPropertyChanged("Event");
+            }
+        }
+
+        private int _photoLeft;
+        public int PhotoLeft
+        {
+            get { return _photoLeft; }
+            set
+            {
+                _photoLeft = value;
+                NotifyPropertyChanged("PhotoLeft");
+            }
+        }
+
 
         public BulbWnd()
         {
@@ -137,6 +170,8 @@ namespace CameraControl.windows
             WaitTime = 0;
             PhdType = 0;
             PhdWait = 5;
+            CountDown = 0;
+            PhotoLeft = 0;
             _captureTimer.Elapsed += _captureTimer_Elapsed;
             _waitTimer.Elapsed += _waitTimer_Elapsed;
             ServiceProvider.Settings.ApplyTheme(this);
@@ -190,6 +225,7 @@ namespace CameraControl.windows
         void _waitTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             _waitSecs++;
+            CountDown--;
             Message = string.Format("Waiting for next capture {0} sec. Photo done {1}/{2}",
                                     _waitSecs, _photoCount, NumOfPhotos);
             if (_waitSecs >= WaitTime)
@@ -212,14 +248,21 @@ namespace CameraControl.windows
                 _waitSecs = 0;
                 if (_photoCount < NumOfPhotos)
                 {
+                    if (PhdType > 0)
+                        PhdGuiding(PhdType);
+
+                    Event = "Waiting";
+                    CountDown = WaitTime;
                     _waitTimer.Start();
                 }
             }
+            CountDown--;
         }
 
         private void btn_start_Click(object sender, RoutedEventArgs e)
         {
             _photoCount = 0;
+            PhotoLeft = NumOfPhotos;
             StartCapture();
         }
 
@@ -238,6 +281,9 @@ namespace CameraControl.windows
                 try
                 {
                     Log.Debug("Bulb capture started");
+                    Event = "Capture";
+                    CountDown = CaptureTime;
+                    PhotoLeft--;
                     if (DefaultScript.UseExternal)
                     {
                         if (DefaultScript.SelectedConfig != null)
@@ -326,12 +372,13 @@ namespace CameraControl.windows
 
         private void StopCapture()
         {
-            Thread thread = new Thread(StopCaptureThread);
-            thread.Start();
             _captureTimer.Stop();
             _waitTimer.Stop();
+            Thread thread = new Thread(StopCaptureThread);
+            thread.Start();
             StaticHelper.Instance.SystemMessage = "Capture stopped";
             Log.Debug("Bulb capture stopped");
+            Event = "Done";
         }
 
 
@@ -356,8 +403,6 @@ namespace CameraControl.windows
                         {
                             MessageBox.Show(TranslationStrings.LabelNoExternalDeviceSelected);
                         }
-                        if (PhdType > 0)
-                            PhdGuiding(PhdType);
                     }
                     else
                     {
@@ -370,6 +415,7 @@ namespace CameraControl.windows
                             StaticHelper.Instance.SystemMessage = TranslationStrings.MsgBulbModeNotSupported;
                         }
                     }
+                    CountDown = 0;
                     StaticHelper.Instance.SystemMessage = "Capture done";
                     Log.Debug("Bulb capture done");
                 }
@@ -518,6 +564,7 @@ namespace CameraControl.windows
         {
             try
             {
+                Event = "PhdGuiding";
                 TcpClient socket = new TcpClient("localhost", 4300);
                 Thread.Sleep(200);
                 switch (movetype)
@@ -538,8 +585,13 @@ namespace CameraControl.windows
                         SendReceiveTest2(socket, 13);
                         break;
                 }
-                Thread.Sleep(PhdWait);
                 socket.Close();
+                CountDown = PhdWait;
+                for (var i = 1; i < PhdWait + 1; i++)
+                {
+                    CountDown--;
+                    Thread.Sleep(1000);
+                }
             }
             catch (Exception exception)
             {

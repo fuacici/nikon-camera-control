@@ -44,12 +44,12 @@
             <RowDefinition Height="36" />
             <RowDefinition Height="36" />
             <RowDefinition Height="36" />
-            <RowDefinition Height="50*" />
-            <RowDefinition Height="109*" />
-            <RowDefinition Height="108*" />
-            <RowDefinition Height="56*" />
-            <RowDefinition Height="28*" />
-            <RowDefinition Height="36*" />
+            <RowDefinition Height="86*" />
+            <RowDefinition Height="68*" />
+            <RowDefinition Height="105*" />
+            <RowDefinition Height="54*" />
+            <RowDefinition Height="27*" />
+            <RowDefinition Height="35*" />
         </Grid.RowDefinitions>
         <Button Content="{T:TranslateExtension LabelStartCapture}" Name="btn_start" Click="btn_start_Click" Grid.Column="3" Grid.Row="1" Margin="5"/>
         <Button Content="{T:TranslateExtension LabelStopCapture}" Name="btn_stop" Click="btn_stop_Click" Grid.Column="3" Grid.Row="3" Margin="5"/>
@@ -131,5 +131,20 @@
             <ComboBoxItem Content="Move 5" />
         </ComboBox>
         <ListBox Grid.Column="4" Grid.Row="9" Grid.RowSpan="2" Name="lst_output" />
+        <GroupBox Grid.Column="1" Grid.Row="6" Header="{T:TranslateExtension LabelCountDown}">
+            <Grid>
+                <Label Content="{Binding Path=CountDown, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="24" FontWeight="Bold" />
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="2" Grid.Row="6" Header="{T:TranslateExtension LabelCurrentEvent}">
+            <Grid>
+                <Label Content="{Binding Path=Event, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="24" FontWeight="Bold" />
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="3" Grid.Row="6" Header="{T:TranslateExtension LabelRemainingCaptures}">
+            <Grid>
+                <Label Content="{Binding Path=PhotoLeft, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="24" FontWeight="Bold" />
+            </Grid>
+        </GroupBox>        
     </Grid>
 </Controls:MetroWindow>
