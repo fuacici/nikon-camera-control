@@ -95,8 +95,9 @@ namespace CameraControl.Core.Classes
                 return;
             foreach (ValuePair valuePair in Values)
             {
+                // set the value only if the value is different from current value 
                 if (valuePair.Name == name && value.IsEnabled && value.Value != valuePair.Value)
-                {
+                { 
                     value.SetValue(valuePair.Value);
                     return;
                 }
