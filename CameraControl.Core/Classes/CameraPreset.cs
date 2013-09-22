@@ -80,13 +80,13 @@ namespace CameraControl.Core.Classes
                 return;
             foreach (ValuePair valuePair in Values)
             {
-                if (valuePair.Name == name && value.IsEnabled)
+                if (valuePair.Name == name && value.IsEnabled && value.Value != valuePair.Value)
                 {
                     value.SetValue(valuePair.Value);
                     return;
                 }
             }
-            Thread.Sleep(100);
+            //Thread.Sleep(100);
         }
 
         public void SetTo(PropertyValue<long> value, string name)
@@ -95,7 +95,7 @@ namespace CameraControl.Core.Classes
                 return;
             foreach (ValuePair valuePair in Values)
             {
-                if (valuePair.Name == name && value.IsEnabled)
+                if (valuePair.Name == name && value.IsEnabled && value.Value != valuePair.Value)
                 {
                     value.SetValue(valuePair.Value);
                     return;
