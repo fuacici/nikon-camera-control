@@ -378,5 +378,7 @@ namespace CameraControl.Core.Translation
         public static string LabelCountDown = "Countdown";
         public static string LabelCurrentEvent = "Current event";
         public static string LabelRemainingCaptures = "Captures left";
+        public static string LabelLiveViewRotation = "Live view rotation";
+        public static string LabelAutomaticallyGuiding = "Automatically PHD Guiding after photo captured";
     }
 }
