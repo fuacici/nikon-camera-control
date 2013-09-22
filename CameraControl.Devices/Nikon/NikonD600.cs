@@ -22,7 +22,7 @@ namespace CameraControl.Devices.Nikon
                     if (result == null || result.Length <= headerSize)
                         return null;
                     GetAditionalLIveViewData(viewData, result);
-                    viewData.ImagePosition = headerSize;
+                    viewData.ImageDataPosition = headerSize;
                     viewData.ImageData = result;
                 }
                 finally
@@ -48,6 +48,11 @@ namespace CameraControl.Devices.Nikon
             viewData.FocusY = ToInt16(result, 30);
 
             viewData.Focused = result[48] != 1;
+            
+            if (result[37] == 1)
+                viewData.Rotation = -90;
+            if (result[37] == 2)
+                viewData.Rotation = 90;
         }
 
         protected override PropertyValue<long> InitStillCaptureMode()

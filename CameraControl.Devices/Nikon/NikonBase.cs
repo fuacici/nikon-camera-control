@@ -999,7 +999,7 @@ namespace CameraControl.Devices.Nikon
                     }
                     int cbBytesRead = result.Length;
                     GetAditionalLIveViewData(viewData, result);
-                    viewData.ImagePosition = 384;
+                    viewData.ImageDataPosition = 384;
                     viewData.ImageData = result;
                 }
                 finally
@@ -1026,6 +1026,11 @@ namespace CameraControl.Devices.Nikon
             viewData.FocusY = ToInt16(result, 22);
 
             viewData.Focused = result[40] != 1;
+            if (result[29] == 1)
+                viewData.Rotation = -90;
+            if (result[29] == 2)
+                viewData.Rotation = 90;
+
         }
 
         public override void Focus(int step)

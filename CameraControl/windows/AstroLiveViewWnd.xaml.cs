@@ -76,9 +76,9 @@ namespace CameraControl.windows
             if (LiveViewData == null || LiveViewData.ImageData == null)
                 return;
             MemoryStream stream = new MemoryStream(LiveViewData.ImageData,
-                                                   LiveViewData.ImagePosition,
+                                                   LiveViewData.ImageDataPosition,
                                                    LiveViewData.ImageData.Length -
-                                                   LiveViewData.ImagePosition);
+                                                   LiveViewData.ImageDataPosition);
             using (var bmp = new Bitmap(stream))
             {
                 Bitmap res = bmp;
