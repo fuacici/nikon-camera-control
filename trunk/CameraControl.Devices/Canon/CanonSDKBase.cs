@@ -800,7 +800,7 @@ namespace CameraControl.Devices.Canon
                 {
                     //DeviceReady();
                     viewData.HaveFocusData = false;
-                    viewData.ImagePosition = 0;
+                    viewData.ImageDataPosition = 0;
                     viewData.ImageData = _liveViewImageData.ImageData;
                     viewData.ImageHeight = 100;
                     viewData.ImageWidth = 100;

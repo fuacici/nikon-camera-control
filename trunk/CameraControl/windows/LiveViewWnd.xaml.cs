@@ -384,6 +384,7 @@ namespace CameraControl.windows
             Recording = false;
             ShowFocusRect = true;
             chk_top.IsChecked = false;
+            cmb_rotation.SelectedIndex = 4;
         }
 
         private void SelectedBitmap_BitmapLoaded(object sender)
@@ -534,9 +535,9 @@ namespace CameraControl.windows
                                                    {
 
                                                        MemoryStream stream = new MemoryStream(LiveViewData.ImageData,
-                                                                                              LiveViewData.ImagePosition,
+                                                                                              LiveViewData.ImageDataPosition,
                                                                                               LiveViewData.ImageData.Length -
-                                                                                              LiveViewData.ImagePosition);
+                                                                                              LiveViewData.ImageDataPosition);
 
                                                        using (var bmp = new Bitmap(stream))
                                                        {
@@ -586,8 +587,6 @@ namespace CameraControl.windows
                                                                    new HomogenityEdgeDetector()
                                                                    );
                                                                newbmp = filter.Apply(bmp);
-                                                               //Merge merge=new Merge(newbmp);
-                                                               //newbmp = merge.Apply(bmp);
                                                            }
 
                                                            WriteableBitmap writeableBitmap;
@@ -606,6 +605,27 @@ namespace CameraControl.windows
                                                                    BitmapSourceConvert.ToBitmapSource(newbmp));
                                                            }
                                                            DrawGrid(writeableBitmap);
+                                                           if (cmb_rotation.SelectedIndex != 0)
+                                                           {
+                                                               switch (cmb_rotation.SelectedIndex)
+                                                               {
+                                                                   case 1:
+                                                                       writeableBitmap = writeableBitmap.Rotate(90);
+                                                                       break;
+                                                                   case 2:
+                                                                       writeableBitmap = writeableBitmap.Rotate(180);
+                                                                       break;
+                                                                   case 3:
+                                                                       writeableBitmap = writeableBitmap.Rotate(270);
+                                                                       break;
+                                                                   case 4:
+                                                                       if (LiveViewData.Rotation != 0)
+                                                                           writeableBitmap =
+                                                                               writeableBitmap.RotateFree(
+                                                                                   LiveViewData.Rotation);
+                                                                       break;
+                                                               }
+                                                           }
                                                            writeableBitmap.Freeze();
                                                            image1.BeginInit();
                                                            image1.Source = writeableBitmap;

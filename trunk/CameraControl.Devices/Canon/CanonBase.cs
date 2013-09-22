@@ -354,7 +354,7 @@ namespace CameraControl.Devices.Canon
                         _timer.Start();
                         return null;
                     }
-                    viewData.ImagePosition = 0;
+                    viewData.ImageDataPosition = 0;
                     viewData.ImageData = response.Data;
                 }
                 catch (Exception e)
