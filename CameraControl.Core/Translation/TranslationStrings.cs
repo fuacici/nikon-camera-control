@@ -381,5 +381,6 @@ namespace CameraControl.Core.Translation
         public static string LabelLiveViewRotation = "Live view rotation";
         public static string LabelAutomaticallyGuiding = "Automatically PHD Guiding after photo captured";
         public static string LabelAutoRotate = "Auto rotate";
+        public static string LabelReset = "Reset";
     }
 }
