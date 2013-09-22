@@ -81,5 +81,6 @@
         <Button Content="{T:TranslateExtension ButtonStart}" Grid.Row="2" HorizontalAlignment="Left" Margin="12,0,0,14" Name="btn_shot" Width="75" Height="23" VerticalAlignment="Bottom" Click="btn_shot_Click" />
         <Button Content="{T:TranslateExtension ButtonClose}" Grid.Row="2" HorizontalAlignment="Right" Margin="0,0,12,14" Name="btn_close" Width="75" Click="btn_close_Click" Height="23" VerticalAlignment="Bottom" />
         <Label Content="" Name="lbl_status" Grid.Row="1" />
+        <Button Content="{T:TranslateExtension LabelReset}" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="101,10,0,0" Name="btn_reset" VerticalAlignment="Top" Width="75" Click="btn_reset_Click" />
     </Grid>
 </Controls:MetroWindow>

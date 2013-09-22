@@ -234,6 +234,22 @@ namespace CameraControl.windows
       HelpProvider.Run(HelpSections.Bracketig);
     }
 
+    private void btn_reset_Click(object sender, RoutedEventArgs e)
+    {
+        foreach (var item in collection)
+        {
+            item.IsChecked = false;
+        }
+        foreach (var item in shuttercollection)
+        {
+            item.IsChecked = false;
+        }
+        foreach (var item in presetcollection)
+        {
+            item.IsChecked = false;
+        }
+    }
+
 
   }
 }
