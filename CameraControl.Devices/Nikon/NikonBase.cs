@@ -316,6 +316,23 @@ namespace CameraControl.Devices.Nikon
                 DeviceReady();
                 DeviceName = StillImageDevice.Model;
                 Manufacturer = StillImageDevice.Manufacturer;
+                IsConnected = true;
+                PropertyChanged += NikonBase_PropertyChanged;
+                // load advanced properties in a separated thread to speed up camera connection
+                var thread = new Thread(LoadProperties) {Priority = ThreadPriority.Lowest};
+                thread.Start();
+            }
+            catch (Exception exception)
+            {
+                Log.Error("Error initialize device", exception);
+            }
+            return true;
+        }
+
+        public void LoadProperties()
+        {
+            try
+            {
                 InitIso();
                 InitShutterSpeed();
                 InitFNumber();
@@ -328,17 +345,14 @@ namespace CameraControl.Devices.Nikon
                 InitOther();
                 ReadDeviceProperties(CONST_PROP_BatteryLevel);
                 ReadDeviceProperties(CONST_PROP_ExposureIndicateStatus);
-                IsConnected = true;
-                PropertyChanged += NikonBase_PropertyChanged;
                 CaptureInSdRam = true;
                 AddAditionalProps();
                 _timer.Start();
             }
             catch (Exception exception)
             {
-                Log.Error("Error initialize device", exception);
+                Log.Error("Error load device properties", exception);
             }
-            return true;
         }
 
         public virtual void AddAditionalProps()
