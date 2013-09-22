@@ -156,6 +156,19 @@ namespace CameraControl.windows
             }
         }
 
+        private bool _automaticGuiding;
+        public bool AutomaticGuiding
+        {
+            get { return _automaticGuiding; }
+            set
+            {
+                _automaticGuiding = value;
+                if (_automaticGuiding && PhdType == 0)
+                    PhdType = 1;
+
+                NotifyPropertyChanged("AutomaticGuiding");
+            }
+        }
 
         public BulbWnd()
         {
@@ -172,6 +185,7 @@ namespace CameraControl.windows
             PhdWait = 5;
             CountDown = 0;
             PhotoLeft = 0;
+            AutomaticGuiding = false;
             _captureTimer.Elapsed += _captureTimer_Elapsed;
             _waitTimer.Elapsed += _waitTimer_Elapsed;
             ServiceProvider.Settings.ApplyTheme(this);
@@ -262,6 +276,7 @@ namespace CameraControl.windows
         private void btn_start_Click(object sender, RoutedEventArgs e)
         {
             _photoCount = 0;
+            AutomaticGuiding = false;
             PhotoLeft = NumOfPhotos;
             StartCapture();
         }
@@ -501,6 +516,7 @@ namespace CameraControl.windows
                     if (CameraDevice == null)
                         return;
                     Init();
+                    CameraDevice.PhotoCaptured += CameraDevice_PhotoCaptured;
                     ServiceProvider.ScriptManager.OutPutMessageReceived += ScriptManager_OutPutMessageReceived;
                     Dispatcher.Invoke(new Action(delegate
                                                      {
@@ -520,17 +536,29 @@ namespace CameraControl.windows
                     _captureTimer.Stop();
                     _waitTimer.Stop();
                     ServiceProvider.ScriptManager.OutPutMessageReceived -= ScriptManager_OutPutMessageReceived;
+                    CameraDevice.PhotoCaptured -= CameraDevice_PhotoCaptured;
                     ServiceProvider.ScriptManager.Save(DefaultScript, _defaultScriptFile);
                     Hide();
                     break;
                 case CmdConsts.All_Close:
                     ServiceProvider.ScriptManager.OutPutMessageReceived -= ScriptManager_OutPutMessageReceived;
+                    CameraDevice.PhotoCaptured -= CameraDevice_PhotoCaptured;
                     Dispatcher.Invoke(new Action(delegate
                                                      {
                                                          Hide();
                                                          Close();
                                                      }));
                     break;
+            }
+        }
+
+        void CameraDevice_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
+        {
+            if (AutomaticGuiding && PhdType > 0)
+            {
+
+                var thread = new Thread(() => PhdGuiding(PhdType));
+                thread.Start();
             }
         }
 
@@ -592,6 +620,7 @@ namespace CameraControl.windows
                     CountDown--;
                     Thread.Sleep(1000);
                 }
+                Event = "";
             }
             catch (Exception exception)
             {
