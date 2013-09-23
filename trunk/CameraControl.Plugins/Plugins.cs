@@ -25,6 +25,7 @@ namespace CameraControl.Plugins
                 ServiceProvider.PluginManager.MainWindowPlugins.Add(new SimpleMainWindow());
                 ServiceProvider.PluginManager.ToolPlugins.Add(new PhdPlugin());
                 ServiceProvider.ExternalDeviceManager.ExternalDevices.Add(new SerialPortShutterRelease());
+                ServiceProvider.ExternalDeviceManager.ExternalDevices.Add(new DSUSBShutterRelease());
             }
             catch (Exception exception)
             {

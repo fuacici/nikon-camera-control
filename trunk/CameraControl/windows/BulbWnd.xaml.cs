@@ -296,8 +296,8 @@ namespace CameraControl.windows
                 try
                 {
                     Log.Debug("Bulb capture started");
-                    Event = "Capture";
                     CountDown = CaptureTime;
+                    Event = "Capture";
                     PhotoLeft--;
                     if (DefaultScript.UseExternal)
                     {
@@ -340,9 +340,11 @@ namespace CameraControl.windows
                 {
                     StaticHelper.Instance.SystemMessage = exception.Message;
                     Log.Error("Bulb start", exception);
+                    Event = "Error";
+                    CountDown = 0;
+                    return;
                 }
             } while (retry);
-
             _waitSecs = 0;
             _captureSecs = 0;
             _captureTimer.Start();
