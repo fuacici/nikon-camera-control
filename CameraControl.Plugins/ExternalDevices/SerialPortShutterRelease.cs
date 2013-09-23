@@ -60,7 +60,7 @@ namespace CameraControl.Plugins.ExternalDevices
         public SerialPortShutterRelease()
         {
             Name = "Serial Port Shutter Release";
-            DeviceType=SourceEnum.ExternaExternalShutterRelease;
+            DeviceType = SourceEnum.ExternaExternalShutterRelease;
         }
     }
 }

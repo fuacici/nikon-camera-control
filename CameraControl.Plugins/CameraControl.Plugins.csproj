@@ -104,6 +104,7 @@
     </Compile>
     <Compile Include="Class1.cs" />
     <Compile Include="ExportPlugins\ExportToZip.cs" />
+    <Compile Include="ExternalDevices\DSUSBShutterRelease.cs" />
     <Compile Include="ExternalDevices\SerialPortShutterRelease.cs" />
     <Compile Include="MainWindowPlugins\SimpleMainWindow.xaml.cs">
       <DependentUpon>SimpleMainWindow.xaml</DependentUpon>
