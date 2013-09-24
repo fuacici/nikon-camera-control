@@ -46,7 +46,12 @@ namespace CameraControl.Plugins.ExternalDevices
         #region Implementation of IExternalDevice
 
         public string Name { get; set; }
-        public bool Execute(CustomConfig config)
+        public bool Capture(CustomConfig config)
+        {
+            return true;
+        }
+
+        public bool Focus(CustomConfig config)
         {
             return true;
         }

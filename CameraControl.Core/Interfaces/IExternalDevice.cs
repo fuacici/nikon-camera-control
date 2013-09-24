@@ -6,7 +6,8 @@ namespace CameraControl.Core.Interfaces
     public interface IExternalDevice
     {
         string Name { get; set; }
-        bool Execute(CustomConfig config);
+        bool Capture(CustomConfig config);
+        bool Focus(CustomConfig config);
         bool CanExecute(CustomConfig config);
         UserControl GetConfig(CustomConfig config);
         SourceEnum DeviceType { get; set; }
