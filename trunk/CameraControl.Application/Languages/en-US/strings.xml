@@ -396,4 +396,30 @@
 	<string name="LabelSetCounters">Set Counters</string>
 	<string name="LabelEdgeDetection">Edge detection</string>
 	<string name="LabelLeadingZeros">Counter leading zeros</string>
+	<!--04/07/2013-->
+	<string name="LabelShowFocusRect">Show focus rectangle</string>
+	<string name="LabelEasyLiveViewControl">Easy live view control</string>
+	<string name="LabelExif">Exif</string>
+	<string name="LabelImageProperties">Image Properties</string>
+	<string name="LabelFileName">File Name</string>
+	<string name="LabelSet">Set</string>
+	<string name="LabelTagSelector">Tag selector</string>
+	<string name="LabelComment">Comment</string>
+	<string name="LabelWriteComments">Write comments/tags in downloaded image file</string>
+	<string name="LabelStayOnTop2">Stay on top</string>
+	<string name="LabelWriteSelectedTags">Write tags from tag selector</string>
+	<string name="LabelClearCache">Clear cache</string>
+	<string name="LabelShowMagnifierInFullSccreen">Show magnifier in fullSccreen</string>
+	<string name="LabelDelayImageLoading">Delay image loading</string>
+	<string name="LabelShowOverlayFolder">Show overlay folder</string>
+	<string name="LabelPHDGuiding">PHD Guiding</string>
+	<string name="LabelWaitPHDGuiding">Wait for PHD (sec)</string>
+	<string name="LabelCountDown">Countdown</string>
+	<string name="LabelCurrentEvent">Current event</string>
+	<string name="LabelRemainingCaptures">Captures left</string>
+	<string name="LabelLiveViewRotation">Live view rotation</string>
+	<string name="LabelAutomaticallyGuiding">Automatically PHD Guiding after photo captured</string>
+	<string name="LabelAutoRotate">Auto rotate</string>
+	<string name="LabelReset">Reset</string>
+	<string name="LabelFocus">Focus</string>
 </resources>
