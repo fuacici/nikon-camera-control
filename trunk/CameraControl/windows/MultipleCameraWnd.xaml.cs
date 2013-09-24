@@ -228,5 +228,15 @@ namespace CameraControl.windows
             }
         }
 
+        private void btn_focus_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btn_capture_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
     }
 }

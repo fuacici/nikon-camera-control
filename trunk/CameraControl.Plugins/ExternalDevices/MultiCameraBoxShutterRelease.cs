@@ -9,13 +9,12 @@ using CameraControl.Core.Interfaces;
 
 namespace CameraControl.Plugins.ExternalDevices
 {
-    public class SerialPortShutterRelease : IExternalDevice
+    public class MultiCameraBoxShutterRelease : IExternalDevice
     {
-
-        #region Implementation of IExternalShutterReleaseSource
+        private SerialPort sp = new SerialPort();
+        #region Implementation of IExternalDevice
 
         public string Name { get; set; }
-        
         public bool Capture(CustomConfig config)
         {
             return true;
@@ -23,6 +22,10 @@ namespace CameraControl.Plugins.ExternalDevices
 
         public bool Focus(CustomConfig config)
         {
+            SerialPort serialPort = new SerialPort(config.Get("Port"));
+            serialPort.Open();
+            serialPort.RtsEnable = true;
+            config.AttachedObject = serialPort;
             return true;
         }
 
@@ -39,32 +42,19 @@ namespace CameraControl.Plugins.ExternalDevices
         public SourceEnum DeviceType { get; set; }
         public bool Start(CustomConfig config)
         {
-            if (config.AttachedObject != null)
-                Stop(config);
-            SerialPort serialPort = new SerialPort(config.Get("Port"));
-            serialPort.Open();
-            serialPort.RtsEnable = true;
-            config.AttachedObject = serialPort;
-            return true;
+            throw new NotImplementedException();
         }
 
         public bool Stop(CustomConfig config)
         {
-            if (config.AttachedObject == null)
-                return false;
-            SerialPort serialPort = config.AttachedObject as SerialPort;
-            if (serialPort == null) throw new ArgumentNullException("serialPort");
-            serialPort.RtsEnable = false;
-            serialPort.Close();
-            config.AttachedObject = null;
-            return true;
+            throw new NotImplementedException();
         }
 
         #endregion
 
-        public SerialPortShutterRelease()
+        public MultiCameraBoxShutterRelease()
         {
-            Name = "Serial Port Shutter Release";
+            Name = "Multi camera Shutter Release";
             DeviceType = SourceEnum.ExternaExternalShutterRelease;
         }
     }
