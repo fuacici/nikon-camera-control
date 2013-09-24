@@ -29,6 +29,12 @@ namespace CameraControl.Plugins.ExternalDevices
         public static extern bool DSUSB_ShutterClose();
 
         [DllImport("ShoestringDSUSB_DLL.dll")]
+        public static extern bool DSUSB_FocusAssert();
+
+        [DllImport("ShoestringDSUSB_DLL.dll")]
+        public static extern bool DSUSB_FocusDeassert();
+
+        [DllImport("ShoestringDSUSB_DLL.dll")]
         public static extern int DSUSB_ShutterStatus(ref int status);
 
         [DllImport("ShoestringDSUSB_DLL.dll")]
@@ -62,13 +68,15 @@ namespace CameraControl.Plugins.ExternalDevices
                 throw new Exception(string.Format("Error connect device {0} ", config.Name));
             DSUSB_LEDRed();
             if(!OpenShutter())
-                throw new Exception(string.Format("Error open shutter device {0} ", config.Name)); ;
+                throw new Exception(string.Format("Error open shutter device {0} ", config.Name));
+            DSUSB_FocusAssert();
             DSUSB_LEDGreen();
             return true;
         }
 
         public bool Stop(CustomConfig config)
         {
+            DSUSB_FocusDeassert();
             if (!DSUSB_ShutterClose())
                 throw new Exception(string.Format("Error close shutter device {0}", config.Name));
             DSUSB_LEDRed();
