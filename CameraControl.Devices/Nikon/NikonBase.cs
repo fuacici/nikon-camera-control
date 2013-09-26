@@ -799,7 +799,7 @@ namespace CameraControl.Devices.Nikon
                 {
                     UInt16 val = BitConverter.ToUInt16(result, ((2 * datasize) + 6 + 2) + i);
                     double d = val;
-                    string s = "ƒ/" + (d / 100).ToString("0.0", CultureInfo.CreateSpecificCulture("eu-ES"));
+                    string s = "ƒ/" + (d / 100).ToString("0.0", CultureInfo.CreateSpecificCulture("en-US"));
                     FNumber.AddValues(s, val);
                 }
                 FNumber.SetValue(defval, trigervaluchange);
@@ -865,7 +865,7 @@ namespace CameraControl.Devices.Nikon
                 {
                     Int16 val = BitConverter.ToInt16(result.Data, ((2 * datasize) + 6 + 2) + i);
                     decimal d = val;
-                    string s = Decimal.Round(d / 1000, 1).ToString();
+                    string s = Decimal.Round(d/1000, 1).ToString("0.0", CultureInfo.CreateSpecificCulture("en-US"));
                     if (d > 0)
                         s = "+" + s;
                     ExposureCompensation.AddValues(s, val);
