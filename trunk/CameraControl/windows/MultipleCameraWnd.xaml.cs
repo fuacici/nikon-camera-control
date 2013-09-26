@@ -36,6 +36,10 @@ namespace CameraControl.windows
         private int _secounter = 0;
         private int _photocounter = 0;
 
+        public bool UseExternal { get; set; }
+
+        public CustomConfig SelectedConfig { get; set; }
+
         public MultipleCameraWnd()
         {
             NumOfPhotos = 1;
@@ -101,6 +105,19 @@ namespace CameraControl.windows
 
         private void btn_shot_Click(object sender, RoutedEventArgs e)
         {
+            if(UseExternal)
+            {
+                try
+                {
+                    if (SelectedConfig != null)
+                        ServiceProvider.ExternalDeviceManager.AssertFocus(SelectedConfig);
+                }
+                catch (Exception exception)
+                {
+                    Log.Error("Error set focus",exception);
+                    StaticHelper.Instance.SystemMessage = "Error set focus" + exception.Message;
+                }
+            }
             _secounter = 0;
             _photocounter = 0;
             _timer.Start();
@@ -118,32 +135,50 @@ namespace CameraControl.windows
                 }
                 try
                 {
-                    foreach (ICameraDevice connectedDevice in ServiceProvider.DeviceManager.ConnectedDevices.Where(connectedDevice => connectedDevice.IsConnected && connectedDevice.IsChecked))
+                    if (UseExternal)
                     {
-                        Thread.Sleep(DelaySec);
-                        ICameraDevice device = connectedDevice;
-                        Thread threadcamera = new Thread(new ThreadStart(delegate
-                                                                           {
-                                                                               try
-                                                                               {
-                                                                                   if (DisbleAutofocus &&
-                                                                                       device.GetCapability(CapabilityEnum.CaptureNoAf))
-                                                                                   {
-                                                                                       device.CapturePhotoNoAf();
-                                                                                   }
-                                                                                   else
-                                                                                   {
-                                                                                       CameraHelper.Capture(device);
-                                                                                   }
-                                                                               }
-                                                                               catch (Exception exception)
-                                                                               {
-                                                                                   Log.Error(exception);
-                                                                                   StaticHelper.Instance.SystemMessage =
-                                                                                     exception.Message;
-                                                                               }
-                                                                           }));
-                        threadcamera.Start();
+                        if (SelectedConfig != null)
+                        {
+                            ServiceProvider.ExternalDeviceManager.OpenShutter(SelectedConfig);
+                            Thread.Sleep(300);
+                            ServiceProvider.ExternalDeviceManager.CloseShutter(SelectedConfig);
+                        }
+                    }
+                    else
+                    {
+                        foreach (
+                            ICameraDevice connectedDevice in
+                                ServiceProvider.DeviceManager.ConnectedDevices.Where(
+                                    connectedDevice => connectedDevice.IsConnected && connectedDevice.IsChecked))
+                        {
+                            Thread.Sleep(DelaySec);
+                            ICameraDevice device = connectedDevice;
+                            Thread threadcamera = new Thread(new ThreadStart(delegate
+                                                                                 {
+                                                                                     try
+                                                                                     {
+                                                                                         if (DisbleAutofocus &&
+                                                                                             device.GetCapability(
+                                                                                                 CapabilityEnum.
+                                                                                                     CaptureNoAf))
+                                                                                         {
+                                                                                             device.CapturePhotoNoAf();
+                                                                                         }
+                                                                                         else
+                                                                                         {
+                                                                                             CameraHelper.Capture(device);
+                                                                                         }
+                                                                                     }
+                                                                                     catch (Exception exception)
+                                                                                     {
+                                                                                         Log.Error(exception);
+                                                                                         StaticHelper.Instance.
+                                                                                             SystemMessage =
+                                                                                             exception.Message;
+                                                                                     }
+                                                                                 }));
+                            threadcamera.Start();
+                        }
                     }
                 }
                 catch (Exception exception)
@@ -177,6 +212,11 @@ namespace CameraControl.windows
 
         private void StopCapture()
         {
+            if (UseExternal &&SelectedConfig != null)
+            {
+                ServiceProvider.ExternalDeviceManager.CloseShutter(SelectedConfig);
+                ServiceProvider.ExternalDeviceManager.DeassertFocus(SelectedConfig);
+            }
             StaticHelper.Instance.SystemMessage = "All captures done !";
         }
 
@@ -230,12 +270,14 @@ namespace CameraControl.windows
 
         private void btn_focus_Click(object sender, RoutedEventArgs e)
         {
-
+            if (SelectedConfig != null)
+                ServiceProvider.ExternalDeviceManager.Focus(SelectedConfig);
         }
 
         private void btn_capture_Click(object sender, RoutedEventArgs e)
         {
-
+            if(SelectedConfig!=null)
+                ServiceProvider.ExternalDeviceManager.Capture(SelectedConfig);
         }
 
     }

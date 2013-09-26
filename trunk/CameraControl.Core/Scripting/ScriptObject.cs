@@ -95,7 +95,7 @@ namespace CameraControl.Core.Scripting
                     {
                         if (SelectedConfig != null)
                         {
-                            ServiceProvider.ExternalDeviceManager.Stop(SelectedConfig);
+                            ServiceProvider.ExternalDeviceManager.CloseShutter(SelectedConfig);
                             NikonBase nikonBase = CameraDevice as NikonBase;
                             if (nikonBase != null)
                                 nikonBase.StartEventTimer();
@@ -154,7 +154,7 @@ namespace CameraControl.Core.Scripting
                             NikonBase nikonBase = CameraDevice as NikonBase;
                             if (nikonBase != null)
                                 nikonBase.StopEventTimer();
-                            ServiceProvider.ExternalDeviceManager.Start(SelectedConfig);
+                            ServiceProvider.ExternalDeviceManager.OpenShutter(SelectedConfig);
                         }
                         else
                         {
