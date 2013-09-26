@@ -47,8 +47,8 @@ namespace CameraControlCmd
                 Console.WriteLine("No connected device was found ! Exiting");
                 return 0;
             }
+            Thread.Sleep(1000);
             int exitCodes= ExecuteArgs();
-            Thread.Sleep(500);
             while (CamerasAreBusy())
             {
                 Thread.Sleep(1);
