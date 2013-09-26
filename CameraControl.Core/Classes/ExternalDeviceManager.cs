@@ -67,14 +67,35 @@ namespace CameraControl.Core.Classes
             ExternalDevices = new AsyncObservableCollection<IExternalDevice>();
         }
 
-        public bool Start(CustomConfig config)
+        public bool OpenShutter(CustomConfig config)
         {
-            return (from device in ExternalDevices where device.Name == config.DriverName select device.Start(config)).FirstOrDefault();
+            return (from device in ExternalDevices where device.Name == config.DriverName select device.OpenShutter(config)).FirstOrDefault();
         }
 
-        public bool Stop(CustomConfig config)
+        public bool CloseShutter(CustomConfig config)
         {
-            return (from device in ExternalDevices where device.Name == config.DriverName select device.Stop(config)).FirstOrDefault();
+            return (from device in ExternalDevices where device.Name == config.DriverName select device.CloseShutter(config)).FirstOrDefault();
         }
+
+        public bool AssertFocus(CustomConfig config)
+        {
+            return (from device in ExternalDevices where device.Name == config.DriverName select device.AssertFocus(config)).FirstOrDefault();
+        }
+
+        public bool DeassertFocus(CustomConfig config)
+        {
+            return (from device in ExternalDevices where device.Name == config.DriverName select device.DeassertFocus(config)).FirstOrDefault();
+        }
+
+        public bool Capture(CustomConfig config)
+        {
+            return (from device in ExternalDevices where device.Name == config.DriverName select device.Capture(config)).FirstOrDefault();
+        }
+
+        public bool Focus(CustomConfig config)
+        {
+            return (from device in ExternalDevices where device.Name == config.DriverName select device.Focus(config)).FirstOrDefault();
+        }
+
     }
 }

@@ -37,10 +37,10 @@ namespace CameraControl.Plugins.ExternalDevices
         }
 
         public SourceEnum DeviceType { get; set; }
-        public bool Start(CustomConfig config)
+        public bool OpenShutter(CustomConfig config)
         {
             if (config.AttachedObject != null)
-                Stop(config);
+                CloseShutter(config);
             SerialPort serialPort = new SerialPort(config.Get("Port"));
             serialPort.Open();
             serialPort.RtsEnable = true;
@@ -48,7 +48,7 @@ namespace CameraControl.Plugins.ExternalDevices
             return true;
         }
 
-        public bool Stop(CustomConfig config)
+        public bool CloseShutter(CustomConfig config)
         {
             if (config.AttachedObject == null)
                 return false;
@@ -58,6 +58,16 @@ namespace CameraControl.Plugins.ExternalDevices
             serialPort.Close();
             config.AttachedObject = null;
             return true;
+        }
+
+        public bool AssertFocus(CustomConfig config)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeassertFocus(CustomConfig config)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

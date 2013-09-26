@@ -67,7 +67,7 @@ namespace CameraControl.Plugins.ExternalDevices
         }
 
         public SourceEnum DeviceType { get; set; }
-        public bool Start(CustomConfig config)
+        public bool OpenShutter(CustomConfig config)
         {
             if (!DSUSB_Reset() && !DSUSB_Open())
                 throw new Exception(string.Format("Error connect device {0} ", config.Name));
@@ -79,13 +79,23 @@ namespace CameraControl.Plugins.ExternalDevices
             return true;
         }
 
-        public bool Stop(CustomConfig config)
+        public bool CloseShutter(CustomConfig config)
         {
             DSUSB_FocusDeassert();
             if (!DSUSB_ShutterClose())
                 throw new Exception(string.Format("Error close shutter device {0}", config.Name));
             DSUSB_LEDRed();
             return true;
+        }
+
+        public bool AssertFocus(CustomConfig config)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeassertFocus(CustomConfig config)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

@@ -11,7 +11,9 @@ namespace CameraControl.Core.Interfaces
         bool CanExecute(CustomConfig config);
         UserControl GetConfig(CustomConfig config);
         SourceEnum DeviceType { get; set; }
-        bool Start(CustomConfig config);
-        bool Stop(CustomConfig config);
+        bool OpenShutter(CustomConfig config);
+        bool CloseShutter(CustomConfig config);
+        bool AssertFocus(CustomConfig config);
+        bool DeassertFocus(CustomConfig config);
     }
 }
