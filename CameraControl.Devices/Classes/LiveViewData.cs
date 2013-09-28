@@ -24,5 +24,7 @@ namespace CameraControl.Devices.Classes
         public int ImageDataPosition { get; set; }
 
         public int Rotation { get; set; }
+
+        public bool MovieIsRecording { get; set; }
     }
 }

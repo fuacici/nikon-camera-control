@@ -48,6 +48,7 @@ namespace CameraControl.Devices.Nikon
             viewData.FocusY = ToInt16(result, 30);
 
             viewData.Focused = result[48] != 1;
+            viewData.MovieIsRecording = result[70] == 1;
             
             if (result[37] == 1)
                 viewData.Rotation = -90;

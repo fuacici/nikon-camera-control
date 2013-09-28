@@ -1044,7 +1044,7 @@ namespace CameraControl.Devices.Nikon
                 viewData.Rotation = -90;
             if (result[29] == 2)
                 viewData.Rotation = 90;
-
+            viewData.MovieIsRecording = result[60] == 1;
         }
 
         public override void Focus(int step)
