@@ -440,17 +440,17 @@ namespace CameraControl.windows
 
         private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            if (_retries > 100)
-            {
-                _timer.Stop();
+            //if (_retries > 100)
+            //{
+            //    _timer.Stop();
 
-                Dispatcher.Invoke(new ThreadStart(delegate
-                                                    {
-                                                        image1.Visibility = Visibility.Hidden;
-                                                        //chk_grid.IsChecked = false;
-                                                    }));
-                return;
-            }
+            //    Dispatcher.Invoke(new ThreadStart(delegate
+            //                                        {
+            //                                            image1.Visibility = Visibility.Hidden;
+            //                                            //chk_grid.IsChecked = false;
+            //                                        }));
+            //    return;
+            //}
             if (!_worker.IsBusy)
                 _worker.RunWorkerAsync();
         }
@@ -525,7 +525,7 @@ namespace CameraControl.windows
                 oper_in_progress = false;
                 return;
             }
-
+            Recording = LiveViewData.MovieIsRecording;
             Dispatcher.Invoke(new Action(delegate
                                            {
                                                try
@@ -1501,7 +1501,7 @@ namespace CameraControl.windows
                         return;
                     }
                 }
-                Recording = !Recording;
+                //Recording = !Recording;
             }
             catch (Exception exception)
             {
