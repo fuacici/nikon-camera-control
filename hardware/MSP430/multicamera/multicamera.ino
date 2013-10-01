@@ -24,7 +24,7 @@ void loop() {
     if(inChar== '5'){
       ShutterOpen();
       AssertFocus();
-      delay(300);  
+      delay(3000);  
       DeassertFocus();
       ShutterClose();
     }

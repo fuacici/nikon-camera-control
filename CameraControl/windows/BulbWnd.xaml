@@ -6,7 +6,7 @@
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
                       xmlns:Devices="clr-namespace:CameraControl.Devices;assembly=CameraControl.Devices"
-                      Closed="Window_Closed" Topmost="True" Closing="MetroWindow_Closing">
+                      Closed="Window_Closed" Closing="MetroWindow_Closing" Name="bulbwnd">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -25,7 +25,7 @@
     </Window.Resources>
     <Controls:MetroWindow.WindowCommands>
         <Controls:WindowCommands>
-            <CheckBox Content="{T:TranslateExtension LabelStayOnTop2}" Name="btn_stay_on_top" IsChecked="{Binding Path=Topmost, RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+             <CheckBox Content="{T:TranslateExtension LabelStayOnTop2}" Name="btn_stay_on_top" VerticalAlignment="Center" VerticalContentAlignment="Center" Click="btn_stay_on_top_Click" />
             <Button Content="{T:TranslateExtension ButtonHelp}" Name="btn_help" Click="btn_help_Click" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Controls:WindowCommands>
     </Controls:MetroWindow.WindowCommands>

@@ -306,5 +306,10 @@ namespace CameraControl.windows
             img_preview.Source = tempbitmap;
         }
 
+        private void btn_stay_on_top_Click(object sender, RoutedEventArgs e)
+        {
+            Topmost = (btn_stay_on_top.IsChecked == true);
+        }
+
     }
 }
