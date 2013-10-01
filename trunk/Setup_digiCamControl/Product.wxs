@@ -22,6 +22,9 @@
         <Directory Id="ProgramMenuSubfolder" Name="$(var.ProductName)">
           <Component Id="ApplicationShortcuts" Guid="DA5F3999-0017-45A3-B58D-7C76D010680C" >
             <Shortcut Id="ApplicationShortcut1" Name="$(var.ProductName)" Target="[INSTALLFOLDER]CameraControl.exe" WorkingDirectory="INSTALLFOLDER"/>
+            <Shortcut Id="ApplicationShortcut2" Name="MtpTester" Target="[INSTALLFOLDER]MtpTester.exe" WorkingDirectory="INSTALLFOLDER"/>
+            <Shortcut Id="ApplicationShortcut3" Name="PhotoBooth" Target="[INSTALLFOLDER]PhotoBooth.exe" WorkingDirectory="INSTALLFOLDER"/>
+            <Shortcut Id="ApplicationShortcut4" Name="PluginManager" Target="[INSTALLFOLDER]CameraControl.PluginManager.exe" WorkingDirectory="INSTALLFOLDER"/>
             <RegistryValue Root="HKCU" Key="Software\digiCamControl"
                       Name="installed" Type="integer" Value="1" KeyPath="yes"/>
             <RemoveFolder Id="ProgramMenuSubfolder" On="uninstall"/>
@@ -61,11 +64,23 @@
 
    
     <WixVariable Id="WixUILicenseRtf" Value="$(var.CameraControl.TargetDir)\Licenses\GPLv3LICENSE.rtf" />
-    
-    
-    <UIRef Id="WixUI_Mondo" />
-    <UIRef Id="WixUI_ErrorProgressText" />
 
+    <UI>
+      <UIRef Id="WixUI_Mondo" />
+      <UIRef Id="WixUI_ErrorProgressText" />
+      <Publish Dialog="ExitDialog"
+          Control="Finish"
+          Event="DoAction"
+          Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
+    </UI>
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch digiCamControl" />
+    <Property Id="WixShellExecTarget" Value="[#fil90C442D731CF499C8C02751563DFAB0D]" />
+    <CustomAction Id="LaunchApplication"
+        BinaryKey="WixCA"
+        DllEntry="WixShellExec"
+        Impersonate="yes" />
+    
+    
     <Icon Id="PracticeSharp.exe" SourceFile="$(var.CameraControl.TargetDir)\CameraControl.exe" />
 	</Product>
 </Wix>
