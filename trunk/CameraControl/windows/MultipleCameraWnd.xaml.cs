@@ -280,5 +280,10 @@ namespace CameraControl.windows
                 ServiceProvider.ExternalDeviceManager.Capture(SelectedConfig);
         }
 
+        private void btn_stay_on_top_Click(object sender, RoutedEventArgs e)
+        {
+            Topmost = (btn_stay_on_top.IsChecked == true);
+        }
+
     }
 }

@@ -26,7 +26,7 @@
     </Window.Resources>
     <Controls:MetroWindow.WindowCommands>
         <Controls:WindowCommands>
-            <CheckBox Content="{T:TranslateExtension LabelStayOnTop2}" Name="btn_stay_on_top" IsChecked="{Binding Path=Topmost, RelativeSource={RelativeSource FindAncestor, AncestorType=my:TimeLapseWnd, AncestorLevel=1}}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+            <CheckBox Content="{T:TranslateExtension LabelStayOnTop2}" Name="btn_stay_on_top" VerticalAlignment="Center" VerticalContentAlignment="Center" Click="btn_stay_on_top_Click" />
             <Button Content="{T:TranslateExtension ButtonHelp}" Name="btn_help" Click="btn_help_Click" />
         </Controls:WindowCommands>
     </Controls:MetroWindow.WindowCommands>

@@ -14,8 +14,8 @@ using CameraControl.Core.Translation;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using CameraControl.Devices.Nikon;
+using MahApps.Metro.Controls;
 using Microsoft.Win32;
-using MessageBox = System.Windows.Forms.MessageBox;
 using Timer = System.Timers.Timer;
 
 namespace CameraControl.windows
@@ -23,7 +23,7 @@ namespace CameraControl.windows
     /// <summary>
     /// Interaction logic for BulbWnd.xaml
     /// </summary>
-    public partial class BulbWnd : INotifyPropertyChanged, IWindow
+    public partial class BulbWnd :MetroWindow, INotifyPropertyChanged, IWindow
     {
         private Timer _captureTimer = new Timer(1000);
         private Timer _waitTimer = new Timer(1000);
@@ -524,7 +524,7 @@ namespace CameraControl.windows
                                                      {
                                                          Show();
                                                          Activate();
-                                                         Topmost = true;
+                                                         //Topmost = true;
                                                          //Topmost = false;
                                                          Focus();
                                                      }));
@@ -661,6 +661,12 @@ namespace CameraControl.windows
                 lst_output.Items.Add(msg);
                 lst_output.ScrollIntoView(lst_output.Items[lst_output.Items.Count - 1]);
             }));
+        }
+
+
+        private void btn_stay_on_top_Click(object sender, RoutedEventArgs e)
+        {
+            Topmost = (btn_stay_on_top.IsChecked == true);
         }
     }
 }
