@@ -22,9 +22,10 @@ void loop() {
     if(inChar== '4')
       DeassertFocus();
     if(inChar== '5'){
-      ShutterOpen();
       AssertFocus();
-      delay(3000);  
+      delay(2000);        
+      ShutterOpen();      
+      delay(200);  
       DeassertFocus();
       ShutterClose();
     }

@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
   <?define ProductName="digiCamControl" ?>
   <?define CompanyName="$(fileVersion.CompanyName($(var.CameraControl.TargetPath)))" ?>
   <?define ProductVersion="$(fileVersion.ProductVersion($(var.CameraControl.TargetPath)))" ?>
   <?define ProductUpgradeCode = "161DE505-11F1-4672-BD27-E7B70B37532A"?>
   
-	<Product Id="200a8e01-34cf-43a4-b228-9c4389b874f8" Name="$(var.ProductName)"  Language="1033" Version="$(var.ProductVersion)" Manufacturer="Duka Istvan" UpgradeCode="$(var.ProductUpgradeCode)">
+	<Product Id="*" Name="$(var.ProductName)"  Language="1033" Version="$(var.ProductVersion)" Manufacturer="Duka Istvan" UpgradeCode="$(var.ProductUpgradeCode)">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
-   
+    <MajorUpgrade DowngradeErrorMessage="A newer version of $(var.ProductName) is already installed."
+                  Schedule="afterInstallValidate"
+                  />
+    
     <Media Id="01" Cabinet="Product.cab" EmbedCab="yes" CompressionLevel="high"/>
 
     <Directory Id="TARGETDIR" Name="SourceDir">
@@ -51,11 +54,7 @@
       <!-- Shortcuts and Directories for Shortcuts go here -->
     </Directory>
 
-   
-    <InstallExecuteSequence>
-      <RemoveExistingProducts After="InstallValidate"/>
-    </InstallExecuteSequence>
-    
+  
 		<Feature Id="ProductFeature" Title="Main program" Level="1">
       <ComponentGroupRef Id="SampleGroup"/>
       <ComponentRef Id="ApplicationShortcuts"/>
