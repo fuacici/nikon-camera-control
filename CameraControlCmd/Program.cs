@@ -253,6 +253,9 @@ namespace CameraControlCmd
                 {
                     try
                     {
+                        // prevent use this mode if the camera not support it 
+                        if (ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.CaptureInRam))
+                            ServiceProvider.DeviceManager.SelectedCameraDevice.CaptureInSdRam = false;
                         ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
                     }
                     catch (Exception exception)
@@ -422,9 +425,6 @@ namespace CameraControlCmd
                 if (eventArgs == null)
                     return;
                 CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(eventArgs.CameraDevice);
-                // prevent use this mode if the camera not support it 
-                if (eventArgs.CameraDevice.GetCapability(CapabilityEnum.CaptureInRam))
-                    eventArgs.CameraDevice.CaptureInSdRam = false;
                 if ((property.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
                     return;
                 string fileName = "";
