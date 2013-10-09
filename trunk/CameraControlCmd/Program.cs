@@ -386,7 +386,7 @@ namespace CameraControlCmd
         static void SelectedCameraDevice_CaptureCompleted(object sender, EventArgs e)
         {
             ICameraDevice device = sender as ICameraDevice;
-            device.IsBusy = false;
+            device.IsBusy = false; 
         }
 
         static void Instance_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -422,6 +422,9 @@ namespace CameraControlCmd
                 if (eventArgs == null)
                     return;
                 CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(eventArgs.CameraDevice);
+                // prevent use this mode if the camera not support it 
+                if (eventArgs.CameraDevice.GetCapability(CapabilityEnum.CaptureInRam))
+                    eventArgs.CameraDevice.CaptureInSdRam = false;
                 if ((property.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
                     return;
                 string fileName = "";
