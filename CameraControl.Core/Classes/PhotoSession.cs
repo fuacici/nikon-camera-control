@@ -468,6 +468,21 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        public void SelectLiked()
+        {
+            foreach (FileItem fileItem in Files)
+            {
+                fileItem.IsChecked = fileItem.IsLiked;
+            }
+        }
+
+        public void SelectUnLiked()
+        {
+            foreach (FileItem fileItem in Files)
+            {
+                fileItem.IsChecked = fileItem.IsUnLiked;
+            }
+        }
 
     }
 }

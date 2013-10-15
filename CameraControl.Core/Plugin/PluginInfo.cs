@@ -29,6 +29,8 @@ namespace CameraControl.Core.Plugin
         public string Description { get; set; }
         public string Folder { get; set; }
         public string AssemblyFileName { get; set; }
+        public string LogoFile { get; set; }
+
         [XmlIgnore]
         public bool Enabled { get; set; }
 
@@ -45,6 +47,12 @@ namespace CameraControl.Core.Plugin
                     FileStream myFileStream = new FileStream(filename, FileMode.Open);
                     pluginInfo = (PluginInfo)mySerializer.Deserialize(myFileStream);
                     myFileStream.Close();
+                    if (!string.IsNullOrEmpty(pluginInfo.LogoFile))
+                    {
+                        pluginInfo.LogoFile = Path.Combine(Path.GetDirectoryName(filename), pluginInfo.LogoFile);
+                        if (!File.Exists(pluginInfo.LogoFile))
+                            Log.Debug("Logo file not found" + pluginInfo.LogoFile);
+                    }
                 }
             }
             catch (Exception e)
