@@ -71,6 +71,32 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        private bool _isLiked;
+        public bool IsLiked
+        {
+            get { return _isLiked; }
+            set
+            {
+                _isLiked = value;
+                _isUnLiked = !(_isUnLiked && _isLiked) && _isUnLiked;
+                NotifyPropertyChanged("IsLiked");
+                NotifyPropertyChanged("IsUnLiked");
+            }
+        }
+
+        private bool _isUnLiked;
+        public bool IsUnLiked
+        {
+            get { return _isUnLiked; }
+            set
+            {
+                _isUnLiked = value;
+                _isLiked = !(_isUnLiked && _isLiked) && _isLiked;
+                NotifyPropertyChanged("IsLiked");
+                NotifyPropertyChanged("IsUnLiked");
+            }
+        }
+
         private BitmapImage _bitmapImage;
         [XmlIgnore]
         public BitmapImage BitmapImage
@@ -140,6 +166,8 @@ namespace CameraControl.Core.Classes
             FileName = deviceObject.FileName;
             FileDate = deviceObject.FileDate;
             IsChecked = true;
+            IsLiked = false;
+            IsUnLiked = false;
             if (deviceObject.ThumbData != null && deviceObject.ThumbData.Length > 4)
             {
                 try
@@ -197,7 +225,7 @@ namespace CameraControl.Core.Classes
         }
 
 
-
+        [XmlIgnore]
         public bool IsLoaded { get; set; }
 
         [XmlIgnore]

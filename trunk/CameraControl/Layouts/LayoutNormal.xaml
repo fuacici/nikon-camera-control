@@ -11,41 +11,57 @@
              DataContext="{Binding RelativeSource={RelativeSource Self}}"                    
              d:DesignHeight="484" d:DesignWidth="689">
     <UserControl.Resources>
-        <Style TargetType="{x:Type ListBox}">
-            <!-- Set the ItemTemplate of the ListBox to a DataTemplate which
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />-->
+                <ResourceDictionary Source="../Resources/Icons.xaml" />
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colours.xaml"/>-->
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml"/>-->
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Menu.xaml"/>-->
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />-->
+
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />-->
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type ListBox}">
+                <!-- Set the ItemTemplate of the ListBox to a DataTemplate which
            explains how to display an object of type BitmapImage. -->
-            <Setter Property="ItemTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <StackPanel>
-                            <Grid Width="130" Height="90">
-                            <Rectangle Stroke="Black" Margin="0" />
-                                <Rectangle Stroke="White" Margin="1" />
-                                <Rectangle Stroke="Black" Margin="2" />
-                                <Image Source="{Binding Path=Thumbnail}" ToolTip="{Binding Path=ToolTip}" Stretch="Uniform" Margin="3">
-                                    <!--<Image.InputBindings>
+                <Setter Property="ItemTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Grid Width="130" Height="90">
+                                    <Rectangle Stroke="Black" Margin="0" />
+                                    <Rectangle Stroke="White" Margin="1" />
+                                    <Rectangle Stroke="Black" Margin="2" />
+                                    <Image Source="{Binding Path=Thumbnail}" ToolTip="{Binding Path=ToolTip}" Stretch="Uniform" Margin="3">
+                                        <!--<Image.InputBindings>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=ImageDoubleClickCommand}" />
                                     </Image.InputBindings>-->
-                                </Image>
-							<CheckBox IsChecked="{Binding Path=IsChecked}" Content="{Binding Path=Name}" Margin="3" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom"/>								
-                            </Grid>
-                        </StackPanel>
-                    	<DataTemplate.Triggers>
-                    		<EventTrigger RoutedEvent="FrameworkElement.Loaded"/>
-                    	</DataTemplate.Triggers>
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
+                                    </Image>
+                                    <CheckBox IsChecked="{Binding Path=IsChecked}" Content="{Binding Path=Name}" Margin="3" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom"/>
+                                </Grid>
+                            </StackPanel>
+                            <DataTemplate.Triggers>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded"/>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
 
-            <Setter Property="ItemsPanel">
-                <Setter.Value>
-                    <ItemsPanelTemplate>
-                        <WrapPanel />
-                    </ItemsPanelTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-      <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+                <Setter Property="ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        </ResourceDictionary>
+
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -76,7 +92,24 @@
             </xctk:Zoombox>
             <!--</local:ZoomBorder>-->
             <Controls:ProgressRing IsActive="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading, Mode=TwoWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <ProgressBar Height="20" Margin="150,0,150,0" Name="progressBar1" VerticalAlignment="Bottom" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false}" IsIndeterminate="True" Opacity="0.5" />
+            <ProgressBar Height="20" Margin="150,0,150,0" Name="progressBar1" VerticalAlignment="Bottom" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false}" IsIndeterminate="True" Opacity="0.5" Panel.ZIndex="1" />
+            <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal">
+                <ToggleButton  Height="50" Name="but_unlike" Width="50" Margin="5" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.IsUnLiked}" Style="{DynamicResource MetroCircleToggleButtonStyle}">
+                    <Rectangle Width="20" Height="20">
+                        <Rectangle.Fill>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_thumbs_down}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </ToggleButton>
+                <ToggleButton  Height="50" Name="but_like" Width="50" Margin="5" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.IsLiked}" Style="{DynamicResource MetroCircleToggleButtonStyle}">
+                    <Rectangle Width="20" Height="20">
+                        <Rectangle.Fill>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_thumbs_up}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </ToggleButton>
+
+            </StackPanel>
         </Grid>
         <StackPanel Grid.Row="1" Margin="0,0,190,0">
             <StackPanel  Orientation="Horizontal" Margin="10,0,0,0" HorizontalAlignment="Right">
@@ -99,8 +132,10 @@
                         </MenuItem>
                         <Separator/>
                         <MenuItem Header="Select" >
-                            <MenuItem Header="All" Name="mnu_select_all" Command="{Binding Path=SelectAllCommand}" />
-                            <MenuItem Header="None" Name="mnu_select_none" Command="{Binding Path=SelectNoneCommand}" />
+                            <MenuItem Header="All" Command="{Binding Path=SelectAllCommand}" />
+                            <MenuItem Header="None" Command="{Binding Path=SelectNoneCommand}" />
+                            <MenuItem Header="Liked" Command="{Binding Path=SelectLiked}" />
+                            <MenuItem Header="UnLIked" Command="{Binding Path=SelectUnLiked}" />                            
                         </MenuItem>
                         <Separator/>
                         <MenuItem Header="Delete File(s)" Name="mnu_delete_file" Command="{Binding Path=DeleteItemCommand}" />
