@@ -251,25 +251,42 @@ namespace CameraControl.Core.Classes
             }
         }
 
-        public string Webaddress
+        public List<string> AvaiableWebAddresses
         {
             get
             {
+                var res = new List<string>();
                 try
                 {
-                    var hostEntry = Dns.GetHostEntry(Dns.GetHostName());
-                    var ip = (
-                               from addr in hostEntry.AddressList
-                               where addr.AddressFamily.ToString() == "InterNetwork"
-                               select addr.ToString()
-                             ).FirstOrDefault();
-                    return string.Format("http://{0}:{1}", ip, WebserverPort);
+                    IPAddress localAddr = IPAddress.Parse("127.0.0.1");
+                    var hostEntry = Dns.GetHostEntry(localAddr);
+                    var ips = (
+                                  from addr in hostEntry.AddressList
+                                  where addr.AddressFamily.ToString() == "InterNetwork"
+                                  select addr.ToString()
+                              ).ToList();
+                    foreach (string ip in ips)
+                    {
+                        res.Add(string.Format("http://{0}:{1}", ip, WebserverPort));
+                    }
                 }
                 catch (Exception exception)
                 {
                     Log.Error("Error get web address ", exception);
                 }
-                return "";
+                return res;
+            }
+        }
+
+
+        private string _webaddress;
+        public string Webaddress
+        {
+            get { return _webaddress; }
+            set
+            {
+                _webaddress = value;
+                NotifyPropertyChanged("Webaddress");
             }
         }
 
