@@ -37,6 +37,11 @@ namespace CameraControlCmd
                 return 0;
             }
             InitApplication();
+            Thread.Sleep(1000);
+            while (CamerasAreBusy())
+            {
+                Thread.Sleep(1);
+            }
             if (args != null && args.Count() == 1 && File.Exists(args[0]))
             {
                 RunScript(args[0]);
@@ -47,7 +52,6 @@ namespace CameraControlCmd
                 Console.WriteLine("No connected device was found ! Exiting");
                 return 0;
             }
-            Thread.Sleep(1000);
             int exitCodes= ExecuteArgs();
             while (CamerasAreBusy())
             {

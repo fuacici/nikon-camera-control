@@ -16,6 +16,9 @@ namespace CameraControl.Core.Scripting.ScriptCommands
                 case "iso":
                     {
                         scriptObject.CameraDevice.IsoNumber.SetValue(val);
+                        if (!scriptObject.CameraDevice.IsoNumber.Values.Contains(val))
+                            ServiceProvider.ScriptManager.OutPut(string.Format("Wrong value {1} for property {0}",
+                                                                               property, val));
                     }
                     break;
                 case "aperture":
@@ -25,6 +28,11 @@ namespace CameraControl.Core.Scripting.ScriptCommands
                         {
                             val = "ƒ/" + val;
                         }
+                        if (!val.Contains("."))
+                            val = val + ".0";
+                        if (!scriptObject.CameraDevice.FNumber.Values.Contains(val))
+                            ServiceProvider.ScriptManager.OutPut(string.Format("Wrong value {1} for property {0}",
+                                                                               property, val));
                         scriptObject.CameraDevice.FNumber.SetValue(val);
                     }
                     break;
@@ -39,21 +47,33 @@ namespace CameraControl.Core.Scripting.ScriptCommands
                             val = "Bulb";
                         }
                         scriptObject.CameraDevice.ShutterSpeed.SetValue(val);
+                        if (!scriptObject.CameraDevice.ShutterSpeed.Values.Contains(val))
+                            ServiceProvider.ScriptManager.OutPut(string.Format("Wrong value {1} for property {0}",
+                                                                               property, val));
                     }
                     break;
                 case "ec":
                     {
                         scriptObject.CameraDevice.ExposureCompensation.SetValue(val);
+                        if (!scriptObject.CameraDevice.ExposureCompensation.Values.Contains(val))
+                            ServiceProvider.ScriptManager.OutPut(string.Format("Wrong value {1} for property {0}",
+                                                                               property, val));
                     }
                     break;
                 case "wb":
                     {
                         scriptObject.CameraDevice.WhiteBalance.SetValue(val);
+                        if (!scriptObject.CameraDevice.WhiteBalance.Values.Contains(val))
+                            ServiceProvider.ScriptManager.OutPut(string.Format("Wrong value {1} for property {0}",
+                                                                               property, val));
                     }
                     break;
                 case "cs":
                     {
                         scriptObject.CameraDevice.CompressionSetting.SetValue(val);
+                        if (!scriptObject.CameraDevice.CompressionSetting.Values.Contains(val))
+                            ServiceProvider.ScriptManager.OutPut(string.Format("Wrong value {1} for property {0}",
+                                                                               property, val));
                     }
                     break;
                 default:

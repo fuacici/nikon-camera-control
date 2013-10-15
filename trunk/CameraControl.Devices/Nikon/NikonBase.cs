@@ -306,7 +306,7 @@ namespace CameraControl.Devices.Nikon
         {
             try
             {
-                IsBusy = false;
+                IsBusy = true;
                 Capabilities.Add(CapabilityEnum.CaptureInRam);
                 Capabilities.Add(CapabilityEnum.CaptureNoAf);
                 StillImageDevice = new StillImageDevice(deviceDescriptor.WpdId);
@@ -353,6 +353,7 @@ namespace CameraControl.Devices.Nikon
             {
                 Log.Error("Error load device properties", exception);
             }
+            IsBusy = false;
         }
 
         public virtual void AddAditionalProps()
