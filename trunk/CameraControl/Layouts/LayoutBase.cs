@@ -313,6 +313,26 @@ namespace CameraControl.Layouts
 
                         }
                         break;
+                    case WindowsCmdConsts.Like_Image:
+                        if (ImageLIst.SelectedItem != null)
+                        {
+                            FileItem item = ImageLIst.SelectedItem as FileItem;
+                            if (item != null)
+                            {
+                                item.IsLiked = !item.IsLiked;
+                            }
+                        }
+                        break;
+                    case WindowsCmdConsts.Unlike_Image:
+                        if (ImageLIst.SelectedItem != null)
+                        {
+                            FileItem item = ImageLIst.SelectedItem as FileItem;
+                            if (item != null)
+                            {
+                                item.IsUnLiked = !item.IsUnLiked;
+                            }
+                        }
+                        break;
                     case WindowsCmdConsts.Del_Image:
                         {
                             DeleteItem(null);
