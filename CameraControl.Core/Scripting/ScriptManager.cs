@@ -88,6 +88,7 @@ namespace CameraControl.Core.Scripting
         {
             if (CurrentScript != null)
             {
+                CurrentScript.Variabiles["timelong"] = DateTime.Now.ToString("HH:mm:ss");
                 CurrentScript.Variabiles["time"] = DateTime.Now.ToString("HH:mm");
                 CurrentScript.Variabiles["day"] = DateTime.Now.Day.ToString();
                 CurrentScript.Variabiles["cameraccount"] = ServiceProvider.DeviceManager.ConnectedDevices.Count.ToString();

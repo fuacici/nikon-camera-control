@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Xml;
 using CameraControl.Devices.Classes;
 
@@ -37,8 +38,9 @@ namespace CameraControl.Core.Scripting.ScriptCommands
 
         public override bool Execute(ScriptObject scriptObject)
         {
-            int loopcount = 0;
-            int.TryParse(scriptObject.ParseString(this.LoadedParams["loopcount"]), out loopcount);
+            int loopcount ;
+            if (!int.TryParse(scriptObject.ParseString(this.LoadedParams["loopcount"]), out loopcount))
+                loopcount = int.MaxValue;
             for (int i = 0; i < loopcount; i++)
             {
                 scriptObject.Variabiles["loopno"] = i.ToString();
@@ -47,6 +49,8 @@ namespace CameraControl.Core.Scripting.ScriptCommands
                 scriptObject.ExecuteCommands(Commands);
                 if (scriptObject.ExitLoop)
                     break;
+                // prevent CPU overloading
+                Thread.Sleep(200);
             }
             scriptObject.ExitLoop = false;
             return true;
