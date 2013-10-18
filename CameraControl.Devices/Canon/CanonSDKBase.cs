@@ -451,8 +451,22 @@ namespace CameraControl.Devices.Canon
         void _camera_Shutdown(object sender, EventArgs e)
         {
             IsConnected = false;
-            OnCameraDisconnected(this, new DisconnectCameraEventArgs { StillImageDevice = null });
+            OnCameraDisconnected(this, new DisconnectCameraEventArgs { StillImageDevice = null,EosCamera = Camera});
         }
+
+        public override void Close()
+        {
+            HaveLiveView = false;
+            Camera.Error -= _camera_Error;
+            Camera.Shutdown -= _camera_Shutdown;
+            Camera.LiveViewPaused -= Camera_LiveViewPaused;
+            Camera.LiveViewUpdate -= Camera_LiveViewUpdate;
+            Camera.PictureTaken -= Camera_PictureTaken;
+            Camera.PropertyChanged -= Camera_PropertyChanged;
+            Camera.Dispose();
+            Camera = null;
+        }
+
 
         void _camera_Error(object sender, EosExceptionEventArgs e)
         {
