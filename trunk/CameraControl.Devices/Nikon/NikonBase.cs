@@ -317,6 +317,7 @@ namespace CameraControl.Devices.Nikon
                 DeviceName = StillImageDevice.Model;
                 Manufacturer = StillImageDevice.Manufacturer;
                 IsConnected = true;
+                CaptureInSdRam = true;
                 PropertyChanged += NikonBase_PropertyChanged;
                 // load advanced properties in a separated thread to speed up camera connection
                 var thread = new Thread(LoadProperties) {Priority = ThreadPriority.Lowest};
@@ -345,7 +346,6 @@ namespace CameraControl.Devices.Nikon
                 InitOther();
                 ReadDeviceProperties(CONST_PROP_BatteryLevel);
                 ReadDeviceProperties(CONST_PROP_ExposureIndicateStatus);
-                CaptureInSdRam = true;
                 AddAditionalProps();
                 _timer.Start();
             }

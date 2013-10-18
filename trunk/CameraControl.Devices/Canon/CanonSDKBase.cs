@@ -254,7 +254,45 @@ namespace CameraControl.Devices.Canon
                                                          {0xEB,"-3 2/3"},
                                                          {0xE8,"-3"},
                                                      };
+        protected Dictionary<uint, string> _wbTable = new Dictionary<uint, string>()
+                  {
+                    {0, "Auto"},
+                    {1, "Daylight"},
+                    {2, "Cloudy"},
+                    {3, "Tungsten"},
+                    {4, "Fluorescent"},
+                    {5, "Flash"},
+                    {6, "Manual"},
+                    {8, "Shade"},
+                    {9, "Color temperature"},
+                    {10, "Custom white balance: PC-1"},
+                    {11, "Custom white balance: PC-2"},
+                    {12, "Custom white balance: PC-3"},
+                    {15, "Manual 2"},
+                    {16, "Manual 3"},
+                    {18, "Manual 4"},
+                    {19, "Manual 5"},
+                    {20, "Custom white balance: PC-4"},
+                    {21, "Custom white balance: PC-5"},
+                  };
 
+        protected Dictionary<uint, string> _meteringTable = new Dictionary<uint, string>()
+                                                                {
+                                                                    {1,"Spot metering"},
+                                                                    {2,"Evaluative metering"},
+                                                                    {3,"Partial metering"},
+                                                                    {4,"Spot metering"},
+                                                                    {5,"Center-weighted averaging metering"},
+                                                                    {0xFFFFFFFF,"Not valid/no settings changes"},
+                                                                };
+        protected Dictionary<uint, string> _focusModeTable = new Dictionary<uint, string>()
+                                                                {
+                                                                    {0,"One-Shot AF"},
+                                                                    {1,"AI Servo AF"},
+                                                                    {2,"AI Focus AF"},
+                                                                    {3,"Manual Focus"},
+                                                                    {0xFFFFFFFF,"Not valid/no settings changes"},
+                                                                };
         public CanonSDKBase()
         {
 
@@ -289,6 +327,7 @@ namespace CameraControl.Devices.Canon
         {
             try
             {
+                IsBusy = true;
                 Camera = camera;
                 Camera.IsErrorTolerantMode = true;
                 DeviceName = Camera.DeviceDescription;
@@ -299,19 +338,11 @@ namespace CameraControl.Devices.Canon
                 Camera.LiveViewPaused += Camera_LiveViewPaused;
                 Camera.LiveViewUpdate += Camera_LiveViewUpdate;
                 Camera.PictureTaken += Camera_PictureTaken;
-                Camera.PropertyChanged += Camera_PropertyChanged;
                 Capabilities.Add(CapabilityEnum.Bulb);
                 Capabilities.Add(CapabilityEnum.LiveView);
                 Capabilities.Add(CapabilityEnum.CaptureInRam);
-                CaptureInSdRam = true;
-                InitMode();
-                InitShutterSpeed();
-                InitFNumber();
-                InitIso();
-                InitEc();
-                InitOther();
-                Battery = (int)Camera.BatteryLevel;
                 IsConnected = true;
+                LoadProperties();
                 return true; 
             }
             catch (Exception exception)
@@ -321,6 +352,22 @@ namespace CameraControl.Devices.Canon
             }
         }
 
+        public void LoadProperties()
+        {
+            InitMode();
+            InitShutterSpeed();
+            InitFNumber();
+            InitIso();
+            InitEc();
+            InitWb();
+            InitMetering();
+            InitFocus();
+            InitOther();
+            Battery = (int)Camera.BatteryLevel;
+            IsBusy = false;
+            Camera.PropertyChanged += Camera_PropertyChanged;
+            CaptureInSdRam = true;
+        }
 
         private void InitOther()
         {
@@ -354,6 +401,9 @@ namespace CameraControl.Devices.Canon
                         break;
                     case Edsdk.PropID_AEMode:
                         Mode.SetValue((uint)Camera.GetProperty(Edsdk.PropID_AEMode), false);
+                        break;
+                    case Edsdk.PropID_WhiteBalance:
+                        WhiteBalance.SetValue(Camera.GetProperty(Edsdk.PropID_WhiteBalance), false);
                         break;
                     case Edsdk.PropID_Tv:
                         ReInitShutterSpeed();
@@ -712,6 +762,99 @@ namespace CameraControl.Devices.Canon
             catch (Exception exception)
             {
                 Log.Debug("Error get EC", exception);
+            }
+        }
+
+        private void InitWb()
+        {
+            WhiteBalance = new PropertyValue<long>();
+            WhiteBalance.ValueChanged += WhiteBalance_ValueChanged;
+            try
+            {
+                foreach (KeyValuePair<uint, string> keyValuePair in _wbTable)
+                {
+                    WhiteBalance.AddValues(keyValuePair.Value, (int)keyValuePair.Key);
+                }
+                WhiteBalance.IsEnabled = true;
+                WhiteBalance.SetValue((long)Camera.GetProperty(Edsdk.PropID_WhiteBalance), false);
+            }
+            catch (Exception exception)
+            {
+                Log.Debug("Error get EC", exception);
+            }
+        }
+
+        void WhiteBalance_ValueChanged(object sender, string key, long val)
+        {
+            try
+            {
+                Camera.SetProperty(Edsdk.PropID_WhiteBalance, val);
+            }
+            catch (Exception exception)
+            {
+                Log.Debug("Error set WB to camera", exception);
+            }            
+        }
+
+        private void InitMetering()
+        {
+            ExposureMeteringMode = new PropertyValue<int>();
+            ExposureMeteringMode.ValueChanged += ExposureMeteringMode_ValueChanged;
+            try
+            {
+                foreach (KeyValuePair<uint, string> keyValuePair in _meteringTable)
+                {
+                    ExposureMeteringMode.AddValues(keyValuePair.Value, (int)keyValuePair.Key);
+                }
+                ExposureMeteringMode.IsEnabled = true;
+                ExposureMeteringMode.SetValue((int) Camera.GetProperty(Edsdk.PropID_MeteringMode), false);
+            }
+            catch (Exception exception)
+            {
+                Log.Debug("Error get metering", exception);
+            }
+        }
+
+        private void InitFocus()
+        {
+            FocusMode = new PropertyValue<long>();
+            FocusMode.ValueChanged += FocusMode_ValueChanged;
+            try
+            {
+                foreach (KeyValuePair<uint, string> keyValuePair in _focusModeTable)
+                {
+                    FocusMode.AddValues(keyValuePair.Value, (int)keyValuePair.Key);
+                }
+                FocusMode.IsEnabled = true;
+                FocusMode.SetValue((int)Camera.GetProperty(Edsdk.PropID_AFMode), false);
+            }
+            catch (Exception exception)
+            {
+                Log.Debug("Error get focus mode", exception);
+            }
+        }
+
+        void FocusMode_ValueChanged(object sender, string key, long val)
+        {
+            try
+            {
+                Camera.SetProperty(Edsdk.PropID_AFMode, val);
+            }
+            catch (Exception exception)
+            {
+                Log.Debug("Error set focus mode to camera", exception);
+            }
+        }
+
+        void ExposureMeteringMode_ValueChanged(object sender, string key, int val)
+        {
+            try
+            {
+                Camera.SetProperty(Edsdk.PropID_MeteringMode, val);
+            }
+            catch (Exception exception)
+            {
+                Log.Debug("Error set metering mode to camera", exception);
             }
         }
 
