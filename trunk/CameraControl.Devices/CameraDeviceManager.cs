@@ -144,24 +144,32 @@ namespace CameraControl.Devices
         {
             try
             {
-                _framework = new EosFramework();
+                if (_framework == null)
+                {
+                    _framework = new EosFramework();
+                    _framework.CameraAdded += _framework_CameraAdded;
+                }
                 AddCanonCameras();
-                _framework.CameraAdded += _framework_CameraAdded;
             }
             catch (Exception exception)
             {
                 Log.Error("Unable init canon driver", exception);
-            }   
+            }
         }
 
         private void _framework_CameraAdded(object sender, EventArgs e)
         {
-            AddCanonCameras();
+            //AddCanonCameras();
         }
 
+        public IEnumerable<EosCamera> GetEosCameras()
+        {
+            using (EosCameraCollection cameras = _framework.GetCameraCollection())
+                return cameras.ToArray();
+        }
         private void AddCanonCameras()
         {
-            foreach (EosCamera eosCamera in _framework.GetCameraCollection())
+            foreach (EosCamera eosCamera in GetEosCameras())
             {
                 bool shouldbeadded = true;
                 foreach (ICameraDevice device in ConnectedDevices)
@@ -177,15 +185,18 @@ namespace CameraControl.Devices
                     }
                 }
 
-                if(shouldbeadded)
+                if (shouldbeadded)
                 {
                     Log.Debug("New canon camera found !");
                     CanonSDKBase camera = new CanonSDKBase();
+                    DeviceDescriptor descriptor = new DeviceDescriptor {EosCamera = eosCamera};
+                    descriptor.CameraDevice = camera;
                     camera.Init(eosCamera);
                     ConnectedDevices.Add(camera);
                     NewCameraConnected(camera);
+                    _deviceEnumerator.Add(descriptor);
                 }
-           }
+            }
             Thread.Sleep(2500);
         }
 
@@ -218,6 +229,10 @@ namespace CameraControl.Devices
             if (e.StillImageDevice != null)
             {
                 DisconnectCamera(e.StillImageDevice);
+            }
+            if (e.EosCamera != null)
+            {
+                DisconnectCamera(e.EosCamera);
             }
             OnCameraDisconnected((ICameraDevice)sender);
         }
@@ -358,6 +373,28 @@ namespace CameraControl.Devices
                 Log.Debug("Name :" + descriptor.CameraDevice.DeviceName);
                 PortableDeviceCollection.Instance.RemoveDevice(device.DeviceId);
                 device.IsConnected = false;
+                if (SelectedCameraDevice == descriptor.CameraDevice)
+                {
+                    SelectedCameraDevice = ConnectedDevices.Count > 0 ? ConnectedDevices[0] : new NotConnectedCameraDevice();
+                }
+                descriptor.CameraDevice.Close();
+                _deviceEnumerator.Remove(descriptor);
+                _deviceEnumerator.RemoveDisconnected();
+            }
+            RemoveDisconnected();
+        }
+
+        private void DisconnectCamera(EosCamera device)
+        {
+            DeviceDescriptor descriptor = _deviceEnumerator.GetByEosCamera(device);
+            if (descriptor != null)
+            {
+                descriptor.CameraDevice.PhotoCaptured -= cameraDevice_PhotoCaptured;
+                descriptor.CameraDevice.CameraDisconnected -= cameraDevice_CameraDisconnected;
+                ConnectedDevices.Remove(descriptor.CameraDevice);
+                StaticHelper.Instance.SystemMessage = "Camera disconnected :" + descriptor.CameraDevice.DeviceName;
+                Log.Debug("===========Camera disconnected==============");
+                Log.Debug("Name :" + descriptor.CameraDevice.DeviceName);
                 if (SelectedCameraDevice == descriptor.CameraDevice)
                 {
                     SelectedCameraDevice = ConnectedDevices.Count > 0 ? ConnectedDevices[0] : new NotConnectedCameraDevice();
