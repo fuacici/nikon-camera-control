@@ -254,7 +254,7 @@ namespace CameraControl.windows
             _captureSecs++;
             Message = string.Format("Capture time {0}/{1} sec. Photo done {2}/{3}", _captureSecs, CaptureTime, _photoCount,
                                     NumOfPhotos);
-            if (_captureSecs > CaptureTime)
+            if (_captureSecs >= CaptureTime)
             {
                 _captureTimer.Stop();
                 StopCapture();

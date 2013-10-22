@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using CameraControl.Classes;
@@ -142,11 +143,7 @@ namespace CameraControl.Layouts
             List<FileItem> filestodelete = new List<FileItem>();
             try
             {
-                foreach (FileItem fileItem in ServiceProvider.Settings.DefaultSession.Files)
-                {
-                    if (fileItem.IsChecked || !File.Exists(fileItem.FileName))
-                        filestodelete.Add(fileItem);
-                }
+                filestodelete.AddRange(ServiceProvider.Settings.DefaultSession.Files.Where(fileItem => fileItem.IsChecked || !File.Exists(fileItem.FileName)));
 
                 if (ServiceProvider.Settings.SelectedBitmap != null && ServiceProvider.Settings.SelectedBitmap.FileItem != null &&
                     filestodelete.Count == 0)
@@ -170,10 +167,9 @@ namespace CameraControl.Layouts
                         if (File.Exists(fileItem.FileName))
                             FileSystem.DeleteFile(fileItem.FileName, UIOption.OnlyErrorDialogs,
                                                   RecycleOption.SendToRecycleBin);
-                        else
-                        {
-                            ServiceProvider.Settings.DefaultSession.Files.Remove(fileItem);
-                        }
+                        fileItem.RemoveThumbs();
+                        ServiceProvider.Settings.DefaultSession.Files.Remove(fileItem);
+
                     }
                     if (selectedindex < ImageLIst.Items.Count)
                     {
