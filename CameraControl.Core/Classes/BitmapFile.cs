@@ -178,7 +178,7 @@ namespace CameraControl.Core.Classes
             FileItem = item;
             IsLoaded = false;
             FullResLoaded = false;
-            if (DisplayImage == null)
+            //if (DisplayImage == null)
                 DisplayImage = new WriteableBitmap(FileItem.Thumbnail);
         }
 
