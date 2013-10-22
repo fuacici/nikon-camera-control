@@ -372,20 +372,23 @@ namespace CameraControl.Devices.Canon
         private void InitOther()
         {
             LiveViewImageZoomRatio = new PropertyValue<int> { Name = "LiveViewImageZoomRatio" };
-            LiveViewImageZoomRatio.AddValues("All", 0);
-            LiveViewImageZoomRatio.AddValues("25%", 1);
-            LiveViewImageZoomRatio.AddValues("33%", 2);
-            LiveViewImageZoomRatio.AddValues("50%", 3);
-            LiveViewImageZoomRatio.AddValues("66%", 4);
-            LiveViewImageZoomRatio.AddValues("100%", 5);
-            LiveViewImageZoomRatio.AddValues("200%", 6);
+            LiveViewImageZoomRatio.AddValues("All", 1);
+            LiveViewImageZoomRatio.AddValues("5x", 5);
+            LiveViewImageZoomRatio.AddValues("10x", 10);
             LiveViewImageZoomRatio.SetValue("All");
             LiveViewImageZoomRatio.ValueChanged += LiveViewImageZoomRatio_ValueChanged;
         }
 
         void LiveViewImageZoomRatio_ValueChanged(object sender, string key, int val)
         {
-            
+            try
+            {
+                Camera.SetProperty(Edsdk.PropID_Evf_Zoom, val);
+            }
+            catch (Exception exception)
+            {
+                Log.Error("Error set property sP", exception);
+            }
         }
 
 
@@ -406,10 +409,16 @@ namespace CameraControl.Devices.Canon
                         WhiteBalance.SetValue(Camera.GetProperty(Edsdk.PropID_WhiteBalance), false);
                         break;
                     case Edsdk.PropID_Tv:
-                        ReInitShutterSpeed();
+                        ShutterSpeed.SetValue(Camera.GetProperty(Edsdk.PropID_Tv), false);
                         break;
                     case Edsdk.PropID_Av:
-                        ReInitFNumber(true);
+                        FNumber.SetValue((int) Camera.GetProperty(Edsdk.PropID_Av), false);
+                        break;
+                    case Edsdk.PropID_MeteringMode:
+                        ExposureMeteringMode.SetValue((int)Camera.GetProperty(Edsdk.PropID_MeteringMode), false);
+                        break;
+                    case Edsdk.PropID_AFMode:
+                        FocusMode.SetValue((int)Camera.GetProperty(Edsdk.PropID_AFMode), false);
                         break;
                     case Edsdk.PropID_BatteryLevel:
                         Battery = (int) Camera.BatteryLevel;
@@ -984,7 +993,7 @@ namespace CameraControl.Devices.Canon
         {
             Camera.ResetShutterButton();
             //if (!Camera.IsInLiveViewMode) 
-                Camera.StartLiveView();
+            Camera.StartLiveView(EosLiveViewAutoFocus.LiveMode);
         }
 
         public override void StopLiveView()

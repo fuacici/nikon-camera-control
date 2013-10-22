@@ -221,7 +221,7 @@ namespace CameraControl
                     !ServiceProvider.WindowsManager.Get(typeof(MultipleCameraWnd)).IsVisible &&
                     !ServiceProvider.Settings.UseExternalViewer)
                 {
-                    if (ServiceProvider.Settings.DelayImageLoading && (_lastLoadTime-DateTime.Now).TotalSeconds<4)
+                    if (ServiceProvider.Settings.DelayImageLoading && (DateTime.Now - _lastLoadTime).TotalSeconds < 4)
                     {
                         _selectiontimer.Stop();
                         _selectiontimer.Start();

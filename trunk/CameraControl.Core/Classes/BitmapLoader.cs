@@ -7,10 +7,11 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CameraControl.Devices;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.Core.Classes
 {
-    public class BitmapLoader
+    public class BitmapLoader : BaseFieldClass 
     {
         private const int LargeThumbSize = 1600;
         private const int SmallThumbSize = 255;
@@ -78,6 +79,8 @@ namespace CameraControl.Core.Classes
             set { _noImageThumbnail = value; }
         }
 
+
+
         public void GenerateCache(FileItem fileItem)
         {
             if (fileItem == null)
@@ -89,49 +92,87 @@ namespace CameraControl.Core.Classes
             GetMetadata(fileItem);
             try
             {
-                BitmapDecoder bmpDec = BitmapDecoder.Create(new Uri(fileItem.FileName),
-                                                            BitmapCreateOptions.None,
-                                                            BitmapCacheOption.Default);
-                WriteableBitmap writeableBitmap = BitmapFactory.ConvertToPbgra32Format(bmpDec.Frames[0]);
-
-                fileItem.FileInfo.Width = writeableBitmap.PixelWidth;
-                fileItem.FileInfo.Height = writeableBitmap.PixelHeight;
-
-                double dw = (double) LargeThumbSize/writeableBitmap.PixelWidth;
-                writeableBitmap = writeableBitmap.Resize((int) (writeableBitmap.PixelWidth*dw),
-                                                         (int) (writeableBitmap.PixelHeight*dw),
-                                                         WriteableBitmapExtensions.Interpolation.Bilinear);
-                LoadHistogram(fileItem, writeableBitmap);
-                Save2Jpg(writeableBitmap, fileItem.LargeThumb);
-                dw = (double) SmallThumbSize/writeableBitmap.PixelWidth;
-                writeableBitmap = writeableBitmap.Resize((int) (writeableBitmap.PixelWidth*dw),
-                                                         (int) (writeableBitmap.PixelHeight*dw),
-                                                         WriteableBitmapExtensions.Interpolation.Bilinear);
-                
-                if (fileItem.FileInfo.ExifTags.ContainName("Exif.Image.Orientation") && !fileItem.IsRaw)
+                using (MemoryStream fileStream = new MemoryStream(File.ReadAllBytes(fileItem.FileName)))
                 {
-                    if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "bottom, right")
-                        writeableBitmap = writeableBitmap.Rotate(180);
+                    BitmapDecoder bmpDec = BitmapDecoder.Create(fileStream,
+                                                                BitmapCreateOptions.PreservePixelFormat,
+                                                                BitmapCacheOption.OnLoad);
 
-                    //if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "top, left")
-                    //    writeableBitmap = writeableBitmap.Rotate(180);
+                    bmpDec.DownloadProgress += (o, args) => StaticHelper.Instance.LoadingProgress = args.Progress;
 
-                    if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "right, top")
-                        writeableBitmap = writeableBitmap.Rotate(90);
+                    fileItem.FileInfo.Width = bmpDec.Frames[0].PixelWidth;
+                    fileItem.FileInfo.Height = bmpDec.Frames[0].PixelHeight;
 
-                    if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "left, bottom")
-                        writeableBitmap = writeableBitmap.Rotate(270);
+                    double dw = (double) LargeThumbSize/bmpDec.Frames[0].PixelWidth;
+                    WriteableBitmap writeableBitmap =
+                        BitmapFactory.ConvertToPbgra32Format(GetBitmapFrame(bmpDec.Frames[0],
+                                                                            (int) (bmpDec.Frames[0].PixelWidth*dw),
+                                                                            (int) (bmpDec.Frames[0].PixelHeight*dw),
+                                                                            BitmapScalingMode.HighQuality));
+
+                    LoadHistogram(fileItem, writeableBitmap);
+                    Save2Jpg(writeableBitmap, fileItem.LargeThumb);
+
+                    dw = (double) SmallThumbSize/writeableBitmap.PixelWidth;
+                    writeableBitmap = writeableBitmap.Resize((int) (writeableBitmap.PixelWidth*dw),
+                                                             (int) (writeableBitmap.PixelHeight*dw),
+                                                             WriteableBitmapExtensions.Interpolation.Bilinear);
+
+                    if (fileItem.FileInfo.ExifTags.ContainName("Exif.Image.Orientation") && !fileItem.IsRaw)
+                    {
+                        if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "bottom, right")
+                            writeableBitmap = writeableBitmap.Rotate(180);
+
+                        //if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "top, left")
+                        //    writeableBitmap = writeableBitmap.Rotate(180);
+
+                        if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "right, top")
+                            writeableBitmap = writeableBitmap.Rotate(90);
+
+                        if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "left, bottom")
+                            writeableBitmap = writeableBitmap.Rotate(270);
+                    }
+
+                    Save2Jpg(writeableBitmap, fileItem.SmallThumb);
+                    fileItem.Thumbnail = LoadSmallImage(fileItem);
+                    fileItem.IsLoaded = true;
+                    fileItem.SaveInfo();
                 }
-
-                Save2Jpg(writeableBitmap, fileItem.SmallThumb);
-                fileItem.Thumbnail = LoadSmallImage(fileItem);
-                fileItem.IsLoaded = true;
-                fileItem.SaveInfo();
             }
             catch (Exception exception)
             {
                 Log.Error("Error generating cache", exception);
             }
+        }
+
+
+        private static BitmapFrame GetBitmapFrame(BitmapFrame photo, int width, int height, BitmapScalingMode mode)
+        {
+            TransformedBitmap target = new TransformedBitmap(
+                photo,
+                new ScaleTransform(
+                    width / photo.Width * 96 / photo.DpiX,
+                    height / photo.Height * 96 / photo.DpiY,
+                    0, 0));
+            BitmapFrame thumbnail = BitmapFrame.Create(target);
+            BitmapFrame newPhoto = Resize(thumbnail, width, height, mode);
+
+            return newPhoto;
+        }
+
+        private static BitmapFrame Resize(BitmapFrame photo, int width, int height, BitmapScalingMode scalingMode)
+        {
+            DrawingGroup group = new DrawingGroup();
+            RenderOptions.SetBitmapScalingMode(group, scalingMode);
+            group.Children.Add(new ImageDrawing(photo, new Rect(0, 0, width, height)));
+            DrawingVisual targetVisual = new DrawingVisual();
+            DrawingContext targetContext = targetVisual.RenderOpen();
+            targetContext.DrawDrawing(group);
+            RenderTargetBitmap target = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Default);
+            targetContext.Close();
+            target.Render(targetVisual);
+            BitmapFrame targetFrame = BitmapFrame.Create(target);
+            return targetFrame;
         }
 
         public static void Save2Jpg(BitmapSource source, string filename)
@@ -366,7 +407,7 @@ namespace CameraControl.Core.Classes
             {
                 DrawRect(bitmap, (int) (focuspoint.X*dw), (int) (focuspoint.Y*dh),
                          (int) ((focuspoint.X + focuspoint.Width)*dw),
-                         (int)((focuspoint.Y + focuspoint.Height) * dh), Colors.Aqua, fileItem.FileInfo.Width / 1000 * 2);
+                         (int)((focuspoint.Y + focuspoint.Height) * dh), Colors.Aqua, fileItem.FileInfo.Width / 1000);
             }
             bitmap.Unlock();
         }
@@ -375,7 +416,7 @@ namespace CameraControl.Core.Classes
         {
             for (int i = 0; i < line; i++)
             {
-                bmp.DrawRectangle(x1 - i, y1 - i, x2 - i, y2 - i, color);
+                bmp.DrawRectangle(x1 + i, y1 + i, x2 - i, y2 - i, color);
             }
         }
 
