@@ -54,9 +54,9 @@
             </Button>-->
         </Controls:WindowCommands>
     </Controls:MetroWindow.WindowCommands>
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <Classes:Settings/>
-    </Window.DataContext>
+    </Window.DataContext>-->
 
     <Controls:MetroWindow.Flyouts>
       <Controls:FlyoutsControl>
