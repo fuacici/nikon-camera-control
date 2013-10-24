@@ -62,7 +62,9 @@ namespace Canon.Eos.Framework
                         ZommBounds = image.ZoomBounds,
                         ImagePosition = image.ImagePosition,
                         //Histogram = image.Histogram,
+                        
                     });
+                    
                 }
             }
             catch (EosException eosEx)
