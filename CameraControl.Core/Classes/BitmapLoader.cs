@@ -11,8 +11,9 @@ using CameraControl.Devices.Classes;
 
 namespace CameraControl.Core.Classes
 {
-    public class BitmapLoader : BaseFieldClass 
+    public class BitmapLoader : BaseFieldClass
     {
+        private const int MaxThumbSize = 1920*2;
         private const int LargeThumbSize = 1600;
         private const int SmallThumbSize = 255;
 
@@ -160,6 +161,16 @@ namespace CameraControl.Core.Classes
             return newPhoto;
         }
 
+        private static BitmapFrame Rotate(BitmapFrame photo, double angle, BitmapScalingMode mode)
+        {
+            TransformedBitmap target = new TransformedBitmap(
+                photo,
+                new RotateTransform(angle, photo.PixelWidth / 2, photo.PixelHeight / 2));
+            BitmapFrame thumbnail = BitmapFrame.Create(target);
+            BitmapFrame newPhoto = Resize(thumbnail, photo.PixelWidth, photo.PixelHeight, mode);
+            return newPhoto;
+        }
+
         private static BitmapFrame Resize(BitmapFrame photo, int width, int height, BitmapScalingMode scalingMode)
         {
             DrawingGroup group = new DrawingGroup();
@@ -300,6 +311,9 @@ namespace CameraControl.Core.Classes
 
         public WriteableBitmap LoadImage(FileItem fileItem, bool fullres)
         {
+            if (ServiceProvider.Settings.LowMemoryUsage)
+                fullres = false;
+
             if (fileItem == null)
                 return null;
             if (!File.Exists(fileItem.LargeThumb) && !fullres)
@@ -314,17 +328,26 @@ namespace CameraControl.Core.Classes
             {
                 BitmapDecoder bmpDec = BitmapDecoder.Create(new Uri(fullres ? fileItem.FileName : fileItem.LargeThumb),
                                                             BitmapCreateOptions.None,
-                                                            BitmapCacheOption.Default);
+                                                            BitmapCacheOption.OnLoad);
 
-                WriteableBitmap bitmap = BitmapFactory.ConvertToPbgra32Format(bmpDec.Frames[0]);
-                
+                double dw = (double)MaxThumbSize / bmpDec.Frames[0].PixelWidth;
+                WriteableBitmap bitmap;
+                if(fullres)
+                bitmap =
+                    BitmapFactory.ConvertToPbgra32Format(GetBitmapFrame(bmpDec.Frames[0],
+                                                                        (int)(bmpDec.Frames[0].PixelWidth * dw),
+                                                                        (int)(bmpDec.Frames[0].PixelHeight * dw),
+                                                                        BitmapScalingMode.NearestNeighbor));
+                else
+                    bitmap = BitmapFactory.ConvertToPbgra32Format(bmpDec.Frames[0]);
+
                 if (ServiceProvider.Settings.ShowFocusPoints)
                     DrawFocusPoints(fileItem, bitmap);
 
                 if (fileItem.FileInfo.ExifTags.ContainName("Exif.Image.Orientation") && !fileItem.IsRaw)
                 {
                     if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "bottom, right")
-                        bitmap = bitmap.Rotate(180);
+                        bitmap =  bitmap.Rotate(180);
 
                     //if (fileItem.FileInfo.ExifTags["Exif.Image.Orientation"] == "top, left")
                     //    bitmap = bitmap.Rotate(180);
