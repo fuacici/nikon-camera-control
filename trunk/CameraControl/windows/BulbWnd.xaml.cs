@@ -252,8 +252,6 @@ namespace CameraControl.windows
         void _captureTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             _captureSecs++;
-            Message = string.Format("Capture time {0}/{1} sec. Photo done {2}/{3}", _captureSecs, CaptureTime, _photoCount,
-                                    NumOfPhotos);
             if (_captureSecs >= CaptureTime)
             {
                 _captureTimer.Stop();
@@ -270,6 +268,8 @@ namespace CameraControl.windows
                     _waitTimer.Start();
                 }
             }
+//            Message = string.Format("Capture time {0}/{1} sec. Photo done {2}/{3}", _captureSecs, CaptureTime, _photoCount,
+//                        NumOfPhotos);
             CountDown--;
         }
 
