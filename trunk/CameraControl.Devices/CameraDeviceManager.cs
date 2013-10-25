@@ -170,6 +170,7 @@ namespace CameraControl.Devices
             using (EosCameraCollection cameras = _framework.GetCameraCollection())
                 return cameras.ToArray();
         }
+
         private void AddCanonCameras()
         {
             foreach (EosCamera eosCamera in GetEosCameras())
