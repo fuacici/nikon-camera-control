@@ -333,6 +333,7 @@ namespace CameraControl.Devices.Canon
                 DeviceName = Camera.DeviceDescription;
                 Manufacturer = "Canon Inc.";
                 SerialNumber = Camera.SerialNumber;
+                Camera.SetEventHandlers();
                 Camera.Error += _camera_Error;
                 Camera.Shutdown += _camera_Shutdown;
                 Camera.LiveViewPaused += Camera_LiveViewPaused;
@@ -363,6 +364,7 @@ namespace CameraControl.Devices.Canon
             InitMetering();
             InitFocus();
             InitOther();
+            InitCompression();
             Battery = (int)Camera.BatteryLevel;
             IsBusy = false;
             Camera.PropertyChanged += Camera_PropertyChanged;
@@ -378,6 +380,22 @@ namespace CameraControl.Devices.Canon
             LiveViewImageZoomRatio.SetValue("All");
             LiveViewImageZoomRatio.ValueChanged += LiveViewImageZoomRatio_ValueChanged;
         }
+
+        private void InitCompression()
+        {
+            CompressionSetting = new PropertyValue<int>();
+            CompressionSetting.AddValues("Jpeg", (int)EosImageFormat.Jpeg);
+            CompressionSetting.AddValues("Crw", (int) EosImageFormat.Crw);
+            CompressionSetting.AddValues("Cr2", (int)EosImageFormat.Cr2);
+            CompressionSetting.SetValue((int)Camera.ImageQuality.PrimaryImageFormat);
+            CompressionSetting.ValueChanged += new PropertyValue<int>.ValueChangedEventHandler(CompressionSetting_ValueChanged);
+        }
+
+        void CompressionSetting_ValueChanged(object sender, string key, int val)
+        {
+            
+        }
+
 
         void LiveViewImageZoomRatio_ValueChanged(object sender, string key, int val)
         {
@@ -419,6 +437,9 @@ namespace CameraControl.Devices.Canon
                         break;
                     case Edsdk.PropID_AFMode:
                         FocusMode.SetValue((int)Camera.GetProperty(Edsdk.PropID_AFMode), false);
+                        break;
+                    case Edsdk.PropID_ImageQuality:
+                        CompressionSetting.SetValue((int)Camera.ImageQuality.PrimaryImageFormat);
                         break;
                     case Edsdk.PropID_BatteryLevel:
                         Battery = (int) Camera.BatteryLevel;
