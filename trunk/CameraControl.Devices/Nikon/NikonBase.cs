@@ -44,6 +44,7 @@ namespace CameraControl.Devices.Nikon
         public const int CONST_PROP_WhiteBalance = 0x5005;
         public const int CONST_PROP_ExposureProgramMode = 0x500E;
         public const int CONST_PROP_ExposureBiasCompensation = 0x5010;
+        public const int CONST_PROP_DateTime = 0x5011;
         public const int CONST_PROP_BatteryLevel = 0x5001;
         public const int CONST_PROP_LiveViewImageZoomRatio = 0xD1A3;
         public const int CONST_PROP_AFModeSelect = 0xD161;
@@ -1405,6 +1406,40 @@ namespace CameraControl.Devices.Nikon
                 default:
                     //throw new ArgumentOutOfRangeException("cameraFieldType");
                     break;
+            }
+        }
+
+        private DateTime _dateTime;
+
+        public override DateTime DateTime
+        {
+            get { return _dateTime; }
+            set
+            {
+                _dateTime = value;
+                try
+                {
+                    byte[] dateval = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                                      CONST_PROP_DateTime);
+                    string datestring = _dateTime.ToString("yyyyMMddTHHmmss");
+                    List<byte> vals = new List<byte>();
+                    List<byte> valsnew = new List<byte>();
+                    valsnew.Add(16);
+                    vals.AddRange(Encoding.UTF8.GetBytes(datestring));
+                    foreach (byte val in vals)
+                    {
+                        valsnew.Add(val);
+                        valsnew.Add(0);
+                    }
+                    valsnew.Add(0);
+                    valsnew.Add(0);
+                    SetProperty(CONST_CMD_SetDevicePropValue, valsnew.ToArray(), CONST_PROP_DateTime, -1);
+                }
+                catch (Exception exception)
+                {
+                    Log.Error("Error set camera DateTime", exception);
+                }
+                NotifyPropertyChanged("DateTime");
             }
         }
 

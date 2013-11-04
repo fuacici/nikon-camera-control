@@ -143,6 +143,17 @@ namespace CameraControl.Devices
             }
         }
 
+        private DateTime _dateTime;
+        public virtual DateTime DateTime
+        {
+            get { return _dateTime; }
+            set
+            {
+                _dateTime = value;
+                NotifyPropertyChanged("DateTime");
+            }
+        }
+
         private string _deviceName;
 
         private bool _isChecked;
