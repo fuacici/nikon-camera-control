@@ -322,6 +322,17 @@ namespace CameraControl.Devices.Canon
             }
         }
 
+        private DateTime _dateTime;
+
+        public override DateTime DateTime
+        {
+            get { return _dateTime; }
+            set
+            {
+                _dateTime = value;
+                NotifyPropertyChanged("DateTime");
+            }
+        }
 
         public bool Init(EosCamera camera)
         {

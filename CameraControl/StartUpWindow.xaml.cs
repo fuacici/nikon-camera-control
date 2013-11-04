@@ -116,8 +116,8 @@ namespace CameraControl
             ServiceProvider.DeviceManager.DisableNativeDrivers = ServiceProvider.Settings.DisableNativeDrivers;
             ServiceProvider.DeviceManager.ConnectToCamera();
             Thread.Sleep(500);
-            StartApplication();
             Dispatcher.Invoke(new Action(Hide));
+            StartApplication();
         }
 
         private void StartApplication()

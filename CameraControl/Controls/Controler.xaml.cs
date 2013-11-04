@@ -147,5 +147,11 @@ namespace CameraControl.Controls
       Dispatcher.Invoke(new Action(() => btn_useasmaster.IsEnabled = true));
     }
 
+    private void btn_dateTime_Click(object sender, RoutedEventArgs e)
+    {
+        if (ServiceProvider.DeviceManager.SelectedCameraDevice != null)
+            ServiceProvider.DeviceManager.SelectedCameraDevice.DateTime = DateTime.Now;
+    }
+
   }
 }
