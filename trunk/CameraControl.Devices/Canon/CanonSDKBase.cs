@@ -17,24 +17,6 @@ namespace CameraControl.Devices.Canon
     public class CanonSDKBase : BaseMTPCamera
     {
         
-        //public const int CONST_CMD_CANON_EOS_RemoteRelease = 0x910F;
-        //public const int CONST_CMD_CANON_EOS_BulbStart = 0x9125;
-        //public const int CONST_CMD_CANON_EOS_BulbEnd = 0x9126;
-        //public const int CONST_CMD_CANON_EOS_SetEventMode = 0x9115;
-        //public const int CONST_CMD_CANON_EOS_SetRemoteMode = 0x9114;
-        //public const int CONST_CMD_CANON_EOS_GetEvent = 0x9116;
-        //public const int CONST_CMD_CANON_EOS_DoAf = 0x9154;
-        //public const int CONST_CMD_CANON_EOS_GetViewFinderData = 0x9153;
-        //public const int CONST_CMD_CANON_EOS_GetObjectInfo = 0x9103;
-
-        //public const int CONST_CMD_CANON_EOS_SetDevicePropValueEx = 0x9110;
-        //public const int CONST_CMD_CANON_EOS_RequestDevicePropValue = 0x9109;
-
-        //public const int CONST_PROP_EOS_ShutterSpeed = 0xD102;
-        //public const int CONST_PROP_EOS_LiveView = 0xD1B0;
-
-        //public const int CONST_Event_CANON_EOS_PropValueChanged = 0xc189 ;
-        //public const int CONST_Event_CANON_EOS_ObjectAddedEx = 0xc181;
 
         private bool _eventIsbusy = false;
 
@@ -122,15 +104,15 @@ namespace CameraControl.Devices.Canon
 
         protected Dictionary<int, string> _apertureTable = new Dictionary<int, string>
                                                                {
-                                                                   {0x08, "1"},
+                                                                   {0x08, "1.0"},
                                                                    {0x0B, "1.1"},
                                                                    {0x0C, "1.2"},
-                                                                   {0x0D, "1 (1/3)"},
+                                                                   {0x0D, "1.0 (1/3)"},
                                                                    {0x10, "1.4"},
                                                                    {0x13, "1.6"},
                                                                    {0x14, "1.8"},
                                                                    {0x15, "1.8 (1/3)"},
-                                                                   {0x18, "2"},
+                                                                   {0x18, "2.0"},
                                                                    {0x1B, "2.2"},
                                                                    {0x1C, "2.5"},
                                                                    {0x1D, "2.5 (1/3)"},
@@ -138,43 +120,43 @@ namespace CameraControl.Devices.Canon
                                                                    {0x23, "3.2"},
                                                                    {0x24, "3.5"},
                                                                    {0x25, "3.5 (1/3)"},
-                                                                   {0x28, "4"},
+                                                                   {0x28, "4.0"},
                                                                    {0x2B, "4.5"},
                                                                    {0x2C, "4.5"},
-                                                                   {0x2D, "5"},
+                                                                   {0x2D, "5.0"},
                                                                    {0x30, "5.6"},
                                                                    {0x33, "6.3"},
                                                                    {0x34, "6.7"},
                                                                    {0x35, "7.1"},
-                                                                   {0x38, "8"},
-                                                                   {0x3B, "9"},
+                                                                   {0x38, "8.0"},
+                                                                   {0x3B, "9.0"},
                                                                    {0x3C, "9.5"},
-                                                                   {0x3D, "10"},
-                                                                   {0x40, "11"},
-                                                                   {0x43, "13 (1/3)"},
-                                                                   {0x44, "13"},
-                                                                   {0x45, "14"},
-                                                                   {0x48, "16"},
-                                                                   {0x4B, "18"},
-                                                                   {0x4C, "19"},
-                                                                   {0x4D, "20"},
-                                                                   {0x50, "22"},
-                                                                   {0x53, "25"},
-                                                                   {0x54, "27"},
-                                                                   {0x55, "29"},
-                                                                   {0x58, "32"},
-                                                                   {0x5B, "36"},
-                                                                   {0x5C, "38"},
-                                                                   {0x5D, "40"},
-                                                                   {0x60, "45"},
-                                                                   {0x63, "51"},
-                                                                   {0x64, "54"},
-                                                                   {0x65, "57"},
-                                                                   {0x68, "64"},
-                                                                   {0x6B, "72"},
-                                                                   {0x6C, "76"},
-                                                                   {0x6D, "80"},
-                                                                   {0x70, "91"},
+                                                                   {0x3D, "10.0"},
+                                                                   {0x40, "11.0"},
+                                                                   {0x43, "13.0 (1/3)"},
+                                                                   {0x44, "13.0"},
+                                                                   {0x45, "14.0"},
+                                                                   {0x48, "16.0"},
+                                                                   {0x4B, "18.0"},
+                                                                   {0x4C, "19.0"},
+                                                                   {0x4D, "20.0"},
+                                                                   {0x50, "22.0"},
+                                                                   {0x53, "25.0"},
+                                                                   {0x54, "27.0"},
+                                                                   {0x55, "29.0"},
+                                                                   {0x58, "32.0"},
+                                                                   {0x5B, "36.0"},
+                                                                   {0x5C, "38.0"},
+                                                                   {0x5D, "40.0"},
+                                                                   {0x60, "45.0"},
+                                                                   {0x63, "51.0"},
+                                                                   {0x64, "54.0"},
+                                                                   {0x65, "57.0"},
+                                                                   {0x68, "64.0"},
+                                                                   {0x6B, "72.0"},
+                                                                   {0x6C, "76.0"},
+                                                                   {0x6D, "80.0"},
+                                                                   {0x70, "91.0"},
                                                                };
 
         protected Dictionary<uint, string> _exposureModeTable = new Dictionary<uint, string>()
@@ -228,29 +210,29 @@ namespace CameraControl.Devices.Canon
 
         protected Dictionary<uint, string> _ec = new Dictionary<uint, string>()
                                                      {
-                                                         {0x18,"+3"},
+                                                         {0x18,"+3.0"},
                                                          {0x15,"+2 2/3"},
-                                                         {0x14,"+2 1/2"},
+                                                         {0x14,"+2.5"},
                                                          {0x13,"+2 1/3"},
-                                                         {0x10,"+2"},
+                                                         {0x10,"+2.0"},
                                                          {0x0D,"+1 2/3"},
-                                                         {0x0C,"+1 1/2"},
+                                                         {0x0C,"+1.5"},
                                                          {0x0B,"+1 1/3"},
                                                          {0x08,"+1"},
                                                          {0x05,"+2/3"},
-                                                         {0x04,"+1/2"},
+                                                         {0x04,"+0.5"},
                                                          {0x03,"+1/3"},
-                                                         {0x00,"0"},
+                                                         {0x00,"0.0"},
                                                          {0xFD,"-1/3"},
-                                                         {0xFC,"-1/2"},
+                                                         {0xFC,"-0.5"},
                                                          {0xFB,"-2/3"},
                                                          {0xF8,"-1"},
                                                          {0xF5,"-1 1/3"},
-                                                         {0xF4,"-1 1/3"},
+                                                         {0xF4,"-1.5"},
                                                          {0xF3,"-1 2/3"},
                                                          {0xF0,"-2"},
                                                          {0xED,"-2 1/3"},
-                                                         {0xEC,"-2 1/2"},
+                                                         {0xEC,"-2.5"},
                                                          {0xEB,"-3 2/3"},
                                                          {0xE8,"-3"},
                                                      };
@@ -433,6 +415,8 @@ namespace CameraControl.Devices.Canon
                         break;
                     case Edsdk.PropID_AEMode:
                         Mode.SetValue((uint)Camera.GetProperty(Edsdk.PropID_AEMode), false);
+                        ReInitFNumber(true);
+                        ReInitShutterSpeed();
                         break;
                     case Edsdk.PropID_WhiteBalance:
                         WhiteBalance.SetValue(Camera.GetProperty(Edsdk.PropID_WhiteBalance), false);
@@ -677,14 +661,14 @@ namespace CameraControl.Devices.Canon
                 {
                     foreach (KeyValuePair<int, string> keyValuePair in _apertureTable)
                     {
-                        FNumber.AddValues(keyValuePair.Value, keyValuePair.Key);
+                        FNumber.AddValues("ƒ/" + keyValuePair.Value, keyValuePair.Key);
                     }
                 }
                 else
                 {
                     foreach (KeyValuePair<int, string> keyValuePair in _apertureTable.Where(keyValuePair => data.NumElements > 0).Where(keyValuePair => ArrayContainValue(data.PropDesc, keyValuePair.Key)))
                     {
-                        FNumber.AddValues(keyValuePair.Value, keyValuePair.Key);
+                        FNumber.AddValues("ƒ/" + keyValuePair.Value, keyValuePair.Key);
                     }
                 }
 
