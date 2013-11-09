@@ -6,10 +6,10 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 using CameraControl.Core.Classes.Queue;
-using CameraControl.Core.Exif.EXIF;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using FreeImageAPI;
+using Newtonsoft.Json;
 
 namespace CameraControl.Core.Classes
 {
@@ -54,6 +54,7 @@ namespace CameraControl.Core.Classes
 
         public string Name { get; set; }
 
+        [JsonIgnore]
         [XmlIgnore]
         public string ToolTip
         {
@@ -98,6 +99,7 @@ namespace CameraControl.Core.Classes
         }
 
         private BitmapImage _bitmapImage;
+        [JsonIgnore]
         [XmlIgnore]
         public BitmapImage BitmapImage
         {
@@ -117,6 +119,7 @@ namespace CameraControl.Core.Classes
         }
 
         private DeviceObject _deviceObject;
+        [JsonIgnore]
         [XmlIgnore]
         public DeviceObject DeviceObject
         {
@@ -129,6 +132,7 @@ namespace CameraControl.Core.Classes
         }
 
         private ICameraDevice _device;
+        [JsonIgnore]
         [XmlIgnore]
         public ICameraDevice Device
         {
@@ -141,6 +145,7 @@ namespace CameraControl.Core.Classes
         }
 
         private FileItemType _itemType;
+        [JsonIgnore]
         [XmlIgnore]
         public FileItemType ItemType
         {
@@ -224,10 +229,11 @@ namespace CameraControl.Core.Classes
             set { _id = value; }
         }
 
-
+        [JsonIgnore]
         [XmlIgnore]
         public bool IsLoaded { get; set; }
-
+        
+        [JsonIgnore]
         [XmlIgnore]
         public FileInfo FileInfo { get; set; }
 
@@ -259,6 +265,7 @@ namespace CameraControl.Core.Classes
 
 
         private BitmapSource _thumbnail;
+        [JsonIgnore]
         [XmlIgnore]
         public BitmapSource Thumbnail
         {

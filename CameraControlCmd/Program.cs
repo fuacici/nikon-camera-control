@@ -93,7 +93,7 @@ namespace CameraControlCmd
                 ServiceProvider.ScriptManager.Execute(scriptObject);
                 while (ServiceProvider.ScriptManager.IsBusy)
                 {
-                    
+                    Thread.Sleep(1);
                 }
             }
             else
@@ -253,23 +253,7 @@ namespace CameraControlCmd
                         ServiceProvider.DeviceManager.SelectedCameraDevice.ExposureCompensation.SetValue( _arguments["ec"]);
                     }
                 }
-                if (_arguments.Contains("capture"))
-                {
-                    try
-                    {
-                        // prevent use this mode if the camera not support it 
-                        if (ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.CaptureInRam))
-                            ServiceProvider.DeviceManager.SelectedCameraDevice.CaptureInSdRam = false;
-                        ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
-                    }
-                    catch (Exception exception)
-                    {
-                        ServiceProvider.DeviceManager.SelectedCameraDevice.IsBusy = false;
-                        Console.WriteLine("Error occurred while capturing photo "+exception);
-                        return 1;
-                    }
-                    return 0;
-                }
+                
                 if (_arguments.Contains("comment"))
                 {
                     Thread.Sleep(200);
@@ -288,6 +272,14 @@ namespace CameraControlCmd
                     ServiceProvider.DeviceManager.SelectedCameraDevice.SetCameraField(CameraFieldType.Copyright, _arguments["copyright"]);
                     Console.WriteLine("Copyright was set");
                 }
+
+                if (_arguments.Contains("capture"))
+                {
+                    new Thread(Capture).Start();
+                    Thread.Sleep(200);
+                    return 0;
+                }
+
                 if (_arguments.Contains("capturenoaf"))
                 {
                     try
@@ -327,6 +319,24 @@ namespace CameraControlCmd
                 return 1;
             }
             return 0;
+        }
+
+        private static void Capture()
+        {
+            try
+            {
+                // prevent use this mode if the camera not support it 
+                if (ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.CaptureInRam))
+                    ServiceProvider.DeviceManager.SelectedCameraDevice.CaptureInSdRam = false;
+                ServiceProvider.DeviceManager.SelectedCameraDevice.CaptureInSdRam = true;
+                ServiceProvider.DeviceManager.SelectedCameraDevice.IsBusy = true;
+                ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
+            }
+            catch (Exception exception)
+            {
+                ServiceProvider.DeviceManager.SelectedCameraDevice.IsBusy = false;
+                Console.WriteLine("Error occurred while capturing photo " + exception);
+            }
         }
 
         private static void ShowHelp()
