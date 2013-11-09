@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
+using Newtonsoft.Json;
 
 namespace CameraControl.Core.Classes
 {
@@ -12,9 +13,11 @@ namespace CameraControl.Core.Classes
     {
         private object _locker = new object();
         private string _lastFilename = null;
-
+        
+        [JsonIgnore]
         [XmlIgnore]
         public List<string> SupportedExtensions = new List<string> { ".jpg", ".nef", ".tif", ".png", ".cr2" };
+        [JsonIgnore]
         [XmlIgnore]
         public List<string> RawExtensions = new List<string> { ".cr2", ".nef" };
 

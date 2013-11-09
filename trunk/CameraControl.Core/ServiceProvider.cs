@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using CameraControl.Core.Classes;
@@ -15,6 +16,7 @@ namespace CameraControl.Core
     public class ServiceProvider : BaseFieldClass
     {
         private static readonly ILog _log = LogManager.GetLogger("DCC");
+        private static PipeServerT _pipeServer;
 
         public static string AppName = "digiCamControl";
 
@@ -47,7 +49,8 @@ namespace CameraControl.Core
             Branding = new Branding();
             ScriptManager = new ScriptManager();
             PluginManager = new PluginManager();
-
+            _pipeServer = new PipeServerT();
+            _pipeServer.Listen("DCCPipe");
         }
 
         static void Log_LogError(LogEventArgs e)
@@ -90,5 +93,6 @@ namespace CameraControl.Core
 
             }
         }
+
     }
 }
