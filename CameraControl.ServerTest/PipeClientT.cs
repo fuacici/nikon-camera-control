@@ -2,6 +2,7 @@
 using System.IO;
 using System.IO.Pipes;
 using System.Diagnostics;
+using System.Windows;
 
 namespace CameraControl.ServerTest
 {
@@ -28,6 +29,7 @@ namespace CameraControl.ServerTest
             }
             catch (Exception oEX)
             {
+                MessageBox.Show("Error :" + oEX.Message);
                 Debug.WriteLine(oEX.Message);
             }
             return "";

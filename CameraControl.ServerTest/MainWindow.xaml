@@ -16,7 +16,12 @@
                         <RowDefinition Height="32" />
                         <RowDefinition Height="181" />
                     </Grid.RowDefinitions>
-                    <TextBox Grid.Row="1" Name="txt_mess" Margin="3" />
+                    <ComboBox Grid.Row="1" Name="txt_mess" Margin="3" IsEditable="True">
+                        <ComboBoxItem Content=":;request:session" />
+                        <ComboBoxItem Content=":;request:session;format:json" />
+                        <ComboBoxItem Content=":;request:cameras" />
+                        <ComboBoxItem Content=":;request:cameras;format:json" />
+                    </ComboBox>
                     <Label Content="Message" />
                     <Button Content="Send" Grid.Column="1" Grid.Row="1" Name="btn_sen" Margin="3" Click="btn_sen_Click" />
                     <Label Content="Response" Grid.Row="2" Name="label1" />
