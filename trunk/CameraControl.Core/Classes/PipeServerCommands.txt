@@ -1,2 +1,4 @@
 ﻿:;request:session
 :;request:session;format:json
+:;request:cameras
+:;request:cameras;format:json

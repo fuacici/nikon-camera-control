@@ -86,6 +86,18 @@ namespace CameraControl.Core.Classes
                                                                          new JsonSerializerSettings() {})
                                            : GetSessionData();
                             }
+                        case "cameras":
+                            {
+                                if(ServiceProvider.DeviceManager.ConnectedDevices.Count==0)
+                                {
+                                    return ":;response:error;message:no camera is connected";
+                                }
+                                return lines.ContainsKey("format") && lines["format"] == "json"
+                                           ? JsonConvert.SerializeObject(ServiceProvider.DeviceManager.ConnectedDevices,
+                                                                         Formatting.Indented,
+                                                                         new JsonSerializerSettings() { })
+                                           : GetCamerasData();
+                            }
                         default:
                             return ":;response:error;message:unknown request";
 
@@ -136,6 +148,20 @@ namespace CameraControl.Core.Classes
                     var value = prop.GetValue(ServiceProvider.Settings.DefaultSession, null);
                     res += string.Format(";{0}:{1}", prop.Name.ToLower(), value);
                 }
+            }
+            return res;
+        }
+
+        private string GetCamerasData()
+        {
+            string res = ":;response:cameras;count:" + ServiceProvider.DeviceManager.ConnectedDevices.Count;
+            for (int i = 0; i < ServiceProvider.DeviceManager.ConnectedDevices.Count; i++)
+            {
+                CameraProperty property =
+                    ServiceProvider.Settings.CameraProperties.Get(ServiceProvider.DeviceManager.ConnectedDevices[i]);
+                res += string.Format(";serial{0}:{1};model{0}:{2};name{0}:{3}", i + 1,
+                                     ServiceProvider.DeviceManager.ConnectedDevices[i].SerialNumber,
+                                     ServiceProvider.DeviceManager.ConnectedDevices[i].DeviceName, property.DeviceName);
             }
             return res;
         }

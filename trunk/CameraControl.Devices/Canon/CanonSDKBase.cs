@@ -325,7 +325,6 @@ namespace CameraControl.Devices.Canon
                 Camera.IsErrorTolerantMode = true;
                 DeviceName = Camera.DeviceDescription;
                 Manufacturer = "Canon Inc.";
-                SerialNumber = Camera.SerialNumber;
                 Camera.SetEventHandlers();
                 Camera.Error += _camera_Error;
                 Camera.Shutdown += _camera_Shutdown;
@@ -362,6 +361,7 @@ namespace CameraControl.Devices.Canon
             IsBusy = false;
             Camera.PropertyChanged += Camera_PropertyChanged;
             CaptureInSdRam = true;
+            SerialNumber = Camera.SerialNumber;
         }
 
         private void InitOther()

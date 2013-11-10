@@ -1,17 +1,20 @@
 
 const int focusPin =  P1_6;
 const int capturePin =  P1_7;
-
-void setup() {
+  
+// the setup routine runs once when you press reset:
+void setup() {    
   pinMode(focusPin, OUTPUT); 
-  pinMode(capturePin, OUTPUT); 
+  pinMode(capturePin, OUTPUT);   
   Reset();
-  // initialize serial:
-  Serial.begin(9600);
+  // initialize the digital pin as an output.
+  pinMode(P2_5, OUTPUT);  
+  Serial.begin(9600);  
 }
 
+// the loop routine runs over and over again forever:
 void loop() {
-  if (Serial.available() > 0) {
+ if (Serial.available() > 0) {
     char inChar = (char)Serial.read();   
     if(inChar== '1')
       AssertFocus();
@@ -37,6 +40,10 @@ void loop() {
     if(inChar== '0')
       Reset();
   }
+  digitalWrite(P2_5, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(1000);               // wait for a second
+  digitalWrite(P2_5, LOW);    // turn the LED off by making the voltage LOW
+  delay(1000);               // wait for a second
 }
 
 void AssertFocus()
@@ -64,9 +71,3 @@ void Reset()
   digitalWrite(focusPin, LOW);
   digitalWrite(capturePin, LOW);
 }
-
-
-
-
-
-
