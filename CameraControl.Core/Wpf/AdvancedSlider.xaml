@@ -8,10 +8,10 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />-->
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colours.xaml"/>-->
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml"/>-->
                 <!--<ResourceDictionary Source="pack://application:,,,/CameraControl;component/Styles/Wpf.Toolkit.Extended.xaml" />-->
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml"/>-->
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
@@ -22,20 +22,20 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="169*" />
             <ColumnDefinition Width="25" />
+            <ColumnDefinition Width="202*" />
+            <ColumnDefinition Width="58" />
             <ColumnDefinition Width="25" />
-            <ColumnDefinition Width="80" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25*" />
-            <RowDefinition Height="25*" />
+            <RowDefinition Height="30*" />
+            <RowDefinition Height="23*" />
         </Grid.RowDefinitions>
-        <Slider Grid.ColumnSpan="4" Grid.Row="1" Name="slider" Margin="5,0" Value="{Binding Value}" Maximum="{Binding Maximum}" Minimum="{Binding Minimum}"/>
+        <Slider Grid.ColumnSpan="2" Grid.Row="1" Name="slider" Value="{Binding Value}" Maximum="{Binding Maximum}" Minimum="{Binding Minimum}" Grid.Column="1" Margin="3" VerticalAlignment="Center"/>
 
-        <TextBox Grid.Column="3" Name="textBox" VerticalContentAlignment="Center" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Padding="0" Panel.ZIndex="1" Margin="2" />
-        <Label Content="{Binding Label}" Name="label" VerticalContentAlignment="Center" Padding="0" Margin="5,0,0,0" />
-        <Button Content="-" Grid.Column="1" Name="btn_m" Margin="2" Click="btn_m_Click" />
-        <Button Content="+" Grid.Column="2" Name="btn_p" Margin="2" Click="btn_p_Click" />
+        <TextBox Grid.Column="2" Name="textBox" VerticalContentAlignment="Center" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Padding="0" Panel.ZIndex="1" Margin="1" />
+        <Label Content="{Binding Label}" Name="label" VerticalContentAlignment="Center" Padding="0" Grid.Column="1" Margin="2" />
+        <Button Content="-" Name="btn_m" Click="btn_m_Click" Margin="2,5" Grid.RowSpan="2" />
+        <Button Content="+" Grid.Column="3" Name="btn_p" Click="btn_p_Click" Margin="2,5" Grid.RowSpan="2" IsTabStop="False" />
     </Grid>
 </UserControl>
