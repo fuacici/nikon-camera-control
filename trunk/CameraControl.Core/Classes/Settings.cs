@@ -580,6 +580,17 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        private bool _addFakeCamera;
+        public bool AddFakeCamera
+        {
+            get { return _addFakeCamera; }
+            set
+            {
+                _addFakeCamera = value;
+                NotifyPropertyChanged("AddFakeCamera");
+            }
+        }
+
 
         public CameraPropertyEnumerator CameraProperties { get; set; }
         public string SelectedLayout { get; set; }
@@ -654,6 +665,7 @@ namespace CameraControl.Core.Classes
             HighlightUnderExp = false;
             ShowMagnifierInFullSccreen = true;
             DelayImageLoading = true;
+            AddFakeCamera = false;
         }
 
         public void Add(PhotoSession session)

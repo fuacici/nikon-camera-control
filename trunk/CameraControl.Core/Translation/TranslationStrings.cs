@@ -383,5 +383,7 @@ namespace CameraControl.Core.Translation
         public static string LabelAutoRotate = "Auto rotate";
         public static string LabelReset = "Reset";
         public static string LabelFocus = "Focus";
+        //17/11/2013
+        public static string LabelAddFakeCamera = "Add a fake camera";
     }
 }
