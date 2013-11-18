@@ -114,6 +114,8 @@ namespace CameraControl
             ServiceProvider.DeviceManager.CameraSelected += DeviceManager_CameraSelected;
             //-------------------
             ServiceProvider.DeviceManager.DisableNativeDrivers = ServiceProvider.Settings.DisableNativeDrivers;
+            if(ServiceProvider.Settings.AddFakeCamera)
+                ServiceProvider.DeviceManager.AddFakeCamera();
             ServiceProvider.DeviceManager.ConnectToCamera();
             Thread.Sleep(500);
             Dispatcher.Invoke(new Action(Hide));

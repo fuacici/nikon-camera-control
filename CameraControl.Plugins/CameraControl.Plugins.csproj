@@ -103,7 +103,11 @@
       <DependentUpon>PHDWnd.xaml</DependentUpon>
     </Compile>
     <Compile Include="Class1.cs" />
+    <Compile Include="DCCUSBShutterReleaseConfig.xaml.cs">
+      <DependentUpon>DCCUSBShutterReleaseConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ExportPlugins\ExportToZip.cs" />
+    <Compile Include="ExternalDevices\DCCUSBShutterRelease.cs" />
     <Compile Include="ExternalDevices\DSUSBShutterRelease.cs" />
     <Compile Include="ExternalDevices\MultiCameraBoxShutterRelease.cs" />
     <Compile Include="ExternalDevices\SerialPortShutterRelease.cs" />
@@ -142,6 +146,10 @@
     <Page Include="Astro\PHDWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DCCUSBShutterReleaseConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="MainWindowPlugins\SimpleMainWindow.xaml">
       <SubType>Designer</SubType>

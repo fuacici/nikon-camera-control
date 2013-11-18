@@ -1,6 +1,7 @@
 
-const int focusPin =  P1_6;
-const int capturePin =  P1_7;
+const int focusPin =  P1_7;
+const int capturePin =  P1_6;
+const int irPin =  P2_5;
   
 // the setup routine runs once when you press reset:
 void setup() {    
@@ -8,7 +9,7 @@ void setup() {
   pinMode(capturePin, OUTPUT);   
   Reset();
   // initialize the digital pin as an output.
-  pinMode(P2_5, OUTPUT);  
+  pinMode(irPin, OUTPUT);  
   Serial.begin(9600);  
 }
 
@@ -37,13 +38,18 @@ void loop() {
       delay(3000);  
       DeassertFocus();
     }
+    if(inChar== '7'){
+      Reset();      
+      NikonShutterNow(irPin);
+      delay(500);  
+    }
+    if(inChar== 'v'){
+      Serial.println("V 1.01"); 
+    }
+    
     if(inChar== '0')
       Reset();
   }
-  digitalWrite(P2_5, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(1000);               // wait for a second
-  digitalWrite(P2_5, LOW);    // turn the LED off by making the voltage LOW
-  delay(1000);               // wait for a second
 }
 
 void AssertFocus()
@@ -70,4 +76,44 @@ void Reset()
 {
   digitalWrite(focusPin, LOW);
   digitalWrite(capturePin, LOW);
+  digitalWrite(irPin, LOW);
 }
+
+void wait(unsigned int time)
+{
+  unsigned long start = micros();
+
+  while(micros()-start<=time)
+  {
+  }
+}
+
+void high(unsigned int time, int freq, int pinLED)
+{
+  int pause = (1000/freq/2)-4;
+  unsigned long start = micros();
+
+  while(micros()-start<=time)
+  {
+    digitalWrite(pinLED,HIGH);
+    delayMicroseconds(pause);
+    digitalWrite(pinLED,LOW);
+    delayMicroseconds(pause);
+  }
+}
+
+void NikonShutterNow(int pin)
+{
+  int freq = 40;
+  //Serial.print("NikonShutterNow(pin=");
+  //Serial.print(pin);
+  //Serial.print(")\n");
+  high(2000,freq,pin);
+  wait(27830);
+  high(390,freq,pin);
+  wait(1580);
+  high(410,freq,pin);
+  wait(3580);
+  high(400,freq,pin);
+} 
+

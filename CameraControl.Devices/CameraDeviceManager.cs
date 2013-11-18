@@ -452,6 +452,13 @@ namespace CameraControl.Devices
             return ConnectToCamera(true);
         }
 
+        public void AddFakeCamera()
+        {
+            FakeCameraDevice device = new FakeCameraDevice();
+            ConnectedDevices.Add(device);
+            SelectedCameraDevice = device;
+        }
+
         public bool ConnectToCamera(bool retry)
         {
             if (DeviceClass == null || DeviceClass.Count == 0)
