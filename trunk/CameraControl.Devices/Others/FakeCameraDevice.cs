@@ -43,6 +43,7 @@ namespace CameraControl.Devices.Others
             IsoNumber = new PropertyValue<int> { IsEnabled = false };
             ExposureMeteringMode = new PropertyValue<int> { IsEnabled = false };
             Battery = 100;
+            Capabilities.Add(CapabilityEnum.CaptureNoAf);
         }
     }
 }

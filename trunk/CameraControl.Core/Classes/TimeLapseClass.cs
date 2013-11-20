@@ -316,9 +316,9 @@ namespace CameraControl.Core.Classes
             {
                 WaitForReady(ServiceProvider.DeviceManager.SelectedCameraDevice);
                 if (NoAutofocus && ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.CaptureNoAf))
-                    ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhotoNoAf();
+                    CameraHelper.CaptureNoAf(ServiceProvider.DeviceManager.SelectedCameraDevice);
                 else
-                    ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
+                    CameraHelper.Capture(ServiceProvider.DeviceManager.SelectedCameraDevice);
                 //_timer.Enabled = true;
             }
             catch (Exception exception)
