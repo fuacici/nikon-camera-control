@@ -1,6 +1,6 @@
 
-const int focusPin =  P1_7;
-const int capturePin =  P1_6;
+const int focusPin =  P1_6;
+const int capturePin =  P1_7;
 const int irPin =  P2_5;
   
 // the setup routine runs once when you press reset:
@@ -19,10 +19,14 @@ void loop() {
     char inChar = (char)Serial.read();   
     if(inChar== '1')
       AssertFocus();
-    if(inChar== '2')
+    if(inChar== '2'){
+      AssertFocus();
       ShutterOpen();
-    if(inChar== '3')
+    }
+    if(inChar== '3'){
+      DeassertFocus();
       ShutterClose();
+    }
     if(inChar== '4')
       DeassertFocus();
     if(inChar== '5'){

@@ -489,7 +489,7 @@ namespace CameraControl
                         return;
                     }
                 }
-                ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhotoNoAf();
+                CameraHelper.CaptureNoAf(ServiceProvider.DeviceManager.SelectedCameraDevice);
             }
             catch (DeviceException exception)
             {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using CameraControl.Devices;
 
 namespace CameraControl.Core.Classes
@@ -23,9 +24,31 @@ namespace CameraControl.Core.Classes
                     if (property.UseExternalShutter && property.SelectedConfig!=null)
                     {
                         ServiceProvider.ExternalDeviceManager.OpenShutter(property.SelectedConfig);
+                        Thread.Sleep(2000);
+                        ServiceProvider.ExternalDeviceManager.CloseShutter(property.SelectedConfig);
                         return;
                     }
                     camera.CapturePhoto();
+                }
+            }
+        }
+
+        public static void CaptureNoAf(object o)
+        {
+            if (o != null)
+            {
+                var camera = o as ICameraDevice;
+                if (camera != null)
+                {
+                    CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(camera);
+                    if (property.UseExternalShutter && property.SelectedConfig != null)
+                    {
+                        ServiceProvider.ExternalDeviceManager.OpenShutter(property.SelectedConfig);
+                        Thread.Sleep(200);
+                        ServiceProvider.ExternalDeviceManager.CloseShutter(property.SelectedConfig);
+                        return;
+                    }
+                    camera.CapturePhotoNoAf();
                 }
             }
         }

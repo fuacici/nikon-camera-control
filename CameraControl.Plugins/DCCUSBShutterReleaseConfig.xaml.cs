@@ -77,5 +77,20 @@ namespace CameraControl.Plugins
             string str = spL.ReadLine();
             Dispatcher.Invoke(new Action(delegate { lbl_mess.Content = str; }));
         }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (sp.IsOpen)
+                {
+                    sp.DataReceived -= sp_DataReceived;
+                    sp.Close();
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
     }
 }

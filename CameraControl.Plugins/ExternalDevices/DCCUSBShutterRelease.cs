@@ -22,10 +22,7 @@ namespace CameraControl.Plugins.ExternalDevices
         public bool Capture(CustomConfig config)
         {
             SendCommand("0", config.Get("Port"));
-            if (config.Get("IrRemote") == "True")
-                SendCommand("7", config.Get("Port"));
-            else
-                SendCommand("5", config.Get("Port"));
+            SendCommand(config.Get("IrRemote") == "True" ? "7" : "5", config.Get("Port"));
             return true;
         }
 
@@ -50,6 +47,7 @@ namespace CameraControl.Plugins.ExternalDevices
 
         public bool OpenShutter(CustomConfig config)
         {
+            SendCommand("0", config.Get("Port"));
             SendCommand(config.Get("IrRemote") == "True" ? "7" : "2", config.Get("Port"));
             return true;
         }
