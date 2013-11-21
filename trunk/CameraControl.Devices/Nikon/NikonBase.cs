@@ -1631,8 +1631,13 @@ namespace CameraControl.Devices.Nikon
                 case OperationEnum.ManualFocus:
                     if (FocusMode.Value.Contains("[M]"))
                         return "LabelMFError";
-                    if (FocusMode.Value.Contains("[F]"))
-                        return "LabelNotAFSError";
+                    MTPDataResponse responsel_focus = ExecuteReadDataEx(CONST_CMD_GetDevicePropValue, 0xD061, -1);
+                    if (responsel_focus.Data != null && responsel_focus.Data.Length > 0)
+                    {
+                        var resp = responsel_focus.Data[0];
+                        if (resp == 2)
+                            return "LabelNotAFSError";
+                    }
                     // check if not Single AF servo
                     return "";
                     break;
