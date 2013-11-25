@@ -67,26 +67,8 @@ namespace CameraControl.Core.Classes
         /// <returns></returns>
         public string GetTheDefaultFileName(string sLocalDirectory)
         {
-            StreamReader sr;
             String sLine = "index.html";
 
-            //try
-            //{
-            //  //Open the default.dat to find out the list
-            //  // of default file
-            //  sr = new StreamReader("data\\Default.Dat");
-
-            //  while ((sLine = sr.ReadLine()) != null)
-            //  {
-            //    //Look for the default file in the web server root folder
-            //    if (File.Exists(sLocalDirectory + sLine) == true)
-            //      break;
-            //  }
-            //}
-            //catch (Exception e)
-            //{
-            //  Console.WriteLine("An Exception Occurred : " + e.ToString());
-            //}
             if (File.Exists(sLocalDirectory + sLine) == true)
                 return sLine;
             else

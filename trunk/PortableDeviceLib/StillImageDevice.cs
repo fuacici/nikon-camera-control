@@ -36,8 +36,8 @@ namespace PortableDeviceLib
             commandValues.SetUnsignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPERATION_CODE, (uint)code);
 
             // According to documentation, first parameter should be 0 (see http://msdn.microsoft.com/en-us/library/dd375691%28v=VS.85%29.aspx)
-            this.portableDeviceClass.SendCommand(0, commandValues, out results);
-            int pvalue = 0;
+            portableDeviceClass.SendCommand(0, commandValues, out results);
+            //int pvalue = 0;
             try
             {
                 int iValue = 0;
@@ -53,7 +53,7 @@ namespace PortableDeviceLib
                     return pValue;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             return 0;
@@ -94,7 +94,7 @@ namespace PortableDeviceLib
 
             // According to documentation, first parameter should be 0 (see http://msdn.microsoft.com/en-us/library/dd375691%28v=VS.85%29.aspx)
             this.portableDeviceClass.SendCommand(0, commandValues, out results);
-            int pvalue = 0;
+            //int pvalue = 0;
             try
             {
                 int iValue = 0;
@@ -106,7 +106,7 @@ namespace PortableDeviceLib
                 if (pValue != 0)
                     return pValue;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             //results.GetSignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out pvalue);
@@ -129,7 +129,7 @@ namespace PortableDeviceLib
                                                     pid);
 
             tag_inner_PROPVARIANT vparam1 = new tag_inner_PROPVARIANT();
-            tag_inner_PROPVARIANT vparam2 = new tag_inner_PROPVARIANT();
+            //tag_inner_PROPVARIANT vparam2 = new tag_inner_PROPVARIANT();
             UintToPropVariant(param1, out vparam1);
             propVariant.Add(ref vparam1);
 
@@ -138,8 +138,8 @@ namespace PortableDeviceLib
             commandValues.SetIPortableDevicePropVariantCollectionValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_OPERATION_PARAMS, propVariant);
 
             // According to documentation, first parameter should be 0 (see http://msdn.microsoft.com/en-us/library/dd375691%28v=VS.85%29.aspx)
-            this.portableDeviceClass.SendCommand(0, commandValues, out results);
-            int pvalue = 0;
+            portableDeviceClass.SendCommand(0, commandValues, out results);
+            //int pvalue = 0;
             try
             {
                 int iValue = 0;
@@ -151,7 +151,7 @@ namespace PortableDeviceLib
                 if (pValue != 0)
                     return pValue;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             //results.GetSignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out pvalue);
@@ -189,7 +189,7 @@ namespace PortableDeviceLib
 
             // According to documentation, first parameter should be 0 (see http://msdn.microsoft.com/en-us/library/dd375691%28v=VS.85%29.aspx)
             this.portableDeviceClass.SendCommand(0, commandValues, out results);
-            int pvalue = 0;
+            //int pvalue = 0;
             try
             {
                 int iValue = 0;
@@ -201,7 +201,7 @@ namespace PortableDeviceLib
                 if (pValue != 0)
                     return pValue;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             //results.GetSignedIntegerValue(ref PortableDevicePKeys.WPD_PROPERTY_MTP_EXT_RESPONSE_CODE, out pvalue);
@@ -263,7 +263,7 @@ namespace PortableDeviceLib
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             //string pwszContext = string.Empty;
@@ -338,7 +338,7 @@ namespace PortableDeviceLib
                         return res;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
 
@@ -447,7 +447,7 @@ namespace PortableDeviceLib
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             //string pwszContext = string.Empty;
@@ -523,7 +523,7 @@ namespace PortableDeviceLib
                     if (pValue != 0)
                         return null;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
 
@@ -703,7 +703,7 @@ namespace PortableDeviceLib
                     return resp;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 
@@ -744,7 +744,7 @@ namespace PortableDeviceLib
                     return resp;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             // 24,142,174,9
@@ -859,7 +859,7 @@ namespace PortableDeviceLib
                 //if (mtperror != 0)
                 //  return mtperror;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             string tmpTransferContext = string.Empty;
@@ -880,8 +880,6 @@ namespace PortableDeviceLib
             portableDeviceClass.SendCommand(0, pParameters, out pResults);
 
 
-            uint cbBytesRead = 0;
-
             try
             {
                 int pValue = 0;
@@ -893,7 +891,7 @@ namespace PortableDeviceLib
                 //if (mtperror != 0)
                 //  return mtperror;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 
@@ -982,7 +980,7 @@ namespace PortableDeviceLib
                 //if (mtperror != 0)
                 //  return mtperror;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             string tmpTransferContext = string.Empty;
@@ -1003,7 +1001,7 @@ namespace PortableDeviceLib
             portableDeviceClass.SendCommand(0, pParameters, out pResults);
 
 
-            uint cbBytesRead = 0;
+            //uint cbBytesRead = 0;
 
             try
             {
@@ -1016,7 +1014,7 @@ namespace PortableDeviceLib
                 //if (mtperror != 0)
                 //  return mtperror;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 

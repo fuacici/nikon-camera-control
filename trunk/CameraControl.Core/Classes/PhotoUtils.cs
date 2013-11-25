@@ -168,15 +168,7 @@ namespace CameraControl.Core.Classes
 
         public static string DateTimeToString(DateTime time)
         {
-            string res = "";
             TimeSpan span = time - DateTime.MinValue;
-            //int days = (int) span.TotalDays;
-            //if (days > 0)
-            //    res += days + " days ";
-            //int hours = (int) span.TotalHours;
-            //hours = hours - (days*24);
-            //res += hours + " hours ";
-            //int minutes = span.TotalMinutes;
             return string.Format("{0} days {1} hours {2} minutes {3} seconds", span.Days, span.Hours, span.Minutes,
                                  span.Seconds);
         }

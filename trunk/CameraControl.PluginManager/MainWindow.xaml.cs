@@ -62,7 +62,7 @@ namespace CameraControl.PluginManager
                         pluginInfo.Enabled = !File.Exists(Path.Combine(folder, "disabled"));
                         PluginS.Add(pluginInfo);
                     }
-                    catch (Exception exception)
+                    catch (Exception)
                     {
 
                     }

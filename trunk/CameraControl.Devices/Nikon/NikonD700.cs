@@ -6,7 +6,7 @@ namespace CameraControl.Devices.Nikon
 {
   public class NikonD700:NikonBase
   {
-    public const int CONST_PROP_RecordingMedia = 0xD10B;
+    //public const int CONST_PROP_RecordingMedia = 0xD10B;
     public const int CONST_PROP_LiveViewMode = 0xD1A0;
 
     public override bool Init(DeviceDescriptor deviceDescriptor)

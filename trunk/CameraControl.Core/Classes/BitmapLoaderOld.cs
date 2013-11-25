@@ -100,7 +100,6 @@ namespace CameraControl.Core.Classes
             }
             else
             {
-                BitmapImage res = null;
                 //Metadata.Clear();
                 try
                 {

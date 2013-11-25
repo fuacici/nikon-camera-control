@@ -86,8 +86,8 @@ namespace CameraControl.Core
                 BasicConfigurator.Configure(fileAppender);
 #if DEBUG
                 // Setup TraceAppender
-                TraceAppender ta = new TraceAppender(
-                  new PatternLayout("%d [%t]%-5p %c [%x] - %m%n"));
+                TraceAppender ta = new TraceAppender();
+                ta.Layout = new PatternLayout("%d [%t]%-5p %c [%x] - %m%n");
                 BasicConfigurator.Configure(ta);
 #endif
 

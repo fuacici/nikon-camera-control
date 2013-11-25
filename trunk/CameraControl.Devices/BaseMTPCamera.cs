@@ -21,6 +21,12 @@ namespace CameraControl.Devices
 
         public event DeviceEventHandler DeviceEvent;
 
+        public void OnDeviceEvent(DeviceEventArgs eventargs)
+        {
+            DeviceEventHandler handler = DeviceEvent;
+            if (handler != null) handler(this, eventargs);
+        }
+
         protected const string AppName = "CameraControl";
         protected const int AppMajorVersionNumber = 1;
         protected const int AppMinorVersionNumber = 0;

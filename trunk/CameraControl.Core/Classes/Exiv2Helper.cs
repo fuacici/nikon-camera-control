@@ -435,17 +435,13 @@ namespace CameraControl.Core.Classes
             {
                 case FocusPointType.Square:
                     return new Rect(w * definition.XRat - (150 * dw), h * definition.YRat - (100 * dh), 300 * dw, 200 * dh);
-                    break;
                 case FocusPointType.VRectangle:
                     return new Rect(w * definition.XRat - (150 * dw), h * definition.YRat - (50 * dh), 300 * dw, 100 * dh);
-                    break;
                 case FocusPointType.HRectangle:
                     return new Rect(w * definition.XRat - (50 * dw), h * definition.YRat - (150 * dh), 100 * dw, 300 * dh);
-                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            return new Rect();
         }
         // live view in focus 
         //Exif.NikonAf2.Version                        Undefined   4  1.00
