@@ -70,7 +70,7 @@ namespace CameraControl.Controls
                     }
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
 
             }

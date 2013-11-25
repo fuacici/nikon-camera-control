@@ -13,8 +13,7 @@ namespace CameraControl.Core.Translation
   {
     private static Dictionary<string, string> _translations;
     private static readonly string _path = string.Empty;
-    private static readonly DateTimeFormatInfo _info;
-    static Dictionary<string, string> TranslatedStrings = new Dictionary<string, string>();
+      static Dictionary<string, string> TranslatedStrings = new Dictionary<string, string>();
 
     private static AsyncObservableCollection<TranslationLangDesc> _availableLangs;
     public static AsyncObservableCollection<TranslationLangDesc> AvailableLangs
@@ -88,7 +87,7 @@ namespace CameraControl.Core.Translation
         langPath = Path.Combine(_path, "Languages", lang_code, "strings.xml");
         doc.Load(langPath);
       }
-      catch (Exception e)
+      catch (Exception)
       {
         if (lang_code == "en-US")
           return 0; // otherwise we are in an endless loop!
@@ -101,7 +100,7 @@ namespace CameraControl.Core.Translation
           {
             TranslatedStrings.Add(stringEntry.Attributes.GetNamedItem("name").Value, stringEntry.InnerText);
           }
-          catch (Exception ex)
+          catch (Exception)
           {
             //Log.Error("Error in Translation Engine");
             //Log.Error(ex);

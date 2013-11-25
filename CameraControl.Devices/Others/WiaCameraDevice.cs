@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using CameraControl.Devices.Classes;
 using WIA;
-using System.Runtime.InteropServices;
 
 namespace CameraControl.Devices.Others
 {
@@ -151,7 +150,7 @@ namespace CameraControl.Devices.Others
 
 
     private Device Device { get; set; }
-    internal object Locker = new object(); // object used to lock multi  
+    internal new object Locker = new object(); // object used to lock multi  
     public DeviceManager DeviceManager { get; set; }
 
     public override bool Init(DeviceDescriptor deviceDescriptor)

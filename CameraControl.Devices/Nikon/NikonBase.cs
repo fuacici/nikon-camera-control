@@ -705,7 +705,7 @@ namespace CameraControl.Devices.Nikon
                     }
                     ShutterSpeed.SetValue(defval);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
 
@@ -741,7 +741,7 @@ namespace CameraControl.Devices.Nikon
                 }
                 Mode.SetValue(defval);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }
@@ -806,7 +806,7 @@ namespace CameraControl.Devices.Nikon
                 }
                 FNumber.SetValue(defval, trigervaluchange);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }
@@ -874,7 +874,7 @@ namespace CameraControl.Devices.Nikon
                 }
                 ExposureCompensation.SetValue(defval, false);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }
@@ -899,7 +899,7 @@ namespace CameraControl.Devices.Nikon
                 }
                 CompressionSetting.SetValue(defval, false);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }
@@ -1297,7 +1297,7 @@ namespace CameraControl.Devices.Nikon
                             break;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }
@@ -1531,7 +1531,7 @@ namespace CameraControl.Devices.Nikon
             {
                 return;
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 //Log.Error("Event exception ", exception);
             }
@@ -1586,7 +1586,6 @@ namespace CameraControl.Devices.Nikon
             {
                 case OperationEnum.Capture:
                     return "";
-                    break;
                 case OperationEnum.RecordMovie:
                     MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetDevicePropValue, 0xD0A4, -1);
                     if (response.Data != null && response.Data.Length > 0)
@@ -1621,13 +1620,11 @@ namespace CameraControl.Devices.Nikon
                             //return "LabelNotInApplicationMode";
                     }
                     return "";
-                    break;
                 case OperationEnum.AutoFocus:
                     if (FocusMode.Value.Contains("[M]"))
                         return "LabelMFError";
                     // check if not Single AF servo
                     return "";
-                    break;
                 case OperationEnum.ManualFocus:
                     if (FocusMode.Value.Contains("[M]"))
                         return "LabelMFError";
@@ -1640,7 +1637,6 @@ namespace CameraControl.Devices.Nikon
                     }
                     // check if not Single AF servo
                     return "";
-                    break;
                 case OperationEnum.LiveView:
                     MTPDataResponse responsel = ExecuteReadDataEx(CONST_CMD_GetDevicePropValue, 0xD1A4, -1);
                     if (responsel.Data != null && responsel.Data.Length > 0)

@@ -16,10 +16,6 @@ namespace CameraControl.Devices.Canon
 {
     public class CanonSDKBase : BaseMTPCamera
     {
-        
-
-        private bool _eventIsbusy = false;
-
         private EosLiveImageEventArgs _liveViewImageData = null;
 
         public EosCamera Camera = null;
@@ -993,7 +989,7 @@ namespace CameraControl.Devices.Canon
                     viewData.FocusFrameXSize = _liveViewImageData.ZommBounds.Width;
                     viewData.FocusFrameYSize = _liveViewImageData.ZommBounds.Height;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     //Log.Error("Error get live view image ", e);
                 }

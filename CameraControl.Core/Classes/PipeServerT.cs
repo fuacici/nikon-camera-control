@@ -14,7 +14,6 @@ namespace CameraControl.Core.Classes
 
     class PipeServerT
     {
-        public event DelegateMessage PipeMessage;
         string _pipeName;
 
         public void Listen(string PipeName)

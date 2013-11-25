@@ -78,7 +78,7 @@ namespace CameraControl.Plugins.Astro
             }
             catch (Exception exception)
             {
-
+                Log.Error("Unable to connect PHD", exception);
             }
         }
 

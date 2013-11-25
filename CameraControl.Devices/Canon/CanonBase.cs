@@ -31,7 +31,7 @@ namespace CameraControl.Devices.Canon
         public const int CONST_Event_CANON_EOS_PropValueChanged = 0xc189 ;
         public const int CONST_Event_CANON_EOS_ObjectAddedEx = 0xc181;
 
-        private bool _eventIsbusy = false;
+        //private bool _eventIsbusy = false;
 
         protected Dictionary<uint, string> _shutterTable = new Dictionary<uint, string>
                                                          {
@@ -217,7 +217,7 @@ namespace CameraControl.Devices.Canon
             {
                 return;
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 //Log.Error("Event exception ", exception);
             }
@@ -256,7 +256,7 @@ namespace CameraControl.Devices.Canon
             {
                 try
                 {
-                    byte datasize = 4;
+                    //byte datasize = 4;
                     ShutterSpeed.Clear();
                     foreach (KeyValuePair<uint, string> keyValuePair in _shutterTable)
                     {

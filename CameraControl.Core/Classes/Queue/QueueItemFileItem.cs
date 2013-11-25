@@ -24,7 +24,7 @@ namespace CameraControl.Core.Classes.Queue
                         FileItem.GetExtendedThumb();
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //Log.Error(e);
             }

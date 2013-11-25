@@ -7,7 +7,7 @@ namespace CameraControl.Devices.Nikon
   public class NikonD60:NikonBase
   {
 
-    protected Dictionary<int, string> _csTable = new Dictionary<int, string>()
+    protected new Dictionary<int, string> _csTable = new Dictionary<int, string>()
                                                 {
                                                   {0, "JPEG (BASIC)"},
                                                   {1, "JPEG (NORMAL)"},

@@ -14,124 +14,124 @@ using CameraControl.windows;
 
 namespace CameraControl.Actions
 {
-  public class CmdExpJpg : BaseFieldClass, IMenuAction, ICommand
-  {
-    #region Implementation of IMenuAction
-
-    private int _progress;
-    private bool _shouldStop;
-    private string _tempdir = "";
-    private string _pathtoalign = "";
-    private string _pathtoenfuse = "";
-    private string _resulfile = "";
-
-    public event EventHandler ProgressChanged;
-    public event EventHandler ActionDone;
-    public int Progress { get; set; }
-    
-    private string _title;
-    public string Title
+    public class CmdExpJpg : BaseFieldClass, IMenuAction, ICommand
     {
-      get { return "Convert raw to exposure bracketing jpg's"; }
-      set { _title = value; }
-    }
+        #region Implementation of IMenuAction
 
-    private bool _isBusy;
+        private bool _shouldStop;
 
-    public bool IsBusy
-    {
-      get { return _isBusy; }
-      set
-      {
-        _isBusy = value;
-        NotifyPropertyChanged("IsBusy");
-      }
-    }
+        public event EventHandler ProgressChanged;
+        public event EventHandler ActionDone;
+        public int Progress { get; set; }
 
-    public void Run(List<string> files)
-    {
-      for (double i = -4; i <= 4; i +=1)
-      {
-        OnProgressChange("Exposure "+i);
-        Exec(i);
-        if (_shouldStop)
+        public string Title
         {
-          OnActionDone();
-          return;
+            get { return "Convert raw to exposure bracketing jpg's"; }
+            set { }
         }
-      }
-      OnActionDone();
-    }
 
-    public void Stop()
-    {
-      _shouldStop = true;
-      OnProgressChange("Stopping ....");      
-    }
+        private bool _isBusy;
 
-    #endregion
-
-    #region Implementation of ICommand
-
-    public void Execute(object parameter)
-    {
-      if (!ServiceProvider.Settings.SelectedBitmap.FileItem.IsRaw)
-      {
-        MessageBox.Show("Raw file is needed for this action");
-        return;
-      }
-
-      IMenuAction action = parameter as IMenuAction;
-      if (action != null)
-      {
-        ActionExecuteWnd wnd = new ActionExecuteWnd(action);
-        wnd.ShowDialog();
-      }
-    }
-
-    public bool CanExecute(object parameter)
-    {
-      return true;
-    }
-
-    public event EventHandler CanExecuteChanged;
-
-    #endregion
-    private void OnProgressChange(string s)
-    {
-      if (ProgressChanged != null)
-        ProgressChanged(this, new ActionEventArgs() { Message = s });
-    }
-
-    private void OnActionDone()
-    {
-      if (ActionDone != null)
-        ActionDone(this, new EventArgs());
-      IsBusy = false;
-      ServiceProvider.Settings.DefaultSession.SelectNone();
-    }
-
-    void Exec(double br)
-    {
-      string _infile = ServiceProvider.Settings.SelectedBitmap.FileItem.FileName;
-      string _otfile = Path.Combine(Path.GetDirectoryName(_infile), Path.GetFileNameWithoutExtension(_infile) + (br > 0 ? "+" : "") + br + ".jpg");
-      string _pathtoufraw =
-        Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "ufraw",
-                     "ufraw-batch.exe");
-      if (File.Exists(_pathtoufraw))
-      {
-        if (PhotoUtils.RunAndWait(_pathtoufraw,
-                                  " --wb=camera --saturation=1.2 --exposure=" +  br +
-                                  " --black-point=auto --overwrite --out-type=jpg --output=" +
-                                  _otfile + " " + _infile))
+        public bool IsBusy
         {
-          ServiceProvider.Settings.DefaultSession.AddFile(_otfile);
+            get { return _isBusy; }
+            set
+            {
+                _isBusy = value;
+                NotifyPropertyChanged("IsBusy");
+            }
         }
-      }
-      else
-      {
-        MessageBox.Show("Ufraw not found !");
-      }  
+
+        public void Run(List<string> files)
+        {
+            for (double i = -4; i <= 4; i += 1)
+            {
+                OnProgressChange("Exposure " + i);
+                Exec(i);
+                if (_shouldStop)
+                {
+                    OnActionDone();
+                    return;
+                }
+            }
+            OnActionDone();
+        }
+
+        public void Stop()
+        {
+            _shouldStop = true;
+            OnProgressChange("Stopping ....");
+        }
+
+        #endregion
+
+        #region Implementation of ICommand
+
+        public void Execute(object parameter)
+        {
+            if (!ServiceProvider.Settings.SelectedBitmap.FileItem.IsRaw)
+            {
+                MessageBox.Show("Raw file is needed for this action");
+                return;
+            }
+
+            IMenuAction action = parameter as IMenuAction;
+            if (action != null)
+            {
+                ActionExecuteWnd wnd = new ActionExecuteWnd(action);
+                wnd.ShowDialog();
+            }
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public event EventHandler CanExecuteChanged;
+
+        public void OnCanExecuteChanged(EventArgs e)
+        {
+            EventHandler handler = CanExecuteChanged;
+            if (handler != null) handler(this, e);
+        }
+
+        #endregion
+        private void OnProgressChange(string s)
+        {
+            if (ProgressChanged != null)
+                ProgressChanged(this, new ActionEventArgs() { Message = s });
+        }
+
+        private void OnActionDone()
+        {
+            if (ActionDone != null)
+                ActionDone(this, new EventArgs());
+            IsBusy = false;
+            ServiceProvider.Settings.DefaultSession.SelectNone();
+        }
+
+        void Exec(double br)
+        {
+            string _infile = ServiceProvider.Settings.SelectedBitmap.FileItem.FileName;
+            string _otfile = Path.Combine(Path.GetDirectoryName(_infile), Path.GetFileNameWithoutExtension(_infile) + (br > 0 ? "+" : "") + br + ".jpg");
+            string _pathtoufraw =
+              Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "ufraw",
+                           "ufraw-batch.exe");
+            if (File.Exists(_pathtoufraw))
+            {
+                if (PhotoUtils.RunAndWait(_pathtoufraw,
+                                          " --wb=camera --saturation=1.2 --exposure=" + br +
+                                          " --black-point=auto --overwrite --out-type=jpg --output=" +
+                                          _otfile + " " + _infile))
+                {
+                    ServiceProvider.Settings.DefaultSession.AddFile(_otfile);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Ufraw not found !");
+            }
+        }
     }
-  }
 }

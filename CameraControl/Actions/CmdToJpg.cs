@@ -13,70 +13,90 @@ using CameraControl.Devices.Classes;
 
 namespace CameraControl.Actions
 {
-  public class CmdToJpg : BaseFieldClass, IMenuAction, ICommand
-  {
-    #region Implementation of IMenuAction
-
-    public event EventHandler ProgressChanged;
-    public event EventHandler ActionDone;
-    public int Progress { get; set; }
-    private string _title;
-    public string Title
+    public class CmdToJpg : BaseFieldClass, IMenuAction, ICommand
     {
-      get { return "Convert raw to jpg"; }
-      set { _title = value; }
-    }
+        #region Implementation of IMenuAction
 
-    public bool IsBusy { get; set; }
-    
-    public void Run(List<string> files)
-    {
-    
-    }
+        public event EventHandler ProgressChanged;
 
-    public void Stop()
-    {
-    
-    }
-
-    #endregion
-
-    #region Implementation of ICommand
-
-    public void Execute(object parameter)
-    {
-      if (!ServiceProvider.Settings.SelectedBitmap.FileItem.IsRaw)
-      {
-        MessageBox.Show("Raw file is needed for this action");
-        return;
-      }
-      string _infile = ServiceProvider.Settings.SelectedBitmap.FileItem.FileName;
-      string _otfile = Path.Combine(Path.GetDirectoryName(_infile), Path.GetFileNameWithoutExtension(_infile) + ".jpg");
-      string _pathtoufraw =
-        Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "ufraw",
-                     "ufraw-batch.exe");
-      if (File.Exists(_pathtoufraw))
-      {
-        if (PhotoUtils.RunAndWait(_pathtoufraw,
-                                  " --wb=camera --saturation=1.2 --exposure=0 --black-point=auto --overwrite --out-type=jpg --output=" +
-                                  _otfile + " " + _infile))
+        public void OnProgressChanged(EventArgs e)
         {
-          ServiceProvider.Settings.DefaultSession.AddFile(_otfile);
+            EventHandler handler = ProgressChanged;
+            if (handler != null) handler(this, e);
         }
-      }
-      else
-      {
-        MessageBox.Show("Ufraw not found !");
-      }
+
+        public event EventHandler ActionDone;
+
+        public void OnActionDone(EventArgs e)
+        {
+            EventHandler handler = ActionDone;
+            if (handler != null) handler(this, e);
+        }
+
+        public int Progress { get; set; }
+
+        public string Title
+        {
+            get { return "Convert raw to jpg"; }
+            set { }
+        }
+
+        public bool IsBusy { get; set; }
+
+        public void Run(List<string> files)
+        {
+
+        }
+
+        public void Stop()
+        {
+
+        }
+
+        #endregion
+
+        #region Implementation of ICommand
+
+        public void Execute(object parameter)
+        {
+            if (!ServiceProvider.Settings.SelectedBitmap.FileItem.IsRaw)
+            {
+                MessageBox.Show("Raw file is needed for this action");
+                return;
+            }
+            string _infile = ServiceProvider.Settings.SelectedBitmap.FileItem.FileName;
+            string _otfile = Path.Combine(Path.GetDirectoryName(_infile), Path.GetFileNameWithoutExtension(_infile) + ".jpg");
+            string _pathtoufraw =
+              Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "ufraw",
+                           "ufraw-batch.exe");
+            if (File.Exists(_pathtoufraw))
+            {
+                if (PhotoUtils.RunAndWait(_pathtoufraw,
+                                          " --wb=camera --saturation=1.2 --exposure=0 --black-point=auto --overwrite --out-type=jpg --output=" +
+                                          _otfile + " " + _infile))
+                {
+                    ServiceProvider.Settings.DefaultSession.AddFile(_otfile);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Ufraw not found !");
+            }
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public event EventHandler CanExecuteChanged;
+
+        public void OnCanExecuteChanged(EventArgs e)
+        {
+            EventHandler handler = CanExecuteChanged;
+            if (handler != null) handler(this, e);
+        }
+
+        #endregion
     }
-
-    public bool CanExecute(object parameter)
-    {
-      return true;
-    }
-
-    public event EventHandler CanExecuteChanged;
-
-    #endregion
-  }
 }
