@@ -23,8 +23,10 @@ namespace CameraControl.Core.Classes
                     CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(camera);
                     if (property.UseExternalShutter && property.SelectedConfig!=null)
                     {
-                        ServiceProvider.ExternalDeviceManager.OpenShutter(property.SelectedConfig);
+                        ServiceProvider.ExternalDeviceManager.AssertFocus(property.SelectedConfig);
                         Thread.Sleep(2000);
+                        ServiceProvider.ExternalDeviceManager.OpenShutter(property.SelectedConfig);
+                        Thread.Sleep(1000);
                         ServiceProvider.ExternalDeviceManager.CloseShutter(property.SelectedConfig);
                         return;
                     }
