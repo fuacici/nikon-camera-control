@@ -245,9 +245,7 @@ namespace CameraControl.Devices.Nikon
             {
                 lock (Locker)
                 {
-                    Thread thread = new Thread(getEvent);
-                    thread.Name = "Event timer";
-                    thread.Start();
+                    ThreadPool.QueueUserWorkItem(getEvent);
                 }
             }
             catch (Exception)
@@ -1443,7 +1441,7 @@ namespace CameraControl.Devices.Nikon
             }
         }
 
-        private void getEvent()
+        private void getEvent(object state)
         {
             try
             {
