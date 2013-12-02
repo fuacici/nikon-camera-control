@@ -468,7 +468,7 @@ namespace CameraControl.Devices.Nikon
 
         private void ImageSize_ValueChanged(object sender, string key, long val)
         {
-            if(CompressionSetting.Value.Contains("RAW"))
+            if(CompressionSetting != null && (CompressionSetting.Value != null && CompressionSetting.Value.Contains("RAW")))
                 return;
             List<byte> vals = new List<byte>() {10};
             vals.AddRange(Encoding.Unicode.GetBytes(key));
