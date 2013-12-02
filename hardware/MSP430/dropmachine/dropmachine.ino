@@ -61,9 +61,9 @@ void loop() {
     doWaterDrop();
   }
   // detect sound 
-  if(mode=3)
+  if(mode==3)
   {
-    DetectSound();
+ //   DetectSound();
   }
 }
 
