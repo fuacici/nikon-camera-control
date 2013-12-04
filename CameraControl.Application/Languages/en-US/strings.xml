@@ -131,7 +131,7 @@
     <string name="LabelSessonName">Sesson name :</string> 
     <string name="LabelFolder">Folder :</string> 
     <string name="LabelFileNameTemplate">File Name Template :</string> 
-    <string name="LabelFileNameTemplateToolTip">$N - Session name &#xa;$C - Counter &#xa;$E - Exposure comp &#xa;$X - Camera name&#xa;$D - Current date&#xa;$Type - Type of file (Raw|Jpg) &#xa;$Tag1 - Selected tag 1&#xa;$Tag2 - Selected tag 2&#xa;$Tag3 - Selected tag 3&#xa;$Tag4 - Selected tag 4</string> 
+    <string name="LabelFileNameTemplateToolTip">$N - Session name &#xa;$C - Counter &#xa;$E - Exposure comp &#xa;$X - Camera name&#xa;$D - Current date&#xa;$UTime - Unix time stamp&#xa;$Type - Type of file (Raw|Jpg) &#xa;$B - Barcode&#xa;$Tag1 - Selected tag 1&#xa;$Tag2 - Selected tag 2&#xa;$Tag3 - Selected tag 3&#xa;$Tag4 - Selected tag 4</string> 
     <string name="LabelCounter">Counter :</string> 
     <string name="LabelUseOriginal">Use original filename gave by the camera</string> 
     <string name="LabelUseOriginalToolTip">This option isn't works with WIA driver</string> 

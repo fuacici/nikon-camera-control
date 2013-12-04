@@ -210,6 +210,18 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        private string _barcode;
+        public string Barcode
+        {
+            get { return _barcode; }
+            set
+            {
+                _barcode = value;
+                NotifyPropertyChanged("Barcode");
+            }
+        }
+
+
         private bool _writeComment;
         public bool WriteComment
         {
@@ -375,7 +387,12 @@ namespace CameraControl.Core.Classes
             if (device.ExposureCompensation != null)
                 res = res.Replace("$E", device.ExposureCompensation.Value != "0" ? device.ExposureCompensation.Value : "");
             res = res.Replace("$D", DateTime.Now.ToString("yyyy-MM-dd"));
+            res = res.Replace("$B", Barcode ?? "");
 
+            var date = new DateTime(1970, 1, 1, 0, 0, 0, DateTime.Now.Kind);
+            var unixTimestamp = System.Convert.ToInt64((DateTime.Now - date).TotalSeconds);
+            res = res.Replace("$UTime", unixTimestamp.ToString());
+            
             res = res.Replace("$Type", GetType(ext));
 
             res = res.Replace("$X", property.DeviceName.Replace(":", "_").Replace("?", "_").Replace("*", "_"));
