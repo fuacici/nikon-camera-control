@@ -67,7 +67,6 @@ namespace CameraControl
             }
             _selectiontimer.Elapsed += _selectiontimer_Elapsed;
             _selectiontimer.AutoReset = false;
-            throw new Exception();
         }
 
         void _selectiontimer_Elapsed(object sender, ElapsedEventArgs e)
