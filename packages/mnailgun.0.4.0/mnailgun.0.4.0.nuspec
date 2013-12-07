@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>mnailgun</id>
+    <version>0.4.0</version>
+    <title>mnailgun</title>
+    <authors>Gino Heyman</authors>
+    <owners>Gino Heyman</owners>
+    <licenseUrl>https://raw.github.com/typesafe/mnailgun/master/license.txt</licenseUrl>
+    <projectUrl>https://github.com/typesafe/mnailgun</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Provides simple access to Mailgun's REST API from .Net applications: Send messages, create web hooks, manage mailboxes, etc.</description>
+    <summary>A simple .Net wrapper library for the Mailgun API.</summary>
+    <releaseNotes />
+    <copyright />
+    <language />
+    <tags>mailgun email</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" />
+    </dependencies>
+  </metadata>
+</package>
