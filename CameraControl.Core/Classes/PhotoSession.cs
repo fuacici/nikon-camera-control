@@ -287,14 +287,31 @@ namespace CameraControl.Core.Classes
 
             Name = "Default";
             Braketing = new BraketingClass();
-            Folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), Name);
+            try
+            {
+                Folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), Name);
+            }
+            catch (Exception exception)
+            {
+                Log.Error("Error set My pictures folder", exception);
+                Folder = "c:\\";
+            }
             Files = new AsyncObservableCollection<FileItem>();
             FileNameTemplate = "DSC_$C";
             TimeLapse = new TimeLapseClass();
             if (ServiceProvider.Settings != null && ServiceProvider.Settings.VideoTypes.Count > 0)
                 TimeLapse.VideoType = ServiceProvider.Settings.VideoTypes[0];
-            TimeLapse.OutputFIleName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos),
-                                                    Name + ".avi");
+            try
+            {
+                TimeLapse.OutputFIleName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos),
+                                                        Name + ".avi");
+            }
+            catch (Exception exception)
+            {
+                Log.Error("Error set My videos folder", exception);
+                TimeLapse.OutputFIleName = "c:\\";
+            }
+
             UseOriginalFilename = false;
             AlowFolderChange = false;
             Tags = new AsyncObservableCollection<TagItem>();
