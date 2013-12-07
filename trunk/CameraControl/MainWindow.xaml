@@ -107,7 +107,9 @@
                         <MenuItem Header="{T:TranslateExtension MenuHomePage}" Click="MenuItem_Click" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}"/>
                         <MenuItem Header="{T:TranslateExtension MenuCheckForUpdate}" Name="mnu_update" Click="MenuItem_Click_1" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}"/>
                         <MenuItem Header="{T:TranslateExtension MenuForum}" Name="mnu_forum" Click="mnu_forum_Click" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}"/>
-                    <Separator />
+                            <Separator />
+                            <MenuItem Header="{T:TranslateExtension LabelSendTheLogFile}" Name="mnu_send_log" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}" Click="mnu_send_log_Click" />
+                            <Separator />
                         <MenuItem Header="{T:TranslateExtension MenuAbout}" Name="mnu_about" Click="btn_about_Click" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=ShowAboutWindow, Converter={StaticResource BooleanToVisibilityConverter1}}"/>
                 </MenuItem>
             </Menu>

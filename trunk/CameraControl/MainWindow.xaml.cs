@@ -67,6 +67,7 @@ namespace CameraControl
             }
             _selectiontimer.Elapsed += _selectiontimer_Elapsed;
             _selectiontimer.AutoReset = false;
+            throw new Exception();
         }
 
         void _selectiontimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -681,6 +682,11 @@ namespace CameraControl
                 ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Del_Image);
                 e.Handled = true;
             }
+        }
+
+        private void mnu_send_log_Click(object sender, RoutedEventArgs e)
+        {
+            HelpProvider.SendCrashReport();
         }
 
     }

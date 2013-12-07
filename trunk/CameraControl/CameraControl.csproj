@@ -122,10 +122,14 @@
       <HintPath>..\packages\MahApps.Metro.0.12.0.7-ALPHA\lib\net40\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -142,6 +146,9 @@
     <Reference Include="TestStack.White, Version=0.10.3.118, Culture=neutral, PublicKeyToken=2672efbf3e161801, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\TestStack.White.0.10.3.118\lib\net40\TestStack.White.dll</HintPath>
+    </Reference>
+    <Reference Include="Typesafe.Mailgun">
+      <HintPath>..\packages\mnailgun.0.4.0\lib\4.0\Typesafe.Mailgun.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />

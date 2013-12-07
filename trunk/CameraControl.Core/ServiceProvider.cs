@@ -32,7 +32,7 @@ namespace CameraControl.Core
         public static Branding Branding { get; set; }
         public static ScriptManager ScriptManager { get; set; }
         public static ExternalDeviceManager ExternalDeviceManager { get; set; }
-
+        public static string LogFile = Path.Combine(Settings.DataFolder, "Log", "app.log");
 
         public static void Configure()
         {
@@ -78,8 +78,9 @@ namespace CameraControl.Core
                                            MaxSizeRollBackups = 5,
                                            RollingStyle = RollingFileAppender.RollingMode.Size,
                                            AppendToFile = true,
-                                           File =
-                                               Path.Combine(Settings.DataFolder, "Log", "app.log"),
+                                           File = LogFile,
+                                           ImmediateFlush = true,
+                                           LockingModel =new FileAppender.MinimalLock(),
                                            Name = "XXXRollingFileAppender"
                                        };
                 fileAppender.ActivateOptions(); // IMPORTANT, creates the file

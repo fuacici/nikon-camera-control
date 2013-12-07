@@ -386,5 +386,7 @@ namespace CameraControl.Core.Translation
         //17/11/2013
         public static string LabelAddFakeCamera = "Add a fake camera";
         public static string LabelBarcode = "Barcode";
+        public static string LabelSendTheLogFile = "Send the log file";
+        public static string LabelAskSendLogFile = "Do you want to send log file to developers ?";
     }
 }
