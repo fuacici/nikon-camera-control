@@ -591,6 +591,17 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        private bool _syncCameraDateTime;
+        public bool SyncCameraDateTime
+        {
+            get { return _syncCameraDateTime; }
+            set
+            {
+                _syncCameraDateTime = value;
+                NotifyPropertyChanged("SyncCameraDateTime");
+            }
+        }
+
 
         public CameraPropertyEnumerator CameraProperties { get; set; }
         public string SelectedLayout { get; set; }
@@ -666,6 +677,7 @@ namespace CameraControl.Core.Classes
             ShowMagnifierInFullSccreen = true;
             DelayImageLoading = true;
             AddFakeCamera = false;
+            SyncCameraDateTime = false;
         }
 
         public void Add(PhotoSession session)
