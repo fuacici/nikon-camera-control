@@ -202,6 +202,17 @@ namespace CameraControl
             CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(cameraDevice);
             cameraDevice.DisplayName = property.DeviceName;
             cameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
+            if(ServiceProvider.Settings.SyncCameraDateTime)
+            {
+                try
+                {
+                    cameraDevice.DateTime = DateTime.Now;
+                }
+                catch (Exception exception)
+                {
+                    Log.Error("Unable to sysnc date time", exception);
+                }
+            }
         }
 
         #endregion
