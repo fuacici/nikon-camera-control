@@ -102,14 +102,14 @@ namespace CameraControl.Core.Classes
             }
         }
 
-        private int _currentThemeIndex;
-        public int CurrentThemeIndex
+        private string _currentThemeName;
+        public string CurrentThemeName
         {
-            get { return _currentThemeIndex; }
+            get { return _currentThemeName; }
             set
             {
-                _currentThemeIndex = value;
-                NotifyPropertyChanged("CurrentThemeIndex");
+                _currentThemeName = value;
+                NotifyPropertyChanged("CurrentThemeName");
                 if (ServiceProvider.WindowsManager != null)
                     ServiceProvider.WindowsManager.ApplyTheme();
             }
@@ -656,7 +656,6 @@ namespace CameraControl.Core.Classes
         {
             DisableNativeDrivers = false;
             AutoPreview = true;
-            CurrentThemeIndex = 0;
             LastUpdateCheckDate = DateTime.MinValue;
             UseTriggerKey = false;
             UseWebserver = false;
@@ -914,43 +913,32 @@ namespace CameraControl.Core.Classes
             writer.Close();
         }
 
+
+        public List<string> Themes
+        {
+            get
+            {
+                var themes = new List<string>();
+                foreach (Accent accent in ThemeManager.DefaultAccents)
+                {
+                    themes.Add("Dark\\" + accent.Name);
+                    themes.Add("Light\\" + accent.Name);
+                }
+
+                return themes;
+            }
+        }
+
         public void ApplyTheme(Window window)
         {
-            switch (CurrentThemeIndex)
+            if (string.IsNullOrEmpty(CurrentThemeName) || !CurrentThemeName.Contains("\\"))
             {
-                case 0:
-                    ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
-                    break;
-                case 1:
-                    ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Green"), Theme.Dark);
-                    break;
-                case 2:
-                    ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Orange"), Theme.Dark);
-                    break;
-                case 3:
-                    ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Purple"), Theme.Dark);
-                    break;
-                case 4:
-                    ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Red"), Theme.Dark);
-                    break;
-                case 5:
-                    ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Light);
-                    break;
-                case 6:
-                    ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Green"), Theme.Light);
-                    break;
-                case 7:
-                    ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Orange"), Theme.Light);
-                    break;
-                case 8:
-                    ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Purple"), Theme.Light);
-                    break;
-                case 9:
-                    ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Red"), Theme.Light);
-                    break;
-
+                ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
+                return;
             }
-
+            ThemeManager.ChangeTheme(window,
+                                     ThemeManager.DefaultAccents.First(a => a.Name == CurrentThemeName.Split('\\')[1]),
+                                     CurrentThemeName.Split('\\')[0] == "Dark" ? Theme.Dark : Theme.Light);
         }
 
         public delegate void SessionSelectedEventHandler(PhotoSession oldvalu, PhotoSession newvalue);

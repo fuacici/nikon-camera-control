@@ -60,19 +60,10 @@
                         <RowDefinition Height="83*" />
                         <RowDefinition Height="29*" />
                     </Grid.RowDefinitions>
+
                     <Label Content="{T:TranslateExtension LabelTheme}" Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Center"/>
-                    <ComboBox Name="cmb_themes" Grid.Row="1" Grid.Column="3" SelectedIndex="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CurrentThemeIndex}" Margin="2">
-                        <ComboBoxItem Content="Dark/Blue" />
-                        <ComboBoxItem Content="Dark/Green" />
-                        <ComboBoxItem Content="Dark/Orange" />
-                        <ComboBoxItem Content="Dark/Purple" />
-                        <ComboBoxItem Content="Dark/Red" />
-                        <ComboBoxItem Content="Light/Blue" />
-                        <ComboBoxItem Content="Light/Green" />
-                        <ComboBoxItem Content="Light/Orange" />
-                        <ComboBoxItem Content="Light/Purple" />
-                        <ComboBoxItem Content="Light/Red" />
-                    </ComboBox>
+                    <ComboBox Name="cmb_themes" Grid.Row="1" Grid.Column="3" SelectedValue="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CurrentThemeName}" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=Themes}" Margin="2"/>
+
                     <Label Content="{T:TranslateExtension LabelMainWindow}" Grid.Row="2" Grid.Column="1" VerticalContentAlignment="Center" />
                     <ComboBox Name="cmb_mainwindow" Grid.Row="2" Grid.Column="3" SelectedItem="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedMainForm}" Margin="2"/>                    
                     
