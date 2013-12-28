@@ -101,6 +101,9 @@
                         <CheckBox Content="{T:TranslateExtension LabelDelayImageLoading}"  IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=DelayImageLoading}" ToolTip="Disable this option if you use Lightroom"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="3">
+                        <CheckBox Content="{T:TranslateExtension LabelShowThumbUpDown}"  IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ShowThumbUpDown}" />
+                    </StackPanel>                    
+                    <StackPanel Orientation="Horizontal" Margin="3">
                         <CheckBox Content="{T:TranslateExtension LabelShowFocusPoints}"  IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ShowFocusPoints}" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="3">
