@@ -37,10 +37,19 @@
                                     <Rectangle Stroke="White" Margin="1" />
                                     <Rectangle Stroke="Black" Margin="2" />
                                     <Image Source="{Binding Path=Thumbnail}" ToolTip="{Binding Path=ToolTip}" Stretch="Uniform" Margin="3">
-                                        <!--<Image.InputBindings>
-                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=ImageDoubleClickCommand}" />
-                                    </Image.InputBindings>-->
                                     </Image>
+                                    <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ShowThumbUpDown, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false}" Margin="5">
+                                        <Rectangle Width="20" Height="20" Visibility="{Binding IsUnLiked, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <Rectangle.Fill>
+                                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_thumbs_down}"/>
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                        <Rectangle Width="20" Height="20" Visibility="{Binding IsLiked, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <Rectangle.Fill>
+                                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_thumbs_up}" />
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                    </StackPanel>
                                     <CheckBox IsChecked="{Binding Path=IsChecked}" Content="{Binding Path=Name}" Margin="3" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom"/>
                                 </Grid>
                             </StackPanel>
@@ -84,7 +93,7 @@
                     <xctk:ZoomboxView>Fit</xctk:ZoomboxView>
                 </xctk:Zoombox.ViewStack>
 
-                    <Image Name="image1" Stretch="Uniform" Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" HorizontalAlignment="Right" >
+                <Image Name="image1" Stretch="Uniform" Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}" HorizontalAlignment="Right" >
                     <Image.InputBindings>
                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=ImageDoubleClickCommand}" />
                     </Image.InputBindings>
@@ -93,8 +102,8 @@
             <!--</local:ZoomBorder>-->
             <Controls:ProgressRing IsActive="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading, Mode=TwoWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <ProgressBar Height="20" Margin="150,0,150,0" Name="progressBar1" VerticalAlignment="Bottom" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ImageLoading, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false}" Value="{Binding Source={x:Static Member=Devices:StaticHelper.Instance}, Path=LoadingProgress}" Opacity="0.5" Panel.ZIndex="1" IsIndeterminate="True" />
-            <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal">
-                <ToggleButton  Height="60" Name="but_unlike" Width="60" Margin="5" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.IsUnLiked}" Style="{DynamicResource MetroCircleToggleButtonStyle}">
+            <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=ShowThumbUpDown, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false}">
+                <ToggleButton  Height="60" Name="but_unlike" Width="60" Margin="5" IsChecked="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.IsUnLiked}" Style="{DynamicResource MetroCircleToggleButtonStyle}" >
                     <Rectangle Width="30" Height="30">
                         <Rectangle.Fill>
                             <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_thumbs_down}" />
@@ -135,7 +144,7 @@
                             <MenuItem Header="All" Command="{Binding Path=SelectAllCommand}" />
                             <MenuItem Header="None" Command="{Binding Path=SelectNoneCommand}" />
                             <MenuItem Header="Liked" Command="{Binding Path=SelectLiked}" />
-                            <MenuItem Header="UnLIked" Command="{Binding Path=SelectUnLiked}" />                            
+                            <MenuItem Header="UnLIked" Command="{Binding Path=SelectUnLiked}" />
                         </MenuItem>
                         <Separator/>
                         <MenuItem Header="Delete File(s)" Name="mnu_delete_file" Command="{Binding Path=DeleteItemCommand}" />

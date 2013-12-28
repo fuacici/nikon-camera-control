@@ -389,5 +389,6 @@ namespace CameraControl.Core.Translation
         public static string LabelSendTheLogFile = "Send the log file";
         public static string LabelAskSendLogFile = "Do you want to send log file to developers ?";
         public static string LabelSyncCameraDate = "Sync camera date time on camera connect";
+        public static string LabelShowThumbUpDown = "Show thumb up/down buttons";
     }
 }

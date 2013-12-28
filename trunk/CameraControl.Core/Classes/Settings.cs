@@ -265,10 +265,7 @@ namespace CameraControl.Core.Classes
                                   where addr.AddressFamily.ToString() == "InterNetwork"
                                   select addr.ToString()
                               ).ToList();
-                    foreach (string ip in ips)
-                    {
-                        res.Add(string.Format("http://{0}:{1}", ip, WebserverPort));
-                    }
+                    res.AddRange(ips.Select(ip => string.Format("http://{0}:{1}", ip, WebserverPort)));
                 }
                 catch (Exception exception)
                 {
@@ -602,6 +599,16 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        private bool _showThumbUpDown;
+        public bool ShowThumbUpDown
+        {
+            get { return _showThumbUpDown; }
+            set
+            {
+                _showThumbUpDown = value;
+                NotifyPropertyChanged("ShowThumbUpDown");
+            }
+        }
 
         public CameraPropertyEnumerator CameraProperties { get; set; }
         public string SelectedLayout { get; set; }
@@ -678,6 +685,7 @@ namespace CameraControl.Core.Classes
             DelayImageLoading = true;
             AddFakeCamera = false;
             SyncCameraDateTime = false;
+            ShowThumbUpDown = false;
         }
 
         public void Add(PhotoSession session)
