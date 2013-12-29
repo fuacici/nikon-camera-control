@@ -610,6 +610,17 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        private string _clientId;
+        public string ClientId
+        {
+            get { return _clientId; }
+            set
+            {
+                _clientId = value;
+                NotifyPropertyChanged("ClientId");
+            }
+        }
+
         public CameraPropertyEnumerator CameraProperties { get; set; }
         public string SelectedLayout { get; set; }
         public AsyncObservableCollection<CameraPreset> CameraPresets { get; set; }
@@ -685,6 +696,7 @@ namespace CameraControl.Core.Classes
             AddFakeCamera = false;
             SyncCameraDateTime = false;
             ShowThumbUpDown = false;
+            ClientId = Guid.NewGuid().ToString();
         }
 
         public void Add(PhotoSession session)

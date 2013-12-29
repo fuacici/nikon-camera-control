@@ -685,7 +685,8 @@ namespace CameraControl
 
         private void mnu_send_log_Click(object sender, RoutedEventArgs e)
         {
-            HelpProvider.SendCrashReport();
+            var wnd = new ErrorReportWnd("Log file");
+            wnd.ShowDialog();
         }
 
     }

@@ -87,7 +87,8 @@ namespace CameraControl
                 if (MessageBox.Show(TranslationStrings.LabelAskSendLogFile, TranslationStrings.LabelApplicationError, MessageBoxButton.YesNo,
                         MessageBoxImage.Error) == MessageBoxResult.Yes)
                 {
-                    HelpProvider.SendCrashReport();
+                    var wnd = new ErrorReportWnd("Application crash");
+                    wnd.ShowDialog();
                 }
                 if (
                 MessageBox.Show(errorMessage, TranslationStrings.LabelApplicationError, MessageBoxButton.YesNo,
