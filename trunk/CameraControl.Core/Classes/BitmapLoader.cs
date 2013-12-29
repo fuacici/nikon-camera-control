@@ -43,7 +43,7 @@ namespace CameraControl.Core.Classes
                     }
                     else
                     {
-                        _defaultThumbnail = new BitmapImage(new Uri("pack://application:,,,/Images/logo.png"));
+                        _defaultThumbnail = new BitmapImage(new Uri("pack://application:,,,/Images/logo_big.png"));
                     }
                 }
                 return _defaultThumbnail;
