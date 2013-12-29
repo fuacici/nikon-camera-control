@@ -22,7 +22,11 @@
 		</EventTrigger>
 	</Window.Triggers>
     <Grid>
-        <Image Name="background" Stretch="Uniform" Source="file:///D:/devel/vs2010/CameraControl/CameraControl/SplashScreen1.png" HorizontalAlignment="Center"  >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="280*" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        <Image Name="background" Stretch="Uniform" Source="/CameraControl;component/Images/logo_big.png" HorizontalAlignment="Center">
         	<Image.RenderTransform>
         		<TransformGroup>
         			<ScaleTransform/>
@@ -32,5 +36,10 @@
         		</TransformGroup>
         	</Image.RenderTransform>
         </Image>
+        <ProgressBar IsIndeterminate="True" Panel.ZIndex="-3" Height="30" VerticalAlignment="Bottom" Grid.RowSpan="2" />
+        <Label Grid.Row="1" Content="Loading...." FontSize="15"/>
+        <Label Content="Label" Name="lbl_vers" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right"  HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom" FontSize="15" Panel.ZIndex="-1" Grid.RowSpan="2">
+
+        </Label>
     </Grid>
 </Window>

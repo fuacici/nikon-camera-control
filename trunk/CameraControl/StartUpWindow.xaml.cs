@@ -33,6 +33,7 @@ namespace CameraControl
         public StartUpWindow()
         {
             InitializeComponent();
+            lbl_vers.Content = "V." + Assembly.GetExecutingAssembly().GetName().Version;
             string procName = Process.GetCurrentProcess().ProcessName;
             // get the list of all processes by that name
 
