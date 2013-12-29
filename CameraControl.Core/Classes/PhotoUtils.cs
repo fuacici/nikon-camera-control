@@ -111,44 +111,6 @@ namespace CameraControl.Core.Classes
         }
 
 
-
-        public static bool CheckForUpdate()
-        {
-            try
-            {
-                string tempfile = Path.GetTempFileName();
-                using (WebClient client = new WebClient())
-                {
-                    client.DownloadFile("http://nikon-camera-control.googlecode.com/svn/trunk/versioninfo.xml", tempfile);
-                }
-
-                XmlDocument document = new XmlDocument();
-                document.Load(tempfile);
-                string ver = document.SelectSingleNode("application/version").InnerText;
-                string url = "http://code.google.com/p/nikon-camera-control/downloads/list";
-                var selectSingleNode = document.SelectSingleNode("application/url");
-                if (selectSingleNode != null)
-                    url = selectSingleNode.InnerText;
-                Version v_ver = new Version(ver);
-                if (v_ver > Assembly.GetExecutingAssembly().GetName().Version)
-                {
-                    if (
-                      MessageBox.Show("New version of application released.\nDo you want to download?", "Update",
-                                      MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        Process.Start(url);
-                        return true;
-                    }
-                }
-                File.Delete(tempfile);
-            }
-            catch (Exception exception)
-            {
-                Log.Error("Error download update information", exception);
-            }
-            return false;
-        }
-
         public static void PlayCaptureSound()
         {
             try

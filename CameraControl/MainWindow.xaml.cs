@@ -3,6 +3,7 @@ using System.Linq;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
@@ -23,6 +24,7 @@ using HelpProvider = CameraControl.Classes.HelpProvider;
 using MessageBox = System.Windows.MessageBox;
 //using MessageBox = System.Windows.Forms.MessageBox;
 using Path = System.IO.Path;
+using Timer = System.Timers.Timer;
 
 namespace CameraControl
 {
@@ -82,15 +84,22 @@ namespace CameraControl
             ServiceProvider.DeviceManager.PhotoCaptured += DeviceManager_PhotoCaptured;
 
             DataContext = ServiceProvider.Settings;
+            ServiceProvider.DeviceManager.CameraSelected += DeviceManager_CameraSelected;
+            SetLayout(ServiceProvider.Settings.SelectedLayout);
+            ServiceProvider.Settings.ApplyTheme(this);
+            var thread = new Thread(CheckForUpdate);
+            thread.Start();
+        }
+
+        private void CheckForUpdate()
+        {
+            Thread.Sleep(2000);
             if ((DateTime.Now - ServiceProvider.Settings.LastUpdateCheckDate).TotalDays > 7)
             {
                 ServiceProvider.Settings.LastUpdateCheckDate = DateTime.Now;
                 ServiceProvider.Settings.Save();
-                CheckForUpdate();
+                Dispatcher.Invoke(new Action(() => NewVersionWnd.CheckForUpdate(false)));
             }
-            ServiceProvider.DeviceManager.CameraSelected += DeviceManager_CameraSelected;
-            SetLayout(ServiceProvider.Settings.SelectedLayout);
-            ServiceProvider.Settings.ApplyTheme(this);
         }
 
         void DeviceManager_CameraSelected(ICameraDevice oldcameraDevice, ICameraDevice newcameraDevice)
@@ -137,12 +146,6 @@ namespace CameraControl
                     PhotoCaptured(eventArgs);
                 }
             }
-        }
-
-        private void CheckForUpdate()
-        {
-            if (PhotoUtils.CheckForUpdate())
-                Close();
         }
 
         void PhotoCaptured(object o)
@@ -420,14 +423,7 @@ namespace CameraControl
 
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
-            if (PhotoUtils.CheckForUpdate())
-            {
-                Close();
-            }
-            else
-            {
-                MessageBox.Show(TranslationStrings.MsgApplicationUpToDate);
-            }
+            NewVersionWnd.CheckForUpdate(true);
         }
 
         private void mnu_reconnect_Click(object sender, RoutedEventArgs e)
@@ -559,11 +555,6 @@ namespace CameraControl
 
         private void btn_Tags_Click(object sender, RoutedEventArgs e)
         {
-            //if (ServiceProvider.Settings.DefaultSession.Tags.Count == 0)
-            //{
-            //    MessageBox.Show(TranslationStrings.MsgUseSessionEditorTags);
-            //    return;
-            //}
             ServiceProvider.WindowsManager.ExecuteCommand(ServiceProvider.WindowsManager.Get(typeof(TagSelectorWnd)).IsVisible
                                                             ? WindowsCmdConsts.TagSelectorWnd_Hide
                                                             : WindowsCmdConsts.TagSelectorWnd_Show);
