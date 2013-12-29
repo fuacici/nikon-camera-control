@@ -279,7 +279,12 @@ namespace CameraControl.Core.Classes
         private string _webaddress;
         public string Webaddress
         {
-            get { return _webaddress; }
+            get
+            {
+                if (!AvaiableWebAddresses.Contains(_webaddress) && AvaiableWebAddresses.Count > 0)
+                    return AvaiableWebAddresses[0];
+                return _webaddress;
+            }
             set
             {
                 _webaddress = value;
