@@ -390,5 +390,8 @@ namespace CameraControl.Core.Translation
         public static string LabelAskSendLogFile = "Do you want to send log file to developers ?";
         public static string LabelSyncCameraDate = "Sync camera date time on camera connect";
         public static string LabelShowThumbUpDown = "Show thumb up/down buttons";
+        public static string LabelSend = "Send";
+        public static string LabelLogMessage = "Message to the developers of digiCamControl :";
+        public static string LabelLogText = "The log file will be send to the digiCamcontrol developer team for improve application stability.";
     }
 }

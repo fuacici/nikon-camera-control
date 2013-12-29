@@ -54,7 +54,7 @@ namespace CameraControl.Classes
             PhotoUtils.Run(_helpData[sections], "");
         }
 
-        public static void SendCrashReport()
+        public static void SendCrashReport(string body, string type)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace CameraControl.Classes
                 if (File.Exists(destfile))
                     File.Delete(destfile);
 
-                using (ZipFile zip = new ZipFile(destfile))
+                using (var zip = new ZipFile(destfile))
                 {
                         zip.AddFile(ServiceProvider.LogFile, "");
                         zip.Save(destfile);
@@ -70,8 +70,8 @@ namespace CameraControl.Classes
                 var client = new MailgunClient("digicamcontrol.mailgun.org", "key-6n75wci5cpuz74vsxfcwfkf-t8v74g82");
                 var message = new MailMessage("error@digicamcontrol.mailgun.org", "error_report@digicamcontrol.com")
                                   {
-                                      Subject = "Error report",
-                                      Body = "Crash report",
+                                      Subject = (type ?? "Log file" )+"-"+ (ServiceProvider.Settings.ClientId ?? ""),
+                                      Body = "Client Id" + (ServiceProvider.Settings.ClientId??"") + "\n" + body,
                                   };
                 message.Attachments.Add(new Attachment(destfile));
 

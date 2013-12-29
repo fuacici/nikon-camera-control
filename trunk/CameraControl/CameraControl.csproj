@@ -267,6 +267,9 @@
     <Compile Include="windows\DownloadPhotosWnd.xaml.cs">
       <DependentUpon>DownloadPhotosWnd.xaml</DependentUpon>
     </Compile>
+    <Compile Include="windows\ErrorReportWnd.xaml.cs">
+      <DependentUpon>ErrorReportWnd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="windows\FullScreenWnd.xaml.cs">
       <DependentUpon>FullScreenWnd.xaml</DependentUpon>
     </Compile>
@@ -411,6 +414,10 @@
     <Page Include="windows\DownloadPhotosWnd.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="windows\ErrorReportWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="windows\FullScreenWnd.xaml">
       <SubType>Designer</SubType>
