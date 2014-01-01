@@ -125,7 +125,6 @@
   <string name="LabelSessonName">Όνομα εργασίας :</string>
   <string name="LabelFolder">Φάκελος :</string>
   <string name="LabelFileNameTemplate">Όνομα προτύπου :</string>
-  <string name="LabelFileNameTemplateToolTip">$N - Όνομα εργασίας \n$C - Μετρητής \n$E - Αντιστάθμιση έκθεσης \n$X - Όνομα κάμερας\n$D - Τρέχουσα ημερομηνία (Raw|Jpg)\n$Tag1 - Επιλεγμένη ετικέτα 1\n$Tag2 - Επιλεγμένη ετικέτα 2\n$Tag3 - Επιλεγμένη ετικέτα 3\n$Tag4 - Επιλεγμένη ετικέτα 4</string>
   <string name="LabelCounter">Μετρητής :</string>
   <string name="LabelUseOriginal">Χρήση ονόματος αρχείου από την κάμερα</string>
   <string name="LabelUseOriginalToolTip">Αυτή η επιλογή δεν θα δουλέψει με τον WIA driver</string>
@@ -378,4 +377,5 @@
   <string name="LabelSetCounters">Ορισμός Μετρητές</string>
   <string name="LabelEdgeDetection">Aνίχνευση ακμής</string>
   <string name="LabelLeadingZeros">Μετρητής μηδενικών που οδηγούν</string>
+  <!--04/07/2013-->
 </resources>

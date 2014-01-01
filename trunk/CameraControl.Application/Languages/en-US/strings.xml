@@ -422,4 +422,20 @@
 	<string name="LabelAutoRotate">Auto rotate</string>
 	<string name="LabelReset">Reset</string>
 	<string name="LabelFocus">Focus</string>
+	<!--17/11/2013-->        
+    <string name="LabelAddFakeCamera">Add a fake camera</string>
+    <string name="LabelBarcode">Barcode</string>
+    <string name="LabelSendTheLogFile">Send the log file</string>
+    <string name="LabelAskSendLogFile">Do you want to send log file to developers ?</string>
+    <string name="LabelSyncCameraDate">Sync camera date time on camera connect</string>
+    <string name="LabelShowThumbUpDown">Show thumb up/down buttons</string>
+    <string name="LabelSend">Send</string>
+    <string name="LabelLogMessage">Message to the developers of digiCamControl :</string>
+    <string name="LabelLogText">The log file will be send to the digiCamcontrol developer team for improve application stability.</string>
+    <string name="LabelFullscreen">Full screen</string>
+    <string name="LabelSelection">Selection</string>
+    <string name="LabelSelectAll">Select All</string>
+    <string name="LabelSelectNone">Select None</string>
+    <string name="LabelSelectLiked">Select Liked</string>
+    <string name="LabelSelectUnLiked">Select UnLiked</string>
 </resources>
