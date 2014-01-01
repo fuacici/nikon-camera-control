@@ -175,6 +175,12 @@ namespace CameraControl.windows
                 qrcode.Text = ServiceProvider.Settings.Webaddress;
         }
 
+        private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            PhotoUtils.Run("https://www.transifex.com/projects/p/digicamcontrol/");
+        }
+
+
 
 
     }

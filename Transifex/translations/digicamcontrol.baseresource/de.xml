@@ -125,7 +125,6 @@
   <string name="LabelSessonName">Sitzungsname</string>
   <string name="LabelFolder">Ordner</string>
   <string name="LabelFileNameTemplate">Dateinbenennung</string>
-  <string name="LabelFileNameTemplateToolTip">$ N - Session Name ⏎\n$ C - Zähler ⏎\n$ E - Belichtungskorrektur ⏎\n$ X - Kamera Name ⏎\n$ D - Aktuelles Datum ⏎\n$ Typ - Typ der Datei (Raw | JPG) ⏎\n$ Tag1 - Ausgewählte tag 1 ⏎\n$ Tag2 - Ausgewählte tag 2 ⏎\n$ Tag3 - Ausgewählte tag 3 ⏎\n$ Tag4 - Ausgewählte tag 4</string>
   <string name="LabelCounter">Zähler</string>
   <string name="LabelUseOriginal">Originalnamen der Kamera benutzen</string>
   <string name="LabelUseOriginalToolTip">Diese Option funktioniert nicht mit dem WIA-Treiber</string>
@@ -378,4 +377,5 @@
   <string name="LabelSetCounters">Zähler installieren</string>
   <string name="LabelEdgeDetection">Kantenerkennung</string>
   <string name="LabelLeadingZeros">Zähler führenden Nullen</string>
+  <!--04/07/2013-->
 </resources>

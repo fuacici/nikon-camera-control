@@ -125,7 +125,6 @@
   <string name="LabelSessonName">Nome sessione:</string>
   <string name="LabelFolder">Cartella:</string>
   <string name="LabelFileNameTemplate">Nome file del Template :</string>
-  <string name="LabelFileNameTemplateToolTip">$N - Nome sessione ⏎\n$C - Contatore ⏎\n$E - Comp. esposizione ⏎\n$X - Nome Fotocamera ⏎\n$D - Data attuale⏎\n$Type - Tipo di file (Raw|Jpg) ⏎\n$Tag1 - Selezionato tag 1⏎\n$Tag2 - Selezionato tag 2⏎\n$Tag3 - Selezionato tag 3⏎\n$Tag4 - Selezionato tag 4</string>
   <string name="LabelCounter">Contatore:</string>
   <string name="LabelUseOriginal">Usa il nome file originale dato dalla fotocamera</string>
   <string name="LabelUseOriginalToolTip">Questa opzione non funziona con il driver WIA</string>
@@ -378,4 +377,30 @@
   <string name="LabelSetCounters">Imposta i contatori</string>
   <string name="LabelEdgeDetection">Rilevamento bordi</string>
   <string name="LabelLeadingZeros">Contatori inizialmente a zero</string>
+  <!--04/07/2013-->
+  <string name="LabelShowFocusRect">Mostra il rettangolo di messa a fuoco</string>
+  <string name="LabelEasyLiveViewControl">Controllo live view semplice</string>
+  <string name="LabelExif">Exif</string>
+  <string name="LabelImageProperties">Proprietà immagine</string>
+  <string name="LabelFileName">Nome file</string>
+  <string name="LabelSet">Imposta</string>
+  <string name="LabelTagSelector">Selettore di Tag</string>
+  <string name="LabelComment">Commento</string>
+  <string name="LabelWriteComments">Scrivi commenti/Tag nel file dell\'immagine scaricata</string>
+  <string name="LabelStayOnTop2">Rimani in primo piano</string>
+  <string name="LabelWriteSelectedTags">Scrivi i Tag dal selezionatore di Tag</string>
+  <string name="LabelClearCache">Svuota cache</string>
+  <string name="LabelShowMagnifierInFullSccreen">Mostra l\'ingrandimento a schermo intero</string>
+  <string name="LabelDelayImageLoading">Ritarda caricamento immagine</string>
+  <string name="LabelShowOverlayFolder">Mostra cartella in sovrapposizione</string>
+  <string name="LabelPHDGuiding">Guida PHD</string>
+  <string name="LabelWaitPHDGuiding">Attesa per il PHD (sec)</string>
+  <string name="LabelCountDown">Conto alla rovescia</string>
+  <string name="LabelCurrentEvent">Evento corrente</string>
+  <string name="LabelRemainingCaptures">Scatti rimanenti</string>
+  <string name="LabelLiveViewRotation">Rotazione Live view</string>
+  <string name="LabelAutomaticallyGuiding">Guida PHD automatica dopo l\'esecuzione della foto</string>
+  <string name="LabelAutoRotate">Rotazione automatica</string>
+  <string name="LabelReset">Resetta</string>
+  <string name="LabelFocus">Messa a fuoco</string>
 </resources>

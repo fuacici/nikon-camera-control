@@ -354,4 +354,5 @@
   <string name="LabelDestinationCardError">El destino de grabación es la tarjeta</string>
   <string name="LabelLiveViewError">Error al cargar la lista de archivos</string>
   <!--07/05/2013-->
+  <!--04/07/2013-->
 </resources>

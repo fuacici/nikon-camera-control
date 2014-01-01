@@ -59,6 +59,7 @@
 
                     <Label Content="{T:TranslateExtension LabelInterfaceLanguage}" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right"/>
                     <ComboBox  ItemsSource="{Binding Source={x:Static Member=T:TranslationManager.AvailableLangs}}" DisplayMemberPath="Name" SelectedValuePath="Value"  SelectedValue="{Binding SelectedLanguage}" Grid.Row="4" Grid.Column="3" Margin="2"/>
+                    <TextBlock Grid.Row="5" Grid.Column="3" Text="Improve interface localization" Cursor="Hand" FontStyle="Italic" HorizontalAlignment="Right" MouseDown="TextBlock_MouseDown"><TextBlock.TextDecorations><TextDecoration><TextDecoration.Pen><Pen /></TextDecoration.Pen></TextDecoration></TextBlock.TextDecorations></TextBlock>
                 </Grid>
             </TabItem>
             <TabItem Header="{T:TranslateExtension LabelPreview}">

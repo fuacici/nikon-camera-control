@@ -355,6 +355,7 @@
   <string name="LabelLiveViewError">Błąd uruchomienia podglądu na żywo</string>
   <!--07/05/2013-->
   <string name="LabelDevices">Urządzenia</string>
+  <string name="LabelExternalShutterRelease">Zewnętrzny spust migawki</string>
   <string name="LabelConfigName">Nazwa konfiguracja</string>
   <string name="LabelDriver">Sterownik</string>
   <string name="LabelAstronomy">Astronomia</string>
@@ -370,8 +371,11 @@
   <string name="LabelStartLiveView">Uruchom LiveView</string>
   <string name="LabelStopLiveView">Zatrzymaj LiveView</string>
   <string name="LabelBrightness">Jasność</string>
+  <string name="LabelUseExternalShutterRelease">Użyj zewnętrznego spustu migawki</string>
   <string name="LabelDownloadJpgOnly">Pobierz plik JPG tylko</string>
   <string name="LabelDownloadJpgOnlyToolTip">Jeśli przechwytywanie odbywa się tylko w formacie RAW + JPEG, pliki pobierane są tylko JPG</string>
   <string name="LabelSetCounters">Ustaw liczniki</string>
   <string name="LabelEdgeDetection">Wykrywanie krawędzi</string>
+  <string name="LabelLeadingZeros">Licznik początkowych zer</string>
+  <!--04/07/2013-->
 </resources>
