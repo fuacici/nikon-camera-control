@@ -245,7 +245,7 @@ namespace CameraControl.Core.Classes
             WriteableBitmap bitmap = file.DisplayImage.Clone();
             int color1 = ConvertColor(Colors.Blue);
             int color2 = ConvertColor(Colors.Red);
-            int treshold = 3;
+            int treshold = 2;
             using (BitmapContext bitmapContext = bitmap.GetBitmapContext())
             {
                 for (var i = 0; i < bitmapContext.Width * bitmapContext.Height; i++)

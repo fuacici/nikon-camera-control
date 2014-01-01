@@ -170,7 +170,7 @@
                         </Rectangle.Fill>
                     </Rectangle>
                 </Button>
-                <Button Grid.Row="2" Grid.Column="0" Margin="1" Grid.ColumnSpan="2" Content="Invert" Command="{Binding Path=SelectInvertCommand}" />
+                <Button Grid.Row="2" Grid.Column="0" Margin="2" Grid.ColumnSpan="2" Content="Invert" Command="{Binding Path=SelectInvertCommand}" />
             </Grid>
         </GroupBox>
     </Grid>
