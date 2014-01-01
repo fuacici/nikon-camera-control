@@ -31,6 +31,7 @@ namespace CameraControl.Layouts
             SelectNoneCommand = new RelayCommand<object>(delegate { ServiceProvider.Settings.DefaultSession.SelectNone(); });
             SelectLiked = new RelayCommand<object>(delegate { ServiceProvider.Settings.DefaultSession.SelectLiked(); });
             SelectUnLiked = new RelayCommand<object>(delegate { ServiceProvider.Settings.DefaultSession.SelectUnLiked(); });
+            SelectInvertCommand = new RelayCommand<object>(delegate { ServiceProvider.Settings.DefaultSession.SelectInver(); });
             CopyNameClipboardCommand = new RelayCommand<object>(delegate { Clipboard.SetText(ServiceProvider.Settings.SelectedBitmap.FileItem.FileName); });
             OpenExplorerCommand = new RelayCommand<object>(OpenInExplorer);
             OpenViewerCommand = new RelayCommand<object>(OpenViewer);
@@ -69,6 +70,12 @@ namespace CameraControl.Layouts
 
 
         public RelayCommand<object> SelectNoneCommand
+        {
+            get;
+            private set;
+        }
+
+        public RelayCommand<object> SelectInvertCommand
         {
             get;
             private set;

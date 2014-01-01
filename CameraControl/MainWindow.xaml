@@ -17,17 +17,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />-->
                 <ResourceDictionary Source="Resources/Icons.xaml" />
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml"/>-->
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml"/>-->
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Menu.xaml"/>-->
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />-->
-
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter1" />
         </ResourceDictionary>
@@ -59,128 +49,125 @@
     </Window.DataContext>-->
 
     <Controls:MetroWindow.Flyouts>
-      <Controls:FlyoutsControl>
-        <Controls:Flyout Header="{T:TranslateExtension LabelMenu}" Position="Right" Opacity="0.9" IsOpen="False">
-            <StackPanel>
-            <Menu  VerticalAlignment="Top" HorizontalAlignment="Left">
-                <Menu.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel Orientation="Vertical"/>
-                    </ItemsPanelTemplate>
-                </Menu.ItemsPanel>
-                
-                <MenuItem Header="{T:TranslateExtension MenuLayout}">
-                    <MenuItem.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </MenuItem.ItemsPanel>
-                    <MenuItem Header="{T:TranslateExtension MenuLayoutNormal}" Click="MenuItem_Click_6" />
-                    <MenuItem Header="{T:TranslateExtension MenuLayoutGridRight}" Click="MenuItem_Click_7" />
-                    <MenuItem Header="{T:TranslateExtension MenuLayoutGrid}" Click="MenuItem_Click_8" />
-                </MenuItem>
-                <MenuItem Header="{T:TranslateExtension MenuPresets}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}">
-                    <MenuItem.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </MenuItem.ItemsPanel>
+        <Controls:FlyoutsControl>
+            <Controls:Flyout Header="{T:TranslateExtension LabelMenu}" Position="Right" Opacity="0.9" IsOpen="False">
+                <StackPanel>
+                    <Menu  VerticalAlignment="Top" HorizontalAlignment="Left">
+                        <Menu.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </Menu.ItemsPanel>
 
-                    <MenuItem Header="{T:TranslateExtension MenuPresetsLoad}" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CameraPresets}" >
-                        <MenuItem.ItemTemplate>
-                            <DataTemplate>
-                                <MenuItem Header="{Binding Path=Name}" 
+                        <MenuItem Header="{T:TranslateExtension MenuPresets}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}">
+                            <MenuItem.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </MenuItem.ItemsPanel>
+
+                            <MenuItem Header="{T:TranslateExtension MenuPresetsLoad}" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=CameraPresets}" >
+                                <MenuItem.ItemTemplate>
+                                    <DataTemplate>
+                                        <MenuItem Header="{Binding Path=Name}" 
                                       Command="{Binding Path=SelectPresetCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" 
                                       CommandParameter="{Binding}"/>
-                            </DataTemplate>
-                        </MenuItem.ItemTemplate>
-                    </MenuItem>
-                    <MenuItem Header="{T:TranslateExtension MenuPresetsSave}" Click="MenuItem_Click_4" />
-                    <MenuItem Header="{T:TranslateExtension MenuPresetsEdit}" Click="MenuItem_Click_5" />
-                </MenuItem>
-                    <MenuItem Header="{T:TranslateExtension MenuHelp}" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}">
-                    <MenuItem.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </MenuItem.ItemsPanel>
-                        <MenuItem Header="{T:TranslateExtension MenuHomePage}" Click="MenuItem_Click" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}"/>
-                        <MenuItem Header="{T:TranslateExtension MenuCheckForUpdate}" Name="mnu_update" Click="MenuItem_Click_1" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}"/>
-                        <MenuItem Header="{T:TranslateExtension MenuForum}" Name="mnu_forum" Click="mnu_forum_Click" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}"/>
-                            <Separator />
-                            <MenuItem Header="{T:TranslateExtension LabelSendTheLogFile}" Name="mnu_send_log" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}" Click="mnu_send_log_Click" />
-                            <Separator />
-                        <MenuItem Header="{T:TranslateExtension MenuAbout}" Name="mnu_about" Click="btn_about_Click" Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=ShowAboutWindow, Converter={StaticResource BooleanToVisibilityConverter1}}"/>
-                </MenuItem>
-            </Menu>
-            <StackPanel Orientation="Vertical">
-                    <Expander Header="{T:TranslateExtension LabelExport}" IsExpanded="True">
-                        <ListBox ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.PluginManager}, Path=ExportPlugins}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel>
-                                        <Button Content="{Binding Path=Title}" Command="{Binding Path=ExecuteExportPluginCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding}" Margin="4"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </Expander>
-                </StackPanel>
-                <StackPanel Orientation="Vertical">
-                    <Expander Header="{T:TranslateExtension LabelTools}" IsExpanded="True">
-                        <ListBox ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.PluginManager}, Path=ToolPlugins}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel>
-                                        <Button Content="{Binding Path=Title}" Command="{Binding Path=ExecuteToolPluginCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding}" Margin="4"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </Expander>
-                </StackPanel>
-           </StackPanel>
-        </Controls:Flyout>
-        <Controls:Flyout Header="{T:TranslateExtension MenuConnectedCameras}" Background="#9f000000" Position="Left" Opacity="0.9">
-            <Grid Width="210" Height="{Binding ElementName=Window,Path=Height}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="70" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="70" />                    
-                </Grid.RowDefinitions>
-                <StackPanel>
-                <Button Content="{T:TranslateExtension MenuMultipleCamera}" Click="Button_Click" Margin="3"/>
-                <Button Height="30" Name="btn_sort" Width="30" Click="btn_sort_Click">
-                    <Button.Content>
-                        <Rectangle Width="18" Height="18">
-                            <Rectangle.Fill>
-                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_sort_alphabetical_ascending}" />
-                            </Rectangle.Fill>
-                        </Rectangle>
-                    </Button.Content>
-                </Button>
-                </StackPanel>
-                <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="0" Grid.Row="1">
-                    <StackPanel >
-                        <StackPanel.ScrollOwner>
-                            <ScrollViewer />
-                        </StackPanel.ScrollOwner>
-
-                        <ListBox ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" SelectedItem="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice}" ScrollViewer.HorizontalScrollBarVisibility="Hidden" >
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                    <local:CameraItem CameraDevice="{Binding Path=.}"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                                    </DataTemplate>
+                                </MenuItem.ItemTemplate>
+                            </MenuItem>
+                            <MenuItem Header="{T:TranslateExtension MenuPresetsSave}" Click="MenuItem_Click_4" />
+                            <MenuItem Header="{T:TranslateExtension MenuPresetsEdit}" Click="MenuItem_Click_5" />
+                        </MenuItem>
+                    </Menu>
+                    <StackPanel Orientation="Vertical"  Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                        <Expander Header="{T:TranslateExtension MenuLayout}" IsExpanded="True">
+                            <StackPanel>
+                                <Button Content="{T:TranslateExtension MenuLayoutNormal}" Click="MenuItem_Click_6" Margin="2"/>
+                                <Button Content="{T:TranslateExtension MenuLayoutGridRight}" Click="MenuItem_Click_7" Margin="2"/>
+                                <Button Content="{T:TranslateExtension MenuLayoutGrid}" Click="MenuItem_Click_8" Margin="2"/>
+                            </StackPanel>
+                        </Expander>
                     </StackPanel>
-                </ScrollViewer>
-                <StackPanel Height="70" Grid.Row="2">
-                        
+                    
+                    <StackPanel Orientation="Vertical"  Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Branding}, Path=OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                        <Expander Header="{T:TranslateExtension MenuHelp}" IsExpanded="True">
+                            <StackPanel>
+                                <Button Content="{T:TranslateExtension MenuHomePage}" Click="MenuItem_Click" Margin="2"/>
+                                <Button Content="{T:TranslateExtension MenuCheckForUpdate}" Click="MenuItem_Click_1" Margin="2"/>
+                                <Button Content="{T:TranslateExtension MenuForum}" Click="mnu_forum_Click" Margin="2"/>
+                                <Button Content="{T:TranslateExtension LabelSendTheLogFile}" Click="mnu_send_log_Click" Margin="2"/>
+                                <Button Content="{T:TranslateExtension MenuAbout}" Click="btn_about_Click" Margin="2"/>
+                            </StackPanel>
+                        </Expander>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <Expander Header="{T:TranslateExtension LabelExport}" IsExpanded="True">
+                            <ListBox ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.PluginManager}, Path=ExportPlugins}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <Button Content="{Binding Path=Title}" Command="{Binding Path=ExecuteExportPluginCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding}" Margin="2"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Expander>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <Expander Header="{T:TranslateExtension LabelTools}" IsExpanded="True">
+                            <ListBox ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.PluginManager}, Path=ToolPlugins}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <Button Content="{Binding Path=Title}" Command="{Binding Path=ExecuteToolPluginCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding}" Margin="2"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Expander>
+                    </StackPanel>
+                </StackPanel>
+            </Controls:Flyout>
+            <Controls:Flyout Header="{T:TranslateExtension MenuConnectedCameras}" Background="#9f000000" Position="Left" Opacity="0.9">
+                <Grid Width="210" Height="{Binding ElementName=Window,Path=Height}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="70" />
+                    </Grid.RowDefinitions>
+                    <StackPanel>
+                        <Button Content="{T:TranslateExtension MenuMultipleCamera}" Click="Button_Click" Margin="3"/>
+                        <Button Height="30" Name="btn_sort" Width="30" Click="btn_sort_Click">
+                            <Button.Content>
+                                <Rectangle Width="18" Height="18">
+                                    <Rectangle.Fill>
+                                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_sort_alphabetical_ascending}" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                    <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="0" Grid.Row="1">
+                        <StackPanel >
+                            <StackPanel.ScrollOwner>
+                                <ScrollViewer />
+                            </StackPanel.ScrollOwner>
+
+                            <ListBox ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" SelectedItem="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice}" ScrollViewer.HorizontalScrollBarVisibility="Hidden" >
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <local:CameraItem CameraDevice="{Binding Path=.}"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </ScrollViewer>
+                    <StackPanel Height="70" Grid.Row="2">
+
                     </StackPanel>
                 </Grid>
-        </Controls:Flyout>
-      </Controls:FlyoutsControl>
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
     </Controls:MetroWindow.Flyouts>
 
     <Grid>
@@ -205,8 +192,8 @@
         </Grid>
 
         <StackPanel Orientation="Vertical" Grid.Row="2">
-                <Label Content="Model:" />
-                <Label Content="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.DeviceName}" />
+            <Label Content="Model:" />
+            <Label Content="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.DeviceName}" />
         </StackPanel>
 
 

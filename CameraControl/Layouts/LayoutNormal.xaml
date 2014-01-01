@@ -7,23 +7,14 @@
                     xmlns:Layouts="clr-namespace:CameraControl.Layouts"
                     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-                    xmlns:Devices="clr-namespace:CameraControl.Devices;assembly=CameraControl.Devices" mc:Ignorable="d" 
+                    xmlns:Devices="clr-namespace:CameraControl.Devices;assembly=CameraControl.Devices"
+                    xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core" mc:Ignorable="d" 
              DataContext="{Binding RelativeSource={RelativeSource Self}}"                    
              d:DesignHeight="484" d:DesignWidth="689">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />-->
                 <ResourceDictionary Source="../Resources/Icons.xaml" />
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml"/>-->
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml"/>-->
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Menu.xaml"/>-->
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />-->
-
-                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="{x:Type ListBox}">
                 <!-- Set the ItemTemplate of the ListBox to a DataTemplate which
@@ -78,7 +69,11 @@
             <RowDefinition Height="20" />
             <RowDefinition Height="120" />
         </Grid.RowDefinitions>
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="75"/>
+        </Grid.ColumnDefinitions>
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.ColumnSpan="2">
             <Label Content="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.InfoLabel}" HorizontalContentAlignment="Center" Height="30" Margin="0,0,0,0" VerticalAlignment="Top" FontWeight="Bold" />
             <!--<xctk:MagnifierManager.Magnifier>
                 <xctk:Magnifier Radius="100" ZoomFactor=".4" Target="{Binding ElementName=image1}" />
@@ -140,13 +135,6 @@
                             </MenuItem.ItemTemplate>
                         </MenuItem>
                         <Separator/>
-                        <MenuItem Header="Select" >
-                            <MenuItem Header="All" Command="{Binding Path=SelectAllCommand}" />
-                            <MenuItem Header="None" Command="{Binding Path=SelectNoneCommand}" />
-                            <MenuItem Header="Liked" Command="{Binding Path=SelectLiked}" />
-                            <MenuItem Header="UnLIked" Command="{Binding Path=SelectUnLiked}" />
-                        </MenuItem>
-                        <Separator/>
                         <MenuItem Header="Delete File(s)" Name="mnu_delete_file" Command="{Binding Path=DeleteItemCommand}" />
                         <MenuItem Header="Show in explorer" Name="mnu_show_explorer" Command="{Binding Path=OpenExplorerCommand}" />
                         <MenuItem Header="Open in external viewer" Name="mnu_open" Command="{Binding Path=OpenViewerCommand}" />
@@ -155,5 +143,35 @@
                 </ListBox.ContextMenu>
             </ListBox>
         </StackPanel>
+        <GroupBox Grid.Column="1" Grid.Row="2" Header="{T:TranslateExtension LabelSelection}" Margin="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Row="0" Grid.Column="0" Margin="1"  Content="[-]" Command="{Binding Path=SelectNoneCommand}" ToolTip="{T:TranslateExtension LabelSelectNone}"/>
+                <Button Grid.Row="0" Grid.Column="1" Margin="1"  Content="[+]" Command="{Binding Path=SelectAllCommand}" ToolTip="{T:TranslateExtension LabelSelectAll}"/>
+                <Button Grid.Row="1" Grid.Column="0" Margin="1" Command="{Binding Path=SelectUnLiked}" ToolTip="{T:TranslateExtension LabelSelectUnLiked}">
+                    <Rectangle Width="15" Height="15">
+                        <Rectangle.Fill>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_thumbs_down}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Button>
+                <Button Grid.Row="1" Grid.Column="1" Margin="1" Command="{Binding Path=SelectLiked}" ToolTip="{T:TranslateExtension LabelSelectLiked}">
+                    <Rectangle Width="15" Height="15">
+                        <Rectangle.Fill>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_thumbs_up}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Button>
+                <Button Grid.Row="2" Grid.Column="0" Margin="1" Grid.ColumnSpan="2" Content="Invert" Command="{Binding Path=SelectInvertCommand}" />
+            </Grid>
+        </GroupBox>
     </Grid>
 </Layouts:LayoutBase>
