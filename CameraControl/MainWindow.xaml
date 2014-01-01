@@ -203,12 +203,12 @@
                 <Button ToolTip="{T:TranslateExtension CapturePhotoToolTip}"  Height="50" Name="button3" Click="button3_Click" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Style="{DynamicResource MetroCircleButtonStyle}">
                     <Image Margin="5" Source="/CameraControl;component/Images/Camera.png"/>
                 </Button>
-                <Button ToolTip="{T:TranslateExtension CapturePhotoNoAfToolTip}"  Height="50" Name="btn_capture_noaf" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_capture_noaf_Click" >
+                <!--<Button ToolTip="{T:TranslateExtension CapturePhotoNoAfToolTip}"  Height="50" Name="btn_capture_noaf" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Margin="5" Click="btn_capture_noaf_Click" >
                     <Grid>
                         <Image Margin="5" Source="/CameraControl;component/Images/Camera.png"/>
                         <Label Content="NoAf" HorizontalContentAlignment="Center" FontSize="14" />
                     </Grid>
-                </Button>
+                </Button>-->
                 <Button ToolTip="{T:TranslateExtension DownloadWindowTitle}" Height="50" Name="but_download" Width="50" Margin="5" Style="{DynamicResource MetroCircleButtonStyle}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Click="but_download_Click">
                     <Rectangle Width="20" Height="20">
                         <Rectangle.Fill>

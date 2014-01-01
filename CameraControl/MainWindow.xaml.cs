@@ -104,15 +104,16 @@ namespace CameraControl
 
         void DeviceManager_CameraSelected(ICameraDevice oldcameraDevice, ICameraDevice newcameraDevice)
         {
-            Dispatcher.Invoke(
-              new Action(
-                delegate
-                {
-                    btn_capture_noaf.IsEnabled = newcameraDevice != null && newcameraDevice.GetCapability(CapabilityEnum.CaptureNoAf);
-                    ((Flyout)Flyouts.Items[0]).IsOpen = false;
-                    ((Flyout)Flyouts.Items[1]).IsOpen = false;
-                    Title = "digiCamControl - " + ServiceProvider.Settings.CameraProperties.Get(newcameraDevice).DeviceName;
-                }));
+            Dispatcher.BeginInvoke(
+                new Action(
+                    delegate
+                        {
+                            //btn_capture_noaf.IsEnabled = newcameraDevice != null && newcameraDevice.GetCapability(CapabilityEnum.CaptureNoAf);
+                            ((Flyout) Flyouts.Items[0]).IsOpen = false;
+                            ((Flyout) Flyouts.Items[1]).IsOpen = false;
+                            Title = (ServiceProvider.Branding.ApplicationTitle ?? "digiCamControl") + " - " +
+                                    ServiceProvider.Settings.CameraProperties.Get(newcameraDevice).DeviceName;
+                        }));
         }
 
         private void ExecuteExportPlugin(IExportPlugin obj)

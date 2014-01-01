@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Xml.Serialization;
 using CameraControl.Core.Classes;
@@ -44,7 +45,7 @@ namespace CameraControl.Core.Plugin
                 {
                     XmlSerializer mySerializer =
                       new XmlSerializer(typeof(PluginInfo));
-                    FileStream myFileStream = new FileStream(filename, FileMode.Open);
+                    FileStream myFileStream = new FileStream(filename, FileMode.Open, FileAccess.Read);
                     pluginInfo = (PluginInfo)mySerializer.Deserialize(myFileStream);
                     myFileStream.Close();
                     if (!string.IsNullOrEmpty(pluginInfo.LogoFile))
