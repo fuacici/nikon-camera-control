@@ -394,5 +394,10 @@ namespace CameraControl.Core.Translation
         public static string LabelLogMessage = "Message to the developers of digiCamControl :";
         public static string LabelLogText = "The log file will be send to the digiCamcontrol developer team for improve application stability.";
         public static string LabelFullscreen = "Full screen";
+        public static string LabelSelection = "Selection";
+        public static string LabelSelectAll = "Select All";
+        public static string LabelSelectNone = "Select None";
+        public static string LabelSelectLiked = "Select Liked";
+        public static string LabelSelectUnLiked = "Select UnLiked";
     }
 }

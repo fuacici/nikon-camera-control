@@ -521,5 +521,12 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        public void SelectInver()
+        {
+            foreach (FileItem fileItem in Files)
+            {
+                fileItem.IsChecked = !fileItem.IsChecked;
+            }
+        }
     }
 }

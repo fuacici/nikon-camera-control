@@ -672,6 +672,17 @@ namespace CameraControl
                 ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Del_Image);
                 e.Handled = true;
             }
+            if (e.Key == Key.P)
+            {
+                ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Like_Image);
+                e.Handled = true;
+            }
+            if (e.Key == Key.X)
+            {
+                ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Unlike_Image);
+                e.Handled = true;
+            }
+
         }
 
         private void mnu_send_log_Click(object sender, RoutedEventArgs e)
