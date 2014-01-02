@@ -245,7 +245,7 @@ namespace CameraControl.Devices.Nikon
             {
                 lock (Locker)
                 {
-                    ThreadPool.QueueUserWorkItem(getEvent);
+                    ThreadPool.QueueUserWorkItem(GetEvent);
                 }
             }
             catch (Exception)
@@ -598,7 +598,7 @@ namespace CameraControl.Devices.Nikon
             }
             else
             {
-                Thread thread = new Thread(getEvent);
+                Thread thread = new Thread(GetEvent);
                 thread.Start();
             }
         }
@@ -1441,7 +1441,7 @@ namespace CameraControl.Devices.Nikon
             }
         }
 
-        private void getEvent(object state)
+        private void GetEvent(object state)
         {
             try
             {
@@ -1451,7 +1451,7 @@ namespace CameraControl.Devices.Nikon
                 //DeviceReady();
                 MTPDataResponse response = ExecuteReadDataEx(CONST_CMD_GetEvent);
 
-                if (response.Data == null)
+                if (response.Data == null || response.Data.Length == 0)
                 {
                     Log.Debug("Get event error :" + response.ErrorCode.ToString("X"));
                     return;
