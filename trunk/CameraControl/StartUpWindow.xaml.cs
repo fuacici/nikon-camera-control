@@ -125,7 +125,7 @@ namespace CameraControl
 
         private void StartApplication()
         {
-            if (ServiceProvider.Settings.SelectedMainForm != _basemainwindow.DisplayName)
+            if (!string.IsNullOrEmpty(ServiceProvider.Settings.SelectedMainForm) && ServiceProvider.Settings.SelectedMainForm != _basemainwindow.DisplayName)
             {
                 SelectorWnd wnd = new SelectorWnd();
                 wnd.ShowDialog();

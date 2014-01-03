@@ -1619,17 +1619,17 @@ namespace CameraControl.Devices.Nikon
                     }
                     return "";
                 case OperationEnum.AutoFocus:
-                    if (FocusMode.Value.Contains("[M]"))
+                    if (FocusMode != null && FocusMode.Value != null && FocusMode.Value.Contains("[M]"))
                         return "LabelMFError";
                     // check if not Single AF servo
                     return "";
                 case OperationEnum.ManualFocus:
-                    if (FocusMode.Value.Contains("[M]"))
+                    if (FocusMode != null && FocusMode.Value != null && FocusMode.Value.Contains("[M]"))
                         return "LabelMFError";
-                    MTPDataResponse responsel_focus = ExecuteReadDataEx(CONST_CMD_GetDevicePropValue, 0xD061, -1);
-                    if (responsel_focus.Data != null && responsel_focus.Data.Length > 0)
+                    MTPDataResponse responselFocus = ExecuteReadDataEx(CONST_CMD_GetDevicePropValue, 0xD061, -1);
+                    if (responselFocus != null && (responselFocus.Data != null && responselFocus.Data.Length > 0))
                     {
-                        var resp = responsel_focus.Data[0];
+                        var resp = responselFocus.Data[0];
                         if (resp == 2)
                             return "LabelNotAFSError";
                     }
