@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using AForge.Imaging.Filters;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
+using CameraControl.Devices;
 using FreeImageAPI;
 using Image = System.Drawing.Image;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -37,11 +38,18 @@ namespace CameraControl.windows
             _backgroundWorker.RunWorkerCompleted += _backgroundWorker_RunWorkerCompleted;
             _backgroundWorker.WorkerSupportsCancellation = true;
             _tempFolder = Path.Combine(Path.GetTempPath(), "DCC_TimeLapse", ServiceProvider.Settings.DefaultSession.Name);
-            if (Directory.Exists(_tempFolder))
+            try
             {
-                Directory.Delete(_tempFolder, true);
+                if (Directory.Exists(_tempFolder))
+                {
+                    Directory.Delete(_tempFolder, true);
+                }
+                Directory.CreateDirectory(_tempFolder);
             }
-            Directory.CreateDirectory(_tempFolder);
+            catch (Exception exception)
+            {
+                Log.Error("Unable to reinitialize timelapse folder", exception);
+            }
             _basedir = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             _virtualdubdir = Path.Combine(_basedir, "VirtualDub", "VirtualDub.exe");
             btn_paly.Visibility = Visibility.Hidden;
