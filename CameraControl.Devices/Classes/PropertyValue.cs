@@ -181,14 +181,15 @@ namespace CameraControl.Devices.Classes
         }
 
 
-        public void SetValue(string o)
+        public void SetValue(string o, bool notifyValuChange=true)
         {
             foreach (KeyValuePair<string, T> keyValuePair in _valuesDictionary)
             {
                 if (keyValuePair.Key == o)
                 {
-                    _notifyValuChange = true;
+                    _notifyValuChange = notifyValuChange;
                     Value = keyValuePair.Key;
+                    _notifyValuChange = true;
                     return;
                 }
             }

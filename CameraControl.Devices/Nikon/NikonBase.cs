@@ -664,7 +664,7 @@ namespace CameraControl.Devices.Nikon
                         UInt16 val = BitConverter.ToUInt16(result.Data, 12 + i);
                         IsoNumber.AddValues(_isoTable.ContainsKey(val) ? _isoTable[val] : val.ToString(), val);
                     }
-                    IsoNumber.SetValue(defval);
+                    IsoNumber.SetValue(defval, false); 
                 }
                 catch (Exception)
                 {
@@ -701,7 +701,7 @@ namespace CameraControl.Devices.Nikon
                         UInt32 val = BitConverter.ToUInt32(result, ((2 * datasize) + 6 + 2) + i);
                         ShutterSpeed.AddValues(_shutterTable.ContainsKey(val) ? _shutterTable[val] : val.ToString(), val);
                     }
-                    ShutterSpeed.SetValue(defval);
+                    ShutterSpeed.SetValue(defval, false);
                 }
                 catch (Exception)
                 {
@@ -781,7 +781,7 @@ namespace CameraControl.Devices.Nikon
         {
             FNumber = new PropertyValue<int> { IsEnabled = true, Name = "FNumber" };
             FNumber.ValueChanged += FNumber_ValueChanged;
-            ReInitFNumber(true);
+            ReInitFNumber(false);
         }
 
         private void ReInitFNumber(bool trigervaluchange)
@@ -825,16 +825,22 @@ namespace CameraControl.Devices.Nikon
                 WhiteBalance = new PropertyValue<long>();
                 WhiteBalance.Name = "WhiteBalance";
                 WhiteBalance.ValueChanged += WhiteBalance_ValueChanged;
-                byte[] result = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropDesc, CONST_PROP_WhiteBalance);
-                int type = BitConverter.ToInt16(result, 2);
-                byte formFlag = result[(2 * datasize) + 5];
-                UInt16 defval = BitConverter.ToUInt16(result, datasize + 5);
-                for (int i = 0; i < result.Length - ((2 * datasize) + 6 + 2); i += datasize)
+                var result = ExecuteReadDataEx(CONST_CMD_GetDevicePropDesc, CONST_PROP_WhiteBalance);
+                if (result.Data != null && result.Data.Length > 0)
                 {
-                    UInt16 val = BitConverter.ToUInt16(result, ((2 * datasize) + 6 + 2) + i);
-                    WhiteBalance.AddValues(_wbTable.ContainsKey(val) ? _wbTable[val] : val.ToString(), val);
+                    int type = BitConverter.ToInt16(result.Data, 2);
+                    byte formFlag = result.Data[(2 * datasize) + 5];
+                    UInt16 defval = BitConverter.ToUInt16(result.Data, datasize + 5);
+                    for (int i = 0; i < result.Data.Length - ((2 * datasize) + 6 + 2); i += datasize)
+                    {
+                        UInt16 val = BitConverter.ToUInt16(result.Data, ((2 * datasize) + 6 + 2) + i);
+                        WhiteBalance.AddValues(_wbTable.ContainsKey(val) ? _wbTable[val] : val.ToString(), val);
+                    }
+                    WhiteBalance.SetValue(defval, false);
                 }
-                WhiteBalance.SetValue(defval);
+                else
+                {
+                }
             }
             catch (Exception ex)
             {
@@ -924,7 +930,7 @@ namespace CameraControl.Devices.Nikon
                     UInt16 val = BitConverter.ToUInt16(result.Data, ((2 * datasize) + 6 + 2) + i);
                     ExposureMeteringMode.AddValues(_emmTable.ContainsKey(val) ? _emmTable[val] : val.ToString(), val);
                 }
-                ExposureMeteringMode.SetValue(defval);
+                ExposureMeteringMode.SetValue(defval, false);
             }
             catch (Exception)
             {
@@ -1282,7 +1288,7 @@ namespace CameraControl.Devices.Nikon
                                     advancedProperty.SetValue(
                                         Encoding.Unicode.GetString(
                                             StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
-                                                                             advancedProperty.Code), 1, 20));
+                                                                             advancedProperty.Code), 1, 20), false);
 
                                 }
                                 else

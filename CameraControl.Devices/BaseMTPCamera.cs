@@ -421,7 +421,7 @@ namespace CameraControl.Devices
                         //Console.WriteLine("Retry ...." + resp.ToString("X"));
                         if (resp == ErrorCodes.MTP_Device_Busy || resp == 0x800700AA)
                         {
-                            Thread.Sleep(100);
+                            Thread.Sleep(50);
                             retry = true;
                             retrynum++;
                         }
