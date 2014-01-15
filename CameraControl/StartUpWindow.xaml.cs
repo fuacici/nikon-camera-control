@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using CameraControl.Actions;
 using CameraControl.Actions.Enfuse;
+using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
@@ -64,6 +65,9 @@ namespace CameraControl
 
         private void InitApplication()
         {
+            // prevent some application crash
+            WpfCommands.DisableWpfTabletSupport();
+            
             ServiceProvider.Configure();
 
             ServiceProvider.Settings = new Settings();

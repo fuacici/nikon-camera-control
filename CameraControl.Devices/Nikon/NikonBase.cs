@@ -982,6 +982,9 @@ namespace CameraControl.Devices.Nikon
                 if (response.Data != null && response.Data.Length > 0 && response.Data[0] > 0)
                     return;
                 DeviceReady();
+                // this should improve focus staking performance
+                // anyway
+                LockCamera();
                 ErrorCodes.GetException(ExecuteWithNoData(CONST_CMD_StartLiveView));
                 DeviceReady();
                 LiveViewImageZoomRatio.SetValue();
@@ -993,6 +996,7 @@ namespace CameraControl.Devices.Nikon
             lock (Locker)
             {
                 DeviceReady();
+                UnLockCamera();
                 ErrorCodes.GetException(ExecuteWithNoData(CONST_CMD_EndLiveView));
                 DeviceReady();
             }
