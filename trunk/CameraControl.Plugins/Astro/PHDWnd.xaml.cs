@@ -108,6 +108,10 @@ namespace CameraControl.Plugins.Astro
                 Console.WriteLine("{0} Error code: {1}.", e.Message, e.ErrorCode);
                 return (e.ErrorCode);
             }
+            catch (Exception exception)
+            {
+                MessageBox.Show("Unable to comunicate with PhD" + exception.Message);
+            }
             return 0;
         }
 
