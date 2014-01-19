@@ -399,5 +399,8 @@ namespace CameraControl.Core.Translation
         public static string LabelSelectNone = "Select None";
         public static string LabelSelectLiked = "Select Liked";
         public static string LabelSelectUnLiked = "Select UnLiked";
+        //19/01/2014
+        public static string LabelLockNearFar = "Please lock nerest and farest focus points";
+        public static string LabelError = "Error";
     }
 }
