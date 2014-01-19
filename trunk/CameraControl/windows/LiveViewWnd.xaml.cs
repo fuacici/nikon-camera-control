@@ -22,6 +22,8 @@ using CameraControl.Core.Interfaces;
 using CameraControl.Core.Translation;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using Color = System.Windows.Media.Color;
 using Path = System.IO.Path;
 using Point = System.Windows.Point;
@@ -33,7 +35,7 @@ namespace CameraControl.windows
     /// <summary>
     /// Interaction logic for LiveViewWnd.xaml
     /// </summary>
-    public partial class LiveViewWnd : IWindow, INotifyPropertyChanged
+    public partial class LiveViewWnd :MetroWindow,  IWindow, INotifyPropertyChanged
     {
         private const int DesiredFrameRate = 20;
 
@@ -848,7 +850,9 @@ namespace CameraControl.windows
             }
             else
             {
-                MessageBox.Show(TranslationStrings.LabelErrorUnableFocus + "\n" + TranslationManager.GetTranslation(resp));
+                this.ShowMessageAsync(TranslationStrings.LabelError,
+                                      TranslationStrings.LabelErrorUnableFocus + "\n" +
+                                      TranslationManager.GetTranslation(resp));
             }
         }
 
@@ -869,7 +873,7 @@ namespace CameraControl.windows
                     else
                     {
                         StaticHelper.Instance.SystemMessage = TranslationStrings.MsgBulbModeNotSupported;
-                        MessageBox.Show(TranslationStrings.MsgBulbModeNotSupported);
+                        this.ShowMessageAsync(TranslationStrings.LabelError, TranslationStrings.MsgBulbModeNotSupported);
                         return;
                     }
                 }
@@ -899,7 +903,9 @@ namespace CameraControl.windows
             else
             {
                 Log.Error("Error starting live view " + resp);
-                MessageBox.Show(TranslationStrings.LabelLiveViewError + "\n" + TranslationManager.GetTranslation(resp));
+                this.ShowMessageAsync(TranslationStrings.LabelError,
+                                      TranslationStrings.LabelLiveViewError + "\n" +
+                                      TranslationManager.GetTranslation(resp));
                 return;
             }
         }
@@ -1290,12 +1296,14 @@ namespace CameraControl.windows
                 }
                 else
                 {
-                    MessageBox.Show(TranslationStrings.LabelErrorUnableFocus + "\n" + TranslationManager.GetTranslation(resp));
+                    this.ShowMessageAsync(TranslationStrings.LabelError,
+                                          TranslationStrings.LabelErrorUnableFocus + "\n" +
+                                          TranslationManager.GetTranslation(resp));
                 }
             }
             catch (Exception exception)
             {
-                MessageBox.Show(TranslationStrings.LabelErrorUnableFocus);
+                this.ShowMessageAsync(TranslationStrings.LabelError, TranslationStrings.LabelErrorUnableFocus);
                 Log.Error("Unable to focus ", exception);
             }
         }
@@ -1457,6 +1465,11 @@ namespace CameraControl.windows
 
         private void btn_takephoto_Click(object sender, RoutedEventArgs e)
         {
+            if(!LockA || !LockB)
+            {
+                this.ShowMessageAsync(TranslationStrings.LabelError, TranslationStrings.LabelLockNearFar);
+                return;
+            }
             Thread.Sleep(500);
             _focusIProgress = false;
             SetFocus(-FocusCounter);
@@ -1505,7 +1518,7 @@ namespace CameraControl.windows
                     }
                     else
                     {
-                        MessageBox.Show(TranslationStrings.LabelErrorRecordMovie + "\n" + TranslationManager.GetTranslation(resp));
+                        this.ShowMessageAsync(TranslationStrings.LabelError, TranslationStrings.LabelErrorRecordMovie + "\n" + TranslationManager.GetTranslation(resp));
                         return;
                     }
                 }
