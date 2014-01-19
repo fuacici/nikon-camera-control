@@ -38,8 +38,12 @@ namespace CameraControl.Core.Translation
         {
           try
           {
-            CultureInfo cult = CultureInfo.GetCultureInfo(Path.GetFileNameWithoutExtension(file));
-            AvailableLangs.Add(new TranslationLangDesc() { Value = Path.GetFileNameWithoutExtension(file), Name = cult.NativeName });
+            CultureInfo cult = CultureInfo.GetCultureInfo(Path.GetFileNameWithoutExtension(file).Replace('_','-'));
+              AvailableLangs.Add(new TranslationLangDesc()
+                                     {
+                                         Value = Path.GetFileNameWithoutExtension(file),
+                                         Name = cult.EnglishName + " - " + cult.NativeName
+                                     });
           }
           catch (Exception exception)
           {
@@ -84,7 +88,7 @@ namespace CameraControl.Core.Translation
       string langPath = "";
       try
       {
-        langPath = Path.Combine(_path, "Languages", lang_code+".xml");
+        langPath = Path.Combine(_path, "Languages", lang_code.Replace('-','_')+".xml");
         doc.Load(langPath);
       }
       catch (Exception)

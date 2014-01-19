@@ -1279,16 +1279,24 @@ namespace CameraControl.windows
 
         private void SetFocus(int step)
         {
-            string resp = SelectedPortableDevice.GetProhibitionCondition(OperationEnum.ManualFocus);
-            if (string.IsNullOrEmpty(resp))
+            try
             {
-                Thread thread = new Thread(SetFocusThread);
-                thread.Start(step);
-                thread.Join();
+                string resp = SelectedPortableDevice.GetProhibitionCondition(OperationEnum.ManualFocus);
+                if (string.IsNullOrEmpty(resp))
+                {
+                    Thread thread = new Thread(SetFocusThread);
+                    thread.Start(step);
+                    thread.Join();
+                }
+                else
+                {
+                    MessageBox.Show(TranslationStrings.LabelErrorUnableFocus + "\n" + TranslationManager.GetTranslation(resp));
+                }
             }
-            else
+            catch (Exception exception)
             {
-                MessageBox.Show(TranslationStrings.LabelErrorUnableFocus + "\n" + TranslationManager.GetTranslation(resp));
+                MessageBox.Show(TranslationStrings.LabelErrorUnableFocus);
+                Log.Error("Unable to focus ", exception);
             }
         }
 
