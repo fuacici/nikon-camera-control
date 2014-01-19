@@ -17,5 +17,7 @@ namespace CameraControl.Core.Scripting
         string Description { get; set; }
         string DefaultValue { get; set; }
         UserControl GetConfig();
+        bool HaveEditControl { get; set; }
+
     }
 }

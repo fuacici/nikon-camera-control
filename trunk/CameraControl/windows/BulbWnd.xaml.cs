@@ -220,6 +220,11 @@ namespace CameraControl.windows
         {
             if (command == null)
                 return;
+            if(!command.HaveEditControl)
+            {
+                MessageBox.Show("Use script editor to edit this script");
+                return;
+            }
             var dlg = new ScriptCommandEdit(command.GetConfig());
             dlg.ShowDialog();
         }

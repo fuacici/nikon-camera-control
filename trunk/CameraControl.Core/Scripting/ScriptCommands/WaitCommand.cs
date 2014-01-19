@@ -84,6 +84,7 @@ namespace CameraControl.Core.Scripting.ScriptCommands
             Description = "Wait the specified seconds in time parameter";
             DefaultValue = "wait time=\"2\"";
             Time = 1;
+            HaveEditControl = true;
         }
     }
 }

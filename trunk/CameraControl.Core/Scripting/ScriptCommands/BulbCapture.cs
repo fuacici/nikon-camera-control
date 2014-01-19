@@ -126,6 +126,7 @@ namespace CameraControl.Core.Scripting.ScriptCommands
             IsExecuted = false;
             Executing = false;
             CaptureTime = 30;
+            HaveEditControl = true;
         }
 
     }

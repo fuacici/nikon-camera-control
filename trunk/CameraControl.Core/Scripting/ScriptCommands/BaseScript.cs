@@ -13,6 +13,11 @@ namespace CameraControl.Core.Scripting.ScriptCommands
     {
         public ValuePairEnumerator LoadedParams = new ValuePairEnumerator();
 
+        public BaseScript()
+        {
+            HaveEditControl = false;
+        }
+
         #region Implementation of IScriptCommand
 
         public virtual bool Execute(ScriptObject scriptObject)
@@ -96,6 +101,8 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         {
             return new UserControl();
         }
+
+        public bool HaveEditControl { get; set; }
 
         #endregion
     }
