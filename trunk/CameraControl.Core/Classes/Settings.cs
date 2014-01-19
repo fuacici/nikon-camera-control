@@ -935,12 +935,8 @@ namespace CameraControl.Core.Classes
         {
             get
             {
-                var themes = new List<string>();
-                foreach (Accent accent in ThemeManager.DefaultAccents)
-                {
-                    themes.Add("Dark\\" + accent.Name);
-                    themes.Add("Light\\" + accent.Name);
-                }
+                var themes = ThemeManager.DefaultAccents.Select(accent => "Light\\" + accent.Name).ToList();
+                themes.AddRange(ThemeManager.DefaultAccents.Select(accent => "Dark\\" + accent.Name));
 
                 return themes;
             }
@@ -950,7 +946,7 @@ namespace CameraControl.Core.Classes
         {
             if (string.IsNullOrEmpty(CurrentThemeName) || !CurrentThemeName.Contains("\\"))
             {
-                ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
+                ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Steel"), Theme.Dark);
                 return;
             }
             ThemeManager.ChangeTheme(window,
