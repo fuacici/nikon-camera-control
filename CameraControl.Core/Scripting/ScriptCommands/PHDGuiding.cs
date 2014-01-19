@@ -123,6 +123,7 @@ namespace CameraControl.Core.Scripting.ScriptCommands
             DefaultValue = "phdguiding movetype=\"move 1\"";
             WaitTime = 2000;
             MoveType = "move 1";
+            HaveEditControl = true;
         }
 
         public static int SendReceiveTest2(TcpClient server, byte opersEnum)

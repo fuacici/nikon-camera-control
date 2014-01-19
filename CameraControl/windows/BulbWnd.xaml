@@ -95,7 +95,7 @@
                                 <DataTemplate>
                                     <MenuItem Header="{Binding Path=Name}" 
                                       Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:BulbWnd, AncestorLevel=1}, Path=AddCommand}" 
-                                      CommandParameter="{Binding}" />
+                                      CommandParameter="{Binding}" IsEnabled="{Binding Path=HaveEditControl}"/>
                                 </DataTemplate>
                             </MenuItem.ItemTemplate>
                         </MenuItem>

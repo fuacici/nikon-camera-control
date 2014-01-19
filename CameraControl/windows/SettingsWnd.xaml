@@ -105,7 +105,7 @@
 
                         <StackPanel Grid.Row="10" Grid.Column="1" Margin="3" Orientation="Horizontal">
                             <Label Content="{T:TranslateExtension LabelLIveViewImageFreeze}"/>
-                            <xctk:IntegerUpDown Minimum="2" Maximum="120" Width="100" Value="{Binding LiveViewFreezeTimeOut}"/>
+                            <Controls:NumericUpDown Minimum="2" Maximum="120" Width="100" Value="{Binding LiveViewFreezeTimeOut}"/>
                         </StackPanel>
                         <StackPanel Grid.Row="11" Grid.Column="1" Margin="3" Orientation="Horizontal">
                             <Label Content="{T:TranslateExtension LabelExternalViewerPath}" />
@@ -144,7 +144,7 @@
                     <CheckBox Grid.Row="2" Grid.Column="1" Margin="3" Content="{T:TranslateExtension LabelPreviewAfterCapture}" IsChecked="{Binding Preview}"/>
                     <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="3">
                         <Label Content="{T:TranslateExtension LabelPreviewTime}"/>
-                        <xctk:IntegerUpDown Minimum="2" Width="100" Value="{Binding PreviewSeconds}"/>
+                        <Controls:NumericUpDown Minimum="2" Width="100" Value="{Binding PreviewSeconds}"/>
                     </StackPanel>
                     <CheckBox Grid.Row="4" Grid.Column="1" Margin="3" Content="{T:TranslateExtension LabelUseExternalViewer}" IsChecked="{Binding UseExternalViewer}" VerticalAlignment="Center"/>
                     <StackPanel Grid.Row="5" Grid.Column="1" Margin="3" Orientation="Horizontal">
@@ -293,7 +293,7 @@
                     </Grid.RowDefinitions>
                     <CheckBox Content="{T:TranslateExtension LabelUseParellelTransfer}" IsChecked="{Binding UseParallelTransfer}" Margin="3" Grid.Column="1" Grid.Row="1" />
                     <CheckBox Content="{T:TranslateExtension LabelShowUnTranslatedStringIds}" IsChecked="{Binding ShowUntranslatedLabelId}" Margin="3" Grid.Column="1" Grid.Row="2" />
-                    <Controls:ToggleSwitch Header="{T:TranslateExtension LabelDisableDriver}" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" IsChecked="{Binding DisableNativeDrivers}" ToolTip="This option disable special handig of some cameras. Use this if you experience some problem" Margin="1,0,1,1" />
+                    <Controls:ToggleSwitch Header="{T:TranslateExtension LabelDisableDriver}" Grid.Row="3" Grid.Column="1" IsChecked="{Binding DisableNativeDrivers}" ToolTip="This option disable special handig of some cameras. Use this if you experience some problem" Margin="3" />
                     <CheckBox Content="{T:TranslateExtension LabelAddFakeCamera}" Grid.Row="4" IsChecked="{Binding AddFakeCamera}" Margin="3" Grid.Column="1"/>
                     <CheckBox Content="{T:TranslateExtension LabelSyncCameraDate}" Grid.Row="5" IsChecked="{Binding SyncCameraDateTime}" Margin="3" Grid.Column="1"/>
                     <Button Content="{T:TranslateExtension LabelClearCache}" Grid.Column="1" Grid.Row="6" Height="30" HorizontalAlignment="Left" Name="btn_clearcache" VerticalAlignment="Top" Width="195" Click="btn_clearcache_Click" />

@@ -4,9 +4,7 @@
         xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core"
                        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                        xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
-                       xmlns:Controls1="clr-namespace:CameraControl.Controls"
                        xmlns:Controls2="clr-namespace:CameraControl.Controls;assembly=CameraControl.Core"
-                       xmlns:my="clr-namespace:CameraControl.windows"
                        Title="{T:TranslateExtension TimeLapseWindowTitle}" Height="445" Width="631" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" UseLayoutRounding="True" ShowActivated="True" Closed="Window_Closed" Closing="Window_Closing"
                        ShowMaxRestoreButton="False" ShowMinButton="False">
     <Window.Resources>
