@@ -22,6 +22,10 @@ namespace CameraControl.Devices
         private DeviceDescriptorEnumerator _deviceEnumerator;
         private EosFramework _framework;
 
+        private static readonly string[] AllovedCanonCameras = new[]
+                                                                   {
+                                                                       "pid_318f" //Canon PowerShot G10
+                                                                   };
 
         /// <summary>
         /// Gets or sets a value indicating whether use experimental drivers.
@@ -280,8 +284,8 @@ namespace CameraControl.Devices
                 //TODO: avoid to load some mass storage in my computer need to find a general solution
                 if (!portableDevice.DeviceId.StartsWith("\\\\?\\usb") && !portableDevice.DeviceId.StartsWith("\\\\?\\comp"))
                     continue;
-                // ignore Canon cameras
-                if (portableDevice.DeviceId.Contains("vid_04a9"))
+                // ignore some Canon cameras
+                if (!SupportedCanonCamera(portableDevice.DeviceId))
                     continue;
                 portableDevice.ConnectToDevice(AppName, AppMajorVersionNumber, AppMinorVersionNumber);
                 if (_deviceEnumerator.GetByWpdId(portableDevice.DeviceId) == null && GetNativeDriver(portableDevice.Model) != null)
@@ -300,6 +304,15 @@ namespace CameraControl.Devices
             }
             _connectionInProgress = false;
         }
+
+        private bool SupportedCanonCamera(string id)
+        {
+            // isn't canon the manufacturer 
+            if (!id.Contains("vid_04a9"))
+                return true;
+            return AllovedCanonCameras.Any(id.Contains);
+        }
+
 
         private void NewCameraConnected(ICameraDevice cameraDevice)
         {
