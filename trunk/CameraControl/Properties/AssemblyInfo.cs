@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Dukus")]
 [assembly: AssemblyProduct("CameraControl")]
-[assembly: AssemblyCopyright("Copyright ©  2012 Duka Istvan")]
+[assembly: AssemblyCopyright("Copyright ©  2014 Duka Istvan")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -51,5 +51,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.736.0")]
-[assembly: AssemblyFileVersion("1.0.736.0")]
+[assembly: AssemblyVersion("1.0.745.0")]
+[assembly: AssemblyFileVersion("1.0.745.0")]
