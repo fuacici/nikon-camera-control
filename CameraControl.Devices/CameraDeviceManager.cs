@@ -22,11 +22,6 @@ namespace CameraControl.Devices
         private DeviceDescriptorEnumerator _deviceEnumerator;
         private EosFramework _framework;
 
-        private static readonly string[] AllovedCanonCameras = new[]
-                                                                   {
-                                                                       "pid_318f" //Canon PowerShot G10
-                                                                   };
-
         /// <summary>
         /// Gets or sets a value indicating whether use experimental drivers.
         /// Experimental drivers isn't tested and may not implement all camera possibilities 
@@ -310,7 +305,7 @@ namespace CameraControl.Devices
             // isn't canon the manufacturer 
             if (!id.Contains("vid_04a9"))
                 return true;
-            return AllovedCanonCameras.Any(id.Contains);
+            return false;
         }
 
 
@@ -498,8 +493,8 @@ namespace CameraControl.Devices
                 // Look for CameraDeviceType devices
                 string model = devInfo.Properties["Name"].get_Value();
                 // skip canon cameras 
-                if (!string.IsNullOrEmpty(model) && model.Contains("Canon"))
-                    continue;
+                //if (!string.IsNullOrEmpty(model) && model.Contains("Canon"))
+                //    continue;
                 if (devInfo.Type == WiaDeviceType.CameraDeviceType && (GetNativeDriver(model) == null || DisableNativeDrivers || noDriversDetected))
                 {
                     do
