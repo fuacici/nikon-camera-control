@@ -45,6 +45,9 @@ namespace CameraControl.windows
     private void btn_set_Click(object sender, RoutedEventArgs e)
     {
         btn_set.IsEnabled = false;
+        try
+        {
+
         string filename = ServiceProvider.Settings.SelectedBitmap.FileItem.FileName;
         Exiv2Helper.SaveComment(filename, ServiceProvider.Settings.SelectedBitmap.Comment);
         if (ServiceProvider.Settings.SelectedBitmap.FileItem.FileInfo.ExifTags.ContainName("Iptc.Application2.Caption"))
@@ -100,6 +103,12 @@ namespace CameraControl.windows
             }
         }
         btn_set.IsEnabled = true;
+        }
+        catch (Exception exception)
+        {
+            Log.Error("Error set property ", exception);
+            MessageBox.Show("Error set property !" + exception.Message);
+        }
     }
 
   }
