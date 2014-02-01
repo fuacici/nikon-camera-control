@@ -692,5 +692,10 @@ namespace CameraControl
             wnd.ShowDialog();
         }
 
+        private void btn_changelog_Click(object sender, RoutedEventArgs e)
+        {
+            NewVersionWnd.ShowChangeLog();
+        }
+
     }
 }

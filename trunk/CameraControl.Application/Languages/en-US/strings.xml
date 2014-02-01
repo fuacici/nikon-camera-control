@@ -41,6 +41,17 @@
 	<string name="[S]_SINGLE_AF_SERVO">[S] Single AF servo</string> 
 	<string name="[M]_MANUAL_FOCUS">[M] Manual focus</string> 
 	<string name="KELVIN">Kelvin</string> 
+	<string name="APPLICATION_MODE">Application mode</string> 
+	<string name="WHITE_FLUORESCENT_LAMP">White fluorescent lamp</string> 
+	<string name="FLUORESCENT_LIGHT_TYPE">Fluorescent light type</string> 
+	<string name="ADOBE_RGB">Adobe RGB</string> 
+	<string name="COLOR_SPACE">Color space</string> 
+	<string name="14_BIT_RECORDING">14-bit recording</string> 
+	<string name="RAW_RECORDING_BIT_MODE">Raw Recording bit mode</string> 
+	<string name="NEUTRAL">Neutral</string> 
+	<string name="PICTURE_CONTROL">Picture control</string> 
+	<string name="LOSSLESS_COMPRESSED_RAW">Lossless compressed RAW</string> 
+	<string name="RAW_COMPRESSION">Raw Compression</string> 
 	
     <!-- End Property values -->	
     <string name="Mode">Mode</string> 
