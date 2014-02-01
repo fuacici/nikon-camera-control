@@ -21,6 +21,7 @@
                         <ComboBoxItem Content=":;request:session;format:json" />
                         <ComboBoxItem Content=":;request:cameras" />
                         <ComboBoxItem Content=":;request:cameras;format:json" />
+                        <ComboBoxItem Content=":;command:capture;serial:&lt;serial&gt;" />
                     </ComboBox>
                     <Label Content="Message" />
                     <Button Content="Send" Grid.Column="1" Grid.Row="1" Name="btn_sen" Margin="3" Click="btn_sen_Click" />
