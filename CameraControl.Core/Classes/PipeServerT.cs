@@ -102,6 +102,43 @@ namespace CameraControl.Core.Classes
 
                     }
                 }
+                if (lines.ContainsKey("command"))
+                {
+                    switch (lines["command"])
+                    {
+                        case "capture":
+                            {
+                                if (ServiceProvider.DeviceManager.ConnectedDevices.Count == 0)
+                                {
+                                    return ":;response:error;message:no camera is connected";
+                                }
+                                if (lines.ContainsKey("serial"))
+                                {
+                                    foreach (ICameraDevice device in ServiceProvider.DeviceManager.ConnectedDevices)
+                                    {
+                                        if (device.SerialNumber == lines["serial"])
+                                        {
+                                            try
+                                            {
+                                                device.CapturePhoto();
+                                                return ":;response:ok;";
+                                            }
+                                            catch (Exception exception)
+                                            {
+                                                return ":;response:error;message:" + exception.Message;
+                                            }
+                                        }
+                                    }
+                                    return ":;response:error;message:No camera was found" ;
+                                }
+                                else
+                                {
+                                    return ":;response:error;message:no serial as parameter";
+                                }
+                            }
+                            break;
+                    }
+                }
             }
             catch (Exception exception)
             {
