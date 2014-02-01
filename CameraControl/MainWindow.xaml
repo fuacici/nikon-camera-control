@@ -96,6 +96,7 @@
                                 <Button Content="{T:TranslateExtension MenuCheckForUpdate}" Click="MenuItem_Click_1" Margin="2"/>
                                 <Button Content="{T:TranslateExtension MenuForum}" Click="mnu_forum_Click" Margin="2"/>
                                 <Button Content="{T:TranslateExtension LabelSendTheLogFile}" Click="mnu_send_log_Click" Margin="2"/>
+                                <Button Content="{T:TranslateExtension LabelChangelog}" Click="btn_changelog_Click" Margin="2"/>
                                 <Button Content="{T:TranslateExtension MenuAbout}" Click="btn_about_Click" Margin="2"/>
                             </StackPanel>
                         </Expander>

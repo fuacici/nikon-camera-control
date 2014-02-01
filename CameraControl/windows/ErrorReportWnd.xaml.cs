@@ -21,11 +21,13 @@ namespace CameraControl.windows
     public partial class ErrorReportWnd
     {
         private string _type;
-        public ErrorReportWnd(string type)
+        private string _message;
+        public ErrorReportWnd(string type, string message = "")
         {
             InitializeComponent();
             ServiceProvider.Settings.ApplyTheme(this);
             _type = type;
+            _message = message;
         }
 
         private void btn_cancel_Click(object sender, RoutedEventArgs e)
@@ -35,7 +37,7 @@ namespace CameraControl.windows
 
         private void btn_send_Click(object sender, RoutedEventArgs e)
         {
-            HelpProvider.SendCrashReport(txt_message.Text, _type);
+            HelpProvider.SendCrashReport(txt_message.Text+_message, _type);
             this.Close();
         }
     }

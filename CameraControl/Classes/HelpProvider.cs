@@ -70,8 +70,8 @@ namespace CameraControl.Classes
                 var client = new MailgunClient("digicamcontrol.mailgun.org", "key-6n75wci5cpuz74vsxfcwfkf-t8v74g82");
                 var message = new MailMessage("error@digicamcontrol.mailgun.org", "error_report@digicamcontrol.com")
                                   {
-                                      Subject = (type ?? "Log file" )+"-"+ (ServiceProvider.Settings.ClientId ?? ""),
-                                      Body = "Client Id" + (ServiceProvider.Settings.ClientId??"") + "\n" + body,
+                                      Subject = (type ?? "Log file"),
+                                      Body = "Client Id" + (ServiceProvider.Settings.ClientId ?? "") + "\n" + body,
                                   };
                 message.Attachments.Add(new Attachment(destfile));
 

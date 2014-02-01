@@ -402,5 +402,6 @@ namespace CameraControl.Core.Translation
         //19/01/2014
         public static string LabelLockNearFar = "Please lock nerest and farest focus points";
         public static string LabelError = "Error";
+        public static string LabelChangelog = "Change Log";
     }
 }

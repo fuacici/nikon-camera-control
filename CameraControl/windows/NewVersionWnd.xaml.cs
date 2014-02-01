@@ -36,6 +36,9 @@ namespace CameraControl.windows
             _downloadUrl = download;
             _logUrl = changelog;
             InitializeComponent();
+            if (string.IsNullOrEmpty(download))
+                button2.Visibility = Visibility.Hidden;
+
             //ServiceProvider.Settings.ApplyTheme(this);
         }
 
@@ -51,6 +54,15 @@ namespace CameraControl.windows
                 MessageBox.Show("Error initialize download !");
             }
         }
+
+        public static void ShowChangeLog()
+        {
+            var wnd = new NewVersionWnd("http://digicamcontrol.com/updates/changelog.html", "");
+            wnd.ShowDialog();
+           
+        }
+
+
 
         public static bool CheckForUpdate(bool notify)
         {
@@ -96,6 +108,11 @@ namespace CameraControl.windows
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             webBrowser.Source = new Uri(_logUrl);
+        }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
