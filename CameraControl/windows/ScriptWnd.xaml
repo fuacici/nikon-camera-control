@@ -28,7 +28,7 @@
     </Controls:MetroWindow.WindowCommands>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="268*" />
             <RowDefinition Height="5" />
             <RowDefinition Height="142*" />

@@ -61,6 +61,12 @@ namespace CameraControl.Core.Scripting
             _timer.AutoReset = true;
             ServiceProvider.DeviceManager.CameraConnected += DeviceManager_CameraConnected;
             ServiceProvider.DeviceManager.CameraDisconnected += DeviceManager_CameraDisconnected;
+            ServiceProvider.DeviceManager.PhotoCaptured += DeviceManager_PhotoCaptured;
+        }
+
+        void DeviceManager_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
+        {
+            
         }
 
         void DeviceManager_CameraDisconnected(ICameraDevice cameraDevice)

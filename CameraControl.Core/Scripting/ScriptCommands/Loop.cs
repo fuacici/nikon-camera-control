@@ -22,7 +22,7 @@ namespace CameraControl.Core.Scripting.ScriptCommands
             }
         }
 
-        public override IScriptCommand Load(System.Xml.XmlNode loadnode)
+        public override IScriptCommand Load(XmlNode loadnode)
         {
             base.Load(loadnode);
             foreach (XmlNode node in loadnode.ChildNodes)
@@ -39,7 +39,7 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         public override bool Execute(ScriptObject scriptObject)
         {
             int loopcount ;
-            if (!int.TryParse(scriptObject.ParseString(this.LoadedParams["loopcount"]), out loopcount))
+            if (!int.TryParse(scriptObject.ParseString(LoadedParams["loopcount"]), out loopcount))
                 loopcount = int.MaxValue;
             for (int i = 0; i < loopcount; i++)
             {

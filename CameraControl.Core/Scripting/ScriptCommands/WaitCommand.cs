@@ -36,15 +36,31 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         public override bool Execute(ScriptObject scriptObject)
         {
             int time = 0;
-            int.TryParse(scriptObject.ParseString(this.LoadedParams["time"]), out time);
+            int.TryParse(scriptObject.ParseString(LoadedParams["time"]), out time);
             Executing = true;
-            ServiceProvider.ScriptManager.OutPut(string.Format("Waiting .... {0}s", time));
-            for (int i = 0; i < time; i++)
+            DateTime currTime = DateTime.Now;
+            if (LoadedParams["for"] == "camera" && ServiceProvider.DeviceManager.SelectedCameraDevice != null)
             {
-                Thread.Sleep(1000);
-                if (ServiceProvider.ScriptManager.ShouldStop)
-                    break;
+                ServiceProvider.ScriptManager.OutPut(string.Format("Waiting .... for camera"));
+                while (ServiceProvider.DeviceManager.SelectedCameraDevice.IsBusy)
+                {
+                    if (ServiceProvider.ScriptManager.ShouldStop)
+                        break;
+                    Thread.Sleep(100);
+                }
             }
+            double dif = time - (DateTime.Now - currTime).TotalSeconds;
+            if (dif > 0)
+            {
+                ServiceProvider.ScriptManager.OutPut(string.Format("Waiting .... {0}s", dif));
+                while ((DateTime.Now - currTime).TotalSeconds < time)
+                {
+                    if (ServiceProvider.ScriptManager.ShouldStop)
+                        break;
+                    Thread.Sleep(100);
+                }
+            }
+
             Executing = false;
             IsExecuted = true;
             return true;
@@ -82,7 +98,7 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         {
             Name = "wait";
             Description = "Wait the specified seconds in time parameter";
-            DefaultValue = "wait time=\"2\"";
+            DefaultValue = "wait time=\"2\" for=\"camera\"";
             Time = 1;
             HaveEditControl = true;
         }
