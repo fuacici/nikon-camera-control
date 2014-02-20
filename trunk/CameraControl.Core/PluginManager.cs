@@ -110,12 +110,19 @@ namespace CameraControl.Core
             foreach (FileInfo file in source.GetFiles())
             {
                 string newfile = Path.Combine(target.FullName, file.Name);
-                if (!File.Exists(newfile))
-                    file.CopyTo(newfile, true);
-                else
+                try
                 {
-                    if (File.GetLastWriteTimeUtc(newfile) < file.LastWriteTimeUtc)
+                    if (!File.Exists(newfile))
                         file.CopyTo(newfile, true);
+                    else
+                    {
+                        if (File.GetLastWriteTimeUtc(newfile) < file.LastWriteTimeUtc)
+                            file.CopyTo(newfile, true);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    Log.Debug("Unable to copy file:" + newfile);
                 }
             }
         }
