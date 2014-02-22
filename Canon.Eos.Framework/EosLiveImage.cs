@@ -47,5 +47,10 @@ namespace Canon.Eos.Framework
             get { return this.GetPropertyPointData(Edsdk.PropID_Evf_ZoomPosition); }
         }
 
+        [EosProperty(Edsdk.PropID_Evf_CoordinateSystem)]
+        public Size Size
+        {
+            get { return this.GetPropertySizeData(Edsdk.PropID_Evf_CoordinateSystem); }
+        }
     }
 }

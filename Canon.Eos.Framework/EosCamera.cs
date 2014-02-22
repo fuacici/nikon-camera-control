@@ -126,6 +126,7 @@ namespace Canon.Eos.Framework
             set { this.SetPropertyIntegerData(Edsdk.PropID_ImageQuality, value.ToBitMask()); }
         }
 
+
         public bool IsErrorTolerantMode { get; set; }
 
         /// <summary>
@@ -311,19 +312,23 @@ namespace Canon.Eos.Framework
 
         protected override void ExecuteSetter(Action action)
         {
-            try
+            lock (_locker)
             {
-                if (this.IsLegacy && !this.IsLocked)
-                {
-                    this.LockAndExceute(action);
-                    return;
-                }
 
-                base.ExecuteSetter(action);
-            }
-            catch (Exception ex)
-            {
-                this.OnError(ex);
+                try
+                {
+                    if (this.IsLegacy && !this.IsLocked)
+                    {
+                        this.LockAndExceute(action);
+                        return;
+                    }
+
+                    base.ExecuteSetter(action);
+                }
+                catch (Exception ex)
+                {
+                    this.OnError(ex);
+                }
             }
         }
 

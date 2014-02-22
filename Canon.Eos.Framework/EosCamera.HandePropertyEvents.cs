@@ -47,37 +47,42 @@ namespace Canon.Eos.Framework
             if ((this.LiveViewDevice & EosLiveViewDevice.Host) == EosLiveViewDevice.None || _cancelLiveViewRequested)
                 return false;
 
-            var memoryStream = IntPtr.Zero;
-            try
+            lock (_locker)
             {
-                Util.Assert(Edsdk.EdsCreateMemoryStream(0, out memoryStream), "Failed to create memory stream.");
-                using (var image = EosLiveImage.CreateFromStream(memoryStream))
+                var memoryStream = IntPtr.Zero;
+                try
                 {
-                    Util.Assert(Edsdk.EdsDownloadEvfImage(this.Handle, image.Handle), "Failed to download evf image.");
-
-                    var converter = new EosConverter();
-                    this.OnLiveViewUpdate(new EosLiveImageEventArgs(converter.ConvertImageStreamToBytes(memoryStream))
+                    Util.Assert(Edsdk.EdsCreateMemoryStream(0, out memoryStream), "Failed to create memory stream.");
+                    using (var image = EosLiveImage.CreateFromStream(memoryStream))
                     {
-                        Zoom = image.Zoom,
-                        ZommBounds = image.ZoomBounds,
-                        ImagePosition = image.ImagePosition,
-                        //Histogram = image.Histogram,
-                        
-                    });
-                    
+                        Util.Assert(Edsdk.EdsDownloadEvfImage(this.Handle, image.Handle),
+                                    "Failed to download evf image.");
+
+                        var converter = new EosConverter();
+                        this.OnLiveViewUpdate(
+                            new EosLiveImageEventArgs(converter.ConvertImageStreamToBytes(memoryStream))
+                                {
+                                    Zoom = image.Zoom,
+                                    ZommBounds = image.ZoomBounds,
+                                    ImagePosition = image.ImagePosition,
+                                    ImageSize = image.Size
+                                    //Histogram = image.Histogram,
+
+                                });
+
+                    }
+                }
+                catch (EosException eosEx)
+                {
+                    //if (eosEx.EosErrorCode != EosErrorCode.DeviceBusy && eosEx.EosErrorCode != EosErrorCode.ObjectNotReady)
+                    //    throw;
+                }
+                finally
+                {
+                    if (memoryStream != IntPtr.Zero)
+                        Edsdk.EdsRelease(memoryStream);
                 }
             }
-            catch (EosException eosEx)
-            {
-                //if (eosEx.EosErrorCode != EosErrorCode.DeviceBusy && eosEx.EosErrorCode != EosErrorCode.ObjectNotReady)
-                //    throw;
-            }
-            finally
-            {
-                if (memoryStream != IntPtr.Zero)
-                    Edsdk.EdsRelease(memoryStream);
-            }
-
             return true;
         }
 
