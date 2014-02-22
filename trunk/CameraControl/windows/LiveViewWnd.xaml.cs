@@ -559,9 +559,9 @@ namespace CameraControl.windows
                                                            if (HighlightUnderExp)
                                                            {
                                                                ColorFiltering filtering = new ColorFiltering();
-                                                               filtering.Blue = new IntRange(0, 10);
-                                                               filtering.Red = new IntRange(0, 10);
-                                                               filtering.Green = new IntRange(0, 10);
+                                                               filtering.Blue = new IntRange(0, 5);
+                                                               filtering.Red = new IntRange(0, 5);
+                                                               filtering.Green = new IntRange(0, 5);
                                                                filtering.FillOutsideRange = false;
                                                                filtering.FillColor = new RGB(System.Drawing.Color.Blue);
                                                                filtering.ApplyInPlace(bmp);
@@ -570,9 +570,9 @@ namespace CameraControl.windows
                                                            if (HighlightOverExp)
                                                            {
                                                                ColorFiltering filtering = new ColorFiltering();
-                                                               filtering.Blue = new IntRange(245, 255);
-                                                               filtering.Red = new IntRange(245, 255);
-                                                               filtering.Green = new IntRange(245, 255);
+                                                               filtering.Blue = new IntRange(250, 255);
+                                                               filtering.Red = new IntRange(250, 255);
+                                                               filtering.Green = new IntRange(250, 255);
                                                                filtering.FillOutsideRange = false;
                                                                filtering.FillColor = new RGB(System.Drawing.Color.Red);
                                                                filtering.ApplyInPlace(bmp);

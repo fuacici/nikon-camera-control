@@ -14,5 +14,7 @@ namespace Canon.Eos.Framework.Eventing
         public long Zoom { get; internal set; }
 
         public Rectangle ZommBounds { get; set; }
+        
+        public Size ImageSize { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace Canon.Eos.Framework
     public abstract class EosObject : EosDisposable
     {
         private readonly IntPtr _handle;
+        protected object _locker = new object();
 
         internal EosObject(IntPtr handle)
         {
@@ -115,7 +116,10 @@ namespace Canon.Eos.Framework
 
         protected virtual void ExecuteSetter(Action action) 
         {
-            action();
+            lock (_locker)
+            {
+                action();
+            }
         }
 
         protected virtual TResult ExecuteGetter<TResult>(Func<TResult> function)
@@ -184,6 +188,12 @@ namespace Canon.Eos.Framework
             return new Point { X = point.x, Y = point.y };
         }
 
+        protected Size GetPropertySizeData(uint propertyId)
+        {
+            var point = this.GetPropertyStruct<Edsdk.EdsSize>(propertyId, Edsdk.EdsDataType.Point);
+            return new Size { Width = point.width, Height = point.height };
+        }
+
         protected Rectangle GetPropertyRectangleData(uint propertyId)
         {
             var rect = this.GetPropertyStruct<Edsdk.EdsRect>(propertyId, Edsdk.EdsDataType.Rect);
@@ -230,7 +240,7 @@ namespace Canon.Eos.Framework
                 propertyId, data));
         }
 
-        protected void SetPropertyIntegerArrayData(uint propertyId, uint[] data)
+        public void SetPropertyIntegerArrayData(uint propertyId, uint[] data)
         {
             this.ExecuteSetter(() => Util.Assert(Edsdk.EdsSetPropertyData(this.Handle, propertyId, 0, Marshal.SizeOf(typeof(uint)) * data.Length, data),
                 string.Format("Failed to set property integer array data: propertyId {0}, data {1}", propertyId, data),

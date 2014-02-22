@@ -167,6 +167,7 @@ namespace Canon.Eos.Framework.Internal.SDK
         public const uint   PropID_Evf_ImagePosition       = 0x0000050B;
 		public const uint   PropID_Evf_HistogramStatus     = 0x0000050C;
         public const uint   PropID_Evf_AFMode              = 0x0000050E;
+        public const uint   PropID_Evf_CoordinateSystem    = 0x00000540;
              
         /*----------------------------------
          Image GPS Properties
