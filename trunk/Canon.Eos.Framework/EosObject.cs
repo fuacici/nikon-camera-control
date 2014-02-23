@@ -17,7 +17,7 @@ namespace Canon.Eos.Framework
             _handle = handle;
         }
 
-        protected internal IntPtr Handle
+        public IntPtr Handle
         {
             get { return _handle; }
         }

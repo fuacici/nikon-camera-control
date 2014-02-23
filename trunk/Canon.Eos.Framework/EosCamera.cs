@@ -334,13 +334,16 @@ namespace Canon.Eos.Framework
 
         private void Lock()
         {
-            this.CheckDisposed();
-
-            if (!this.IsLocked)
+            lock (_locker)
             {
-                Util.Assert(Edsdk.EdsSendStatusCommand(this.Handle, Edsdk.CameraState_UILock),
-                    "Failed to lock camera.");
-                this.IsLocked = true;
+                this.CheckDisposed();
+
+                if (!this.IsLocked)
+                {
+                    Util.Assert(Edsdk.EdsSendStatusCommand(this.Handle, Edsdk.CameraState_UILock),
+                                "Failed to lock camera.");
+                    this.IsLocked = true;
+                }
             }
         }
 

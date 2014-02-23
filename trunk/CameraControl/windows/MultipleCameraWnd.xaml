@@ -50,7 +50,7 @@
         </Grid.ColumnDefinitions>
         <Button Content="{T:TranslateExtension ButtonCapturePhotos}" Name="btn_shot" Click="btn_shot_Click" Grid.Row="1" Grid.ColumnSpan="2" Margin="5"/>
         <Label Content="{Binding Source={x:Static Member=Devices:StaticHelper.Instance}, Path=SystemMessage}" Name="lbl_message" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="10" Grid.ColumnSpan="3" />
-        <CheckBox Content="{T:TranslateExtension LabelDisableAutofocus}" Height="27" HorizontalAlignment="Left" Margin="5,0,0,0" Name="chk_noautofocus" VerticalAlignment="Top" IsChecked="{Binding Path=DisbleAutofocus, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:MultipleCameraWnd, AncestorLevel=1}}" Grid.Row="4" Grid.ColumnSpan="2" Width="220" />
+        <CheckBox Content="{T:TranslateExtension LabelDisableAutofocus}" Height="27" HorizontalAlignment="Left" Margin="5,0,0,0" Name="chk_noautofocus" VerticalAlignment="Top" IsChecked="{Binding Path=DisbleAutofocus, RelativeSource={RelativeSource FindAncestor, AncestorType=my1:MultipleCameraWnd, AncestorLevel=1}}" Grid.Row="4" Grid.ColumnSpan="2" Width="220" IsEnabled="False" />
         <Button Content="{T:TranslateExtension ButtonStop}" Name="btn_stop" Click="btn_stop_Click" Grid.Row="2" Grid.ColumnSpan="2" Margin="5"/>
         <ListBox Grid.Column="2" Name="listBox1" ItemsSource="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=ConnectedDevices}" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectedItem="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice}" Grid.RowSpan="8">
             <ListBox.ContextMenu>
