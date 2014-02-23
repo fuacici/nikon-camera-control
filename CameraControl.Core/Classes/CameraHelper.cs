@@ -7,7 +7,7 @@ using CameraControl.Devices;
 
 namespace CameraControl.Core.Classes
 {
-    public class CameraHelper
+    public static class CameraHelper
     {
         /// <summary>
         /// Captures the specified camera device.
@@ -55,6 +55,19 @@ namespace CameraControl.Core.Classes
             }
         }
 
-
+        /// <summary>
+        /// Waits for a camera to be ready.
+        /// </summary>
+        /// <param name="device">The device.</param>
+        /// <param name="timeout">The timeout in milliseconds.</param>
+        public static void WaitForCamera(this ICameraDevice device, int timeout)
+        {
+            DateTime startTime = DateTime.Now;
+            while (device.IsBusy)
+            {
+                if ((DateTime.Now - startTime).TotalMilliseconds > timeout)
+                    break;
+            }
+        }
     }
 }

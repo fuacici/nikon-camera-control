@@ -46,6 +46,7 @@ namespace CameraControl.Core.Classes
 
         public void Set(ICameraDevice camera)
         {
+            camera.IsBusy = true;
             SetTo(camera.CompressionSetting, "CompressionSetting");
             SetTo(camera.ExposureCompensation, "ExposureCompensation");
             SetTo(camera.ExposureMeteringMode, "ExposureMeteringMode");
@@ -71,6 +72,7 @@ namespace CameraControl.Core.Classes
                     SetTo(propertyValue, propertyValue.Name);
                 }
             }
+            camera.IsBusy = false;
         }
 
 
@@ -126,10 +128,16 @@ namespace CameraControl.Core.Classes
             return new ValuePair { Name = name, IsDisabled = value.IsEnabled, Value = value.Value };
         }
 
-        public void Add(ValuePair pair)
+        public void Add(ValuePair pairParam)
         {
-            if (pair == null)
+            if (pairParam == null)
                 return;
+            ValuePair pair = new ValuePair()
+                                 {
+                                     Name = pairParam.Name,
+                                     IsDisabled = pairParam.IsDisabled,
+                                     Value = pairParam.Value == null ? null : pairParam.Value.Replace('\0', ' ')
+                                 };
             foreach (ValuePair valuePair in Values)
             {
                 if (pair.Name == valuePair.Name)
