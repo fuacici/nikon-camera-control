@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -1104,6 +1106,146 @@ namespace CameraControl.Devices.Canon
         private bool ArrayContainValue(IEnumerable<int> data, int value)
         {
             return data.Any(i => i == (int)value);
+        }
+
+        public override AsyncObservableCollection<DeviceObject> GetObjects(object storageId)
+        {
+            List<DeviceObject> list = new List<DeviceObject>();
+            int count = 0;
+            Edsdk.EdsGetChildCount(Camera.Handle, out count);
+            for (int i = 0; i < count; i++)
+            {
+                IntPtr volumePtr;
+                Edsdk.EdsGetChildAtIndex(Camera.Handle, i, out volumePtr);
+                Edsdk.EdsVolumeInfo vinfo;
+                Edsdk.EdsGetVolumeInfo(volumePtr, out vinfo);
+                //ignore the HDD
+                if (vinfo.szVolumeLabel != "HDD")
+                {
+                    //get all child entries on this volume
+                    list.AddRange(GetChildren(volumePtr));
+                }
+                Edsdk.EdsRelease(volumePtr);
+            }
+            return new AsyncObservableCollection<DeviceObject>(list);
+        }
+
+        private List<DeviceObject> GetChildren(IntPtr ptr)
+        {
+            int ChildCount;
+            //get children of first pointer
+            List<DeviceObject> list = new List<DeviceObject>();
+            Edsdk.EdsGetChildCount(ptr, out ChildCount);
+            if (ChildCount > 0)
+            {
+                //if it has children, create an array of entries
+                for (int i = 0; i < ChildCount; i++)
+                {
+                    IntPtr ChildPtr;
+                    //get children of children
+                    Edsdk.EdsGetChildAtIndex(ptr, i, out ChildPtr);
+                    //get the information about this children
+                    Edsdk.EdsDirectoryItemInfo ChildInfo;
+                    Edsdk.EdsGetDirectoryItemInfo(ChildPtr, out ChildInfo);
+
+                    if (ChildInfo.isFolder==0)
+                    {
+                        //if it's not a folder, create thumbnail and safe it to the entry
+                        IntPtr stream;
+                        Edsdk.EdsCreateMemoryStream(0, out stream);
+                        Edsdk.EdsDownloadThumbnail(ChildPtr, stream);
+                        list.Add(new DeviceObject()
+                                     {
+                                         FileName = ChildInfo.szFileName,
+                                         ThumbData = GetImage(stream, Edsdk.EdsImageSource.Thumbnail),
+                                     });
+                    }
+                    else
+                    {
+                        //if it's a folder, check for children with recursion
+                        list.AddRange(GetChildren(ChildPtr));
+                    }
+                    //release current children
+                    Edsdk.EdsRelease(ChildPtr);
+                }
+            }
+            return list;
+        }
+
+        private byte[] GetImage(IntPtr img_stream, Edsdk.EdsImageSource imageSource)
+        {
+            IntPtr stream = IntPtr.Zero;
+            IntPtr img_ref = IntPtr.Zero;
+            IntPtr streamPointer = IntPtr.Zero;
+            Edsdk.EdsImageInfo imageInfo;
+            Edsdk.EdsSize outputSize = new Edsdk.EdsSize();
+            Byte[] buffer;
+            Byte temp;
+
+            //create reference to image
+            Edsdk.EdsCreateImageRef(img_stream, out img_ref);
+            //get information about image
+            Edsdk.EdsGetImageInfo(img_ref, imageSource, out imageInfo);
+
+            //calculate size, stride and buffersize
+            outputSize.width = imageInfo.EffectiveRect.width;
+            outputSize.height = imageInfo.EffectiveRect.height;
+            int Stride = ((outputSize.width * 3) + 3) & ~3;
+            uint bufferSize = (uint)(outputSize.height * Stride);
+
+            //Init buffer
+            buffer = new Byte[bufferSize];
+            //Create memory stream to buffer
+            Edsdk.EdsCreateMemoryStreamFromPointer(buffer, bufferSize, out stream);
+            //copy image into buffer
+            Edsdk.EdsGetImage(img_ref, imageSource, Edsdk.EdsTargetImageType.RGB, imageInfo.EffectiveRect, outputSize, stream);
+
+            //makes RGB out of BGR
+            if (outputSize.width % 4 == 0)
+            {
+                for (int t = 0; t < bufferSize; t += 3)
+                {
+                    temp = buffer[t];
+                    buffer[t] = buffer[t + 2];
+                    buffer[t + 2] = temp;
+                }
+            }
+            else
+            {
+                int Padding = Stride - (outputSize.width * 3);
+                for (int y = outputSize.height - 1; y > -1; y--)
+                {
+                    int RowStart = (outputSize.width * 3) * y;
+                    int TargetStart = Stride * y;
+
+                    Array.Copy(buffer, RowStart, buffer, TargetStart, outputSize.width * 3);
+
+                    for (int t = TargetStart; t < TargetStart + (outputSize.width * 3); t += 3)
+                    {
+                        temp = buffer[t];
+                        buffer[t] = buffer[t + 2];
+                        buffer[t + 2] = temp;
+                    }
+                }
+            }
+
+            //create pointer to image data
+            Edsdk.EdsGetPointer(stream, out streamPointer);
+            //Release all ressources
+            Edsdk.EdsRelease(img_stream);
+            Edsdk.EdsRelease(img_ref);
+            Edsdk.EdsRelease(stream);
+            var bitmap = new Bitmap(outputSize.width, outputSize.height, Stride, PixelFormat.Format24bppRgb,
+                                    streamPointer);
+            byte[] byteArray = new byte[0];
+            using (MemoryStream memostream = new MemoryStream())
+            {
+                bitmap.Save(memostream, ImageFormat.Bmp);
+                memostream.Close();
+
+                byteArray = memostream.ToArray();
+            }
+            return byteArray;
         }
     }
 }

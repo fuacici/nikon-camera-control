@@ -1520,8 +1520,7 @@ namespace Canon.Eos.Framework.Internal.SDK
         //  Returns:    Any of the sdk errors.
         -----------------------------------------------------------------------------*/
         [DllImport("EDSDK.dll")]
-        public extern static uint EdsCreateMemoryStreamFromPointer( IntPtr inUserBuffer,
-             uint inBufferSize, out IntPtr outStream);
+        public extern static uint EdsCreateMemoryStreamFromPointer(byte[] inUserBuffer, uint inBufferSize, out IntPtr outStream);
 
         /*-----------------------------------------------------------------------------
         //
