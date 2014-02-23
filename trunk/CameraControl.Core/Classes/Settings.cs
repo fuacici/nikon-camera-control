@@ -628,7 +628,19 @@ namespace CameraControl.Core.Classes
 
         public CameraPropertyEnumerator CameraProperties { get; set; }
         public string SelectedLayout { get; set; }
-        public AsyncObservableCollection<CameraPreset> CameraPresets { get; set; }
+
+
+        private ObservableCollection<CameraPreset> _cameraPresets;
+
+        public ObservableCollection<CameraPreset> CameraPresets
+        {
+            get { return _cameraPresets; }
+            set
+            {
+                _cameraPresets = value;
+                NotifyPropertyChanged("CameraPresets");
+            }
+        }
 
         public string OverlayFolder
         {

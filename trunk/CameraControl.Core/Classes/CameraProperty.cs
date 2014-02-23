@@ -38,6 +38,18 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        private string _defaultPresetName;
+
+        public string DefaultPresetName
+        {
+            get { return _defaultPresetName; }
+            set
+            {
+                _defaultPresetName = value;
+                NotifyPropertyChanged("PhotoSessionName");
+            }
+        }
+
         [XmlIgnore]
         public PhotoSession PhotoSession { get; set; }
 

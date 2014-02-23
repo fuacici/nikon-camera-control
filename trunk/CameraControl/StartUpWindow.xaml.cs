@@ -207,6 +207,18 @@ namespace CameraControl
             CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(cameraDevice);
             cameraDevice.DisplayName = property.DeviceName;
             cameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
+            CameraPreset preset = ServiceProvider.Settings.GetPreset(property.DefaultPresetName);
+            if (preset != null)
+            {
+                var thread = new Thread(delegate()
+                                               {
+                                                   cameraDevice.WaitForCamera(5000);
+                                                   preset.Set(cameraDevice);
+
+                                               });
+                thread.Start();
+            }
+
             if(ServiceProvider.Settings.SyncCameraDateTime)
             {
                 try
