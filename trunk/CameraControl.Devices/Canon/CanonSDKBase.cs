@@ -286,7 +286,7 @@ namespace CameraControl.Devices.Canon
                 base.CaptureInSdRam = value;
                 try
                 {
-                    if (base.CaptureInSdRam)
+                    if (!base.CaptureInSdRam)
                     {
                         Camera.SavePicturesToCamera();
                     }
