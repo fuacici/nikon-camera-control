@@ -29,7 +29,7 @@
             <Button Content="{T:TranslateExtension ButtonHelp}" Name="btn_help" Click="btn_help_Click" />
         </Controls:WindowCommands>
     </Controls:MetroWindow.WindowCommands>
-    <Grid>
+    <Grid Height="375">
         <Grid.RowDefinitions>
             <RowDefinition Height="232*" />
             <RowDefinition Height="46*" />
@@ -63,6 +63,7 @@
                     <CheckBox Content="{T:TranslateExtension LabelUseCameraCounter}" ToolTip="" IsChecked="{Binding Path=UseCameraCounter}"/>
                     <CheckBox Content="{T:TranslateExtension LabelDownloadJpgOnly}" ToolTip="{T:TranslateExtension LabelDownloadJpgOnlyToolTip}" IsChecked="{Binding Path=DownloadOnlyJpg}" />
                     <CheckBox Content="{T:TranslateExtension LabelWriteComments}" IsChecked="{Binding Path=WriteComment}" />
+                    <CheckBox Content="{T:TranslateExtension LabelAllowOverWrite}" IsChecked="{Binding Path=AllowOverWrite}" />
                 </StackPanel>
             </TabItem>
             <TabItem Header="{T:TranslateExtension LabelTags}">
