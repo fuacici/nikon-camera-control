@@ -319,6 +319,7 @@ namespace CameraControl.Core.Classes
             DownloadOnlyJpg = false;
             LeadingZeros = 4;
             WriteComment = false;
+            AllowOverWrite = false;
         }
 
         void _systemWatcher_Created(object sender, FileSystemEventArgs e)
@@ -358,6 +359,17 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        private bool _allowOverWrite;
+        public bool AllowOverWrite
+        {
+            get { return _allowOverWrite; }
+            set
+            {
+                _allowOverWrite = value;
+                NotifyPropertyChanged("AllowOverWrite");
+            }
+        }
+
         public string GetNextFileName(string ext, ICameraDevice device)
         {
             lock (_locker)
@@ -374,7 +386,8 @@ namespace CameraControl.Core.Classes
                     
                 string fileName = Path.Combine(Folder,
                                                FormatFileName(device, ext) + (!ext.StartsWith(".") ? "." : "") + ext);
-                if (File.Exists(fileName))
+                
+                if (File.Exists(fileName) && !AllowOverWrite)
                     return GetNextFileName(ext, device);
                 _lastFilename = fileName;
                 return fileName;
@@ -385,7 +398,7 @@ namespace CameraControl.Core.Classes
         {
             CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(device);
             string res = FileNameTemplate;
-            if (!res.Contains("$C"))
+            if (!res.Contains("$C") && !AllowOverWrite)
                 res += "$C";
 
             if (UseCameraCounter)

@@ -187,12 +187,18 @@ namespace CameraControl
                 else
                 {
                     fileName = Path.Combine(session.Folder, eventArgs.FileName);
-                    if (File.Exists(fileName))
+                    if (File.Exists(fileName) && !session.AllowOverWrite)
                         fileName =
                           StaticHelper.GetUniqueFilename(
                             Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_", 0,
                             Path.GetExtension(fileName));
                 }
+                
+                if(session.AllowOverWrite && File.Exists(fileName))
+                {
+                    File.Delete(fileName);
+                }
+
                 if (!Directory.Exists(Path.GetDirectoryName(fileName)))
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(fileName));
