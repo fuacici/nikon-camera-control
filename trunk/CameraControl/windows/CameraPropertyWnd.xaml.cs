@@ -93,6 +93,7 @@ namespace CameraControl.windows
                     }));
                     break;
                 case WindowsCmdConsts.CameraPropertyWnd_Hide:
+                    CameraProperty = null;
                     Hide();
                     break;
                 case CmdConsts.All_Close:
