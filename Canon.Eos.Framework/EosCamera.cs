@@ -376,12 +376,18 @@ namespace Canon.Eos.Framework
 
         public void SetProperty(uint propertyId, long val)
         {
-            this.SetPropertyIntegerData(propertyId, val);
+            lock (_locker)
+            {
+                this.SetPropertyIntegerData(propertyId, val);
+            }
         }
 
         public long GetProperty(uint propertyId)
         {
-            return (long)this.GetPropertyIntegerData(propertyId);
+            lock (_locker)
+            {
+                return (long) this.GetPropertyIntegerData(propertyId);
+            }
         }
         /// <summary>
         /// Saves the pictures to camera.
@@ -427,8 +433,11 @@ namespace Canon.Eos.Framework
 
         private uint SendCommand(uint command, int parameter = 0)
         {
-            this.EnsureOpenSession();            
-            return Edsdk.EdsSendCommand(this.Handle, command, parameter);
+            lock (_locker)
+            {
+                this.EnsureOpenSession();
+                return Edsdk.EdsSendCommand(this.Handle, command, parameter);
+            }
         }
 
         public void SetEventHandlers()
@@ -523,16 +532,23 @@ namespace Canon.Eos.Framework
 
         public void AutoFocus()
         {
-            if (this.IsLegacy && !this.IsLocked)
+            lock (_locker)
             {
-                this.LockAndExceute(this.AutoFocus);
-                return;
-            }
+                if (this.IsLegacy && !this.IsLocked)
+                {
+                    this.LockAndExceute(this.AutoFocus);
+                    return;
+                }
 
-            Util.Assert(this.SendCommand(Edsdk.CameraCommand_PressShutterButton, (int)Edsdk.EdsShutterButton.CameraCommand_ShutterButton_OFF),
-                "Failed to take picture no AF.");
-            Util.Assert(this.SendCommand(Edsdk.CameraCommand_PressShutterButton, (int)Edsdk.EdsShutterButton.CameraCommand_ShutterButton_Halfway),
-                "Failed to take picture no AF.");
+                Util.Assert(
+                    this.SendCommand(Edsdk.CameraCommand_PressShutterButton,
+                                     (int) Edsdk.EdsShutterButton.CameraCommand_ShutterButton_OFF),
+                    "Failed to take picture no AF.");
+                Util.Assert(
+                    this.SendCommand(Edsdk.CameraCommand_PressShutterButton,
+                                     (int) Edsdk.EdsShutterButton.CameraCommand_ShutterButton_Halfway),
+                    "Failed to take picture no AF.");
+            }
         }
 
 

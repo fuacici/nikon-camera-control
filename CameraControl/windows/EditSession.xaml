@@ -5,9 +5,9 @@
                       xmlns:Classes="clr-namespace:CameraControl.Core.Classes;assembly=CameraControl.Core"
                       xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
                       WindowStartupLocation="CenterScreen" Topmost="True">
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <Classes:PhotoSession/>
-    </Window.DataContext>
+    </Window.DataContext>-->
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
