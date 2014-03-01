@@ -172,7 +172,7 @@ namespace CameraControl.Devices.Classes
                     return;
                 }
             }
-            Console.WriteLine(string.Format("Value not found for property {0}, value {1} ", Name, o));
+            //Console.WriteLine(string.Format("Value not found for property {0}, value {1} ", Name, o));
         }
 
         public void SetValue()
