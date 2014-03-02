@@ -192,6 +192,7 @@
     <Compile Include="Classes\CustomConfig.cs" />
     <Compile Include="Classes\FileInfo.cs" />
     <Compile Include="Classes\FileItem.cs" />
+    <Compile Include="Classes\LiveviewSettings.cs" />
     <Compile Include="Classes\MessageEventArgs.cs" />
     <Compile Include="Classes\PhotoSession.cs" />
     <Compile Include="Classes\PhotoUtils.cs" />
@@ -268,6 +269,7 @@
     <Compile Include="Wpf\ProgressWindow.xaml.cs">
       <DependentUpon>ProgressWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Wpf\SizeConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CameraControl.Devices\CameraControl.Devices.csproj">

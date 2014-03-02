@@ -145,11 +145,24 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        private LiveviewSettings _liveviewSettings;
+
+        public LiveviewSettings LiveviewSettings
+        {
+            get { return _liveviewSettings; }
+            set
+            {
+                _liveviewSettings = value;
+                NotifyPropertyChanged("LiveviewSettings");
+            }
+        }
+
         public CameraProperty()
         {
             NoDownload = false;
             CaptureInSdRam = true;
             Counter = 0;
+            LiveviewSettings = new LiveviewSettings();
         }
 
     }
