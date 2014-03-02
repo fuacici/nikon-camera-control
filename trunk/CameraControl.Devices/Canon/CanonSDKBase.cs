@@ -357,8 +357,8 @@ namespace CameraControl.Devices.Canon
             InitCompression();
             Battery = (int)Camera.BatteryLevel;
             IsBusy = false;
-            Camera.PropertyChanged += Camera_PropertyChanged;
             CaptureInSdRam = true;
+            Camera.PropertyChanged += Camera_PropertyChanged;
             SerialNumber = Camera.SerialNumber;
         }
 

@@ -189,17 +189,18 @@ namespace CameraControl
         {
             if (newcameraDevice == null)
                 return;
-            CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(newcameraDevice);
-            // load session data only if not session attached to the selected camera
-            if (newcameraDevice.AttachedPhotoSession == null)
-            {
-                newcameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
-            }
-            if (newcameraDevice.AttachedPhotoSession != null)
-                ServiceProvider.Settings.DefaultSession = (PhotoSession)newcameraDevice.AttachedPhotoSession;
-
-            if (newcameraDevice.GetCapability(CapabilityEnum.CaptureInRam))
-                newcameraDevice.CaptureInSdRam = property.CaptureInSdRam;
+            var thread = new Thread(delegate()
+                                               {
+                                                   CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(newcameraDevice);
+                                                   // load session data only if not session attached to the selected camera
+                                                   if (newcameraDevice.AttachedPhotoSession == null)
+                                                   {
+                                                       newcameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
+                                                   }
+                                                   if (newcameraDevice.AttachedPhotoSession != null)
+                                                       ServiceProvider.Settings.DefaultSession = (PhotoSession)newcameraDevice.AttachedPhotoSession;
+                                               });
+            thread.Start();
         }
 
         void DeviceManager_CameraConnected(ICameraDevice cameraDevice)
@@ -207,15 +208,18 @@ namespace CameraControl
             CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(cameraDevice);
             cameraDevice.DisplayName = property.DeviceName;
             cameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
+            if (cameraDevice.GetCapability(CapabilityEnum.CaptureInRam))
+                cameraDevice.CaptureInSdRam = property.CaptureInSdRam;
+             
             CameraPreset preset = ServiceProvider.Settings.GetPreset(property.DefaultPresetName);
             if (preset != null)
             {
                 var thread = new Thread(delegate()
-                                               {
-                                                   cameraDevice.WaitForCamera(5000);
-                                                   preset.Set(cameraDevice);
+                                            {
+                                                cameraDevice.WaitForCamera(5000);
+                                                preset.Set(cameraDevice);
 
-                                               });
+                                            });
                 thread.Start();
             }
 

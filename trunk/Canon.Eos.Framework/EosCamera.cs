@@ -496,14 +496,17 @@ namespace Canon.Eos.Framework
 
         public void TakePicture()
         {
-            if (this.IsLegacy && !this.IsLocked)
+            lock (_locker)
             {
-                this.LockAndExceute(this.TakePicture);
-                return;
-            }
+                if (this.IsLegacy && !this.IsLocked)
+                {
+                    this.LockAndExceute(this.TakePicture);
+                    return;
+                }
 
-            Util.Assert(this.SendCommand(Edsdk.CameraCommand_TakePicture),
-                "Failed to take picture.");
+                Util.Assert(this.SendCommand(Edsdk.CameraCommand_TakePicture),
+                            "Failed to take picture.");
+            }
         }
 
         public void TakePictureNoAf()
@@ -617,10 +620,13 @@ namespace Canon.Eos.Framework
         
         private void Unlock()
         {
-            if (this.IsLocked)
+            lock (_locker)
             {
-                Edsdk.EdsSendStatusCommand(this.Handle, Edsdk.CameraState_UIUnLock);
-                this.IsLocked = false;
+                if (this.IsLocked)
+                {
+                    Edsdk.EdsSendStatusCommand(this.Handle, Edsdk.CameraState_UIUnLock);
+                    this.IsLocked = false;
+                }
             }
         }                        
     }
