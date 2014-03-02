@@ -35,7 +35,8 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="224" />
+            <RowDefinition Height="18" />
+            <RowDefinition Height="206" />
             <RowDefinition Height="46*" />
             <RowDefinition Height="303*" />
             <RowDefinition Height="20*" />
@@ -43,20 +44,23 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250" />
             <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="528*" />
+            <ColumnDefinition Width="464*" />
+            <ColumnDefinition Width="17*" />
         </Grid.ColumnDefinitions>
-        <Image Stretch="Uniform" Grid.Column="2" Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}"  Grid.RowSpan="3" Name="img_preview" />
-        <Image Name="image1" Stretch="Uniform" Grid.Column="2" MouseDown="image1_MouseDown" Grid.RowSpan="3" Opacity="{Binding ElementName=slider_transparent,Path=Value}" RenderTransformOrigin="0.5,0.5" >
+        <Image Stretch="Uniform" Grid.Column="2" Source="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage}"  Grid.RowSpan="4" Name="img_preview" Grid.ColumnSpan="2" />
+        <Image Name="image1" Stretch="Uniform" Grid.Column="2" MouseDown="image1_MouseDown" Grid.RowSpan="4" Opacity="{Binding ElementName=slider_transparent,Path=Value}" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2">
             <Image.RenderTransform>
                 <RotateTransform Angle="{Binding ElementName=slider_rotation,Path=Value }"  />
             </Image.RenderTransform>
         </Image>
-        <Canvas Grid.Column="1" Name="canvas"   Background="{x:Null}" SizeChanged="canvas_SizeChanged" Grid.RowSpan="3" Grid.ColumnSpan="2" Margin="5,0,0,0">
+        <Controls:RangeSlider Grid.Column="2" Margin="4" Grid.ColumnSpan="2" />
+        <Controls:RangeSlider Grid.Column="3" Grid.RowSpan="4" Margin="4" Grid.ColumnSpan="2" Orientation="Vertical"/>
+        <Canvas Grid.Column="2" Name="canvas"   Background="{x:Null}" SizeChanged="canvas_SizeChanged" Grid.RowSpan="4" Margin="5,0,0,0" Grid.ColumnSpan="2">
             <Label Canvas.Left="0" Canvas.Top="0" Content="REC" Height="41" Name="lbl_rec" FontSize="20" FontWeight="Bold" Foreground="Red" Width="52"></Label>
         </Canvas>
-        <Button Content="{T:TranslateExtension ButtonAutoFocus}" Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="button1" VerticalAlignment="Top" Width="112" Click="button1_Click" />
-        <Button Content="{T:TranslateExtension ButtonCapture}" Height="23" Margin="0,12,9,0" Name="button2" VerticalAlignment="Top" Click="button2_Click" HorizontalAlignment="Right" Width="101" />
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.RowSpan="2">
+        <Button Content="{T:TranslateExtension ButtonAutoFocus}" Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="button1" VerticalAlignment="Top" Width="112" Click="button1_Click" Grid.RowSpan="2" />
+        <Button Content="{T:TranslateExtension ButtonCapture}" Height="23" Margin="0,12,9,0" Name="button2" VerticalAlignment="Top" Click="button2_Click" HorizontalAlignment="Right" Width="101" Grid.RowSpan="2" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="2" Grid.RowSpan="2">
             <StackPanel>
                 <StackPanel.ScrollOwner>
                     <ScrollViewer />
@@ -103,6 +107,7 @@
                                     </Rectangle>
                                 </ToggleButton.Resources>
                                 <ToggleButton.Style>
+                                    <!---->
                                     <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
                                         <Style.Triggers>
                                             <Trigger Property="IsChecked" Value="True">
@@ -132,7 +137,8 @@
                                     </Rectangle>
                                 </ToggleButton.Resources>
                                 <ToggleButton.Style>
-                                    <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+                                    <!---->
+                                    <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}" >
                                         <Style.Triggers>
                                             <Trigger Property="IsChecked" Value="True">
                                                 <Setter Property="Content" Value="{StaticResource OnImage}">
@@ -280,19 +286,19 @@
                 </Expander>
             </StackPanel>
         </ScrollViewer>
-        <ToggleButton Content="{T:TranslateExtension ButtonFreezeImage}" Height="23" Margin="12,83,9,0" VerticalAlignment="Top" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=FreezeImage}" Checked="ToggleButton_Checked" />
-        <Button Content="{T:TranslateExtension ButtonRecordMovie}" Height="23" Margin="12,51,9,0" Name="btn_record" VerticalAlignment="Top" Click="btn_record_Click" />
-        <Canvas Height="104" Margin="32,114,0,0" Name="canvas_image" VerticalAlignment="Top" Background="#FFC7C7C7" MouseDown="canvas_image_MouseDown" HorizontalAlignment="Left" Width="150">
+        <ToggleButton Content="{T:TranslateExtension ButtonFreezeImage}" Height="23" Margin="12,65,9,0" VerticalAlignment="Top" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=FreezeImage}" Checked="ToggleButton_Checked" Grid.Row="1" />
+        <Button Content="{T:TranslateExtension ButtonRecordMovie}" Height="23" Margin="12,33,9,0" Name="btn_record" VerticalAlignment="Top" Click="btn_record_Click" Grid.Row="1" />
+        <Canvas Height="104" Margin="32,96,0,0" Name="canvas_image" VerticalAlignment="Top" Background="#FFC7C7C7" MouseDown="canvas_image_MouseDown" HorizontalAlignment="Left" Width="150" Grid.Row="1">
             <Rectangle Canvas.Left="0" Canvas.Top="0" Height="15" Name="small_focus_rect" Stroke="Red" Width="17" ClipToBounds="True" />
             <!--<Controls:ProgressRing IsActive="{Binding Path=SelectedPortableDevice.IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Height="78" Width="81" Canvas.Left="21" Canvas.Top="20" />-->
         </Canvas>
         <!--<Image Name="img_preview" Margin="31,114,0,0" Height="{Binding ElementName=canvas_image, Path=Height}" HorizontalAlignment="Left" Width="{Binding ElementName=canvas_image, Path=Width}"/>-->
-        <Label Content="{Binding Path=Fps, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Margin="188,114,9,72" />
-        <Grid Margin="92,0,100,0" Grid.Column="2" Grid.Row="1" Name="grid_wait" Visibility="Hidden">
+        <Label Content="{Binding Path=Fps, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Margin="188,96,9,72" Grid.Row="1" />
+        <Grid Margin="92,0,83,0" Grid.Column="2" Grid.Row="2" Name="grid_wait" Visibility="Hidden">
             <ProgressBar IsIndeterminate="True" Height="20"/>
             <Label Content="{T:TranslateExtension LabelWaitingForDevice}" HorizontalContentAlignment="Center" />
         </Grid>
-        <Label Content="{Binding Source={x:Static Member=Devices:StaticHelper.Instance}, Path=SystemMessage}" FontWeight="Bold" HorizontalContentAlignment="Right" Grid.Row="3" Grid.Column="1" Padding="0" Grid.ColumnSpan="2" />
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Name="gridSplitter1" Grid.RowSpan="4" />
+        <Label Content="{Binding Source={x:Static Member=Devices:StaticHelper.Instance}, Path=SystemMessage}" FontWeight="Bold" HorizontalContentAlignment="Right" Grid.Row="4" Grid.Column="1" Padding="0" Grid.ColumnSpan="3" />
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Name="gridSplitter1" Grid.RowSpan="5" />
     </Grid>
 </Controls:MetroWindow>
