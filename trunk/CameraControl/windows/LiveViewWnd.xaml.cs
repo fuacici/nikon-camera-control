@@ -69,6 +69,17 @@ namespace CameraControl.windows
             }
         }
 
+        private CameraProperty _cameraProperty;
+        public CameraProperty CameraProperty
+        {
+            get { return _cameraProperty; }
+            set
+            {
+                _cameraProperty = value;
+                NotifyPropertyChanged("CameraProperty");
+            }
+        }
+
         private int _fps;
 
         public int Fps
@@ -754,6 +765,7 @@ namespace CameraControl.windows
             {
                 if (LiveViewData == null)
                     return;
+
                 _focusrect.BeginInit();
                 _focusrect.Visibility = LiveViewData.HaveFocusData && ShowFocusRect &&
                                         selectedPortableDevice.LiveViewImageZoomRatio.Value == "All"
@@ -803,13 +815,6 @@ namespace CameraControl.windows
             small_focus_rect.SetValue(Canvas.TopProperty, LiveViewData.FocusY * yt - (_focusrect.Width / 2 * yt));
         }
 
-        private void SetLinePos(Line line, int x1, int y1, int x2, int y2)
-        {
-            line.X1 = x1;
-            line.X2 = x2;
-            line.Y1 = y1;
-            line.Y2 = y2;
-        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -1097,11 +1102,12 @@ namespace CameraControl.windows
                                                              SelectedPortableDevice = cameraparam;
                                                              SelectedPortableDevice.CameraDisconnected +=
                                                                  selectedPortableDevice_CameraDisconnected;
-                                                             CameraProperty property =
+                                                             CameraProperty =
                                                                  ServiceProvider.Settings.CameraProperties.Get(
                                                                      SelectedPortableDevice);
                                                              Title = TranslationStrings.LiveViewWindowTitle + " - " +
-                                                                     property.DeviceName;
+                                                                     CameraProperty.DeviceName;
+                                                             DataContext = CameraProperty.LiveviewSettings;
                                                              Show();
                                                              Activate();
                                                              //Topmost = true;
@@ -1157,6 +1163,7 @@ namespace CameraControl.windows
                                                              selectedPortableDevice_CaptureCompleted;
                                                            ServiceProvider.Settings.SelectedBitmap.BitmapLoaded -=
                                                              SelectedBitmap_BitmapLoaded;
+                                                           DataContext = null;
                                                            Thread.Sleep(100);
                                                            StopLiveView();
                                                            Recording = false;
@@ -1596,6 +1603,12 @@ namespace CameraControl.windows
             Dispatcher.Invoke(slider_transparent.Value == 1
                                 ? new Action(delegate { img_preview.Visibility = Visibility.Hidden; })
                                 : new Action(delegate { img_preview.Visibility = Visibility.Visible; }));
+        }
+
+        private void MetroWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            CameraProperty.LiveviewSettings.CanvasHeight = slide_vert.ActualHeight;
+            CameraProperty.LiveviewSettings.CanvasWidt = slide_horiz.ActualWidth;
         }
     }
 }
