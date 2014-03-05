@@ -615,6 +615,17 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        private bool _autoPreviewJpgOnly;
+        public bool AutoPreviewJpgOnly
+        {
+            get { return _autoPreviewJpgOnly; }
+            set
+            {
+                _autoPreviewJpgOnly = value;
+                NotifyPropertyChanged("AutoPreviewJpgOnly");
+            }
+        }
+
         private string _clientId;
         public string ClientId
         {
@@ -713,6 +724,7 @@ namespace CameraControl.Core.Classes
             AddFakeCamera = false;
             SyncCameraDateTime = false;
             ShowThumbUpDown = false;
+            AutoPreviewJpgOnly = false;
             ClientId = Guid.NewGuid().ToString();
         }
 
