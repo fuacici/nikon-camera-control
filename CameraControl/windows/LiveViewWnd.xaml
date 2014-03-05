@@ -29,7 +29,6 @@
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />-->
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
-            <ClassesWpf:SizeConverter x:Key="SizeConverter" />
         </ResourceDictionary>
     </Window.Resources>
     <Controls:MetroWindow.WindowCommands>
@@ -58,12 +57,15 @@
                 <RotateTransform Angle="{Binding ElementName=slider_rotation,Path=Value }"  />
             </Image.RenderTransform>
         </Image>
-        <Controls:RangeSlider Grid.Column="2" Margin="4" Grid.ColumnSpan="2" Name="slide_horiz"/>
-        <Controls:RangeSlider Grid.Row="1" Grid.Column="3" Grid.RowSpan="3" Margin="4" Grid.ColumnSpan="2" Orientation="Vertical" UpperValue="{Binding Path=GridVerticalMin}" Name="slide_vert" />
+        <Controls:RangeSlider Grid.Column="2" Margin="4" Grid.ColumnSpan="2" Name="slide_horiz" UpperValue="{Binding Path=GridHorizontalMax}"  LowerValue="{Binding Path=GridHorizontalMin}" SmallChange="1" MinRangeWidth="0" Visibility="{Binding Path=GridVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <Controls:RangeSlider Grid.Row="1" Grid.Column="3" Grid.RowSpan="3" Margin="4" Orientation="Vertical" UpperValue="{Binding Path=GridVerticalMin}"  LowerValue="{Binding Path=GridVerticalMax}"  Name="slide_vert" SmallChange="1" MinRangeWidth="0" Visibility="{Binding Path=GridVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-        <Line Grid.Column="2" Grid.RowSpan="4" Name="line_verMin" X1="100" Y1="0" X2="100" Y2="{Binding ElementName=slide_vert, Path=ActualHeight}" StrokeThickness="3" Stroke="Black"/>
+        <Line Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" Y1="0" X1="{Binding Path=GridHorizontalMinSize}" Y2="{Binding ElementName=slide_vert, Path=ActualHeight}" X2="{Binding Path=GridHorizontalMinSize}" StrokeThickness="1" Stroke="Black" Visibility="{Binding Path=GridVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <Line Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" Y1="0" X1="{Binding Path=GridHorizontalMaxSize}" Y2="{Binding ElementName=slide_vert, Path=ActualHeight}" X2="{Binding Path=GridHorizontalMaxSize}" StrokeThickness="1" Stroke="Black" Visibility="{Binding Path=GridVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-        <Line Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" Name="line_horMin" X1="0" Y1="{Binding Path=GridVerticalMinSize}" X2="{Binding ElementName=slide_horiz, Path=ActualWidth}" Y2="{Binding Path=GridVerticalMinSize}" StrokeThickness="3" Stroke="Black"/>
+        <Line Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" X1="0" Y1="{Binding Path=GridVerticalMinSize}" X2="{Binding ElementName=slide_horiz, Path=ActualWidth}" Y2="{Binding Path=GridVerticalMinSize}" StrokeThickness="1" Stroke="Black" Visibility="{Binding Path=GridVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <Line Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" X1="0" Y1="{Binding Path=GridVerticalMaxSize}" X2="{Binding ElementName=slide_horiz, Path=ActualWidth}" Y2="{Binding Path=GridVerticalMaxSize}" StrokeThickness="1" Stroke="Black" Visibility="{Binding Path=GridVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
 
         <Canvas Grid.Column="2" Name="canvas"   Background="{x:Null}" SizeChanged="canvas_SizeChanged" Grid.RowSpan="4" Margin="5,0,0,0" Grid.ColumnSpan="2">
             <Label Canvas.Left="0" Canvas.Top="0" Content="REC" Height="41" Name="lbl_rec" FontSize="20" FontWeight="Bold" Foreground="Red" Width="52"></Label>
@@ -215,16 +217,19 @@
                                 <ColumnDefinition Width="5"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="186*" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <Label Content="{T:TranslateExtension LabelOverlay}" Grid.Column="1" VerticalAlignment="Center"/>
                             <ComboBox Grid.Column="3" Margin="3" SelectedIndex="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=GridType}" Name="cmb_overlay">
@@ -236,13 +241,16 @@
                             </ComboBox>
                             <ComboBox Name="cmb_zoom" IsEnabled="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" ItemsSource="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.Values, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" SelectedValue="{Binding Path=SelectedPortableDevice.LiveViewImageZoomRatio.Value, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="1" Grid.Column="3" Margin="3"/>
                             <Label Content="{T:TranslateExtension LabelLvZoomRation}" Name="label1" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" />
-                            <CheckBox Content="B&amp;W" Name="checkBox1" IsChecked="{Binding Path=BlackAndWhite, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" />
-                            <Label Content="{T:TranslateExtension LabelOpacity}" Grid.Column="1" Grid.Row="3" Name="label2" Grid.ColumnSpan="3" />
-                            <Slider Name="slider_transparent" Maximum="1" Value="1" Grid.Row="4" Grid.ColumnSpan="3" Grid.Column="1" ValueChanged="slider_transparent_ValueChanged" />
-                            <CheckBox Content="{T:TranslateExtension LabelStayOnTop}" Name="chk_top" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" />
-                            <CheckBox Content="{T:TranslateExtension LabelShowFocusRect}" IsChecked="{Binding Path=ShowFocusRect, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" />
-                            <Label Content="{T:TranslateExtension LabelLiveViewRotation}" Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="3" />
-                            <ComboBox Name="cmb_rotation" Grid.Row="8" Grid.ColumnSpan="3" Grid.Column="1">
+                            <Label Content="{T:TranslateExtension LabelOpacity}" Grid.Column="1" Grid.Row="2" Name="label2" Grid.ColumnSpan="3" />
+                            <Slider Name="slider_transparent" Maximum="1" Value="1" Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="1" ValueChanged="slider_transparent_ValueChanged" />
+                            
+                            <CheckBox Content="B&amp;W" Name="checkBox1" IsChecked="{Binding Path=BlackAndWhite, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Margin="2"/>
+                            <CheckBox Content="{T:TranslateExtension LabelStayOnTop}" Name="chk_top" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Margin="2"/>
+                            <CheckBox Content="{T:TranslateExtension LabelShowFocusRect}" IsChecked="{Binding Path=ShowFocusRect, RelativeSource={RelativeSource FindAncestor, AncestorType=my:LiveViewWnd, AncestorLevel=1}}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Margin="2"/>
+                            <CheckBox Content="{T:TranslateExtension LabelShowRuler}" IsChecked="{Binding Path=GridVisible}" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" Margin="2"/>
+                            
+                            <Label Content="{T:TranslateExtension LabelLiveViewRotation}" Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="3" />
+                            <ComboBox Name="cmb_rotation" Grid.Row="9" Grid.ColumnSpan="3" Grid.Column="1">
                                 <ComboBoxItem Content="{T:TranslateExtension LabelRotateNone}" />
                                 <ComboBoxItem Content="{T:TranslateExtension LabelRotate90}" />
                                 <ComboBoxItem Content="{T:TranslateExtension LabelRotate180}" />
