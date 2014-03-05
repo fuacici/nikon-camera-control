@@ -87,12 +87,13 @@
                         </Grid.RowDefinitions>
                         <CheckBox Grid.Row="1" Grid.Column="1" Margin="3" Content="{T:TranslateExtension LabelPlaySound}"  IsChecked="{Binding PlaySound}" />
                         <CheckBox Grid.Row="2" Grid.Column="1" Margin="3" Content="{T:TranslateExtension LabelAutoPreview}"  IsChecked="{Binding AutoPreview}" ToolTip="Disable this option if you use Lightroom"/>
-                        <CheckBox Grid.Row="3" Grid.Column="1" Margin="3" Content="{T:TranslateExtension LabelDelayImageLoading}"  IsChecked="{Binding DelayImageLoading}"/>
-                        <CheckBox Grid.Row="4" Grid.Column="1" Margin="3" Content="{T:TranslateExtension LabelShowThumbUpDown}"  IsChecked="{Binding ShowThumbUpDown}" />
-                        <CheckBox Grid.Row="5" Grid.Column="1" Margin="3" Content="{T:TranslateExtension LabelShowFocusPoints}"  IsChecked="{Binding ShowFocusPoints}" />
-                        <CheckBox Grid.Row="6" Grid.Column="1" Margin="3" Content="{T:TranslateExtension LabelLowMemoryUsage}"  IsChecked="{Binding LowMemoryUsage}" />
-                        <CheckBox Grid.Row="7" Grid.Column="1" Margin="3" Content="{T:TranslateExtension LabelDontLoadThumbs}" IsChecked="{Binding DontLoadThumbnails}"/>
-                        <StackPanel Grid.Row="8" Grid.Column="1" Margin="3" Orientation="Horizontal" >
+                        <CheckBox Grid.Row="3" Grid.Column="1" Margin="3" Content="{T:TranslateExtension LabelAutoPreviewJpgOnly}"  IsChecked="{Binding AutoPreviewJpgOnly}" />
+                        <CheckBox Grid.Row="4" Grid.Column="1" Margin="3" Content="{T:TranslateExtension LabelDelayImageLoading}"  IsChecked="{Binding DelayImageLoading}"/>
+                        <CheckBox Grid.Row="5" Grid.Column="1" Margin="3" Content="{T:TranslateExtension LabelShowThumbUpDown}"  IsChecked="{Binding ShowThumbUpDown}" />
+                        <CheckBox Grid.Row="6" Grid.Column="1" Margin="3" Content="{T:TranslateExtension LabelShowFocusPoints}"  IsChecked="{Binding ShowFocusPoints}" />
+                        <CheckBox Grid.Row="7" Grid.Column="1" Margin="3" Content="{T:TranslateExtension LabelLowMemoryUsage}"  IsChecked="{Binding LowMemoryUsage}" />
+                        <CheckBox Grid.Row="8" Grid.Column="1" Margin="3" Content="{T:TranslateExtension LabelDontLoadThumbs}" IsChecked="{Binding DontLoadThumbnails}"/>
+                        <StackPanel Grid.Row="9" Grid.Column="1" Margin="3" Orientation="Horizontal" >
                             <Label Content="{T:TranslateExtension LabelRotateImage}"/>
                             <ComboBox SelectedIndex="{Binding RotateIndex}">
                                 <ComboBoxItem Content="{T:TranslateExtension LabelRotateNone}" />
@@ -101,13 +102,13 @@
                                 <ComboBoxItem Content="{T:TranslateExtension LabelRotate270}" />
                             </ComboBox>
                         </StackPanel>
-                        <CheckBox Grid.Row="9" Grid.Column="1" Margin="3" Content="{T:TranslateExtension LabelPreviewInLIveView}" IsChecked="{Binding PreviewLiveViewImage}"/>
+                        <CheckBox Grid.Row="10" Grid.Column="1" Margin="3" Content="{T:TranslateExtension LabelPreviewInLIveView}" IsChecked="{Binding PreviewLiveViewImage}"/>
 
-                        <StackPanel Grid.Row="10" Grid.Column="1" Margin="3" Orientation="Horizontal">
+                        <StackPanel Grid.Row="11" Grid.Column="1" Margin="3" Orientation="Horizontal">
                             <Label Content="{T:TranslateExtension LabelLIveViewImageFreeze}"/>
                             <Controls:NumericUpDown Minimum="2" Maximum="120" Width="100" Value="{Binding LiveViewFreezeTimeOut}"/>
                         </StackPanel>
-                        <StackPanel Grid.Row="11" Grid.Column="1" Margin="3" Orientation="Horizontal">
+                        <StackPanel Grid.Row="12" Grid.Column="1" Margin="3" Orientation="Horizontal">
                             <Label Content="{T:TranslateExtension LabelExternalViewerPath}" />
                             <TextBox Width="300" Text="{Binding ExternalViewer}" />
                             <Button Content="..." HorizontalAlignment="Right" Margin="2" Name="btn_browse_file" VerticalAlignment="Top" Width="29" Click="btn_browse_file_Click" />

@@ -229,16 +229,21 @@ namespace CameraControl
                 //select the new file only when the multiple camera support isn't used to prevent high CPU usage on raw files
                 if (ServiceProvider.Settings.AutoPreview &&
                     !ServiceProvider.WindowsManager.Get(typeof(MultipleCameraWnd)).IsVisible &&
-                    !ServiceProvider.Settings.UseExternalViewer)
+                    !ServiceProvider.Settings.UseExternalViewer )
                 {
-                    if (ServiceProvider.Settings.DelayImageLoading && (DateTime.Now - _lastLoadTime).TotalSeconds < 4)
+                    if ((Path.GetExtension(fileName).ToLower() == ".jpg" && ServiceProvider.Settings.AutoPreviewJpgOnly) || !ServiceProvider.Settings.AutoPreviewJpgOnly)
                     {
-                        _selectiontimer.Stop();
-                        _selectiontimer.Start();
-                    }
-                    else
-                    {
-                        ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Select_Image, _selectedItem);
+
+                        if (ServiceProvider.Settings.DelayImageLoading &&
+                            (DateTime.Now - _lastLoadTime).TotalSeconds < 4)
+                        {
+                            _selectiontimer.Stop();
+                            _selectiontimer.Start();
+                        }
+                        else
+                        {
+                            ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Select_Image, _selectedItem);
+                        }
                     }
                 }
                 _lastLoadTime = DateTime.Now;

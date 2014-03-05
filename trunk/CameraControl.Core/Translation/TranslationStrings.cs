@@ -406,5 +406,6 @@ namespace CameraControl.Core.Translation
         //27/02/2014
         public static string LabelAllowOverWrite = "Allow overwrite";
         public static string LabelShowRuler = "Show Ruler";
+        public static string LabelAutoPreviewJpgOnly = "Auto Preview Jpg Only";
     }
 }
