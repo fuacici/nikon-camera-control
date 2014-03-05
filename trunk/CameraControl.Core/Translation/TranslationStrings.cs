@@ -405,5 +405,6 @@ namespace CameraControl.Core.Translation
         public static string LabelChangelog = "Change Log";
         //27/02/2014
         public static string LabelAllowOverWrite = "Allow overwrite";
+        public static string LabelShowRuler = "Show Ruler";
     }
 }
