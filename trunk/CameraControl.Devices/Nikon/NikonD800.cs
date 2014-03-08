@@ -63,8 +63,8 @@ namespace CameraControl.Devices.Nikon
             PropertyValue<long> res = new PropertyValue<long>() { Name = "Exposure delay mode", IsEnabled = true, Code = 0xD06A };
             res.AddValues("3 sec", 0);
             res.AddValues("2 sec", 1);
-            res.AddValues("1 sec", 1);
-            res.AddValues("OFF", 1);
+            res.AddValues("1 sec", 2);
+            res.AddValues("OFF", 3);
             res.ValueChanged += (sender, key, val) => SetProperty(CONST_CMD_SetDevicePropValue, new[] { (byte)val }, res.Code, -1);
             return res;
         }
