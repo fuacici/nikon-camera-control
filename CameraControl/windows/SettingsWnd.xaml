@@ -196,7 +196,7 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="{T:TranslateExtension LabelFocusAndLiveview}">
+            <TabItem Header="{T:TranslateExtension LabelSettingsLiveView}">
                 <Grid Margin="5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="170" />

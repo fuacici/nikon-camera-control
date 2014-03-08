@@ -407,5 +407,6 @@ namespace CameraControl.Core.Translation
         public static string LabelAllowOverWrite = "Allow overwrite";
         public static string LabelShowRuler = "Show Ruler";
         public static string LabelAutoPreviewJpgOnly = "Auto Preview Jpg Only";
+        public static string LabelSettingsLiveView = "Live view";
     }
 }
