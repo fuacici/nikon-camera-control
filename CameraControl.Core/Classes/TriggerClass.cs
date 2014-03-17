@@ -35,7 +35,7 @@ namespace CameraControl.Core.Classes
       if (ServiceProvider.Settings.UseWebserver)
       {
         WebServer.Start(ServiceProvider.Settings.WebserverPort);
-        WebServer.Event += WebServer_Event;
+        //WebServer.Event += WebServer_Event;
       }
     }
 
