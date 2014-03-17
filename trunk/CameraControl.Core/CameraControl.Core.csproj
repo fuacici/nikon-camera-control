@@ -95,6 +95,15 @@
     <Reference Include="FreeImageNET">
       <HintPath>..\refs\FreeImageNET.dll</HintPath>
     </Reference>
+    <Reference Include="Griffin.Networking">
+      <HintPath>..\packages\Griffin.Networking.0.5.7\lib\net40\Griffin.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="Griffin.Networking.Protocol.Http">
+      <HintPath>..\packages\Griffin.Networking.Protocol.Http.0.5.2\lib\net40\Griffin.Networking.Protocol.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="Griffin.WebServer">
+      <HintPath>..\packages\Griffin.WebServer.0.5.0\lib\net40\Griffin.WebServer.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.AvalonEdit, Version=4.4.0.9727, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AvalonEdit.4.4.0.9727\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
@@ -206,6 +215,8 @@
     <Compile Include="Classes\TriggerClass.cs" />
     <Compile Include="Classes\ValuePairEnumerator.cs" />
     <Compile Include="Classes\WebServer.cs" />
+    <Compile Include="Classes\WebServerModule.cs" />
+    <Compile Include="Classes\WebServerOld.cs" />
     <Compile Include="Classes\WindowsCmdConsts.cs" />
     <Compile Include="Interfaces\IExportPlugin.cs" />
     <Compile Include="Interfaces\IExternalDevice.cs" />

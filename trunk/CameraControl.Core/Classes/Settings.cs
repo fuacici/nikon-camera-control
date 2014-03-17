@@ -670,6 +670,16 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        public static string WebServerFolder
+        {
+            get
+            {
+                return Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "WebServer\\");
+            }
+        }
+
+
+
         public Settings()
         {
             ConfigFile = Path.Combine(DataFolder, "settings.xml");
