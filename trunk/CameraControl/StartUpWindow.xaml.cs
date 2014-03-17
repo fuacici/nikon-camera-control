@@ -121,7 +121,20 @@ namespace CameraControl
             ServiceProvider.DeviceManager.DisableNativeDrivers = ServiceProvider.Settings.DisableNativeDrivers;
             if(ServiceProvider.Settings.AddFakeCamera)
                 ServiceProvider.DeviceManager.AddFakeCamera();
-            ServiceProvider.DeviceManager.ConnectToCamera();
+            try
+            {
+                ServiceProvider.DeviceManager.ConnectToCamera();
+            }
+            catch (Exception exception)
+            {
+                Log.Error("Unable to initialize device manager", exception);
+                if (exception.Message.Contains("0AF10CEC-2ECD-4B92-9581-34F6AE0637F3"))
+                {
+                    System.Windows.Forms.MessageBox.Show(
+                        "Unable to initialize device manager !\nMissing some components! Please install latest Windows Media Player! ");
+                    Application.Current.Shutdown(1);
+                }
+            }
             Thread.Sleep(500);
             Dispatcher.Invoke(new Action(Hide));
             StartApplication();
