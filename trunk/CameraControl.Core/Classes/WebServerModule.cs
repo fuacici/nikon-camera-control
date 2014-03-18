@@ -31,7 +31,9 @@ namespace CameraControl.Core.Classes
 
         public ModuleResult HandleRequest(IHttpContext context)
         {
-
+            string cmd = context.Request.QueryString["CMD"];
+            if(!string.IsNullOrEmpty(cmd))
+                ServiceProvider.WindowsManager.ExecuteCommand(cmd);
             return ModuleResult.Continue;
         }
     }

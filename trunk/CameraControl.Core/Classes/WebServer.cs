@@ -7,6 +7,7 @@ using Griffin.Networking.Protocol.Http.Services.BodyDecoders;
 using Griffin.WebServer;
 using Griffin.WebServer.Files;
 using Griffin.WebServer.Modules;
+using Griffin.WebServer.Routing;
 
 namespace CameraControl.Core.Classes
 {
@@ -23,10 +24,13 @@ namespace CameraControl.Core.Classes
             // Create the file module and allow files to be listed.
             var module = new FileModule(fileService) { ListFiles = false };
 
+            var routerModule = new RouterModule();
+            routerModule.Add(new DefaultDocumentRouter(Settings.WebServerFolder, "index.html"));
             // Add the module
-            moduleManager.Add(module);
-            moduleManager.Add(new BodyDecodingModule(new UrlFormattedDecoder()));
             moduleManager.Add(new WebServerModule());
+            moduleManager.Add(routerModule);
+            moduleManager.Add(module);
+            //moduleManager.Add(new BodyDecodingModule(new UrlFormattedDecoder()));
 
             // And start the server.
             var server = new HttpServer(moduleManager);
