@@ -25,15 +25,16 @@ namespace CameraControl.Core.Classes
             var module = new FileModule(fileService) { ListFiles = false };
 
             var routerModule = new RouterModule();
-            routerModule.Add(new DefaultDocumentRouter(Settings.WebServerFolder, "index.html"));
+
             // Add the module
+            //moduleManager.Add(module);
             moduleManager.Add(new WebServerModule());
-            moduleManager.Add(routerModule);
-            moduleManager.Add(module);
+
             //moduleManager.Add(new BodyDecodingModule(new UrlFormattedDecoder()));
 
             // And start the server.
             var server = new HttpServer(moduleManager);
+            
             server.Start(IPAddress.Any, port);
         }
 
