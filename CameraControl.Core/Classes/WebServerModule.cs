@@ -57,10 +57,14 @@ namespace CameraControl.Core.Classes
                 {
                     if (Path.GetFileName(item.LargeThumb) == Path.GetFileName(context.Request.Uri.AbsolutePath.Replace("/", "\\")))
                     {
-                        if (!File.Exists(item.LargeThumb) && !item.IsRaw)
-                        {
-                            BitmapLoader.Instance.GenerateCache(item);
-                        }
+                        //if (!File.Exists(item.LargeThumb) && !item.IsRaw)
+                        //{
+                        //    BitmapLoader.Instance.GenerateCache(item);
+                        //}
+                        SendFile(context,
+                                 !File.Exists(item.LargeThumb)
+                                     ? Path.Combine(Settings.WebServerFolder, "logo.png")
+                                     : item.LargeThumb);
                         SendFile(context, item.LargeThumb);
                         return ModuleResult.Continue;
                     }
@@ -82,6 +86,10 @@ namespace CameraControl.Core.Classes
                 }
             }
 
+            if (context.Request.Uri.AbsolutePath.StartsWith("/preview.jpg"))
+            {
+                SendFile(context, ServiceProvider.Settings.SelectedBitmap.FileItem.LargeThumb);
+            }
             if (context.Request.Uri.AbsolutePath.StartsWith("/image/"))
             {
                 foreach (FileItem item in ServiceProvider.Settings.DefaultSession.Files)
