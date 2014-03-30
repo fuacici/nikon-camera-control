@@ -969,10 +969,16 @@ namespace CameraControl.Core.Classes
         {
             get
             {
-                var themes = ThemeManager.DefaultAccents.Select(accent => "Light\\" + accent.Name).ToList();
-                themes.AddRange(ThemeManager.DefaultAccents.Select(accent => "Dark\\" + accent.Name));
-
-                return themes;
+                try
+                {
+                    var themes = ThemeManager.DefaultAccents.Select(accent => "Light\\" + accent.Name).ToList();
+                    themes.AddRange(ThemeManager.DefaultAccents.Select(accent => "Dark\\" + accent.Name));
+                    return themes;
+                }
+                catch (Exception)
+                {
+                    return new List<string>();
+                }
             }
         }
 

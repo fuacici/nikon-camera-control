@@ -476,6 +476,7 @@ namespace CameraControl.Devices.Canon
                         args.FileName = Path.GetFileName(memory.FileName);
                 }
                 OnPhotoCapture(this, args);
+                OnCaptureCompleted(this,new EventArgs());
             }
             catch (Exception exception)
             {
