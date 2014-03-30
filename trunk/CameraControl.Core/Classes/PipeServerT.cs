@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Diagnostics;
 using System.Reflection;
+using System.Threading;
 using CameraControl.Devices;
 using Newtonsoft.Json;
 
@@ -118,15 +119,28 @@ namespace CameraControl.Core.Classes
                                     {
                                         if (device.SerialNumber == lines["serial"])
                                         {
-                                            try
-                                            {
-                                                device.CapturePhoto();
-                                                return ":;response:ok;";
-                                            }
-                                            catch (Exception exception)
-                                            {
-                                                return ":;response:error;message:" + exception.Message;
-                                            }
+                                            var thread = new Thread(new ThreadStart(delegate
+                                                                                        {
+                                                                                            try
+                                                                                            {
+                                                                                                CameraHelper.Capture(
+                                                                                                    device);
+                                                                                            }
+                                                                                            catch (Exception exception)
+                                                                                            {
+                                                                                                Log.Error(
+                                                                                                    "Error capture:",
+                                                                                                    exception);
+                                                                                                StaticHelper.Instance.
+                                                                                                    SystemMessage =
+                                                                                                    exception.Message;
+                                                                                            }
+
+                                                                                        }
+                                                                        ));
+
+                                            thread.Start();
+                                            return ":;response:ok;";
                                         }
                                     }
                                     return ":;response:error;message:No camera was found" ;
