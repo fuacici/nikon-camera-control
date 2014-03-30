@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
+using System.Windows.Threading;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
-using CameraControl.Core.Interfaces;
 using CameraControl.Core.Scripting;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
 using CameraControlCmd.Classes;
-using PortableDeviceLib;
 
 namespace CameraControlCmd
 {
@@ -29,6 +26,7 @@ namespace CameraControlCmd
         {
             Console.WriteLine("digiCamControl command line utility");
             Console.WriteLine();
+
             _arguments = new InputArguments(args, "/");
             if (!args.Any() || _arguments.Contains("help"))
             {
@@ -53,6 +51,17 @@ namespace CameraControlCmd
                 return 0;
             }
             int exitCodes= ExecuteArgs();
+            Thread.Sleep(250);
+            Thread thread = new Thread(WaitForCameras);
+            thread.Start();
+            
+            Dispatcher.Run();
+
+            return exitCodes;
+        }
+
+        static void WaitForCameras()
+        {
             while (CamerasAreBusy())
             {
                 Thread.Sleep(1);
@@ -63,16 +72,19 @@ namespace CameraControlCmd
                 int.TryParse(_arguments["wait"], out time);
                 if (time > 0)
                 {
-                    Console.Write("Waiting {0} milliseconds", time);
+                    Dispatcher.CurrentDispatcher.Invoke(
+                        new Action(() => Console.Write("Waiting {0} milliseconds", time)));
+                   
                     Thread.Sleep(time);
                 }
                 else
                 {
-                    Console.Write("Press any key ...");
+                    Dispatcher.CurrentDispatcher.Invoke(new Action(() => Console.Write("Press any key ...")));
+
                     Console.ReadLine();
                 }
             }
-            return exitCodes;
+            System.Environment.Exit(0);
         }
 
         static void RunScript(string filename)
@@ -325,11 +337,11 @@ namespace CameraControlCmd
         {
             try
             {
-                // prevent use this mode if the camera not support it 
-                if (ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.CaptureInRam))
-                    ServiceProvider.DeviceManager.SelectedCameraDevice.CaptureInSdRam = false;
-                ServiceProvider.DeviceManager.SelectedCameraDevice.CaptureInSdRam = true;
                 ServiceProvider.DeviceManager.SelectedCameraDevice.IsBusy = true;
+                ServiceProvider.DeviceManager.SelectedCameraDevice.CaptureInSdRam = true;
+                // prevent use this mode if the camera not support it 
+                 if (ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.CaptureInRam))
+                    ServiceProvider.DeviceManager.SelectedCameraDevice.CaptureInSdRam = false;
                 ServiceProvider.DeviceManager.SelectedCameraDevice.CapturePhoto();
             }
             catch (Exception exception)
@@ -402,8 +414,8 @@ namespace CameraControlCmd
 
         static void SelectedCameraDevice_CaptureCompleted(object sender, EventArgs e)
         {
-            ICameraDevice device = sender as ICameraDevice;
-            device.IsBusy = false; 
+            //ICameraDevice device = sender as ICameraDevice;
+            //device.IsBusy = false; 
         }
 
         static void Instance_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -427,20 +439,26 @@ namespace CameraControlCmd
             Thread thread = new Thread(PhotoCaptured);
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start(eventArgs);
+            //thread.Join();
         }
 
 
         static void PhotoCaptured(object o)
         {
+            PhotoCapturedEventArgs eventArgs = o as PhotoCapturedEventArgs;
+            if (eventArgs == null)
+                return;
+
             try
             {
                 Console.WriteLine("Photo transfer begin.");
-                PhotoCapturedEventArgs eventArgs = o as PhotoCapturedEventArgs;
-                if (eventArgs == null)
-                    return;
+
                 CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(eventArgs.CameraDevice);
                 if ((property.NoDownload && !eventArgs.CameraDevice.CaptureInSdRam))
+                {
+                    eventArgs.CameraDevice.IsBusy = false;
                     return;
+                }
                 string fileName = "";
                 if (string.IsNullOrEmpty(_outFilename))
                 {
@@ -483,10 +501,12 @@ namespace CameraControlCmd
                 {
                     PhotoUtils.PlayCaptureSound();
                 }
+                eventArgs.CameraDevice.IsBusy = false;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Transfer error !\nMessage :" + ex.Message);
+                eventArgs.CameraDevice.IsBusy = false;
                 Log.Error("Transfer error !", ex);
             }
         }
