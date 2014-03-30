@@ -88,12 +88,23 @@ namespace CameraControl.Core.Classes
                 return;
             if (!File.Exists(fileItem.FileName))
                 return;
+            string filename = fileItem.FileName;
+            if (fileItem.IsRaw)
+            {
+                string s = Path.Combine(Path.GetFullPath(fileItem.FileName),
+                                        Path.GetFileNameWithoutExtension(fileItem.FileName) + ".jpg");
+                if (File.Exists(s))
+                {
+
+                    filename = s;
+                }
+            }
             if ((File.Exists(fileItem.LargeThumb) && File.Exists(fileItem.SmallThumb)) && File.Exists(fileItem.InfoFile))
                 return;
             GetMetadata(fileItem);
             try
             {
-                using (MemoryStream fileStream = new MemoryStream(File.ReadAllBytes(fileItem.FileName)))
+                using (MemoryStream fileStream = new MemoryStream(File.ReadAllBytes(filename)))
                 {
                     BitmapDecoder bmpDec = BitmapDecoder.Create(fileStream,
                                                                 BitmapCreateOptions.PreservePixelFormat,
@@ -109,7 +120,7 @@ namespace CameraControl.Core.Classes
                         BitmapFactory.ConvertToPbgra32Format(GetBitmapFrame(bmpDec.Frames[0],
                                                                             (int) (bmpDec.Frames[0].PixelWidth*dw),
                                                                             (int) (bmpDec.Frames[0].PixelHeight*dw),
-                                                                            BitmapScalingMode.HighQuality));
+                                                                            BitmapScalingMode.Linear));
 
                     LoadHistogram(fileItem, writeableBitmap);
                     Save2Jpg(writeableBitmap, fileItem.LargeThumb);
