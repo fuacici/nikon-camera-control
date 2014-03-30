@@ -86,7 +86,10 @@ namespace CameraControl.Devices
                         {"D300s", typeof (NikonD300)},
                         {"D300S", typeof (NikonD300)},
                         {"D3200", typeof (NikonD3200)},
+                        {"D3300", typeof (NikonD3200)},
                         {"D4", typeof (NikonD4)},
+                        {"D4s", typeof (NikonD4)},
+                        {"D4S", typeof (NikonD4)},
                         {"D40", typeof (NikonD40)},
                         {"D50", typeof (NikonD40)},
                         {"D5300", typeof (NikonD5200)},
@@ -495,7 +498,7 @@ namespace CameraControl.Devices
                 // skip canon cameras 
                 //if (!string.IsNullOrEmpty(model) && model.Contains("Canon"))
                 //    continue;
-                if (devInfo.Type == WiaDeviceType.CameraDeviceType && (GetNativeDriver(model) == null || DisableNativeDrivers || noDriversDetected))
+                if ((devInfo.Type == WiaDeviceType.CameraDeviceType || devInfo.Type == WiaDeviceType.VideoDeviceType) && (GetNativeDriver(model) == null || DisableNativeDrivers || noDriversDetected))
                 {
                     do
                     {
