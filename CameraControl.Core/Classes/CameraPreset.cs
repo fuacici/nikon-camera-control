@@ -32,6 +32,7 @@ namespace CameraControl.Core.Classes
             Add(GetFrom(camera.FocusMode, "FocusMode"));
             Add(GetFrom(camera.LiveViewImageZoomRatio, "LiveViewImageZoomRatio"));
             Add(new ValuePair { Name = "CaptureInSdRam", Value = camera.CaptureInSdRam.ToString() });
+            Add(new ValuePair { Name = "HostMode", Value = camera.HostMode.ToString() });
             var property = ServiceProvider.Settings.CameraProperties.Get(camera);
             CameraProperty.NoDownload = property.NoDownload;
             CameraProperty.CaptureInSdRam = property.CaptureInSdRam;
@@ -47,6 +48,12 @@ namespace CameraControl.Core.Classes
         public void Set(ICameraDevice camera)
         {
             camera.IsBusy = true;
+            if (!string.IsNullOrEmpty(GetValue("HostMode")))
+            {
+                bool val;
+                if (bool.TryParse(GetValue("HostMode"), out val))
+                    camera.HostMode = val;
+            }
             SetTo(camera.CompressionSetting, "CompressionSetting");
             SetTo(camera.ExposureCompensation, "ExposureCompensation");
             SetTo(camera.ExposureMeteringMode, "ExposureMeteringMode");

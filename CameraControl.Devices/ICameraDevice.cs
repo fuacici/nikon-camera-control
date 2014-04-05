@@ -22,6 +22,8 @@ namespace CameraControl.Devices
         /// </value>
         bool CaptureInSdRam { get; set; }
 
+        bool HostMode { get; set; }
+
         PropertyValue<int> FNumber { get; set; }
         PropertyValue<int> IsoNumber { get; set; }
         PropertyValue<long> ShutterSpeed { get; set; }

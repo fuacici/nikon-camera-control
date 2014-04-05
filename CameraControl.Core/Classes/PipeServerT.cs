@@ -119,27 +119,9 @@ namespace CameraControl.Core.Classes
                                     {
                                         if (device.SerialNumber == lines["serial"])
                                         {
-                                            var thread = new Thread(new ThreadStart(delegate
-                                                                                        {
-                                                                                            try
-                                                                                            {
-                                                                                                CameraHelper.Capture(
-                                                                                                    device);
-                                                                                            }
-                                                                                            catch (Exception exception)
-                                                                                            {
-                                                                                                Log.Error(
-                                                                                                    "Error capture:",
-                                                                                                    exception);
-                                                                                                StaticHelper.Instance.
-                                                                                                    SystemMessage =
-                                                                                                    exception.Message;
-                                                                                            }
-
-                                                                                        }
-                                                                        ));
-
-                                            thread.Start();
+                                            Log.Debug("Start capture: " + device.SerialNumber);
+                                            var thread = new Thread(StartCapture);
+                                            thread.Start(device);
                                             return ":;response:ok;";
                                         }
                                     }
@@ -159,6 +141,19 @@ namespace CameraControl.Core.Classes
                 res = ":;response:error;message:" + exception.Message;
             }
             return res;
+        }
+
+        private void StartCapture(object o)
+        {
+            try
+            {
+                CameraHelper.Capture(o);
+            }
+            catch (Exception exception)
+            {
+                Log.Error("Error capture:", exception);
+                StaticHelper.Instance.SystemMessage = exception.Message;
+            }
         }
 
         private Dictionary<string, string> Pharse(string data)

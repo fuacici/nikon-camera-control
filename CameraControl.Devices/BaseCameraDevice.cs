@@ -44,6 +44,17 @@ namespace CameraControl.Devices
             }
         }
 
+        private bool _hostMode;
+        public bool HostMode
+        {
+            get { return _hostMode; }
+            set
+            {
+                _hostMode = value;
+                NotifyPropertyChanged("HostMode");
+            }
+        }
+
         private PropertyValue<int> _isoNumber;
         public virtual PropertyValue<int> IsoNumber
         {

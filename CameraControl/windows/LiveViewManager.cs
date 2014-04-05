@@ -21,12 +21,14 @@ namespace CameraControl.windows
 
         private Dictionary<object, LiveViewWnd> _register;
         private static Dictionary<ICameraDevice, bool> _recordtoRam;
+        private static Dictionary<ICameraDevice, bool> _hostMode;
         private static Dictionary<ICameraDevice, CameraPreset> _presets;
 
         public LiveViewManager()
         {
             _register = new Dictionary<object, LiveViewWnd>();
             _recordtoRam = new Dictionary<ICameraDevice, bool>();
+            _hostMode = new Dictionary<ICameraDevice, bool>();
             _presets = new Dictionary<ICameraDevice, CameraPreset>();
         }
 
@@ -114,13 +116,18 @@ namespace CameraControl.windows
         {
             // some nikon cameras can set af to manual
             //force to capture in ram
-            if (device is NikonBase && device.GetCapability(CapabilityEnum.CaptureNoAf))
+            if (device is NikonBase)
             {
                 if (!_recordtoRam.ContainsKey(device))
                     _recordtoRam.Add(device, device.CaptureInSdRam);
                 else
                     _recordtoRam[device] = device.CaptureInSdRam;
                 device.CaptureInSdRam = true;
+                if (!_hostMode.ContainsKey(device))
+                    _hostMode.Add(device, device.HostMode);
+                else
+                    _hostMode[device] = device.HostMode;
+                device.HostMode = true;
             }
             device.StartLiveView();
         }
@@ -128,10 +135,12 @@ namespace CameraControl.windows
         public static void StopLiveView(ICameraDevice device)
         {
             device.StopLiveView();
-            if (device is NikonBase && device.GetCapability(CapabilityEnum.CaptureNoAf))
+            if (device is NikonBase)
             {
                 if (_recordtoRam.ContainsKey(device))
                     device.CaptureInSdRam = _recordtoRam[device];
+                if (_hostMode.ContainsKey(device))
+                    device.HostMode = _hostMode[device];
             }
         }
 

@@ -318,6 +318,7 @@ namespace CameraControl.Devices.Nikon
                 IsConnected = true;
                 CaptureInSdRam = true;
                 PropertyChanged += NikonBase_PropertyChanged;
+                SerialNumber = StillImageDevice.SerialNumber.TrimEnd('0');
                 // load advanced properties in a separated thread to speed up camera connection
                 var thread = new Thread(LoadProperties) {Priority = ThreadPriority.Lowest};
                 thread.Start();
@@ -346,6 +347,7 @@ namespace CameraControl.Devices.Nikon
                 ReadDeviceProperties(CONST_PROP_BatteryLevel);
                 ReadDeviceProperties(CONST_PROP_ExposureIndicateStatus);
                 AddAditionalProps();
+                HostMode = false;
                 _timer.Start();
             }
             catch (Exception exception)
@@ -584,6 +586,12 @@ namespace CameraControl.Devices.Nikon
                 SetProperty(CONST_CMD_SetDevicePropValue, CaptureInSdRam ? new[] { (byte)1 } : new[] { (byte)0 }, CONST_PROP_RecordingMedia, -1);
                 ReadDeviceProperties(CONST_PROP_RecordingMedia);
             }
+            if (e.PropertyName == "HostMode")
+            {
+                ExecuteWithNoData(CONST_CMD_ChangeCameraMode, (uint) (HostMode ? 1 : 0));
+                Mode.IsEnabled = HostMode;
+            }
+
         }
 
         void _stillImageDevice_DeviceEvent(object sender, PortableDeviceEventArgs e)
