@@ -14,9 +14,22 @@ namespace CameraControl.Core.Scripting.ScriptCommands
         {
             foreach (ICameraDevice cameraDevice in ServiceProvider.DeviceManager.ConnectedDevices)
             {
-                new Thread(CameraHelper.Capture).Start(cameraDevice);
+                ICameraDevice device = cameraDevice;
+                new Thread(() => Capture(device)).Start();
             }
             return true;
+        }
+
+        private void Capture(ICameraDevice device)
+        {
+            try
+            {
+                CameraHelper.Capture(device);
+            }
+            catch (Exception e)
+            {
+                StaticHelper.Instance.SystemMessage = e.Message;
+            }
         }
 
         public CaptureAll()
