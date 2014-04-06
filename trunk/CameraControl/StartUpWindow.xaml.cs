@@ -178,6 +178,10 @@ namespace CameraControl
                 Thread.Sleep(1000);
                 Application.Current.Shutdown();
             }
+            if (cmd == CmdConsts.Capture)
+            {
+                CameraHelper.Capture();
+            }
         }
 
         #region eventhandlers

@@ -35,6 +35,19 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        public static void Capture()
+        {
+            try
+            {
+                Capture(ServiceProvider.DeviceManager.SelectedCameraDevice);
+            }
+            catch (Exception e)
+            {
+                Log.Debug("Error capture", e);
+                StaticHelper.Instance.SystemMessage = e.Message;
+            }
+        }
+
         public static void CaptureNoAf(object o)
         {
             if (o != null)
