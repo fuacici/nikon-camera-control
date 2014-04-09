@@ -318,7 +318,11 @@ namespace CameraControl.Devices.Nikon
                 IsConnected = true;
                 CaptureInSdRam = true;
                 PropertyChanged += NikonBase_PropertyChanged;
-                SerialNumber = StillImageDevice.SerialNumber.TrimEnd('0');
+                var ser = StillImageDevice.SerialNumber;
+                if (ser != null && ser.Length >= 7)
+                {
+                    SerialNumber = StillImageDevice.SerialNumber.Substring(0, 7);
+                }
                 // load advanced properties in a separated thread to speed up camera connection
                 var thread = new Thread(LoadProperties) {Priority = ThreadPriority.Lowest};
                 thread.Start();

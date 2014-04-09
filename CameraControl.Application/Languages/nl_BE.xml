@@ -2,6 +2,19 @@
 <resources>
   <!--Property values-->
   <!--End Property values-->
+  <string name="Mode">Modus</string>
+  <string name="Iso">ISO</string>
+  <string name="ShutterSpeed">sluitertijd</string>
+  <string name="Aperture">Diafragma</string>
+  <string name="WhiteBalance">witbalans</string>
+  <string name="BraketingToolTip">Belichtingsreeksen</string>
+  <string name="FullscreenToolTip">Schermvullende weergave</string>
+  <string name="BraketingWindowTitle">Belichtingsreeksen</string>
+  <string name="ButtonDelete">Wissen</string>
+  <string name="LabelManualFocus">Handmatige scherpstelling</string>
+  <string name="LabelGrid">Raster</string>
+  <string name="LabelExposureBracketing">Belichtingsreeksen</string>
+  <string name="MenuLayoutGrid">Raster</string>
   <!--15/10/2012-->
   <!--22/10/2012-->
   <!--25/10/2012-->
@@ -30,6 +43,7 @@
   <!--20/01/2013-->
   <!--29/01/2013-->
   <!--31/01/2013-->
+  <string name="LabelComboGrid">Raster</string>
   <!--13/03/2013-->
   <!--17/03/2012-->
   <!--28/03/2012-->

@@ -2,6 +2,8 @@
 <resources>
   <!--Property values-->
   <!--End Property values-->
+  <string name="Mode">Modo</string>
+  <string name="Iso">_Iso</string>
   <!--15/10/2012-->
   <!--22/10/2012-->
   <!--25/10/2012-->
