@@ -41,6 +41,17 @@
   <string name="[S]_SINGLE_AF_SERVO">[S] AF singolo</string>
   <string name="[M]_MANUAL_FOCUS">[M] Messa a fuoco manuale</string>
   <string name="KELVIN">Kelvin</string>
+  <string name="APPLICATION_MODE">Modalità applicazione</string>
+  <string name="WHITE_FLUORESCENT_LAMP">Lampada fluorescente bianca</string>
+  <string name="FLUORESCENT_LIGHT_TYPE">Tipo di luce fluorescente</string>
+  <string name="ADOBE_RGB">Adobe RGB</string>
+  <string name="COLOR_SPACE">Spazio colore</string>
+  <string name="14_BIT_RECORDING">Registrazione 14-bit</string>
+  <string name="RAW_RECORDING_BIT_MODE">Bit modalità di registrazione RAW</string>
+  <string name="NEUTRAL">Neutro</string>
+  <string name="PICTURE_CONTROL">Controllo immagine</string>
+  <string name="LOSSLESS_COMPRESSED_RAW">RAW compresso senza perdita</string>
+  <string name="RAW_COMPRESSION">Compressione RAW</string>
   <!--End Property values-->
   <string name="Mode">Modalità</string>
   <string name="Iso">_Iso</string>
@@ -125,6 +136,7 @@
   <string name="LabelSessonName">Nome sessione:</string>
   <string name="LabelFolder">Cartella:</string>
   <string name="LabelFileNameTemplate">Nome file del Template :</string>
+  <string name="LabelFileNameTemplateToolTip">$N - Nome sessione\n\n$C - Contatore\n\n$E - Compensazione esp.\n\n$X - Nome fotocamera\n\n$D - Data corrente\n\n$UTime - Data e ora Unix\n\n$Type - Tipo di file (Raw|Jpg) \n\n$B - Codice a barre\n\n$Tag1 - Tag 1 selezionato\n\n$Tag2 - Tag 2 selezionato\n\n$Tag3 - Tag 3 selezionato\n\n$Tag4 - Tag 4 selezionato</string>
   <string name="LabelCounter">Contatore:</string>
   <string name="LabelUseOriginal">Usa il nome file originale dato dalla fotocamera</string>
   <string name="LabelUseOriginalToolTip">Questa opzione non funziona con il driver WIA</string>
@@ -403,4 +415,20 @@
   <string name="LabelAutoRotate">Rotazione automatica</string>
   <string name="LabelReset">Resetta</string>
   <string name="LabelFocus">Messa a fuoco</string>
+  <!--17/11/2013-->
+  <string name="LabelAddFakeCamera">Aggiungi una camera fittizia</string>
+  <string name="LabelBarcode">Codice a barre</string>
+  <string name="LabelSendTheLogFile">Invia il file di log</string>
+  <string name="LabelAskSendLogFile">Vuoi inviare il file di log agli sviluppatori?</string>
+  <string name="LabelSyncCameraDate">Sincronizza ora e data della fotocamera alla connessione</string>
+  <string name="LabelShowThumbUpDown">Mostra la pressione sui bottoni su/giù</string>
+  <string name="LabelSend">Invia</string>
+  <string name="LabelLogMessage">Messaggio agli sviluppatori di digiCamControl:</string>
+  <string name="LabelLogText">Il file di log verrà inviato agli sviluppatori di digiCamControl per migliorare la stabilità dell\'applicazione.</string>
+  <string name="LabelFullscreen">Schermo intero</string>
+  <string name="LabelSelection">Selezione</string>
+  <string name="LabelSelectAll">Seleziona Tutto</string>
+  <string name="LabelSelectNone">Elimina selezione</string>
+  <string name="LabelSelectLiked">Seleziona i Preferiti</string>
+  <string name="LabelSelectUnLiked">Seleziona i Non preferiti</string>
 </resources>

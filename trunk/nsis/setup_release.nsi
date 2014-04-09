@@ -7,7 +7,7 @@ Name digiCamControl
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 1.0.751
+!define VERSION 1.0.778
 !define COMPANY "Duka Istvan"
 !define URL http://www.digicamcontrol.com/
 
@@ -93,8 +93,11 @@ Section -post SEC0002
     !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     CreateDirectory "$SMPROGRAMS\$StartMenuGroup"
     CreateShortCut "$SMPROGRAMS\$StartMenuGroup\digiCamControl.lnk" "$INSTDIR\CameraControl.exe"
+	CreateShortCut "$SMPROGRAMS\$StartMenuGroup\MtpTester.lnk" "$INSTDIR\MtpTester.exe"
+    CreateShortCut "$SMPROGRAMS\$StartMenuGroup\PhotoBooth.lnk" "$INSTDIR\PhotoBooth.exe" 
+	
     CreateShortCut "$DESKTOP\digiCamControl.lnk" "$INSTDIR\CameraControl.exe" "" "$INSTDIR\CameraControl.exe" 0 "" "" "digiCamControl"
-    
+	
     CreateShortcut "$SMPROGRAMS\$StartMenuGroup\Uninstall $(^Name).lnk" "$INSTDIR\uninstall.exe"
   
     !insertmacro MUI_STARTMENU_WRITE_END

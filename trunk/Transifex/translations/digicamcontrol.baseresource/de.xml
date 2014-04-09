@@ -41,6 +41,17 @@
   <string name="[S]_SINGLE_AF_SERVO">[S] Single AF</string>
   <string name="[M]_MANUAL_FOCUS">[M] Manueller Fokus</string>
   <string name="KELVIN">Kelvin</string>
+  <string name="APPLICATION_MODE">Anwendungs-Modus</string>
+  <string name="WHITE_FLUORESCENT_LAMP">Weisse Leuchtstofflampe</string>
+  <string name="FLUORESCENT_LIGHT_TYPE">Leuchtstoffartiges Licht</string>
+  <string name="ADOBE_RGB">Adobe RGB</string>
+  <string name="COLOR_SPACE">Farbraum</string>
+  <string name="14_BIT_RECORDING">14-Bit Aufzeichnung</string>
+  <string name="RAW_RECORDING_BIT_MODE">Raw-Aufzeichnig in Bit Modus</string>
+  <string name="NEUTRAL">Neutral</string>
+  <string name="PICTURE_CONTROL">Picture control</string>
+  <string name="LOSSLESS_COMPRESSED_RAW">Verlustlose RAW Kompression</string>
+  <string name="RAW_COMPRESSION">RAW Kompression</string>
   <!--End Property values-->
   <string name="Mode">Modus</string>
   <string name="Iso">Iso</string>
@@ -378,4 +389,39 @@
   <string name="LabelEdgeDetection">Kantenerkennung</string>
   <string name="LabelLeadingZeros">Zähler führenden Nullen</string>
   <!--04/07/2013-->
+  <string name="LabelShowFocusRect">Autofokus-Messfeld anzeigen</string>
+  <string name="LabelEasyLiveViewControl">Vereinfachtes Live View</string>
+  <string name="LabelExif">Exif</string>
+  <string name="LabelImageProperties">Bildeigenschaften</string>
+  <string name="LabelFileName">Dateiname</string>
+  <string name="LabelTagSelector">Tag-/Stichwortauswahl</string>
+  <string name="LabelComment">Kommentar</string>
+  <string name="LabelWriteComments">Kommentare/Tags in gespeicherte Bilddatei schreiben</string>
+  <string name="LabelStayOnTop2">Im Vordergrund bleiben</string>
+  <string name="LabelClearCache">Cache leeren</string>
+  <string name="LabelShowMagnifierInFullSccreen">Vergrösserung Bildschirmfüllen anzeigen</string>
+  <string name="LabelDelayImageLoading">Während Serienbilder Vorschau Pausieren</string>
+  <string name="LabelCountDown">Countdown</string>
+  <string name="LabelCurrentEvent">Aktuelles Ereignis</string>
+  <string name="LabelRemainingCaptures">Aufnahmen links</string>
+  <string name="LabelLiveViewRotation">Live view drehen</string>
+  <string name="LabelAutoRotate">Automatisches ausrichten</string>
+  <string name="LabelReset">Zurücksetzen</string>
+  <string name="LabelFocus">Fokussieren</string>
+  <!--17/11/2013-->
+  <string name="LabelAddFakeCamera">Eine simulierte Kamera hinzufügen</string>
+  <string name="LabelBarcode">Barcode</string>
+  <string name="LabelSendTheLogFile">Logdatei senden</string>
+  <string name="LabelAskSendLogFile">Wollen Sie die Logdatei den Entwicklern zusenden?</string>
+  <string name="LabelSyncCameraDate">Kamerdatum beim Verbinden Synchronisieren</string>
+  <string name="LabelShowThumbUpDown">Daumen hoch/-runter Buttons anzeigen</string>
+  <string name="LabelSend">Senden</string>
+  <string name="LabelLogMessage">Mitteilung an die Entwickler von digiCamControl :</string>
+  <string name="LabelLogText">Die Logdatei wird dem Entwicklerteam von digiCamControl zugesandt um die Anwendungsstabilität zu verbessern.</string>
+  <string name="LabelFullscreen">Vollbild</string>
+  <string name="LabelSelection">Auswahl</string>
+  <string name="LabelSelectAll">Alles auswählen</string>
+  <string name="LabelSelectNone">Nichts auswählen</string>
+  <string name="LabelSelectLiked">Favorisierte Auswählten</string>
+  <string name="LabelSelectUnLiked">Abgewiesene Auswählen</string>
 </resources>
