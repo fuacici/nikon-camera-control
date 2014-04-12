@@ -263,8 +263,8 @@
                 </Expander>
                 <Expander Header="{T:TranslateExtension LabelLuminosity}" BorderThickness="1"  BorderBrush="Black"  Margin="3" IsExpanded="True">
                     <Expander.Content>
-                        <Grid Height="75" Width="242">
-                        <Border BorderThickness="1" BorderBrush="Black" Background="White">
+                        <Grid Height="75" >
+                        <Border BorderThickness="1" BorderBrush="Black" Background="White" HorizontalAlignment="Stretch">
                             <Polygon Points="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=LuminanceHistogramPoints}" Stretch="Fill" Fill="Black" Opacity="0.8" />
                         </Border>
                             <CheckBox IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:LiveViewWnd}}, Path=HighlightUnderExp}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="16"/>

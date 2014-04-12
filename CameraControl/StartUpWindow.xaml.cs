@@ -117,6 +117,7 @@ namespace CameraControl
             ServiceProvider.Settings.SessionSelected += Settings_SessionSelected;
             ServiceProvider.DeviceManager.CameraConnected += DeviceManager_CameraConnected;
             ServiceProvider.DeviceManager.CameraSelected += DeviceManager_CameraSelected;
+            ServiceProvider.DeviceManager.CameraDisconnected += DeviceManager_CameraDisconnected;
             //-------------------
             ServiceProvider.DeviceManager.DisableNativeDrivers = ServiceProvider.Settings.DisableNativeDrivers;
             if(ServiceProvider.Settings.AddFakeCamera)
@@ -138,6 +139,11 @@ namespace CameraControl
             Thread.Sleep(500);
             Dispatcher.Invoke(new Action(Hide));
             StartApplication();
+        }
+
+        void DeviceManager_CameraDisconnected(ICameraDevice cameraDevice)
+        {
+            cameraDevice.CameraInitDone -= cameraDevice_CameraInitDone;
         }
 
         private void StartApplication()
@@ -222,25 +228,31 @@ namespace CameraControl
 
         void DeviceManager_CameraConnected(ICameraDevice cameraDevice)
         {
+            cameraDevice.CameraInitDone += cameraDevice_CameraInitDone;
+        }
+
+        void cameraDevice_CameraInitDone(ICameraDevice cameraDevice)
+        {
             CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(cameraDevice);
             cameraDevice.DisplayName = property.DeviceName;
             cameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
             if (cameraDevice.GetCapability(CapabilityEnum.CaptureInRam))
                 cameraDevice.CaptureInSdRam = property.CaptureInSdRam;
-             
+
             CameraPreset preset = ServiceProvider.Settings.GetPreset(property.DefaultPresetName);
             if (preset != null)
             {
                 var thread = new Thread(delegate()
-                                            {
-                                                cameraDevice.WaitForCamera(5000);
-                                                preset.Set(cameraDevice);
+                {
+                    Thread.Sleep(1500);
+                    cameraDevice.WaitForCamera(5000);
+                    preset.Set(cameraDevice);
 
-                                            });
+                });
                 thread.Start();
             }
 
-            if(ServiceProvider.Settings.SyncCameraDateTime)
+            if (ServiceProvider.Settings.SyncCameraDateTime)
             {
                 try
                 {
@@ -250,7 +262,7 @@ namespace CameraControl
                 {
                     Log.Error("Unable to sysnc date time", exception);
                 }
-            }
+            }            
         }
 
         #endregion
