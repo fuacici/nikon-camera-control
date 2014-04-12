@@ -411,6 +411,13 @@ namespace CameraControl.Devices
         public event PhotoCapturedEventHandler PhotoCaptured;
         public event EventHandler CaptureCompleted;
         public event CameraDisconnectedEventHandler CameraDisconnected;
+        public event CameraDeviceManager.CameraConnectedEventHandler CameraInitDone;
+
+        public void OnCameraInitDone()
+        {
+            CameraDeviceManager.CameraConnectedEventHandler handler = CameraInitDone;
+            if (handler != null) handler(this);
+        }
 
         private AsyncObservableCollection<PropertyValue<long>> _advancedProperties;
         public AsyncObservableCollection<PropertyValue<long>> AdvancedProperties

@@ -53,7 +53,9 @@ namespace CameraControl.Core.Classes
                 bool val;
                 if (bool.TryParse(GetValue("HostMode"), out val))
                     camera.HostMode = val;
+                Thread.Sleep(500);
             }
+            SetTo(camera.Mode, "Mode");
             SetTo(camera.CompressionSetting, "CompressionSetting");
             SetTo(camera.ExposureCompensation, "ExposureCompensation");
             SetTo(camera.ExposureMeteringMode, "ExposureMeteringMode");
@@ -84,6 +86,21 @@ namespace CameraControl.Core.Classes
 
 
         public void SetTo(PropertyValue<int> value, string name)
+        {
+            if (value == null)
+                return;
+            foreach (ValuePair valuePair in Values)
+            {
+                if (valuePair.Name == name && value.IsEnabled && value.Value != valuePair.Value)
+                {
+                    value.SetValue(valuePair.Value);
+                    return;
+                }
+            }
+            //Thread.Sleep(100);
+        }
+
+        public void SetTo(PropertyValue<uint> value, string name)
         {
             if (value == null)
                 return;

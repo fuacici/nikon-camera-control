@@ -353,6 +353,7 @@ namespace CameraControl.Devices.Nikon
                 AddAditionalProps();
                 HostMode = false;
                 _timer.Start();
+                OnCameraInitDone();
             }
             catch (Exception exception)
             {
@@ -593,7 +594,8 @@ namespace CameraControl.Devices.Nikon
             if (e.PropertyName == "HostMode")
             {
                 ExecuteWithNoData(CONST_CMD_ChangeCameraMode, (uint) (HostMode ? 1 : 0));
-                Mode.IsEnabled = HostMode;
+                if (Mode != null)
+                    Mode.IsEnabled = HostMode;
             }
 
         }

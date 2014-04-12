@@ -109,6 +109,7 @@ namespace CameraControl.Devices
         /// </summary>
         event CameraDisconnectedEventHandler CameraDisconnected;
 
+        event CameraDeviceManager.CameraConnectedEventHandler CameraInitDone;
         /// <summary>
         /// Gets or sets the arbitrary number of advanced properties.
         /// </summary>
