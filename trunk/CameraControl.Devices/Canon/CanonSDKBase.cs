@@ -334,6 +334,7 @@ namespace CameraControl.Devices.Canon
                 Capabilities.Add(CapabilityEnum.CaptureInRam);
                 IsConnected = true;
                 LoadProperties();
+                OnCameraInitDone();
                 return true; 
             }
             catch (Exception exception)
