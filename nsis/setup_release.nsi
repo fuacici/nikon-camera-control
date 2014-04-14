@@ -7,7 +7,7 @@ Name digiCamControl
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 1.0.778
+!define VERSION 1.1.0
 !define COMPANY "Duka Istvan"
 !define URL http://www.digicamcontrol.com/
 
@@ -32,6 +32,7 @@ Var TempResult
 
 # Installer pages
 !insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_LICENSE "..\CameraControl.Application\Licenses\DigiCamControlLicence.txt"
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_STARTMENU Application $StartMenuGroup
 !insertmacro MUI_PAGE_INSTFILES
@@ -181,13 +182,10 @@ nextun:
 ;Run the uninstaller
 uninst:
   ClearErrors
-  ExecWait '$R0 _?=$INSTDIR' ;Do not copy the uninstaller to a temp file
+  ;ExecWait '$R0 _?=$INSTDIR' ;Do not copy the uninstaller to a temp file
+  ExecWait '$R0' ;Do not copy the uninstaller to a temp file
  
   IfErrors no_remove_uninstaller done
-    ;You can either use Delete /REBOOTOK in the uninstaller or add some code
-    ;here to remove the uninstaller. Use a registry key to check
-    ;whether the user has chosen to uninstall. If you are using an uninstaller
-    ;components page, make sure all sections are uninstalled.
   no_remove_uninstaller:
  
 done:

@@ -244,9 +244,16 @@ namespace CameraControl
             {
                 var thread = new Thread(delegate()
                 {
-                    Thread.Sleep(1500);
-                    cameraDevice.WaitForCamera(5000);
-                    preset.Set(cameraDevice);
+                    try
+                    {
+                        Thread.Sleep(1500);
+                        cameraDevice.WaitForCamera(5000);
+                        preset.Set(cameraDevice);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error("Unable to load default preset", e);
+                    }
 
                 });
                 thread.Start();
