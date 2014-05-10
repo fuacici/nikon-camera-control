@@ -216,6 +216,7 @@
     <Compile Include="Classes\WebServer.cs" />
     <Compile Include="Classes\WebServerModule.cs" />
     <Compile Include="Classes\WebServerOld.cs" />
+    <Compile Include="Classes\WindowCommandItem.cs" />
     <Compile Include="Classes\WindowsCmdConsts.cs" />
     <Compile Include="Interfaces\IExportPlugin.cs" />
     <Compile Include="Interfaces\IExternalDevice.cs" />

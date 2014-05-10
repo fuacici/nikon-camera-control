@@ -1,21 +1,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using CameraControl.Core.Interfaces;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.Core.Classes
 {
     public class WindowsManager
     {
+        public AsyncObservableCollection<WindowCommandItem> WindowCommands { get; set; }
+
 
         public delegate void EventEventHandler(string cmd, object o);
         public virtual event EventEventHandler Event;
 
         private List<IWindow> WindowsList;
+
         public WindowsManager()
         {
             WindowsList = new List<IWindow>();
+            WindowCommands = new AsyncObservableCollection<WindowCommandItem>();
         }
 
         public void Add(IWindow window)
@@ -70,6 +76,23 @@ namespace CameraControl.Core.Classes
                 WindowsList.Remove(windowToRemove);
         }
 
+        /// <summary>
+        /// Registers commands used by the application core.
+        /// </summary>
+        public void RegisterKnowCommands()
+        {
+            AddCommandsFromType(typeof(CmdConsts));
+            AddCommandsFromType(typeof(WindowsCmdConsts));
+        }
 
+        private void AddCommandsFromType(Type type)
+        {
+            var fields = type.GetFields(BindingFlags.Public | BindingFlags.Static |
+               BindingFlags.FlattenHierarchy).Where(fi => fi.IsLiteral && !fi.IsInitOnly).ToList();
+            foreach (FieldInfo fieldInfo in fields)
+            {
+                WindowCommands.Add(new WindowCommandItem() { Name = fieldInfo.GetValue(type).ToString() });
+            }
+        }
     }
 }
