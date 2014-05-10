@@ -22,6 +22,8 @@ namespace CameraControl.Devices
         private DeviceDescriptorEnumerator _deviceEnumerator;
         private EosFramework _framework;
 
+        public Dictionary<ICameraDevice, byte[]> LiveViewImage;
+
         /// <summary>
         /// Gets or sets a value indicating whether use experimental drivers.
         /// Experimental drivers isn't tested and may not implement all camera possibilities 
@@ -132,6 +134,8 @@ namespace CameraControl.Devices
             SelectedCameraDevice = new NotConnectedCameraDevice();
             ConnectedDevices = new AsyncObservableCollection<ICameraDevice>();
             _deviceEnumerator = new DeviceDescriptorEnumerator();
+            LiveViewImage = new Dictionary<ICameraDevice, byte[]>();
+
             // prevent program crash in something wrong with wia
             try
             {

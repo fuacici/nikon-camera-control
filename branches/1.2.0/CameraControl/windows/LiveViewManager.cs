@@ -17,8 +17,6 @@ namespace CameraControl.windows
     {
         private static object _locker = new object();
 
-        #region Implementation of IWindow
-
         private Dictionary<object, LiveViewWnd> _register;
         private static Dictionary<ICameraDevice, bool> _recordtoRam;
         private static Dictionary<ICameraDevice, bool> _hostMode;
@@ -32,6 +30,9 @@ namespace CameraControl.windows
             _presets = new Dictionary<ICameraDevice, CameraPreset>();
         }
 
+
+
+        #region Implementation of IWindow
         public void ExecuteCommand(string cmd, object param)
         {
             if (param == null)

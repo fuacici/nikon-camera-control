@@ -189,6 +189,11 @@ namespace CameraControl
             {
                 CameraHelper.Capture();
             }
+            if (cmd == CmdConsts.CaptureNoAf)
+            {
+                CameraHelper.CaptureNoAf();
+            }
+
         }
 
         #region eventhandlers
