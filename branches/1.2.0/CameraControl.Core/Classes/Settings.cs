@@ -971,8 +971,8 @@ namespace CameraControl.Core.Classes
             {
                 try
                 {
-                    var themes = ThemeManager.DefaultAccents.Select(accent => "Light\\" + accent.Name).ToList();
-                    themes.AddRange(ThemeManager.DefaultAccents.Select(accent => "Dark\\" + accent.Name));
+                    var themes = ThemeManager.Accents.Select(accent => "Light\\" + accent.Name).ToList();
+                    themes.AddRange(ThemeManager.Accents.Select(accent => "Dark\\" + accent.Name));
                     return themes;
                 }
                 catch (Exception)
@@ -986,12 +986,11 @@ namespace CameraControl.Core.Classes
         {
             if (string.IsNullOrEmpty(CurrentThemeName) || !CurrentThemeName.Contains("\\"))
             {
-                ThemeManager.ChangeTheme(window, ThemeManager.DefaultAccents.First(a => a.Name == "Steel"), Theme.Dark);
+                ThemeManager.ChangeAppStyle(window, ThemeManager.Accents.First(a => a.Name == "Steel"), ThemeManager.GetAppTheme("BaseDark"));
                 return;
             }
-            ThemeManager.ChangeTheme(window,
-                                     ThemeManager.DefaultAccents.First(a => a.Name == CurrentThemeName.Split('\\')[1]),
-                                     CurrentThemeName.Split('\\')[0] == "Dark" ? Theme.Dark : Theme.Light);
+            ThemeManager.ChangeAppStyle(window, ThemeManager.Accents.First(a => a.Name == CurrentThemeName.Split('\\')[1]), ThemeManager.GetAppTheme(CurrentThemeName.Split('\\')[0] == "Dark" ? "BaseDark" : "BaseLight"));
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.Accents.First(a => a.Name == CurrentThemeName.Split('\\')[1]), ThemeManager.GetAppTheme(CurrentThemeName.Split('\\')[0] == "Dark" ? "BaseDark" : "BaseLight"));
         }
 
         public delegate void SessionSelectedEventHandler(PhotoSession oldvalu, PhotoSession newvalue);
