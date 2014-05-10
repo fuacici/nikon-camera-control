@@ -643,6 +643,10 @@ namespace CameraControl.windows
                                                            image1.BeginInit();
                                                            image1.Source = writeableBitmap;
                                                            image1.EndInit();
+
+                                                           ServiceProvider.DeviceManager.LiveViewImage[
+                                                               selectedPortableDevice] = SaveJpeg(writeableBitmap);
+
                                                        }
                                                        if (SelectedPortableDevice.LiveViewImageZoomRatio.Value == "All")
                                                        {
@@ -669,6 +673,19 @@ namespace CameraControl.windows
                                                 }));
             _retries = 0;
             oper_in_progress = false;
+        }
+
+        public byte[] SaveJpeg(WriteableBitmap image)
+        {
+            var enc = new JpegBitmapEncoder();
+            enc.QualityLevel = 90;
+            enc.Frames.Add(BitmapFrame.Create(image));
+
+            using (MemoryStream stm = new MemoryStream())
+            {
+                enc.Save(stm);
+                return stm.ToArray();
+            }
         }
 
         private void DrawGrid(WriteableBitmap writeableBitmap)
@@ -861,7 +878,7 @@ namespace CameraControl.windows
             }
         }
 
-        private void button2_Click(object sender, RoutedEventArgs e)
+        private void Capture()
         {
             Log.Debug("LiveView: Capture started");
             _timer.Stop();
@@ -892,6 +909,11 @@ namespace CameraControl.windows
                 Log.Error("Unable to take picture with no af", exception);
             }
             //_timer.Start();
+        }
+
+        private void button2_Click(object sender, RoutedEventArgs e)
+        {
+            ServiceProvider.WindowsManager.ExecuteCommand(CmdConsts.LiveView_Capture, SelectedPortableDevice);
         }
 
         private void StartLiveView()
@@ -1246,6 +1268,11 @@ namespace CameraControl.windows
                     if (LiveViewData != null && LiveViewData.ImageData != null)
                     {
                         SetFocusPos(LiveViewData.FocusX, LiveViewData.FocusY + ServiceProvider.Settings.FocusMoveStep);
+                    }
+                    break;
+                case CmdConsts.LiveView_Capture:
+                    {
+                        Capture();
                     }
                     break;
             }

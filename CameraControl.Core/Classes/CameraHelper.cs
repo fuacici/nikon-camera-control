@@ -48,6 +48,19 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        public static void CaptureNoAf()
+        {
+            try
+            {
+                CaptureNoAf(ServiceProvider.DeviceManager.SelectedCameraDevice);
+            }
+            catch (Exception e)
+            {
+                Log.Debug("Error capture", e);
+                StaticHelper.Instance.SystemMessage = e.Message;
+            }
+        }
+
         public static void CaptureNoAf(object o)
         {
             if (o != null)
