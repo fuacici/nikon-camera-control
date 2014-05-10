@@ -86,7 +86,7 @@ namespace CameraControl
             DataContext = ServiceProvider.Settings;
             ServiceProvider.DeviceManager.CameraSelected += DeviceManager_CameraSelected;
             SetLayout(ServiceProvider.Settings.SelectedLayout);
-            ServiceProvider.Settings.ApplyTheme(this);
+            //ServiceProvider.Settings.ApplyTheme(this);
             var thread = new Thread(CheckForUpdate);
             thread.Start();
         }
