@@ -1498,6 +1498,7 @@ namespace CameraControl.Devices.Nikon
                                 case CONST_Event_ObjectAddedInSdram:
                                 case CONST_Event_ObjectAdded:
                                     {
+                                        Log.Debug("CONST_Event_ObjectAddedInSdram" + eventCode.ToString("X"));
                                         MTPDataResponse objectdata = ExecuteReadDataEx(CONST_CMD_GetObjectInfo, (uint)longeventParam);
                                         string filename = "DSC_0000.JPG";
                                         if (objectdata.Data != null)
@@ -1510,6 +1511,7 @@ namespace CameraControl.Devices.Nikon
                                         {
                                             Log.Error("Error getting file name");
                                         }
+                                        Log.Debug("File name" + filename);
                                         PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
                                                                         {
                                                                             WiaImageItem = null,
