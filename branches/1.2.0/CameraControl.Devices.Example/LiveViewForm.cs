@@ -22,6 +22,7 @@ namespace CameraControl.Devices.Example
         {
             //set live view default frame rate to 15
             _liveViewTimer.Interval = 1000 / 15;
+            _liveViewTimer.Stop();
             _liveViewTimer.Tick += _liveViewTimer_Tick;
             CameraDevice = cameraDevice;
             CameraDevice.CameraDisconnected += CameraDevice_CameraDisconnected;
@@ -61,9 +62,9 @@ namespace CameraControl.Devices.Example
             try
             {
                 pictureBox1.Image = new Bitmap(new MemoryStream(liveViewData.ImageData,
-                                                                liveViewData.ImagePosition,
+                                                                liveViewData.ImageDataPosition,
                                                                 liveViewData.ImageData.Length -
-                                                                liveViewData.ImagePosition));
+                                                                liveViewData.ImageDataPosition));
             }
             catch (Exception)
             {
@@ -101,7 +102,12 @@ namespace CameraControl.Devices.Example
                 }
 
             } while (retry);
-            _liveViewTimer.Start();
+            MethodInvoker method = () => _liveViewTimer.Start();
+            if (InvokeRequired)
+                BeginInvoke(method);
+            else
+                method.Invoke();
+        
         }
 
         private void btn_stop_Click(object sender, EventArgs e)
