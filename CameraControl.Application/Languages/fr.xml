@@ -43,12 +43,12 @@
   <string name="KELVIN">Kelvin</string>
   <!--End Property values-->
   <string name="Mode">Mode</string>
-  <string name="Iso">ISO</string>
-  <string name="ShutterSpeed"> Vitesse d\'obturation</string>
-  <string name="Aperture">Ouverture</string>
-  <string name="WhiteBalance">Balance des blancs</string>
-  <string name="ExposureComp">Correction d\'exposition</string>
-  <string name="Compression">Compression</string>
+  <string name="Iso">_ISO</string>
+  <string name="ShutterSpeed"> _Vitesse d\'obturation</string>
+  <string name="Aperture">_Ouverture</string>
+  <string name="WhiteBalance">_Balance des blancs</string>
+  <string name="ExposureComp">_Compensation d\'exposition</string>
+  <string name="Compression">_Compression</string>
   <string name="MeteringMode">Mode de mesure d\'exposition</string>
   <string name="FocusMode">Mode de mise au point</string>
   <string name="Battery">Batterie</string>
@@ -354,6 +354,43 @@
   <string name="LabelDestinationCardError">La destination d\'enregistrement est la carte</string>
   <string name="LabelLiveViewError">Erreur Live view</string>
   <!--07/05/2013-->
+  <string name="LabelDriver">Driver</string>
+  <string name="LabelAstronomy">Astronomie</string>
+  <string name="LabelEnable">Activé</string>
+  <string name="LabelScript">Script</string>
+  <string name="LabelStartScript">Démarrer le script</string>
+  <string name="LabelStopScript">Arrêter le script</string>
+  <string name="LabelDeviceSettings">Configuration de l\'appareil</string>
+  <string name="LabelAvailableDevices">Appareils disponibles</string>
+  <string name="LabelCommands">Commandes</string>
+  <string name="LabelStartLiveView">Démarrer \'Live View\'</string>
+  <string name="LabelStopLiveView">Arrêter \'Live View\'</string>
+  <string name="LabelBrightness">Luminosité</string>
+  <string name="LabelUseExternalShutterRelease">Utiliser un déclencheur externe</string>
+  <string name="LabelDownloadJpgOnly">Télécharger le fichier jpg seulement.</string>
+  <string name="LabelDownloadJpgOnlyToolTip">Si la capture est faite avec JPG+RAW seul les fichiers jpg sont téléchargés</string>
+  <string name="LabelSetCounters">Paramétrer les compteurs</string>
+  <string name="LabelEdgeDetection">Détection des bords</string>
   <!--04/07/2013-->
+  <string name="LabelImageProperties">Propriétés de l\'image</string>
+  <string name="LabelFileName">Nom du fichier</string>
+  <string name="LabelSet">Paramétrer</string>
+  <string name="LabelTagSelector">Sélecteur de tag</string>
+  <string name="LabelShowMagnifierInFullSccreen">Mettre la loupe en plein écran</string>
+  <string name="LabelPHDGuiding">Guidage PHD</string>
+  <string name="LabelAutomaticallyGuiding">Guidage PHD automatique après prise de vue</string>
+  <string name="LabelAutoRotate">Rotation automatique</string>
+  <string name="LabelReset">Réinitialiser</string>
+  <string name="LabelFocus">Focus</string>
   <!--17/11/2013-->
+  <string name="LabelAddFakeCamera">Ajouter une fausse caméra</string>
+  <string name="LabelBarcode">Code barre</string>
+  <string name="LabelSendTheLogFile">Envoyer le fichier log</string>
+  <string name="LabelAskSendLogFile">Souhaitez-vous envoyer le fichier log aux développeurs ?</string>
+  <string name="LabelSend">Envoyer</string>
+  <string name="LabelLogMessage">Message aux développeurs de digiCamControl</string>
+  <string name="LabelLogText">Le fichier log sera envoyé à l\'équipe de développement de digiCamControl pour améliorer la stabilité de l\'application.</string>
+  <string name="LabelFullscreen">Plein écran</string>
+  <string name="LabelSelection">Sélection</string>
+  <string name="LabelSelectAll">Sélectionner tout</string>
 </resources>
