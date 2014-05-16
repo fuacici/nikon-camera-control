@@ -202,9 +202,9 @@ namespace CameraControl.Devices
                     CanonSDKBase camera = new CanonSDKBase();
                     DeviceDescriptor descriptor = new DeviceDescriptor {EosCamera = eosCamera};
                     descriptor.CameraDevice = camera;
+                    NewCameraConnected(camera);
                     camera.Init(eosCamera);
                     ConnectedDevices.Add(camera);
-                    NewCameraConnected(camera);
                     _deviceEnumerator.Add(descriptor);
                 }
             }
@@ -296,12 +296,11 @@ namespace CameraControl.Devices
                     DeviceDescriptor descriptor = new DeviceDescriptor { WpdId = portableDevice.DeviceId };
                     cameraDevice = (ICameraDevice)Activator.CreateInstance(GetNativeDriver(portableDevice.Model));
                     cameraDevice.SerialNumber = StaticHelper.GetSerial(portableDevice.DeviceId);
+                    NewCameraConnected(cameraDevice);
                     cameraDevice.Init(descriptor);
                     descriptor.CameraDevice = cameraDevice;
                     _deviceEnumerator.Add(descriptor);
                     ConnectedDevices.Add(cameraDevice);
-
-                    NewCameraConnected(cameraDevice);
                 }
             }
             _connectionInProgress = false;

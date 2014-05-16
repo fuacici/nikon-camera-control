@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using CameraControl.Devices;
+using CameraControl.Devices.Classes;
 
 namespace CameraControl.Core.Classes
 {
@@ -95,5 +96,21 @@ namespace CameraControl.Core.Classes
                     break;
             }
         }
+
+        /// <summary>
+        /// Loads the atached properties to a camera.
+        /// </summary>
+        /// <param name="cameraDevice">The camera device.</param>
+        /// <returns>The atached CameraProperty</returns>
+        public static CameraProperty LoadProperties(this ICameraDevice cameraDevice)
+        {
+            CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(cameraDevice);
+            cameraDevice.DisplayName = property.DeviceName;
+            cameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
+            if (cameraDevice.GetCapability(CapabilityEnum.CaptureInRam))
+                cameraDevice.CaptureInSdRam = property.CaptureInSdRam;
+            return property;
+        }
+
     }
 }

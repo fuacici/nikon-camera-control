@@ -81,7 +81,7 @@ namespace CameraControl.windows
                     _cameraDevice = param as ICameraDevice;
                     if (_cameraDevice == null)
                         return;
-                    CameraProperty = ServiceProvider.Settings.CameraProperties.Get(_cameraDevice);
+                    CameraProperty = _cameraDevice.LoadProperties();
                     CameraProperty.BeginEdit();
                     Dispatcher.Invoke(new Action(delegate
                     {
@@ -134,6 +134,7 @@ namespace CameraControl.windows
         {
             CameraProperty.EndEdit();
             ServiceProvider.Settings.Save();
+            _cameraDevice.LoadProperties(); 
             ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.CameraPropertyWnd_Hide);
         }
 
