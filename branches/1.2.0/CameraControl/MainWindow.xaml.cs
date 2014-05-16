@@ -31,7 +31,7 @@ namespace CameraControl
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : MetroWindow, IMainWindowPlugin
+    public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropertyChanged
     {
 
         public PropertyWnd PropertyWnd { get; set; }
@@ -112,7 +112,7 @@ namespace CameraControl
                             ((Flyout) Flyouts.Items[0]).IsOpen = false;
                             ((Flyout) Flyouts.Items[1]).IsOpen = false;
                             Title = (ServiceProvider.Branding.ApplicationTitle ?? "digiCamControl") + " - " +
-                                    ServiceProvider.Settings.CameraProperties.Get(newcameraDevice).DeviceName;
+                                    newcameraDevice.DisplayName;
                         }));
         }
 
@@ -158,7 +158,7 @@ namespace CameraControl
             {
                 Log.Debug("Photo transfer begin.");
                 eventArgs.CameraDevice.IsBusy = true;
-                CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(eventArgs.CameraDevice);
+                CameraProperty property = eventArgs.CameraDevice.LoadProperties();
                 PhotoSession session = (PhotoSession)eventArgs.CameraDevice.AttachedPhotoSession ??
                                        ServiceProvider.Settings.DefaultSession;
                 StaticHelper.Instance.SystemMessage = "";
@@ -204,12 +204,12 @@ namespace CameraControl
                     Directory.CreateDirectory(Path.GetDirectoryName(fileName));
                 }
                 Log.Debug("Transfer started :" + fileName);
-                DateTime startTIme = DateTime.Now;
+                //DateTime startTIme = DateTime.Now;
                 eventArgs.CameraDevice.TransferFile(eventArgs.Handle, fileName);
-                Log.Debug("Transfer done :" + fileName);
-                Log.Debug("[BENCHMARK]Speed :" +
-                          (new FileInfo(fileName).Length / (DateTime.Now - startTIme).TotalSeconds / 1024 / 1024).ToString("0000.00"));
-                Log.Debug("[BENCHMARK]Transfer time :" + ((DateTime.Now - startTIme).TotalSeconds).ToString("0000.000"));
+                //Log.Debug("Transfer done :" + fileName);
+                //Log.Debug("[BENCHMARK]Speed :" +
+                //          (new FileInfo(fileName).Length / (DateTime.Now - startTIme).TotalSeconds / 1024 / 1024).ToString("0000.00"));
+                //Log.Debug("[BENCHMARK]Transfer time :" + ((DateTime.Now - startTIme).TotalSeconds).ToString("0000.000"));
                 
                 // write comment and tags directly in transferred file
                 if (ServiceProvider.Settings.DefaultSession.WriteComment)
@@ -657,9 +657,34 @@ namespace CameraControl
 
         private void btn_sort_Click(object sender, RoutedEventArgs e)
         {
-            ServiceProvider.DeviceManager.ConnectedDevices =
-              new AsyncObservableCollection<ICameraDevice>(
-                ServiceProvider.DeviceManager.ConnectedDevices.OrderBy(x => x.DisplayName));
+            SortCameras(true);
+        }
+
+        private void btn_sort_desc_Click(object sender, RoutedEventArgs e)
+        {
+            SortCameras(false);
+        }
+
+        private void SortCameras(bool asc)
+        {
+            // making sure the camera names are refreshed from properties
+            foreach (var device in ServiceProvider.DeviceManager.ConnectedDevices)
+            {
+                device.LoadProperties();
+            }
+            if (asc)
+            {
+                ServiceProvider.DeviceManager.ConnectedDevices =
+                    new AsyncObservableCollection<ICameraDevice>(
+                        ServiceProvider.DeviceManager.ConnectedDevices.OrderBy(x => x.DisplayName));
+            }
+            else
+            {
+                ServiceProvider.DeviceManager.ConnectedDevices =
+                    new AsyncObservableCollection<ICameraDevice>(
+                        ServiceProvider.DeviceManager.ConnectedDevices.OrderByDescending(x => x.DisplayName));
+            }
+
         }
 
         private void but_star_Click(object sender, RoutedEventArgs e)
@@ -707,6 +732,20 @@ namespace CameraControl
         {
             NewVersionWnd.ShowChangeLog();
         }
+
+        #region Implementation of INotifyPropertyChanged
+
+        public virtual event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+
+        #endregion
 
     }
 }

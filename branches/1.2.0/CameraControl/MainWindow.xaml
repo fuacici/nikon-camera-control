@@ -138,6 +138,7 @@
                     </Grid.RowDefinitions>
                     <StackPanel>
                         <Button Content="{T:TranslateExtension MenuMultipleCamera}" Click="Button_Click" Margin="3"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Height="30" Name="btn_sort" Width="30" Click="btn_sort_Click">
                             <Button.Content>
                                 <Rectangle Width="18" Height="18">
@@ -147,6 +148,16 @@
                                 </Rectangle>
                             </Button.Content>
                         </Button>
+                            <Button Height="30" Name="btn_sort_desc" Width="30" Click="btn_sort_desc_Click">
+                                <Button.Content>
+                                    <Rectangle Width="18" Height="18">
+                                        <Rectangle.Fill>
+                                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_sort_alphabetical_descending}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
                     </StackPanel>
                     <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="0" Grid.Row="1">
                         <StackPanel >

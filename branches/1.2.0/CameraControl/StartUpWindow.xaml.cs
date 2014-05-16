@@ -240,11 +240,7 @@ namespace CameraControl
 
         void cameraDevice_CameraInitDone(ICameraDevice cameraDevice)
         {
-            CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(cameraDevice);
-            cameraDevice.DisplayName = property.DeviceName;
-            cameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
-            if (cameraDevice.GetCapability(CapabilityEnum.CaptureInRam))
-                cameraDevice.CaptureInSdRam = property.CaptureInSdRam;
+            var property = cameraDevice.LoadProperties();
 
             CameraPreset preset = ServiceProvider.Settings.GetPreset(property.DefaultPresetName);
             if (preset != null)
