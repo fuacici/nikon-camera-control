@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Input;
 using CameraControl.Core.Interfaces;
 using CameraControl.Devices.Classes;
 
@@ -83,6 +84,28 @@ namespace CameraControl.Core.Classes
         {
             AddCommandsFromType(typeof(CmdConsts));
             AddCommandsFromType(typeof(WindowsCmdConsts));
+            WindowCommands = new AsyncObservableCollection<WindowCommandItem>(WindowCommands.OrderBy(x => x.Name)); 
+            foreach (WindowCommandItem item in WindowCommands)
+            {
+                switch (item.Name)
+                {
+                    case CmdConsts.Capture:
+                        item.SetKey(Key.Space);
+                        break;
+                    case WindowsCmdConsts.Next_Image:
+                        item.SetKey(Key.Right);
+                        break;
+                    case WindowsCmdConsts.Prev_Image:
+                        item.SetKey(Key.Left);
+                        break;
+                    case WindowsCmdConsts.Like_Image:
+                        item.SetKey(Key.P);
+                        break;
+                    case WindowsCmdConsts.Unlike_Image:
+                        item.SetKey(Key.X);
+                        break;
+                }
+            }
         }
 
         private void AddCommandsFromType(Type type)

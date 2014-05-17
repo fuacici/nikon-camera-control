@@ -21,9 +21,6 @@ namespace CameraControl.Core.Classes
         public static string AppName = "digiCamControl";
         private string ConfigFile = "";
 
-        //[XmlIgnore]
-        //public WIAManager Manager { get; set; }
-
         private PhotoSession _defaultSession;
 
         [XmlIgnore]
@@ -77,6 +74,17 @@ namespace CameraControl.Core.Classes
             {
                 _imageLoading = value;
                 NotifyPropertyChanged("ImageLoading");
+            }
+        }
+
+        private AsyncObservableCollection<WindowCommandItem> _actions;
+        public AsyncObservableCollection<WindowCommandItem> Actions
+        {
+            get { return _actions; }
+            set
+            {
+                _actions = value;
+                NotifyPropertyChanged("Actions");
             }
         }
 
@@ -138,62 +146,6 @@ namespace CameraControl.Core.Classes
         }
 
         public DateTime LastUpdateCheckDate { get; set; }
-
-        private bool _triggerKeyAlt;
-        public bool TriggerKeyAlt
-        {
-            get { return _triggerKeyAlt; }
-            set
-            {
-                _triggerKeyAlt = value;
-                NotifyPropertyChanged("TriggerKeyAlt");
-            }
-        }
-
-        private bool _triggerKeyCtrl;
-
-        public bool TriggerKeyCtrl
-        {
-            get { return _triggerKeyCtrl; }
-            set
-            {
-                _triggerKeyCtrl = value;
-                NotifyPropertyChanged("TriggerKeyCtrl");
-            }
-        }
-
-        private bool _triggerKeyShift;
-        public bool TriggerKeyShift
-        {
-            get { return _triggerKeyShift; }
-            set
-            {
-                _triggerKeyShift = value;
-                NotifyPropertyChanged("TriggerKeyShift");
-            }
-        }
-
-        private Key _triggerKey;
-        public Key TriggerKey
-        {
-            get { return _triggerKey; }
-            set
-            {
-                _triggerKey = value;
-                NotifyPropertyChanged("TriggerKey");
-            }
-        }
-
-        private bool _usetriggerKey;
-        public bool UseTriggerKey
-        {
-            get { return _usetriggerKey; }
-            set
-            {
-                _usetriggerKey = value;
-                NotifyPropertyChanged("UseTriggerKey");
-            }
-        }
 
         private bool _useWebserver;
         public bool UseWebserver
@@ -703,10 +655,10 @@ namespace CameraControl.Core.Classes
 
         public void ResetSettings()
         {
+            Actions = new AsyncObservableCollection<WindowCommandItem>();
             DisableNativeDrivers = false;
             AutoPreview = true;
             LastUpdateCheckDate = DateTime.MinValue;
-            UseTriggerKey = false;
             UseWebserver = false;
             WebserverPort = 5513;
             Preview = false;
@@ -736,6 +688,22 @@ namespace CameraControl.Core.Classes
             ShowThumbUpDown = false;
             AutoPreviewJpgOnly = false;
             ClientId = Guid.NewGuid().ToString();
+            if (ServiceProvider.WindowsManager != null)
+                SyncActions(ServiceProvider.WindowsManager.WindowCommands);
+        }
+
+
+        /// <summary>
+        /// Add new WinddowssCommands from items
+        /// </summary>
+        /// <param name="items">The items.</param>
+        public void SyncActions(IEnumerable<WindowCommandItem>  items)
+        {
+            List<WindowCommandItem> itemsToAdd= (from windowCommandItem in items let found = Actions.Any(commandItem => windowCommandItem.Name == commandItem.Name) where !found select windowCommandItem).ToList();
+            foreach (WindowCommandItem item in itemsToAdd)
+            {
+                Actions.Add(item);
+            }
         }
 
         public void Add(PhotoSession session)

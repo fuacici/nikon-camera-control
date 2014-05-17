@@ -112,7 +112,7 @@ namespace CameraControl
                             ((Flyout) Flyouts.Items[0]).IsOpen = false;
                             ((Flyout) Flyouts.Items[1]).IsOpen = false;
                             Title = (ServiceProvider.Branding.ApplicationTitle ?? "digiCamControl") + " - " +
-                                    newcameraDevice.DisplayName;
+                                    (newcameraDevice == null ? "" : newcameraDevice.DisplayName);
                         }));
         }
 
@@ -694,31 +694,31 @@ namespace CameraControl
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Right)
-            {
-                ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Next_Image);
-                e.Handled = true;
-            }
-            if (e.Key == Key.Left)
-            {
-                ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Prev_Image);
-                e.Handled = true;
-            }
+            //if (e.Key == Key.Right)
+            //{
+            //    ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Next_Image);
+            //    e.Handled = true;
+            //}
+            //if (e.Key == Key.Left)
+            //{
+            //    ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Prev_Image);
+            //    e.Handled = true;
+            //}
             if(e.Key==Key.Delete)
             {
                 ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Del_Image);
                 e.Handled = true;
             }
-            if (e.Key == Key.P)
-            {
-                ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Like_Image);
-                e.Handled = true;
-            }
-            if (e.Key == Key.X)
-            {
-                ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Unlike_Image);
-                e.Handled = true;
-            }
+            //if (e.Key == Key.P)
+            //{
+            //    ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Like_Image);
+            //    e.Handled = true;
+            //}
+            //if (e.Key == Key.X)
+            //{
+            //    ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Unlike_Image);
+            //    e.Handled = true;
+            //}
 
         }
 
