@@ -409,5 +409,7 @@ namespace CameraControl.Core.Translation
         public static string LabelAutoPreviewJpgOnly = "Auto Preview Jpg Only";
         public static string LabelSettingsLiveView = "Live view";
         public static string LabelHostMode = "Host mode";
+        //17.05.2014
+        public static string LabelClear = "Clear";
     }
 }

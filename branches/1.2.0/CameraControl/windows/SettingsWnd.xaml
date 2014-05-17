@@ -10,7 +10,7 @@
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:Classes="clr-namespace:CameraControl.Core.Classes;assembly=CameraControl.Core"
                        mc:Ignorable="d"
-                       d:DataContext="{d:DesignInstance Type=Classes:Settings, IsDesignTimeCreatable=True}">
+                       d:DataContext="{d:DesignInstance Type=Classes:Settings, IsDesignTimeCreatable=True}" xmlns:my1="clr-namespace:CameraControl.windows">
     <Controls:MetroWindow.WindowCommands>
         <Controls:WindowCommands>
             <CheckBox Content="{T:TranslateExtension LabelStayOnTop2}" Name="btn_stay_on_top" VerticalAlignment="Center" VerticalContentAlignment="Center" Click="btn_stay_on_top_Click" />
@@ -167,23 +167,30 @@
                     </Grid.RowDefinitions>
                     <GroupBox Header="Keyboard" VerticalAlignment="Top">
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="32*" />
-                                <RowDefinition Height="54*" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <CheckBox Content="{T:TranslateExtension LabelUseKeybordToTrigger}" Name="chk_usekey" IsChecked="{Binding UseTriggerKey}" Margin="5"/>
-                            <CheckBox Content="Alt" Height="20" HorizontalAlignment="Left" Margin="7,6,0,0" Name="checkBox2" VerticalAlignment="Top" IsChecked="{Binding TriggerKeyAlt}" IsEnabled="{Binding ElementName=chk_usekey, Path=IsChecked}" Grid.Column="1" />
-                            <CheckBox Content="Ctrl" Height="20" HorizontalAlignment="Left" Margin="61,6,0,0" Name="checkBox3" VerticalAlignment="Top" IsChecked="{Binding TriggerKeyCtrl}" IsEnabled="{Binding ElementName=chk_usekey, Path=IsChecked}" Grid.Column="1" />
-                            <CheckBox Content="Shift" Height="20" HorizontalAlignment="Left" Margin="117,6,0,0" Name="checkBox4" VerticalAlignment="Top" IsChecked="{Binding TriggerKeyShift}" IsEnabled="{Binding ElementName=chk_usekey, Path=IsChecked}" Grid.Column="1" />
-                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="5" Name="cmb_keys" VerticalAlignment="Top" Width="111" SelectedItem="{Binding TriggerKey}" IsEnabled="{Binding ElementName=chk_usekey, Path=IsChecked}" Grid.Row="1" />
+                            <ListBox Height="150" Grid.Row="1" ItemsSource="{Binding Actions}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="{Binding Path=Name}" Margin="2" Width="200"/>
+                                            <CheckBox IsChecked="{Binding Path=Alt}" Content="Alt" Margin="5"/>
+                                            <CheckBox IsChecked="{Binding Path=Ctrl}" Content="Ctrl" Margin="5"/>
+                                            <ComboBox SelectedItem="{Binding Path=Key}" ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my1:SettingsWnd, AncestorLevel=1}, Path=AvailableKeys}" Width="150"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="{T:TranslateExtension LabelWebserver}" Margin="0,0,0,6" Grid.Row="1">
                         <Grid ToolTip="{T:TranslateExtension ReStartToolTip}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="300" />
+                                <ColumnDefinition Width="326" />
+                            </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="32*" />
                                 <RowDefinition Height="37*" />
@@ -191,7 +198,7 @@
                             </Grid.RowDefinitions>
                             <CheckBox Content="{T:TranslateExtension LabelUseWebserver}" Height="25" HorizontalAlignment="Left" Margin="10,5,0,0" Name="checkBox1" VerticalAlignment="Top" IsChecked="{Binding UseWebserver}" Width="220" />
                             <ComboBox Height="23" HorizontalAlignment="Left" Margin="8,5,0,0" Name="textBox1" VerticalAlignment="Top" Width="290" IsReadOnly="True" ItemsSource="{Binding AvaiableWebAddresses, Mode=OneTime}" SelectedItem="{Binding Webaddress}" IsEditable="False" SelectionChanged="textBox1_SelectionChanged" Grid.Row="1" />
-                            <my:QrCodeImgControl Height="129" HorizontalAlignment="Left" Margin="10,4,0,0" Stretch="Uniform" VerticalAlignment="Top" Width="132" Name="qrcode" Grid.Row="2" />
+                            <my:QrCodeImgControl Height="129" HorizontalAlignment="Left" Margin="7,3,0,0" Stretch="Uniform" VerticalAlignment="Top" Width="132" Name="qrcode" Grid.Column="1" Grid.RowSpan="3" />
                         </Grid>
                     </GroupBox>
                 </Grid>

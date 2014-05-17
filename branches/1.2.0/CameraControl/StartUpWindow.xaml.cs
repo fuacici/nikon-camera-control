@@ -109,6 +109,8 @@ namespace CameraControl
             ServiceProvider.WindowsManager.Event += WindowsManager_Event;
             ServiceProvider.WindowsManager.ApplyTheme();
             ServiceProvider.WindowsManager.RegisterKnowCommands();
+            ServiceProvider.Settings.SyncActions(ServiceProvider.WindowsManager.WindowCommands);
+
             ServiceProvider.Trigger.Start();
             ServiceProvider.PluginManager.CopyPlugins();
             ServiceProvider.PluginManager.LoadPlugins(Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Plugins"));
@@ -133,7 +135,7 @@ namespace CameraControl
                 Log.Error("Unable to initialize device manager", exception);
                 if (exception.Message.Contains("0AF10CEC-2ECD-4B92-9581-34F6AE0637F3"))
                 {
-                    System.Windows.Forms.MessageBox.Show(
+                    MessageBox.Show(
                         "Unable to initialize device manager !\nMissing some components! Please install latest Windows Media Player! ");
                     Application.Current.Shutdown(1);
                 }
