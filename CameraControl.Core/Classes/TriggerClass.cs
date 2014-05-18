@@ -36,40 +36,6 @@ namespace CameraControl.Core.Classes
             if (ServiceProvider.Settings.UseWebserver)
             {
                 WebServer.Start(ServiceProvider.Settings.WebserverPort);
-                //WebServer.Event += WebServer_Event;
-            }
-        }
-
-        void WebServer_Event(string cmd)
-        {
-            if (cmd.StartsWith("CMD=TAKEPHOTO_"))
-            {
-                TakePhoto();
-            }
-            else if (cmd.StartsWith("CMD=TAKEPHOTONOAF"))
-            {
-                Thread thread = new Thread(new ThreadStart(delegate
-                {
-                    try
-                    {
-                        ServiceProvider.DeviceManager.SelectedCameraDevice.
-                          CapturePhotoNoAf();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }));
-                thread.Start();
-            }
-            else
-            {
-                string simplecmd = "";
-                if (cmd.Contains("="))
-                {
-                    simplecmd = cmd.Split('=')[1];
-                }
-                simplecmd = simplecmd.Replace("/", "");
-                ServiceProvider.WindowsManager.ExecuteCommand(simplecmd);
             }
         }
 
@@ -127,21 +93,6 @@ namespace CameraControl.Core.Classes
             return CallNextHookEx(_hookID, nCode, wParam, lParam);
         }
 
-        private static void TakePhoto()
-        {
-            Thread thread = new Thread(new ThreadStart(delegate
-            {
-                try
-                {
-                    ServiceProvider.DeviceManager.SelectedCameraDevice.
-                      CapturePhoto();
-                }
-                catch (Exception)
-                {
-                }
-            }));
-            thread.Start();
-        }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr SetWindowsHookEx(int idHook,
