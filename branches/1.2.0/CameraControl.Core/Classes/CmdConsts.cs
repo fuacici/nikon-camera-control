@@ -28,5 +28,6 @@ namespace CameraControl.Core.Classes
         public const string All_Close = "All_Close";
         public const string Capture = "Capture";
         public const string CaptureNoAf = "CaptureNoAf";
+        public const string CaptureAll = "CaptureAll";
     }
 }

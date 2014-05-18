@@ -49,6 +49,37 @@ namespace CameraControl.Core.Classes
             }
         }
 
+        /// <summary>
+        /// Captures with all connected cameras.
+        /// </summary>
+        /// <param name="delay">The delay between camera captures in milli sec</param>
+        public  static void CaptureAll(int delay)
+        {
+            foreach (
+                          ICameraDevice connectedDevice in
+                              ServiceProvider.DeviceManager.ConnectedDevices.Where(
+                                  connectedDevice => connectedDevice.IsConnected && connectedDevice.IsChecked))
+            {
+                Thread.Sleep(delay);
+                ICameraDevice device = connectedDevice;
+                Thread threadcamera = new Thread(new ThreadStart(delegate
+                {
+                    try
+                    {
+                        Capture(device);
+                    }
+                    catch (Exception exception)
+                    {
+                        Log.Error(exception);
+                        StaticHelper.Instance.
+                            SystemMessage =
+                            exception.Message;
+                    }
+                }));
+                threadcamera.Start();
+            }
+        }
+
         public static void CaptureNoAf()
         {
             try

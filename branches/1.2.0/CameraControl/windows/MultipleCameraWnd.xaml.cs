@@ -146,39 +146,7 @@ namespace CameraControl.windows
                     }
                     else
                     {
-                        foreach (
-                            ICameraDevice connectedDevice in
-                                ServiceProvider.DeviceManager.ConnectedDevices.Where(
-                                    connectedDevice => connectedDevice.IsConnected && connectedDevice.IsChecked))
-                        {
-                            Thread.Sleep(DelaySec);
-                            ICameraDevice device = connectedDevice;
-                            Thread threadcamera = new Thread(new ThreadStart(delegate
-                                                                                 {
-                                                                                     try
-                                                                                     {
-                                                                                         if (DisbleAutofocus &&
-                                                                                             device.GetCapability(
-                                                                                                 CapabilityEnum.
-                                                                                                     CaptureNoAf))
-                                                                                         {
-                                                                                             device.CapturePhotoNoAf();
-                                                                                         }
-                                                                                         else
-                                                                                         {
-                                                                                             CameraHelper.Capture(device);
-                                                                                         }
-                                                                                     }
-                                                                                     catch (Exception exception)
-                                                                                     {
-                                                                                         Log.Error(exception);
-                                                                                         StaticHelper.Instance.
-                                                                                             SystemMessage =
-                                                                                             exception.Message;
-                                                                                     }
-                                                                                 }));
-                            threadcamera.Start();
-                        }
+                      CameraHelper.CaptureAll(DelaySec);
                     }
                 }
                 catch (Exception exception)
