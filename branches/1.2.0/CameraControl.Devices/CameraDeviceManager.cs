@@ -561,6 +561,47 @@ namespace CameraControl.Devices
         /// Occurs when SelectedCameraDevice property changed.
         /// </summary>
         public event CameraSelectedEventHandler CameraSelected;
+
+
+        public void SelectNextCamera()
+        {
+            if (ConnectedDevices.Count == 0)
+                return;
+            int idx = 0;
+            for (int i = 0; i < ConnectedDevices.Count; i++)
+            {
+                var device = ConnectedDevices[i];
+                if (device == SelectedCameraDevice)
+                {
+                    idx = i;
+                    break;
+                }
+            }
+            idx++;
+            if (idx < ConnectedDevices.Count)
+                SelectedCameraDevice = ConnectedDevices[idx];
+        }
+
+        public void SelectPrevCamera()
+        {
+            if (ConnectedDevices.Count == 0)
+                return;
+            int idx = 0;
+            for (int i = 0; i < ConnectedDevices.Count; i++)
+            {
+                var device = ConnectedDevices[i];
+                if (device == SelectedCameraDevice)
+                {
+                    idx = i;
+                    break;
+                }
+            }
+            idx--;
+            if (idx >= 0)
+                SelectedCameraDevice = ConnectedDevices[idx];
+        }
+
+
     }
 }
 
