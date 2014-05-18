@@ -29,5 +29,17 @@ namespace CameraControl.Core.Classes
         public const string Capture = "Capture";
         public const string CaptureNoAf = "CaptureNoAf";
         public const string CaptureAll = "CaptureAll";
+        public const string NextAperture = "NextAperture";
+        public const string PrevAperture = "PrevAperture";
+        public const string NextIso = "NextIso";
+        public const string PrevIso = "PrevIso";
+        public const string NextShutter = "NextShutter";
+        public const string PrevShutter = "PrevShutter";
+        public const string NextWhiteBalance = "NextWhiteBalance";
+        public const string PrevWhiteBalance = "PrevWhiteBalance";
+        public const string NextExposureCompensation = "NextExposureCompensation";
+        public const string PrevExposureCompensation = "PrevExposureCompensation";
+        public const string NextCamera = "NextCamera";
+        public const string PrevCamera = "PrevCamera";
     }
 }

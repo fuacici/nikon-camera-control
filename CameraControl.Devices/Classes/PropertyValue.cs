@@ -76,11 +76,36 @@ namespace CameraControl.Devices.Classes
             }
         }
 
+        public void NextValue()
+        {
+            if (Values == null || Values.Count == 0 || !IsEnabled)
+                return;
+            int ind = Values.IndexOf(Value);
+            if (ind < 0)
+                return;
+            ind++;
+            if (ind < Values.Count)
+                Value = Values[ind];
+        }
+
+        public void PrevValue()
+        {
+            if (Values == null || Values.Count == 0 || !IsEnabled)
+                return;
+            int ind = Values.IndexOf(Value);
+            ind--;
+            if (ind < 0)
+                return;
+
+            if (ind < Values.Count)
+                Value = Values[ind];
+        }
+
 
         public void OnValueChanged(object sender, string key, T val)
         {
             Thread thread = new Thread(OnValueChangedThread);
-            thread.Name = "SetProperty thread";
+            thread.Name = "SetProperty thread "+Name;
             thread.Start(new object[] {sender, key, val});
             thread.Join(200);
         }

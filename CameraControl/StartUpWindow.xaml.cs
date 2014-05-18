@@ -200,6 +200,59 @@ namespace CameraControl
                     CameraHelper.CaptureAll(0);
                     break;
             }
+            ICameraDevice device = ServiceProvider.DeviceManager.SelectedCameraDevice;
+            if(device!=null && device.IsConnected)
+            {
+                switch (cmd)
+                {
+                    case CmdConsts.NextAperture:
+                        if (device.FNumber != null)
+                            device.FNumber.NextValue();
+                        break;
+                    case CmdConsts.PrevAperture:
+                        if (device.FNumber != null)
+                            device.FNumber.PrevValue();
+                        break;
+                    case CmdConsts.NextIso:
+                        if (device.IsoNumber != null)
+                            device.IsoNumber.NextValue();
+                        break;
+                    case CmdConsts.PrevIso:
+                        if (device.IsoNumber != null)
+                            device.IsoNumber.PrevValue();
+                        break;
+                    case CmdConsts.NextShutter:
+                        if (device.ShutterSpeed != null)
+                            device.ShutterSpeed.NextValue();
+                        break;
+                    case CmdConsts.PrevShutter:
+                        if (device.ShutterSpeed != null)
+                            device.ShutterSpeed.PrevValue();
+                        break;
+                    case CmdConsts.NextWhiteBalance:
+                        if (device.WhiteBalance != null)
+                            device.WhiteBalance.NextValue();
+                        break;
+                    case CmdConsts.PrevWhiteBalance:
+                        if (device.WhiteBalance != null)
+                            device.WhiteBalance.PrevValue();
+                        break;
+                    case CmdConsts.NextExposureCompensation:
+                        if (device.ExposureCompensation != null)
+                            device.ExposureCompensation.NextValue();
+                        break;
+                    case CmdConsts.PrevExposureCompensation:
+                        if (device.ExposureCompensation != null)
+                            device.ExposureCompensation.PrevValue();
+                        break;
+                    case CmdConsts.NextCamera:
+                        ServiceProvider.DeviceManager.SelectNextCamera();
+                        break;
+                    case CmdConsts.PrevCamera:
+                        ServiceProvider.DeviceManager.SelectPrevCamera();
+                        break;
+                }
+            }
         }
 
         #region eventhandlers

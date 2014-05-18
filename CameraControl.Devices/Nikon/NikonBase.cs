@@ -1303,11 +1303,13 @@ namespace CameraControl.Devices.Nikon
                             {
                                 if (advancedProperty.Name == "Image Size")
                                 {
-                                    advancedProperty.SetValue(
-                                        Encoding.Unicode.GetString(
-                                            StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
-                                                                             advancedProperty.Code), 1, 20), false);
-
+                                    var val = StillImageDevice.ExecuteReadData(CONST_CMD_GetDevicePropValue,
+                                                                               advancedProperty.Code);
+                                    if (val != null && val.Length > 0)
+                                    {
+                                        advancedProperty.SetValue(
+                                            Encoding.Unicode.GetString(val, 1, 20), false);
+                                    }
                                 }
                                 else
                                 {
