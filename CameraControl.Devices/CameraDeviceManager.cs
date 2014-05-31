@@ -22,6 +22,8 @@ namespace CameraControl.Devices
         private DeviceDescriptorEnumerator _deviceEnumerator;
         private EosFramework _framework;
 
+        public Dictionary<ICameraDevice, byte[]> LiveViewImage;
+
         /// <summary>
         /// Gets or sets a value indicating whether use experimental drivers.
         /// Experimental drivers isn't tested and may not implement all camera possibilities 
@@ -132,6 +134,8 @@ namespace CameraControl.Devices
             SelectedCameraDevice = new NotConnectedCameraDevice();
             ConnectedDevices = new AsyncObservableCollection<ICameraDevice>();
             _deviceEnumerator = new DeviceDescriptorEnumerator();
+            LiveViewImage = new Dictionary<ICameraDevice, byte[]>();
+
             // prevent program crash in something wrong with wia
             try
             {
@@ -198,9 +202,9 @@ namespace CameraControl.Devices
                     CanonSDKBase camera = new CanonSDKBase();
                     DeviceDescriptor descriptor = new DeviceDescriptor {EosCamera = eosCamera};
                     descriptor.CameraDevice = camera;
+                    NewCameraConnected(camera);
                     camera.Init(eosCamera);
                     ConnectedDevices.Add(camera);
-                    NewCameraConnected(camera);
                     _deviceEnumerator.Add(descriptor);
                 }
             }
@@ -292,12 +296,11 @@ namespace CameraControl.Devices
                     DeviceDescriptor descriptor = new DeviceDescriptor { WpdId = portableDevice.DeviceId };
                     cameraDevice = (ICameraDevice)Activator.CreateInstance(GetNativeDriver(portableDevice.Model));
                     cameraDevice.SerialNumber = StaticHelper.GetSerial(portableDevice.DeviceId);
+                    NewCameraConnected(cameraDevice);
                     cameraDevice.Init(descriptor);
                     descriptor.CameraDevice = cameraDevice;
                     _deviceEnumerator.Add(descriptor);
                     ConnectedDevices.Add(cameraDevice);
-
-                    NewCameraConnected(cameraDevice);
                 }
             }
             _connectionInProgress = false;
@@ -558,6 +561,47 @@ namespace CameraControl.Devices
         /// Occurs when SelectedCameraDevice property changed.
         /// </summary>
         public event CameraSelectedEventHandler CameraSelected;
+
+
+        public void SelectNextCamera()
+        {
+            if (ConnectedDevices.Count == 0)
+                return;
+            int idx = 0;
+            for (int i = 0; i < ConnectedDevices.Count; i++)
+            {
+                var device = ConnectedDevices[i];
+                if (device == SelectedCameraDevice)
+                {
+                    idx = i;
+                    break;
+                }
+            }
+            idx++;
+            if (idx < ConnectedDevices.Count)
+                SelectedCameraDevice = ConnectedDevices[idx];
+        }
+
+        public void SelectPrevCamera()
+        {
+            if (ConnectedDevices.Count == 0)
+                return;
+            int idx = 0;
+            for (int i = 0; i < ConnectedDevices.Count; i++)
+            {
+                var device = ConnectedDevices[i];
+                if (device == SelectedCameraDevice)
+                {
+                    idx = i;
+                    break;
+                }
+            }
+            idx--;
+            if (idx >= 0)
+                SelectedCameraDevice = ConnectedDevices[idx];
+        }
+
+
     }
 }
 

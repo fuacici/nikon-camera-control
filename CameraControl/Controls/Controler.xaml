@@ -23,7 +23,7 @@
     <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="115" />
-            <ColumnDefinition Width="43*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <ScrollViewer VerticalScrollBarVisibility="Visible" >
             <WrapPanel  HorizontalAlignment="Left"  Name="wrapPanel1" VerticalAlignment="Top" ItemWidth="100" >

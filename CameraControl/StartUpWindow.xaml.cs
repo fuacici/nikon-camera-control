@@ -107,6 +107,10 @@ namespace CameraControl
             ServiceProvider.WindowsManager.Add(new AstroLiveViewWnd());
             ServiceProvider.WindowsManager.Add(new ScriptWnd());
             ServiceProvider.WindowsManager.Event += WindowsManager_Event;
+            ServiceProvider.WindowsManager.ApplyTheme();
+            ServiceProvider.WindowsManager.RegisterKnowCommands();
+            ServiceProvider.Settings.SyncActions(ServiceProvider.WindowsManager.WindowCommands);
+
             ServiceProvider.Trigger.Start();
             ServiceProvider.PluginManager.CopyPlugins();
             ServiceProvider.PluginManager.LoadPlugins(Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Plugins"));
@@ -131,7 +135,7 @@ namespace CameraControl
                 Log.Error("Unable to initialize device manager", exception);
                 if (exception.Message.Contains("0AF10CEC-2ECD-4B92-9581-34F6AE0637F3"))
                 {
-                    System.Windows.Forms.MessageBox.Show(
+                    MessageBox.Show(
                         "Unable to initialize device manager !\nMissing some components! Please install latest Windows Media Player! ");
                     Application.Current.Shutdown(1);
                 }
@@ -184,9 +188,70 @@ namespace CameraControl
                 Thread.Sleep(1000);
                 Application.Current.Shutdown();
             }
-            if (cmd == CmdConsts.Capture)
+            switch (cmd)
             {
-                CameraHelper.Capture();
+                case CmdConsts.Capture:
+                    CameraHelper.Capture();
+                    break;
+                case CmdConsts.CaptureNoAf:
+                    CameraHelper.CaptureNoAf();
+                    break;
+                case CmdConsts.CaptureAll:
+                    CameraHelper.CaptureAll(0);
+                    break;
+            }
+            ICameraDevice device = ServiceProvider.DeviceManager.SelectedCameraDevice;
+            if(device!=null && device.IsConnected)
+            {
+                switch (cmd)
+                {
+                    case CmdConsts.NextAperture:
+                        if (device.FNumber != null)
+                            device.FNumber.NextValue();
+                        break;
+                    case CmdConsts.PrevAperture:
+                        if (device.FNumber != null)
+                            device.FNumber.PrevValue();
+                        break;
+                    case CmdConsts.NextIso:
+                        if (device.IsoNumber != null)
+                            device.IsoNumber.NextValue();
+                        break;
+                    case CmdConsts.PrevIso:
+                        if (device.IsoNumber != null)
+                            device.IsoNumber.PrevValue();
+                        break;
+                    case CmdConsts.NextShutter:
+                        if (device.ShutterSpeed != null)
+                            device.ShutterSpeed.NextValue();
+                        break;
+                    case CmdConsts.PrevShutter:
+                        if (device.ShutterSpeed != null)
+                            device.ShutterSpeed.PrevValue();
+                        break;
+                    case CmdConsts.NextWhiteBalance:
+                        if (device.WhiteBalance != null)
+                            device.WhiteBalance.NextValue();
+                        break;
+                    case CmdConsts.PrevWhiteBalance:
+                        if (device.WhiteBalance != null)
+                            device.WhiteBalance.PrevValue();
+                        break;
+                    case CmdConsts.NextExposureCompensation:
+                        if (device.ExposureCompensation != null)
+                            device.ExposureCompensation.NextValue();
+                        break;
+                    case CmdConsts.PrevExposureCompensation:
+                        if (device.ExposureCompensation != null)
+                            device.ExposureCompensation.PrevValue();
+                        break;
+                    case CmdConsts.NextCamera:
+                        ServiceProvider.DeviceManager.SelectNextCamera();
+                        break;
+                    case CmdConsts.PrevCamera:
+                        ServiceProvider.DeviceManager.SelectPrevCamera();
+                        break;
+                }
             }
         }
 
@@ -233,11 +298,7 @@ namespace CameraControl
 
         void cameraDevice_CameraInitDone(ICameraDevice cameraDevice)
         {
-            CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(cameraDevice);
-            cameraDevice.DisplayName = property.DeviceName;
-            cameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(property.PhotoSessionName);
-            if (cameraDevice.GetCapability(CapabilityEnum.CaptureInRam))
-                cameraDevice.CaptureInSdRam = property.CaptureInSdRam;
+            var property = cameraDevice.LoadProperties();
 
             CameraPreset preset = ServiceProvider.Settings.GetPreset(property.DefaultPresetName);
             if (preset != null)
