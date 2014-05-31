@@ -24,7 +24,22 @@ namespace CameraControl.Core.Classes
         public const string LiveView_Focus_Move_Up = "LiveView_Focus_Move_Up";
         public const string LiveView_Focus_Move_Down = "LiveView_Focus_Move_Down";
         public const string LiveView_Focus = "LiveView_Focus";
+        public const string LiveView_Capture = "LiveView_Capture";
         public const string All_Close = "All_Close";
         public const string Capture = "Capture";
+        public const string CaptureNoAf = "CaptureNoAf";
+        public const string CaptureAll = "CaptureAll";
+        public const string NextAperture = "NextAperture";
+        public const string PrevAperture = "PrevAperture";
+        public const string NextIso = "NextIso";
+        public const string PrevIso = "PrevIso";
+        public const string NextShutter = "NextShutter";
+        public const string PrevShutter = "PrevShutter";
+        public const string NextWhiteBalance = "NextWhiteBalance";
+        public const string PrevWhiteBalance = "PrevWhiteBalance";
+        public const string NextExposureCompensation = "NextExposureCompensation";
+        public const string PrevExposureCompensation = "PrevExposureCompensation";
+        public const string NextCamera = "NextCamera";
+        public const string PrevCamera = "PrevCamera";
     }
 }

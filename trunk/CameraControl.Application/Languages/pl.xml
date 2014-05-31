@@ -41,6 +41,17 @@
   <string name="[S]_SINGLE_AF_SERVO">[S] Pojedynczy AF</string>
   <string name="[M]_MANUAL_FOCUS">[M] Ręczna ostrość</string>
   <string name="KELVIN">Kelwin</string>
+  <string name="APPLICATION_MODE">Tryb aplikacji</string>
+  <string name="WHITE_FLUORESCENT_LAMP">Biała świetlówka</string>
+  <string name="FLUORESCENT_LIGHT_TYPE">Typ światła fluorescencyjnego</string>
+  <string name="ADOBE_RGB">Adobe RGB</string>
+  <string name="COLOR_SPACE">Wiadomość dla deweloperów digiCamControl:</string>
+  <string name="14_BIT_RECORDING">Zapis 14-bit</string>
+  <string name="RAW_RECORDING_BIT_MODE">Tryb zapisu bit RAW </string>
+  <string name="NEUTRAL">Neutralny</string>
+  <string name="PICTURE_CONTROL">Kontrola obrazu</string>
+  <string name="LOSSLESS_COMPRESSED_RAW">Niska kompresja RAW</string>
+  <string name="RAW_COMPRESSION">Kompresja RAW</string>
   <!--End Property values-->
   <string name="Mode">Tryb</string>
   <string name="Iso">ISO</string>
@@ -125,6 +136,7 @@
   <string name="LabelSessonName">Nazwa sesji:</string>
   <string name="LabelFolder">Folder:</string>
   <string name="LabelFileNameTemplate">Nazwa pliku szablonu:</string>
+  <string name="LabelFileNameTemplateToolTip">$N - Nazwa sesji\n$C - Licznik \n$E - Ekspozycja \n$X - Nazwa aparatu\n$D - Bieżąca data\n$UTime - Sygnatura czasu\n$Type - Typ pliku (Raw|Jpg) \n$B - Kod kreskowy\n$Tag1 - Zaznaczony tag 1\n$Tag2 - Zaznaczony tag 2\n$Tag3 - Zaznaczony tag 3\n$Tag4 - Zaznaczony tag 4</string>
   <string name="LabelCounter">Licznik:</string>
   <string name="LabelUseOriginal">Użyj oryginalnej nazwy pliku danej przez aparat</string>
   <string name="LabelUseOriginalToolTip">Ta opcja jest współpracuje z sterownika WIA</string>
@@ -378,5 +390,45 @@
   <string name="LabelEdgeDetection">Wykrywanie krawędzi</string>
   <string name="LabelLeadingZeros">Licznik początkowych zer</string>
   <!--04/07/2013-->
+  <string name="LabelShowFocusRect">Pokaż ramkę aktywności</string>
+  <string name="LabelEasyLiveViewControl">Łatwe sterowanie podglądem na żywo</string>
+  <string name="LabelExif">Exif</string>
+  <string name="LabelImageProperties">Właściwości obrazka</string>
+  <string name="LabelFileName">Nazwa Pliku</string>
+  <string name="LabelSet">Ustaw</string>
+  <string name="LabelTagSelector">Selektor tagu</string>
+  <string name="LabelComment">Komentarz</string>
+  <string name="LabelWriteComments">Zapisz komentarze/tagi w pobranym pliku obrazu</string>
+  <string name="LabelStayOnTop2">Zawsze na wierzchu</string>
+  <string name="LabelWriteSelectedTags">Zapisz tagi z selektora tagu</string>
+  <string name="LabelClearCache">Wyczyść cache</string>
+  <string name="LabelShowMagnifierInFullSccreen">Pokaż powiększenie w pełnym ekranie</string>
+  <string name="LabelDelayImageLoading">Opóźnienie ładowania obrazu</string>
+  <string name="LabelShowOverlayFolder">Pokaż nakładkę folderu</string>
+  <string name="LabelPHDGuiding">Przewodnik PHD</string>
+  <string name="LabelWaitPHDGuiding">Czekaj na PHD (s.)</string>
+  <string name="LabelCountDown">Licznik</string>
+  <string name="LabelCurrentEvent">Bieżące zdarzenie</string>
+  <string name="LabelRemainingCaptures">Pozostało zdjęć</string>
+  <string name="LabelLiveViewRotation">Obrót Podglądu na żywo</string>
+  <string name="LabelAutomaticallyGuiding">Automatycznie po zdjęciu przewodnik PHD przechwycenia</string>
+  <string name="LabelAutoRotate">Auto obrót</string>
+  <string name="LabelReset">Reset</string>
+  <string name="LabelFocus">Ostrzenie</string>
   <!--17/11/2013-->
+  <string name="LabelAddFakeCamera">Dodaj fałszywy aparat</string>
+  <string name="LabelBarcode">Kod kreskowy</string>
+  <string name="LabelSendTheLogFile">Wyślij plik log</string>
+  <string name="LabelAskSendLogFile">Czy chcesz wysłać plik dziennika do deweloperów?</string>
+  <string name="LabelSyncCameraDate">Synchronizacja czasu/daty z podłączonym aparatem</string>
+  <string name="LabelShowThumbUpDown">Pokaż Przycisk miniaturek Góra/Dół</string>
+  <string name="LabelSend">Wyślij</string>
+  <string name="LabelLogMessage">Wiadomość dla deweloperów digiCamControl:</string>
+  <string name="LabelLogText">Plik dziennika zostanie wysłany do zespołu deweloperskiego digiCamcontrol dla poprawy stabilności aplikacji.</string>
+  <string name="LabelFullscreen">Pełny Ekran</string>
+  <string name="LabelSelection">Zaznaczenie</string>
+  <string name="LabelSelectAll">Zaznacz wszystko</string>
+  <string name="LabelSelectNone">Brak zaznaczenia</string>
+  <string name="LabelSelectLiked">Zaznacz Polubione</string>
+  <string name="LabelSelectUnLiked">Zaznacz niepolubione</string>
 </resources>

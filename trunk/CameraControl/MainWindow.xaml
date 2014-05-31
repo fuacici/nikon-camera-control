@@ -10,7 +10,7 @@
                        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                        xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
                        xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
-                       Closed="Window_Closed" Closing="Window_Closing" Icon="/CameraControl;component/Images/logo.png" WindowState="Maximized" VerticalContentAlignment="Center" PreviewKeyDown="MetroWindow_PreviewKeyDown" Loaded="MetroWindow_Loaded" Name="Window" KeyDown="Window_KeyDown">
+                       xmlns:Panels="clr-namespace:CameraControl.Panels" Closed="Window_Closed" Closing="Window_Closing" Icon="/CameraControl;component/Images/logo.png" WindowState="Maximized" VerticalContentAlignment="Center" PreviewKeyDown="MetroWindow_PreviewKeyDown" Loaded="MetroWindow_Loaded" Name="Window" KeyDown="Window_KeyDown">
     <i:Interaction.Behaviors>
         <Behaviours:BorderlessWindowBehavior/>
     </i:Interaction.Behaviors>
@@ -138,6 +138,7 @@
                     </Grid.RowDefinitions>
                     <StackPanel>
                         <Button Content="{T:TranslateExtension MenuMultipleCamera}" Click="Button_Click" Margin="3"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Height="30" Name="btn_sort" Width="30" Click="btn_sort_Click">
                             <Button.Content>
                                 <Rectangle Width="18" Height="18">
@@ -147,6 +148,16 @@
                                 </Rectangle>
                             </Button.Content>
                         </Button>
+                            <Button Height="30" Name="btn_sort_desc" Width="30" Click="btn_sort_desc_Click">
+                                <Button.Content>
+                                    <Rectangle Width="18" Height="18">
+                                        <Rectangle.Fill>
+                                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_sort_alphabetical_descending}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
                     </StackPanel>
                     <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="0" Grid.Row="1">
                         <StackPanel >
@@ -175,8 +186,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="136" />
             <ColumnDefinition Width="200" />
-            <ColumnDefinition Width="454*" />
-            <ColumnDefinition Width="294" />
+            <ColumnDefinition Width="382*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="65" />
@@ -186,7 +197,7 @@
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ShowGridLines="False">
+        <Grid Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ShowGridLines="False" Margin="0,0,25,0">
             <DockPanel   Name="StackLayout">
             </DockPanel>
             <!--<Controls:ProgressRing IsActive="True" Height="184" Width="214" IsLarge="False" />-->
@@ -252,18 +263,26 @@
             </WrapPanel>
         </Controls:MetroContentControl>
         <local:Controler x:Name="controler1" DataContext="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}}" IsEnabled="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Grid.Row="1" Grid.ColumnSpan="2" Margin="3"/>
-        <StackPanel Orientation="Vertical" Grid.Column="3">
-            <StackPanel>
-                <Label Content="{T:TranslateExtension Session}" Margin="5,1,1,1" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <ComboBox Name="cmb_session" SelectedValue="{Binding Path=DefaultSession}" ItemsSource="{Binding Path=PhotoSessions}" Width="150" Margin="3" ToolTip="{Binding Path=DefaultSession.Folder}"/>
-                <Button Content="{T:TranslateExtension SessionAdd}" Grid.Column="3" Name="btn_add_Sesion" Margin="3" Click="btn_add_Sesion_Click" />
-                <Button Content="{T:TranslateExtension SessionEdit}" Grid.Column="3" Name="btn_edit_Sesion" Margin="3" Click="btn_edit_Sesion_Click" />
-                <Button Content="{T:TranslateExtension SessionDel}" Grid.Column="3" Name="btn_del_Sesion" Margin="3" Click="btn_del_Sesion_Click" />
-            </StackPanel>
-        </StackPanel>
+
         <Controls:ProgressRing IsActive="{Binding Source={x:Static Member=Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsBusy}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,24,30,0" Grid.Row="3" Height="78" Width="81" />
         <Button Content="{T:TranslateExtension ButtonGetRawCodec}" Grid.Row="3" Height="23" Name="btn_getRaw" VerticalAlignment="Top" Click="btn_getRaw_Click"  Visibility="{Binding Source={x:Static Member=Core:ServiceProvider.Settings}, Path=SelectedBitmap.RawCodecNeeded, Converter={StaticResource BooleanToVisibilityConverter1}, ConverterParameter=false}"/>
+
+        <Expander Grid.Column="3" ExpandDirection="Left" IsExpanded="True" Grid.RowSpan="5">
+            <StackPanel>
+                <Expander  Header="{T:TranslateExtension LabelSelection}" VerticalAlignment="Top" IsExpanded="True" Width="200">
+                    <Panels:SelectionControl/>
+                </Expander>
+                <Expander  Header="{T:TranslateExtension Session}" VerticalAlignment="Top" IsExpanded="True">
+                    <StackPanel>
+                        <ComboBox Name="cmb_session" SelectedValue="{Binding Path=DefaultSession}" ItemsSource="{Binding Path=PhotoSessions}" ToolTip="{Binding Path=DefaultSession.Folder}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="{T:TranslateExtension SessionAdd}" Grid.Column="3" Name="btn_add_Sesion" Margin="3" Click="btn_add_Sesion_Click" />
+                            <Button Content="{T:TranslateExtension SessionEdit}" Grid.Column="3" Name="btn_edit_Sesion" Margin="3" Click="btn_edit_Sesion_Click" />
+                            <Button Content="{T:TranslateExtension SessionDel}" Grid.Column="3" Name="btn_del_Sesion" Margin="3" Click="btn_del_Sesion_Click" />
+                        </StackPanel>
+                    </StackPanel>
+                </Expander>
+            </StackPanel>
+        </Expander>
     </Grid>
 </Controls:MetroWindow >

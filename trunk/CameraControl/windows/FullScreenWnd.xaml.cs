@@ -39,14 +39,14 @@ namespace CameraControl.windows
 
         void FullScreenWnd_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Right)
-            {
-                ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Next_Image);
-            }
-            if (e.Key == Key.Left)
-            {
-                ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Prev_Image);
-            }
+            //if (e.Key == Key.Right)
+            //{
+            //    ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Next_Image);
+            //}
+            //if (e.Key == Key.Left)
+            //{
+            //    ServiceProvider.WindowsManager.ExecuteCommand(WindowsCmdConsts.Prev_Image);
+            //}
         }
 
         private void image1_KeyDown(object sender, KeyEventArgs e)

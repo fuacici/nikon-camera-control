@@ -41,6 +41,12 @@
   <string name="[S]_SINGLE_AF_SERVO">[S] シングルAFサーボ</string>
   <string name="[M]_MANUAL_FOCUS">[M]マニュアルフォーカス</string>
   <string name="KELVIN">ケルビン</string>
+  <string name="ADOBE_RGB">Adobe RGB</string>
+  <string name="COLOR_SPACE">色空間</string>
+  <string name="NEUTRAL">ニュートラル</string>
+  <string name="PICTURE_CONTROL">ピクチャーコントロール</string>
+  <string name="LOSSLESS_COMPRESSED_RAW">ロスレス圧縮RAW</string>
+  <string name="RAW_COMPRESSION">圧縮ＲＡＷ</string>
   <!--End Property values-->
   <string name="Mode">モード</string>
   <string name="Iso">_ISO感度</string>
@@ -320,14 +326,67 @@
   <string name="LabelShowUnTranslatedStringIds">翻訳せずに文字列IDを表示</string>
   <!--20/01/2013-->
   <!--29/01/2013-->
+  <string name="LabelSelected">選択済</string>
   <!--31/01/2013-->
   <string name="LabelNone">なし</string>
   <string name="LabelComboGrid">サムネイル</string>
   <!--13/03/2013-->
   <!--17/03/2012-->
+  <string name="LabelMFError">カメラはマニュアルフォーカスモードです</string>
+  <string name="LabelNotAFSError">フォーカスモードがシングルAFサーボモードではありません</string>
   <!--28/03/2012-->
+  <string name="LabelApertureValueError">絞り値はレンズの絞りリングで設定されています</string>
+  <string name="LabelNonCPULEnseError">非CPUレンズが接続され、撮影モードがマニュアル（M）ではありません</string>
+  <string name="LabelOverHeatedError">CCDの温度が高いためライブビューが開始できません</string>
   <string name="LabelCardProtectedError">カードが書き込み禁止です</string>
+  <string name="LabelMirrorUpError">レリーズモードがミラーアップ撮影に設定されており、現在、ミラーアップ中です</string>
+  <string name="LabelMirrorUpError2">レリーズモードは[ミラーアップ撮影]です</string>
+  <string name="LabelDestinationCardError">カードへ記録</string>
+  <string name="LabelLiveViewError">ライブビュー開始時にエラーが発生しました</string>
   <!--07/05/2013-->
+  <string name="LabelDevices">デバイス</string>
+  <string name="LabelExternalShutterRelease">外部シャッター</string>
+  <string name="LabelConfigName">設定名</string>
+  <string name="LabelDriver">ドライバー</string>
+  <string name="LabelAstronomy">天体写真</string>
+  <string name="LabelEnable">可</string>
+  <string name="LabelUseConfiguration">設定を適用</string>
+  <string name="LabelNoExternalDeviceSelected">外部デバイスが選択されていません</string>
+  <string name="LabelScript">スクリプト</string>
+  <string name="LabelStartScript">スクリプト開始</string>
+  <string name="LabelStopScript">スクリプト停止</string>
+  <string name="LabelDeviceSettings">デバイス設定</string>
+  <string name="LabelAvailableDevices">使用可能デバイス</string>
+  <string name="LabelCommands">コマンド</string>
+  <string name="LabelStartLiveView">ライブビューを開始</string>
+  <string name="LabelStopLiveView">ライブビューを停止</string>
+  <string name="LabelBrightness">明るさ</string>
+  <string name="LabelUseExternalShutterRelease">外部シャッターを使用</string>
+  <string name="LabelDownloadJpgOnly">JPG画像のみダウンロード</string>
+  <string name="LabelSetCounters">カウンター・セット</string>
   <!--04/07/2013-->
+  <string name="LabelEasyLiveViewControl">ライブビュー操作</string>
+  <string name="LabelExif">Exif</string>
+  <string name="LabelFileName">ファイル名</string>
+  <string name="LabelSet">セット</string>
+  <string name="LabelComment">コメント</string>
+  <string name="LabelStayOnTop2">前面に表示</string>
+  <string name="LabelClearCache">キャッシュをクリア</string>
+  <string name="LabelShowMagnifierInFullSccreen">拡大鏡をフルスクリーンに表示</string>
+  <string name="LabelPHDGuiding">PHDガイディング撮影</string>
+  <string name="LabelAutoRotate">自動回転</string>
+  <string name="LabelReset">リセット</string>
+  <string name="LabelFocus">ピント</string>
   <!--17/11/2013-->
+  <string name="LabelBarcode">バーコード</string>
+  <string name="LabelSendTheLogFile">ログファイルを送信</string>
+  <string name="LabelAskSendLogFile">開発者へログファイルを送信しますか？</string>
+  <string name="LabelSyncCameraDate">接続カメラの日時と時間をPCと同期</string>
+  <string name="LabelSend">送信</string>
+  <string name="LabelLogMessage">開発者へメッセージを送る</string>
+  <string name="LabelLogText">ログファイルを今後の開発のために開発者へ送信する</string>
+  <string name="LabelFullscreen">全画面</string>
+  <string name="LabelSelection">選択</string>
+  <string name="LabelSelectAll">全選択</string>
+  <string name="LabelSelectNone">選択しない</string>
 </resources>

@@ -90,6 +90,13 @@ namespace CameraControl.Core.Classes
             {
                 SendFile(context, ServiceProvider.Settings.SelectedBitmap.FileItem.LargeThumb);
             }
+
+            if (context.Request.Uri.AbsolutePath.StartsWith("/liveview.jpg") && ServiceProvider.DeviceManager.SelectedCameraDevice != null && ServiceProvider.DeviceManager.LiveViewImage.ContainsKey(ServiceProvider.DeviceManager.SelectedCameraDevice))
+            {
+                SendData(context,
+                         ServiceProvider.DeviceManager.LiveViewImage[ServiceProvider.DeviceManager.SelectedCameraDevice]);
+            }
+
             if (context.Request.Uri.AbsolutePath.StartsWith("/image/"))
             {
                 foreach (FileItem item in ServiceProvider.Settings.DefaultSession.Files)
@@ -158,7 +165,19 @@ namespace CameraControl.Core.Classes
             context.Response.ContentType = str;
             context.Response.ContentLength = (int)fileStream.Length;
             context.Response.Body = fileStream;
-            
+           
+        }
+
+        private void SendData(IHttpContext context, byte[] data)
+        {
+            if (data == null)
+                return;
+            MemoryStream stream = new MemoryStream(data);
+//            context.Response.AddHeader("Content-Disposition",
+                                       //"inline;filename=\"" + Path.GetFileName(fullpath) + "\"");
+            context.Response.ContentType = "image/jpg";
+            context.Response.ContentLength = data.Length;
+            context.Response.Body = stream;
         }
 
         private string GetFullPath(Uri uri)

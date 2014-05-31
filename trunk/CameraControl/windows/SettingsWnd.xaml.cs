@@ -4,13 +4,14 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Forms;
+//using System.Windows.Forms;
 using System.Windows.Input;
 using CameraControl.Classes;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
 using CameraControl.Devices;
 using CameraControl.Devices.Classes;
+using Microsoft.Win32;
 using Path = System.IO.Path;
 using CameraControl.Core;
 using HelpProvider = CameraControl.Classes.HelpProvider;
@@ -27,13 +28,15 @@ namespace CameraControl.windows
     {
 
         public AsyncObservableCollection<RotateFlipType> RotateFlipTypesValues { get; set; }
+        public AsyncObservableCollection<string> AvailableKeys { get; set; }
 
         public SettingsWnd()
         {
+            AvailableKeys = new AsyncObservableCollection<string>();
             InitializeComponent();
-            foreach (Key key in Enum.GetValues(typeof(Keys)))
+            foreach (string key in Enum.GetNames(typeof(Key)))
             {
-                cmb_keys.Items.Add(key);
+                AvailableKeys.Add(key);
             }
             RotateFlipTypesValues = new AsyncObservableCollection<RotateFlipType>(Enum.GetValues(typeof(RotateFlipType)).Cast<RotateFlipType>().Distinct());
             ServiceProvider.Settings.ApplyTheme(this);
@@ -89,7 +92,7 @@ namespace CameraControl.windows
         {
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.FileName = ServiceProvider.Settings.ExternalViewer;
-            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (dialog.ShowDialog()==true)
             {
                 ServiceProvider.Settings.ExternalViewer = dialog.FileName;
             }
@@ -109,7 +112,7 @@ namespace CameraControl.windows
         {
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.FileName = ServiceProvider.Settings.ExternalViewerPath;
-            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (dialog.ShowDialog() == true)
             {
                 ServiceProvider.Settings.ExternalViewerPath = dialog.FileName;
             }
